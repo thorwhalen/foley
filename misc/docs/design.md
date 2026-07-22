@@ -1,8 +1,17 @@
 # foley — Design
 
-**Status: design-stage.** This document synthesizes the five research reports in
-[`research/`](research/) into an architecture. Nothing here is built yet; it is the
-plan the code will follow. Depth and citations live in the reports — this is the map.
+**Status: design-stage.** This is the readable map of the architecture. The
+**authoritative, fully-detailed synthesis** (all 12 research reports reconciled into
+component diagram, data models, façade API, adapter/protocol contracts, module tree,
+dependency graph, and the epic/subtask plan) lives in
+[`research/10-facade-architecture.md`](research/10-facade-architecture.md) — read that
+for depth. Nothing here is built yet; it is the plan the code will follow.
+
+> **Key reconciliation from report 10:** `redistribute_standalone_ok` (a copyright
+> flag) and `cache_bytes_ok` (a TOS/operational flag) are **distinct** — e.g. Freesound
+> CC0 is legally redistributable but its API TOS forbids caching, so it is stored
+> by-reference. `LicenseRecord` is the SSOT for *both* the candidate license-filter
+> *and* each `SoundRecord`'s storage mode.
 
 ## Mission
 
