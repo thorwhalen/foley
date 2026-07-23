@@ -45,6 +45,19 @@ audio = [
     "librosa",
     "pyloudnorm",
 ]
+# CLAP embedder — the joint text<->audio retrieval engine (laion/larger_clap_general).
+clap = [
+    "transformers>=4.40",
+    "torch",
+]
+# Hybrid vector+keyword index — LanceDB (vector column + Tantivy FTS + RRF in one table).
+index = [
+    "lancedb>=0.13",
+]
+# Minimal single-file fallback index (sqlite-vec + stdlib FTS5); no LanceDB needed.
+index-sqlite = [
+    "sqlite-vec>=0.1.0",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
@@ -52,6 +65,11 @@ test = [
     "soundfile",
     "soxr", # so resample/encode tests execute in CI (skipif-guarded in lean envs)
     "pyloudnorm", # so LUFS tests execute in CI
+    # NB: librosa is intentionally NOT here — it pulls numba/llvmlite, which have no
+    # wheels / a hard <3.10 guard on new CPython patches and break the CI install;
+    # trim_silence tests importorskip librosa and run locally via foley[audio]. The
+    # heavy backends (lancedb, sqlite-vec, torch) are likewise out — their tests are
+    # importorskip/skipif-guarded (foley[index]/[index-sqlite]/[clap]).
 ]
 dev = [
     "pytest>=7.0",
@@ -116,6 +134,18 @@ doctest_optionflags = [
 
 [tool.wads.ci]
 project_name = ""
+
+# Extras the wads CI installs (`.[extras]`). "test" pulls numpy/soundfile/soxr/
+# pyloudnorm so the numpy-backed tests (base/qc/audio/search/taxonomy and the
+# MemoryIndex hybrid+library path) actually run in CI. It deliberately omits
+# librosa (numba/llvmlite break the CI install) and the heavy backends
+# (lancedb/sqlite-vec/torch) — those tests importorskip/skipif-guard and run
+# locally via foley[audio]/[index]/[index-sqlite]/[clap]. Without this section the
+# CI installs only core deps and any top-level numpy import errors on collection.
+[tool.wads.ci.install]
+extras = [
+    "test",
+]
 
 [tool.wads.ci.commands]
 pre_test = []

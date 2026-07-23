@@ -116,6 +116,35 @@ from .stores import (
     make_meta_store,
     store_sound,
 )
+from . import index
+from .index import (
+    CLAP_SAMPLE_RATE,
+    DEFAULT_CANDIDATE_K,
+    DEFAULT_CLAP_DIM,
+    DEFAULT_CLAP_MODEL_ID,
+    RRF_K,
+    CatIdResolution,
+    ClapEmbedder,
+    Embedder,
+    FusedHit,
+    KeywordIndex,
+    LanceIndex,
+    MemoryIndex,
+    SoundLibrary,
+    SqliteVecIndex,
+    VectorIndex,
+    default_embedder,
+    default_index,
+    default_library,
+    fuse_hits,
+    hybrid_search,
+    lancedb_available,
+    parse_ucs_filename,
+    reciprocal_rank_fusion,
+    resolve_catid,
+    sqlite_vec_loadable,
+    vector_search,
+)
 
 __all__ = [
     # --- base: constants + enums ---------------------------------------------
@@ -182,4 +211,82 @@ __all__ = [
     "fade",
     "loudness_normalize",
     "to_working",
+    # --- index: embeddings, hybrid search, library façade, taxonomy ----------
+    "index",
+    "SoundLibrary",
+    "default_library",
+    "search",
+    "similar",
+    "Embedder",
+    "ClapEmbedder",
+    "default_embedder",
+    "VectorIndex",
+    "KeywordIndex",
+    "MemoryIndex",
+    "LanceIndex",
+    "SqliteVecIndex",
+    "default_index",
+    "lancedb_available",
+    "sqlite_vec_loadable",
+    "hybrid_search",
+    "vector_search",
+    "reciprocal_rank_fusion",
+    "fuse_hits",
+    "FusedHit",
+    "RRF_K",
+    "DEFAULT_CANDIDATE_K",
+    "DEFAULT_CLAP_MODEL_ID",
+    "DEFAULT_CLAP_DIM",
+    "CLAP_SAMPLE_RATE",
+    "resolve_catid",
+    "parse_ucs_filename",
+    "CatIdResolution",
+    "library",
 ]
+
+
+def search(
+    query: str,
+    *,
+    k: int = 10,
+    filters=None,
+    commercial_ok=None,
+    ucs_category=None,
+    min_snr=None,
+    duration_range=None,
+    rerank: bool = False,
+):
+    """Hybrid (CLAP vector ⊕ BM25) search of the default library.
+
+    Convenience wrapper over ``foley.library.search(...)`` — see
+    :meth:`foley.index.SoundLibrary.search`. Constructs the process-wide default
+    library (local stores + CLAP + best available index) on first use.
+    """
+    return default_library().search(
+        query,
+        k=k,
+        filters=filters,
+        commercial_ok=commercial_ok,
+        ucs_category=ucs_category,
+        min_snr=min_snr,
+        duration_range=duration_range,
+        rerank=rerank,
+    )
+
+
+def similar(sound_id: str, *, k: int = 10):
+    """Find sounds similar to a stored sound (audio<->audio) in the default library.
+
+    See :meth:`foley.index.SoundLibrary.similar`.
+    """
+    return default_library().similar(sound_id, k=k)
+
+
+def __getattr__(name: str):
+    """Lazily expose ``foley.library`` (the default :class:`SoundLibrary`).
+
+    Kept lazy so ``import foley`` never constructs the CLAP model or the index.
+    """
+    if name == "library":
+        return default_library()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

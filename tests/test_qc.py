@@ -6,10 +6,11 @@ tone, noisy tone). ``pyloudnorm`` is exercised when present and skipped
 otherwise; ``run_qc`` is verified to still produce a report without it.
 """
 
-import numpy as np
 import pytest
 
-from foley.qc import (
+np = pytest.importorskip("numpy")  # noqa: E402 — QC tests synthesize numpy arrays
+
+from foley.qc import (  # noqa: E402  (after importorskip, by design)
     DEFAULT_QC_THRESHOLDS,
     LUFS_MIN_BLOCK_S,
     QCReport,
