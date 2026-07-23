@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.1 documentation</title>
+  <title>foley &mdash; foley 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/documentation_options.js?v=e3a6060d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -52,9 +52,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/library.html">foley.index.library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
@@ -216,21 +218,31 @@
     <span class="n">DEFAULT_CLAP_DIM</span><span class="p">,</span>
     <span class="n">DEFAULT_CLAP_MODEL_ID</span><span class="p">,</span>
     <span class="n">RRF_K</span><span class="p">,</span>
+    <span class="n">Captioner</span><span class="p">,</span>
     <span class="n">CatIdResolution</span><span class="p">,</span>
     <span class="n">ClapEmbedder</span><span class="p">,</span>
+    <span class="n">ClapZeroShotTagger</span><span class="p">,</span>
     <span class="n">Embedder</span><span class="p">,</span>
     <span class="n">FusedHit</span><span class="p">,</span>
+    <span class="n">IngestReport</span><span class="p">,</span>
+    <span class="n">IngestResult</span><span class="p">,</span>
     <span class="n">KeywordIndex</span><span class="p">,</span>
     <span class="n">LanceIndex</span><span class="p">,</span>
     <span class="n">MemoryIndex</span><span class="p">,</span>
+    <span class="n">PannsTagger</span><span class="p">,</span>
     <span class="n">SoundLibrary</span><span class="p">,</span>
     <span class="n">SqliteVecIndex</span><span class="p">,</span>
+    <span class="n">Tagger</span><span class="p">,</span>
     <span class="n">VectorIndex</span><span class="p">,</span>
     <span class="n">default_embedder</span><span class="p">,</span>
     <span class="n">default_index</span><span class="p">,</span>
     <span class="n">default_library</span><span class="p">,</span>
+    <span class="n">default_tagger</span><span class="p">,</span>
+    <span class="n">default_zeroshot_tagger</span><span class="p">,</span>
     <span class="n">fuse_hits</span><span class="p">,</span>
     <span class="n">hybrid_search</span><span class="p">,</span>
+    <span class="n">ingest_folder</span><span class="p">,</span>
+    <span class="n">ingest_one</span><span class="p">,</span>
     <span class="n">lancedb_available</span><span class="p">,</span>
     <span class="n">parse_ucs_filename</span><span class="p">,</span>
     <span class="n">reciprocal_rank_fusion</span><span class="p">,</span>
@@ -335,6 +347,18 @@
     <span class="s2">&quot;parse_ucs_filename&quot;</span><span class="p">,</span>
     <span class="s2">&quot;CatIdResolution&quot;</span><span class="p">,</span>
     <span class="s2">&quot;library&quot;</span><span class="p">,</span>
+    <span class="c1"># --- index: taggers + ingestion ------------------------------------------</span>
+    <span class="s2">&quot;Tagger&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Captioner&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ClapZeroShotTagger&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PannsTagger&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;default_tagger&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;default_zeroshot_tagger&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ingest&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ingest_one&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ingest_folder&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IngestResult&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IngestReport&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 
@@ -378,6 +402,49 @@
 <span class="sd">    See :meth:`foley.index.SoundLibrary.similar`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">default_library</span><span class="p">()</span><span class="o">.</span><span class="n">similar</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ingest">
+<a class="viewcode-back" href="../module_docs/foley.html#foley.ingest">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ingest</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span><span class="p">,</span>
+    <span class="n">qc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ingest a folder (or single file) of sounds into the default library.</span>
+
+<span class="sd">    ``probe -&gt; QC -&gt; tag -&gt; zero-shot -&gt; caption -&gt; embed -&gt; SoundRecord`` for</span>
+<span class="sd">    each file, returning an :class:`~foley.index.IngestReport`. See</span>
+<span class="sd">    :func:`foley.index.ingest_folder` / :func:`~foley.index.ingest_one` for the</span>
+<span class="sd">    per-file options (``license``, taggers, ``min_status``, …).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: A folder (walked) or a single audio file.</span>
+<span class="sd">        library: Target library (default: the process-wide default library).</span>
+<span class="sd">        backend: ``&quot;local&quot;`` ingests filesystem audio; other backends (a source</span>
+<span class="sd">            adapter pull) route through ``add_from`` (subtask #5) — kept in the</span>
+<span class="sd">            signature for forward-compat.</span>
+<span class="sd">        qc: Run the Tier-0 QC gate (quarantines failing clips).</span>
+<span class="sd">        recursive: Recurse into sub-folders.</span>
+<span class="sd">        **kw: Forwarded to :func:`foley.index.ingest_one`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">backend</span> <span class="o">!=</span> <span class="s2">&quot;local&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;ingest backend </span><span class="si">{</span><span class="n">backend</span><span class="si">!r}</span><span class="s2"> not implemented; only &#39;local&#39; is &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;available (source-adapter pulls arrive with subtask #5).&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">ingest_folder</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">,</span>
+        <span class="n">library</span><span class="o">=</span><span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">(),</span>
+        <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span>
+        <span class="n">do_qc</span><span class="o">=</span><span class="n">qc</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 

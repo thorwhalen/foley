@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.index.protocols &mdash; foley 0.0.1 documentation</title>
+  <title>foley.index.protocols &mdash; foley 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -52,9 +52,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
@@ -254,6 +256,48 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            ``[(id, bm25_score), ...]`` in descending-score order.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Tagger">
+<a class="viewcode-back" href="../../../module_docs/foley/index/protocols.html#foley.Tagger">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Tagger</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map a clip to ``(label, score)`` pairs against a label vocabulary.</span>
+
+<span class="sd">    Used on ingest to auto-fill ``SoundRecord.audioset_labels`` (supervised) and</span>
+<span class="sd">    ``tags`` (zero-shot). The default supervised tagger is PANNs CNN14 over</span>
+<span class="sd">    AudioSet; the default zero-shot tagger scores a clip against a custom/UCS</span>
+<span class="sd">    label set via CLAP (report 03). BEATs/AST are drop-in upgrades. Consumes the</span>
+<span class="sd">    working array (``float32``, any sr — the impl resamples to its model&#39;s rate).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Tagger.tag">
+<a class="viewcode-back" href="../../../module_docs/foley/index/protocols.html#foley.Tagger.tag">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tag</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">wav</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">sr</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">taxonomy</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;audioset&quot;</span><span class="p">,</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the top-``k`` ``(label, score)`` tags for the clip, best first.&quot;&quot;&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Captioner">
+<a class="viewcode-back" href="../../../module_docs/foley/index/protocols.html#foley.Captioner">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Captioner</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Produce one natural-language sentence describing a clip (report 03).</span>
+
+<span class="sd">    The caption feeds the BM25 keyword index and human display. Default is a</span>
+<span class="sd">    dedicated AAC model (EnCLAP); Qwen2-Audio is a richer promptable upgrade.</span>
+<span class="sd">    Both are ``foley[caption]`` adapters plugged in behind this protocol.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Captioner.caption">
+<a class="viewcode-back" href="../../../module_docs/foley/index/protocols.html#foley.Captioner.caption">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">caption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wav</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">sr</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a one-sentence caption for the clip.&quot;&quot;&quot;</span></div>
 </div>
 
 </pre></div>

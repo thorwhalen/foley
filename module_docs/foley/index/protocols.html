@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.index.protocols &mdash; foley 0.0.1 documentation</title>
+  <title>foley.index.protocols &mdash; foley 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -55,8 +55,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ingest.html">foley.index.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">foley.index.library</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">foley.index.protocols</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.protocols.Captioner"><code class="docutils literal notranslate"><span class="pre">Captioner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.protocols.Captioner.caption"><code class="docutils literal notranslate"><span class="pre">Captioner.caption()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.protocols.Embedder"><code class="docutils literal notranslate"><span class="pre">Embedder</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.protocols.Embedder.model_id"><code class="docutils literal notranslate"><span class="pre">Embedder.model_id</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.protocols.Embedder.dim"><code class="docutils literal notranslate"><span class="pre">Embedder.dim</span></code></a></li>
@@ -69,6 +74,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.protocols.KeywordIndex.index"><code class="docutils literal notranslate"><span class="pre">KeywordIndex.index()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.protocols.Tagger"><code class="docutils literal notranslate"><span class="pre">Tagger</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.protocols.Tagger.tag"><code class="docutils literal notranslate"><span class="pre">Tagger.tag()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.protocols.VectorIndex"><code class="docutils literal notranslate"><span class="pre">VectorIndex</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.protocols.VectorIndex.get_vector"><code class="docutils literal notranslate"><span class="pre">VectorIndex.get_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.protocols.VectorIndex.knn"><code class="docutils literal notranslate"><span class="pre">VectorIndex.knn()</span></code></a></li>
@@ -78,6 +87,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taggers.html">foley.index.taggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="taxonomy.html">foley.index.taxonomy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="taxonomy/model.html">foley.index.taxonomy.model</a></li>
@@ -135,6 +145,21 @@ the vector column and the FTS index in one table); the façade simply passes it 
 both <code class="docutils literal notranslate"><span class="pre">vindex</span></code> and <code class="docutils literal notranslate"><span class="pre">kindex</span></code>.</p>
 <p>This module is stdlib-only: <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> appears solely in annotations, imported
 under <code class="docutils literal notranslate"><span class="pre">TYPE_CHECKING</span></code> so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley.index.protocols</span></code> never pulls numpy.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.protocols.Captioner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.protocols.</span></span><span class="sig-name descname"><span class="pre">Captioner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/protocols.html#Captioner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.protocols.Captioner" title="Link to this definition"></a></dt>
+<dd><p>Produce one natural-language sentence describing a clip (report 03).</p>
+<p>The caption feeds the BM25 keyword index and human display. Default is a
+dedicated AAC model (EnCLAP); Qwen2-Audio is a richer promptable upgrade.
+Both are <code class="docutils literal notranslate"><span class="pre">foley[caption]</span></code> adapters plugged in behind this protocol.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.protocols.Captioner.caption">
+<span class="sig-name descname"><span class="pre">caption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wav</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/foley/index/protocols.html#Captioner.caption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.protocols.Captioner.caption" title="Link to this definition"></a></dt>
+<dd><p>Return a one-sentence caption for the clip.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.index.protocols.Embedder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.protocols.</span></span><span class="sig-name descname"><span class="pre">Embedder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/protocols.html#Embedder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.protocols.Embedder" title="Link to this definition"></a></dt>
@@ -232,6 +257,23 @@ single-file fallback. Same <code class="docutils literal notranslate"><span clas
 <dt class="sig sig-object py" id="foley.index.protocols.KeywordIndex.index">
 <span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/protocols.html#KeywordIndex.index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.protocols.KeywordIndex.index" title="Link to this definition"></a></dt>
 <dd><p>Insert or replace the searchable text (and light metadata) for <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.protocols.Tagger">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.protocols.</span></span><span class="sig-name descname"><span class="pre">Tagger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/protocols.html#Tagger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.protocols.Tagger" title="Link to this definition"></a></dt>
+<dd><p>Map a clip to <code class="docutils literal notranslate"><span class="pre">(label,</span> <span class="pre">score)</span></code> pairs against a label vocabulary.</p>
+<p>Used on ingest to auto-fill <code class="docutils literal notranslate"><span class="pre">SoundRecord.audioset_labels</span></code> (supervised) and
+<code class="docutils literal notranslate"><span class="pre">tags</span></code> (zero-shot). The default supervised tagger is PANNs CNN14 over
+AudioSet; the default zero-shot tagger scores a clip against a custom/UCS
+label set via CLAP (report 03). BEATs/AST are drop-in upgrades. Consumes the
+working array (<code class="docutils literal notranslate"><span class="pre">float32</span></code>, any sr — the impl resamples to its model’s rate).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.protocols.Tagger.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wav</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxonomy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'audioset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/protocols.html#Tagger.tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.protocols.Tagger.tag" title="Link to this definition"></a></dt>
+<dd><p>Return the top-<code class="docutils literal notranslate"><span class="pre">k</span></code> <code class="docutils literal notranslate"><span class="pre">(label,</span> <span class="pre">score)</span></code> tags for the clip, best first.</p>
 </dd></dl>
 
 </dd></dl>

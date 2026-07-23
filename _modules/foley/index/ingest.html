@@ -1,0 +1,610 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.index.ingest &mdash; foley 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.index.ingest</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.index.ingest</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The ingestion pipeline — turn any audio file into a searchable SoundRecord.</span>
+
+<span class="sd">``probe -&gt; QC -&gt; supervised tag -&gt; zero-shot tag -&gt; caption -&gt; resolve taxonomy</span>
+<span class="sd">-&gt; embed -&gt; assemble -&gt; store`` (report 03 Stages 0-5, report 08 §3 QC gate,</span>
+<span class="sd">report 09 §5 decode-once). It is almost entirely **composition** over primitives</span>
+<span class="sd">that already exist:</span>
+
+<span class="sd">    * decode / archive: :func:`foley.audio.load` / :func:`~foley.audio.encode`</span>
+<span class="sd">      (decode once, then fan the one array out to QC + taggers + embedder),</span>
+<span class="sd">    * QC gate: :func:`foley.qc.run_qc` (a ``fail`` clip is quarantined, not added),</span>
+<span class="sd">    * embed: the library&#39;s :class:`~foley.index.embedders.ClapEmbedder` (the vector</span>
+<span class="sd">      is reused for zero-shot tagging — no second CLAP pass),</span>
+<span class="sd">    * taxonomy: :func:`foley.index.taxonomy.resolve_catid` (tags+caption -&gt; UCS),</span>
+<span class="sd">    * store + index: :meth:`foley.index.library.SoundLibrary.add`</span>
+<span class="sd">      (the by-value/by-reference license gate + vector upsert + BM25 index).</span>
+
+<span class="sd">Enrichment stages degrade gracefully: a missing ``foley[tag]`` (PANNs) or</span>
+<span class="sd">captioner is skipped with a note, never a crash — only the CLAP embedding is</span>
+<span class="sd">required (retrieval-first). Everything heavy is lazy-imported; importing this</span>
+<span class="sd">module costs only the stdlib.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">ARCHIVE_FORMAT</span><span class="p">,</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">,</span> <span class="n">encode</span><span class="p">,</span> <span class="n">load</span><span class="p">,</span> <span class="n">to_working</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AcquisitionMethod</span><span class="p">,</span> <span class="n">LicenseRecord</span><span class="p">,</span> <span class="n">SerializableMixin</span><span class="p">,</span> <span class="n">SoundRecord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_license_flags</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..qc</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="p">,</span> <span class="n">QCStatus</span><span class="p">,</span> <span class="n">QCThresholds</span><span class="p">,</span> <span class="n">run_qc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">content_key</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.taxonomy</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_catid</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover - typing only</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndarray</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">AudioSource</span>
+
+<span class="c1">#: Audio file extensions the folder walker ingests.</span>
+<span class="n">AUDIO_EXTS</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;.wav&quot;</span><span class="p">,</span> <span class="s2">&quot;.flac&quot;</span><span class="p">,</span> <span class="s2">&quot;.aiff&quot;</span><span class="p">,</span> <span class="s2">&quot;.aif&quot;</span><span class="p">,</span> <span class="s2">&quot;.ogg&quot;</span><span class="p">,</span> <span class="s2">&quot;.mp3&quot;</span><span class="p">,</span> <span class="s2">&quot;.opus&quot;</span><span class="p">,</span> <span class="s2">&quot;.m4a&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1">#: QC status ordering (worse -&gt; better) for the admission gate.</span>
+<span class="n">_QC_RANK</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fail&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># result / report types</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="IngestResult">
+<a class="viewcode-back" href="../../../module_docs/foley/index/ingest.html#foley.IngestResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IngestResult</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The outcome of ingesting one clip.</span>
+
+<span class="sd">    ``status``: ``&#39;pass&#39;``/``&#39;warn&#39;`` (ingested), ``&#39;quarantined&#39;`` (QC-rejected,</span>
+<span class="sd">    not added), ``&#39;skipped_dup&#39;`` (content already in the library), or</span>
+<span class="sd">    ``&#39;error&#39;``. ``record`` is present only when the clip was ingested.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">record</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SoundRecord</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">qc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">notes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="IngestReport">
+<a class="viewcode-back" href="../../../module_docs/foley/index/ingest.html#foley.IngestReport">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IngestReport</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The rolled-up outcome of a folder ingest (JSON-serializable).&quot;&quot;&quot;</span>
+
+    <span class="n">root</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">results</span><span class="p">:</span> <span class="s2">&quot;list[IngestResult]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IngestReport.record">
+<a class="viewcode-back" href="../../../module_docs/foley/index/ingest.html#foley.IngestReport.record">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">IngestResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append one :class:`IngestResult`.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IngestReport.error">
+<a class="viewcode-back" href="../../../module_docs/foley/index/ingest.html#foley.IngestReport.error">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Record a per-file error without aborting the run.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_by_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">statuses</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[IngestResult]&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="n">statuses</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ingested</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[IngestResult]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Results that were added to the library (``pass`` or ``warn``).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_status</span><span class="p">(</span><span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">quarantined</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[IngestResult]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Results rejected by the QC gate.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_status</span><span class="p">(</span><span class="s2">&quot;quarantined&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">skipped</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[IngestResult]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Results skipped as content-addressed duplicates.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_status</span><span class="p">(</span><span class="s2">&quot;skipped_dup&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">errored</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[IngestResult]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Results that raised during ingest.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_status</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IngestReport.summary">
+<a class="viewcode-back" href="../../../module_docs/foley/index/ingest.html#foley.IngestReport.summary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A counts dict for a console/CLI summary.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">),</span>
+            <span class="s2">&quot;ingested&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ingested</span><span class="p">),</span>
+            <span class="s2">&quot;quarantined&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quarantined</span><span class="p">),</span>
+            <span class="s2">&quot;skipped&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skipped</span><span class="p">),</span>
+            <span class="s2">&quot;errored&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errored</span><span class="p">),</span>
+        <span class="p">}</span></div>
+</div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># stage helpers (probe / metadata / gate)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_Probe</span><span class="p">:</span>
+    <span class="n">wav</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span>
+    <span class="n">native_sr</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">bit_depth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_bit_depth_from_subtype</span><span class="p">(</span><span class="n">subtype</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map a libsndfile subtype (``PCM_24``, ``FLOAT`` …) to a bit depth.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">subtype</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;FLOAT&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;DOUBLE&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s2">&quot;ALAW&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;ULAW&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">subtype</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mapping</span><span class="p">[</span><span class="n">subtype</span><span class="p">]</span>
+    <span class="n">digits</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">subtype</span> <span class="k">if</span> <span class="n">ch</span><span class="o">.</span><span class="n">isdigit</span><span class="p">())</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">digits</span><span class="p">)</span> <span class="k">if</span> <span class="n">digits</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_sound_meta</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[Optional[str], Optional[int]]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``(format, bit_depth)`` from the container header (best-effort).&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)):</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">)):</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">src</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">format</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">_bit_depth_from_subtype</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">subtype</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_probe</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="s2">&quot;AudioSource&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Probe</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decode ``src`` once and read its container metadata (report 03 Stage 0).&quot;&quot;&quot;</span>
+    <span class="n">wav</span><span class="p">,</span> <span class="n">native_sr</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">channels</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">wav</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">fmt</span><span class="p">,</span> <span class="n">bit_depth</span> <span class="o">=</span> <span class="n">_sound_meta</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_Probe</span><span class="p">(</span>
+        <span class="n">wav</span><span class="o">=</span><span class="n">wav</span><span class="p">,</span>
+        <span class="n">native_sr</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">native_sr</span><span class="p">),</span>
+        <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span>
+        <span class="n">bit_depth</span><span class="o">=</span><span class="n">bit_depth</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_below</span><span class="p">(</span><span class="n">status</span><span class="p">:</span> <span class="n">QCStatus</span><span class="p">,</span> <span class="n">min_status</span><span class="p">:</span> <span class="n">QCStatus</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;True if ``status`` is worse than the admission floor ``min_status``.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_QC_RANK</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">_QC_RANK</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">min_status</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_src_name</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The basename of a path-like source (for UCS-filename taxonomy parsing).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">))</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_reference_uri</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A fetchable URI for a by-reference sound: the resolved local path if</span>
+<span class="sd">    ``src`` is path-like (index-in-place), else ``None``.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">))</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_audio_identity</span><span class="p">(</span><span class="n">wav</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reproducible content id from the canonical decoded PCM.</span>
+
+<span class="sd">    Hashing the float32 samples (not the FLAC container, whose Vorbis-comment</span>
+<span class="sd">    vendor string embeds the libFLAC version) keeps the id/dedup key stable across</span>
+<span class="sd">    machines and library upgrades — the local&lt;-&gt;cloud idempotency promise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">canonical</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">wav</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">content_key</span><span class="p">(</span><span class="n">canonical</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_user_license</span><span class="p">(</span><span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The default license for a local ingest: user-owned =&gt; cacheable (by-value).</span>
+
+<span class="sd">    Routes through the ``license_id -&gt; flags`` SSOT (``&#39;user-owned&#39;``), so the</span>
+<span class="sd">    storage mode is derived, not hand-set. ``rights_verified=True`` because the</span>
+<span class="sd">    user is asserting ownership by ingesting their own files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lic</span> <span class="o">=</span> <span class="n">LicenseRecord</span><span class="p">(</span>
+        <span class="n">source</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span>
+        <span class="n">source_url</span><span class="o">=</span><span class="n">source_url</span><span class="p">,</span>
+        <span class="n">license_id</span><span class="o">=</span><span class="s2">&quot;user-owned&quot;</span><span class="p">,</span>
+        <span class="n">acquisition_method</span><span class="o">=</span><span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+        <span class="n">rights_verified</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">apply_license_flags</span><span class="p">(</span><span class="n">lic</span><span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># ingest_one — the single-file composer</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="ingest_one">
+<a class="viewcode-back" href="../../../module_docs/foley/index/ingest.html#foley.ingest_one">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ingest_one</span><span class="p">(</span>
+    <span class="n">src</span><span class="p">:</span> <span class="s2">&quot;AudioSource&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">license</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LicenseRecord</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">tagger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">zeroshot_tagger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">captioner</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">do_qc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">min_status</span><span class="p">:</span> <span class="n">QCStatus</span> <span class="o">=</span> <span class="n">QCStatus</span><span class="o">.</span><span class="n">warn</span><span class="p">,</span>
+    <span class="n">do_supervised</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">do_zeroshot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">do_caption</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">thresholds</span><span class="p">:</span> <span class="n">QCThresholds</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="p">,</span>
+    <span class="n">store</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ingest one clip into ``library`` and return an :class:`IngestResult`.</span>
+
+<span class="sd">    Pipeline: probe + decode-once -&gt; content-address dedup -&gt; QC gate -&gt; embed</span>
+<span class="sd">    (once) -&gt; supervised + zero-shot tags -&gt; caption -&gt; resolve UCS -&gt; assemble</span>
+<span class="sd">    ``SoundRecord`` -&gt; :meth:`SoundLibrary.add`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        src: A path, ``bytes``, or file-like audio source.</span>
+<span class="sd">        library: Target :class:`~foley.index.library.SoundLibrary` (default: the</span>
+<span class="sd">            process-wide default library).</span>
+<span class="sd">        license: Rights record (default: a user-owned, cacheable license).</span>
+<span class="sd">        tagger: Supervised :class:`~foley.index.protocols.Tagger` (default: PANNs</span>
+<span class="sd">            via :func:`~foley.index.taggers.default_tagger`).</span>
+<span class="sd">        zeroshot_tagger: Zero-shot tagger (default: CLAP via</span>
+<span class="sd">            :func:`~foley.index.taggers.default_zeroshot_tagger`).</span>
+<span class="sd">        captioner: Optional :class:`~foley.index.protocols.Captioner` (default:</span>
+<span class="sd">            none — the caption stage is off unless one is injected).</span>
+<span class="sd">        do_qc: Run the Tier-0 QC gate.</span>
+<span class="sd">        min_status: Admission floor — a QC status worse than this is quarantined</span>
+<span class="sd">            (default ``warn``: only ``fail`` clips are rejected).</span>
+<span class="sd">        do_supervised / do_zeroshot / do_caption: Toggle each enrichment stage.</span>
+<span class="sd">        thresholds: QC thresholds.</span>
+<span class="sd">        store: If ``False``, assemble the record but do not add it to the library</span>
+<span class="sd">            (probe/QC/enrich only).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An :class:`IngestResult`; its ``record`` is ``None`` when quarantined or a</span>
+<span class="sd">        duplicate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_library</span>
+
+    <span class="n">lib</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
+
+    <span class="c1"># Stage 0 — probe + decode once + archive bytes + content-addressed id.</span>
+    <span class="c1"># The id/dedup key hashes the CANONICAL decoded PCM (reproducible across</span>
+    <span class="c1"># environments), NOT the FLAC archive whose vendor string varies by libFLAC</span>
+    <span class="c1"># version. The archive bytes are the stored blob (keyed separately by</span>
+    <span class="c1"># store_sound as content_sha256).</span>
+    <span class="n">probe</span> <span class="o">=</span> <span class="n">_probe</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">work</span> <span class="o">=</span> <span class="n">to_working</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">,</span> <span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">)</span>
+    <span class="n">archive</span> <span class="o">=</span> <span class="n">encode</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">,</span> <span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">)</span>  <span class="c1"># FLAC bytes</span>
+    <span class="n">sound_id</span> <span class="o">=</span> <span class="n">_audio_identity</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">store</span> <span class="ow">and</span> <span class="n">sound_id</span> <span class="ow">in</span> <span class="n">lib</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;skipped_dup&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Stage 1 — QC gate (report 08 §3)</span>
+    <span class="n">qc_report</span> <span class="o">=</span> <span class="n">run_qc</span><span class="p">(</span><span class="n">work</span><span class="p">,</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="n">thresholds</span><span class="p">)</span> <span class="k">if</span> <span class="n">do_qc</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">qc_report</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">_below</span><span class="p">(</span><span class="n">qc_report</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">min_status</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="s2">&quot;quarantined&quot;</span><span class="p">,</span>
+            <span class="n">qc</span><span class="o">=</span><span class="n">qc_report</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+            <span class="n">notes</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">qc_report</span><span class="o">.</span><span class="n">notes</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="n">notes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Stage 5a — embed once (the retrieval vector; reused for zero-shot tagging)</span>
+    <span class="n">audio_vec</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">embedder</span><span class="o">.</span><span class="n">embed_audio</span><span class="p">(</span><span class="n">work</span><span class="p">,</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">)</span>
+
+    <span class="c1"># Stage 2 — supervised AudioSet tags (optional, graceful)</span>
+    <span class="n">audioset_labels</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">do_supervised</span><span class="p">:</span>
+        <span class="n">audioset_labels</span> <span class="o">=</span> <span class="n">_run_supervised</span><span class="p">(</span><span class="n">tagger</span><span class="p">,</span> <span class="n">probe</span><span class="p">,</span> <span class="n">notes</span><span class="p">)</span>
+
+    <span class="c1"># Stage 3 — zero-shot tags (optional; reuses audio_vec, no second CLAP pass).</span>
+    <span class="c1"># The default tagger is bound to the LIBRARY&#39;s embedder so the audio vector</span>
+    <span class="c1"># and the label prompts live in the same joint space.</span>
+    <span class="n">zeroshot_tags</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">do_zeroshot</span><span class="p">:</span>
+        <span class="n">zeroshot_tags</span> <span class="o">=</span> <span class="n">_run_zeroshot</span><span class="p">(</span>
+            <span class="n">zeroshot_tagger</span><span class="p">,</span> <span class="n">probe</span><span class="p">,</span> <span class="n">audio_vec</span><span class="p">,</span> <span class="n">notes</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="n">lib</span><span class="o">.</span><span class="n">embedder</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Stage 4 — caption (optional; only when a captioner is injected)</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">do_caption</span> <span class="ow">and</span> <span class="n">captioner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">caption</span> <span class="o">=</span> <span class="n">captioner</span><span class="o">.</span><span class="n">caption</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">,</span> <span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># graceful: a captioner failure never aborts</span>
+            <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;captioning skipped: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># taxonomy resolve (tags + caption + audioset + filename -&gt; UCS CatID)</span>
+    <span class="n">resolution</span> <span class="o">=</span> <span class="n">resolve_catid</span><span class="p">(</span>
+        <span class="n">tags</span><span class="o">=</span><span class="n">zeroshot_tags</span><span class="p">,</span>
+        <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
+        <span class="n">audioset_labels</span><span class="o">=</span><span class="n">audioset_labels</span><span class="p">,</span>
+        <span class="n">filename</span><span class="o">=</span><span class="n">_src_name</span><span class="p">(</span><span class="n">src</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">ref_uri</span> <span class="o">=</span> <span class="n">_reference_uri</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">lic</span> <span class="o">=</span> <span class="n">license</span> <span class="k">if</span> <span class="n">license</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_default_user_license</span><span class="p">(</span><span class="n">ref_uri</span><span class="p">)</span>
+    <span class="c1"># `format` is the DELIVERED format (what library.audio() serves): the FLAC</span>
+    <span class="c1"># archive when cached by-value, else the untouched source container.</span>
+    <span class="n">delivered_format</span> <span class="o">=</span> <span class="n">ARCHIVE_FORMAT</span> <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">cache_bytes_ok</span> <span class="k">else</span> <span class="n">probe</span><span class="o">.</span><span class="n">format</span>
+
+    <span class="n">record</span> <span class="o">=</span> <span class="n">SoundRecord</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span>
+        <span class="n">uri</span><span class="o">=</span><span class="n">ref_uri</span><span class="p">,</span>  <span class="c1"># a fetchable ref for by-reference; overwritten by the content</span>
+        <span class="n">license</span><span class="o">=</span><span class="n">lic</span><span class="p">,</span>  <span class="c1">#   key when store_sound caches by-value</span>
+        <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">audioset_labels</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">zeroshot_tags</span><span class="p">)),</span>
+        <span class="n">audioset_labels</span><span class="o">=</span><span class="n">audioset_labels</span><span class="p">,</span>
+        <span class="n">ucs_category</span><span class="o">=</span><span class="n">resolution</span><span class="o">.</span><span class="n">catid</span><span class="p">,</span>
+        <span class="n">ucs_subcategory</span><span class="o">=</span><span class="n">resolution</span><span class="o">.</span><span class="n">subcategory</span><span class="p">,</span>
+        <span class="n">duration_s</span><span class="o">=</span><span class="p">(</span><span class="n">qc_report</span><span class="o">.</span><span class="n">duration_s</span> <span class="k">if</span> <span class="n">qc_report</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">work</span><span class="p">)</span> <span class="o">/</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">),</span>
+        <span class="n">sample_rate</span><span class="o">=</span><span class="n">WORKING_SAMPLE_RATE</span><span class="p">,</span>
+        <span class="n">channels</span><span class="o">=</span><span class="n">probe</span><span class="o">.</span><span class="n">channels</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="n">delivered_format</span><span class="p">,</span>
+        <span class="n">archive_format</span><span class="o">=</span><span class="n">ARCHIVE_FORMAT</span><span class="p">,</span>
+        <span class="n">source_sample_rate</span><span class="o">=</span><span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">,</span>
+        <span class="n">source_bit_depth</span><span class="o">=</span><span class="n">probe</span><span class="o">.</span><span class="n">bit_depth</span><span class="p">,</span>
+        <span class="n">loudness_lufs</span><span class="o">=</span><span class="p">(</span><span class="n">qc_report</span><span class="o">.</span><span class="n">loudness_lufs</span> <span class="k">if</span> <span class="n">qc_report</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="n">qc</span><span class="o">=</span><span class="p">(</span><span class="n">qc_report</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">if</span> <span class="n">qc_report</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">store</span><span class="p">:</span>
+        <span class="n">lib</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">archive</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="n">audio_vec</span><span class="p">)</span>
+
+    <span class="n">status</span> <span class="o">=</span> <span class="n">qc_report</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">qc_report</span> <span class="k">else</span> <span class="s2">&quot;pass&quot;</span>
+    <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="n">record</span><span class="p">,</span> <span class="n">qc</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">qc</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="n">notes</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_supervised</span><span class="p">(</span><span class="n">tagger</span><span class="p">,</span> <span class="n">probe</span><span class="p">:</span> <span class="n">_Probe</span><span class="p">,</span> <span class="n">notes</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.taggers</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_tagger</span>
+
+    <span class="n">tg</span> <span class="o">=</span> <span class="n">tagger</span> <span class="k">if</span> <span class="n">tagger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_tagger</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tg</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">,</span> <span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">)]</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;supervised tagging skipped: foley[tag] (panns-inference) not installed&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;supervised tagging failed: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_zeroshot</span><span class="p">(</span>
+    <span class="n">zeroshot_tagger</span><span class="p">,</span> <span class="n">probe</span><span class="p">:</span> <span class="n">_Probe</span><span class="p">,</span> <span class="n">audio_vec</span><span class="p">,</span> <span class="n">notes</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">embedder</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.taggers</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_zeroshot_tagger</span>
+
+    <span class="n">zs</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">zeroshot_tagger</span>
+        <span class="k">if</span> <span class="n">zeroshot_tagger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="n">default_zeroshot_tagger</span><span class="p">(</span><span class="n">embedder</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># reuse the already-computed audio vector when the tagger supports it</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">zs</span><span class="p">,</span> <span class="s2">&quot;tag_vector&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">zs</span><span class="o">.</span><span class="n">tag_vector</span><span class="p">(</span><span class="n">audio_vec</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">zs</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">,</span> <span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">)]</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;zero-shot tagging skipped: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># ingest_folder — the folder facade</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_iter_audio_files</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">exts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Iterator[Path]&quot;</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="k">yield</span> <span class="n">p</span>
+        <span class="k">return</span>
+    <span class="n">walker</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">recursive</span> <span class="k">else</span> <span class="n">p</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">walker</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">fp</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">fp</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">exts</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">fp</span>
+
+
+<div class="viewcode-block" id="ingest_folder">
+<a class="viewcode-back" href="../../../module_docs/foley/index/ingest.html#foley.ingest_folder">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ingest_folder</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">exts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">AUDIO_EXTS</span><span class="p">,</span>
+    <span class="n">on_error</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;collect&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">ingest_one_kw</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ingest every audio file under ``path`` and return an :class:`IngestReport`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: A folder (walked) or a single audio file.</span>
+<span class="sd">        library: Target library (default: the process-wide default).</span>
+<span class="sd">        recursive: Recurse into sub-folders.</span>
+<span class="sd">        exts: Audio extensions to ingest.</span>
+<span class="sd">        on_error: ``&#39;collect&#39;`` records per-file errors and continues;</span>
+<span class="sd">            ``&#39;raise&#39;`` re-raises the first error.</span>
+<span class="sd">        **ingest_one_kw: Forwarded to :func:`ingest_one` (license, taggers, QC</span>
+<span class="sd">            flags, …).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An :class:`IngestReport` (with ``.summary()`` counts and per-file results).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_library</span>
+
+    <span class="n">lib</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">IngestReport</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">_iter_audio_files</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span> <span class="n">exts</span><span class="o">=</span><span class="n">exts</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">ingest_one</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fp</span><span class="p">),</span> <span class="n">library</span><span class="o">=</span><span class="n">lib</span><span class="p">,</span> <span class="o">**</span><span class="n">ingest_one_kw</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">on_error</span> <span class="o">==</span> <span class="s2">&quot;raise&quot;</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">report</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

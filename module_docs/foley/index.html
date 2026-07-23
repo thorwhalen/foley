@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.index &mdash; foley 0.0.1 documentation</title>
+  <title>foley.index &mdash; foley 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -53,6 +53,10 @@
 <li class="toctree-l1"><a class="reference internal" href="audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="base.html">foley.base</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">foley.index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.Captioner"><code class="docutils literal notranslate"><span class="pre">Captioner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.Captioner.caption"><code class="docutils literal notranslate"><span class="pre">Captioner.caption()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.CatIdResolution"><code class="docutils literal notranslate"><span class="pre">CatIdResolution</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.ClapEmbedder"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.ClapEmbedder.model_id"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.model_id</span></code></a></li>
@@ -61,6 +65,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.dim</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.ClapEmbedder.embed_audio"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.embed_audio()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.ClapEmbedder.embed_text"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.embed_text()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.ClapZeroShotTagger"><code class="docutils literal notranslate"><span class="pre">ClapZeroShotTagger</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ClapZeroShotTagger.embedder"><code class="docutils literal notranslate"><span class="pre">ClapZeroShotTagger.embedder</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ClapZeroShotTagger.labels"><code class="docutils literal notranslate"><span class="pre">ClapZeroShotTagger.labels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ClapZeroShotTagger.tag"><code class="docutils literal notranslate"><span class="pre">ClapZeroShotTagger.tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ClapZeroShotTagger.tag_vector"><code class="docutils literal notranslate"><span class="pre">ClapZeroShotTagger.tag_vector()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.Embedder"><code class="docutils literal notranslate"><span class="pre">Embedder</span></code></a><ul>
@@ -77,6 +88,17 @@
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.FusedHit.bm25_score"><code class="docutils literal notranslate"><span class="pre">FusedHit.bm25_score</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.IngestReport"><code class="docutils literal notranslate"><span class="pre">IngestReport</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.IngestReport.error"><code class="docutils literal notranslate"><span class="pre">IngestReport.error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.IngestReport.errored"><code class="docutils literal notranslate"><span class="pre">IngestReport.errored</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.IngestReport.ingested"><code class="docutils literal notranslate"><span class="pre">IngestReport.ingested</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.IngestReport.quarantined"><code class="docutils literal notranslate"><span class="pre">IngestReport.quarantined</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.IngestReport.record"><code class="docutils literal notranslate"><span class="pre">IngestReport.record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.IngestReport.skipped"><code class="docutils literal notranslate"><span class="pre">IngestReport.skipped</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.IngestReport.summary"><code class="docutils literal notranslate"><span class="pre">IngestReport.summary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.IngestResult"><code class="docutils literal notranslate"><span class="pre">IngestResult</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.KeywordIndex"><code class="docutils literal notranslate"><span class="pre">KeywordIndex</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.KeywordIndex.bm25"><code class="docutils literal notranslate"><span class="pre">KeywordIndex.bm25()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.KeywordIndex.index"><code class="docutils literal notranslate"><span class="pre">KeywordIndex.index()</span></code></a></li>
@@ -100,6 +122,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.MemoryIndex.index"><code class="docutils literal notranslate"><span class="pre">MemoryIndex.index()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.MemoryIndex.knn"><code class="docutils literal notranslate"><span class="pre">MemoryIndex.knn()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.MemoryIndex.upsert"><code class="docutils literal notranslate"><span class="pre">MemoryIndex.upsert()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.PannsTagger"><code class="docutils literal notranslate"><span class="pre">PannsTagger</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.PannsTagger.tag"><code class="docutils literal notranslate"><span class="pre">PannsTagger.tag()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.SoundLibrary"><code class="docutils literal notranslate"><span class="pre">SoundLibrary</span></code></a><ul>
@@ -128,6 +154,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.SqliteVecIndex.upsert"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex.upsert()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.Tagger"><code class="docutils literal notranslate"><span class="pre">Tagger</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.Tagger.tag"><code class="docutils literal notranslate"><span class="pre">Tagger.tag()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.VectorIndex"><code class="docutils literal notranslate"><span class="pre">VectorIndex</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.VectorIndex.get_vector"><code class="docutils literal notranslate"><span class="pre">VectorIndex.get_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.index.VectorIndex.knn"><code class="docutils literal notranslate"><span class="pre">VectorIndex.knn()</span></code></a></li>
@@ -137,8 +167,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.default_embedder"><code class="docutils literal notranslate"><span class="pre">default_embedder()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.default_index"><code class="docutils literal notranslate"><span class="pre">default_index()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.default_library"><code class="docutils literal notranslate"><span class="pre">default_library()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.default_tagger"><code class="docutils literal notranslate"><span class="pre">default_tagger()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.default_zeroshot_tagger"><code class="docutils literal notranslate"><span class="pre">default_zeroshot_tagger()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.fuse_hits"><code class="docutils literal notranslate"><span class="pre">fuse_hits()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.hybrid_search"><code class="docutils literal notranslate"><span class="pre">hybrid_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest_folder"><code class="docutils literal notranslate"><span class="pre">ingest_folder()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest_one"><code class="docutils literal notranslate"><span class="pre">ingest_one()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.lancedb_available"><code class="docutils literal notranslate"><span class="pre">lancedb_available()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.parse_ucs_filename"><code class="docutils literal notranslate"><span class="pre">parse_ucs_filename()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.reciprocal_rank_fusion"><code class="docutils literal notranslate"><span class="pre">reciprocal_rank_fusion()</span></code></a></li>
@@ -149,9 +183,11 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index/embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/ingest.html">foley.index.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index/library.html">foley.index.library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index/protocols.html">foley.index.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taggers.html">foley.index.taggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index/taxonomy.html">foley.index.taxonomy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
@@ -199,6 +235,21 @@ protocols with zero-config defaults.</p>
 lazy-imported inside the method that needs it, so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley.index</span></code> costs
 only the stdlib; install the capability you use via the matching extra
 (<code class="docutils literal notranslate"><span class="pre">foley[clap]</span></code>, <code class="docutils literal notranslate"><span class="pre">foley[index]</span></code>, <code class="docutils literal notranslate"><span class="pre">foley[index-sqlite]</span></code>).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.Captioner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">Captioner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/index/protocols.html#Captioner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.Captioner" title="Link to this definition"></a></dt>
+<dd><p>Produce one natural-language sentence describing a clip (report 03).</p>
+<p>The caption feeds the BM25 keyword index and human display. Default is a
+dedicated AAC model (EnCLAP); Qwen2-Audio is a richer promptable upgrade.
+Both are <code class="docutils literal notranslate"><span class="pre">foley[caption]</span></code> adapters plugged in behind this protocol.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.Captioner.caption">
+<span class="sig-name descname"><span class="pre">caption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wav</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/foley/index/protocols.html#Captioner.caption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.Captioner.caption" title="Link to this definition"></a></dt>
+<dd><p>Return a one-sentence caption for the clip.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.index.CatIdResolution">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">CatIdResolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subcategory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matched_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/index/taxonomy/model.html#CatIdResolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.CatIdResolution" title="Link to this definition"></a></dt>
@@ -263,6 +314,53 @@ via <a class="reference internal" href="audio.html#module-foley.audio" title="fo
 <dt class="sig sig-object py" id="foley.index.ClapEmbedder.embed_text">
 <span class="sig-name descname"><span class="pre">embed_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/foley/index/embedders.html#ClapEmbedder.embed_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ClapEmbedder.embed_text" title="Link to this definition"></a></dt>
 <dd><p>Embed one or more query strings -&gt; <code class="docutils literal notranslate"><span class="pre">(n_texts,</span> <span class="pre">dim)</span></code> L2-normalized.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.ClapZeroShotTagger">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">ClapZeroShotTagger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'this</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">sound</span> <span class="pre">of</span> <span class="pre">{label}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/index/taggers.html#ClapZeroShotTagger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ClapZeroShotTagger" title="Link to this definition"></a></dt>
+<dd><p>Zero-shot tagger: score a clip against a label set via CLAP cosine.</p>
+<p>Reuses a <a class="reference internal" href="index/embedders.html#foley.index.embedders.ClapEmbedder" title="foley.index.embedders.ClapEmbedder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClapEmbedder</span></code></a> (the same model the
+Index uses), so the audio is embedded in the same joint space as the label
+prompts and no extra weights load. The default label set is the UCS
+subcategory names (foley’s own vocabulary), so tags land in-taxonomy.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.ClapZeroShotTagger.embedder">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">embedder</span></span><a class="headerlink" href="#foley.index.ClapZeroShotTagger.embedder" title="Link to this definition"></a></dt>
+<dd><p>The CLAP embedder (injected or the process-wide default).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.ClapZeroShotTagger.labels">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">labels</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.ClapZeroShotTagger.labels" title="Link to this definition"></a></dt>
+<dd><p>natural UCS <code class="docutils literal notranslate"><span class="pre">category</span> <span class="pre">subcategory</span></code> phrases).</p>
+<p>Natural multi-word phrases (<code class="docutils literal notranslate"><span class="pre">&quot;weather</span> <span class="pre">rain&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;glass</span> <span class="pre">break&quot;</span></code>) are far
+better CLAP prompts — and better BM25 tags / taxonomy-resolver input — than
+bare abstract subcategory words (<code class="docutils literal notranslate"><span class="pre">&quot;Break&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Buzz&quot;</span></code>), which are a known
+zero-shot artifact (anomalously close to everything). Absolute tag-quality
+calibration (thresholds, label curation) is an eval-harness concern (#10).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The label vocabulary (<a class="reference internal" href="../foley.html#foley.Affordance.default" title="foley.Affordance.default">default</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.ClapZeroShotTagger.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wav</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxonomy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'custom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/index/taggers.html#ClapZeroShotTagger.tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ClapZeroShotTagger.tag" title="Link to this definition"></a></dt>
+<dd><p>Return the top-<code class="docutils literal notranslate"><span class="pre">k</span></code> <code class="docutils literal notranslate"><span class="pre">(label,</span> <span class="pre">cosine)</span></code> tags for the clip, best first.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.ClapZeroShotTagger.tag_vector">
+<span class="sig-name descname"><span class="pre">tag_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/index/taggers.html#ClapZeroShotTagger.tag_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ClapZeroShotTagger.tag_vector" title="Link to this definition"></a></dt>
+<dd><p>Score a <strong>precomputed</strong> (L2-normalized) audio vector against the labels.</p>
+<p>The efficiency seam (report 03 Part 2): the Index already embeds every
+sound with this model, so on ingest the retrieval vector is reused here —
+no second CLAP forward pass.</p>
 </dd></dl>
 
 </dd></dl>
@@ -388,6 +486,63 @@ appeared only in the vector list).</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.IngestReport">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">IngestReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="index/ingest.html#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/index/ingest.html#IngestReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.IngestReport" title="Link to this definition"></a></dt>
+<dd><p>The rolled-up outcome of a folder ingest (JSON-serializable).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.IngestReport.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Exception</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/foley/index/ingest.html#IngestReport.error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.IngestReport.error" title="Link to this definition"></a></dt>
+<dd><p>Record a per-file error without aborting the run.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.IngestReport.errored">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">errored</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="index/ingest.html#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.IngestReport.errored" title="Link to this definition"></a></dt>
+<dd><p>Results that raised during ingest.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.IngestReport.ingested">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ingested</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="index/ingest.html#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.IngestReport.ingested" title="Link to this definition"></a></dt>
+<dd><p>Results that were added to the library (<code class="docutils literal notranslate"><span class="pre">pass</span></code> or <code class="docutils literal notranslate"><span class="pre">warn</span></code>).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.IngestReport.quarantined">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">quarantined</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="index/ingest.html#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.IngestReport.quarantined" title="Link to this definition"></a></dt>
+<dd><p>Results rejected by the QC gate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.IngestReport.record">
+<span class="sig-name descname"><span class="pre">record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="index/ingest.html#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/foley/index/ingest.html#IngestReport.record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.IngestReport.record" title="Link to this definition"></a></dt>
+<dd><p>Append one <a class="reference internal" href="#foley.index.IngestResult" title="foley.index.IngestResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestResult</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.IngestReport.skipped">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">skipped</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="index/ingest.html#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.IngestReport.skipped" title="Link to this definition"></a></dt>
+<dd><p>Results skipped as content-addressed duplicates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.IngestReport.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/foley/index/ingest.html#IngestReport.summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.IngestReport.summary" title="Link to this definition"></a></dt>
+<dd><p>A counts dict for a console/CLI summary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.IngestResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">IngestResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><span class="pre">SoundRecord</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/index/ingest.html#IngestResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.IngestResult" title="Link to this definition"></a></dt>
+<dd><p>The outcome of ingesting one clip.</p>
+<p><code class="docutils literal notranslate"><span class="pre">status</span></code>: <code class="docutils literal notranslate"><span class="pre">'pass'</span></code>/<code class="docutils literal notranslate"><span class="pre">'warn'</span></code> (ingested), <code class="docutils literal notranslate"><span class="pre">'quarantined'</span></code> (QC-rejected,
+not added), <code class="docutils literal notranslate"><span class="pre">'skipped_dup'</span></code> (content already in the library), or
+<code class="docutils literal notranslate"><span class="pre">'error'</span></code>. <code class="docutils literal notranslate"><span class="pre">record</span></code> is present only when the clip was ingested.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -535,6 +690,21 @@ in the corpus size, which is fine for the in-memory tier’s scale.</p>
 <dt class="sig sig-object py" id="foley.index.MemoryIndex.upsert">
 <span class="sig-name descname"><span class="pre">upsert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/foley/index/indexes.html#MemoryIndex.upsert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.MemoryIndex.upsert" title="Link to this definition"></a></dt>
 <dd><p>Insert or replace the vector (and light metadata) for <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.PannsTagger">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">PannsTagger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/index/taggers.html#PannsTagger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.PannsTagger" title="Link to this definition"></a></dt>
+<dd><p>PANNs CNN14 supervised tagger over the 527 AudioSet classes (<code class="docutils literal notranslate"><span class="pre">foley[tag]</span></code>).</p>
+<p>The checkpoint auto-downloads to <code class="docutils literal notranslate"><span class="pre">~/panns_data</span></code> (~327 MB) on the first
+<a class="reference internal" href="#foley.index.PannsTagger.tag" title="foley.index.PannsTagger.tag"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tag()</span></code></a>. PANNs expects 32 kHz mono; the clip is resampled via
+<a class="reference internal" href="audio.html#foley.audio.to_working" title="foley.audio.to_working"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.audio.to_working()</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.PannsTagger.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wav</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxonomy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'audioset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/index/taggers.html#PannsTagger.tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.PannsTagger.tag" title="Link to this definition"></a></dt>
+<dd><p>Return the top-<code class="docutils literal notranslate"><span class="pre">k</span></code> <code class="docutils literal notranslate"><span class="pre">(AudioSet</span> <span class="pre">label,</span> <span class="pre">score)</span></code> tags, best first.</p>
 </dd></dl>
 
 </dd></dl>
@@ -773,6 +943,23 @@ score is larger-is-better (consistent with the other backends).</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="foley.index.Tagger">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">Tagger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/index/protocols.html#Tagger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.Tagger" title="Link to this definition"></a></dt>
+<dd><p>Map a clip to <code class="docutils literal notranslate"><span class="pre">(label,</span> <span class="pre">score)</span></code> pairs against a label vocabulary.</p>
+<p>Used on ingest to auto-fill <code class="docutils literal notranslate"><span class="pre">SoundRecord.audioset_labels</span></code> (supervised) and
+<code class="docutils literal notranslate"><span class="pre">tags</span></code> (zero-shot). The default supervised tagger is PANNs CNN14 over
+AudioSet; the default zero-shot tagger scores a clip against a custom/UCS
+label set via CLAP (report 03). BEATs/AST are drop-in upgrades. Consumes the
+working array (<code class="docutils literal notranslate"><span class="pre">float32</span></code>, any sr — the impl resamples to its model’s rate).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.Tagger.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wav</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">taxonomy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'audioset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/index/protocols.html#Tagger.tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.Tagger.tag" title="Link to this definition"></a></dt>
+<dd><p>Return the top-<code class="docutils literal notranslate"><span class="pre">k</span></code> <code class="docutils literal notranslate"><span class="pre">(label,</span> <span class="pre">score)</span></code> tags for the clip, best first.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="foley.index.VectorIndex">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">VectorIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/index/protocols.html#VectorIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.VectorIndex" title="Link to this definition"></a></dt>
 <dd><p>Approximate-nearest-neighbour store over embedding vectors.</p>
@@ -852,6 +1039,22 @@ must survive restarts); inject it explicitly for tests/ephemeral use.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.index.default_tagger">
+<span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">default_tagger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="index/taggers.html#foley.index.taggers.PannsTagger" title="foley.index.taggers.PannsTagger"><span class="pre">PannsTagger</span></a></span></span><a class="reference internal" href="../../_modules/foley/index/taggers.html#default_tagger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.default_tagger" title="Link to this definition"></a></dt>
+<dd><p>The default supervised tagger (PANNs CNN14; <code class="docutils literal notranslate"><span class="pre">foley[tag]</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.default_zeroshot_tagger">
+<span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">default_zeroshot_tagger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embedder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="index/taggers.html#foley.index.taggers.ClapZeroShotTagger" title="foley.index.taggers.ClapZeroShotTagger"><span class="pre">ClapZeroShotTagger</span></a></span></span><a class="reference internal" href="../../_modules/foley/index/taggers.html#default_zeroshot_tagger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.default_zeroshot_tagger" title="Link to this definition"></a></dt>
+<dd><p>The default zero-shot tagger (CLAP vs UCS subcategories; <code class="docutils literal notranslate"><span class="pre">foley[clap]</span></code>).</p>
+<p>Cached <strong>per embedder</strong> so the tagger is bound to the SAME embedder that
+produced the audio vector it scores — otherwise (report seam) the cosine would
+cross two unrelated embedding spaces. <code class="docutils literal notranslate"><span class="pre">embedder=None</span></code> uses the process-wide
+default embedder.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.index.fuse_hits">
 <span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">fuse_hits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector_hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword_hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rrf_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="index/search.html#foley.index.search.FusedHit" title="foley.index.search.FusedHit"><span class="pre">FusedHit</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/index/search.html#fuse_hits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.fuse_hits" title="Link to this definition"></a></dt>
 <dd><p>RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.</p>
@@ -892,6 +1095,65 @@ vector).</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The top-<code class="docutils literal notranslate"><span class="pre">k</span></code> fused :class:<a href="#id7"><span class="problematic" id="id8">`</span></a>FusedHit`s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.ingest_folder">
+<span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">ingest_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('.wav',</span> <span class="pre">'.flac',</span> <span class="pre">'.aiff',</span> <span class="pre">'.aif',</span> <span class="pre">'.ogg',</span> <span class="pre">'.mp3',</span> <span class="pre">'.opus',</span> <span class="pre">'.m4a')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'collect'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">ingest_one_kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="index/ingest.html#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><span class="pre">IngestReport</span></a></span></span><a class="reference internal" href="../../_modules/foley/index/ingest.html#ingest_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest_folder" title="Link to this definition"></a></dt>
+<dd><p>Ingest every audio file under <code class="docutils literal notranslate"><span class="pre">path</span></code> and return an <a class="reference internal" href="#foley.index.IngestReport" title="foley.index.IngestReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestReport</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – A folder (walked) or a single audio file.</p></li>
+<li><p><strong>library</strong> – Target library (default: the process-wide default).</p></li>
+<li><p><strong>recursive</strong> – Recurse into sub-folders.</p></li>
+<li><p><strong>exts</strong> – Audio extensions to ingest.</p></li>
+<li><p><strong>on_error</strong> – <code class="docutils literal notranslate"><span class="pre">'collect'</span></code> records per-file errors and continues;
+<code class="docutils literal notranslate"><span class="pre">'raise'</span></code> re-raises the first error.</p></li>
+<li><p><strong>**ingest_one_kw</strong> – Forwarded to <a class="reference internal" href="#foley.index.ingest_one" title="foley.index.ingest_one"><code class="xref py py-func docutils literal notranslate"><span class="pre">ingest_one()</span></code></a> (license, taggers, QC
+flags, …).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An <a class="reference internal" href="#foley.index.IngestReport" title="foley.index.IngestReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestReport</span></code></a> (with <code class="docutils literal notranslate"><span class="pre">.summary()</span></code> counts and per-file results).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.ingest_one">
+<span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">ingest_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="audio.html#foley.audio.AudioSource" title="foley.audio.AudioSource"><span class="pre">AudioSource</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../foley.html#foley.LicenseRecord" title="foley.LicenseRecord"><span class="pre">LicenseRecord</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeroshot_tagger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captioner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_qc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../foley.html#foley.QCStatus" title="foley.QCStatus"><span class="pre">QCStatus</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QCStatus.warn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_supervised</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_zeroshot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../foley.html#foley.QCThresholds" title="foley.QCThresholds"><span class="pre">QCThresholds</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QCThresholds(clip_full_scale=0.999,</span> <span class="pre">clip_min_run=3,</span> <span class="pre">clip_reject_ratio=0.0001,</span> <span class="pre">clip_reject_run=10,</span> <span class="pre">true_peak_max_dbtp=-1.0,</span> <span class="pre">true_peak_oversample=4,</span> <span class="pre">dc_offset_fail=0.01,</span> <span class="pre">dc_offset_warn=0.001,</span> <span class="pre">silence_rms_dbfs=-60.0,</span> <span class="pre">snr_clean_db=20.0,</span> <span class="pre">snr_quiet_percentile=10.0,</span> <span class="pre">snr_frame_s=0.025,</span> <span class="pre">snr_hop_s=0.01,</span> <span class="pre">edge_rel_peak_dbfs=-40.0,</span> <span class="pre">edge_fade_s=0.01,</span> <span class="pre">lufs_gate_floor=-70.0,</span> <span class="pre">lufs_outlier_lu=6.0,</span> <span class="pre">duration_min_s=0.1,</span> <span class="pre">deliver_min_sample_rate=44100)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.index.IngestResult" title="foley.index.IngestResult"><span class="pre">IngestResult</span></a></span></span><a class="reference internal" href="../../_modules/foley/index/ingest.html#ingest_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest_one" title="Link to this definition"></a></dt>
+<dd><p>Ingest one clip into <code class="docutils literal notranslate"><span class="pre">library</span></code> and return an <a class="reference internal" href="#foley.index.IngestResult" title="foley.index.IngestResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestResult</span></code></a>.</p>
+<p>Pipeline: probe + decode-once -&gt; content-address dedup -&gt; QC gate -&gt; embed
+(once) -&gt; supervised + zero-shot tags -&gt; caption -&gt; resolve UCS -&gt; assemble
+<code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code> -&gt; <a class="reference internal" href="#foley.index.SoundLibrary.add" title="foley.index.SoundLibrary.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SoundLibrary.add()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – A path, <code class="docutils literal notranslate"><span class="pre">bytes</span></code>, or file-like audio source.</p></li>
+<li><p><strong>library</strong> – Target <a class="reference internal" href="index/library.html#foley.index.library.SoundLibrary" title="foley.index.library.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundLibrary</span></code></a> (default: the
+process-wide default library).</p></li>
+<li><p><strong>license</strong> – Rights record (default: a user-owned, cacheable license).</p></li>
+<li><p><strong>tagger</strong> – Supervised <a class="reference internal" href="index/protocols.html#foley.index.protocols.Tagger" title="foley.index.protocols.Tagger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tagger</span></code></a> (default: PANNs
+via <a class="reference internal" href="index/taggers.html#foley.index.taggers.default_tagger" title="foley.index.taggers.default_tagger"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_tagger()</span></code></a>).</p></li>
+<li><p><strong>zeroshot_tagger</strong> – Zero-shot tagger (default: CLAP via
+<a class="reference internal" href="index/taggers.html#foley.index.taggers.default_zeroshot_tagger" title="foley.index.taggers.default_zeroshot_tagger"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_zeroshot_tagger()</span></code></a>).</p></li>
+<li><p><strong>captioner</strong> – Optional <a class="reference internal" href="index/protocols.html#foley.index.protocols.Captioner" title="foley.index.protocols.Captioner"><code class="xref py py-class docutils literal notranslate"><span class="pre">Captioner</span></code></a> (default:
+none — the caption stage is off unless one is injected).</p></li>
+<li><p><strong>do_qc</strong> – Run the Tier-0 QC gate.</p></li>
+<li><p><strong>min_status</strong> – Admission floor — a QC status worse than this is quarantined
+(default <code class="docutils literal notranslate"><span class="pre">warn</span></code>: only <code class="docutils literal notranslate"><span class="pre">fail</span></code> clips are rejected).</p></li>
+<li><p><strong>do_caption</strong> (<em>do_supervised / do_zeroshot /</em>) – Toggle each enrichment stage.</p></li>
+<li><p><strong>thresholds</strong> – QC thresholds.</p></li>
+<li><p><strong>store</strong> – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, assemble the record but do not add it to the library
+(probe/QC/enrich only).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An <a class="reference internal" href="#foley.index.IngestResult" title="foley.index.IngestResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestResult</span></code></a>; its <code class="docutils literal notranslate"><span class="pre">record</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> when quarantined or a
+duplicate.</p>
 </dd>
 </dl>
 </dd></dl>

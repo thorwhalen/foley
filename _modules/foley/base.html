@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.base &mdash; foley 0.0.1 documentation</title>
+  <title>foley.base &mdash; foley 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -52,9 +52,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/library.html">foley.index.library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
@@ -430,7 +432,9 @@
     <span class="n">notice_text_required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># provenance / transformation</span>
-    <span class="n">transformations</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># ordered ops; non-empty =&gt; &quot;(modified)&quot;</span>
+    <span class="n">transformations</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span>
+    <span class="p">)</span>  <span class="c1"># ordered ops; non-empty =&gt; &quot;(modified)&quot;</span>
 
     <span class="c1"># generation (present iff AI-generated)</span>
     <span class="n">is_ai_generated</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
@@ -439,7 +443,9 @@
     <span class="n">generation_prompt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">generation_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">generation_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-    <span class="n">watermark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># {&quot;present&quot;: True, &quot;method&quot;: &quot;audioseal&quot;, &quot;version&quot;: ...}</span>
+    <span class="n">watermark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="kc">None</span>  <span class="c1"># {&quot;present&quot;: True, &quot;method&quot;: &quot;audioseal&quot;, &quot;version&quot;: ...}</span>
+    <span class="p">)</span>
     <span class="n">c2pa_manifest_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># safety / disclosure</span>
@@ -474,7 +480,9 @@
 
     <span class="c1"># storage (report 09)</span>
     <span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># content key | local path | s3://… | https://…</span>
-    <span class="n">storage_mode</span><span class="p">:</span> <span class="n">StorageMode</span> <span class="o">=</span> <span class="n">StorageMode</span><span class="o">.</span><span class="n">by_reference</span>  <span class="c1"># DERIVED from license.cache_bytes_ok</span>
+    <span class="n">storage_mode</span><span class="p">:</span> <span class="n">StorageMode</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">StorageMode</span><span class="o">.</span><span class="n">by_reference</span>
+    <span class="p">)</span>  <span class="c1"># DERIVED from license.cache_bytes_ok</span>
     <span class="n">archive_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># &#39;flac&#39;</span>
     <span class="n">source_sample_rate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># preserved native rate (e.g. 96/192 kHz)</span>
     <span class="n">source_bit_depth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>

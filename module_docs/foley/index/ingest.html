@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.index.ingest &mdash; foley 0.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.index.library" href="library.html" />
+    <link rel="prev" title="foley.index.indexes" href="indexes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.index.ingest</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.AUDIO_EXTS"><code class="docutils literal notranslate"><span class="pre">AUDIO_EXTS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.IngestReport"><code class="docutils literal notranslate"><span class="pre">IngestReport</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ingest.IngestReport.error"><code class="docutils literal notranslate"><span class="pre">IngestReport.error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ingest.IngestReport.errored"><code class="docutils literal notranslate"><span class="pre">IngestReport.errored</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ingest.IngestReport.ingested"><code class="docutils literal notranslate"><span class="pre">IngestReport.ingested</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ingest.IngestReport.quarantined"><code class="docutils literal notranslate"><span class="pre">IngestReport.quarantined</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ingest.IngestReport.record"><code class="docutils literal notranslate"><span class="pre">IngestReport.record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ingest.IngestReport.skipped"><code class="docutils literal notranslate"><span class="pre">IngestReport.skipped</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.ingest.IngestReport.summary"><code class="docutils literal notranslate"><span class="pre">IngestReport.summary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.IngestResult"><code class="docutils literal notranslate"><span class="pre">IngestResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.ingest_folder"><code class="docutils literal notranslate"><span class="pre">ingest_folder()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.ingest_one"><code class="docutils literal notranslate"><span class="pre">ingest_one()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.index.ingest</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/index/ingest.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.index.ingest">
+<span id="foley-index-ingest"></span><h1>foley.index.ingest<a class="headerlink" href="#module-foley.index.ingest" title="Link to this heading"></a></h1>
+<p>The ingestion pipeline — turn any audio file into a searchable SoundRecord.</p>
+<p><code class="docutils literal notranslate"><span class="pre">probe</span> <span class="pre">-&gt;</span> <span class="pre">QC</span> <span class="pre">-&gt;</span> <span class="pre">supervised</span> <span class="pre">tag</span> <span class="pre">-&gt;</span> <span class="pre">zero-shot</span> <span class="pre">tag</span> <span class="pre">-&gt;</span> <span class="pre">caption</span> <span class="pre">-&gt;</span> <span class="pre">resolve</span> <span class="pre">taxonomy</span>
+<span class="pre">-&gt;</span> <span class="pre">embed</span> <span class="pre">-&gt;</span> <span class="pre">assemble</span> <span class="pre">-&gt;</span> <span class="pre">store</span></code> (report 03 Stages 0-5, report 08 §3 QC gate,
+report 09 §5 decode-once). It is almost entirely <strong>composition</strong> over primitives
+that already exist:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>decode / archive: <a class="reference internal" href="../audio.html#foley.audio.load" title="foley.audio.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.audio.load()</span></code></a> / <a class="reference internal" href="../audio.html#foley.audio.encode" title="foley.audio.encode"><code class="xref py py-func docutils literal notranslate"><span class="pre">encode()</span></code></a>
+(decode once, then fan the one array out to QC + taggers + embedder),</p></li>
+<li><p>QC gate: <a class="reference internal" href="../qc.html#foley.qc.run_qc" title="foley.qc.run_qc"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.qc.run_qc()</span></code></a> (a <code class="docutils literal notranslate"><span class="pre">fail</span></code> clip is quarantined, not added),</p></li>
+<li><p>embed: the library’s <a class="reference internal" href="embedders.html#foley.index.embedders.ClapEmbedder" title="foley.index.embedders.ClapEmbedder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClapEmbedder</span></code></a> (the vector
+is reused for zero-shot tagging — no second CLAP pass),</p></li>
+<li><p>taxonomy: <a class="reference internal" href="taxonomy.html#foley.index.taxonomy.resolve_catid" title="foley.index.taxonomy.resolve_catid"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.index.taxonomy.resolve_catid()</span></code></a> (tags+caption -&gt; UCS),</p></li>
+<li><p>store + index: <a class="reference internal" href="library.html#foley.index.library.SoundLibrary.add" title="foley.index.library.SoundLibrary.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">foley.index.library.SoundLibrary.add()</span></code></a>
+(the by-value/by-reference license gate + vector upsert + BM25 index).</p></li>
+</ul>
+</div></blockquote>
+<p>Enrichment stages degrade gracefully: a missing <code class="docutils literal notranslate"><span class="pre">foley[tag]</span></code> (PANNs) or
+captioner is skipped with a note, never a crash — only the CLAP embedding is
+required (retrieval-first). Everything heavy is lazy-imported; importing this
+module costs only the stdlib.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.index.ingest.AUDIO_EXTS">
+<span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">AUDIO_EXTS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('.wav',</span> <span class="pre">'.flac',</span> <span class="pre">'.aiff',</span> <span class="pre">'.aif',</span> <span class="pre">'.ogg',</span> <span class="pre">'.mp3',</span> <span class="pre">'.opus',</span> <span class="pre">'.m4a')</span></span><a class="headerlink" href="#foley.index.ingest.AUDIO_EXTS" title="Link to this definition"></a></dt>
+<dd><p>Audio file extensions the folder walker ingests.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestReport">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">IngestReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/ingest.html#IngestReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.IngestReport" title="Link to this definition"></a></dt>
+<dd><p>The rolled-up outcome of a folder ingest (JSON-serializable).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestReport.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Exception</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/ingest.html#IngestReport.error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.IngestReport.error" title="Link to this definition"></a></dt>
+<dd><p>Record a per-file error without aborting the run.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestReport.errored">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">errored</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.ingest.IngestReport.errored" title="Link to this definition"></a></dt>
+<dd><p>Results that raised during ingest.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestReport.ingested">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ingested</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.ingest.IngestReport.ingested" title="Link to this definition"></a></dt>
+<dd><p>Results that were added to the library (<code class="docutils literal notranslate"><span class="pre">pass</span></code> or <code class="docutils literal notranslate"><span class="pre">warn</span></code>).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestReport.quarantined">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">quarantined</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.ingest.IngestReport.quarantined" title="Link to this definition"></a></dt>
+<dd><p>Results rejected by the QC gate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestReport.record">
+<span class="sig-name descname"><span class="pre">record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/ingest.html#IngestReport.record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.IngestReport.record" title="Link to this definition"></a></dt>
+<dd><p>Append one <a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestResult</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestReport.skipped">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">skipped</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.ingest.IngestReport.skipped" title="Link to this definition"></a></dt>
+<dd><p>Results skipped as content-addressed duplicates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestReport.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/index/ingest.html#IngestReport.summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.IngestReport.summary" title="Link to this definition"></a></dt>
+<dd><p>A counts dict for a console/CLI summary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">IngestResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><span class="pre">SoundRecord</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/ingest.html#IngestResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.IngestResult" title="Link to this definition"></a></dt>
+<dd><p>The outcome of ingesting one clip.</p>
+<p><code class="docutils literal notranslate"><span class="pre">status</span></code>: <code class="docutils literal notranslate"><span class="pre">'pass'</span></code>/<code class="docutils literal notranslate"><span class="pre">'warn'</span></code> (ingested), <code class="docutils literal notranslate"><span class="pre">'quarantined'</span></code> (QC-rejected,
+not added), <code class="docutils literal notranslate"><span class="pre">'skipped_dup'</span></code> (content already in the library), or
+<code class="docutils literal notranslate"><span class="pre">'error'</span></code>. <code class="docutils literal notranslate"><span class="pre">record</span></code> is present only when the clip was ingested.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.ingest.ingest_folder">
+<span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">ingest_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('.wav',</span> <span class="pre">'.flac',</span> <span class="pre">'.aiff',</span> <span class="pre">'.aif',</span> <span class="pre">'.ogg',</span> <span class="pre">'.mp3',</span> <span class="pre">'.opus',</span> <span class="pre">'.m4a')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'collect'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">ingest_one_kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><span class="pre">IngestReport</span></a></span></span><a class="reference internal" href="../../../_modules/foley/index/ingest.html#ingest_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.ingest_folder" title="Link to this definition"></a></dt>
+<dd><p>Ingest every audio file under <code class="docutils literal notranslate"><span class="pre">path</span></code> and return an <a class="reference internal" href="#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestReport</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – A folder (walked) or a single audio file.</p></li>
+<li><p><strong>library</strong> – Target library (default: the process-wide default).</p></li>
+<li><p><strong>recursive</strong> – Recurse into sub-folders.</p></li>
+<li><p><strong>exts</strong> – Audio extensions to ingest.</p></li>
+<li><p><strong>on_error</strong> – <code class="docutils literal notranslate"><span class="pre">'collect'</span></code> records per-file errors and continues;
+<code class="docutils literal notranslate"><span class="pre">'raise'</span></code> re-raises the first error.</p></li>
+<li><p><strong>**ingest_one_kw</strong> – Forwarded to <a class="reference internal" href="#foley.index.ingest.ingest_one" title="foley.index.ingest.ingest_one"><code class="xref py py-func docutils literal notranslate"><span class="pre">ingest_one()</span></code></a> (license, taggers, QC
+flags, …).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An <a class="reference internal" href="#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestReport</span></code></a> (with <code class="docutils literal notranslate"><span class="pre">.summary()</span></code> counts and per-file results).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.ingest.ingest_one">
+<span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">ingest_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../audio.html#foley.audio.AudioSource" title="foley.audio.AudioSource"><span class="pre">AudioSource</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.LicenseRecord" title="foley.LicenseRecord"><span class="pre">LicenseRecord</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeroshot_tagger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captioner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_qc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.QCStatus" title="foley.QCStatus"><span class="pre">QCStatus</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QCStatus.warn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_supervised</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_zeroshot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.QCThresholds" title="foley.QCThresholds"><span class="pre">QCThresholds</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QCThresholds(clip_full_scale=0.999,</span> <span class="pre">clip_min_run=3,</span> <span class="pre">clip_reject_ratio=0.0001,</span> <span class="pre">clip_reject_run=10,</span> <span class="pre">true_peak_max_dbtp=-1.0,</span> <span class="pre">true_peak_oversample=4,</span> <span class="pre">dc_offset_fail=0.01,</span> <span class="pre">dc_offset_warn=0.001,</span> <span class="pre">silence_rms_dbfs=-60.0,</span> <span class="pre">snr_clean_db=20.0,</span> <span class="pre">snr_quiet_percentile=10.0,</span> <span class="pre">snr_frame_s=0.025,</span> <span class="pre">snr_hop_s=0.01,</span> <span class="pre">edge_rel_peak_dbfs=-40.0,</span> <span class="pre">edge_fade_s=0.01,</span> <span class="pre">lufs_gate_floor=-70.0,</span> <span class="pre">lufs_outlier_lu=6.0,</span> <span class="pre">duration_min_s=0.1,</span> <span class="pre">deliver_min_sample_rate=44100)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a></span></span><a class="reference internal" href="../../../_modules/foley/index/ingest.html#ingest_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.ingest_one" title="Link to this definition"></a></dt>
+<dd><p>Ingest one clip into <code class="docutils literal notranslate"><span class="pre">library</span></code> and return an <a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestResult</span></code></a>.</p>
+<p>Pipeline: probe + decode-once -&gt; content-address dedup -&gt; QC gate -&gt; embed
+(once) -&gt; supervised + zero-shot tags -&gt; caption -&gt; resolve UCS -&gt; assemble
+<code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code> -&gt; <code class="xref py py-meth docutils literal notranslate"><span class="pre">SoundLibrary.add()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – A path, <code class="docutils literal notranslate"><span class="pre">bytes</span></code>, or file-like audio source.</p></li>
+<li><p><strong>library</strong> – Target <a class="reference internal" href="library.html#foley.index.library.SoundLibrary" title="foley.index.library.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundLibrary</span></code></a> (default: the
+process-wide default library).</p></li>
+<li><p><strong>license</strong> – Rights record (default: a user-owned, cacheable license).</p></li>
+<li><p><strong>tagger</strong> – Supervised <a class="reference internal" href="protocols.html#foley.index.protocols.Tagger" title="foley.index.protocols.Tagger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tagger</span></code></a> (default: PANNs
+via <a class="reference internal" href="taggers.html#foley.index.taggers.default_tagger" title="foley.index.taggers.default_tagger"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_tagger()</span></code></a>).</p></li>
+<li><p><strong>zeroshot_tagger</strong> – Zero-shot tagger (default: CLAP via
+<a class="reference internal" href="taggers.html#foley.index.taggers.default_zeroshot_tagger" title="foley.index.taggers.default_zeroshot_tagger"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_zeroshot_tagger()</span></code></a>).</p></li>
+<li><p><strong>captioner</strong> – Optional <a class="reference internal" href="protocols.html#foley.index.protocols.Captioner" title="foley.index.protocols.Captioner"><code class="xref py py-class docutils literal notranslate"><span class="pre">Captioner</span></code></a> (default:
+none — the caption stage is off unless one is injected).</p></li>
+<li><p><strong>do_qc</strong> – Run the Tier-0 QC gate.</p></li>
+<li><p><strong>min_status</strong> – Admission floor — a QC status worse than this is quarantined
+(default <code class="docutils literal notranslate"><span class="pre">warn</span></code>: only <code class="docutils literal notranslate"><span class="pre">fail</span></code> clips are rejected).</p></li>
+<li><p><strong>do_caption</strong> (<em>do_supervised / do_zeroshot /</em>) – Toggle each enrichment stage.</p></li>
+<li><p><strong>thresholds</strong> – QC thresholds.</p></li>
+<li><p><strong>store</strong> – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, assemble the record but do not add it to the library
+(probe/QC/enrich only).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An <a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestResult</span></code></a>; its <code class="docutils literal notranslate"><span class="pre">record</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> when quarantined or a
+duplicate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="indexes.html" class="btn btn-neutral float-left" title="foley.index.indexes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="library.html" class="btn btn-neutral float-right" title="foley.index.library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

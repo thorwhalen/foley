@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.qc &mdash; foley 0.0.1 documentation</title>
+  <title>foley.qc &mdash; foley 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -52,9 +52,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/library.html">foley.index.library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
@@ -120,6 +122,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
@@ -550,7 +553,7 @@
     <span class="n">clipped_ratio</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">clipped_max_run</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">dc_offset</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="n">rms_dbfs</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">rms_dbfs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>  <span class="c1"># None when non-finite (silent clip =&gt; -inf): JSON-safe</span>
     <span class="n">is_silent</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">needs_edge_fade</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">has_nan_inf</span><span class="p">:</span> <span class="nb">bool</span>
@@ -563,10 +566,19 @@
 <div class="viewcode-block" id="QCReport.to_dict">
 <a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.QCReport.to_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a plain, JSON-safe dict (``status`` as its string value).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a plain, JSON-safe dict (``status`` as its string value).</span>
+
+<span class="sd">        Non-finite floats are swept to ``None`` at this boundary too (belt-and-</span>
+<span class="sd">        suspenders over the construction-time :func:`_json_safe` guard) so no</span>
+<span class="sd">        ``Infinity``/``NaN`` can ever reach ``json.dumps`` regardless of who set a</span>
+<span class="sd">        field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">d</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">value</span>
-        <span class="k">return</span> <span class="n">d</span></div>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">else</span> <span class="n">v</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span></div>
 </div>
 
 
@@ -576,6 +588,19 @@
     <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
     <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_json_safe</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clamp a non-finite float to ``None`` so :meth:`QCReport.to_dict` -&gt;</span>
+<span class="sd">    ``json.dumps`` is strict-JSON safe.</span>
+
+<span class="sd">    ``estimate_snr`` can return ``+inf`` (zero-padded one-shot: noise floor 0) or</span>
+<span class="sd">    ``-inf`` (silent); ``_rms_dbfs`` / ``true_peak_dbtp`` return ``-inf`` (silent).</span>
+<span class="sd">    Left raw, ``json.dumps`` emits ``Infinity``/``-Infinity``, which Postgres</span>
+<span class="sd">    JSONB and JS ``JSON.parse`` reject — breaking the cloud-store-swap invariant.</span>
+<span class="sd">    This is the single SSOT for that clamp.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="n">_is_finite</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="run_qc">
@@ -686,9 +711,7 @@
         <span class="p">)</span>
     <span class="k">if</span> <span class="n">_is_finite</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span> <span class="ow">and</span> <span class="n">snr</span> <span class="o">&lt;</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">snr_clean_db</span><span class="p">:</span>
         <span class="n">warn</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;low SNR </span><span class="si">{</span><span class="n">snr</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> dB &lt; </span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">snr_clean_db</span><span class="si">}</span><span class="s2"> dB (advisory)&quot;</span>
-        <span class="p">)</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;low SNR </span><span class="si">{</span><span class="n">snr</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> dB &lt; </span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">snr_clean_db</span><span class="si">}</span><span class="s2"> dB (advisory)&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">_is_finite</span><span class="p">(</span><span class="n">true_peak</span><span class="p">)</span> <span class="ow">and</span> <span class="n">true_peak</span> <span class="o">&gt;</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">true_peak_max_dbtp</span><span class="p">:</span>
         <span class="n">warn</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -709,13 +732,16 @@
         <span class="n">clipped_ratio</span><span class="o">=</span><span class="n">clipped_ratio</span><span class="p">,</span>
         <span class="n">clipped_max_run</span><span class="o">=</span><span class="n">clipped_max_run</span><span class="p">,</span>
         <span class="n">dc_offset</span><span class="o">=</span><span class="n">dc</span><span class="p">,</span>
-        <span class="n">rms_dbfs</span><span class="o">=</span><span class="n">rms_db</span><span class="p">,</span>
+        <span class="c1"># Non-finite (+/-inf / nan) floats are clamped to None (see _json_safe):</span>
+        <span class="c1"># rms_dbfs is -inf for a silent clip; snr_db is +inf for a zero-padded</span>
+        <span class="c1"># one-shot (noise floor 0) and -inf when silent.</span>
+        <span class="n">rms_dbfs</span><span class="o">=</span><span class="n">_json_safe</span><span class="p">(</span><span class="n">rms_db</span><span class="p">),</span>
         <span class="n">is_silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span>
         <span class="n">needs_edge_fade</span><span class="o">=</span><span class="n">edge</span><span class="p">,</span>
         <span class="n">has_nan_inf</span><span class="o">=</span><span class="n">nan_inf</span><span class="p">,</span>
-        <span class="n">true_peak_dbtp</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">true_peak</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">true_peak</span><span class="p">,</span>
-        <span class="n">snr_db</span><span class="o">=</span><span class="n">snr</span><span class="p">,</span>
-        <span class="n">loudness_lufs</span><span class="o">=</span><span class="n">lufs</span><span class="p">,</span>
+        <span class="n">true_peak_dbtp</span><span class="o">=</span><span class="n">_json_safe</span><span class="p">(</span><span class="n">true_peak</span><span class="p">),</span>
+        <span class="n">snr_db</span><span class="o">=</span><span class="n">_json_safe</span><span class="p">(</span><span class="n">snr</span><span class="p">),</span>
+        <span class="n">loudness_lufs</span><span class="o">=</span><span class="n">_json_safe</span><span class="p">(</span><span class="n">lufs</span><span class="p">),</span>
         <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span>
         <span class="n">notes</span><span class="o">=</span><span class="n">notes</span><span class="p">,</span>
     <span class="p">)</span></div>
