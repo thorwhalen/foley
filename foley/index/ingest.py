@@ -42,7 +42,14 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 
 #: Audio file extensions the folder walker ingests.
 AUDIO_EXTS: tuple[str, ...] = (
-    ".wav", ".flac", ".aiff", ".aif", ".ogg", ".mp3", ".opus", ".m4a",
+    ".wav",
+    ".flac",
+    ".aiff",
+    ".aif",
+    ".ogg",
+    ".mp3",
+    ".opus",
+    ".m4a",
 )
 
 #: QC status ordering (worse -> better) for the admission gate.
@@ -84,9 +91,7 @@ class IngestReport(SerializableMixin):
 
     def error(self, path, exc: Exception) -> None:
         """Record a per-file error without aborting the run."""
-        self.results.append(
-            IngestResult(id=str(path), status="error", error=repr(exc))
-        )
+        self.results.append(IngestResult(id=str(path), status="error", error=repr(exc)))
 
     def _by_status(self, *statuses: str) -> "list[IngestResult]":
         return [r for r in self.results if r.status in statuses]
@@ -295,7 +300,9 @@ def ingest_one(
         return IngestResult(id=sound_id, status="skipped_dup")
 
     # Stage 1 — QC gate (report 08 §3)
-    qc_report = run_qc(work, WORKING_SAMPLE_RATE, thresholds=thresholds) if do_qc else None
+    qc_report = (
+        run_qc(work, WORKING_SAMPLE_RATE, thresholds=thresholds) if do_qc else None
+    )
     if qc_report is not None and _below(qc_report.status, min_status):
         return IngestResult(
             id=sound_id,
@@ -354,7 +361,9 @@ def ingest_one(
         audioset_labels=audioset_labels,
         ucs_category=resolution.catid,
         ucs_subcategory=resolution.subcategory,
-        duration_s=(qc_report.duration_s if qc_report else len(work) / WORKING_SAMPLE_RATE),
+        duration_s=(
+            qc_report.duration_s if qc_report else len(work) / WORKING_SAMPLE_RATE
+        ),
         sample_rate=WORKING_SAMPLE_RATE,
         channels=probe.channels,
         format=delivered_format,
@@ -381,7 +390,9 @@ def _run_supervised(tagger, probe: _Probe, notes: list) -> list:
     try:
         return [label for label, _ in tg.tag(probe.wav, probe.native_sr)]
     except ImportError:
-        notes.append("supervised tagging skipped: foley[tag] (panns-inference) not installed")
+        notes.append(
+            "supervised tagging skipped: foley[tag] (panns-inference) not installed"
+        )
     except Exception as exc:
         notes.append(f"supervised tagging failed: {exc!r}")
     return []
