@@ -65,10 +65,10 @@ test = [
     "soundfile",
     "soxr", # so resample/encode tests execute in CI (skipif-guarded in lean envs)
     "pyloudnorm", # so LUFS tests execute in CI
-    "lancedb", # so the LanceDB hybrid-index tests execute in CI
-    # NB: sqlite-vec is deliberately NOT here — its tests need an interpreter with
-    # loadable SQLite extensions (most CI pythons lack this), so they skip in CI
-    # regardless; keeping it out avoids needless install surface. Use foley[index-sqlite].
+    "librosa", # so trim_silence tests execute
+    # NB: the heavy backend deps (lancedb, sqlite-vec, torch/transformers) are NOT
+    # here on purpose — their tests are importorskip/skipif-guarded and run when the
+    # matching extra is installed (foley[index], foley[index-sqlite], foley[clap]).
 ]
 dev = [
     "pytest>=7.0",
@@ -133,6 +133,17 @@ doctest_optionflags = [
 
 [tool.wads.ci]
 project_name = ""
+
+# Extras the wads CI installs (`.[extras]`). "audio" pulls numpy/soundfile/soxr/
+# librosa/pyloudnorm so the numpy-backed tests (base/qc/audio/search/taxonomy and
+# the MemoryIndex hybrid+library path) actually run in CI. The heavy backends
+# (lancedb/sqlite-vec/torch) stay out — their tests importorskip/skipif-guard and
+# run locally with foley[index]/[index-sqlite]/[clap]. Without this section the CI
+# installs only core deps and any top-level numpy import errors on collection.
+[tool.wads.ci.install]
+extras = [
+    "audio",
+]
 
 [tool.wads.ci.commands]
 pre_test = []
