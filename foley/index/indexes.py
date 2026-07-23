@@ -387,12 +387,7 @@ class LanceIndex:
         if self._count() == 0:
             return None
         # Filter-only query (no query vector, no pylance): returns the row's cols.
-        rows = (
-            self.table.search()
-            .where(f"id = {_sql_str(id)}")
-            .limit(1)
-            .to_list()
-        )
+        rows = self.table.search().where(f"id = {_sql_str(id)}").limit(1).to_list()
         if not rows:
             return None
         return np.asarray(rows[0]["vector"], dtype=np.float32)

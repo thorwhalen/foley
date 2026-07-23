@@ -551,9 +551,7 @@ def run_qc(
         )
     if _is_finite(snr) and snr < thresholds.snr_clean_db:
         warn = True
-        notes.append(
-            f"low SNR {snr:.1f} dB < {thresholds.snr_clean_db} dB (advisory)"
-        )
+        notes.append(f"low SNR {snr:.1f} dB < {thresholds.snr_clean_db} dB (advisory)")
     if _is_finite(true_peak) and true_peak > thresholds.true_peak_max_dbtp:
         warn = True
         notes.append(

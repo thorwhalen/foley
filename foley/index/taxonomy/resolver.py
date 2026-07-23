@@ -24,7 +24,9 @@ from .ucs import default_ucs_table, parse_catid_token
 
 # Coarse per-stage confidence bands.
 _CONF_FILENAME: float = 1.0
-_CONF_KEYWORD_CONFIDENT: float = 0.8  # strong hit (subcategory/synonym) on a verified row
+_CONF_KEYWORD_CONFIDENT: float = (
+    0.8  # strong hit (subcategory/synonym) on a verified row
+)
 _CONF_KEYWORD_APPROX: float = 0.6  # strong hit on an approximate (confident=False) row
 _CONF_KEYWORD_WEAK: float = 0.4  # category-name-only brush (no subcategory/synonym hit)
 _CONF_AUDIOSET: float = 0.5
@@ -213,7 +215,10 @@ class KeywordResolver:
     """
 
     def __init__(
-        self, *, table: Optional[UcsTable] = None, audioset_map: Optional[AudioSetUcsMap] = None
+        self,
+        *,
+        table: Optional[UcsTable] = None,
+        audioset_map: Optional[AudioSetUcsMap] = None,
     ):
         """Create a resolver over the given (or default) UCS table + AudioSet map."""
         self.table = table or default_ucs_table()

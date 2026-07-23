@@ -396,7 +396,7 @@ class SoundLibrary(Mapping):
                 cand.clap_score = float(np.dot(qvec, vec))
         return sorted(
             candidates,
-            key=lambda c: (c.clap_score if c.clap_score is not None else -1.0),
+            key=lambda c: c.clap_score if c.clap_score is not None else -1.0,
             reverse=True,
         )
 

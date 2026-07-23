@@ -171,6 +171,4 @@ def vector_search(
     Returns:
         Up to ``k`` :class:`FusedHit`s in descending-similarity order.
     """
-    return [
-        FusedHit(id=i, clap_score=s) for i, s in vindex.knn(qvec, k, where=where)
-    ]
+    return [FusedHit(id=i, clap_score=s) for i, s in vindex.knn(qvec, k, where=where)]

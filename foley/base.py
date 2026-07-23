@@ -298,7 +298,9 @@ class LicenseRecord(SerializableMixin):
     notice_text_required: Optional[str] = None
 
     # provenance / transformation
-    transformations: list = field(default_factory=list)  # ordered ops; non-empty => "(modified)"
+    transformations: list = field(
+        default_factory=list
+    )  # ordered ops; non-empty => "(modified)"
 
     # generation (present iff AI-generated)
     is_ai_generated: bool = False
@@ -307,7 +309,9 @@ class LicenseRecord(SerializableMixin):
     generation_prompt: Optional[str] = None
     generation_seed: Optional[int] = None
     generation_params: dict = field(default_factory=dict)
-    watermark: Optional[dict] = None  # {"present": True, "method": "audioseal", "version": ...}
+    watermark: Optional[dict] = (
+        None  # {"present": True, "method": "audioseal", "version": ...}
+    )
     c2pa_manifest_ref: Optional[str] = None
 
     # safety / disclosure
@@ -339,7 +343,9 @@ class SoundRecord(SerializableMixin):
 
     # storage (report 09)
     uri: Optional[str] = None  # content key | local path | s3://… | https://…
-    storage_mode: StorageMode = StorageMode.by_reference  # DERIVED from license.cache_bytes_ok
+    storage_mode: StorageMode = (
+        StorageMode.by_reference
+    )  # DERIVED from license.cache_bytes_ok
     archive_format: Optional[str] = None  # 'flac'
     source_sample_rate: Optional[int] = None  # preserved native rate (e.g. 96/192 kHz)
     source_bit_depth: Optional[int] = None

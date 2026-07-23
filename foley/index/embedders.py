@@ -139,13 +139,9 @@ class ClapEmbedder:
         # transformers 4.57.1 accepts both ``audio=`` (new) and ``audios=``
         # (deprecated, removed in 4.59); older versions accept only ``audios=``.
         try:
-            return self._processor(
-                audio=wav, sampling_rate=sr, return_tensors="pt"
-            )
+            return self._processor(audio=wav, sampling_rate=sr, return_tensors="pt")
         except TypeError:
-            return self._processor(
-                audios=wav, sampling_rate=sr, return_tensors="pt"
-            )
+            return self._processor(audios=wav, sampling_rate=sr, return_tensors="pt")
 
     def embed_audio(self, wav: "ndarray", sr: int) -> "ndarray":
         """Embed one audio clip -> ``(dim,)`` L2-normalized.
