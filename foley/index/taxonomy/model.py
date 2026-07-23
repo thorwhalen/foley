@@ -1,0 +1,103 @@
+"""Data structures for the UCS/AudioSet taxonomy resolver (stdlib-only).
+
+These are plain, immutable-ish records — the resolver logic lives in
+:mod:`~foley.index.taxonomy.ucs`, :mod:`~foley.index.taxonomy.audioset`, and
+:mod:`~foley.index.taxonomy.resolver`. Nothing here imports numpy/torch; the
+whole taxonomy layer is a pure lookup over dicts (report 04 §5.3 — "taxonomies do
+faceting and browse", the CLAP vector does the heavy retrieval).
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Optional
+
+
+@dataclass(frozen=True)
+class UcsRow:
+    """One Universal Category System entry.
+
+    A ``catid`` (e.g. ``'DOORWood'``) is an OPAQUE key — the category prefix is
+    variable-length and not reliably splittable — so ``catid -> (category,
+    subcategory)`` is always a table lookup, never a string split (report
+    04 §5.2). ``confident=False`` marks an APPROXIMATE CatID reconstructed for the
+    seed table; verify it against the UCS master before treating it as
+    authoritative.
+    """
+
+    catid: str
+    category: str
+    subcategory: str
+    synonyms: tuple[str, ...] = ()
+    confident: bool = False
+
+
+@dataclass
+class UcsTable:
+    """A loaded UCS lookup: by CatID (exact + case-insensitive) and by synonym.
+
+    Attributes:
+        by_catid: ``CatID -> UcsRow`` (case-sensitive primary key).
+        order: The CatIDs in stable insertion order (deterministic tie-breaking).
+    """
+
+    by_catid: dict[str, UcsRow] = field(default_factory=dict)
+    order: list[str] = field(default_factory=list)
+    _ci_index: dict[str, str] = field(default_factory=dict)  # lower(catid) -> catid
+
+    def get(self, catid: str) -> Optional[UcsRow]:
+        """Look up a row by CatID: exact first, then case-insensitive."""
+        row = self.by_catid.get(catid)
+        if row is not None:
+            return row
+        canonical = self._ci_index.get(catid.lower())
+        return self.by_catid.get(canonical) if canonical else None
+
+    def __contains__(self, catid: str) -> bool:
+        return self.get(catid) is not None
+
+    def __len__(self) -> int:
+        return len(self.by_catid)
+
+    def __iter__(self):
+        return iter(self.by_catid.values())
+
+
+@dataclass
+class AudioSetUcsMap:
+    """AudioSet-label -> UCS-CatID overlap map (report 04 §5.3).
+
+    Keyed primarily by lowercased label **name** (robust); ``by_mid`` carries the
+    best-effort ``/m/...`` machine ids as a secondary key. Every target CatID is
+    validated against the UCS table at load time (fail-fast on a broken map).
+    """
+
+    by_name: dict[str, str] = field(default_factory=dict)
+    by_mid: dict[str, str] = field(default_factory=dict)
+
+    def resolve(self, label: str) -> Optional[str]:
+        """Map one AudioSet label (a MID or a name) to a UCS CatID (or ``None``)."""
+        if label in self.by_mid:
+            return self.by_mid[label]
+        return self.by_name.get(label.lower())
+
+
+@dataclass
+class CatIdResolution:
+    """The result of resolving free tags/caption/labels to a UCS CatID.
+
+    ``catid`` feeds :attr:`~foley.base.SoundRecord.ucs_category` and
+    ``subcategory`` feeds :attr:`~foley.base.SoundRecord.ucs_subcategory` on
+    ingest, and :attr:`~foley.base.SoundEvent.ucs_catid` on the query side.
+    """
+
+    catid: Optional[str] = None
+    category: Optional[str] = None
+    subcategory: Optional[str] = None
+    source: Optional[str] = None  # 'filename' | 'keyword' | 'audioset' | None
+    confidence: float = 0.0  # coarse per-stage band, 0..1
+    matched_terms: list[str] = field(default_factory=list)
+
+    def __bool__(self) -> bool:
+        """Truthy iff a CatID was resolved."""
+        return self.catid is not None

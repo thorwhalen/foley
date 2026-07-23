@@ -7,8 +7,10 @@ evaluation/QC, observability, `dol` storage). It is the SFX sibling of
 [`arioso`](https://github.com/thorwhalen/arioso) (a unified façade over music-gen
 backends) and shares its discipline.
 
-**Status:** design-stage. The plan is **[Epic #13](https://github.com/thorwhalen/foley/issues/13)**
-with 12 sub-issues (#1–#12). Nothing is implemented yet.
+**Status:** early implementation. The plan is **[Epic #13](https://github.com/thorwhalen/foley/issues/13)**
+with 12 sub-issues (#1–#12). **#1 Foundation** (data models, `dol` stores, audio + Tier-0 QC)
+and **#2 Index** (CLAP embedder, hybrid RRF search, `SoundLibrary` façade, UCS/AudioSet
+taxonomy resolver) are built; next is **#3 Ingestion** → **#4 Bootstrap** (the `ingest()`→`search()` keystone).
 
 ## Read before doing foley work
 

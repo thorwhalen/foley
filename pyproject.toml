@@ -45,6 +45,19 @@ audio = [
     "librosa",
     "pyloudnorm",
 ]
+# CLAP embedder — the joint text<->audio retrieval engine (laion/larger_clap_general).
+clap = [
+    "transformers>=4.40",
+    "torch",
+]
+# Hybrid vector+keyword index — LanceDB (vector column + Tantivy FTS + RRF in one table).
+index = [
+    "lancedb>=0.13",
+]
+# Minimal single-file fallback index (sqlite-vec + stdlib FTS5); no LanceDB needed.
+index-sqlite = [
+    "sqlite-vec>=0.1.0",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
@@ -52,6 +65,10 @@ test = [
     "soundfile",
     "soxr", # so resample/encode tests execute in CI (skipif-guarded in lean envs)
     "pyloudnorm", # so LUFS tests execute in CI
+    "lancedb", # so the LanceDB hybrid-index tests execute in CI
+    # NB: sqlite-vec is deliberately NOT here — its tests need an interpreter with
+    # loadable SQLite extensions (most CI pythons lack this), so they skip in CI
+    # regardless; keeping it out avoids needless install surface. Use foley[index-sqlite].
 ]
 dev = [
     "pytest>=7.0",
