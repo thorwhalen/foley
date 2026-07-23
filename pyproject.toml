@@ -24,7 +24,10 @@ keywords = [
 authors = [
     { name = "Thor Whalen" },
 ]
-dependencies = []
+dependencies = [
+    "dol", # storage as a Mapping, local->cloud (byte + meta stores)
+    "config2py", # env/config resolution (FOLEY_DATA_DIR now; source keys later)
+]
 
 [project.license]
 text = "mit"
@@ -35,6 +38,21 @@ Repository = "https://github.com/thorwhalen/foley"
 Documentation = "https://thorwhalen.github.io/foley"
 
 [project.optional-dependencies]
+audio = [
+    "numpy",
+    "soundfile",
+    "soxr",
+    "librosa",
+    "pyloudnorm",
+]
+test = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "numpy",
+    "soundfile",
+    "soxr", # so resample/encode tests execute in CI (skipif-guarded in lean envs)
+    "pyloudnorm", # so LUFS tests execute in CI
+]
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
@@ -87,6 +105,9 @@ convention = "google"
 minversion = "6.0"
 testpaths = [
     "tests",
+]
+markers = [
+    "audiofile: requires an audio-file codec lib (soundfile) to run",
 ]
 doctest_optionflags = [
     "NORMALIZE_WHITESPACE",
