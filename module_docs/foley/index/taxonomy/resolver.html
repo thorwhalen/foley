@@ -1,0 +1,204 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.index.taxonomy.resolver &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="foley.index.taxonomy.seed" href="seed.html" />
+    <link rel="prev" title="foley.index.taxonomy.model" href="model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.index.taxonomy.resolver</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.resolver.KeywordResolver"><code class="docutils literal notranslate"><span class="pre">KeywordResolver</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.taxonomy.resolver.KeywordResolver.resolve"><code class="docutils literal notranslate"><span class="pre">KeywordResolver.resolve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.resolver.TaxonomyResolver"><code class="docutils literal notranslate"><span class="pre">TaxonomyResolver</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.taxonomy.resolver.TaxonomyResolver.resolve"><code class="docutils literal notranslate"><span class="pre">TaxonomyResolver.resolve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.resolver.resolve_catid"><code class="docutils literal notranslate"><span class="pre">resolve_catid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.index.taxonomy.resolver</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/module_docs/foley/index/taxonomy/resolver.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.index.taxonomy.resolver">
+<span id="foley-index-taxonomy-resolver"></span><h1>foley.index.taxonomy.resolver<a class="headerlink" href="#module-foley.index.taxonomy.resolver" title="Link to this heading"></a></h1>
+<p>Resolve free tags/caption/labels to a UCS CatID (the EnvSound-UCS pipeline).</p>
+<p>Staged precedence, highest wins (report 04 §5.3, [11 §3.1] — normalize
+heterogeneous labels onto UCS via mapping/synonym tables):</p>
+<blockquote>
+<div><p>filename-parse  &gt;  keyword/synonym  &gt;  audioset-map  &gt;  none</p>
+</div></blockquote>
+<p>Matching is word-boundary aware (so <code class="docutils literal notranslate"><span class="pre">&quot;rain&quot;</span></code> matches “heavy rain” but not
+“brainstorm”), a subcategory hit outranks a category-name hit, and multi-word
+phrases outrank single tokens — with a deterministic table-order final tiebreak.
+The always-available default is this stdlib <a class="reference internal" href="#foley.index.taxonomy.resolver.KeywordResolver" title="foley.index.taxonomy.resolver.KeywordResolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">KeywordResolver</span></code></a>; a richer
+CLAP zero-shot resolver (embed once, argmax over UCS label prompts, report
+03 Part 2) can be dropped in behind the same <a class="reference internal" href="#foley.index.taxonomy.resolver.TaxonomyResolver" title="foley.index.taxonomy.resolver.TaxonomyResolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaxonomyResolver</span></code></a> protocol.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.taxonomy.resolver.KeywordResolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.resolver.</span></span><span class="sig-name descname"><span class="pre">KeywordResolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="model.html#foley.index.taxonomy.model.UcsTable" title="foley.index.taxonomy.model.UcsTable"><span class="pre">UcsTable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioset_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="model.html#foley.index.taxonomy.model.AudioSetUcsMap" title="foley.index.taxonomy.model.AudioSetUcsMap"><span class="pre">AudioSetUcsMap</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/foley/index/taxonomy/resolver.html#KeywordResolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.resolver.KeywordResolver" title="Link to this definition"></a></dt>
+<dd><p>The default stdlib resolver — staged keyword/synonym/AudioSet resolution.</p>
+<p>Zero heavy dependencies. Bind a different <a class="reference internal" href="#foley.index.taxonomy.resolver.TaxonomyResolver" title="foley.index.taxonomy.resolver.TaxonomyResolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaxonomyResolver</span></code></a> (e.g. a
+future CLAP zero-shot resolver) by keyword injection to upgrade quality.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.taxonomy.resolver.KeywordResolver.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="model.html#foley.index.taxonomy.model.CatIdResolution" title="foley.index.taxonomy.model.CatIdResolution"><span class="pre">CatIdResolution</span></a></span></span><a class="reference internal" href="../../../../_modules/foley/index/taxonomy/resolver.html#KeywordResolver.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.resolver.KeywordResolver.resolve" title="Link to this definition"></a></dt>
+<dd><p>Resolve a <a class="reference internal" href="../../base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a>’s tags/caption/labels/uri.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.taxonomy.resolver.TaxonomyResolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.resolver.</span></span><span class="sig-name descname"><span class="pre">TaxonomyResolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/foley/index/taxonomy/resolver.html#TaxonomyResolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.resolver.TaxonomyResolver" title="Link to this definition"></a></dt>
+<dd><p>Resolve a <a class="reference internal" href="../../base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a> to a UCS CatID.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.taxonomy.resolver.TaxonomyResolver.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="model.html#foley.index.taxonomy.model.CatIdResolution" title="foley.index.taxonomy.model.CatIdResolution"><span class="pre">CatIdResolution</span></a></span></span><a class="reference internal" href="../../../../_modules/foley/index/taxonomy/resolver.html#TaxonomyResolver.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.resolver.TaxonomyResolver.resolve" title="Link to this definition"></a></dt>
+<dd><p>Return the CatID resolution for <code class="docutils literal notranslate"><span class="pre">record</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.taxonomy.resolver.resolve_catid">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.resolver.</span></span><span class="sig-name descname"><span class="pre">resolve_catid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioset_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="model.html#foley.index.taxonomy.model.UcsTable" title="foley.index.taxonomy.model.UcsTable"><span class="pre">UcsTable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioset_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="model.html#foley.index.taxonomy.model.AudioSetUcsMap" title="foley.index.taxonomy.model.AudioSetUcsMap"><span class="pre">AudioSetUcsMap</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="model.html#foley.index.taxonomy.model.CatIdResolution" title="foley.index.taxonomy.model.CatIdResolution"><span class="pre">CatIdResolution</span></a></span></span><a class="reference internal" href="../../../../_modules/foley/index/taxonomy/resolver.html#resolve_catid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.resolver.resolve_catid" title="Link to this definition"></a></dt>
+<dd><p>Resolve inputs to a best UCS CatID by the staged precedence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tags</strong> – Free tags on the sound.</p></li>
+<li><p><strong>caption</strong> – Free-text caption/description.</p></li>
+<li><p><strong>audioset_labels</strong> – AudioSet MIDs or names (e.g. from PANNs).</p></li>
+<li><p><strong>filename</strong> – Optional UCS-style filename/path (its token-0 CatID wins if
+recognized).</p></li>
+<li><p><strong>table</strong> – UCS table (defaults to <code class="xref py py-func docutils literal notranslate"><span class="pre">default_ucs_table()</span></code>).</p></li>
+<li><p><strong>audioset_map</strong> – AudioSet-&gt;UCS map (defaults to
+<a class="reference internal" href="audioset.html#foley.index.taxonomy.audioset.default_audioset_ucs_map" title="foley.index.taxonomy.audioset.default_audioset_ucs_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_audioset_ucs_map()</span></code></a>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="model.html#foley.index.taxonomy.model.CatIdResolution" title="foley.index.taxonomy.model.CatIdResolution"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatIdResolution</span></code></a> (falsy when
+nothing resolved).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model.html" class="btn btn-neutral float-left" title="foley.index.taxonomy.model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="seed.html" class="btn btn-neutral float-right" title="foley.index.taxonomy.seed" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

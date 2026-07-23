@@ -1,0 +1,752 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.qc &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.qc</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.qc</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tier-0 deterministic audio QC for foley (research report 08 §3).</span>
+
+<span class="sd">Pure, per-clip range-checks over a floating-point waveform in ``[-1, 1]``:</span>
+<span class="sd">clipping, true-peak, DC offset, whole-clip silence, SNR, edge clicks, loudness</span>
+<span class="sd">(LUFS), duration, and ``NaN``/``Inf`` sanity. Every threshold is an explicit</span>
+<span class="sd">:class:`QCThresholds` field — there are **no inline policy literals** — so the</span>
+<span class="sd">whole table is a single, overridable source of truth.</span>
+
+<span class="sd">Zero-dependency import contract:</span>
+<span class="sd">    This module imports **stdlib only** at the top level. ``numpy`` is</span>
+<span class="sd">    lazy-imported inside each function body (like ``foley.audio``), so</span>
+<span class="sd">    ``import foley.qc`` succeeds on a bare install with no scientific stack.</span>
+<span class="sd">    :func:`measure_lufs` additionally lazy-imports ``pyloudnorm`` and returns</span>
+<span class="sd">    ``None`` when it (or a measurable clip) is absent; everything else is</span>
+<span class="sd">    numpy-only.</span>
+
+<span class="sd">Waveform convention:</span>
+<span class="sd">    ``samples`` is a float array shaped ``(frames,)`` (mono) or</span>
+<span class="sd">    ``(frames, channels)``. dBFS is ``20·log10(|x|)`` with full scale at 1.0.</span>
+
+<span class="sd">Typical use (at ingest, a later phase)::</span>
+
+<span class="sd">    report = run_qc(working_array, sample_rate)</span>
+<span class="sd">    sound_record.qc = report.to_dict()   # becomes filterable metadata</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># annotations only — never imported at runtime</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<span class="c1">#: BS.1770 integrated-loudness gating block = 400 ms; a clip shorter than one</span>
+<span class="c1">#: block cannot be measured (``pyloudnorm`` raises), so :func:`measure_lufs`</span>
+<span class="c1">#: returns ``None`` for it. This is a fixed property of the algorithm, not a</span>
+<span class="c1">#: tunable QC policy threshold, hence a module constant rather than a field.</span>
+<span class="n">LUFS_MIN_BLOCK_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span>
+
+
+<div class="viewcode-block" id="QCStatus">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.QCStatus">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">QCStatus</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Overall verdict for a clip (subclasses ``str`` so it is JSON-safe).&quot;&quot;&quot;</span>
+
+    <span class="n">pass_</span> <span class="o">=</span> <span class="s2">&quot;pass&quot;</span>
+    <span class="n">warn</span> <span class="o">=</span> <span class="s2">&quot;warn&quot;</span>
+    <span class="n">fail</span> <span class="o">=</span> <span class="s2">&quot;fail&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="QCThresholds">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.QCThresholds">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">QCThresholds</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;All Tier-0 QC defaults (report 08 §3 table), each an explicit field.</span>
+
+<span class="sd">    Grouped by check. Pass a customized instance to :func:`run_qc` (or the</span>
+<span class="sd">    per-check keyword arguments) to override any threshold without editing code.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># clipping</span>
+    <span class="n">clip_full_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.999</span>  <span class="c1"># |x| &gt;= this counts as full-scale</span>
+    <span class="n">clip_min_run</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># consecutive full-scale samples = a clip event</span>
+    <span class="n">clip_reject_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0001</span>  <span class="c1"># 0.01% clipped-sample ratio =&gt; fail</span>
+    <span class="n">clip_reject_run</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># any run &gt;= 10 samples =&gt; fail</span>
+    <span class="c1"># true peak</span>
+    <span class="n">true_peak_max_dbtp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="n">true_peak_oversample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="c1"># dc offset</span>
+    <span class="n">dc_offset_fail</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># |mean| &gt; 0.01 =&gt; correct/warn</span>
+    <span class="n">dc_offset_warn</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># 0.001..0.01 =&gt; note</span>
+    <span class="c1"># silence</span>
+    <span class="n">silence_rms_dbfs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">60.0</span>  <span class="c1"># whole-clip RMS below =&gt; empty (fail)</span>
+    <span class="c1"># SNR</span>
+    <span class="n">snr_clean_db</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span>  <span class="c1"># &gt;= clean; below =&gt; warn (advisory)</span>
+    <span class="n">snr_quiet_percentile</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span>  <span class="c1"># noise floor from quietest 10% of frames</span>
+    <span class="n">snr_frame_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.025</span>  <span class="c1"># 25 ms short-time RMS frames</span>
+    <span class="n">snr_hop_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.010</span>
+    <span class="c1"># edge click / fade</span>
+    <span class="n">edge_rel_peak_dbfs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">40.0</span>  <span class="c1"># first/last sample above this rel-peak =&gt; fade</span>
+    <span class="n">edge_fade_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="c1"># loudness</span>
+    <span class="n">lufs_gate_floor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">70.0</span>
+    <span class="n">lufs_outlier_lu</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">6.0</span>  <span class="c1"># +/- from library median (library-level check)</span>
+    <span class="c1"># duration / format</span>
+    <span class="n">duration_min_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="c1"># reserved: a DELIVERY-time target (enforced with the master profile at the</span>
+    <span class="c1"># weave stage), NOT a Tier-0 source-clip gate — kept in this one table so all</span>
+    <span class="c1"># rate/loudness policy has a single home. run_qc does not evaluate it.</span>
+    <span class="n">deliver_min_sample_rate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">44_100</span></div>
+
+
+
+<span class="c1">#: The shipped default thresholds; the default for every keyword below.</span>
+<span class="n">DEFAULT_QC_THRESHOLDS</span> <span class="o">=</span> <span class="n">QCThresholds</span><span class="p">()</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Private numpy helpers (each lazy-imports numpy so the module stays zero-dep)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_2d</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``samples`` as a float64 ``(frames, channels)`` array.</span>
+
+<span class="sd">    Mono ``(frames,)`` input is promoted to ``(frames, 1)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">a</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_mono_1d</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Down-mix to a 1-D float64 array (channel mean); 1-D passes through.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_true_run_lengths</span><span class="p">(</span><span class="n">mask</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lengths of every maximal run of ``True`` in a 1-D boolean array.</span>
+
+<span class="sd">    Vectorized via a padded first-difference: rising edges start runs, falling</span>
+<span class="sd">    edges end them. Returns an empty array when there are no ``True`` runs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">padded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="kc">False</span><span class="p">],</span> <span class="n">m</span><span class="p">,</span> <span class="p">[</span><span class="kc">False</span><span class="p">]))</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">padded</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">))</span>
+    <span class="n">starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">diff</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ends</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">diff</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ends</span> <span class="o">-</span> <span class="n">starts</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_upsample_fft</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Band-limited ``factor``x upsampling of a 1-D real signal via zero-padding</span>
+<span class="sd">    the ``rfft`` spectrum. Amplitude-preserving (scaled by ``factor``).&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">factor</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="n">n_up</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factor</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">spec_up</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_up</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">spec_up</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">spec_up</span><span class="p">[:</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[:</span><span class="n">m</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft</span><span class="p">(</span><span class="n">spec_up</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_up</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_frame_rms</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span> <span class="n">frame_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hop</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Short-time RMS of a 1-D signal over ``frame_len`` windows every ``hop``.</span>
+
+<span class="sd">    If the signal is shorter than one frame it yields a single whole-signal RMS.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="n">frame_len</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">)))])</span>
+    <span class="n">starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="n">frame_len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">hop</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">s</span> <span class="p">:</span> <span class="n">s</span> <span class="o">+</span> <span class="n">frame_len</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">starts</span><span class="p">]</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_rms_dbfs</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whole-clip RMS level in dBFS (``-inf`` for exact/zero silence).&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+    <span class="n">mean_square</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">mean_square</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mean_square</span><span class="p">))</span>  <span class="c1"># 10·log10(ms) == 20·log10(rms)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Public per-check functions (deterministic; numpy-only unless noted)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="has_nan_inf">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.has_nan_inf">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">has_nan_inf</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``True`` if any sample is ``NaN`` or ``Inf`` (corrupt-clip guard).&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="duration_s">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.duration_s">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">duration_s</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clip duration in seconds: ``frames / sample_rate``.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="n">frames</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">ndim</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="dc_offset">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.dc_offset">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">dc_offset</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Largest per-channel absolute DC offset, ``max_c |mean_n x[n, c]|``.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">_as_2d</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))))</span></div>
+
+
+
+<div class="viewcode-block" id="is_silent">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.is_silent">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_silent</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rms_floor_dbfs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="o">.</span><span class="n">silence_rms_dbfs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``True`` when whole-clip RMS falls below ``rms_floor_dbfs``.</span>
+
+<span class="sd">    A zero (exactly silent) clip has RMS ``0`` -&gt; ``-inf`` dBFS -&gt; ``True``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">mean_square</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">mean_square</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">dbfs</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mean_square</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">dbfs</span> <span class="o">&lt;</span> <span class="n">rms_floor_dbfs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="detect_clipping">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.detect_clipping">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">detect_clipping</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">full_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="o">.</span><span class="n">clip_full_scale</span><span class="p">,</span>
+    <span class="n">min_run</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="o">.</span><span class="n">clip_min_run</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect hard (flat-topped) clipping.</span>
+
+<span class="sd">    A frame is &quot;hot&quot; when any channel reaches ``|x| &gt;= full_scale``. Only</span>
+<span class="sd">    maximal hot runs of length ``&gt;= min_run`` count as clip events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Waveform in ``[-1, 1]``.</span>
+<span class="sd">        full_scale: Absolute level at/above which a sample is full-scale.</span>
+<span class="sd">        min_run: Minimum consecutive full-scale frames to count as clipping.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``(clipped_ratio, max_run_length)`` — the fraction of frames inside</span>
+<span class="sd">        counting runs, and the longest counting run (``(0.0, 0)`` if none).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">_as_2d</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">total</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="n">hot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">full_scale</span>
+    <span class="n">runs</span> <span class="o">=</span> <span class="n">_true_run_lengths</span><span class="p">(</span><span class="n">hot</span><span class="p">)</span>
+    <span class="n">clip_runs</span> <span class="o">=</span> <span class="n">runs</span><span class="p">[</span><span class="n">runs</span> <span class="o">&gt;=</span> <span class="n">min_run</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">clip_runs</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">clip_runs</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">total</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">clip_runs</span><span class="o">.</span><span class="n">max</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="true_peak_dbtp">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.true_peak_dbtp">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">true_peak_dbtp</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">oversample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="o">.</span><span class="n">true_peak_oversample</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inter-sample true-peak level in dBTP.</span>
+
+<span class="sd">    Each channel is band-limited-upsampled ``oversample``x (numpy FFT), the</span>
+<span class="sd">    peak magnitude is taken across all channels, and converted to dBTP. Returns</span>
+<span class="sd">    ``-inf`` for a fully silent clip. ``sample_rate`` is accepted for interface</span>
+<span class="sd">    symmetry (FFT interpolation is rate-independent).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">_as_2d</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="n">peak</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">up</span> <span class="o">=</span> <span class="n">_upsample_fft</span><span class="p">(</span><span class="n">a</span><span class="p">[:,</span> <span class="n">c</span><span class="p">],</span> <span class="n">oversample</span><span class="p">)</span>
+        <span class="n">chan_peak</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">up</span><span class="p">)))</span> <span class="k">if</span> <span class="n">up</span><span class="o">.</span><span class="n">size</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">peak</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">peak</span><span class="p">,</span> <span class="n">chan_peak</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">peak</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="mf">20.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">peak</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="estimate_snr">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.estimate_snr">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_snr</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">quiet_percentile</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="o">.</span><span class="n">snr_quiet_percentile</span><span class="p">,</span>
+    <span class="n">frame_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="o">.</span><span class="n">snr_frame_s</span><span class="p">,</span>
+    <span class="n">hop_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="o">.</span><span class="n">snr_hop_s</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate SNR in dB (advisory — a busy-street SFX legitimately scores low).</span>
+
+<span class="sd">    The noise floor is the mean short-time RMS of the quietest</span>
+<span class="sd">    ``quiet_percentile`` percent of frames; the signal level is the whole-clip</span>
+<span class="sd">    RMS. A near-noise-free clip (quiet frames -&gt; ~0) yields a very high value;</span>
+<span class="sd">    an exactly-zero floor returns ``inf`` and a silent clip returns ``-inf``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Waveform in ``[-1, 1]`` (down-mixed to mono internally).</span>
+<span class="sd">        sample_rate: Sample rate in Hz (sizes the frames).</span>
+<span class="sd">        quiet_percentile: Percent of quietest frames forming the noise floor.</span>
+<span class="sd">        frame_s: Short-time frame length in seconds.</span>
+<span class="sd">        hop_s: Hop between frames in seconds.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        SNR in dB.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">_to_mono_1d</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+    <span class="n">signal_rms</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">signal_rms</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+    <span class="n">frame_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">frame_s</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">)))</span>
+    <span class="n">hop</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">hop_s</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">)))</span>
+    <span class="n">frame_rms</span> <span class="o">=</span> <span class="n">_frame_rms</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">frame_len</span><span class="p">,</span> <span class="n">hop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">frame_rms</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">frame_rms</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">quiet_percentile</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)))</span>
+    <span class="n">quietest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">frame_rms</span><span class="p">)[:</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">noise_floor</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">quietest</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">noise_floor</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="mf">20.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">signal_rms</span> <span class="o">/</span> <span class="n">noise_floor</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="needs_edge_fade">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.needs_edge_fade">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">needs_edge_fade</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rel_peak_dbfs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="o">.</span><span class="n">edge_rel_peak_dbfs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``True`` when the first or last sample sits above ``rel_peak_dbfs``</span>
+<span class="sd">    relative to the clip peak — i.e. a nonzero boundary that clicks under</span>
+<span class="sd">    narration and needs a short fade.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">_as_2d</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">peak</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">peak</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">edge</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+    <span class="k">if</span> <span class="n">edge</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">rel_db</span> <span class="o">=</span> <span class="mf">20.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">edge</span> <span class="o">/</span> <span class="n">peak</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">rel_db</span> <span class="o">&gt;</span> <span class="n">rel_peak_dbfs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="measure_lufs">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.measure_lufs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">measure_lufs</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">gate_floor_lufs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="o">.</span><span class="n">lufs_gate_floor</span><span class="p">,</span>
+    <span class="n">min_block_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">LUFS_MIN_BLOCK_S</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Integrated loudness (LUFS, ITU-R BS.1770-4) via ``pyloudnorm`` (lazy).</span>
+
+<span class="sd">    Returns ``None`` when ``pyloudnorm`` is unavailable, the clip is shorter than</span>
+<span class="sd">    one gating block (``min_block_s``), the samples are non-finite, or the</span>
+<span class="sd">    measured loudness is at/below the gate floor (near-silent / unstable — do</span>
+<span class="sd">    not amplify, just flag).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pyloudnorm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pyln</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">min_block_s</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">meter</span> <span class="o">=</span> <span class="n">pyln</span><span class="o">.</span><span class="n">Meter</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">loudness</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">meter</span><span class="o">.</span><span class="n">integrated_loudness</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">loudness</span><span class="p">)</span> <span class="ow">or</span> <span class="n">loudness</span> <span class="o">&lt;=</span> <span class="n">gate_floor_lufs</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">loudness</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># QCReport + the run_qc orchestrator</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="QCReport">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.QCReport">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">QCReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-clip Tier-0 QC result.</span>
+
+<span class="sd">    Mirrors the fields the ``SoundRecord`` schema already carries</span>
+<span class="sd">    (``duration_s``, ``sample_rate``, ``channels``, ``loudness_lufs``) plus the</span>
+<span class="sd">    deterministic check outputs, an overall ``status``, and human-readable</span>
+<span class="sd">    ``notes`` for every firing condition. Serialize with :meth:`to_dict` into</span>
+<span class="sd">    ``SoundRecord.qc``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">duration_s</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">clipped_ratio</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">clipped_max_run</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">dc_offset</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">rms_dbfs</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">is_silent</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">needs_edge_fade</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">has_nan_inf</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">true_peak_dbtp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">snr_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">loudness_lufs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">status</span><span class="p">:</span> <span class="n">QCStatus</span> <span class="o">=</span> <span class="n">QCStatus</span><span class="o">.</span><span class="n">pass_</span>
+    <span class="n">notes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QCReport.to_dict">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.QCReport.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a plain, JSON-safe dict (``status`` as its string value).&quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_finite</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;True when ``value`` is a finite number (guards ``None``/``inf``/``nan``).&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="k">return</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="run_qc">
+<a class="viewcode-back" href="../../module_docs/foley/qc.html#foley.run_qc">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_qc</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;np.ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">thresholds</span><span class="p">:</span> <span class="n">QCThresholds</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QCReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run every Tier-0 check and fold the results into a :class:`QCReport`.</span>
+
+<span class="sd">    Status rules (evaluated in order):</span>
+<span class="sd">        FAIL if ``has_nan_inf`` OR ``is_silent`` OR</span>
+<span class="sd">        ``clipped_max_run &gt;= clip_reject_run`` OR</span>
+<span class="sd">        ``clipped_ratio &gt; clip_reject_ratio`` OR ``duration_s &lt; duration_min_s``.</span>
+<span class="sd">        WARN if ``dc_offset &gt; dc_offset_fail`` OR ``needs_edge_fade`` OR</span>
+<span class="sd">        (``snr_db`` is a finite value ``&lt; snr_clean_db``) OR</span>
+<span class="sd">        (``true_peak_dbtp`` is a finite value ``&gt; true_peak_max_dbtp``).</span>
+<span class="sd">        Otherwise PASS.</span>
+
+<span class="sd">    Each firing condition appends a human-readable string to ``notes``. Two</span>
+<span class="sd">    thresholds are intentionally NOT evaluated on a single source clip here</span>
+<span class="sd">    because they belong to later stages: the library-median loudness-outlier</span>
+<span class="sd">    check (``+/- lufs_outlier_lu``, a library-level concern) and the delivery</span>
+<span class="sd">    sample-rate target (``deliver_min_sample_rate``, enforced at the weave/master</span>
+<span class="sd">    stage).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Waveform in ``[-1, 1]`` (mono or ``(frames, channels)``).</span>
+<span class="sd">        sample_rate: Sample rate in Hz.</span>
+<span class="sd">        thresholds: Overridable QC thresholds (defaults to shipped values).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A populated :class:`QCReport`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="n">channels</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">duration_s</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">)</span>
+    <span class="n">nan_inf</span> <span class="o">=</span> <span class="n">has_nan_inf</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">rms_db</span> <span class="o">=</span> <span class="n">_rms_dbfs</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">silent</span> <span class="o">=</span> <span class="n">is_silent</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">rms_floor_dbfs</span><span class="o">=</span><span class="n">thresholds</span><span class="o">.</span><span class="n">silence_rms_dbfs</span><span class="p">)</span>
+    <span class="n">clipped_ratio</span><span class="p">,</span> <span class="n">clipped_max_run</span> <span class="o">=</span> <span class="n">detect_clipping</span><span class="p">(</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">full_scale</span><span class="o">=</span><span class="n">thresholds</span><span class="o">.</span><span class="n">clip_full_scale</span><span class="p">,</span> <span class="n">min_run</span><span class="o">=</span><span class="n">thresholds</span><span class="o">.</span><span class="n">clip_min_run</span>
+    <span class="p">)</span>
+    <span class="n">dc</span> <span class="o">=</span> <span class="n">dc_offset</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">edge</span> <span class="o">=</span> <span class="n">needs_edge_fade</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">rel_peak_dbfs</span><span class="o">=</span><span class="n">thresholds</span><span class="o">.</span><span class="n">edge_rel_peak_dbfs</span><span class="p">)</span>
+    <span class="n">true_peak</span> <span class="o">=</span> <span class="n">true_peak_dbtp</span><span class="p">(</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">oversample</span><span class="o">=</span><span class="n">thresholds</span><span class="o">.</span><span class="n">true_peak_oversample</span>
+    <span class="p">)</span>
+    <span class="n">snr</span> <span class="o">=</span> <span class="n">estimate_snr</span><span class="p">(</span>
+        <span class="n">a</span><span class="p">,</span>
+        <span class="n">sample_rate</span><span class="p">,</span>
+        <span class="n">quiet_percentile</span><span class="o">=</span><span class="n">thresholds</span><span class="o">.</span><span class="n">snr_quiet_percentile</span><span class="p">,</span>
+        <span class="n">frame_s</span><span class="o">=</span><span class="n">thresholds</span><span class="o">.</span><span class="n">snr_frame_s</span><span class="p">,</span>
+        <span class="n">hop_s</span><span class="o">=</span><span class="n">thresholds</span><span class="o">.</span><span class="n">snr_hop_s</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">lufs</span> <span class="o">=</span> <span class="n">measure_lufs</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">gate_floor_lufs</span><span class="o">=</span><span class="n">thresholds</span><span class="o">.</span><span class="n">lufs_gate_floor</span><span class="p">)</span>
+
+    <span class="n">notes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fail</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">nan_inf</span><span class="p">:</span>
+        <span class="n">fail</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;NaN/Inf samples present (corrupt file) =&gt; reject&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">silent</span><span class="p">:</span>
+        <span class="n">fail</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;near-silent: RMS </span><span class="si">{</span><span class="n">rms_db</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> dBFS &lt; &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">silence_rms_dbfs</span><span class="si">}</span><span class="s2"> dBFS floor =&gt; reject&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">clipped_max_run</span> <span class="o">&gt;=</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">clip_reject_run</span><span class="p">:</span>
+        <span class="n">fail</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;hard clipping: run of </span><span class="si">{</span><span class="n">clipped_max_run</span><span class="si">}</span><span class="s2"> &gt;= &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">clip_reject_run</span><span class="si">}</span><span class="s2"> full-scale samples =&gt; reject&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">clipped_ratio</span> <span class="o">&gt;</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">clip_reject_ratio</span><span class="p">:</span>
+        <span class="n">fail</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;hard clipping: clipped ratio </span><span class="si">{</span><span class="n">clipped_ratio</span><span class="si">:</span><span class="s2">.4%</span><span class="si">}</span><span class="s2"> &gt; &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">clip_reject_ratio</span><span class="si">:</span><span class="s2">.4%</span><span class="si">}</span><span class="s2"> =&gt; reject&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">duration_min_s</span><span class="p">:</span>
+        <span class="n">fail</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;too short: </span><span class="si">{</span><span class="n">duration</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> s &lt; </span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">duration_min_s</span><span class="si">}</span><span class="s2"> s =&gt; reject&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">warn</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">dc</span> <span class="o">&gt;</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">dc_offset_fail</span><span class="p">:</span>
+        <span class="n">warn</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;DC offset </span><span class="si">{</span><span class="n">dc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">dc_offset_fail</span><span class="si">}</span><span class="s2"> =&gt; high-pass/correct&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">dc</span> <span class="o">&gt;</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">dc_offset_warn</span><span class="p">:</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;minor DC offset </span><span class="si">{</span><span class="n">dc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (&gt; </span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">dc_offset_warn</span><span class="si">}</span><span class="s2">) &quot;</span>
+            <span class="s2">&quot;— within tolerance, no action&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">edge</span><span class="p">:</span>
+        <span class="n">warn</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;edge click: boundary above </span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">edge_rel_peak_dbfs</span><span class="si">}</span><span class="s2"> dBFS &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;rel-peak =&gt; apply &gt;= </span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">edge_fade_s</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> ms fade&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_is_finite</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span> <span class="ow">and</span> <span class="n">snr</span> <span class="o">&lt;</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">snr_clean_db</span><span class="p">:</span>
+        <span class="n">warn</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;low SNR </span><span class="si">{</span><span class="n">snr</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> dB &lt; </span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">snr_clean_db</span><span class="si">}</span><span class="s2"> dB (advisory)&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_is_finite</span><span class="p">(</span><span class="n">true_peak</span><span class="p">)</span> <span class="ow">and</span> <span class="n">true_peak</span> <span class="o">&gt;</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">true_peak_max_dbtp</span><span class="p">:</span>
+        <span class="n">warn</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;true peak </span><span class="si">{</span><span class="n">true_peak</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> dBTP &gt; </span><span class="si">{</span><span class="n">thresholds</span><span class="o">.</span><span class="n">true_peak_max_dbtp</span><span class="si">}</span><span class="s2"> dBTP&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">fail</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">QCStatus</span><span class="o">.</span><span class="n">fail</span>
+    <span class="k">elif</span> <span class="n">warn</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">QCStatus</span><span class="o">.</span><span class="n">warn</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">QCStatus</span><span class="o">.</span><span class="n">pass_</span>
+
+    <span class="k">return</span> <span class="n">QCReport</span><span class="p">(</span>
+        <span class="n">duration_s</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span>
+        <span class="n">sample_rate</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">),</span>
+        <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+        <span class="n">clipped_ratio</span><span class="o">=</span><span class="n">clipped_ratio</span><span class="p">,</span>
+        <span class="n">clipped_max_run</span><span class="o">=</span><span class="n">clipped_max_run</span><span class="p">,</span>
+        <span class="n">dc_offset</span><span class="o">=</span><span class="n">dc</span><span class="p">,</span>
+        <span class="n">rms_dbfs</span><span class="o">=</span><span class="n">rms_db</span><span class="p">,</span>
+        <span class="n">is_silent</span><span class="o">=</span><span class="n">silent</span><span class="p">,</span>
+        <span class="n">needs_edge_fade</span><span class="o">=</span><span class="n">edge</span><span class="p">,</span>
+        <span class="n">has_nan_inf</span><span class="o">=</span><span class="n">nan_inf</span><span class="p">,</span>
+        <span class="n">true_peak_dbtp</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">true_peak</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">true_peak</span><span class="p">,</span>
+        <span class="n">snr_db</span><span class="o">=</span><span class="n">snr</span><span class="p">,</span>
+        <span class="n">loudness_lufs</span><span class="o">=</span><span class="n">lufs</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span>
+        <span class="n">notes</span><span class="o">=</span><span class="n">notes</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

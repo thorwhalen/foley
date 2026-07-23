@@ -1,0 +1,624 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.base &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Canonical data models for foley — the single source of truth (SSOT) types.</span>
+
+<span class="sd">This module is stdlib-only and declarative: it defines the dataclasses, enums,</span>
+<span class="sd">and affordance registries every other layer shares, plus generic dict/JSON</span>
+<span class="sd">(de)serialization. It contains NO policy (see ``foley.licensing``) and NO I/O</span>
+<span class="sd">(see ``foley.stores`` / ``foley.audio``).</span>
+
+<span class="sd">Serialization contract:</span>
+<span class="sd">    * ``record.to_dict()``  -&gt; a plain dict (nested dataclasses recursed via</span>
+<span class="sd">      ``dataclasses.asdict``; enum members preserved, and JSON-safe because every</span>
+<span class="sd">      enum subclasses ``str``).</span>
+<span class="sd">    * ``record.to_json()``  -&gt; a JSON string.</span>
+<span class="sd">    * ``Cls.from_dict(d)`` / ``Cls.from_json(s)`` -&gt; reconstructs, coercing enum</span>
+<span class="sd">      fields from their string values and nested ``LicenseRecord`` from its dict.</span>
+<span class="sd">      Unknown keys are ignored (forward-compatible schema evolution); missing keys</span>
+<span class="sd">      fall back to field defaults.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="n">SCHEMA_VERSION</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Enums — closed, cross-layer, persisted vocabularies</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># All enums subclass ``(str, Enum)`` so they (a) give enum ergonomics, (b) compare</span>
+<span class="c1"># equal to their persisted string value, and (c) serialize to their ``.value``</span>
+<span class="c1"># string under ``json.dumps`` with no custom encoder. ``from_dict`` coerces the</span>
+<span class="c1"># string back via ``EnumClass(value)``.</span>
+
+
+<div class="viewcode-block" id="StorageMode">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.StorageMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StorageMode</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How a sound&#39;s bytes are held (DERIVED from ``license.cache_bytes_ok``).&quot;&quot;&quot;</span>
+
+    <span class="n">by_value</span> <span class="o">=</span> <span class="s2">&quot;by_value&quot;</span>  <span class="c1"># bytes cached in the byte store</span>
+    <span class="n">by_reference</span> <span class="o">=</span> <span class="s2">&quot;by_reference&quot;</span>  <span class="c1"># URI + provenance only; no bytes stored</span></div>
+
+
+
+<div class="viewcode-block" id="AcquisitionMethod">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.AcquisitionMethod">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AcquisitionMethod</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How a sound entered foley (retrieval channel or origin).&quot;&quot;&quot;</span>
+
+    <span class="n">api</span> <span class="o">=</span> <span class="s2">&quot;api&quot;</span>
+    <span class="n">bulk</span> <span class="o">=</span> <span class="s2">&quot;bulk&quot;</span>
+    <span class="n">scrape_pointer</span> <span class="o">=</span> <span class="s2">&quot;scrape_pointer&quot;</span>
+    <span class="n">generated</span> <span class="o">=</span> <span class="s2">&quot;generated&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CandidateOrigin">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.CandidateOrigin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CandidateOrigin</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether a candidate was retrieved from the index or freshly generated.&quot;&quot;&quot;</span>
+
+    <span class="n">retrieved</span> <span class="o">=</span> <span class="s2">&quot;retrieved&quot;</span>
+    <span class="n">generated</span> <span class="o">=</span> <span class="s2">&quot;generated&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Salience">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Salience">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Salience</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How prominent a sound event is within a passage.&quot;&quot;&quot;</span>
+
+    <span class="n">high</span> <span class="o">=</span> <span class="s2">&quot;high&quot;</span>
+    <span class="n">medium</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
+    <span class="n">low</span> <span class="o">=</span> <span class="s2">&quot;low&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Layer">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Layer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Layer</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mix layer (shared by ``SoundEvent`` now and ``TimelineItem`` later).&quot;&quot;&quot;</span>
+
+    <span class="n">voice</span> <span class="o">=</span> <span class="s2">&quot;voice&quot;</span>
+    <span class="n">sfx_fg</span> <span class="o">=</span> <span class="s2">&quot;sfx_fg&quot;</span>
+    <span class="n">ambience</span> <span class="o">=</span> <span class="s2">&quot;ambience&quot;</span>
+    <span class="n">stinger</span> <span class="o">=</span> <span class="s2">&quot;stinger&quot;</span>
+    <span class="n">music</span> <span class="o">=</span> <span class="s2">&quot;music&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="VerifyLevel">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.VerifyLevel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">VerifyLevel</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Which rung of the verification ladder produced a ``Verdict``.&quot;&quot;&quot;</span>
+
+    <span class="n">clap</span> <span class="o">=</span> <span class="s2">&quot;clap&quot;</span>
+    <span class="n">listen</span> <span class="o">=</span> <span class="s2">&quot;listen&quot;</span>
+    <span class="n">judge</span> <span class="o">=</span> <span class="s2">&quot;judge&quot;</span></div>
+
+
+
+<span class="c1"># NOTE: ``QCStatus`` lives in ``foley.qc`` (tightly coupled to ``QCReport``), NOT</span>
+<span class="c1"># here — ``base.py`` keeps ``SoundRecord.qc`` as a plain ``Optional[dict]`` so it</span>
+<span class="c1"># never imports ``qc.py`` (avoids a base-&gt;qc dependency and keeps ``import</span>
+<span class="c1"># foley.base`` free of numpy).</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Affordances + the two registries (mirrors ``arioso.base.AFFORDANCES``)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Affordance">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Affordance">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Affordance</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Descriptor for a unified parameter affordance (arioso analog).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        name: Canonical parameter name used at the façade level.</span>
+<span class="sd">        type: Expected Python type.</span>
+<span class="sd">        description: Human-readable description.</span>
+<span class="sd">        default: Default value (``None`` = no default / required).</span>
+<span class="sd">        stage: ``&#39;query&#39;`` (search/find/filter) or ``&#39;generate&#39;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">type</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">stage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;query&quot;</span></div>
+
+
+
+<span class="c1">#: Unified query-stage parameters (search / find / filter surface).</span>
+<span class="n">QUERY_AFFORDANCES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Affordance</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Natural-language query&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;semantic_text&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">&quot;semantic_text&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Query for CLAP semantic space&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;query&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;Number of results&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;filters&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="s2">&quot;Metadata predicates (SQL-style)&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;ucs_category&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;ucs_category&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;UCS CatID facet&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;audioset_label&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">&quot;audioset_label&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;AudioSet ontology facet (rolls up children)&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;duration_range&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;duration_range&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="s2">&quot;(min_s, max_s)&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;min_snr&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;min_snr&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;QC filter: min SNR dB&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;commercial_ok&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;commercial_ok&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">&quot;License filter shorthand&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;license&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Explicit license id constraint&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;sort&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;sort&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;score|duration|created|downloads&quot;</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;rerank&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;rerank&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">&quot;Apply second-stage rerank&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1">#: Unified generation-stage parameters (generate backends map onto these).</span>
+<span class="n">GENERATION_AFFORDANCES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Affordance</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;prompt&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Sound description&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">&quot;duration&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;Seconds; None =&gt; backend default&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;prompt_influence&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">&quot;prompt_influence&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;0..1 unified guidance&quot;</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;generate&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;negative_prompt&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">&quot;negative_prompt&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Content to exclude&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;Diffusion/flow steps&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">&quot;seed&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;Reproducibility (capture in provenance)&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;loop&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;loop&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">&quot;Seamless-loopable clip&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;generate&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;output_format&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">&quot;output_format&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;wav|opus|mp3&quot;</span><span class="p">,</span> <span class="s2">&quot;wav&quot;</span><span class="p">,</span> <span class="s2">&quot;generate&quot;</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Serialization mixin (generic, stdlib-only)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_decode</span><span class="p">(</span><span class="n">tp</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce a JSON-decoded value into the field type ``tp``.</span>
+
+<span class="sd">    Handles ``Optional``/``Union``, list/set/tuple containers (recursing into</span>
+<span class="sd">    the element type), ``str``-enums (via ``EnumClass(value)``), and nested</span>
+<span class="sd">    dataclasses (via their ``from_dict`` when present, else ``**value``).</span>
+<span class="sd">    Anything else (``dict``, primitives) is returned unchanged.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tp: The declared field type (a resolved type hint).</span>
+<span class="sd">        value: The raw JSON-decoded value.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The value coerced to ``tp`` (or unchanged when no coercion applies).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">origin</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_origin</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">origin</span> <span class="ow">is</span> <span class="n">Union</span><span class="p">:</span>  <span class="c1"># Optional[X] / X | None</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span> <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">_decode</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="n">origin</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
+        <span class="n">item_tp</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="nb">object</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="p">[</span><span class="n">_decode</span><span class="p">(</span><span class="n">item_tp</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="k">if</span> <span class="n">origin</span> <span class="ow">is</span> <span class="nb">tuple</span> <span class="k">else</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="k">if</span> <span class="n">origin</span> <span class="ow">is</span> <span class="nb">set</span> <span class="k">else</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tp</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">is_dataclass</span><span class="p">(</span><span class="n">tp</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">tp</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="s2">&quot;from_dict&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">tp</span><span class="p">(</span><span class="o">**</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+
+<div class="viewcode-block" id="SerializableMixin">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SerializableMixin</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds ``to_dict``/``to_json``/``from_dict``/``from_json`` to a dataclass.</span>
+
+<span class="sd">    Stdlib-only, DRY, no-magic (de)serialization. Every SSOT dataclass below</span>
+<span class="sd">    inherits this instead of hand-rolling per-class encoders/decoders.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SerializableMixin.to_dict">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the recursive plain-dict form.</span>
+
+<span class="sd">        Enum members are preserved (and remain JSON-safe because every enum</span>
+<span class="sd">        subclasses ``str``); nested dataclasses are recursed via</span>
+<span class="sd">        ``dataclasses.asdict``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SerializableMixin.to_json">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin.to_json">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a JSON string (str-enums serialize to their ``.value``).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            indent: Optional pretty-print indent passed to ``json.dumps``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SerializableMixin.from_dict">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin.from_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableMixin&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reconstruct an instance from a plain dict.</span>
+
+<span class="sd">        Enum fields and nested dataclasses are coerced via :func:`_decode`.</span>
+<span class="sd">        Unknown keys are ignored (forward-compatible); missing keys fall back</span>
+<span class="sd">        to field defaults.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            d: A plain dict (typically from ``to_dict()`` or ``json.loads``).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hints</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">known</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">)}</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">:</span> <span class="n">_decode</span><span class="p">(</span><span class="n">hints</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">object</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">known</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SerializableMixin.from_json">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin.from_json">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableMixin&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reconstruct an instance from a JSON string.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            s: A JSON string (typically from ``to_json()``).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">s</span><span class="p">))</span></div>
+</div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># LicenseRecord — rights + provenance SSOT</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="LicenseRecord">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.LicenseRecord">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LicenseRecord</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-sound rights + provenance. SSOT for BOTH ``keep()`` and storage mode.</span>
+
+<span class="sd">    The eight derived flags default fail-closed here (the bare-record baseline);</span>
+<span class="sd">    populate them from the ``license_id`` via</span>
+<span class="sd">    ``foley.licensing.apply_license_flags`` (source overrides win). Never</span>
+<span class="sd">    hand-set the derived flags — always route through the policy layer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># identity / origin</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &#39;freesound&#39; | &#39;user&#39; | &#39;stable_audio&#39; | ...</span>
+    <span class="n">source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">acquisition_method</span><span class="p">:</span> <span class="n">AcquisitionMethod</span> <span class="o">=</span> <span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">retrieved_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># ISO-8601</span>
+    <span class="n">adapter_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">content_sha256</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># rights (normalized)</span>
+    <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>  <span class="c1"># SPDX id or RemArc / Sonniss-GDC / ElevenLabs-SFX / Stability-Community / Proprietary-&lt;vendor&gt;</span>
+    <span class="n">license_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">license_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">license_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rights_holder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">creator_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">creator_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># derived flags (SSOT for filtering; fail-closed baseline)</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">embed_in_derivative_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># normal case</span>
+    <span class="n">redistribute_standalone_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># COPYRIGHT: raw-file re-exposure</span>
+    <span class="n">cache_bytes_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># OPERATIONAL: may foley persist bytes? (Freesound TOS =&gt; False even for CC0)</span>
+    <span class="n">modification_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">ai_training_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">revenue_cap_usd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># e.g. 1_000_000 for Stability-Community</span>
+
+    <span class="c1"># attribution</span>
+    <span class="n">requires_attribution</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">attribution_text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">notice_text_required</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># provenance / transformation</span>
+    <span class="n">transformations</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># ordered ops; non-empty =&gt; &quot;(modified)&quot;</span>
+
+    <span class="c1"># generation (present iff AI-generated)</span>
+    <span class="n">is_ai_generated</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">generator_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">generator_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">generation_prompt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">generation_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">generation_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">watermark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># {&quot;present&quot;: True, &quot;method&quot;: &quot;audioseal&quot;, &quot;version&quot;: ...}</span>
+    <span class="n">c2pa_manifest_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># safety / disclosure</span>
+    <span class="n">contains_recognizable_voice</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">potential_trademark</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">disclosure_recommended</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># EU AI Act Art.50 hint</span>
+    <span class="n">rights_verified</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># False =&gt; unknown =&gt; fail-closed</span>
+    <span class="n">verified_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">schema_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SCHEMA_VERSION</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># SoundRecord — canonical per-sound record</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="SoundRecord">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SoundRecord">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SoundRecord</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Canonical SSOT per sound.</span>
+
+<span class="sd">    Audio bytes + CLAP vector live in SEPARATE stores keyed by the same id; this</span>
+<span class="sd">    record holds a content-hash ``uri``, never raw bytes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># identity</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">content_sha256</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># content-address key into `sounds`</span>
+    <span class="n">hash_algo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sha256&quot;</span>
+
+    <span class="c1"># storage (report 09)</span>
+    <span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># content key | local path | s3://… | https://…</span>
+    <span class="n">storage_mode</span><span class="p">:</span> <span class="n">StorageMode</span> <span class="o">=</span> <span class="n">StorageMode</span><span class="o">.</span><span class="n">by_reference</span>  <span class="c1"># DERIVED from license.cache_bytes_ok</span>
+    <span class="n">archive_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># &#39;flac&#39;</span>
+    <span class="n">source_sample_rate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># preserved native rate (e.g. 96/192 kHz)</span>
+    <span class="n">source_bit_depth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># rights + provenance</span>
+    <span class="n">license</span><span class="p">:</span> <span class="n">LicenseRecord</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">))</span>
+
+    <span class="c1"># descriptive text (feeds BM25 + display)</span>
+    <span class="n">caption</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="c1"># controlled taxonomy</span>
+    <span class="n">ucs_category</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">ucs_subcategory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">audioset_labels</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="c1"># audio technical facts</span>
+    <span class="n">duration_s</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># working/delivered rate</span>
+    <span class="n">channels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">loudness_lufs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># &#39;wav&#39;|&#39;flac&#39;|&#39;opus&#39;|&#39;mp3&#39;</span>
+
+    <span class="c1"># quality control (report 08; QCReport.to_dict())</span>
+    <span class="n">qc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># retrieval index refs (NOT inlined in list views)</span>
+    <span class="n">embedding_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">embedding_dim</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">embedding_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># cross-work continuity</span>
+    <span class="n">named_cue</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">schema_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SCHEMA_VERSION</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># SELECT-stage models — SoundEvent, Verdict, Candidate</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="SoundEvent">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SoundEvent">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SoundEvent</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One salient, physically-audible event decomposed from a passage.&quot;&quot;&quot;</span>
+
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span> <span class="o">=</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span>
+    <span class="n">diegetic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">salience</span><span class="p">:</span> <span class="n">Salience</span> <span class="o">=</span> <span class="n">Salience</span><span class="o">.</span><span class="n">medium</span>
+    <span class="n">onset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># symbolic anchor, resolved by WEAVE</span>
+    <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">ucs_catid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">audioset</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">era_place</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># anachronism guard</span></div>
+
+
+
+<div class="viewcode-block" id="Verdict">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Verdict">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Verdict</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of one verification rung for a candidate.&quot;&quot;&quot;</span>
+
+    <span class="n">match</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># 0..1</span>
+    <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">level</span><span class="p">:</span> <span class="n">VerifyLevel</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span></div>
+
+
+
+<div class="viewcode-block" id="Candidate">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Candidate">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Candidate</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ranked, license-checked, (optionally) verified sound for one SoundEvent.</span>
+
+<span class="sd">    Retrieval and generation return the SAME shape; only ``origin`` differs.</span>
+<span class="sd">    Nested ``sound`` / ``event`` / ``verdict`` dataclasses are decoded generically</span>
+<span class="sd">    by :func:`_decode` — no per-field code needed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">sound</span><span class="p">:</span> <span class="n">SoundRecord</span>
+    <span class="n">origin</span><span class="p">:</span> <span class="n">CandidateOrigin</span> <span class="o">=</span> <span class="n">CandidateOrigin</span><span class="o">.</span><span class="n">retrieved</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SoundEvent</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">clap_score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bm25_score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rrf_score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rerank_score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">verdict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Verdict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">license_ok</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># result of keep()</span>
+    <span class="n">preview_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># IntendedUse — the caller&#39;s rights intent</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="IntendedUse">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.IntendedUse">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IntendedUse</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;What the caller intends to do with a sound; consumed by ``keep()``.&quot;&quot;&quot;</span>
+
+    <span class="n">commercial</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">publish</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">redistribute_standalone</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">will_train</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">can_attribute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">revenue_usd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">allow_voice_or_trademark</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

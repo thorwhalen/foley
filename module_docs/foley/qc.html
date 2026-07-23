@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.qc &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="foley.stores" href="stores.html" />
+    <link rel="prev" title="foley.licensing" href="licensing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">foley.licensing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.qc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.DEFAULT_QC_THRESHOLDS"><code class="docutils literal notranslate"><span class="pre">DEFAULT_QC_THRESHOLDS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.LUFS_MIN_BLOCK_S"><code class="docutils literal notranslate"><span class="pre">LUFS_MIN_BLOCK_S</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.QCReport"><code class="docutils literal notranslate"><span class="pre">QCReport</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.qc.QCReport.to_dict"><code class="docutils literal notranslate"><span class="pre">QCReport.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.QCStatus"><code class="docutils literal notranslate"><span class="pre">QCStatus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.QCThresholds"><code class="docutils literal notranslate"><span class="pre">QCThresholds</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.dc_offset"><code class="docutils literal notranslate"><span class="pre">dc_offset()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.detect_clipping"><code class="docutils literal notranslate"><span class="pre">detect_clipping()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.duration_s"><code class="docutils literal notranslate"><span class="pre">duration_s()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.estimate_snr"><code class="docutils literal notranslate"><span class="pre">estimate_snr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.has_nan_inf"><code class="docutils literal notranslate"><span class="pre">has_nan_inf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.is_silent"><code class="docutils literal notranslate"><span class="pre">is_silent()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.measure_lufs"><code class="docutils literal notranslate"><span class="pre">measure_lufs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.needs_edge_fade"><code class="docutils literal notranslate"><span class="pre">needs_edge_fade()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.run_qc"><code class="docutils literal notranslate"><span class="pre">run_qc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.qc.true_peak_dbtp"><code class="docutils literal notranslate"><span class="pre">true_peak_dbtp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.qc</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/foley/qc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.qc">
+<span id="foley-qc"></span><h1>foley.qc<a class="headerlink" href="#module-foley.qc" title="Link to this heading"></a></h1>
+<p>Tier-0 deterministic audio QC for foley (research report 08 §3).</p>
+<p>Pure, per-clip range-checks over a floating-point waveform in <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>:
+clipping, true-peak, DC offset, whole-clip silence, SNR, edge clicks, loudness
+(LUFS), duration, and <code class="docutils literal notranslate"><span class="pre">NaN</span></code>/<code class="docutils literal notranslate"><span class="pre">Inf</span></code> sanity. Every threshold is an explicit
+<a class="reference internal" href="#foley.qc.QCThresholds" title="foley.qc.QCThresholds"><code class="xref py py-class docutils literal notranslate"><span class="pre">QCThresholds</span></code></a> field — there are <strong>no inline policy literals</strong> — so the
+whole table is a single, overridable source of truth.</p>
+<dl class="simple">
+<dt>Zero-dependency import contract:</dt><dd><p>This module imports <strong>stdlib only</strong> at the top level. <code class="docutils literal notranslate"><span class="pre">numpy</span></code> is
+lazy-imported inside each function body (like <code class="docutils literal notranslate"><span class="pre">foley.audio</span></code>), so
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley.qc</span></code> succeeds on a bare install with no scientific stack.
+<a class="reference internal" href="#foley.qc.measure_lufs" title="foley.qc.measure_lufs"><code class="xref py py-func docutils literal notranslate"><span class="pre">measure_lufs()</span></code></a> additionally lazy-imports <code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> and returns
+<code class="docutils literal notranslate"><span class="pre">None</span></code> when it (or a measurable clip) is absent; everything else is
+numpy-only.</p>
+</dd>
+<dt>Waveform convention:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">samples</span></code> is a float array shaped <code class="docutils literal notranslate"><span class="pre">(frames,)</span></code> (mono) or
+<code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">channels)</span></code>. dBFS is <code class="docutils literal notranslate"><span class="pre">20·log10(|x|)</span></code> with full scale at 1.0.</p>
+</dd>
+</dl>
+<p>Typical use (at ingest, a later phase):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">report</span> <span class="o">=</span> <span class="n">run_qc</span><span class="p">(</span><span class="n">working_array</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">)</span>
+<span class="n">sound_record</span><span class="o">.</span><span class="n">qc</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>   <span class="c1"># becomes filterable metadata</span>
+</pre></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.qc.DEFAULT_QC_THRESHOLDS">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_QC_THRESHOLDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">QCThresholds(clip_full_scale=0.999,</span> <span class="pre">clip_min_run=3,</span> <span class="pre">clip_reject_ratio=0.0001,</span> <span class="pre">clip_reject_run=10,</span> <span class="pre">true_peak_max_dbtp=-1.0,</span> <span class="pre">true_peak_oversample=4,</span> <span class="pre">dc_offset_fail=0.01,</span> <span class="pre">dc_offset_warn=0.001,</span> <span class="pre">silence_rms_dbfs=-60.0,</span> <span class="pre">snr_clean_db=20.0,</span> <span class="pre">snr_quiet_percentile=10.0,</span> <span class="pre">snr_frame_s=0.025,</span> <span class="pre">snr_hop_s=0.01,</span> <span class="pre">edge_rel_peak_dbfs=-40.0,</span> <span class="pre">edge_fade_s=0.01,</span> <span class="pre">lufs_gate_floor=-70.0,</span> <span class="pre">lufs_outlier_lu=6.0,</span> <span class="pre">duration_min_s=0.1,</span> <span class="pre">deliver_min_sample_rate=44100)</span></span><a class="headerlink" href="#foley.qc.DEFAULT_QC_THRESHOLDS" title="Link to this definition"></a></dt>
+<dd><p>The shipped default thresholds; the default for every keyword below.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.qc.LUFS_MIN_BLOCK_S">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">LUFS_MIN_BLOCK_S</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.4</span></span><a class="headerlink" href="#foley.qc.LUFS_MIN_BLOCK_S" title="Link to this definition"></a></dt>
+<dd><p>BS.1770 integrated-loudness gating block = 400 ms; a clip shorter than one
+block cannot be measured (<code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> raises), so <a class="reference internal" href="#foley.qc.measure_lufs" title="foley.qc.measure_lufs"><code class="xref py py-func docutils literal notranslate"><span class="pre">measure_lufs()</span></code></a>
+returns <code class="docutils literal notranslate"><span class="pre">None</span></code> for it. This is a fixed property of the algorithm, not a
+tunable QC policy threshold, hence a module constant rather than a field.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.qc.QCReport">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">QCReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clipped_ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clipped_max_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dc_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_dbfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_silent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">needs_edge_fade</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_nan_inf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_peak_dbtp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loudness_lufs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.qc.QCStatus" title="foley.qc.QCStatus"><span class="pre">QCStatus</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QCStatus.pass_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/qc.html#QCReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.QCReport" title="Link to this definition"></a></dt>
+<dd><p>Per-clip Tier-0 QC result.</p>
+<p>Mirrors the fields the <code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code> schema already carries
+(<code class="docutils literal notranslate"><span class="pre">duration_s</span></code>, <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code>, <code class="docutils literal notranslate"><span class="pre">channels</span></code>, <code class="docutils literal notranslate"><span class="pre">loudness_lufs</span></code>) plus the
+deterministic check outputs, an overall <code class="docutils literal notranslate"><span class="pre">status</span></code>, and human-readable
+<code class="docutils literal notranslate"><span class="pre">notes</span></code> for every firing condition. Serialize with <a class="reference internal" href="#foley.qc.QCReport.to_dict" title="foley.qc.QCReport.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a> into
+<code class="docutils literal notranslate"><span class="pre">SoundRecord.qc</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.qc.QCReport.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#QCReport.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.QCReport.to_dict" title="Link to this definition"></a></dt>
+<dd><p>Return a plain, JSON-safe dict (<code class="docutils literal notranslate"><span class="pre">status</span></code> as its string value).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.qc.QCStatus">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">QCStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/qc.html#QCStatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.QCStatus" title="Link to this definition"></a></dt>
+<dd><p>Overall verdict for a clip (subclasses <code class="docutils literal notranslate"><span class="pre">str</span></code> so it is JSON-safe).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.qc.QCThresholds">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">QCThresholds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip_full_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.999</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_min_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_reject_ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_reject_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_peak_max_dbtp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_peak_oversample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dc_offset_fail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dc_offset_warn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silence_rms_dbfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-60.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr_clean_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr_quiet_percentile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr_frame_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr_hop_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_rel_peak_dbfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-40.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_fade_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lufs_gate_floor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-70.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lufs_outlier_lu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration_min_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deliver_min_sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">44100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/qc.html#QCThresholds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.QCThresholds" title="Link to this definition"></a></dt>
+<dd><p>All Tier-0 QC defaults (report 08 §3 table), each an explicit field.</p>
+<p>Grouped by check. Pass a customized instance to <a class="reference internal" href="#foley.qc.run_qc" title="foley.qc.run_qc"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_qc()</span></code></a> (or the
+per-check keyword arguments) to override any threshold without editing code.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.dc_offset">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">dc_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#dc_offset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.dc_offset" title="Link to this definition"></a></dt>
+<dd><p>Largest per-channel absolute DC offset, <code class="docutils literal notranslate"><span class="pre">max_c</span> <span class="pre">|mean_n</span> <span class="pre">x[n,</span> <span class="pre">c]|</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.detect_clipping">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">detect_clipping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.999</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#detect_clipping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.detect_clipping" title="Link to this definition"></a></dt>
+<dd><p>Detect hard (flat-topped) clipping.</p>
+<p>A frame is “hot” when any channel reaches <code class="docutils literal notranslate"><span class="pre">|x|</span> <span class="pre">&gt;=</span> <span class="pre">full_scale</span></code>. Only
+maximal hot runs of length <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">min_run</span></code> count as clip events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> – Waveform in <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>.</p></li>
+<li><p><strong>full_scale</strong> – Absolute level at/above which a sample is full-scale.</p></li>
+<li><p><strong>min_run</strong> – Minimum consecutive full-scale frames to count as clipping.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(clipped_ratio,</span> <span class="pre">max_run_length)</span></code> — the fraction of frames inside
+counting runs, and the longest counting run (<code class="docutils literal notranslate"><span class="pre">(0.0,</span> <span class="pre">0)</span></code> if none).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.duration_s">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">duration_s</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#duration_s"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.duration_s" title="Link to this definition"></a></dt>
+<dd><p>Clip duration in seconds: <code class="docutils literal notranslate"><span class="pre">frames</span> <span class="pre">/</span> <span class="pre">sample_rate</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.estimate_snr">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">estimate_snr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet_percentile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hop_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#estimate_snr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.estimate_snr" title="Link to this definition"></a></dt>
+<dd><p>Estimate SNR in dB (advisory — a busy-street SFX legitimately scores low).</p>
+<p>The noise floor is the mean short-time RMS of the quietest
+<code class="docutils literal notranslate"><span class="pre">quiet_percentile</span></code> percent of frames; the signal level is the whole-clip
+RMS. A near-noise-free clip (quiet frames -&gt; ~0) yields a very high value;
+an exactly-zero floor returns <code class="docutils literal notranslate"><span class="pre">inf</span></code> and a silent clip returns <code class="docutils literal notranslate"><span class="pre">-inf</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> – Waveform in <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code> (down-mixed to mono internally).</p></li>
+<li><p><strong>sample_rate</strong> – Sample rate in Hz (sizes the frames).</p></li>
+<li><p><strong>quiet_percentile</strong> – Percent of quietest frames forming the noise floor.</p></li>
+<li><p><strong>frame_s</strong> – Short-time frame length in seconds.</p></li>
+<li><p><strong>hop_s</strong> – Hop between frames in seconds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>SNR in dB.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.has_nan_inf">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">has_nan_inf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#has_nan_inf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.has_nan_inf" title="Link to this definition"></a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if any sample is <code class="docutils literal notranslate"><span class="pre">NaN</span></code> or <code class="docutils literal notranslate"><span class="pre">Inf</span></code> (corrupt-clip guard).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.is_silent">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">is_silent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_floor_dbfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-60.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#is_silent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.is_silent" title="Link to this definition"></a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> when whole-clip RMS falls below <code class="docutils literal notranslate"><span class="pre">rms_floor_dbfs</span></code>.</p>
+<p>A zero (exactly silent) clip has RMS <code class="docutils literal notranslate"><span class="pre">0</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">-inf</span></code> dBFS -&gt; <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.measure_lufs">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">measure_lufs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_floor_lufs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-70.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_block_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#measure_lufs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.measure_lufs" title="Link to this definition"></a></dt>
+<dd><p>Integrated loudness (LUFS, ITU-R BS.1770-4) via <code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> (lazy).</p>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> when <code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> is unavailable, the clip is shorter than
+one gating block (<code class="docutils literal notranslate"><span class="pre">min_block_s</span></code>), the samples are non-finite, or the
+measured loudness is at/below the gate floor (near-silent / unstable — do
+not amplify, just flag).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.needs_edge_fade">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">needs_edge_fade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_peak_dbfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-40.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#needs_edge_fade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.needs_edge_fade" title="Link to this definition"></a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> when the first or last sample sits above <code class="docutils literal notranslate"><span class="pre">rel_peak_dbfs</span></code>
+relative to the clip peak — i.e. a nonzero boundary that clicks under
+narration and needs a short fade.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.run_qc">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">run_qc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.qc.QCThresholds" title="foley.qc.QCThresholds"><span class="pre">QCThresholds</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QCThresholds(clip_full_scale=0.999,</span> <span class="pre">clip_min_run=3,</span> <span class="pre">clip_reject_ratio=0.0001,</span> <span class="pre">clip_reject_run=10,</span> <span class="pre">true_peak_max_dbtp=-1.0,</span> <span class="pre">true_peak_oversample=4,</span> <span class="pre">dc_offset_fail=0.01,</span> <span class="pre">dc_offset_warn=0.001,</span> <span class="pre">silence_rms_dbfs=-60.0,</span> <span class="pre">snr_clean_db=20.0,</span> <span class="pre">snr_quiet_percentile=10.0,</span> <span class="pre">snr_frame_s=0.025,</span> <span class="pre">snr_hop_s=0.01,</span> <span class="pre">edge_rel_peak_dbfs=-40.0,</span> <span class="pre">edge_fade_s=0.01,</span> <span class="pre">lufs_gate_floor=-70.0,</span> <span class="pre">lufs_outlier_lu=6.0,</span> <span class="pre">duration_min_s=0.1,</span> <span class="pre">deliver_min_sample_rate=44100)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.qc.QCReport" title="foley.qc.QCReport"><span class="pre">QCReport</span></a></span></span><a class="reference internal" href="../../_modules/foley/qc.html#run_qc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.run_qc" title="Link to this definition"></a></dt>
+<dd><p>Run every Tier-0 check and fold the results into a <a class="reference internal" href="#foley.qc.QCReport" title="foley.qc.QCReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">QCReport</span></code></a>.</p>
+<dl class="simple">
+<dt>Status rules (evaluated in order):</dt><dd><p>FAIL if <code class="docutils literal notranslate"><span class="pre">has_nan_inf</span></code> OR <code class="docutils literal notranslate"><span class="pre">is_silent</span></code> OR
+<code class="docutils literal notranslate"><span class="pre">clipped_max_run</span> <span class="pre">&gt;=</span> <span class="pre">clip_reject_run</span></code> OR
+<code class="docutils literal notranslate"><span class="pre">clipped_ratio</span> <span class="pre">&gt;</span> <span class="pre">clip_reject_ratio</span></code> OR <code class="docutils literal notranslate"><span class="pre">duration_s</span> <span class="pre">&lt;</span> <span class="pre">duration_min_s</span></code>.
+WARN if <code class="docutils literal notranslate"><span class="pre">dc_offset</span> <span class="pre">&gt;</span> <span class="pre">dc_offset_fail</span></code> OR <code class="docutils literal notranslate"><span class="pre">needs_edge_fade</span></code> OR
+(<code class="docutils literal notranslate"><span class="pre">snr_db</span></code> is a finite value <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">snr_clean_db</span></code>) OR
+(<code class="docutils literal notranslate"><span class="pre">true_peak_dbtp</span></code> is a finite value <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">true_peak_max_dbtp</span></code>).
+Otherwise PASS.</p>
+</dd>
+</dl>
+<p>Each firing condition appends a human-readable string to <code class="docutils literal notranslate"><span class="pre">notes</span></code>. Two
+thresholds are intentionally NOT evaluated on a single source clip here
+because they belong to later stages: the library-median loudness-outlier
+check (<code class="docutils literal notranslate"><span class="pre">+/-</span> <span class="pre">lufs_outlier_lu</span></code>, a library-level concern) and the delivery
+sample-rate target (<code class="docutils literal notranslate"><span class="pre">deliver_min_sample_rate</span></code>, enforced at the weave/master
+stage).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> – Waveform in <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code> (mono or <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">channels)</span></code>).</p></li>
+<li><p><strong>sample_rate</strong> – Sample rate in Hz.</p></li>
+<li><p><strong>thresholds</strong> – Overridable QC thresholds (defaults to shipped values).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A populated <a class="reference internal" href="#foley.qc.QCReport" title="foley.qc.QCReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">QCReport</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.qc.true_peak_dbtp">
+<span class="sig-prename descclassname"><span class="pre">foley.qc.</span></span><span class="sig-name descname"><span class="pre">true_peak_dbtp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">oversample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/qc.html#true_peak_dbtp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.qc.true_peak_dbtp" title="Link to this definition"></a></dt>
+<dd><p>Inter-sample true-peak level in dBTP.</p>
+<p>Each channel is band-limited-upsampled <code class="docutils literal notranslate"><span class="pre">oversample``x</span> <span class="pre">(numpy</span> <span class="pre">FFT),</span> <span class="pre">the</span>
+<span class="pre">peak</span> <span class="pre">magnitude</span> <span class="pre">is</span> <span class="pre">taken</span> <span class="pre">across</span> <span class="pre">all</span> <span class="pre">channels,</span> <span class="pre">and</span> <span class="pre">converted</span> <span class="pre">to</span> <span class="pre">dBTP.</span> <span class="pre">Returns</span>
+<span class="pre">``-inf</span></code> for a fully silent clip. <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code> is accepted for interface
+symmetry (FFT interpolation is rate-independent).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="licensing.html" class="btn btn-neutral float-left" title="foley.licensing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="stores.html" class="btn btn-neutral float-right" title="foley.stores" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

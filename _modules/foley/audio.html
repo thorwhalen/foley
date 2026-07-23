@@ -1,0 +1,578 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.audio &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.audio</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.audio</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Audio I/O and DSP primitives for foley.</span>
+
+<span class="sd">The foundation every other foley layer decodes/encodes/transforms audio through.</span>
+<span class="sd">It commits to a small, explicit set of representations (report 09):</span>
+
+<span class="sd">    * **Working** (in RAM, between DSP ops): a ``float32`` NumPy array at</span>
+<span class="sd">      ``48 kHz`` — shape ``(frames,)`` mono or ``(frames, channels)``. This is</span>
+<span class="sd">      the lingua franca of ``soundfile``/``librosa``/``soxr`` and exactly what</span>
+<span class="sd">      CLAP expects.</span>
+<span class="sd">    * **Archive** (bytes at rest): **FLAC**, source sample-rate and bit-depth</span>
+<span class="sd">      preserved — lossless, ~40-60% smaller than WAV, self-describing.</span>
+<span class="sd">    * **Delivery / preview** (derived): **Opus** by default (not implemented in</span>
+<span class="sd">      the foundation — an FFmpeg/`foley[ffmpeg]` concern surfaced later).</span>
+
+<span class="sd">Design rules honoured here:</span>
+
+<span class="sd">    * **Zero-dep import.** This module imports only the stdlib at top level; the</span>
+<span class="sd">      heavy libraries (``numpy``, ``soundfile``, ``soxr``, ``librosa``,</span>
+<span class="sd">      ``pyloudnorm``) are lazy-imported *inside* the functions that need them, so</span>
+<span class="sd">      ``import foley.audio`` always succeeds on a bare install and only the</span>
+<span class="sd">      function you call pays for (and requires) its dependency.</span>
+<span class="sd">    * **No magic numbers.** Every default (sample rate, dtype, archive subtype,</span>
+<span class="sd">      resample quality, trim/fade/loudness targets) is a named module-level</span>
+<span class="sd">      constant used as a keyword-only argument default.</span>
+<span class="sd">    * **Never bundle FFmpeg / pydub / torchaudio.** MP3/AAC/Opus transcode is an</span>
+<span class="sd">      optional external-tool concern, not part of this royalty-free core.</span>
+
+<span class="sd">All ops assume the working representation (float array, time on axis 0). ``load``</span>
+<span class="sd">is the one function that produces it from arbitrary sources (path, raw bytes, or</span>
+<span class="sd">a file-like object).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover - typing only, never imported at runtime</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndarray</span>
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Canonical representation + operation defaults (no literal hides in code)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">WORKING_SAMPLE_RATE</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">48_000</span>  <span class="c1"># CLAP + video/broadcast standard (report 09)</span>
+<span class="n">WORKING_DTYPE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;float32&quot;</span>  <span class="c1"># float avoids clipping across chained DSP ops</span>
+<span class="n">ARCHIVE_FORMAT</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;flac&quot;</span>  <span class="c1"># lossless, small, metadata-rich, royalty-free</span>
+<span class="n">ARCHIVE_SUBTYPE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PCM_24&quot;</span>  <span class="c1"># recording-grade archive depth (24-bit)</span>
+<span class="n">DELIVERY_FORMAT</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;opus&quot;</span>  <span class="c1"># royalty-free preview codec (transcode = later)</span>
+<span class="n">RESAMPLE_QUALITY</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;HQ&quot;</span>  <span class="c1"># soxr preset: QQ | LQ | MQ | HQ | VHQ</span>
+
+<span class="n">TRIM_TOP_DB</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30.0</span>  <span class="c1"># librosa trim: silence = &gt;= this many dB below peak</span>
+<span class="n">DEFAULT_FADE_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># 10 ms declick ramp at edit points</span>
+<span class="n">FADE_KIND</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span>  <span class="c1"># &#39;linear&#39; | &#39;equal_power&#39; (sqrt, for crossfades)</span>
+
+<span class="c1"># Loudness targets (LUFS), each named so no literal hides in code.</span>
+<span class="n">LUFS_STREAMING</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">14.0</span>  <span class="c1"># Spotify/YouTube-class streaming target</span>
+<span class="n">LUFS_PODCAST</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.0</span>  <span class="c1"># foley default (matches WEAVE MasterProfile)</span>
+<span class="n">LUFS_EBU</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">23.0</span>  <span class="c1"># EBU R128 broadcast target</span>
+<span class="n">LUFS_ATSC</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">24.0</span>  <span class="c1"># ATSC A/85 broadcast target</span>
+<span class="n">DEFAULT_LOUDNESS_TARGET_LUFS</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">LUFS_PODCAST</span>
+<span class="n">TRUE_PEAK_MAX_DBTP</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>  <span class="c1"># ceiling after loudness normalization</span>
+<span class="n">LUFS_GATE_FLOOR</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">70.0</span>  <span class="c1"># pyloudnorm near-silent gate; flag, don&#39;t amplify</span>
+
+<span class="c1">#: A source ``load`` can decode: a filesystem path, raw encoded bytes, or an</span>
+<span class="c1">#: already-open binary file-like object (e.g. ``io.BytesIO``).</span>
+<span class="n">AudioSource</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">]</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># I/O — decode / encode between bytes/files and the working array</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="load">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.load">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span>
+    <span class="n">src</span><span class="p">:</span> <span class="n">AudioSource</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">target_sr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mono</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">WORKING_DTYPE</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decode audio into a float working array.</span>
+
+<span class="sd">    ``src`` may be a filesystem path, raw encoded ``bytes`` (wrapped in a</span>
+<span class="sd">    ``BytesIO`` so nothing touches disk), or any binary file-like object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        src: Path, raw bytes, or file-like object to decode.</span>
+<span class="sd">        target_sr: If given, resample the decoded audio to this rate (via</span>
+<span class="sd">            :func:`resample`); otherwise the native rate is returned.</span>
+<span class="sd">        mono: If ``True``, down-mix multichannel audio to mono.</span>
+<span class="sd">        dtype: NumPy dtype string for the returned array (default ``float32``).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``(samples, sample_rate)`` tuple. ``samples`` has shape ``(frames,)``</span>
+<span class="sd">        (mono) or ``(frames, channels)``; ``sample_rate`` reflects any resample.</span>
+
+<span class="sd">    Lazy dependencies: ``soundfile`` (and ``soxr`` when ``target_sr`` differs).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">)):</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
+    <span class="n">samples</span><span class="p">,</span> <span class="n">sample_rate</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">always_2d</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mono</span> <span class="ow">and</span> <span class="n">samples</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">target_sr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">target_sr</span> <span class="o">!=</span> <span class="n">sample_rate</span><span class="p">:</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">target_sr</span><span class="o">=</span><span class="n">target_sr</span><span class="p">)</span>
+        <span class="n">sample_rate</span> <span class="o">=</span> <span class="n">target_sr</span>
+    <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="n">sample_rate</span></div>
+
+
+
+<div class="viewcode-block" id="save">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.save">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">dst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ARCHIVE_FORMAT</span><span class="p">,</span>
+    <span class="n">subtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ARCHIVE_SUBTYPE</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write ``samples`` to ``dst`` as ``fmt``/``subtype`` (default = FLAC archive).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: The working array to write (shape ``(frames,)`` or</span>
+<span class="sd">            ``(frames, channels)``).</span>
+<span class="sd">        sample_rate: Sample rate in Hz.</span>
+<span class="sd">        dst: Destination path or writable binary file-like object.</span>
+<span class="sd">        fmt: Container/codec name (case-insensitive; passed to libsndfile).</span>
+<span class="sd">        subtype: Sample subtype (e.g. ``PCM_24``, ``PCM_16``, ``FLOAT``).</span>
+
+<span class="sd">    Lazy dependency: ``soundfile``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+
+    <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">subtype</span><span class="o">=</span><span class="n">subtype</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="encode">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.encode">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ARCHIVE_FORMAT</span><span class="p">,</span>
+    <span class="n">subtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ARCHIVE_SUBTYPE</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encode ``samples`` fully in memory and return the container bytes.</span>
+
+<span class="sd">    This is the producer for the content-addressed byte store: default output is</span>
+<span class="sd">    the FLAC archive form.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: The working array to encode.</span>
+<span class="sd">        sample_rate: Sample rate in Hz.</span>
+<span class="sd">        fmt: Container/codec name (case-insensitive).</span>
+<span class="sd">        subtype: Sample subtype (e.g. ``PCM_24``).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The encoded audio as ``bytes``.</span>
+
+<span class="sd">    Lazy dependency: ``soundfile``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+    <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">subtype</span><span class="o">=</span><span class="n">subtype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># DSP primitives — resample / channels / trim / fade / loudness</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="resample">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.resample">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resample</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">target_sr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">,</span>
+    <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">RESAMPLE_QUALITY</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resample ``samples`` to ``target_sr`` (a no-op when already there).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Working array (mono ``(frames,)`` or ``(frames, channels)``).</span>
+<span class="sd">        sample_rate: The array&#39;s current rate in Hz.</span>
+<span class="sd">        target_sr: Desired output rate in Hz (default = the working rate).</span>
+<span class="sd">        quality: soxr quality preset (``QQ``/``LQ``/``MQ``/``HQ``/``VHQ``).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The resampled array (the input unchanged when ``sample_rate ==</span>
+<span class="sd">        target_sr``). dtype is preserved by soxr.</span>
+
+<span class="sd">    Lazy dependency: ``soxr``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sample_rate</span> <span class="o">==</span> <span class="n">target_sr</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">samples</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">soxr</span>
+
+    <span class="k">return</span> <span class="n">soxr</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">target_sr</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="to_mono">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.to_mono">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Down-mix to mono by averaging channels; 1-D input passes through.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Mono ``(frames,)`` or multichannel ``(frames, channels)`` array.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A 1-D mono array (dtype preserved).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">samples</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">samples</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">samples</span></div>
+
+
+
+<div class="viewcode-block" id="ensure_channels">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.ensure_channels">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ensure_channels</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce ``samples`` to exactly ``channels`` channels.</span>
+
+<span class="sd">    Mappings: mono -&gt; N by duplication; N -&gt; mono by mean; N -&gt; M (N != M, both</span>
+<span class="sd">    &gt; 1) by collapsing to mono then tiling up to M.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Mono or multichannel working array.</span>
+<span class="sd">        channels: Target channel count (must be &gt;= 1).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``(frames,)`` array when ``channels == 1``, else a</span>
+<span class="sd">        ``(frames, channels)`` array.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If ``channels &lt; 1``.</span>
+
+<span class="sd">    Lazy dependency: ``numpy`` (only for the up-mix / tile path).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">channels</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;channels must be &gt;= 1, got </span><span class="si">{</span><span class="n">channels</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">samples</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">channels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">samples</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">current</span> <span class="o">==</span> <span class="n">channels</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">samples</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">mono</span> <span class="o">=</span> <span class="n">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>  <span class="c1"># 1-D</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">mono</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">channels</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="trim_silence">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.trim_silence">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">trim_silence</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">top_db</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">TRIM_TOP_DB</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Strip leading/trailing silence, returning the clip and its kept span.</span>
+
+<span class="sd">    Silence detection runs on a transient mono down-mix (so librosa&#39;s time-last</span>
+<span class="sd">    convention never clashes with foley&#39;s time-first ``(frames, channels)``</span>
+<span class="sd">    layout); the returned sample indices then slice the *original* array along</span>
+<span class="sd">    axis 0, preserving its channel layout.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Working array (mono or multichannel).</span>
+<span class="sd">        sample_rate: Sample rate in Hz (kept in the signature for API symmetry;</span>
+<span class="sd">            trimming is index-based).</span>
+<span class="sd">        top_db: A frame is silent when it sits at least this many dB below the</span>
+<span class="sd">            reference (peak) level.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``(trimmed, (start_sample, end_sample))``. On all-silent (or otherwise</span>
+<span class="sd">        degenerate) input the original array is returned unchanged with a</span>
+<span class="sd">        full-length span ``(0, len(samples))``.</span>
+
+<span class="sd">    Lazy dependency: ``librosa``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">librosa</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">mono</span> <span class="o">=</span> <span class="n">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">effects</span><span class="o">.</span><span class="n">trim</span><span class="p">(</span><span class="n">mono</span><span class="p">,</span> <span class="n">top_db</span><span class="o">=</span><span class="n">top_db</span><span class="p">)</span>
+    <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">end</span> <span class="o">&lt;=</span> <span class="n">start</span><span class="p">:</span>  <span class="c1"># degenerate / all-silent guard</span>
+        <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">samples</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">],</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fade_ramp</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return an ascending 0-&gt;1 gain ramp of ``length`` samples.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        length: Number of samples in the ramp.</span>
+<span class="sd">        dtype: NumPy dtype for the ramp (matches the signal being faded).</span>
+<span class="sd">        kind: ``&#39;linear&#39;`` or ``&#39;equal_power&#39;`` (square-root of the linear ramp,</span>
+<span class="sd">            for dip-free crossfades).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A 1-D ramp array rising from 0.0 to 1.0.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">ramp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;equal_power&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ramp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ramp</span>
+
+
+<div class="viewcode-block" id="fade">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.fade">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fade</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">fade_in_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_FADE_S</span><span class="p">,</span>
+    <span class="n">fade_out_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_FADE_S</span><span class="p">,</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">FADE_KIND</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply in/out gain ramps to ``samples`` (a short declick by default).</span>
+
+<span class="sd">    Ramp lengths are clamped to at most ``len(samples) // 2`` so the in- and</span>
+<span class="sd">    out-ramps never overlap on tiny inputs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Working array (mono or multichannel).</span>
+<span class="sd">        sample_rate: Sample rate in Hz (converts the fade durations to samples).</span>
+<span class="sd">        fade_in_s: Fade-in duration in seconds.</span>
+<span class="sd">        fade_out_s: Fade-out duration in seconds.</span>
+<span class="sd">        kind: ``&#39;linear&#39;`` or ``&#39;equal_power&#39;`` ramp shape.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A new array with the fade envelope applied (input is not mutated).</span>
+
+<span class="sd">    Lazy dependency: ``numpy``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">max_ramp</span> <span class="o">=</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">n_in</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fade_in_s</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">),</span> <span class="n">max_ramp</span><span class="p">)</span>
+    <span class="n">n_out</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fade_out_s</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">),</span> <span class="n">max_ramp</span><span class="p">)</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">samples</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_in</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">env</span><span class="p">[:</span><span class="n">n_in</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fade_ramp</span><span class="p">(</span><span class="n">n_in</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">samples</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_out</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">env</span><span class="p">[</span><span class="o">-</span><span class="n">n_out</span><span class="p">:]</span> <span class="o">=</span> <span class="n">_fade_ramp</span><span class="p">(</span><span class="n">n_out</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">samples</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">samples</span> <span class="o">*</span> <span class="n">env</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="k">if</span> <span class="n">samples</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">samples</span> <span class="o">*</span> <span class="n">env</span></div>
+
+
+
+<div class="viewcode-block" id="loudness_normalize">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.loudness_normalize">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">loudness_normalize</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">target_lufs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_LOUDNESS_TARGET_LUFS</span><span class="p">,</span>
+    <span class="n">true_peak_dbtp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">TRUE_PEAK_MAX_DBTP</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loudness-normalize to ``target_lufs``, then keep it peak-safe.</span>
+
+<span class="sd">    Integrated loudness is measured (ITU-R BS.1770-4 / EBU R128), the signal is</span>
+<span class="sd">    scaled to ``target_lufs``, and finally attenuated so its sample peak sits at</span>
+<span class="sd">    or below ``true_peak_dbtp``. Near-silent input (measured loudness at or below</span>
+<span class="sd">    the ``LUFS_GATE_FLOOR``) is returned **unchanged** — flag it, don&#39;t amplify</span>
+<span class="sd">    hiss.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Working array (mono or multichannel, time on axis 0 — the layout</span>
+<span class="sd">            pyloudnorm expects).</span>
+<span class="sd">        sample_rate: Sample rate in Hz.</span>
+<span class="sd">        target_lufs: Desired integrated loudness (default = foley&#39;s podcast</span>
+<span class="sd">            target).</span>
+<span class="sd">        true_peak_dbtp: Ceiling (dBFS, sample-peak approximation) applied after</span>
+<span class="sd">            loudness normalization.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``(normalized, measured_input_lufs)``. When the input is near-silent,</span>
+<span class="sd">        ``normalized`` is the unchanged input and ``measured_input_lufs`` is at</span>
+<span class="sd">        or below ``LUFS_GATE_FLOOR`` (possibly ``-inf``).</span>
+
+<span class="sd">    Lazy dependencies: ``pyloudnorm`` (+ ``numpy``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pyloudnorm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pyln</span>
+
+    <span class="n">meter</span> <span class="o">=</span> <span class="n">pyln</span><span class="o">.</span><span class="n">Meter</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">)</span>
+    <span class="n">measured</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">meter</span><span class="o">.</span><span class="n">integrated_loudness</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">measured</span> <span class="o">&lt;=</span> <span class="n">LUFS_GATE_FLOOR</span><span class="p">:</span>  <span class="c1"># near-silent: flag, don&#39;t amplify</span>
+        <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="n">measured</span>
+
+    <span class="n">normalized</span> <span class="o">=</span> <span class="n">pyln</span><span class="o">.</span><span class="n">normalize</span><span class="o">.</span><span class="n">loudness</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">measured</span><span class="p">,</span> <span class="n">target_lufs</span><span class="p">)</span>
+
+    <span class="n">ceiling</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="n">true_peak_dbtp</span> <span class="o">/</span> <span class="mf">20.0</span><span class="p">)</span>
+    <span class="n">peak</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">normalized</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">peak</span> <span class="o">&gt;</span> <span class="n">ceiling</span><span class="p">:</span>
+        <span class="n">normalized</span> <span class="o">=</span> <span class="n">normalized</span> <span class="o">*</span> <span class="p">(</span><span class="n">ceiling</span> <span class="o">/</span> <span class="n">peak</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">normalized</span><span class="p">,</span> <span class="n">measured</span></div>
+
+
+
+<div class="viewcode-block" id="to_working">
+<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.to_working">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_working</span><span class="p">(</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">mono</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">target_sr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">WORKING_DTYPE</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Produce the canonical CLAP/QC working array from an arbitrary clip.</span>
+
+<span class="sd">    Down-mixes (when ``mono``), resamples to ``target_sr``, and casts to</span>
+<span class="sd">    ``dtype`` — the ``float32`` @ 48 kHz mono array every embedder/tagger/QC</span>
+<span class="sd">    check consumes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        samples: Decoded working array (mono or multichannel).</span>
+<span class="sd">        sample_rate: The array&#39;s current rate in Hz.</span>
+<span class="sd">        mono: If ``True``, down-mix to mono.</span>
+<span class="sd">        target_sr: Working sample rate in Hz.</span>
+<span class="sd">        dtype: Output NumPy dtype string.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The canonical working array.</span>
+
+<span class="sd">    Lazy dependency: ``soxr`` (only when ``sample_rate != target_sr``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mono</span><span class="p">:</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">target_sr</span><span class="o">=</span><span class="n">target_sr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">samples</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

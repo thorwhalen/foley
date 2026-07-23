@@ -1,0 +1,421 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">foley</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;foley — a retrieval-first façade for sound effects.</span>
+
+<span class="sd">foley finds (or generates) the right sound effect for a moment of narration and</span>
+<span class="sd">weaves it in. It is the SFX sibling of ``arioso`` (a unified façade over AI</span>
+<span class="sd">music-generation backends): one simple surface over many sound *sources* (a</span>
+<span class="sd">bring-your-own library, service APIs like Freesound, and generative-AI models),</span>
+<span class="sd">a searchable *index* of every sound (by keyword *and* meaning, via CLAP</span>
+<span class="sd">embeddings + hybrid search), an *agent* that selects the right sound for a</span>
+<span class="sd">narrative context, and a *compositor* that places it under the voice.</span>
+
+<span class="sd">Four stages::</span>
+
+<span class="sd">    SOURCE  -&gt;  INDEX  -&gt;  SELECT  -&gt;  WEAVE</span>
+<span class="sd">    (get)      (find)      (choose)    (compose)</span>
+
+<span class="sd">Intended façade (design-stage — see ``misc/docs/design.md`` and</span>
+<span class="sd">``misc/docs/roadmap.md`` for what is implemented)::</span>
+
+<span class="sd">    import foley</span>
+
+<span class="sd">    foley.find(&quot;She pushed open the heavy oak door; rain hammered outside.&quot;)</span>
+<span class="sd">    foley.search(&quot;distant thunder rumble&quot;, k=10)</span>
+<span class="sd">    foley.generate(&quot;a single wooden door creak&quot;, backend=&quot;stable_audio_open&quot;)</span>
+<span class="sd">    foley.ingest(&quot;~/my_sounds/&quot;)</span>
+
+<span class="sd">The design is grounded in the research reports under ``misc/docs/research/``.</span>
+
+<span class="sd">Foundation surface (implemented — the retrieval-agnostic base every later stage</span>
+<span class="sd">stands on). This top-level namespace re-exports it:</span>
+
+<span class="sd">    * **Data models** (``foley.base``) — the SSOT dataclasses/enums shared across</span>
+<span class="sd">      layers (:class:`SoundRecord`, :class:`LicenseRecord`, :class:`Candidate`,</span>
+<span class="sd">      :class:`SoundEvent`, :class:`Verdict`, :class:`IntendedUse`), the two</span>
+<span class="sd">      affordance registries, and generic dict/JSON (de)serialization.</span>
+<span class="sd">    * **License policy** (``foley.licensing``) — the ``license_id`` -&gt; flag-set</span>
+<span class="sd">      SSOT (:data:`LICENSE_FLAGS`), flag derivation, and the fail-closed</span>
+<span class="sd">      :func:`keep` gate.</span>
+<span class="sd">    * **Storage** (``foley.stores``) — content-addressed byte store + metadata</span>
+<span class="sd">      store built from ``dol``, and :func:`store_sound` (the by-value vs</span>
+<span class="sd">      by-reference gate driven by ``LicenseRecord.cache_bytes_ok``).</span>
+<span class="sd">    * **QC** (``foley.qc``) — Tier-0 deterministic audio checks</span>
+<span class="sd">      (:func:`run_qc` -&gt; :class:`QCReport`, thresholds in :class:`QCThresholds`).</span>
+<span class="sd">    * **Audio** (``foley.audio``) — I/O + DSP primitives. Exposed as a submodule</span>
+<span class="sd">      (``foley.audio``) with the key functions also re-exported here.</span>
+
+<span class="sd">Import cost: ``import foley`` pulls only ``dol`` (a light core dependency used by</span>
+<span class="sd">``foley.stores``); ``numpy``/``soundfile``/``soxr``/``librosa``/``pyloudnorm`` are</span>
+<span class="sd">lazy-imported inside the audio/QC functions that need them (install via the</span>
+<span class="sd">``foley[audio]`` extra), so a bare install imports cleanly.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">audio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.audio</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">WORKING_SAMPLE_RATE</span><span class="p">,</span>
+    <span class="n">encode</span><span class="p">,</span>
+    <span class="n">ensure_channels</span><span class="p">,</span>
+    <span class="n">fade</span><span class="p">,</span>
+    <span class="n">load</span><span class="p">,</span>
+    <span class="n">loudness_normalize</span><span class="p">,</span>
+    <span class="n">resample</span><span class="p">,</span>
+    <span class="n">save</span><span class="p">,</span>
+    <span class="n">to_mono</span><span class="p">,</span>
+    <span class="n">to_working</span><span class="p">,</span>
+    <span class="n">trim_silence</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GENERATION_AFFORDANCES</span><span class="p">,</span>
+    <span class="n">QUERY_AFFORDANCES</span><span class="p">,</span>
+    <span class="n">SCHEMA_VERSION</span><span class="p">,</span>
+    <span class="n">AcquisitionMethod</span><span class="p">,</span>
+    <span class="n">Affordance</span><span class="p">,</span>
+    <span class="n">Candidate</span><span class="p">,</span>
+    <span class="n">CandidateOrigin</span><span class="p">,</span>
+    <span class="n">IntendedUse</span><span class="p">,</span>
+    <span class="n">Layer</span><span class="p">,</span>
+    <span class="n">LicenseRecord</span><span class="p">,</span>
+    <span class="n">Salience</span><span class="p">,</span>
+    <span class="n">SerializableMixin</span><span class="p">,</span>
+    <span class="n">SoundEvent</span><span class="p">,</span>
+    <span class="n">SoundRecord</span><span class="p">,</span>
+    <span class="n">StorageMode</span><span class="p">,</span>
+    <span class="n">Verdict</span><span class="p">,</span>
+    <span class="n">VerifyLevel</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.licensing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LICENSE_FLAGS</span><span class="p">,</span>
+    <span class="n">UNKNOWN_LICENSE_FLAGS</span><span class="p">,</span>
+    <span class="n">LicenseFlags</span><span class="p">,</span>
+    <span class="n">apply_license_flags</span><span class="p">,</span>
+    <span class="n">derive_license_flags</span><span class="p">,</span>
+    <span class="n">keep</span><span class="p">,</span>
+    <span class="n">keep_sound</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.qc</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="p">,</span>
+    <span class="n">QCReport</span><span class="p">,</span>
+    <span class="n">QCStatus</span><span class="p">,</span>
+    <span class="n">QCThresholds</span><span class="p">,</span>
+    <span class="n">dc_offset</span><span class="p">,</span>
+    <span class="n">detect_clipping</span><span class="p">,</span>
+    <span class="n">duration_s</span><span class="p">,</span>
+    <span class="n">estimate_snr</span><span class="p">,</span>
+    <span class="n">has_nan_inf</span><span class="p">,</span>
+    <span class="n">is_silent</span><span class="p">,</span>
+    <span class="n">measure_lufs</span><span class="p">,</span>
+    <span class="n">needs_edge_fade</span><span class="p">,</span>
+    <span class="n">run_qc</span><span class="p">,</span>
+    <span class="n">true_peak_dbtp</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.stores</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DEFAULT_AUDIO_DIR</span><span class="p">,</span>
+    <span class="n">DEFAULT_META_DIR</span><span class="p">,</span>
+    <span class="n">FOLEY_DATA_DIR</span><span class="p">,</span>
+    <span class="n">content_key</span><span class="p">,</span>
+    <span class="n">make_byte_store</span><span class="p">,</span>
+    <span class="n">make_meta_store</span><span class="p">,</span>
+    <span class="n">store_sound</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">index</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.index</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CLAP_SAMPLE_RATE</span><span class="p">,</span>
+    <span class="n">DEFAULT_CANDIDATE_K</span><span class="p">,</span>
+    <span class="n">DEFAULT_CLAP_DIM</span><span class="p">,</span>
+    <span class="n">DEFAULT_CLAP_MODEL_ID</span><span class="p">,</span>
+    <span class="n">RRF_K</span><span class="p">,</span>
+    <span class="n">CatIdResolution</span><span class="p">,</span>
+    <span class="n">ClapEmbedder</span><span class="p">,</span>
+    <span class="n">Embedder</span><span class="p">,</span>
+    <span class="n">FusedHit</span><span class="p">,</span>
+    <span class="n">KeywordIndex</span><span class="p">,</span>
+    <span class="n">LanceIndex</span><span class="p">,</span>
+    <span class="n">MemoryIndex</span><span class="p">,</span>
+    <span class="n">SoundLibrary</span><span class="p">,</span>
+    <span class="n">SqliteVecIndex</span><span class="p">,</span>
+    <span class="n">VectorIndex</span><span class="p">,</span>
+    <span class="n">default_embedder</span><span class="p">,</span>
+    <span class="n">default_index</span><span class="p">,</span>
+    <span class="n">default_library</span><span class="p">,</span>
+    <span class="n">fuse_hits</span><span class="p">,</span>
+    <span class="n">hybrid_search</span><span class="p">,</span>
+    <span class="n">lancedb_available</span><span class="p">,</span>
+    <span class="n">parse_ucs_filename</span><span class="p">,</span>
+    <span class="n">reciprocal_rank_fusion</span><span class="p">,</span>
+    <span class="n">resolve_catid</span><span class="p">,</span>
+    <span class="n">sqlite_vec_loadable</span><span class="p">,</span>
+    <span class="n">vector_search</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># --- base: constants + enums ---------------------------------------------</span>
+    <span class="s2">&quot;SCHEMA_VERSION&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;StorageMode&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AcquisitionMethod&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CandidateOrigin&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Salience&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Layer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;VerifyLevel&quot;</span><span class="p">,</span>
+    <span class="c1"># --- base: affordances ---------------------------------------------------</span>
+    <span class="s2">&quot;Affordance&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;QUERY_AFFORDANCES&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GENERATION_AFFORDANCES&quot;</span><span class="p">,</span>
+    <span class="c1"># --- base: serialization + models ----------------------------------------</span>
+    <span class="s2">&quot;SerializableMixin&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LicenseRecord&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SoundRecord&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SoundEvent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Verdict&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Candidate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IntendedUse&quot;</span><span class="p">,</span>
+    <span class="c1"># --- licensing: policy ---------------------------------------------------</span>
+    <span class="s2">&quot;LicenseFlags&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LICENSE_FLAGS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;UNKNOWN_LICENSE_FLAGS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;derive_license_flags&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;apply_license_flags&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;keep&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;keep_sound&quot;</span><span class="p">,</span>
+    <span class="c1"># --- stores: content-addressed storage + the storage gate ----------------</span>
+    <span class="s2">&quot;content_key&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;make_byte_store&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;make_meta_store&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;store_sound&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FOLEY_DATA_DIR&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_AUDIO_DIR&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_META_DIR&quot;</span><span class="p">,</span>
+    <span class="c1"># --- qc: Tier-0 deterministic audio QC -----------------------------------</span>
+    <span class="s2">&quot;QCStatus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;QCThresholds&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_QC_THRESHOLDS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;QCReport&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run_qc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;has_nan_inf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;duration_s&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dc_offset&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;is_silent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;detect_clipping&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;true_peak_dbtp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;estimate_snr&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;needs_edge_fade&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;measure_lufs&quot;</span><span class="p">,</span>
+    <span class="c1"># --- audio: I/O + DSP primitives -----------------------------------------</span>
+    <span class="s2">&quot;audio&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;WORKING_SAMPLE_RATE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;load&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;save&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;encode&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;resample&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;to_mono&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ensure_channels&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trim_silence&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fade&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;loudness_normalize&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;to_working&quot;</span><span class="p">,</span>
+    <span class="c1"># --- index: embeddings, hybrid search, library façade, taxonomy ----------</span>
+    <span class="s2">&quot;index&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SoundLibrary&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;default_library&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;search&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;similar&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Embedder&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ClapEmbedder&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;default_embedder&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;VectorIndex&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KeywordIndex&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MemoryIndex&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LanceIndex&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SqliteVecIndex&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;default_index&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lancedb_available&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sqlite_vec_loadable&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;hybrid_search&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;vector_search&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;reciprocal_rank_fusion&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fuse_hits&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FusedHit&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RRF_K&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_CANDIDATE_K&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_CLAP_MODEL_ID&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_CLAP_DIM&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CLAP_SAMPLE_RATE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;resolve_catid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;parse_ucs_filename&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CatIdResolution&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;library&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="search">
+<a class="viewcode-back" href="../module_docs/foley.html#foley.search">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">filters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ucs_category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_snr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">duration_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">rerank</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hybrid (CLAP vector ⊕ BM25) search of the default library.</span>
+
+<span class="sd">    Convenience wrapper over ``foley.library.search(...)`` — see</span>
+<span class="sd">    :meth:`foley.index.SoundLibrary.search`. Constructs the process-wide default</span>
+<span class="sd">    library (local stores + CLAP + best available index) on first use.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">default_library</span><span class="p">()</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+        <span class="n">query</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
+        <span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">,</span>
+        <span class="n">ucs_category</span><span class="o">=</span><span class="n">ucs_category</span><span class="p">,</span>
+        <span class="n">min_snr</span><span class="o">=</span><span class="n">min_snr</span><span class="p">,</span>
+        <span class="n">duration_range</span><span class="o">=</span><span class="n">duration_range</span><span class="p">,</span>
+        <span class="n">rerank</span><span class="o">=</span><span class="n">rerank</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="similar">
+<a class="viewcode-back" href="../module_docs/foley.html#foley.similar">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">similar</span><span class="p">(</span><span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find sounds similar to a stored sound (audio&lt;-&gt;audio) in the default library.</span>
+
+<span class="sd">    See :meth:`foley.index.SoundLibrary.similar`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">default_library</span><span class="p">()</span><span class="o">.</span><span class="n">similar</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lazily expose ``foley.library`` (the default :class:`SoundLibrary`).</span>
+
+<span class="sd">    Kept lazy so ``import foley`` never constructs the CLAP model or the index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;library&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default_library</span><span class="p">()</span>
+    <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;module </span><span class="si">{</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> has no attribute </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

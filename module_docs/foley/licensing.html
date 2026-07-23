@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.licensing &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="foley.qc" href="qc.html" />
+    <link rel="prev" title="foley.index.taxonomy.ucs" href="index/taxonomy/ucs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.licensing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.LICENSE_FLAGS"><code class="docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.LicenseFlags"><code class="docutils literal notranslate"><span class="pre">LicenseFlags</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.UNKNOWN_LICENSE_FLAGS"><code class="docutils literal notranslate"><span class="pre">UNKNOWN_LICENSE_FLAGS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.apply_license_flags"><code class="docutils literal notranslate"><span class="pre">apply_license_flags()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.derive_license_flags"><code class="docutils literal notranslate"><span class="pre">derive_license_flags()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.keep"><code class="docutils literal notranslate"><span class="pre">keep()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.keep_sound"><code class="docutils literal notranslate"><span class="pre">keep_sound()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.licensing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/foley/licensing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.licensing">
+<span id="foley-licensing"></span><h1>foley.licensing<a class="headerlink" href="#module-foley.licensing" title="Link to this heading"></a></h1>
+<p>License policy for foley: the license_id -&gt; flag-set SSOT, flag derivation
+(with per-source overrides), and the fail-closed candidate <code class="docutils literal notranslate"><span class="pre">keep()</span></code> gate.</p>
+<p>Stdlib-only (imports only <code class="docutils literal notranslate"><span class="pre">foley.base</span></code>). The dependency direction is one-way:
+<code class="docutils literal notranslate"><span class="pre">licensing</span> <span class="pre">-&gt;</span> <span class="pre">base</span></code>.</p>
+<p>The two operational vs copyright flags are DISTINCT and must not be conflated:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">redistribute_standalone_ok</span></code> is a COPYRIGHT question (may the raw file be
+re-exposed standalone?).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cache_bytes_ok</span></code> is a TOS/OPERATIONAL question (may foley persist the
+bytes at all?).</p></li>
+</ul>
+</div></blockquote>
+<p>E.g. Freesound CC0 is legally redistributable yet its API TOS forbids caching,
+so the Freesound adapter passes <code class="docutils literal notranslate"><span class="pre">overrides={'cache_bytes_ok':</span> <span class="pre">False}</span></code> — the
+item is redistributable but stored by-reference.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.licensing.LICENSE_FLAGS">
+<span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">LICENSE_FLAGS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#foley.licensing.LicenseFlags" title="foley.licensing.LicenseFlags"><span class="pre">LicenseFlags</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'CC-BY-4.0':</span> <span class="pre">LicenseFlags(commercial_ok=True,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=True,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=True,</span> <span class="pre">requires_attribution=True,</span> <span class="pre">revenue_cap_usd=None),</span> <span class="pre">'CC-BY-NC-4.0':</span> <span class="pre">LicenseFlags(commercial_ok=False,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=True,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=True,</span> <span class="pre">revenue_cap_usd=None),</span> <span class="pre">'CC-Sampling+-1.0':</span> <span class="pre">LicenseFlags(commercial_ok=False,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=False,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=True,</span> <span class="pre">revenue_cap_usd=None),</span> <span class="pre">'CC0-1.0':</span> <span class="pre">LicenseFlags(commercial_ok=True,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=True,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=True,</span> <span class="pre">requires_attribution=False,</span> <span class="pre">revenue_cap_usd=None),</span> <span class="pre">'ElevenLabs-SFX':</span> <span class="pre">LicenseFlags(commercial_ok=True,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=False,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=False,</span> <span class="pre">revenue_cap_usd=None),</span> <span class="pre">'MIT':</span> <span class="pre">LicenseFlags(commercial_ok=True,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=True,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=True,</span> <span class="pre">requires_attribution=True,</span> <span class="pre">revenue_cap_usd=None),</span> <span class="pre">'Pixabay-Content':</span> <span class="pre">LicenseFlags(commercial_ok=True,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=False,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=False,</span> <span class="pre">revenue_cap_usd=None),</span> <span class="pre">'RemArc':</span> <span class="pre">LicenseFlags(commercial_ok=False,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=False,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=True,</span> <span class="pre">revenue_cap_usd=None),</span> <span class="pre">'Sonniss-GDC':</span> <span class="pre">LicenseFlags(commercial_ok=True,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=False,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=False,</span> <span class="pre">revenue_cap_usd=None),</span> <span class="pre">'Stability-Community':</span> <span class="pre">LicenseFlags(commercial_ok=True,</span> <span class="pre">embed_in_derivative_ok=True,</span> <span class="pre">redistribute_standalone_ok=False,</span> <span class="pre">cache_bytes_ok=True,</span> <span class="pre">modification_ok=True,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=False,</span> <span class="pre">revenue_cap_usd=1000000),</span> <span class="pre">'unknown':</span> <span class="pre">LicenseFlags(commercial_ok=False,</span> <span class="pre">embed_in_derivative_ok=False,</span> <span class="pre">redistribute_standalone_ok=False,</span> <span class="pre">cache_bytes_ok=False,</span> <span class="pre">modification_ok=False,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=False,</span> <span class="pre">revenue_cap_usd=None)}</span></span><a class="headerlink" href="#foley.licensing.LICENSE_FLAGS" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">license_id</span></code> -&gt; default flag set (report 07 §8.1 seed table).</p>
+<p>Order of <code class="docutils literal notranslate"><span class="pre">LicenseFlags</span></code> positional args:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">commercial</span><span class="p">,</span> <span class="n">embed</span><span class="p">,</span> <span class="n">redistribute_standalone</span><span class="p">,</span> <span class="n">cache_bytes</span><span class="p">,</span> <span class="n">modification</span><span class="p">,</span>
+<span class="n">ai_training</span><span class="p">,</span> <span class="n">requires_attribution</span><span class="p">,</span> <span class="n">revenue_cap_usd</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SSOT</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.licensing.LicenseFlags">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">LicenseFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commercial_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_in_derivative_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redistribute_standalone_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_bytes_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modification_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ai_training_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requires_attribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">revenue_cap_usd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/licensing.html#LicenseFlags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.licensing.LicenseFlags" title="Link to this definition"></a></dt>
+<dd><p>The eight derivable flags for one <code class="docutils literal notranslate"><span class="pre">license_id</span></code> (the table row type).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.licensing.UNKNOWN_LICENSE_FLAGS">
+<span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">UNKNOWN_LICENSE_FLAGS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">LicenseFlags(commercial_ok=False,</span> <span class="pre">embed_in_derivative_ok=False,</span> <span class="pre">redistribute_standalone_ok=False,</span> <span class="pre">cache_bytes_ok=False,</span> <span class="pre">modification_ok=False,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=False,</span> <span class="pre">revenue_cap_usd=None)</span></span><a class="headerlink" href="#foley.licensing.UNKNOWN_LICENSE_FLAGS" title="Link to this definition"></a></dt>
+<dd><p>Fail-closed fallback for unknown / <code class="docutils literal notranslate"><span class="pre">Proprietary-*</span></code> license ids (all False, cap None).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.licensing.apply_license_flags">
+<span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">apply_license_flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><span class="pre">LicenseRecord</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><span class="pre">LicenseRecord</span></a></span></span><a class="reference internal" href="../../_modules/foley/licensing.html#apply_license_flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.licensing.apply_license_flags" title="Link to this definition"></a></dt>
+<dd><p>Populate <code class="docutils literal notranslate"><span class="pre">record</span></code>’s eight derived flags from its <code class="docutils literal notranslate"><span class="pre">license_id</span></code>
+(+ overrides), in place, and return it.</p>
+<p>Does NOT touch <code class="docutils literal notranslate"><span class="pre">rights_verified</span></code> — verification is a separate concern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>record</strong> – The <a class="reference internal" href="base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a> to populate.</p></li>
+<li><p><strong>overrides</strong> – Optional per-source flag overrides (see
+<a class="reference internal" href="#foley.licensing.derive_license_flags" title="foley.licensing.derive_license_flags"><code class="xref py py-func docutils literal notranslate"><span class="pre">derive_license_flags()</span></code></a>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The same (mutated) <code class="docutils literal notranslate"><span class="pre">record</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.licensing.derive_license_flags">
+<span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">derive_license_flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">license_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.licensing.LicenseFlags" title="foley.licensing.LicenseFlags"><span class="pre">LicenseFlags</span></a></span></span><a class="reference internal" href="../../_modules/foley/licensing.html#derive_license_flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.licensing.derive_license_flags" title="Link to this definition"></a></dt>
+<dd><p>Look up the flag set for a <code class="docutils literal notranslate"><span class="pre">license_id</span></code> (fail-closed fallback), then
+apply per-source overrides.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>license_id</strong> – The normalized license id (SPDX or foley-specific token).</p></li>
+<li><p><strong>overrides</strong> – Optional per-source flag overrides — e.g. Freesound forces
+<code class="docutils literal notranslate"><span class="pre">cache_bytes_ok=False</span></code> on CC0. Keys must be <code class="docutils literal notranslate"><span class="pre">LicenseFlags</span></code> fields.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The resolved <a class="reference internal" href="#foley.licensing.LicenseFlags" title="foley.licensing.LicenseFlags"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseFlags</span></code></a> (fallback = all-False
+<code class="docutils literal notranslate"><span class="pre">UNKNOWN_LICENSE_FLAGS</span></code> for unrecognized ids).</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">overrides</span></code> contains a key that is not a
+    <a class="reference internal" href="#foley.licensing.LicenseFlags" title="foley.licensing.LicenseFlags"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseFlags</span></code></a> field.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.licensing.keep">
+<span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">keep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><span class="pre">LicenseRecord</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">intended_use</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#foley.base.IntendedUse" title="foley.base.IntendedUse"><span class="pre">IntendedUse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/foley/licensing.html#keep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.licensing.keep" title="Link to this definition"></a></dt>
+<dd><p>Fail-closed candidate license gate (report 07 §8.2).</p>
+<p>Run BEFORE ranking/verification in the agent’s <code class="docutils literal notranslate"><span class="pre">decide()</span></code>. Unknown or
+unverified rights =&gt; reject. Any single unmet requirement =&gt; reject.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>record</strong> – The candidate’s rights record.</p></li>
+<li><p><strong>intended_use</strong> – The caller’s declared intent.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> only if every requirement in <code class="docutils literal notranslate"><span class="pre">intended_use</span></code> is satisfied by
+<code class="docutils literal notranslate"><span class="pre">record</span></code>; <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise (including unverified rights).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.licensing.keep_sound">
+<span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">keep_sound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_record</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intended_use</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#foley.base.IntendedUse" title="foley.base.IntendedUse"><span class="pre">IntendedUse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/foley/licensing.html#keep_sound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.licensing.keep_sound" title="Link to this definition"></a></dt>
+<dd><p>Convenience: apply <a class="reference internal" href="#foley.licensing.keep" title="foley.licensing.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">keep()</span></code></a> to a <code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code>’s nested license.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sound_record</strong> – A <a class="reference internal" href="base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a> (its <code class="docutils literal notranslate"><span class="pre">.license</span></code> is the
+SSOT consulted).</p></li>
+<li><p><strong>intended_use</strong> – The caller’s declared intent.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of <code class="docutils literal notranslate"><span class="pre">keep(sound_record.license,</span> <span class="pre">intended_use)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index/taxonomy/ucs.html" class="btn btn-neutral float-left" title="foley.index.taxonomy.ucs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="qc.html" class="btn btn-neutral float-right" title="foley.qc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

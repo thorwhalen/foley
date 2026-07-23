@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.index.taxonomy &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.index.taxonomy.audioset" href="taxonomy/audioset.html" />
+    <link rel="prev" title="foley.index.search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">foley.index.search</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.index.taxonomy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.AudioSetUcsMap"><code class="docutils literal notranslate"><span class="pre">AudioSetUcsMap</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.taxonomy.AudioSetUcsMap.resolve"><code class="docutils literal notranslate"><span class="pre">AudioSetUcsMap.resolve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.CatIdResolution"><code class="docutils literal notranslate"><span class="pre">CatIdResolution</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.KeywordResolver"><code class="docutils literal notranslate"><span class="pre">KeywordResolver</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.taxonomy.KeywordResolver.resolve"><code class="docutils literal notranslate"><span class="pre">KeywordResolver.resolve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.TaxonomyResolver"><code class="docutils literal notranslate"><span class="pre">TaxonomyResolver</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.taxonomy.TaxonomyResolver.resolve"><code class="docutils literal notranslate"><span class="pre">TaxonomyResolver.resolve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.UcsRow"><code class="docutils literal notranslate"><span class="pre">UcsRow</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.UcsTable"><code class="docutils literal notranslate"><span class="pre">UcsTable</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.taxonomy.UcsTable.by_catid"><code class="docutils literal notranslate"><span class="pre">UcsTable.by_catid</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.taxonomy.UcsTable.order"><code class="docutils literal notranslate"><span class="pre">UcsTable.order</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.taxonomy.UcsTable.get"><code class="docutils literal notranslate"><span class="pre">UcsTable.get()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.default_audioset_ucs_map"><code class="docutils literal notranslate"><span class="pre">default_audioset_ucs_map()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.default_ucs_table"><code class="docutils literal notranslate"><span class="pre">default_ucs_table()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.load_audioset_ucs_map"><code class="docutils literal notranslate"><span class="pre">load_audioset_ucs_map()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.load_ucs_table"><code class="docutils literal notranslate"><span class="pre">load_ucs_table()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.parse_catid_token"><code class="docutils literal notranslate"><span class="pre">parse_catid_token()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.parse_ucs_filename"><code class="docutils literal notranslate"><span class="pre">parse_ucs_filename()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.taxonomy.resolve_catid"><code class="docutils literal notranslate"><span class="pre">resolve_catid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.index.taxonomy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/index/taxonomy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.index.taxonomy">
+<span id="foley-index-taxonomy"></span><h1>foley.index.taxonomy<a class="headerlink" href="#module-foley.index.taxonomy" title="Link to this heading"></a></h1>
+<p>UCS + AudioSet taxonomy: the <code class="docutils literal notranslate"><span class="pre">tags</span> <span class="pre">-&gt;</span> <span class="pre">UCS</span> <span class="pre">CatID</span></code> resolver for foley.</p>
+<p>Two complementary controlled vocabularies (report 04 §5): <strong>UCS</strong> (the industry
+browse tree and normalization target) and the <strong>AudioSet ontology</strong> (the machine
+label layer taggers emit). This package resolves a sound’s free tags, caption,
+AudioSet labels, and/or UCS-style filename onto a UCS CatID, filling
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">ucs_category</span></code>/<code class="docutils literal notranslate"><span class="pre">ucs_subcategory</span></code> on ingest and
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">ucs_catid</span></code> on the query side.</p>
+<p>Progressive disclosure — the one-call path is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">foley.index.taxonomy</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_catid</span>
+<span class="n">resolve_catid</span><span class="p">(</span><span class="n">caption</span><span class="o">=</span><span class="s2">&quot;a heavy wooden door creaks open&quot;</span><span class="p">)</span>   <span class="c1"># -&gt; CatIdResolution</span>
+</pre></div>
+</div>
+<p>Everything else (the UCS table, the AudioSet map, a custom resolver) is optional
+keyword injection. The seed tables live in code; the full UCS master and the
+EnvSound-UCS mapping drop in later as JSON under <code class="docutils literal notranslate"><span class="pre">data/</span></code> with no logic change.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.taxonomy.AudioSetUcsMap">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">AudioSetUcsMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_mid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/model.html#AudioSetUcsMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.AudioSetUcsMap" title="Link to this definition"></a></dt>
+<dd><p>AudioSet-label -&gt; UCS-CatID overlap map (report 04 §5.3).</p>
+<p>Keyed primarily by lowercased label <strong>name</strong> (robust); <code class="docutils literal notranslate"><span class="pre">by_mid</span></code> carries the
+best-effort <code class="docutils literal notranslate"><span class="pre">/m/...</span></code> machine ids as a secondary key. Every target CatID is
+validated against the UCS table at load time (fail-fast on a broken map).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.taxonomy.AudioSetUcsMap.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/model.html#AudioSetUcsMap.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.AudioSetUcsMap.resolve" title="Link to this definition"></a></dt>
+<dd><p>Map one AudioSet label (a MID or a name) to a UCS CatID (or <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.taxonomy.CatIdResolution">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">CatIdResolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subcategory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matched_terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/model.html#CatIdResolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.CatIdResolution" title="Link to this definition"></a></dt>
+<dd><p>The result of resolving free tags/caption/labels to a UCS CatID.</p>
+<p><code class="docutils literal notranslate"><span class="pre">catid</span></code> feeds <code class="xref py py-attr docutils literal notranslate"><span class="pre">ucs_category</span></code> and
+<code class="docutils literal notranslate"><span class="pre">subcategory</span></code> feeds <code class="xref py py-attr docutils literal notranslate"><span class="pre">ucs_subcategory</span></code> on
+ingest, and <code class="xref py py-attr docutils literal notranslate"><span class="pre">ucs_catid</span></code> on the query side.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.taxonomy.KeywordResolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">KeywordResolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.UcsTable" title="foley.index.taxonomy.model.UcsTable"><span class="pre">UcsTable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioset_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.AudioSetUcsMap" title="foley.index.taxonomy.model.AudioSetUcsMap"><span class="pre">AudioSetUcsMap</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/resolver.html#KeywordResolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.KeywordResolver" title="Link to this definition"></a></dt>
+<dd><p>The default stdlib resolver — staged keyword/synonym/AudioSet resolution.</p>
+<p>Zero heavy dependencies. Bind a different <a class="reference internal" href="#foley.index.taxonomy.TaxonomyResolver" title="foley.index.taxonomy.TaxonomyResolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaxonomyResolver</span></code></a> (e.g. a
+future CLAP zero-shot resolver) by keyword injection to upgrade quality.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.taxonomy.KeywordResolver.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.CatIdResolution" title="foley.index.taxonomy.model.CatIdResolution"><span class="pre">CatIdResolution</span></a></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/resolver.html#KeywordResolver.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.KeywordResolver.resolve" title="Link to this definition"></a></dt>
+<dd><p>Resolve a <a class="reference internal" href="../base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a>’s tags/caption/labels/uri.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.taxonomy.TaxonomyResolver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">TaxonomyResolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/resolver.html#TaxonomyResolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.TaxonomyResolver" title="Link to this definition"></a></dt>
+<dd><p>Resolve a <a class="reference internal" href="../base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a> to a UCS CatID.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.taxonomy.TaxonomyResolver.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.CatIdResolution" title="foley.index.taxonomy.model.CatIdResolution"><span class="pre">CatIdResolution</span></a></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/resolver.html#TaxonomyResolver.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.TaxonomyResolver.resolve" title="Link to this definition"></a></dt>
+<dd><p>Return the CatID resolution for <code class="docutils literal notranslate"><span class="pre">record</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.taxonomy.UcsRow">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">UcsRow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subcategory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synonyms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confident</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/model.html#UcsRow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.UcsRow" title="Link to this definition"></a></dt>
+<dd><p>One Universal Category System entry.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">catid</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">'DOORWood'</span></code>) is an OPAQUE key — the category prefix is
+variable-length and not reliably splittable — so <code class="docutils literal notranslate"><span class="pre">catid</span> <span class="pre">-&gt;</span> <span class="pre">(category,</span>
+<span class="pre">subcategory)</span></code> is always a table lookup, never a string split (report
+04 §5.2). <code class="docutils literal notranslate"><span class="pre">confident=False</span></code> marks an APPROXIMATE CatID reconstructed for the
+seed table; verify it against the UCS master before treating it as
+authoritative.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.taxonomy.UcsTable">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">UcsTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by_catid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~foley.index.taxonomy.model.UcsRow]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_ci_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/model.html#UcsTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.UcsTable" title="Link to this definition"></a></dt>
+<dd><p>A loaded UCS lookup: by CatID (exact + case-insensitive) and by synonym.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.index.taxonomy.UcsTable.by_catid">
+<span class="sig-name descname"><span class="pre">by_catid</span></span><a class="headerlink" href="#foley.index.taxonomy.UcsTable.by_catid" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">CatID</span> <span class="pre">-&gt;</span> <span class="pre">UcsRow</span></code> (case-sensitive primary key).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, <a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.UcsRow" title="foley.index.taxonomy.model.UcsRow">foley.index.taxonomy.model.UcsRow</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.index.taxonomy.UcsTable.order">
+<span class="sig-name descname"><span class="pre">order</span></span><a class="headerlink" href="#foley.index.taxonomy.UcsTable.order" title="Link to this definition"></a></dt>
+<dd><p>The CatIDs in stable insertion order (deterministic tie-breaking).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.taxonomy.UcsTable.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.UcsRow" title="foley.index.taxonomy.model.UcsRow"><span class="pre">UcsRow</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/model.html#UcsTable.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.UcsTable.get" title="Link to this definition"></a></dt>
+<dd><p>Look up a row by CatID: exact first, then case-insensitive.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.taxonomy.default_audioset_ucs_map">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">default_audioset_ucs_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.AudioSetUcsMap" title="foley.index.taxonomy.model.AudioSetUcsMap"><span class="pre">AudioSetUcsMap</span></a></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/audioset.html#default_audioset_ucs_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.default_audioset_ucs_map" title="Link to this definition"></a></dt>
+<dd><p>The process-wide default AudioSet-&gt;UCS map (seed + any JSON drop).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.taxonomy.default_ucs_table">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">default_ucs_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.UcsTable" title="foley.index.taxonomy.model.UcsTable"><span class="pre">UcsTable</span></a></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/ucs.html#default_ucs_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.default_ucs_table" title="Link to this definition"></a></dt>
+<dd><p>The process-wide default UCS table (seed + any JSON drop), built once.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.taxonomy.load_audioset_ucs_map">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">load_audioset_ucs_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.UcsTable" title="foley.index.taxonomy.model.UcsTable"><span class="pre">UcsTable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.AudioSetUcsMap" title="foley.index.taxonomy.model.AudioSetUcsMap"><span class="pre">AudioSetUcsMap</span></a></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/audioset.html#load_audioset_ucs_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.load_audioset_ucs_map" title="Link to this definition"></a></dt>
+<dd><p>Build the AudioSet(name|MID) -&gt; UCS-CatID map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_dir</strong> – Directory to look for <code class="docutils literal notranslate"><span class="pre">audioset_ucs.json</span></code> in (defaults to the
+package’s <code class="docutils literal notranslate"><span class="pre">taxonomy/data/</span></code>); merged over the seed when present.</p></li>
+<li><p><strong>table</strong> – The UCS table every target CatID must exist in (defaults to
+<a class="reference internal" href="taxonomy/ucs.html#foley.index.taxonomy.ucs.default_ucs_table" title="foley.index.taxonomy.ucs.default_ucs_table"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_ucs_table()</span></code></a>).</p></li>
+<li><p><strong>include_seed</strong> – Start from the in-code seed map (default <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A ready <a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.AudioSetUcsMap" title="foley.index.taxonomy.model.AudioSetUcsMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">AudioSetUcsMap</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If any entry targets a CatID absent from <code class="docutils literal notranslate"><span class="pre">table</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.taxonomy.load_ucs_table">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">load_ucs_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.UcsTable" title="foley.index.taxonomy.model.UcsTable"><span class="pre">UcsTable</span></a></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/ucs.html#load_ucs_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.load_ucs_table" title="Link to this definition"></a></dt>
+<dd><p>Build the UCS lookup: the seed rows, overridden/extended by a JSON drop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_dir</strong> – Directory to look for <code class="docutils literal notranslate"><span class="pre">ucs_full.json</span></code> in (defaults to the
+package’s <code class="docutils literal notranslate"><span class="pre">taxonomy/data/</span></code>). When present, its rows override the
+seed on CatID collision and add the rest of the ~750-row master.</p></li>
+<li><p><strong>include_seed</strong> – Start from the in-code seed table (default <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A ready <a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.UcsTable" title="foley.index.taxonomy.model.UcsTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">UcsTable</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.taxonomy.parse_catid_token">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">parse_catid_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/ucs.html#parse_catid_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.parse_catid_token" title="Link to this definition"></a></dt>
+<dd><p>Return token 0 (the CatID candidate) of a UCS-style filename, else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>Strips directory and extension; requires at least one <code class="docutils literal notranslate"><span class="pre">_</span></code> (the field
+delimiter). Does not validate the token against the table.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.taxonomy.parse_ucs_filename">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">parse_ucs_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.UcsTable" title="foley.index.taxonomy.model.UcsTable"><span class="pre">UcsTable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/ucs.html#parse_ucs_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.parse_ucs_filename" title="Link to this definition"></a></dt>
+<dd><p>Parse a UCS-conformant filename to <code class="docutils literal notranslate"><span class="pre">(ucs_category,</span> <span class="pre">ucs_subcategory)</span></code>.</p>
+<p>Fail-quiet: returns <code class="docutils literal notranslate"><span class="pre">(None,</span> <span class="pre">None)</span></code> when the name is not UCS-conformant or
+its CatID token is unknown (so a wrong subcategory is never emitted).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – A path or filename (only the basename’s token 0 is used).</p></li>
+<li><p><strong>table</strong> – The UCS table to resolve against (defaults to
+<a class="reference internal" href="#foley.index.taxonomy.default_ucs_table" title="foley.index.taxonomy.default_ucs_table"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_ucs_table()</span></code></a>).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.taxonomy.resolve_catid">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taxonomy.</span></span><span class="sig-name descname"><span class="pre">resolve_catid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioset_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.UcsTable" title="foley.index.taxonomy.model.UcsTable"><span class="pre">UcsTable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioset_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.AudioSetUcsMap" title="foley.index.taxonomy.model.AudioSetUcsMap"><span class="pre">AudioSetUcsMap</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.CatIdResolution" title="foley.index.taxonomy.model.CatIdResolution"><span class="pre">CatIdResolution</span></a></span></span><a class="reference internal" href="../../../_modules/foley/index/taxonomy/resolver.html#resolve_catid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.taxonomy.resolve_catid" title="Link to this definition"></a></dt>
+<dd><p>Resolve inputs to a best UCS CatID by the staged precedence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tags</strong> – Free tags on the sound.</p></li>
+<li><p><strong>caption</strong> – Free-text caption/description.</p></li>
+<li><p><strong>audioset_labels</strong> – AudioSet MIDs or names (e.g. from PANNs).</p></li>
+<li><p><strong>filename</strong> – Optional UCS-style filename/path (its token-0 CatID wins if
+recognized).</p></li>
+<li><p><strong>table</strong> – UCS table (defaults to <a class="reference internal" href="#foley.index.taxonomy.default_ucs_table" title="foley.index.taxonomy.default_ucs_table"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_ucs_table()</span></code></a>).</p></li>
+<li><p><strong>audioset_map</strong> – AudioSet-&gt;UCS map (defaults to
+<a class="reference internal" href="taxonomy/audioset.html#foley.index.taxonomy.audioset.default_audioset_ucs_map" title="foley.index.taxonomy.audioset.default_audioset_ucs_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_audioset_ucs_map()</span></code></a>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="taxonomy/model.html#foley.index.taxonomy.model.CatIdResolution" title="foley.index.taxonomy.model.CatIdResolution"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatIdResolution</span></code></a> (falsy when
+nothing resolved).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="search.html" class="btn btn-neutral float-left" title="foley.index.search" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="taxonomy/audioset.html" class="btn btn-neutral float-right" title="foley.index.taxonomy.audioset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

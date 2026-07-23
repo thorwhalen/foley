@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.index.indexes &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.index.library" href="library.html" />
+    <link rel="prev" title="foley.index.embedders" href="embedders.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.index.indexes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.indexes.LanceIndex"><code class="docutils literal notranslate"><span class="pre">LanceIndex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.LanceIndex.bm25"><code class="docutils literal notranslate"><span class="pre">LanceIndex.bm25()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.LanceIndex.commit"><code class="docutils literal notranslate"><span class="pre">LanceIndex.commit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.LanceIndex.db"><code class="docutils literal notranslate"><span class="pre">LanceIndex.db</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.LanceIndex.get_vector"><code class="docutils literal notranslate"><span class="pre">LanceIndex.get_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.LanceIndex.index"><code class="docutils literal notranslate"><span class="pre">LanceIndex.index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.LanceIndex.knn"><code class="docutils literal notranslate"><span class="pre">LanceIndex.knn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.LanceIndex.table"><code class="docutils literal notranslate"><span class="pre">LanceIndex.table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.LanceIndex.upsert"><code class="docutils literal notranslate"><span class="pre">LanceIndex.upsert()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.indexes.MemoryIndex"><code class="docutils literal notranslate"><span class="pre">MemoryIndex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.MemoryIndex.bm25"><code class="docutils literal notranslate"><span class="pre">MemoryIndex.bm25()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.MemoryIndex.commit"><code class="docutils literal notranslate"><span class="pre">MemoryIndex.commit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.MemoryIndex.get_vector"><code class="docutils literal notranslate"><span class="pre">MemoryIndex.get_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.MemoryIndex.index"><code class="docutils literal notranslate"><span class="pre">MemoryIndex.index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.MemoryIndex.knn"><code class="docutils literal notranslate"><span class="pre">MemoryIndex.knn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.MemoryIndex.upsert"><code class="docutils literal notranslate"><span class="pre">MemoryIndex.upsert()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.indexes.SqliteVecIndex"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.SqliteVecIndex.bm25"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex.bm25()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.SqliteVecIndex.close"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.SqliteVecIndex.commit"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex.commit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.SqliteVecIndex.get_vector"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex.get_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.SqliteVecIndex.index"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex.index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.SqliteVecIndex.knn"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex.knn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.indexes.SqliteVecIndex.upsert"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex.upsert()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.indexes.default_index"><code class="docutils literal notranslate"><span class="pre">default_index()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.indexes.lancedb_available"><code class="docutils literal notranslate"><span class="pre">lancedb_available()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.indexes.sqlite_vec_loadable"><code class="docutils literal notranslate"><span class="pre">sqlite_vec_loadable()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.index.indexes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/index/indexes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.index.indexes">
+<span id="foley-index-indexes"></span><h1>foley.index.indexes<a class="headerlink" href="#module-foley.index.indexes" title="Link to this heading"></a></h1>
+<p>Concrete vector + keyword index backends (the swappable retrieval engines).</p>
+<p>Each backend satisfies BOTH <a class="reference internal" href="protocols.html#foley.index.protocols.VectorIndex" title="foley.index.protocols.VectorIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">VectorIndex</span></code></a> and
+<a class="reference internal" href="protocols.html#foley.index.protocols.KeywordIndex" title="foley.index.protocols.KeywordIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">KeywordIndex</span></code></a>, so one object serves as both
+<code class="docutils literal notranslate"><span class="pre">vindex</span></code> and <code class="docutils literal notranslate"><span class="pre">kindex</span></code> in <a class="reference internal" href="library.html#foley.index.library.SoundLibrary" title="foley.index.library.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundLibrary</span></code></a>. Three
+tiers, same protocol (report 04 §6.2 — “small protocols, swapped stores”):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#foley.index.indexes.MemoryIndex" title="foley.index.indexes.MemoryIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryIndex</span></code></a>   — pure <code class="docutils literal notranslate"><span class="pre">numpy</span></code> cosine + a compact stdlib BM25. Zero
+persistence, zero optional-extra (just numpy). The always-available default
+for tests and small ephemeral libraries; it also exercises foley’s own RRF.</p></li>
+<li><p><a class="reference internal" href="#foley.index.indexes.LanceIndex" title="foley.index.indexes.LanceIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">LanceIndex</span></code></a>    — LanceDB: one table with a vector column + native
+full-text index (no <code class="docutils literal notranslate"><span class="pre">tantivy</span></code> needed). Local dir or <code class="docutils literal notranslate"><span class="pre">s3://</span></code> unchanged —
+the recommended persistent default (<code class="docutils literal notranslate"><span class="pre">foley[index]</span></code>).</p></li>
+<li><p><a class="reference internal" href="#foley.index.indexes.SqliteVecIndex" title="foley.index.indexes.SqliteVecIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">SqliteVecIndex</span></code></a> — sqlite-vec (<code class="docutils literal notranslate"><span class="pre">vec0</span></code>) + stdlib FTS5 in one file
+(<code class="docutils literal notranslate"><span class="pre">foley[index-sqlite]</span></code>). Minimalist single-file option; <strong>requires an
+interpreter whose ``sqlite3`` allows loadable extensions</strong> (see
+<a class="reference internal" href="#foley.index.indexes.sqlite_vec_loadable" title="foley.index.indexes.sqlite_vec_loadable"><code class="xref py py-func docutils literal notranslate"><span class="pre">sqlite_vec_loadable()</span></code></a>).</p></li>
+</ul>
+</div></blockquote>
+<p>All three lazy-import their heavy dependency inside methods, so importing this
+module costs only the stdlib. Fusion is NOT done in-engine: <code class="xref py py-meth docutils literal notranslate"><span class="pre">knn()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">bm25()</span></code> return raw ranked lists and <a class="reference internal" href="search.html#module-foley.index.search" title="foley.index.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.index.search</span></code></a> fuses them via
+one shared RRF, so ranking is identical across backends.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.indexes.LanceIndex">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.indexes.</span></span><span class="sig-name descname"><span class="pre">LanceIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'sounds'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#LanceIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.LanceIndex" title="Link to this definition"></a></dt>
+<dd><p>LanceDB-backed index: one table with a vector column + a native FTS index.</p>
+<p>Writes are staged per id and flushed on the next read (or explicit
+<a class="reference internal" href="#foley.index.indexes.LanceIndex.commit" title="foley.index.indexes.LanceIndex.commit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">commit()</span></code></a>), so a sound’s vector (<a class="reference internal" href="#foley.index.indexes.LanceIndex.upsert" title="foley.index.indexes.LanceIndex.upsert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">upsert()</span></code></a>) and text (<a class="reference internal" href="#foley.index.indexes.LanceIndex.index" title="foley.index.indexes.LanceIndex.index"><code class="xref py py-meth docutils literal notranslate"><span class="pre">index()</span></code></a>)
+— which arrive as two separate protocol calls — are merged into one row and
+written as an efficient batch. Vector search is exact cosine (no ANN index is
+built at this tier; adding one is a scale-time optimization). Fusion is done
+by <a class="reference internal" href="search.html#module-foley.index.search" title="foley.index.search"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.index.search</span></code></a>, not by LanceDB’s native hybrid reranker, so
+ranking matches every other backend.</p>
+<p>One-table constraint: the vector column is mandatory, so <strong>every indexed row
+needs a vector</strong>. <code class="docutils literal notranslate"><span class="pre">SoundLibrary.add</span></code> enforces this (it raises without an
+embedding source), so the façade path is safe; a bare <code class="docutils literal notranslate"><span class="pre">index()</span></code> with no
+matching <code class="docutils literal notranslate"><span class="pre">upsert()</span></code> stages a text-only row that stays unflushed (never
+keyword-searchable). For a keyword-only library with no embeddings, use
+<a class="reference internal" href="#foley.index.indexes.MemoryIndex" title="foley.index.indexes.MemoryIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryIndex</span></code></a> or <a class="reference internal" href="#foley.index.indexes.SqliteVecIndex" title="foley.index.indexes.SqliteVecIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">SqliteVecIndex</span></code></a> (independent vector/text tables).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.LanceIndex.bm25">
+<span class="sig-name descname"><span class="pre">bm25</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#LanceIndex.bm25"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.LanceIndex.bm25" title="Link to this definition"></a></dt>
+<dd><p>Native full-text (BM25) search; returns <code class="docutils literal notranslate"><span class="pre">[(id,</span> <span class="pre">score),</span> <span class="pre">...]</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.LanceIndex.commit">
+<span class="sig-name descname"><span class="pre">commit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#LanceIndex.commit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.LanceIndex.commit" title="Link to this definition"></a></dt>
+<dd><p>Flush all staged writes to the LanceDB table.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.indexes.LanceIndex.db">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">db</span></span><a class="headerlink" href="#foley.index.indexes.LanceIndex.db" title="Link to this definition"></a></dt>
+<dd><p>The lazily-connected LanceDB database handle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.LanceIndex.get_vector">
+<span class="sig-name descname"><span class="pre">get_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#LanceIndex.get_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.LanceIndex.get_vector" title="Link to this definition"></a></dt>
+<dd><p>Return the stored vector for <code class="docutils literal notranslate"><span class="pre">id</span></code> (staged or persisted), else <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.LanceIndex.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#LanceIndex.index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.LanceIndex.index" title="Link to this definition"></a></dt>
+<dd><p>Stage the searchable text for <code class="docutils literal notranslate"><span class="pre">id</span></code> (flushed on the next read/commit).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.LanceIndex.knn">
+<span class="sig-name descname"><span class="pre">knn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#LanceIndex.knn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.LanceIndex.knn" title="Link to this definition"></a></dt>
+<dd><p>Exact cosine KNN; returns <code class="docutils literal notranslate"><span class="pre">[(id,</span> <span class="pre">cosine_similarity),</span> <span class="pre">...]</span></code>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.index.indexes.LanceIndex.table">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">table</span></span><a class="headerlink" href="#foley.index.indexes.LanceIndex.table" title="Link to this definition"></a></dt>
+<dd><p>The lazily-opened (or created-empty) LanceDB table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.LanceIndex.upsert">
+<span class="sig-name descname"><span class="pre">upsert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#LanceIndex.upsert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.LanceIndex.upsert" title="Link to this definition"></a></dt>
+<dd><p>Stage the vector for <code class="docutils literal notranslate"><span class="pre">id</span></code> (flushed on the next read/commit).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.indexes.MemoryIndex">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.indexes.</span></span><span class="sig-name descname"><span class="pre">MemoryIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#MemoryIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.MemoryIndex" title="Link to this definition"></a></dt>
+<dd><p>In-memory vector + keyword index (numpy cosine + compact BM25).</p>
+<p>Not persistent — everything lives in dicts, lost on process exit. It exists
+so the full hybrid + façade path is testable and usable with only <code class="docutils literal notranslate"><span class="pre">numpy</span></code>
+(no LanceDB, no torch), and as a genuine zero-config tier for small or
+ephemeral libraries. The vector and text stores are independent dicts, so
+<a class="reference internal" href="#foley.index.indexes.MemoryIndex.upsert" title="foley.index.indexes.MemoryIndex.upsert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">upsert()</span></code></a> and <a class="reference internal" href="#foley.index.indexes.MemoryIndex.index" title="foley.index.indexes.MemoryIndex.index"><code class="xref py py-meth docutils literal notranslate"><span class="pre">index()</span></code></a> never contend.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.MemoryIndex.bm25">
+<span class="sig-name descname"><span class="pre">bm25</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#MemoryIndex.bm25"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.MemoryIndex.bm25" title="Link to this definition"></a></dt>
+<dd><p>Return the top-<code class="docutils literal notranslate"><span class="pre">k</span></code> BM25 matches for <code class="docutils literal notranslate"><span class="pre">query</span></code> (best first).</p>
+<p>A compact Okapi BM25 (<code class="docutils literal notranslate"><span class="pre">k1=1.5</span></code>, <code class="docutils literal notranslate"><span class="pre">b=0.75</span></code>) recomputed per query — O(N)
+in the corpus size, which is fine for the in-memory tier’s scale.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.MemoryIndex.commit">
+<span class="sig-name descname"><span class="pre">commit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#MemoryIndex.commit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.MemoryIndex.commit" title="Link to this definition"></a></dt>
+<dd><p>No-op (writes are immediate); present for interface symmetry.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.MemoryIndex.get_vector">
+<span class="sig-name descname"><span class="pre">get_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#MemoryIndex.get_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.MemoryIndex.get_vector" title="Link to this definition"></a></dt>
+<dd><p>Return the stored vector for <code class="docutils literal notranslate"><span class="pre">id</span></code> (or <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.MemoryIndex.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#MemoryIndex.index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.MemoryIndex.index" title="Link to this definition"></a></dt>
+<dd><p>Insert or replace the searchable text (and light metadata) for <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.MemoryIndex.knn">
+<span class="sig-name descname"><span class="pre">knn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#MemoryIndex.knn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.MemoryIndex.knn" title="Link to this definition"></a></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">k</span></code> cosine-nearest ids to <code class="docutils literal notranslate"><span class="pre">vector</span></code> (most-similar first).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.MemoryIndex.upsert">
+<span class="sig-name descname"><span class="pre">upsert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#MemoryIndex.upsert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.MemoryIndex.upsert" title="Link to this definition"></a></dt>
+<dd><p>Insert or replace the vector (and light metadata) for <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.indexes.SqliteVecIndex">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.indexes.</span></span><span class="sig-name descname"><span class="pre">SqliteVecIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#SqliteVecIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.SqliteVecIndex" title="Link to this definition"></a></dt>
+<dd><p>Single-file index: sqlite-vec <code class="docutils literal notranslate"><span class="pre">vec0</span></code> KNN + stdlib FTS5 keyword search.</p>
+<p>The whole index is one SQLite file behind two virtual tables (independent, so
+<a class="reference internal" href="#foley.index.indexes.SqliteVecIndex.upsert" title="foley.index.indexes.SqliteVecIndex.upsert"><code class="xref py py-meth docutils literal notranslate"><span class="pre">upsert()</span></code></a> and <a class="reference internal" href="#foley.index.indexes.SqliteVecIndex.index" title="foley.index.indexes.SqliteVecIndex.index"><code class="xref py py-meth docutils literal notranslate"><span class="pre">index()</span></code></a> never contend). <strong>Requires an interpreter
+whose ``sqlite3`` permits loadable extensions</strong> — probe with
+<a class="reference internal" href="#foley.index.indexes.sqlite_vec_loadable" title="foley.index.indexes.sqlite_vec_loadable"><code class="xref py py-func docutils literal notranslate"><span class="pre">sqlite_vec_loadable()</span></code></a> before constructing; the constructor raises a
+clear error otherwise.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.SqliteVecIndex.bm25">
+<span class="sig-name descname"><span class="pre">bm25</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#SqliteVecIndex.bm25"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.SqliteVecIndex.bm25" title="Link to this definition"></a></dt>
+<dd><p>FTS5 BM25 search; returns <code class="docutils literal notranslate"><span class="pre">[(id,</span> <span class="pre">score),</span> <span class="pre">...]</span></code> best-first.</p>
+<p>FTS5’s <code class="docutils literal notranslate"><span class="pre">rank</span></code> is more-negative-is-better; it is negated so the returned
+score is larger-is-better (consistent with the other backends).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.SqliteVecIndex.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#SqliteVecIndex.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.SqliteVecIndex.close" title="Link to this definition"></a></dt>
+<dd><p>Close the underlying SQLite connection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.SqliteVecIndex.commit">
+<span class="sig-name descname"><span class="pre">commit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#SqliteVecIndex.commit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.SqliteVecIndex.commit" title="Link to this definition"></a></dt>
+<dd><p>Commit any pending SQLite transaction (writes auto-commit already).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.SqliteVecIndex.get_vector">
+<span class="sig-name descname"><span class="pre">get_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#SqliteVecIndex.get_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.SqliteVecIndex.get_vector" title="Link to this definition"></a></dt>
+<dd><p>Return the stored vector for <code class="docutils literal notranslate"><span class="pre">id</span></code> (or <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.SqliteVecIndex.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#SqliteVecIndex.index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.SqliteVecIndex.index" title="Link to this definition"></a></dt>
+<dd><p>Insert or replace the searchable text for <code class="docutils literal notranslate"><span class="pre">id</span></code> in the FTS5 table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.SqliteVecIndex.knn">
+<span class="sig-name descname"><span class="pre">knn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#SqliteVecIndex.knn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.SqliteVecIndex.knn" title="Link to this definition"></a></dt>
+<dd><p>KNN over <code class="docutils literal notranslate"><span class="pre">vec0</span></code> (cosine); returns <code class="docutils literal notranslate"><span class="pre">[(id,</span> <span class="pre">cosine_similarity),</span> <span class="pre">...]</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.indexes.SqliteVecIndex.upsert">
+<span class="sig-name descname"><span class="pre">upsert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#SqliteVecIndex.upsert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.SqliteVecIndex.upsert" title="Link to this definition"></a></dt>
+<dd><p>Insert or replace the vector for <code class="docutils literal notranslate"><span class="pre">id</span></code> in the <code class="docutils literal notranslate"><span class="pre">vec0</span></code> table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.indexes.default_index">
+<span class="sig-prename descclassname"><span class="pre">foley.index.indexes.</span></span><span class="sig-name descname"><span class="pre">default_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#default_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.default_index" title="Link to this definition"></a></dt>
+<dd><p>Build the best available persistent index for a library.</p>
+<p>Degradation ladder: LanceDB (<code class="docutils literal notranslate"><span class="pre">foley[index]</span></code>) → sqlite-vec
+(<code class="docutils literal notranslate"><span class="pre">foley[index-sqlite]</span></code>, if loadable) → an informative error. The
+non-persistent <a class="reference internal" href="#foley.index.indexes.MemoryIndex" title="foley.index.indexes.MemoryIndex"><code class="xref py py-class docutils literal notranslate"><span class="pre">MemoryIndex</span></code></a> is never chosen automatically (a library
+must survive restarts); inject it explicitly for tests/ephemeral use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_dir</strong> – The library data root (a <code class="docutils literal notranslate"><span class="pre">pathlib.Path</span></code>-like).</p></li>
+<li><p><strong>dim</strong> – The embedding dimensionality from the active embedder.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A ready index object (both <code class="docutils literal notranslate"><span class="pre">VectorIndex</span></code> and <code class="docutils literal notranslate"><span class="pre">KeywordIndex</span></code>).</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If no persistent backend is installed/usable.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.indexes.lancedb_available">
+<span class="sig-prename descclassname"><span class="pre">foley.index.indexes.</span></span><span class="sig-name descname"><span class="pre">lancedb_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#lancedb_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.lancedb_available" title="Link to this definition"></a></dt>
+<dd><p>True if <code class="docutils literal notranslate"><span class="pre">lancedb</span></code> is importable (the <code class="docutils literal notranslate"><span class="pre">foley[index]</span></code> extra is present).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.indexes.sqlite_vec_loadable">
+<span class="sig-prename descclassname"><span class="pre">foley.index.indexes.</span></span><span class="sig-name descname"><span class="pre">sqlite_vec_loadable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/foley/index/indexes.html#sqlite_vec_loadable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.indexes.sqlite_vec_loadable" title="Link to this definition"></a></dt>
+<dd><p>True if <code class="docutils literal notranslate"><span class="pre">sqlite_vec</span></code> is installed AND this interpreter can load it.</p>
+<p>The macOS system / pyenv CPython builds frequently ship a <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code> without
+loadable-extension support (no <code class="docutils literal notranslate"><span class="pre">enable_load_extension</span></code>); on those,
+sqlite-vec cannot be used even when <a href="#id1"><span class="problematic" id="id2">``</span></a>pip install``ed. This probes both.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="embedders.html" class="btn btn-neutral float-left" title="foley.index.embedders" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="library.html" class="btn btn-neutral float-right" title="foley.index.library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

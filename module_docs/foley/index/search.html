@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.index.search &mdash; foley 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.index.taxonomy" href="taxonomy.html" />
+    <link rel="prev" title="foley.index.protocols" href="protocols.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.index.search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.search.DEFAULT_CANDIDATE_K"><code class="docutils literal notranslate"><span class="pre">DEFAULT_CANDIDATE_K</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.search.FusedHit"><code class="docutils literal notranslate"><span class="pre">FusedHit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.search.FusedHit.id"><code class="docutils literal notranslate"><span class="pre">FusedHit.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.search.FusedHit.rrf_score"><code class="docutils literal notranslate"><span class="pre">FusedHit.rrf_score</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.search.FusedHit.clap_score"><code class="docutils literal notranslate"><span class="pre">FusedHit.clap_score</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.index.search.FusedHit.bm25_score"><code class="docutils literal notranslate"><span class="pre">FusedHit.bm25_score</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.search.RRF_K"><code class="docutils literal notranslate"><span class="pre">RRF_K</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.search.fuse_hits"><code class="docutils literal notranslate"><span class="pre">fuse_hits()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.search.hybrid_search"><code class="docutils literal notranslate"><span class="pre">hybrid_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.search.reciprocal_rank_fusion"><code class="docutils literal notranslate"><span class="pre">reciprocal_rank_fusion()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.search.vector_search"><code class="docutils literal notranslate"><span class="pre">vector_search()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.index.search</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/index/search.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.index.search">
+<span id="foley-index-search"></span><h1>foley.index.search<a class="headerlink" href="#module-foley.index.search" title="Link to this heading"></a></h1>
+<p>Hybrid retrieval: reciprocal rank fusion over a vector list and a keyword list.</p>
+<p>Pure orchestration + fusion. This module depends only on the small index
+protocols (<a class="reference internal" href="protocols.html#module-foley.index.protocols" title="foley.index.protocols"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.index.protocols</span></code></a>) — never on <code class="docutils literal notranslate"><span class="pre">torch</span></code>/<code class="docutils literal notranslate"><span class="pre">lancedb</span></code>/
+<code class="docutils literal notranslate"><span class="pre">sqlite_vec</span></code> — so the fusion rule is one SSOT exercised identically by every
+backend and directly unit-testable.</p>
+<p>Why rank fusion (report 04 §3.2): dense CLAP cosine lives in <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code> while
+BM25 scores are unbounded, so <strong>averaging them lets one drown the other</strong>.
+<strong>Reciprocal Rank Fusion</strong> (RRF; Cormack, Clarke &amp; Büttcher, SIGIR 2009) instead
+fuses on <em>rank position</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">score</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">Σ_rankers</span>  <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="n">rank_r</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>          <span class="c1"># k = 60 (standard)</span>
+</pre></div>
+</div>
+<p>A document ranked high by <em>either</em> the vector list or the BM25 list floats up;
+<code class="docutils literal notranslate"><span class="pre">k=60</span></code> damps the long tail. It is one line, parameter-light, and robust — the
+right first-stage fusion for a mix of semantic captions and terse literal tags.</p>
+<p>The concrete backends (LanceDB, sqlite-vec) can fuse natively in-engine; foley
+deliberately fuses here instead so the ranking is byte-identical across backends
+and gated by the eval harness (report 08) rather than an engine’s internals.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.index.search.DEFAULT_CANDIDATE_K">
+<span class="sig-prename descclassname"><span class="pre">foley.index.search.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_CANDIDATE_K</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></span><a class="headerlink" href="#foley.index.search.DEFAULT_CANDIDATE_K" title="Link to this definition"></a></dt>
+<dd><p>Per-ranker shortlist depth pulled from each index before fusion. Fusing deeper
+lists than the requested <code class="docutils literal notranslate"><span class="pre">k</span></code> lets a doc ranked mid-list by one ranker but top
+by the other still surface.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.index.search.FusedHit">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.search.</span></span><span class="sig-name descname"><span class="pre">FusedHit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rrf_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clap_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bm25_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/index/search.html#FusedHit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.search.FusedHit" title="Link to this definition"></a></dt>
+<dd><p>One fused retrieval hit: an id plus the scores that produced it.</p>
+<p>The raw component scores are carried through (not just the fused rank score)
+so the façade can stamp them onto a <a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>
+(<code class="docutils literal notranslate"><span class="pre">clap_score</span></code> / <code class="docutils literal notranslate"><span class="pre">bm25_score</span></code> / <code class="docutils literal notranslate"><span class="pre">rrf_score</span></code>) for display and debugging.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.index.search.FusedHit.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#foley.index.search.FusedHit.id" title="Link to this definition"></a></dt>
+<dd><p>The sound id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.index.search.FusedHit.rrf_score">
+<span class="sig-name descname"><span class="pre">rrf_score</span></span><a class="headerlink" href="#foley.index.search.FusedHit.rrf_score" title="Link to this definition"></a></dt>
+<dd><p>The fused RRF score (<code class="docutils literal notranslate"><span class="pre">None</span></code> for a pure-vector search).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.index.search.FusedHit.clap_score">
+<span class="sig-name descname"><span class="pre">clap_score</span></span><a class="headerlink" href="#foley.index.search.FusedHit.clap_score" title="Link to this definition"></a></dt>
+<dd><p>Cosine similarity from the vector ranker (<code class="docutils literal notranslate"><span class="pre">None</span></code> if the id
+appeared only in the keyword list).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.index.search.FusedHit.bm25_score">
+<span class="sig-name descname"><span class="pre">bm25_score</span></span><a class="headerlink" href="#foley.index.search.FusedHit.bm25_score" title="Link to this definition"></a></dt>
+<dd><p>BM25 score from the keyword ranker (<code class="docutils literal notranslate"><span class="pre">None</span></code> if the id
+appeared only in the vector list).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.index.search.RRF_K">
+<span class="sig-prename descclassname"><span class="pre">foley.index.search.</span></span><span class="sig-name descname"><span class="pre">RRF_K</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60</span></span><a class="headerlink" href="#foley.index.search.RRF_K" title="Link to this definition"></a></dt>
+<dd><p>Standard RRF damping constant (Cormack et al., SIGIR 2009). Larger =&gt; flatter.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.search.fuse_hits">
+<span class="sig-prename descclassname"><span class="pre">foley.index.search.</span></span><span class="sig-name descname"><span class="pre">fuse_hits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector_hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword_hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rrf_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.index.search.FusedHit" title="foley.index.search.FusedHit"><span class="pre">FusedHit</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/search.html#fuse_hits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.search.fuse_hits" title="Link to this definition"></a></dt>
+<dd><p>RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector_hits</strong> – <code class="docutils literal notranslate"><span class="pre">[(id,</span> <span class="pre">cosine_similarity),</span> <span class="pre">...]</span></code> best-first (from
+<a class="reference internal" href="protocols.html#foley.index.protocols.VectorIndex.knn" title="foley.index.protocols.VectorIndex.knn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">knn()</span></code></a>).</p></li>
+<li><p><strong>keyword_hits</strong> – <code class="docutils literal notranslate"><span class="pre">[(id,</span> <span class="pre">bm25_score),</span> <span class="pre">...]</span></code> best-first (from
+<a class="reference internal" href="protocols.html#foley.index.protocols.KeywordIndex.bm25" title="foley.index.protocols.KeywordIndex.bm25"><code class="xref py py-meth docutils literal notranslate"><span class="pre">bm25()</span></code></a>).</p></li>
+<li><p><strong>k</strong> – Number of fused hits to return.</p></li>
+<li><p><strong>rrf_k</strong> – The RRF damping constant.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The top-<code class="docutils literal notranslate"><span class="pre">k</span></code> :class:<a href="#id1"><span class="problematic" id="id2">`</span></a>FusedHit`s, each carrying its raw component scores.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.search.hybrid_search">
+<span class="sig-prename descclassname"><span class="pre">foley.index.search.</span></span><span class="sig-name descname"><span class="pre">hybrid_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.Embedder" title="foley.Embedder"><span class="pre">Embedder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.VectorIndex" title="foley.VectorIndex"><span class="pre">VectorIndex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">kindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.KeywordIndex" title="foley.KeywordIndex"><span class="pre">KeywordIndex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rrf_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.index.search.FusedHit" title="foley.index.search.FusedHit"><span class="pre">FusedHit</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/search.html#hybrid_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.search.hybrid_search" title="Link to this definition"></a></dt>
+<dd><p>Embed <code class="docutils literal notranslate"><span class="pre">query</span></code>, run the vector + keyword rankers, and RRF-fuse them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> – The natural-language query.</p></li>
+<li><p><strong>embedder</strong> – Text&lt;-&gt;audio embedder (its <code class="docutils literal notranslate"><span class="pre">embed_text</span></code> produces the query
+vector).</p></li>
+<li><p><strong>vindex</strong> – The vector index (CLAP KNN).</p></li>
+<li><p><strong>kindex</strong> – The keyword index (BM25).</p></li>
+<li><p><strong>k</strong> – Number of fused results to return.</p></li>
+<li><p><strong>candidate_k</strong> – Shortlist depth pulled from each ranker before fusion.</p></li>
+<li><p><strong>rrf_k</strong> – The RRF damping constant.</p></li>
+<li><p><strong>where</strong> – Optional metadata push-down passed to both rankers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The top-<code class="docutils literal notranslate"><span class="pre">k</span></code> fused :class:<a href="#id3"><span class="problematic" id="id4">`</span></a>FusedHit`s.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.search.reciprocal_rank_fusion">
+<span class="sig-prename descclassname"><span class="pre">foley.index.search.</span></span><span class="sig-name descname"><span class="pre">reciprocal_rank_fusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ranked_id_lists</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/search.html#reciprocal_rank_fusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.search.reciprocal_rank_fusion" title="Link to this definition"></a></dt>
+<dd><p>Fuse several ranked id lists into one, by reciprocal rank.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ranked_id_lists</strong> – Each element is a list of ids in descending-relevance
+order (best first). Lists may overlap and may differ in length.</p></li>
+<li><p><strong>k</strong> – The RRF damping constant (default <a class="reference internal" href="#foley.index.search.RRF_K" title="foley.index.search.RRF_K"><code class="xref py py-data docutils literal notranslate"><span class="pre">RRF_K</span></code></a> = 60).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[(id,</span> <span class="pre">fused_score),</span> <span class="pre">...]</span></code> sorted by fused score descending, ties
+broken by <code class="docutils literal notranslate"><span class="pre">id</span></code> ascending (so the fusion is fully deterministic).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.search.vector_search">
+<span class="sig-prename descclassname"><span class="pre">foley.index.search.</span></span><span class="sig-name descname"><span class="pre">vector_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qvec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">vindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.VectorIndex" title="foley.VectorIndex"><span class="pre">VectorIndex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.index.search.FusedHit" title="foley.index.search.FusedHit"><span class="pre">FusedHit</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/index/search.html#vector_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.search.vector_search" title="Link to this definition"></a></dt>
+<dd><p>Pure audio&lt;-&gt;audio (or clip-&gt;library) vector search — no keyword leg.</p>
+<p>Used by <code class="docutils literal notranslate"><span class="pre">SoundLibrary.similar</span></code> and by searching with a reference clip.
+Hits keep their cosine similarity in <code class="docutils literal notranslate"><span class="pre">clap_score</span></code> and preserve the index’s
+own descending-similarity order (<code class="docutils literal notranslate"><span class="pre">rrf_score</span></code> is left <code class="docutils literal notranslate"><span class="pre">None</span></code> — there is no
+fusion).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qvec</strong> – An already-L2-normalized <code class="docutils literal notranslate"><span class="pre">(dim,)</span></code> query vector.</p></li>
+<li><p><strong>vindex</strong> – The vector index.</p></li>
+<li><p><strong>k</strong> – Number of neighbours to return.</p></li>
+<li><p><strong>where</strong> – Optional metadata push-down.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Up to <code class="docutils literal notranslate"><span class="pre">k</span></code> :class:<a href="#id5"><span class="problematic" id="id6">`</span></a>FusedHit`s in descending-similarity order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="protocols.html" class="btn btn-neutral float-left" title="foley.index.protocols" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="taxonomy.html" class="btn btn-neutral float-right" title="foley.index.taxonomy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
