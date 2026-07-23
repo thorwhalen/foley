@@ -272,6 +272,35 @@ def test_qc_report_to_dict_is_json_safe():
     assert reloaded["status"] == "pass"
 
 
+def test_qc_report_json_safe_for_silent_clip():
+    # a fully silent clip: rms_dbfs -> -inf, snr_db -> -inf. Both must be None so
+    # to_dict() -> json.dumps never emits non-standard 'Infinity' (rejected by
+    # Postgres JSONB / JS JSON.parse) — the "cloud = swap the store" invariant.
+    import json
+
+    report = run_qc(np.zeros(SR, dtype=np.float32), SR)
+    assert report.rms_dbfs is None
+    assert report.snr_db is None
+    dumped = json.dumps(report.to_dict())
+    assert "Infinity" not in dumped
+    assert json.loads(dumped)["rms_dbfs"] is None
+
+
+def test_qc_report_json_safe_for_zero_padded_one_shot():
+    # a short burst padded with exact zeros: estimate_snr's noise floor is 0 =>
+    # snr_db is +inf. It must be None (json-safe); rms_dbfs stays finite.
+    import json
+
+    padded = np.concatenate(
+        [_sine(0.1, amp=0.5), np.zeros(int(0.9 * SR), dtype=np.float32)]
+    ).astype(np.float32)
+    report = run_qc(padded, SR)
+    assert report.snr_db is None  # +inf guarded
+    assert report.rms_dbfs is not None  # signal present => finite
+    dumped = json.dumps(report.to_dict())
+    assert "Infinity" not in dumped
+
+
 def test_custom_thresholds_are_honored():
     # Tightening the silence floor upward can flip a quiet clip to "silent".
     quiet = _sine(1.0, amp=0.5) * 1e-3  # ~ -69 dBFS RMS

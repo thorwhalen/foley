@@ -421,7 +421,7 @@ class QCReport:
     clipped_ratio: float
     clipped_max_run: int
     dc_offset: float
-    rms_dbfs: float
+    rms_dbfs: Optional[float]  # None when non-finite (silent clip => -inf): JSON-safe
     is_silent: bool
     needs_edge_fade: bool
     has_nan_inf: bool
@@ -574,12 +574,16 @@ def run_qc(
         clipped_ratio=clipped_ratio,
         clipped_max_run=clipped_max_run,
         dc_offset=dc,
-        rms_dbfs=rms_db,
+        # Non-finite (+/-inf / nan) => None so QCReport.to_dict() -> json.dumps
+        # never emits non-standard Infinity (rejected by Postgres JSONB / JS
+        # JSON.parse): rms_dbfs is -inf for a silent clip; snr_db is +inf for a
+        # zero-padded one-shot (noise floor 0) and -inf when silent.
+        rms_dbfs=rms_db if _is_finite(rms_db) else None,
         is_silent=silent,
         needs_edge_fade=edge,
         has_nan_inf=nan_inf,
-        true_peak_dbtp=None if true_peak == float("-inf") else true_peak,
-        snr_db=snr,
+        true_peak_dbtp=true_peak if _is_finite(true_peak) else None,
+        snr_db=snr if _is_finite(snr) else None,
         loudness_lufs=lufs,
         status=status,
         notes=notes,
