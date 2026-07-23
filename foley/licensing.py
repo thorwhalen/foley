@@ -62,6 +62,10 @@ LICENSE_FLAGS: dict[str, LicenseFlags] = {
         True, True, False, True, True, False, False, 1_000_000
     ),
     "MIT": LicenseFlags(True, True, True, True, True, True, True, None),
+    # The user's own local content (default for `foley.ingest`): full rights and
+    # cacheable => stored by-value. The natural contrast to Freesound-API (below,
+    # to be added by the adapter) whose TOS forces cache_bytes_ok=False.
+    "user-owned": LicenseFlags(True, True, True, True, True, True, False, None),
     "unknown": UNKNOWN_LICENSE_FLAGS,
 }
 

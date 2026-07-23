@@ -28,8 +28,9 @@ from .indexes import (
     lancedb_available,
     sqlite_vec_loadable,
 )
+from .ingest import IngestReport, IngestResult, ingest_folder, ingest_one
 from .library import SoundLibrary, default_library
-from .protocols import Embedder, KeywordIndex, VectorIndex
+from .protocols import Captioner, Embedder, KeywordIndex, Tagger, VectorIndex
 from .search import (
     DEFAULT_CANDIDATE_K,
     RRF_K,
@@ -39,6 +40,12 @@ from .search import (
     reciprocal_rank_fusion,
     vector_search,
 )
+from .taggers import (
+    ClapZeroShotTagger,
+    PannsTagger,
+    default_tagger,
+    default_zeroshot_tagger,
+)
 from .taxonomy import CatIdResolution, parse_ucs_filename, resolve_catid
 
 __all__ = [
@@ -46,9 +53,21 @@ __all__ = [
     "Embedder",
     "VectorIndex",
     "KeywordIndex",
+    "Tagger",
+    "Captioner",
     # embedders
     "ClapEmbedder",
     "default_embedder",
+    # taggers
+    "ClapZeroShotTagger",
+    "PannsTagger",
+    "default_tagger",
+    "default_zeroshot_tagger",
+    # ingestion
+    "ingest_one",
+    "ingest_folder",
+    "IngestResult",
+    "IngestReport",
     "DEFAULT_CLAP_MODEL_ID",
     "DEFAULT_CLAP_DIM",
     "CLAP_SAMPLE_RATE",
