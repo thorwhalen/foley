@@ -123,21 +123,31 @@ from .index import (
     DEFAULT_CLAP_DIM,
     DEFAULT_CLAP_MODEL_ID,
     RRF_K,
+    Captioner,
     CatIdResolution,
     ClapEmbedder,
+    ClapZeroShotTagger,
     Embedder,
     FusedHit,
+    IngestReport,
+    IngestResult,
     KeywordIndex,
     LanceIndex,
     MemoryIndex,
+    PannsTagger,
     SoundLibrary,
     SqliteVecIndex,
+    Tagger,
     VectorIndex,
     default_embedder,
     default_index,
     default_library,
+    default_tagger,
+    default_zeroshot_tagger,
     fuse_hits,
     hybrid_search,
+    ingest_folder,
+    ingest_one,
     lancedb_available,
     parse_ucs_filename,
     reciprocal_rank_fusion,
@@ -242,6 +252,18 @@ __all__ = [
     "parse_ucs_filename",
     "CatIdResolution",
     "library",
+    # --- index: taggers + ingestion ------------------------------------------
+    "Tagger",
+    "Captioner",
+    "ClapZeroShotTagger",
+    "PannsTagger",
+    "default_tagger",
+    "default_zeroshot_tagger",
+    "ingest",
+    "ingest_one",
+    "ingest_folder",
+    "IngestResult",
+    "IngestReport",
 ]
 
 
@@ -280,6 +302,46 @@ def similar(sound_id: str, *, k: int = 10):
     See :meth:`foley.index.SoundLibrary.similar`.
     """
     return default_library().similar(sound_id, k=k)
+
+
+def ingest(
+    path,
+    *,
+    library=None,
+    backend: str = "local",
+    qc: bool = True,
+    recursive: bool = True,
+    **kw,
+):
+    """Ingest a folder (or single file) of sounds into the default library.
+
+    ``probe -> QC -> tag -> zero-shot -> caption -> embed -> SoundRecord`` for
+    each file, returning an :class:`~foley.index.IngestReport`. See
+    :func:`foley.index.ingest_folder` / :func:`~foley.index.ingest_one` for the
+    per-file options (``license``, taggers, ``min_status``, …).
+
+    Args:
+        path: A folder (walked) or a single audio file.
+        library: Target library (default: the process-wide default library).
+        backend: ``"local"`` ingests filesystem audio; other backends (a source
+            adapter pull) route through ``add_from`` (subtask #5) — kept in the
+            signature for forward-compat.
+        qc: Run the Tier-0 QC gate (quarantines failing clips).
+        recursive: Recurse into sub-folders.
+        **kw: Forwarded to :func:`foley.index.ingest_one`.
+    """
+    if backend != "local":
+        raise NotImplementedError(
+            f"ingest backend {backend!r} not implemented; only 'local' is "
+            f"available (source-adapter pulls arrive with subtask #5)."
+        )
+    return ingest_folder(
+        path,
+        library=library if library is not None else default_library(),
+        recursive=recursive,
+        do_qc=qc,
+        **kw,
+    )
 
 
 def __getattr__(name: str):

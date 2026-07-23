@@ -272,6 +272,47 @@ def test_qc_report_to_dict_is_json_safe():
     assert reloaded["status"] == "pass"
 
 
+def _assert_strict_json(report):
+    # allow_nan=False raises on exactly the tokens Postgres JSONB / JS JSON.parse
+    # reject (Infinity / -Infinity / NaN) — the precise regression oracle.
+    import json
+
+    d = report.to_dict()
+    json.dumps(d, allow_nan=False)
+    assert json.loads(json.dumps(d)) == d  # round-trips
+
+
+def test_json_safe_unit():
+    from foley.qc import _json_safe
+
+    assert _json_safe(float("inf")) is None
+    assert _json_safe(float("-inf")) is None
+    assert _json_safe(float("nan")) is None
+    assert _json_safe(None) is None
+    assert _json_safe(-3.5) == -3.5
+
+
+def test_qc_report_json_safe_for_silent_clip():
+    # a fully silent clip: rms_dbfs -> -inf, snr_db -> -inf; both clamp to None.
+    report = run_qc(np.zeros(SR, dtype=np.float32), SR)
+    assert report.is_silent and report.status is QCStatus.fail
+    assert report.rms_dbfs is None and report.snr_db is None
+    assert report.true_peak_dbtp is None and report.loudness_lufs is None
+    _assert_strict_json(report)
+
+
+def test_qc_report_json_safe_for_zero_padded_one_shot():
+    # a short burst padded with exact zeros: estimate_snr's noise floor is 0 =>
+    # snr_db is +inf; it clamps to None while rms_dbfs stays finite.
+    padded = np.concatenate(
+        [_sine(0.1, amp=0.5), np.zeros(int(0.9 * SR), dtype=np.float32)]
+    ).astype(np.float32)
+    report = run_qc(padded, SR)
+    assert report.snr_db is None  # +inf clamped
+    assert report.rms_dbfs is not None  # signal present => finite
+    _assert_strict_json(report)
+
+
 def test_custom_thresholds_are_honored():
     # Tightening the silence floor upward can flip a quiet clip to "silent".
     quiet = _sine(1.0, amp=0.5) * 1e-3  # ~ -69 dBFS RMS

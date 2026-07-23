@@ -26,6 +26,7 @@ Typical use (at ingest, a later phase)::
 
 from __future__ import annotations
 
+import math
 import warnings
 from dataclasses import asdict, dataclass, field
 from enum import Enum
@@ -421,7 +422,7 @@ class QCReport:
     clipped_ratio: float
     clipped_max_run: int
     dc_offset: float
-    rms_dbfs: float
+    rms_dbfs: Optional[float]  # None when non-finite (silent clip => -inf): JSON-safe
     is_silent: bool
     needs_edge_fade: bool
     has_nan_inf: bool
@@ -432,10 +433,19 @@ class QCReport:
     notes: list = field(default_factory=list)
 
     def to_dict(self) -> dict:
-        """Return a plain, JSON-safe dict (``status`` as its string value)."""
+        """Return a plain, JSON-safe dict (``status`` as its string value).
+
+        Non-finite floats are swept to ``None`` at this boundary too (belt-and-
+        suspenders over the construction-time :func:`_json_safe` guard) so no
+        ``Infinity``/``NaN`` can ever reach ``json.dumps`` regardless of who set a
+        field.
+        """
         d = asdict(self)
         d["status"] = self.status.value
-        return d
+        return {
+            k: (None if isinstance(v, float) and not math.isfinite(v) else v)
+            for k, v in d.items()
+        }
 
 
 def _is_finite(value: Optional[float]) -> bool:
@@ -443,6 +453,19 @@ def _is_finite(value: Optional[float]) -> bool:
     import numpy as np
 
     return value is not None and bool(np.isfinite(value))
+
+
+def _json_safe(value: Optional[float]) -> Optional[float]:
+    """Clamp a non-finite float to ``None`` so :meth:`QCReport.to_dict` ->
+    ``json.dumps`` is strict-JSON safe.
+
+    ``estimate_snr`` can return ``+inf`` (zero-padded one-shot: noise floor 0) or
+    ``-inf`` (silent); ``_rms_dbfs`` / ``true_peak_dbtp`` return ``-inf`` (silent).
+    Left raw, ``json.dumps`` emits ``Infinity``/``-Infinity``, which Postgres
+    JSONB and JS ``JSON.parse`` reject — breaking the cloud-store-swap invariant.
+    This is the single SSOT for that clamp.
+    """
+    return value if _is_finite(value) else None
 
 
 def run_qc(
@@ -572,13 +595,16 @@ def run_qc(
         clipped_ratio=clipped_ratio,
         clipped_max_run=clipped_max_run,
         dc_offset=dc,
-        rms_dbfs=rms_db,
+        # Non-finite (+/-inf / nan) floats are clamped to None (see _json_safe):
+        # rms_dbfs is -inf for a silent clip; snr_db is +inf for a zero-padded
+        # one-shot (noise floor 0) and -inf when silent.
+        rms_dbfs=_json_safe(rms_db),
         is_silent=silent,
         needs_edge_fade=edge,
         has_nan_inf=nan_inf,
-        true_peak_dbtp=None if true_peak == float("-inf") else true_peak,
-        snr_db=snr,
-        loudness_lufs=lufs,
+        true_peak_dbtp=_json_safe(true_peak),
+        snr_db=_json_safe(snr),
+        loudness_lufs=_json_safe(lufs),
         status=status,
         notes=notes,
     )

@@ -58,6 +58,17 @@ index = [
 index-sqlite = [
     "sqlite-vec>=0.1.0",
 ]
+# Supervised AudioSet tagging on ingest — PANNs CNN14 (checkpoint auto-downloads).
+tag = [
+    "panns-inference",
+]
+# Audio captioning on ingest (EnCLAP / Qwen2-Audio adapters plug in behind the
+# Captioner protocol; no default ships yet). transformers/torch already in [clap].
+caption = [
+    "transformers>=4.40",
+    "torch",
+    "torchaudio",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",

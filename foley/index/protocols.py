@@ -132,3 +132,33 @@ class KeywordIndex(Protocol):
         Returns:
             ``[(id, bm25_score), ...]`` in descending-score order.
         """
+
+
+@runtime_checkable
+class Tagger(Protocol):
+    """Map a clip to ``(label, score)`` pairs against a label vocabulary.
+
+    Used on ingest to auto-fill ``SoundRecord.audioset_labels`` (supervised) and
+    ``tags`` (zero-shot). The default supervised tagger is PANNs CNN14 over
+    AudioSet; the default zero-shot tagger scores a clip against a custom/UCS
+    label set via CLAP (report 03). BEATs/AST are drop-in upgrades. Consumes the
+    working array (``float32``, any sr — the impl resamples to its model's rate).
+    """
+
+    def tag(
+        self, wav: "ndarray", sr: int, *, taxonomy: str = "audioset", top_k: int = 10
+    ) -> list[tuple[str, float]]:
+        """Return the top-``k`` ``(label, score)`` tags for the clip, best first."""
+
+
+@runtime_checkable
+class Captioner(Protocol):
+    """Produce one natural-language sentence describing a clip (report 03).
+
+    The caption feeds the BM25 keyword index and human display. Default is a
+    dedicated AAC model (EnCLAP); Qwen2-Audio is a richer promptable upgrade.
+    Both are ``foley[caption]`` adapters plugged in behind this protocol.
+    """
+
+    def caption(self, wav: "ndarray", sr: int) -> str:
+        """Return a one-sentence caption for the clip."""

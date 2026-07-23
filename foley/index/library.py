@@ -457,7 +457,11 @@ def _record_matches(
         return False
     if min_snr is not None:
         snr = (record.qc or {}).get("snr_db")
-        if snr is None or snr < min_snr:
+        # Only a FINITE snr below the floor excludes. A None snr means "no finite
+        # SNR" — either unmeasured or infinitely clean (a zero-padded one-shot
+        # scores +inf, clamped to None for JSON-safety); a max-clean clip must not
+        # be dropped by a quality floor, so None passes.
+        if snr is not None and snr < min_snr:
             return False
     if duration_range is not None:
         lo, hi = duration_range

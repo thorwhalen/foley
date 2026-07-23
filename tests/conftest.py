@@ -43,8 +43,14 @@ class FakeEmbedder:
         return np.stack([self._vec(t) for t in text]).astype(np.float32)
 
     def embed_audio(self, wav, sr):
-        # Records pass explicit vectors in tests; this is a stable placeholder.
-        return self._vec("placeholder audio").astype(np.float32)
+        # Deterministic per-content vector: distinct clips embed to distinct
+        # points (so ingest tests get non-degenerate vectors), reproducibly.
+        arr = np.ascontiguousarray(np.asarray(wav, dtype=np.float32))
+        seed = int.from_bytes(hashlib.md5(arr.tobytes()).digest()[:4], "little")
+        rng = np.random.default_rng(seed)
+        vec = rng.standard_normal(self.dim).astype(np.float32)
+        norm = float(np.linalg.norm(vec))
+        return vec / norm if norm else vec
 
 
 @pytest.fixture
