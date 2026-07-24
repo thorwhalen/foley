@@ -68,9 +68,7 @@ CONTENT_CREDENTIAL_SCHEMA = "foley/content-credential/v1"
 IPTC_TRAINED_ALGORITHMIC_MEDIA = (
     "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
 )
-IPTC_DIGITAL_CREATION = (
-    "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"
-)
+IPTC_DIGITAL_CREATION = "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"
 
 
 # ---------------------------------------------------------------------------
@@ -92,12 +90,25 @@ class TrademarkEntry:
 #: legal guarantee.
 TRADEMARK_REGISTRY: "tuple[TrademarkEntry, ...]" = (
     TrademarkEntry("THX Deep Note", frozenset({"thx", "deep note"})),
-    TrademarkEntry("NBC chimes", frozenset({"nbc chimes", "nbc chime", "nbc three-note"})),
+    TrademarkEntry(
+        "NBC chimes", frozenset({"nbc chimes", "nbc chime", "nbc three-note"})
+    ),
     TrademarkEntry(
         "Netflix Ta-dum",
-        frozenset({"ta-dum", "ta dum", "tudum", "netflix intro", "netflix sound", "netflix chime"}),
+        frozenset(
+            {
+                "ta-dum",
+                "ta dum",
+                "tudum",
+                "netflix intro",
+                "netflix sound",
+                "netflix chime",
+            }
+        ),
     ),
-    TrademarkEntry("MGM lion roar", frozenset({"mgm roar", "mgm lion", "metro-goldwyn-mayer lion"})),
+    TrademarkEntry(
+        "MGM lion roar", frozenset({"mgm roar", "mgm lion", "metro-goldwyn-mayer lion"})
+    ),
     TrademarkEntry(
         "20th Century Fox fanfare",
         frozenset({"20th century fox fanfare", "fox fanfare", "century fox intro"}),
@@ -106,7 +117,9 @@ TRADEMARK_REGISTRY: "tuple[TrademarkEntry, ...]" = (
         "Intel five-note bong",
         frozenset({"intel bong", "intel inside", "intel jingle", "intel chime"}),
     ),
-    TrademarkEntry("Homer Simpson D'oh", frozenset({"d'oh", "homer doh", "homer simpson doh"})),
+    TrademarkEntry(
+        "Homer Simpson D'oh", frozenset({"d'oh", "homer doh", "homer simpson doh"})
+    ),
 )
 
 #: Explicit voice-clone / human-voice-request cues (report 07 §7.1) — matched
@@ -178,9 +191,9 @@ def scan_prompt(prompt: str) -> PromptScan:
     )
     # Explicit clone cues match case-insensitively; proper-name patterns match the
     # ORIGINAL (cased) prompt so lowercase SFX descriptions are never flagged.
-    voice_hits = tuple(p.pattern for p in _VOICE_CUE_PATTERNS if p.search(text)) + tuple(
-        p.pattern for p in _VOICE_NAME_PATTERNS if p.search(original)
-    )
+    voice_hits = tuple(
+        p.pattern for p in _VOICE_CUE_PATTERNS if p.search(text)
+    ) + tuple(p.pattern for p in _VOICE_NAME_PATTERNS if p.search(original))
     return PromptScan(trademark_hits=trademark_hits, voice_hits=voice_hits)
 
 
@@ -328,7 +341,9 @@ class AudioSealWatermarker:
         out = np.clip(out, -1.0, 1.0).astype(np.float32)
 
         buf = io.BytesIO()
-        sf.write(buf, out if channels > 1 else out[:, 0], sr, format="WAV", subtype="FLOAT")
+        sf.write(
+            buf, out if channels > 1 else out[:, 0], sr, format="WAV", subtype="FLOAT"
+        )
         wm_bytes = buf.getvalue()
 
         prob, recovered = detect_watermark(wm_bytes)
