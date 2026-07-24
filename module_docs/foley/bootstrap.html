@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.bootstrap &mdash; foley 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="foley.cli" href="cli.html" />
+    <link rel="prev" title="foley.base" href="base.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">foley.base</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.bootstrap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.bootstrap.COMMERCIAL_USE"><code class="docutils literal notranslate"><span class="pre">COMMERCIAL_USE</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.bootstrap.MetadataCaptioner"><code class="docutils literal notranslate"><span class="pre">MetadataCaptioner</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.bootstrap.RING0_DIR"><code class="docutils literal notranslate"><span class="pre">RING0_DIR</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.bootstrap.bootstrap"><code class="docutils literal notranslate"><span class="pre">bootstrap()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.bootstrap.demo"><code class="docutils literal notranslate"><span class="pre">demo()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.bootstrap</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/foley/bootstrap.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.bootstrap">
+<span id="foley-bootstrap"></span><h1>foley.bootstrap<a class="headerlink" href="#module-foley.bootstrap" title="Link to this heading"></a></h1>
+<p>Seed a foley library from bulk corpora — the <code class="docutils literal notranslate"><span class="pre">foley</span> <span class="pre">bootstrap</span></code> keystone.</p>
+<p><a class="reference internal" href="#foley.bootstrap.bootstrap" title="foley.bootstrap.bootstrap"><code class="xref py py-func docutils literal notranslate"><span class="pre">bootstrap()</span></code></a> turns downloaded corpora (via the <a class="reference internal" href="sources.html#module-foley.sources" title="foley.sources"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.sources</span></code></a>
+adapters) into a searchable, license-clean library, and <a class="reference internal" href="#foley.bootstrap.demo" title="foley.bootstrap.demo"><code class="xref py py-func docutils literal notranslate"><span class="pre">demo()</span></code></a> proves the
+whole <code class="docutils literal notranslate"><span class="pre">ingest</span> <span class="pre">-&gt;</span> <span class="pre">search</span></code> path against a tiny bundled synthetic fixture — no
+corpus download needed. <code class="docutils literal notranslate"><span class="pre">demo</span></code> still needs the runtime extras (<code class="docutils literal notranslate"><span class="pre">foley[audio]</span></code>
+to decode + <code class="docutils literal notranslate"><span class="pre">foley[clap]</span></code> for the embedder, whose model downloads on first
+use); it is the <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">'foley[audio,clap]'</span> <span class="pre">&amp;&amp;</span> <span class="pre">foley.demo()</span></code> smoke test.</p>
+<p>It is a thin <strong>orchestrator</strong> over the existing pipeline — the only new logic is
+the ring policy:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Ring 0</strong> (ship-in-repo: Clotho-eval, FoleySet) and <strong>Ring 1</strong> (fetch:
+FSD50K) are the default rings.</p></li>
+<li><p><strong>Ring 2</strong> (Sonniss, BBC RemArc — <code class="docutils literal notranslate"><span class="pre">ai_training_ok=False</span></code>) is <em>refused by
+default</em>: never fetched, never auto-indexed, and admitted only with the
+explicit <code class="docutils literal notranslate"><span class="pre">accept_ai_restricted</span></code> consent flag. This is enforced twice —
+here (refuse the corpus up front) and, as the real guarantee, in
+<a class="reference internal" href="index/ingest.html#foley.index.ingest.ingest_one" title="foley.index.ingest.ingest_one"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.index.ingest.ingest_one()</span></code></a>’s fail-closed per-clip gate.</p></li>
+<li><p><strong>Commercial filter</strong> (Ring 1): each clip is passed through the fail-closed
+<a class="reference internal" href="../foley.html#foley.keep" title="foley.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.keep()</span></code></a> gate for commercial use, so the non-commercial /
+unverified slice (CC-BY-NC, Sampling+, unknown) is dropped
+(<code class="docutils literal notranslate"><span class="pre">status='skipped_license'</span></code>) before it is embedded.</p></li>
+</ul>
+</div></blockquote>
+<p>Everything downstream — decode, QC, tagging, embedding, dedup, the
+by-value/by-reference storage gate — is reused verbatim from <code class="docutils literal notranslate"><span class="pre">ingest_one</span></code>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.bootstrap.COMMERCIAL_USE">
+<span class="sig-prename descclassname"><span class="pre">foley.bootstrap.</span></span><span class="sig-name descname"><span class="pre">COMMERCIAL_USE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">IntendedUse(commercial=True,</span> <span class="pre">publish=True,</span> <span class="pre">redistribute_standalone=False,</span> <span class="pre">will_train=False,</span> <span class="pre">can_attribute=True,</span> <span class="pre">revenue_usd=0,</span> <span class="pre">allow_voice_or_trademark=False)</span></span><a class="headerlink" href="#foley.bootstrap.COMMERCIAL_USE" title="Link to this definition"></a></dt>
+<dd><p>The intended use the Ring-1 commercial filter checks each clip against.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.bootstrap.MetadataCaptioner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.bootstrap.</span></span><span class="sig-name descname"><span class="pre">MetadataCaptioner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/bootstrap.html#MetadataCaptioner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.bootstrap.MetadataCaptioner" title="Link to this definition"></a></dt>
+<dd><p>A trivial <a class="reference internal" href="index/protocols.html#foley.index.protocols.Captioner" title="foley.index.protocols.Captioner"><code class="xref py py-class docutils literal notranslate"><span class="pre">Captioner</span></code></a> returning a fixed string.</p>
+<p>Lets a corpus’s <em>human</em> caption (Clotho) or fixture caption flow through the
+normal <code class="docutils literal notranslate"><span class="pre">ingest_one</span></code> caption stage into the BM25 keyword index — no
+special-casing of the pipeline.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.bootstrap.RING0_DIR">
+<span class="sig-prename descclassname"><span class="pre">foley.bootstrap.</span></span><span class="sig-name descname"><span class="pre">RING0_DIR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/foley/foley/foley/data/ring0')</span></span><a class="headerlink" href="#foley.bootstrap.RING0_DIR" title="Link to this definition"></a></dt>
+<dd><p>The in-repo Ring-0 synthetic fixture (package-data; a few KB of CC0 clips).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.bootstrap.bootstrap">
+<span class="sig-prename descclassname"><span class="pre">foley.bootstrap.</span></span><span class="sig-name descname"><span class="pre">bootstrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corpora</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accept_ai_restricted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commercial_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">ingest_one_kw</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="index/ingest.html#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><span class="pre">IngestReport</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/bootstrap.html#bootstrap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.bootstrap.bootstrap" title="Link to this definition"></a></dt>
+<dd><p>Seed <code class="docutils literal notranslate"><span class="pre">library</span></code> from the selected bulk corpora, returning per-corpus reports.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rings</strong> – Which rings to include (default <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1)</span></code> — Ring 2 is never
+default; it is opt-in via <code class="docutils literal notranslate"><span class="pre">corpora=[...]</span></code> + <code class="docutils literal notranslate"><span class="pre">accept_ai_restricted</span></code>).</p></li>
+<li><p><strong>corpora</strong> – Explicit corpus-name allowlist; overrides <code class="docutils literal notranslate"><span class="pre">rings</span></code> when given.</p></li>
+<li><p><strong>data_dir</strong> – Root under which each corpus lives at <code class="docutils literal notranslate"><span class="pre">data_dir/&lt;name&gt;</span></code>
+(default: the library’s data dir / <code class="docutils literal notranslate"><span class="pre">$FOLEY_DATA_DIR</span></code>).</p></li>
+<li><p><strong>library</strong> – Target <a class="reference internal" href="index/library.html#foley.index.library.SoundLibrary" title="foley.index.library.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundLibrary</span></code></a> (default: the
+process-wide default library).</p></li>
+<li><p><strong>roots</strong> – Optional per-corpus root overrides (<code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">path}</span></code>) — for corpora
+downloaded somewhere other than <code class="docutils literal notranslate"><span class="pre">data_dir/&lt;name&gt;</span></code>.</p></li>
+<li><p><strong>accept_ai_restricted</strong> – Consent gate for Ring-2 / <code class="docutils literal notranslate"><span class="pre">ai_training_ok=False</span></code>
+corpora. <code class="docutils literal notranslate"><span class="pre">False</span></code> (default) refuses them; <code class="docutils literal notranslate"><span class="pre">True</span></code> records explicit
+operator consent and admits them.</p></li>
+<li><p><strong>commercial_only</strong> – Force the per-clip commercial filter on/off. <code class="docutils literal notranslate"><span class="pre">None</span></code>
+(default) derives it from the ring (Ring 1 → on, else off).</p></li>
+<li><p><strong>**ingest_one_kw</strong> – Forwarded to <a class="reference internal" href="index/ingest.html#foley.index.ingest.ingest_one" title="foley.index.ingest.ingest_one"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.index.ingest.ingest_one()</span></code></a>
+(<code class="docutils literal notranslate"><span class="pre">do_supervised</span></code>, <code class="docutils literal notranslate"><span class="pre">do_zeroshot</span></code>, <code class="docutils literal notranslate"><span class="pre">min_status</span></code>, <code class="docutils literal notranslate"><span class="pre">thresholds</span></code> …).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">{corpus_name:</span> <span class="pre">IngestReport}</span></code> — inspect each <code class="docutils literal notranslate"><span class="pre">.summary()</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.bootstrap.demo">
+<span class="sig-prename descclassname"><span class="pre">foley.bootstrap.</span></span><span class="sig-name descname"><span class="pre">demo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'rain</span> <span class="pre">on</span> <span class="pre">a</span> <span class="pre">window'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/foley/bootstrap.html#demo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.bootstrap.demo" title="Link to this definition"></a></dt>
+<dd><p>Ingest the bundled Ring-0 fixture and run one search — the smoke test.</p>
+<p>Needs no corpus download (the fixture ships in the wheel), but does need the
+runtime extras: <code class="docutils literal notranslate"><span class="pre">foley[audio]</span></code> to decode and, unless a library is injected,
+<code class="docutils literal notranslate"><span class="pre">foley[clap]</span></code> for the default embedder (its model downloads on first use).
+Uses an ephemeral in-memory library (so it never mutates <code class="docutils literal notranslate"><span class="pre">$FOLEY_DATA_DIR</span></code>)
+unless one is injected. The fixture’s per-clip captions + tags (from its
+<code class="docutils literal notranslate"><span class="pre">manifest.json</span></code>) flow into the keyword index so a plain-text query resolves.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>library</strong> – Optional target library (tests inject a <code class="docutils literal notranslate"><span class="pre">FakeEmbedder</span></code> one;
+the default builds a memory library with the real CLAP embedder).</p></li>
+<li><p><strong>query</strong> – The demo search query.</p></li>
+<li><p><strong>k</strong> – How many hits to request.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">{&quot;ingested&quot;:</span> <span class="pre">&lt;summary</span> <span class="pre">dict&gt;,</span> <span class="pre">&quot;top_hit&quot;:</span> <span class="pre">&lt;id</span> <span class="pre">or</span> <span class="pre">None&gt;,</span> <span class="pre">&quot;caption&quot;:</span> <span class="pre">&lt;str&gt;}</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="base.html" class="btn btn-neutral float-left" title="foley.base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cli.html" class="btn btn-neutral float-right" title="foley.cli" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

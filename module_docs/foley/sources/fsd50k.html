@@ -1,0 +1,206 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.sources.fsd50k &mdash; foley 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.sources.sonniss" href="sonniss.html" />
+    <link rel="prev" title="foley.sources.foleyset" href="foleyset.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.sources.fsd50k</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.sources.fsd50k.FSD50K"><code class="docutils literal notranslate"><span class="pre">FSD50K</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.sources.fsd50k.Fsd50kCorpus"><code class="docutils literal notranslate"><span class="pre">Fsd50kCorpus</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.sources.fsd50k.Fsd50kCorpus.corpus_dir"><code class="docutils literal notranslate"><span class="pre">Fsd50kCorpus.corpus_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.sources.fsd50k.Fsd50kCorpus.iter_clips"><code class="docutils literal notranslate"><span class="pre">Fsd50kCorpus.iter_clips()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.sources.fsd50k.Fsd50kCorpus.resolve_license"><code class="docutils literal notranslate"><span class="pre">Fsd50kCorpus.resolve_license()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.sources.fsd50k</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/sources/fsd50k.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.sources.fsd50k">
+<span id="foley-sources-fsd50k"></span><h1>foley.sources.fsd50k<a class="headerlink" href="#module-foley.sources.fsd50k" title="Link to this heading"></a></h1>
+<p>FSD50K — the labeled, commercial-safe backbone corpus (Ring 1).</p>
+<p>FSD50K (report 11 §1.1, Zenodo 4060432) is ~51 k Freesound clips with AudioSet
+labels. Its <em>compilation</em> is CC-BY-4.0, but <strong>each clip carries its own Freesound
+license</strong> (CC0 / CC-BY / CC-BY-NC / Sampling+), so licensing is resolved
+<strong>per-clip</strong> from the shipped metadata, not stamped uniformly. The bootstrap
+Ring-1 policy then drops the non-commercial slice (CC-BY-NC / Sampling+) via the
+fail-closed commercial filter, keeping the ~85 % CC0/CC-BY backbone.</p>
+<p>Per-clip metadata lives in the FSD50K <code class="docutils literal notranslate"><span class="pre">*_clips_info_FSD50K.json</span></code> files
+(<code class="docutils literal notranslate"><span class="pre">{fname:</span> <span class="pre">{title,</span> <span class="pre">description,</span> <span class="pre">tags,</span> <span class="pre">license,</span> <span class="pre">uploader,</span> <span class="pre">...}}</span></code>) where <code class="docutils literal notranslate"><span class="pre">license</span></code>
+is a Creative-Commons URL. This adapter reads those, maps the URL to a foley
+<code class="docutils literal notranslate"><span class="pre">license_id</span></code>, and fails closed (<code class="docutils literal notranslate"><span class="pre">license_id='unknown'</span></code>, <code class="docutils literal notranslate"><span class="pre">rights_verified=</span>
+<span class="pre">False</span></code>) for any clip whose license is missing or unrecognized — such clips are
+then dropped by <a class="reference internal" href="../../foley.html#foley.keep" title="foley.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.keep()</span></code></a>. The bytes are a Zenodo bulk download, so
+they are cacheable (<code class="docutils literal notranslate"><span class="pre">cache_bytes_ok=True</span></code>, stored by-value) — do NOT copy #5’s
+Freesound-<em>API</em> <code class="docutils literal notranslate"><span class="pre">cache_bytes_ok=False</span></code> override.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The exact metadata filename/columns are per the published FSD50K layout; if a
+future release moves them, this adapter degrades to fail-closed rather than
+guessing. Verify against the real download when wiring the fetch (#4 ships the
+local-dir ingestion; auto-download is a fast-follow).</p>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.sources.fsd50k.FSD50K">
+<span class="sig-prename descclassname"><span class="pre">foley.sources.fsd50k.</span></span><span class="sig-name descname"><span class="pre">FSD50K</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;foley.sources.fsd50k.Fsd50kCorpus</span> <span class="pre">object&gt;</span></span><a class="headerlink" href="#foley.sources.fsd50k.FSD50K" title="Link to this definition"></a></dt>
+<dd><p>The FSD50K Ring-1 adapter.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.sources.fsd50k.Fsd50kCorpus">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.sources.fsd50k.</span></span><span class="sig-name descname"><span class="pre">Fsd50kCorpus</span></span><a class="reference internal" href="../../../_modules/foley/sources/fsd50k.html#Fsd50kCorpus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.fsd50k.Fsd50kCorpus" title="Link to this definition"></a></dt>
+<dd><p>Ring-1 FSD50K adapter with per-clip Freesound license resolution.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.sources.fsd50k.Fsd50kCorpus.corpus_dir">
+<span class="sig-name descname"><span class="pre">corpus_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/foley/sources/fsd50k.html#Fsd50kCorpus.corpus_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.fsd50k.Fsd50kCorpus.corpus_dir" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">data_dir/fsd50k</span></code> — the conventional on-disk root.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.sources.fsd50k.Fsd50kCorpus.iter_clips">
+<span class="sig-name descname"><span class="pre">iter_clips</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#foley.sources.base.ClipSpec" title="foley.sources.base.ClipSpec"><span class="pre">ClipSpec</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/sources/fsd50k.html#Fsd50kCorpus.iter_clips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.fsd50k.Fsd50kCorpus.iter_clips" title="Link to this definition"></a></dt>
+<dd><p>Yield a clip per audio file, carrying its per-clip license metadata.</p>
+<p>Each clip’s <code class="docutils literal notranslate"><span class="pre">meta</span></code> gets <code class="docutils literal notranslate"><span class="pre">{license_id,</span> <span class="pre">rights_verified,</span> <span class="pre">creator_name,</span>
+<span class="pre">source_url}</span></code> resolved from the FSD50K clips-info JSON (fail-closed when a
+clip is absent from the metadata).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.sources.fsd50k.Fsd50kCorpus.resolve_license">
+<span class="sig-name descname"><span class="pre">resolve_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#foley.sources.base.ClipSpec" title="foley.sources.base.ClipSpec"><span class="pre">ClipSpec</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><span class="pre">LicenseRecord</span></a></span></span><a class="reference internal" href="../../../_modules/foley/sources/fsd50k.html#Fsd50kCorpus.resolve_license"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.fsd50k.Fsd50kCorpus.resolve_license" title="Link to this definition"></a></dt>
+<dd><p>Build the per-clip rights record from the metadata in <code class="docutils literal notranslate"><span class="pre">spec.meta</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="foleyset.html" class="btn btn-neutral float-left" title="foley.sources.foleyset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sonniss.html" class="btn btn-neutral float-right" title="foley.sources.sonniss" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

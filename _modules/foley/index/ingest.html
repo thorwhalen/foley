@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.index.ingest &mdash; foley 0.0.3 documentation</title>
+  <title>foley.index.ingest &mdash; foley 0.0.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../../../_static/documentation_options.js?v=8c5712d9"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -49,6 +49,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
@@ -65,6 +67,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
 </ul>
 
@@ -164,8 +173,11 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The outcome of ingesting one clip.</span>
 
 <span class="sd">    ``status``: ``&#39;pass&#39;``/``&#39;warn&#39;`` (ingested), ``&#39;quarantined&#39;`` (QC-rejected,</span>
-<span class="sd">    not added), ``&#39;skipped_dup&#39;`` (content already in the library), or</span>
-<span class="sd">    ``&#39;error&#39;``. ``record`` is present only when the clip was ingested.</span>
+<span class="sd">    not added), ``&#39;skipped_dup&#39;`` (content already in the library),</span>
+<span class="sd">    ``&#39;rights_blocked&#39;`` (license forbids AI training / embedding, refused before</span>
+<span class="sd">    embed — see :func:`ingest_one`), ``&#39;skipped_license&#39;`` (dropped by a</span>
+<span class="sd">    bootstrap commercial-use / fail-closed license filter), or ``&#39;error&#39;``.</span>
+<span class="sd">    ``record`` is present only when the clip was ingested.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
@@ -219,6 +231,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_status</span><span class="p">(</span><span class="s2">&quot;skipped_dup&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rights_blocked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[IngestResult]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Results refused by the fail-closed AI-training/license rights gate.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_status</span><span class="p">(</span><span class="s2">&quot;rights_blocked&quot;</span><span class="p">,</span> <span class="s2">&quot;skipped_license&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">errored</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[IngestResult]&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Results that raised during ingest.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_by_status</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
@@ -232,6 +249,7 @@
             <span class="s2">&quot;ingested&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ingested</span><span class="p">),</span>
             <span class="s2">&quot;quarantined&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quarantined</span><span class="p">),</span>
             <span class="s2">&quot;skipped&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skipped</span><span class="p">),</span>
+            <span class="s2">&quot;rights_blocked&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rights_blocked</span><span class="p">),</span>
             <span class="s2">&quot;errored&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errored</span><span class="p">),</span>
         <span class="p">}</span></div>
 </div>
@@ -366,6 +384,8 @@
     <span class="n">do_caption</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">thresholds</span><span class="p">:</span> <span class="n">QCThresholds</span> <span class="o">=</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="p">,</span>
     <span class="n">store</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">allow_ai_training_forbidden</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">seed_tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestResult</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ingest one clip into ``library`` and return an :class:`IngestResult`.</span>
 
@@ -391,10 +411,21 @@
 <span class="sd">        thresholds: QC thresholds.</span>
 <span class="sd">        store: If ``False``, assemble the record but do not add it to the library</span>
 <span class="sd">            (probe/QC/enrich only).</span>
+<span class="sd">        seed_tags: Optional caller-supplied tags (e.g. a corpus&#39;s folder-path</span>
+<span class="sd">            taxonomy) unioned into the record&#39;s ``tags`` alongside the</span>
+<span class="sd">            supervised/zero-shot tags — so they feed the BM25 keyword index.</span>
+<span class="sd">        allow_ai_training_forbidden: The universal fail-closed rights gate. A</span>
+<span class="sd">            sound whose license has ``ai_training_ok=False`` (e.g. Sonniss,</span>
+<span class="sd">            BBC RemArc) is refused with status ``&#39;rights_blocked&#39;`` *before* it is</span>
+<span class="sd">            embedded or stored — CLAP-embedding-and-persisting is itself a form of</span>
+<span class="sd">            AI training on the corpus. Pass ``True`` to record explicit operator</span>
+<span class="sd">            consent and admit it anyway (see :func:`foley.bootstrap.bootstrap`&#39;s</span>
+<span class="sd">            ``accept_ai_restricted``). Protects every ingest path, not just</span>
+<span class="sd">            bootstrap.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An :class:`IngestResult`; its ``record`` is ``None`` when quarantined or a</span>
-<span class="sd">        duplicate.</span>
+<span class="sd">        An :class:`IngestResult`; its ``record`` is ``None`` when quarantined, a</span>
+<span class="sd">        duplicate, or rights-blocked.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_library</span>
 
@@ -425,6 +456,24 @@
         <span class="p">)</span>
 
     <span class="n">notes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Resolve rights BEFORE any embed/store. A by-reference sound names a</span>
+    <span class="c1"># fetchable uri (its local path when path-like). This is the universal,</span>
+    <span class="c1"># fail-closed AI-training gate: a license that forbids AI training is refused</span>
+    <span class="c1"># here — CLAP-embedding + persisting the corpus IS a form of training on it —</span>
+    <span class="c1"># unless the caller passes explicit consent. Guards every path into the</span>
+    <span class="c1"># library, not just bootstrap (report 07; invariant #3 of foley-dev-implement).</span>
+    <span class="n">ref_uri</span> <span class="o">=</span> <span class="n">_reference_uri</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">lic</span> <span class="o">=</span> <span class="n">license</span> <span class="k">if</span> <span class="n">license</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_default_user_license</span><span class="p">(</span><span class="n">ref_uri</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_ai_training_forbidden</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="s2">&quot;rights_blocked&quot;</span><span class="p">,</span>
+            <span class="n">notes</span><span class="o">=</span><span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;license </span><span class="si">{</span><span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="si">!r}</span><span class="s2"> forbids AI training; embed + persist &quot;</span>
+                <span class="s2">&quot;refused (set allow_ai_training_forbidden=True to consent)&quot;</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="c1"># Stage 5a — embed once (the retrieval vector; reused for zero-shot tagging)</span>
     <span class="n">audio_vec</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">embedder</span><span class="o">.</span><span class="n">embed_audio</span><span class="p">(</span><span class="n">work</span><span class="p">,</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">)</span>
@@ -459,10 +508,9 @@
         <span class="n">filename</span><span class="o">=</span><span class="n">_src_name</span><span class="p">(</span><span class="n">src</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="n">ref_uri</span> <span class="o">=</span> <span class="n">_reference_uri</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-    <span class="n">lic</span> <span class="o">=</span> <span class="n">license</span> <span class="k">if</span> <span class="n">license</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_default_user_license</span><span class="p">(</span><span class="n">ref_uri</span><span class="p">)</span>
     <span class="c1"># `format` is the DELIVERED format (what library.audio() serves): the FLAC</span>
-    <span class="c1"># archive when cached by-value, else the untouched source container.</span>
+    <span class="c1"># archive when cached by-value, else the untouched source container. (`lic`</span>
+    <span class="c1"># and `ref_uri` were resolved above, before the rights gate.)</span>
     <span class="n">delivered_format</span> <span class="o">=</span> <span class="n">ARCHIVE_FORMAT</span> <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">cache_bytes_ok</span> <span class="k">else</span> <span class="n">probe</span><span class="o">.</span><span class="n">format</span>
 
     <span class="n">record</span> <span class="o">=</span> <span class="n">SoundRecord</span><span class="p">(</span>
@@ -470,7 +518,7 @@
         <span class="n">uri</span><span class="o">=</span><span class="n">ref_uri</span><span class="p">,</span>  <span class="c1"># a fetchable ref for by-reference; overwritten by the content</span>
         <span class="n">license</span><span class="o">=</span><span class="n">lic</span><span class="p">,</span>  <span class="c1">#   key when store_sound caches by-value</span>
         <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
-        <span class="n">tags</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">audioset_labels</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">zeroshot_tags</span><span class="p">)),</span>
+        <span class="n">tags</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">audioset_labels</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">zeroshot_tags</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">seed_tags</span> <span class="ow">or</span> <span class="p">[])),</span>
         <span class="n">audioset_labels</span><span class="o">=</span><span class="n">audioset_labels</span><span class="p">,</span>
         <span class="n">ucs_category</span><span class="o">=</span><span class="n">resolution</span><span class="o">.</span><span class="n">catid</span><span class="p">,</span>
         <span class="n">ucs_subcategory</span><span class="o">=</span><span class="n">resolution</span><span class="o">.</span><span class="n">subcategory</span><span class="p">,</span>
@@ -537,9 +585,24 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_iter_audio_files</span><span class="p">(</span>
-    <span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">exts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<div class="viewcode-block" id="iter_audio_files">
+<a class="viewcode-back" href="../../../module_docs/foley/index/ingest.html#foley.iter_audio_files">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">iter_audio_files</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">exts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">AUDIO_EXTS</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Iterator[Path]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield the audio files under ``path`` (or ``path`` itself if it is a file).</span>
+
+<span class="sd">    The shared corpus/folder walk — reused by :func:`ingest_folder` and the</span>
+<span class="sd">    bulk-corpus adapters in :mod:`foley.sources` so the traversal is not forked.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: A folder (walked) or a single audio file.</span>
+<span class="sd">        recursive: Recurse into sub-folders.</span>
+<span class="sd">        exts: Audio extensions to include (lowercased suffix match).</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        Each matching file as a :class:`pathlib.Path`, in sorted order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
         <span class="k">yield</span> <span class="n">p</span>
@@ -547,7 +610,13 @@
     <span class="n">walker</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">recursive</span> <span class="k">else</span> <span class="n">p</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">walker</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">fp</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">fp</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">exts</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">fp</span>
+            <span class="k">yield</span> <span class="n">fp</span></div>
+
+
+
+<span class="c1">#: Backwards-compatible private alias (kept so nothing that imported the old</span>
+<span class="c1">#: underscore name breaks); prefer :func:`iter_audio_files`.</span>
+<span class="n">_iter_audio_files</span> <span class="o">=</span> <span class="n">iter_audio_files</span>
 
 
 <div class="viewcode-block" id="ingest_folder">
@@ -580,7 +649,7 @@
 
     <span class="n">lib</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
     <span class="n">report</span> <span class="o">=</span> <span class="n">IngestReport</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">_iter_audio_files</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span> <span class="n">exts</span><span class="o">=</span><span class="n">exts</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">iter_audio_files</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span> <span class="n">exts</span><span class="o">=</span><span class="n">exts</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">ingest_one</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fp</span><span class="p">),</span> <span class="n">library</span><span class="o">=</span><span class="n">lib</span><span class="p">,</span> <span class="o">**</span><span class="n">ingest_one_kw</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>

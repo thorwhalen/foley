@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; foley 0.0.3 documentation</title>
+  <title>&lt;no title&gt; &mdash; foley 0.0.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=47de8214"></script>
+      <script src="_static/documentation_options.js?v=8c5712d9"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,6 +50,8 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley.html">foley</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/cli.html">foley.cli</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
@@ -66,6 +68,13 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/licensing.html">foley.licensing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/stores.html">foley.stores</a></li>
 </ul>
 
@@ -132,6 +141,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.Verdict"><code class="docutils literal notranslate"><span class="pre">Verdict</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.VerifyLevel"><code class="docutils literal notranslate"><span class="pre">VerifyLevel</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.apply_license_flags"><code class="docutils literal notranslate"><span class="pre">apply_license_flags()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.bootstrap"><code class="docutils literal notranslate"><span class="pre">bootstrap()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.content_key"><code class="docutils literal notranslate"><span class="pre">content_key()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.dc_offset"><code class="docutils literal notranslate"><span class="pre">dc_offset()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.default_embedder"><code class="docutils literal notranslate"><span class="pre">default_embedder()</span></code></a></li>
@@ -139,6 +149,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.default_library"><code class="docutils literal notranslate"><span class="pre">default_library()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.default_tagger"><code class="docutils literal notranslate"><span class="pre">default_tagger()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.default_zeroshot_tagger"><code class="docutils literal notranslate"><span class="pre">default_zeroshot_tagger()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.demo"><code class="docutils literal notranslate"><span class="pre">demo()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.derive_license_flags"><code class="docutils literal notranslate"><span class="pre">derive_license_flags()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.detect_clipping"><code class="docutils literal notranslate"><span class="pre">detect_clipping()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.duration_s"><code class="docutils literal notranslate"><span class="pre">duration_s()</span></code></a></li>
@@ -212,6 +223,19 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/base.html#foley.base.VerifyLevel"><code class="docutils literal notranslate"><span class="pre">VerifyLevel</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/bootstrap.html">foley.bootstrap</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/bootstrap.html#foley.bootstrap.COMMERCIAL_USE"><code class="docutils literal notranslate"><span class="pre">COMMERCIAL_USE</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/bootstrap.html#foley.bootstrap.MetadataCaptioner"><code class="docutils literal notranslate"><span class="pre">MetadataCaptioner</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/bootstrap.html#foley.bootstrap.RING0_DIR"><code class="docutils literal notranslate"><span class="pre">RING0_DIR</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/bootstrap.html#foley.bootstrap.bootstrap"><code class="docutils literal notranslate"><span class="pre">bootstrap()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/bootstrap.html#foley.bootstrap.demo"><code class="docutils literal notranslate"><span class="pre">demo()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/cli.html">foley.cli</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/cli.html#foley.cli.build_parser"><code class="docutils literal notranslate"><span class="pre">build_parser()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/cli.html#foley.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index.html">foley.index</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/index.html#foley.index.Captioner"><code class="docutils literal notranslate"><span class="pre">Captioner</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/index.html#foley.index.CatIdResolution"><code class="docutils literal notranslate"><span class="pre">CatIdResolution</span></code></a></li>
@@ -269,6 +293,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/index/ingest.html#foley.index.ingest.IngestResult"><code class="docutils literal notranslate"><span class="pre">IngestResult</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/index/ingest.html#foley.index.ingest.ingest_folder"><code class="docutils literal notranslate"><span class="pre">ingest_folder()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/index/ingest.html#foley.index.ingest.ingest_one"><code class="docutils literal notranslate"><span class="pre">ingest_one()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/index/ingest.html#foley.index.ingest.iter_audio_files"><code class="docutils literal notranslate"><span class="pre">iter_audio_files()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index/library.html">foley.index.library</a><ul>
@@ -375,6 +400,53 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/qc.html#foley.qc.needs_edge_fade"><code class="docutils literal notranslate"><span class="pre">needs_edge_fade()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/qc.html#foley.qc.run_qc"><code class="docutils literal notranslate"><span class="pre">run_qc()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/qc.html#foley.qc.true_peak_dbtp"><code class="docutils literal notranslate"><span class="pre">true_peak_dbtp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources.html">foley.sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.ClipSpec"><code class="docutils literal notranslate"><span class="pre">ClipSpec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.ClothoEvalCorpus"><code class="docutils literal notranslate"><span class="pre">ClothoEvalCorpus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.CorpusAdapter"><code class="docutils literal notranslate"><span class="pre">CorpusAdapter</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.Fsd50kCorpus"><code class="docutils literal notranslate"><span class="pre">Fsd50kCorpus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.UniformCorpus"><code class="docutils literal notranslate"><span class="pre">UniformCorpus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.bulk_license"><code class="docutils literal notranslate"><span class="pre">bulk_license()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.corpora_in_rings"><code class="docutils literal notranslate"><span class="pre">corpora_in_rings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.register_corpus"><code class="docutils literal notranslate"><span class="pre">register_corpus()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.ring_of"><code class="docutils literal notranslate"><span class="pre">ring_of()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources.html#foley.sources.select_corpora"><code class="docutils literal notranslate"><span class="pre">select_corpora()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/base.html">foley.sources.base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/base.html#foley.sources.base.CORPUS_REGISTRY"><code class="docutils literal notranslate"><span class="pre">CORPUS_REGISTRY</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/base.html#foley.sources.base.ClipSpec"><code class="docutils literal notranslate"><span class="pre">ClipSpec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/base.html#foley.sources.base.CorpusAdapter"><code class="docutils literal notranslate"><span class="pre">CorpusAdapter</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/base.html#foley.sources.base.UniformCorpus"><code class="docutils literal notranslate"><span class="pre">UniformCorpus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/base.html#foley.sources.base.bulk_license"><code class="docutils literal notranslate"><span class="pre">bulk_license()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/base.html#foley.sources.base.corpora_in_rings"><code class="docutils literal notranslate"><span class="pre">corpora_in_rings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/base.html#foley.sources.base.register_corpus"><code class="docutils literal notranslate"><span class="pre">register_corpus()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/base.html#foley.sources.base.ring_of"><code class="docutils literal notranslate"><span class="pre">ring_of()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/base.html#foley.sources.base.select_corpora"><code class="docutils literal notranslate"><span class="pre">select_corpora()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/bbc_remarc.html#foley.sources.bbc_remarc.BBC_REMARC"><code class="docutils literal notranslate"><span class="pre">BBC_REMARC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/clotho.html">foley.sources.clotho</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/clotho.html#foley.sources.clotho.CLOTHO"><code class="docutils literal notranslate"><span class="pre">CLOTHO</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/clotho.html#foley.sources.clotho.ClothoEvalCorpus"><code class="docutils literal notranslate"><span class="pre">ClothoEvalCorpus</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/foleyset.html#foley.sources.foleyset.FOLEYSET"><code class="docutils literal notranslate"><span class="pre">FOLEYSET</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/fsd50k.html#foley.sources.fsd50k.FSD50K"><code class="docutils literal notranslate"><span class="pre">FSD50K</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/fsd50k.html#foley.sources.fsd50k.Fsd50kCorpus"><code class="docutils literal notranslate"><span class="pre">Fsd50kCorpus</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/sources/sonniss.html#foley.sources.sonniss.SONNISS"><code class="docutils literal notranslate"><span class="pre">SONNISS</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/stores.html">foley.stores</a><ul>

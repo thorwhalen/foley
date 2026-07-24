@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.sources.fsd50k &mdash; foley 0.0.4 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.sources.fsd50k</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.sources.fsd50k</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;FSD50K — the labeled, commercial-safe backbone corpus (Ring 1).</span>
+
+<span class="sd">FSD50K (report 11 §1.1, Zenodo 4060432) is ~51 k Freesound clips with AudioSet</span>
+<span class="sd">labels. Its *compilation* is CC-BY-4.0, but **each clip carries its own Freesound</span>
+<span class="sd">license** (CC0 / CC-BY / CC-BY-NC / Sampling+), so licensing is resolved</span>
+<span class="sd">**per-clip** from the shipped metadata, not stamped uniformly. The bootstrap</span>
+<span class="sd">Ring-1 policy then drops the non-commercial slice (CC-BY-NC / Sampling+) via the</span>
+<span class="sd">fail-closed commercial filter, keeping the ~85 % CC0/CC-BY backbone.</span>
+
+<span class="sd">Per-clip metadata lives in the FSD50K ``*_clips_info_FSD50K.json`` files</span>
+<span class="sd">(``{fname: {title, description, tags, license, uploader, ...}}``) where ``license``</span>
+<span class="sd">is a Creative-Commons URL. This adapter reads those, maps the URL to a foley</span>
+<span class="sd">``license_id``, and fails closed (``license_id=&#39;unknown&#39;``, ``rights_verified=</span>
+<span class="sd">False``) for any clip whose license is missing or unrecognized — such clips are</span>
+<span class="sd">then dropped by :func:`foley.keep`. The bytes are a Zenodo bulk download, so</span>
+<span class="sd">they are cacheable (``cache_bytes_ok=True``, stored by-value) — do NOT copy #5&#39;s</span>
+<span class="sd">Freesound-*API* ``cache_bytes_ok=False`` override.</span>
+
+<span class="sd">.. note::</span>
+<span class="sd">   The exact metadata filename/columns are per the published FSD50K layout; if a</span>
+<span class="sd">   future release moves them, this adapter degrades to fail-closed rather than</span>
+<span class="sd">   guessing. Verify against the real download when wiring the fetch (#4 ships the</span>
+<span class="sd">   local-dir ingestion; auto-download is a fast-follow).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">LicenseRecord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClipSpec</span><span class="p">,</span> <span class="n">bulk_license</span><span class="p">,</span> <span class="n">register_corpus</span>
+
+<span class="c1">#: Glob for the FSD50K per-clip info JSONs (dev + eval).</span>
+<span class="n">_CLIPS_INFO_GLOB</span> <span class="o">=</span> <span class="s2">&quot;*clips_info*.json&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_license_id_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[str, bool]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map a Creative-Commons license URL to ``(license_id, rights_verified)``.</span>
+
+<span class="sd">    Recognized CC families map to their foley ``license_id`` (rights_verified</span>
+<span class="sd">    True); anything unknown/missing returns the fail-closed</span>
+<span class="sd">    ``(&#39;unknown&#39;, False)``. Order matters: ``by-nc`` and ``sampling`` are checked</span>
+<span class="sd">    before the bare ``by``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">&quot;zero&quot;</span> <span class="ow">in</span> <span class="n">u</span> <span class="ow">or</span> <span class="s2">&quot;publicdomain&quot;</span> <span class="ow">in</span> <span class="n">u</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;CC0-1.0&quot;</span><span class="p">,</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="s2">&quot;by-nc&quot;</span> <span class="ow">in</span> <span class="n">u</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;CC-BY-NC-4.0&quot;</span><span class="p">,</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="s2">&quot;sampling&quot;</span> <span class="ow">in</span> <span class="n">u</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;CC-Sampling+-1.0&quot;</span><span class="p">,</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="s2">&quot;/by/&quot;</span> <span class="ow">in</span> <span class="n">u</span> <span class="ow">or</span> <span class="n">u</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/by&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;CC-BY-4.0&quot;</span><span class="p">,</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_clips_info</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;dict[str, dict]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load ``{fname: info}`` from every ``*clips_info*.json`` under ``root``.</span>
+
+<span class="sd">    Best-effort across the dev/eval split files; a malformed file is skipped so a</span>
+<span class="sd">    partial metadata drop still licenses the clips it does describe (the rest fail</span>
+<span class="sd">    closed).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span><span class="p">:</span> <span class="s2">&quot;dict[str, dict]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="n">_CLIPS_INFO_GLOB</span><span class="p">)):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># utf-8-sig tolerates a BOM (else json.load raises and the whole</span>
+            <span class="c1"># metadata file is skipped, silently failing its clips closed).</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8-sig&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">clip</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">clip</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="n">info</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="n">clip</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">continue</span>
+    <span class="k">return</span> <span class="n">info</span>
+
+
+<div class="viewcode-block" id="Fsd50kCorpus">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/fsd50k.html#foley.sources.Fsd50kCorpus">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Fsd50kCorpus</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ring-1 FSD50K adapter with per-clip Freesound license resolution.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;fsd50k&quot;</span>
+    <span class="n">ring</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">default_license_id</span> <span class="o">=</span> <span class="s2">&quot;CC-BY-4.0&quot;</span>  <span class="c1"># the compilation license; per-clip overrides</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;fsd50k&quot;</span>
+
+<div class="viewcode-block" id="Fsd50kCorpus.corpus_dir">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/fsd50k.html#foley.sources.Fsd50kCorpus.corpus_dir">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">corpus_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;``data_dir/fsd50k`` — the conventional on-disk root.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Fsd50kCorpus.iter_clips">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/fsd50k.html#foley.sources.Fsd50kCorpus.iter_clips">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">iter_clips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ClipSpec</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield a clip per audio file, carrying its per-clip license metadata.</span>
+
+<span class="sd">        Each clip&#39;s ``meta`` gets ``{license_id, rights_verified, creator_name,</span>
+<span class="sd">        source_url}`` resolved from the FSD50K clips-info JSON (fail-closed when a</span>
+<span class="sd">        clip is absent from the metadata).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..index.ingest</span><span class="w"> </span><span class="kn">import</span> <span class="n">iter_audio_files</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="n">_load_clips_info</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">iter_audio_files</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">stem</span>
+            <span class="n">clip</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">license_id</span><span class="p">,</span> <span class="n">verified</span> <span class="o">=</span> <span class="n">_license_id_from_url</span><span class="p">(</span><span class="n">clip</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">))</span>
+            <span class="k">yield</span> <span class="n">ClipSpec</span><span class="p">(</span>
+                <span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">fp</span><span class="p">),</span>
+                <span class="n">source_id</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span>
+                <span class="n">meta</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;license_id&quot;</span><span class="p">:</span> <span class="n">license_id</span><span class="p">,</span>
+                    <span class="s2">&quot;rights_verified&quot;</span><span class="p">:</span> <span class="n">verified</span><span class="p">,</span>
+                    <span class="s2">&quot;creator_name&quot;</span><span class="p">:</span> <span class="n">clip</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uploader&quot;</span><span class="p">),</span>
+                    <span class="c1"># FSD50K fnames ARE Freesound sound ids -&gt; a real attribution URL</span>
+                    <span class="s2">&quot;source_url&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;https://freesound.org/s/</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Fsd50kCorpus.resolve_license">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/fsd50k.html#foley.sources.Fsd50kCorpus.resolve_license">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_license</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">ClipSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the per-clip rights record from the metadata in ``spec.meta``.&quot;&quot;&quot;</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">meta</span>
+        <span class="k">return</span> <span class="n">bulk_license</span><span class="p">(</span>
+            <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">license_id</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;license_id&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">),</span>
+            <span class="n">rights_verified</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rights_verified&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+            <span class="n">source_id</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">source_id</span><span class="p">,</span>
+            <span class="n">source_url</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source_url&quot;</span><span class="p">),</span>
+            <span class="n">creator_name</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;creator_name&quot;</span><span class="p">),</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1">#: The FSD50K Ring-1 adapter.</span>
+<span class="n">FSD50K</span> <span class="o">=</span> <span class="n">register_corpus</span><span class="p">(</span><span class="n">Fsd50kCorpus</span><span class="p">())</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
