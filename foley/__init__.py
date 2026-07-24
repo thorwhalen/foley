@@ -115,10 +115,12 @@ from .qc import (
 from .stores import (
     DEFAULT_AUDIO_DIR,
     DEFAULT_META_DIR,
+    DEFAULT_RUN_DIR,
     FOLEY_DATA_DIR,
     content_key,
     make_byte_store,
     make_meta_store,
+    make_run_store,
     store_sound,
 )
 from . import index
@@ -194,6 +196,13 @@ from .provenance import (
     credits_for,
 )
 
+# --- obs: observability + reproducible run-artifact (#11) ----------------------
+# The obs package is stdlib-only at import (opentelemetry loads lazily inside the
+# OTel-backed tracer only, behind foley[obs]), so this keeps `import foley` dol-only.
+# Off by default: a plain façade call is a byte-for-byte no-op until obs is enabled.
+from . import obs
+from .obs import RunManifest, SpanRecord
+
 __all__ = [
     # --- base: constants + enums ---------------------------------------------
     "SCHEMA_VERSION",
@@ -232,10 +241,12 @@ __all__ = [
     "content_key",
     "make_byte_store",
     "make_meta_store",
+    "make_run_store",
     "store_sound",
     "FOLEY_DATA_DIR",
     "DEFAULT_AUDIO_DIR",
     "DEFAULT_META_DIR",
+    "DEFAULT_RUN_DIR",
     # --- qc: Tier-0 deterministic audio QC -----------------------------------
     "QCStatus",
     "QCThresholds",
@@ -324,6 +335,10 @@ __all__ = [
     "RecognizableVoiceRefusal",
     "art50_checklist",
     "scan_prompt",
+    # --- obs: observability + reproducible run-artifact (#11) -----------------
+    "obs",
+    "RunManifest",
+    "SpanRecord",
     # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
     "eval",
     "evaluate",

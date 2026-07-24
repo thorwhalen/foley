@@ -285,36 +285,74 @@ class SoundLibrary(Mapping):
         Returns:
             Up to ``k`` :class:`~foley.base.Candidate`s, best first.
         """
-        filtering = any(
-            x is not None
-            for x in (filters, commercial_ok, ucs_category, min_snr, duration_range)
-        )
-        fetch_k = k * _OVERFETCH_FACTOR if filtering else k
-        hits = hybrid_search(
-            query,
-            embedder=self.embedder,
-            vindex=self.vindex,
-            kindex=self.kindex,
-            k=fetch_k,
-            candidate_k=max(self.candidate_k, fetch_k),
-            rrf_k=self.rrf_k,
-        )
-        candidates = self._hits_to_candidates(hits)
-        candidates = [
-            c
-            for c in candidates
-            if _record_matches(
-                c.sound,
-                filters=filters,
-                commercial_ok=commercial_ok,
-                ucs_category=ucs_category,
-                min_snr=min_snr,
-                duration_range=duration_range,
+        from ..obs.recorder import facade_run
+        from ..obs.trace import GENAI
+
+        # Root run-span for the retrieval op; a no-op unless observability is on (#11).
+        with facade_run(
+            "search",
+            inputs={
+                "query": query,
+                "k": k,
+                "filters": filters,
+                "commercial_ok": commercial_ok,
+                "ucs_category": ucs_category,
+                "min_snr": min_snr,
+                "duration_range": duration_range,
+            },
+            params={"rerank": rerank, "rrf_k": self.rrf_k},
+        ) as run:
+            filtering = any(
+                x is not None
+                for x in (filters, commercial_ok, ucs_category, min_snr, duration_range)
             )
-        ]
-        if rerank:
-            candidates = self._rerank(query, candidates)
-        return candidates[:k]
+            fetch_k = k * _OVERFETCH_FACTOR if filtering else k
+            with run.span(
+                "retrieve",
+                **{
+                    GENAI["operation"]: "embeddings",
+                    GENAI["data_source_id"]: "foley-index",
+                },
+            ):
+                hits = hybrid_search(
+                    query,
+                    embedder=self.embedder,
+                    vindex=self.vindex,
+                    kindex=self.kindex,
+                    k=fetch_k,
+                    candidate_k=max(self.candidate_k, fetch_k),
+                    rrf_k=self.rrf_k,
+                )
+            candidates = self._hits_to_candidates(hits)
+            candidates = [
+                c
+                for c in candidates
+                if _record_matches(
+                    c.sound,
+                    filters=filters,
+                    commercial_ok=commercial_ok,
+                    ucs_category=ucs_category,
+                    min_snr=min_snr,
+                    duration_range=duration_range,
+                )
+            ]
+            if rerank:
+                candidates = self._rerank(query, candidates)
+            result = candidates[:k]
+            run.add_result_ids([c.sound.id for c in result])
+            run.add_candidate_scores(
+                [
+                    {
+                        "id": c.sound.id,
+                        "clap": c.clap_score,
+                        "bm25": c.bm25_score,
+                        "rrf": c.rrf_score,
+                        "rerank": c.rerank_score,
+                    }
+                    for c in result
+                ]
+            )
+            return result
 
     def search_clip(
         self, clip: "AudioSource", *, sr: Optional[int] = None, k: int = 10
@@ -341,12 +379,17 @@ class SoundLibrary(Mapping):
         Uses the stored vector (no re-decoding); the query sound itself is
         excluded from the results.
         """
-        qvec = self.vindex.get_vector(sound_id)
-        if qvec is None:
-            return []
-        hits = vector_search(qvec, vindex=self.vindex, k=k + 1)
-        candidates = self._hits_to_candidates(hits, exclude_id=sound_id)
-        return candidates[:k]
+        from ..obs.recorder import facade_run
+
+        with facade_run("similar", inputs={"sound_id": sound_id, "k": k}) as run:
+            qvec = self.vindex.get_vector(sound_id)
+            if qvec is None:
+                return []
+            hits = vector_search(qvec, vindex=self.vindex, k=k + 1)
+            candidates = self._hits_to_candidates(hits, exclude_id=sound_id)
+            result = candidates[:k]
+            run.add_result_ids([c.sound.id for c in result])
+            return result
 
     def filter(self, **facets) -> "list[SoundRecord]":
         """Browse the library by metadata facets (no ranking).

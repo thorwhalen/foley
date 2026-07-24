@@ -64,6 +64,8 @@ DEFAULT_AUDIO_DIR = FOLEY_DATA_DIR / "audio"
 DEFAULT_META_DIR = FOLEY_DATA_DIR / "meta"
 #: Content-credential sidecars (#9b): ``Mapping[content_id -> credential dict]``.
 DEFAULT_PROVENANCE_DIR = FOLEY_DATA_DIR / "provenance"
+#: Reproducible run-manifests (#11): ``Mapping[run_id -> RunManifest dict]``.
+DEFAULT_RUN_DIR = FOLEY_DATA_DIR / "runs"
 
 #: A filesystem location (path or path-like string) for a local store root.
 Rootdir = Union[str, "os.PathLike[str]"]
@@ -187,6 +189,25 @@ def make_provenance_store(
 
     Returns:
         A ``MutableMapping[str, dict]`` keyed by content id.
+    """
+    json_store = mk_dirs_if_missing(JsonFiles(str(rootdir)))
+    return wrap_kvs(json_store, id_of_key=_meta_filename, key_of_id=_meta_key)
+
+
+def make_run_store(rootdir: Rootdir = DEFAULT_RUN_DIR) -> MutableMapping[str, dict]:
+    """Build the run-artifact store: ``Mapping[run_id -> RunManifest dict]`` (JSON files).
+
+    The by-value carrier for #11's reproducible run-manifests (one per instrumented
+    ``find()`` / ``generate()`` / … ). An exact sibling of :func:`make_provenance_store`:
+    escapes the ``run_id`` to a safe ``{enc}.json`` filename (invariant #3) while
+    exposing bare ``run_id`` keys; values are plain dicts ((de)serialized by
+    ``dol.JsonFiles``). Local by default; swap in any ``dol`` Mapping for the cloud.
+
+    Args:
+        rootdir: Directory that holds the run JSON files (created if missing).
+
+    Returns:
+        A ``MutableMapping[str, dict]`` keyed by ``run_id``.
     """
     json_store = mk_dirs_if_missing(JsonFiles(str(rootdir)))
     return wrap_kvs(json_store, id_of_key=_meta_filename, key_of_id=_meta_key)

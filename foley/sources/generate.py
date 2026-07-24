@@ -37,6 +37,7 @@ unhandled exception.
 
 from __future__ import annotations
 
+import functools
 from typing import Optional
 
 from ..base import Candidate, CandidateOrigin
@@ -111,7 +112,7 @@ def candidate_of(result: IngestResult) -> Candidate:
     return Candidate(sound=result.record, origin=CandidateOrigin.generated)
 
 
-def generate(
+def _generate(
     prompt: str,
     *,
     backend: str = "stable_audio",
@@ -219,7 +220,20 @@ def generate(
     # A synthesis failure (auth / rate-limit / model load / bad response) yields an
     # inspectable report with one error entry, never an unhandled exception.
     try:
-        clip = gen.generate(prompt, **affordances)
+        from ..obs.recorder import current_run
+        from ..obs.trace import GENAI
+
+        # GenAI child span for the actual synthesis (no-op unless obs is enabled, #11).
+        with current_run().span(
+            "gen.generate",
+            kind="CLIENT",
+            **{
+                GENAI["operation"]: "generate_content",
+                GENAI["provider"]: backend,
+                GENAI["request_model"]: backend,
+            },
+        ):
+            clip = gen.generate(prompt, **affordances)
     except Exception as exc:
         report.record(
             IngestResult(id=f"{backend}:generate", status="error", error=repr(exc))
@@ -315,6 +329,66 @@ def generate(
         res.notes.append(_CONSENT_NOTE)
     report.record(res)
     return report
+
+
+#: Non-affordance keyword params of :func:`_generate` (the rest are GENERATION_AFFORDANCES).
+_GENERATE_KNOWN = frozenset(
+    {"backend", "library", "store", "adapter", "watermark", "on_flagged", "watermarker", "provenance_store"}
+)
+
+
+@functools.wraps(_generate)
+def generate(*args, **kwargs) -> IngestReport:
+    """Observability wrapper over :func:`_generate` (#11).
+
+    Opens a root ``generate`` run-span (a no-op unless observability is enabled) and,
+    on completion, appends the run-manifest facts read off the stored records — result
+    ids, per-clip generation seeds + disclosure refs (from the ``LicenseRecord``), and
+    the embedded :class:`~foley.index.ingest.IngestReport`. The signature + docstring
+    are inherited from :func:`_generate` via :func:`functools.wraps`; the internal
+    ``gen.generate`` GenAI child span is emitted inside ``_generate``.
+    """
+    from ..obs.recorder import facade_run
+    from ..obs.run_artifact import ingest_digest
+
+    prompt = args[0] if args else kwargs.get("prompt")
+    backend = kwargs.get("backend", "stable_audio")
+    affordances = {
+        k: v for k, v in kwargs.items() if k not in _GENERATE_KNOWN and k != "prompt"
+    }
+    params = {k: kwargs[k] for k in ("store", "on_flagged", "watermark") if k in kwargs}
+    with facade_run(
+        "generate",
+        inputs={"prompt": prompt, "backend": backend, **affordances},
+        params=params,
+    ) as run:
+        report = _generate(*args, **kwargs)
+        for res in report.ingested:
+            rec = res.record
+            lic = rec.license
+            run.add_result_ids([rec.id])
+            run.add_seed(
+                rec.id,
+                {
+                    "backend": backend,
+                    "model": lic.generator_model,
+                    "version": lic.generator_version,
+                    "prompt": lic.generation_prompt,
+                    "seed": lic.generation_seed,
+                    "params": lic.generation_params,
+                    "c2pa_manifest_ref": lic.c2pa_manifest_ref,
+                },
+            )
+            run.add_disclosure_ref(
+                rec.id,
+                {
+                    "watermark": lic.watermark,
+                    "c2pa_manifest_ref": lic.c2pa_manifest_ref,
+                    "disclosure_recommended": lic.disclosure_recommended,
+                },
+            )
+        run.set_ingest_report(ingest_digest(report))
+        return report
 
 
 def _metadata_captioner(prompt: str):

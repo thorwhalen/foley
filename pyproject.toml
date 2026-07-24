@@ -140,6 +140,17 @@ provenance = [
     "numpy",
     "soundfile",
 ]
+# Vendor-neutral OpenTelemetry trace EXPORT for the run-artifact mirror (#11).
+# opentelemetry-sdk transitively pulls opentelemetry-api + semantic-conventions, so
+# foley[obs] can both create AND export GenAI spans; the host app still calls
+# set_tracer_provider to actually export. opentelemetry is imported LAZILY inside
+# foley.obs.trace.OTelTracer ONLY, so `import foley` stays dol-only and a bare install
+# still emits a stdlib RunManifest (only the OTel span mirror needs this extra).
+# Deliberately NOT in [tool.wads.ci.install] — obs tests use the stdlib no-op tracer +
+# a dict run store and never import opentelemetry, keeping CI hermetic.
+obs = [
+    "opentelemetry-sdk>=1.37",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
