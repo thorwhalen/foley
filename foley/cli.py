@@ -131,8 +131,7 @@ def _cmd_eval(args) -> int:
     floor = baseline["value"] - baseline["tolerance"]
     status = "PASS" if report.mean[metric] >= floor else "FAIL"
     print(
-        f"baseline={baseline['value']:.4f} floor={floor:.4f} "
-        f"Δ={delta:+.4f} -> {status}"
+        f"baseline={baseline['value']:.4f} floor={floor:.4f} Δ={delta:+.4f} -> {status}"
     )
     return 0 if report.mean[metric] >= floor else 1
 
@@ -192,9 +191,13 @@ def build_parser() -> argparse.ArgumentParser:
     p_ing.add_argument("--no-qc", action="store_true")
     p_ing.set_defaults(func=_cmd_ingest)
 
-    p_eval = sub.add_parser("eval", help="Tier-1 retrieval eval + the nDCG regression gate")
+    p_eval = sub.add_parser(
+        "eval", help="Tier-1 retrieval eval + the nDCG regression gate"
+    )
     p_eval.add_argument("-k", type=int, default=10)
-    p_eval.add_argument("--golden", help="path to a golden-set JSON (default: the frozen seed)")
+    p_eval.add_argument(
+        "--golden", help="path to a golden-set JSON (default: the frozen seed)"
+    )
     p_eval.add_argument(
         "--update-baseline",
         action="store_true",

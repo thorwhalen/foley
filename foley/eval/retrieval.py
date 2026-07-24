@@ -54,7 +54,11 @@ def _relevant(qrels_q: "dict[str, int]", rel_lvl: int) -> "set[str]":
 
 
 def recall_at_k(
-    qrels_q: "dict[str, int]", run_q: "dict[str, float]", k: int = 10, *, rel_lvl: int = 1
+    qrels_q: "dict[str, int]",
+    run_q: "dict[str, float]",
+    k: int = 10,
+    *,
+    rel_lvl: int = 1,
 ) -> float:
     """Fraction of ALL relevant docs (grade ≥ ``rel_lvl``) retrieved in the top-``k``."""
     rel = _relevant(qrels_q, rel_lvl)
@@ -65,7 +69,11 @@ def recall_at_k(
 
 
 def precision_at_k(
-    qrels_q: "dict[str, int]", run_q: "dict[str, float]", k: int = 10, *, rel_lvl: int = 1
+    qrels_q: "dict[str, int]",
+    run_q: "dict[str, float]",
+    k: int = 10,
+    *,
+    rel_lvl: int = 1,
 ) -> float:
     """Fraction of the top-``k`` that is relevant (denominator is literal ``k``)."""
     rel = _relevant(qrels_q, rel_lvl)
@@ -74,7 +82,11 @@ def precision_at_k(
 
 
 def average_precision_at_k(
-    qrels_q: "dict[str, int]", run_q: "dict[str, float]", k: int = 10, *, rel_lvl: int = 1
+    qrels_q: "dict[str, int]",
+    run_q: "dict[str, float]",
+    k: int = 10,
+    *,
+    rel_lvl: int = 1,
 ) -> float:
     """Average precision (trec_eval ``map``: divide by TOTAL relevant, not ``min(R,k)``)."""
     rel = _relevant(qrels_q, rel_lvl)
@@ -90,7 +102,11 @@ def average_precision_at_k(
 
 
 def mrr_at_k(
-    qrels_q: "dict[str, int]", run_q: "dict[str, float]", k: int = 10, *, rel_lvl: int = 1
+    qrels_q: "dict[str, int]",
+    run_q: "dict[str, float]",
+    k: int = 10,
+    *,
+    rel_lvl: int = 1,
 ) -> float:
     """Reciprocal rank of the first relevant doc in the top-``k`` (0.0 if none)."""
     rel = _relevant(qrels_q, rel_lvl)
@@ -161,7 +177,9 @@ class RetrievalReport:
         ]
         worst = sorted(self.per_query.items(), key=lambda kv: kv[1].get(metric, 0.0))
         for qid, m in worst[:8]:
-            lines.append(f"  {qid}: {m.get(metric, 0.0):.4f} | rank={self.ranks.get(qid, '-')}")
+            lines.append(
+                f"  {qid}: {m.get(metric, 0.0):.4f} | rank={self.ranks.get(qid, '-')}"
+            )
         return "\n".join(lines)
 
 

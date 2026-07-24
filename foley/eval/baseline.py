@@ -47,10 +47,9 @@ def is_stale(baseline: dict, *, seed_path, manifest_path) -> bool:
     """True if the baseline's fixture stamps no longer match the fixtures on disk."""
     golden = baseline.get("golden", {})
     corpus = baseline.get("corpus", {})
-    return (
-        golden.get("seed_sha256") != _sha256(seed_path)
-        or corpus.get("manifest_sha256") != _sha256(manifest_path)
-    )
+    return golden.get("seed_sha256") != _sha256(seed_path) or corpus.get(
+        "manifest_sha256"
+    ) != _sha256(manifest_path)
 
 
 def write_baseline(
