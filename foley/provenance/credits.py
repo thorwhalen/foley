@@ -80,7 +80,9 @@ class CreditEntry(SerializableMixin):
 # ---------------------------------------------------------------------------
 
 
-def _coerce_record(x: CreditInput) -> "tuple[str, LicenseRecord, Optional[str], list, Optional[str]]":
+def _coerce_record(
+    x: CreditInput,
+) -> "tuple[str, LicenseRecord, Optional[str], list, Optional[str]]":
     """Normalize any credit input to ``(sound_id, license, caption, tags, ucs)``."""
     if isinstance(x, Candidate):
         x = x.sound
@@ -150,7 +152,8 @@ def credit_entry(record: CreditInput, *, title: Optional[str] = None) -> CreditE
     name, url = _license_display(lic)
     return CreditEntry(
         sound_id=sound_id,
-        title=title or _resolve_title(caption, tags, ucs, lic.source, lic.source_id, sound_id),
+        title=title
+        or _resolve_title(caption, tags, ucs, lic.source, lic.source_id, sound_id),
         author=_resolve_author(lic),
         author_url=lic.creator_url,
         source=lic.source,
@@ -194,7 +197,9 @@ def _ai_segment(entry: CreditEntry) -> str:
     return seg
 
 
-def attribution_line(source: "Union[CreditEntry, CreditInput]", *, fmt: str = "markdown") -> str:
+def attribution_line(
+    source: "Union[CreditEntry, CreditInput]", *, fmt: str = "markdown"
+) -> str:
     """Render one sound's TASL attribution line.
 
     A source-supplied ``attribution_text`` (if non-empty) is returned **verbatim**;
@@ -306,7 +311,9 @@ def credits_for(
     elif sort == "title":
         entries.sort(key=lambda e: ((e.title or "").lower(), (e.author or "").lower()))
     elif sort != "appearance":
-        raise ValueError(f"unknown sort {sort!r}; use 'appearance', 'author', or 'title'")
+        raise ValueError(
+            f"unknown sort {sort!r}; use 'appearance', 'author', or 'title'"
+        )
     return Credits(entries=tuple(entries), title=title)
 
 
@@ -330,7 +337,9 @@ def render_credits_md(
     if not credits.entries:
         lines.append("_No third-party sounds._")
     else:
-        lines.extend(f"- {attribution_line(e, fmt='markdown')}" for e in credits.entries)
+        lines.extend(
+            f"- {attribution_line(e, fmt='markdown')}" for e in credits.entries
+        )
     return "\n".join(lines) + "\n"
 
 

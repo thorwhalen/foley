@@ -177,7 +177,8 @@ LICENSE_META: dict[str, LicenseMeta] = {
         "BBC RemArc Licence", "https://sound-effects.bbcrewind.co.uk/licensing"
     ),
     "Sonniss-GDC": LicenseMeta(
-        "Sonniss GDC Game Audio Bundle License", "https://sonniss.com/gdc-bundle-license"
+        "Sonniss GDC Game Audio Bundle License",
+        "https://sonniss.com/gdc-bundle-license",
     ),
     "Pixabay-Content": LicenseMeta(
         "Pixabay Content License", "https://pixabay.com/service/license-summary/"

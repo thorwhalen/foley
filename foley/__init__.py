@@ -338,7 +338,9 @@ def evaluate(*, golden=None, k: int = 10):
     return run_ring0_retrieval_eval(**kw)
 
 
-def credits(sounds, *, title: str = "Credits", only_required: bool = False, write_to=None):
+def credits(
+    sounds, *, title: str = "Credits", only_required: bool = False, write_to=None
+):
     """Build the TASL attribution :class:`~foley.provenance.Credits` for ``sounds``.
 
     Works standalone today (given any iterable of sounds), and is what the WEAVE
