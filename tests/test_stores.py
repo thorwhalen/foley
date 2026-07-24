@@ -22,6 +22,7 @@ import pytest
 from foley.base import LicenseRecord, SoundRecord, StorageMode
 from foley.stores import (
     HASH_ALGO,
+    _meta_filename,
     content_key,
     make_byte_store,
     make_meta_store,
@@ -202,6 +203,106 @@ def test_gate_reads_license_cache_bytes_ok_when_override_none(tmp_path):
     # only the by-value blob is present
     assert len(sounds) == 1
     assert sounds[content_key(FAKE_FLAC)] == FAKE_FLAC
+
+
+# ---------------------------------------------------------------------------
+# id safety at the storage boundary (invariant #3) — once SOURCE adapters mint
+# external-derived ids, an id with os.sep / .. / a drive letter / NUL must NOT
+# escape the meta dir, collide, or vanish from iteration.
+# ---------------------------------------------------------------------------
+
+# ids that would escape / spawn a subdir / shadow a dotfile if written naively
+HOSTILE_IDS = [
+    "../evil",  # parent-dir escape
+    "../../etc/passwd",  # deep escape
+    "a/b",  # subdirectory
+    "..",  # bare parent ref (encodes to a leading-dot filename)
+    ".",  # bare current ref (leading-dot filename)
+    "/abs/path",  # absolute path
+    "C:\\Windows\\sys",  # windows drive + backslash separators
+    ".hidden",  # leading dot -> dol skips dotfiles on iteration
+    "a\x00b",  # embedded NUL (C-string truncation)
+]
+
+# realistic external ids a source adapter would mint (must round-trip verbatim)
+EXTERNAL_IDS = [
+    "freesound:12345",
+    "https://freesound.org/s/1/",
+    "elevenlabs/sfx-2024-01",
+    "uníçodé-🎧",
+    "50%off-sale",
+]
+
+
+def test_meta_store_hostile_ids_do_not_escape_root(tmp_path):
+    meta_root = tmp_path / "meta"
+    _, meta = _stores(tmp_path)
+    for i, sid in enumerate(HOSTILE_IDS):
+        rec = _record(cache_bytes_ok=True, sound_id=sid)
+        rec.caption = f"payload-{i}"
+        meta[sid] = rec
+
+    # NOTHING was written outside the meta dir (no parent-dir escape).
+    stray = [p.name for p in tmp_path.iterdir() if p.name not in {"meta", "audio"}]
+    assert stray == []
+    # every backing file is a single component directly under the meta root
+    # (no subdirectories spawned by an id containing os.sep).
+    assert [p for p in meta_root.iterdir() if p.is_dir()] == []
+    # and no file is a dotfile (which dol would omit from iteration).
+    assert all(not p.name.startswith(".") for p in meta_root.iterdir())
+
+
+def test_meta_store_hostile_ids_roundtrip_and_iterate(tmp_path):
+    _, meta = _stores(tmp_path)
+    for i, sid in enumerate(HOSTILE_IDS):
+        rec = _record(cache_bytes_ok=True, sound_id=sid)
+        rec.caption = f"payload-{i}"
+        meta[sid] = rec
+
+    # keys come back as the ORIGINAL ids (reversible encoding), none dropped...
+    assert set(meta) == set(HOSTILE_IDS)
+    assert len(meta) == len(HOSTILE_IDS)
+    # ...and each record reads back intact under its original id.
+    for i, sid in enumerate(HOSTILE_IDS):
+        assert sid in meta
+        assert meta[sid].caption == f"payload-{i}"
+
+
+def test_meta_store_external_ids_roundtrip(tmp_path):
+    _, meta = _stores(tmp_path)
+    for sid in EXTERNAL_IDS:
+        meta[sid] = _record(cache_bytes_ok=True, sound_id=sid)
+    assert set(meta) == set(EXTERNAL_IDS)
+    for sid in EXTERNAL_IDS:
+        assert meta[sid].id == sid
+
+
+def test_meta_store_hex_content_id_is_a_noop(tmp_path):
+    # Backward-compat: a hex content id must map to {hex}.json unchanged, so
+    # meta files written before this fix stay readable.
+    _, meta = _stores(tmp_path)
+    hex_id = content_key(FAKE_FLAC)  # all url-unreserved chars
+    meta[hex_id] = _record(cache_bytes_ok=True, sound_id=hex_id)
+    files = sorted(p.name for p in (tmp_path / "meta").iterdir())
+    assert files == [f"{hex_id}.json"]
+    assert list(meta) == [hex_id]
+
+
+def test_meta_filename_is_never_a_dotfile_and_is_injective():
+    filenames = [_meta_filename(s) for s in HOSTILE_IDS + EXTERNAL_IDS]
+    assert all(not fn.startswith(".") for fn in filenames)  # iterable by dol
+    assert all(("/" not in fn and "\\" not in fn) for fn in filenames)  # no sep
+    assert len(set(filenames)) == len(filenames)  # collision-free
+
+
+def test_store_sound_rejects_empty_id_before_any_write(tmp_path):
+    sounds, meta = _stores(tmp_path)
+    rec = _record(cache_bytes_ok=True, sound_id="")
+    with pytest.raises(ValueError):
+        store_sound(rec, FAKE_FLAC, sounds=sounds, meta=meta)
+    # fail-closed BEFORE side effects: no orphan blob, no meta entry
+    assert len(sounds) == 0
+    assert len(meta) == 0
 
 
 def test_explicit_override_beats_license_flag(tmp_path):

@@ -16,6 +16,7 @@ from foley.qc import (  # noqa: E402  (after importorskip, by design)
     QCReport,
     QCStatus,
     QCThresholds,
+    _upsample_fft,
     detect_clipping,
     dc_offset,
     duration_s,
@@ -164,6 +165,31 @@ def test_true_peak_dbtp_is_finite_for_sine():
 
 def test_true_peak_dbtp_silence_is_neg_inf():
     assert true_peak_dbtp(np.zeros(SR, dtype=np.float32), SR) == float("-inf")
+
+
+def test_upsample_fft_does_not_over_report_nyquist():
+    # A full-scale Nyquist tone (alternating +1/-1, even length) reconstructs to
+    # a cosine whose true peak is 1.0 (the samples ARE the peaks). Zero-pad FFT
+    # upsampling double-counts the even-n Nyquist bin unless it is halved — the
+    # bug this guards against inflated the peak to ~2.0 (+6 dB).
+    x = np.array([1.0, -1.0] * 8, dtype=np.float64)  # n=16 (even)
+    up = _upsample_fft(x, 4)
+    assert float(np.max(np.abs(up))) <= 1.0 + 1e-6  # was ~2.0 before the fix
+
+
+def test_upsample_fft_preserves_midband_peak():
+    # A tone well below Nyquist must be unaffected by the Nyquist-bin correction.
+    t = np.arange(64)
+    mid = np.sin(2.0 * np.pi * 8 * t / 64)  # bin 8 of 64 — mid-band
+    up = _upsample_fft(mid, 4)
+    assert abs(float(np.max(np.abs(up))) - 1.0) <= 1e-6
+
+
+def test_true_peak_dbtp_nyquist_tone_not_over_reported():
+    # End-to-end: the public metric must not report a Nyquist tone as > +6 dBFS.
+    x = np.array([1.0, -1.0] * (SR // 2), dtype=np.float32)  # 1 s Nyquist tone
+    tp = true_peak_dbtp(x, SR)
+    assert tp <= 0.5  # ~0 dBFS true peak; was ~+6 dBFS before the fix
 
 
 # ---------------------------------------------------------------------------

@@ -28,6 +28,14 @@ Invariants wired here (see the skill):
        ``redistribute_standalone_ok`` (copyright): a Freesound CC0 item is
        legally redistributable yet ``cache_bytes_ok=False``, so it is stored
        by-reference (URI + provenance only, NO bytes cached).
+    #3 The meta store is safe by construction — ``sound_id`` values become
+       on-disk filenames, and once SOURCE adapters mint external-derived ids
+       (``freesound:123``, URLs, arbitrary strings) an unescaped id could carry
+       ``/`` / ``..`` / drive letters / NUL and escape the meta dir or collide.
+       :func:`make_meta_store` percent-encodes every id into a single, non-dot
+       filename component (reversibly, so listing still yields the original id),
+       and :func:`store_sound` rejects an empty id before any write. Hex content
+       ids are unaffected (percent-encoding is a no-op on them).
 """
 
 import hashlib
@@ -35,6 +43,7 @@ import os
 from collections.abc import MutableMapping
 from pathlib import Path
 from typing import Optional, Union
+from urllib.parse import quote, unquote
 
 from dol import Files, JsonFiles, mk_dirs_if_missing, wrap_kvs
 
@@ -91,6 +100,43 @@ def make_byte_store(rootdir: Rootdir = DEFAULT_AUDIO_DIR) -> MutableMapping[str,
     return mk_dirs_if_missing(Files(str(rootdir)))
 
 
+def _validate_sound_id(sound_id: str) -> str:
+    """Reject ids that cannot become a safe, round-trippable meta filename.
+
+    The path-*safety* is provided by :func:`_meta_filename`'s percent-encoding;
+    this guard only rejects the degenerate cases encoding cannot rescue — a
+    non-``str`` or an empty id (which would map to the ambiguous hidden file
+    ``.json``). Fail-closed: a bad id is a programming error, not data.
+    """
+    if not isinstance(sound_id, str) or not sound_id:
+        raise ValueError(f"sound_id must be a non-empty str, got {sound_id!r}")
+    return sound_id
+
+
+def _meta_filename(sound_id: str) -> str:
+    """Map a ``sound_id`` to its on-disk metadata filename, escape-proof.
+
+    Percent-encodes every character outside the URL-unreserved set (so ``/``,
+    ``\\``, ``:``, ``..`` separators, NUL, etc. can never form a path that
+    escapes the store root or spawns a subdirectory), then guarantees the result
+    is not a dotfile (``dol`` silently omits leading-dot files from iteration —
+    so an id like ``..`` or ``.foo`` would persist yet vanish from ``list()``).
+    The mapping is injective and reversed by :func:`_meta_key`, so listing still
+    yields the original ids. A no-op on hex content ids (all-unreserved).
+    """
+    encoded = quote(_validate_sound_id(sound_id), safe="")
+    if encoded.startswith("."):  # dol skips dotfiles on iteration
+        encoded = "%2E" + encoded[1:]
+    return f"{encoded}{META_FILE_SUFFIX}"
+
+
+def _meta_key(filename: str) -> str:
+    """Invert :func:`_meta_filename`: on-disk filename -> original ``sound_id``."""
+    if filename.endswith(META_FILE_SUFFIX):
+        filename = filename[: -len(META_FILE_SUFFIX)]
+    return unquote(filename)
+
+
 def make_meta_store(
     rootdir: Rootdir = DEFAULT_META_DIR,
 ) -> MutableMapping[str, SoundRecord]:
@@ -98,7 +144,9 @@ def make_meta_store(
 
     ``SoundRecord`` values are (de)serialized transparently via the
     ``SerializableMixin`` (``to_dict`` / ``from_dict``); each record is written as
-    a ``{sound_id}.json`` file while the store's keys stay the bare ``sound_id``.
+    a percent-encoded ``{sound_id}.json`` file while the store's keys stay the
+    bare ``sound_id`` (invariant #3 — the id is escaped at this boundary so an
+    externally-derived id can never escape ``rootdir`` or collide via ``/``/``..``).
 
     Args:
         rootdir: Directory that holds the metadata JSON files (created if missing).
@@ -112,12 +160,10 @@ def make_meta_store(
         obj_of_data=SoundRecord.from_dict,  # dict -> SoundRecord on read
         data_of_obj=lambda rec: rec.to_dict(),  # SoundRecord -> dict on write
         # dol applies id_of_key to reach the underlying store and key_of_id when
-        # listing, so id_of_key adds the file suffix and key_of_id strips it —
-        # exposing bare sound_id keys over {sound_id}.json files on disk.
-        id_of_key=lambda k: f"{k}{META_FILE_SUFFIX}",  # sound_id -> filename
-        key_of_id=lambda k: (
-            k[: -len(META_FILE_SUFFIX)] if k.endswith(META_FILE_SUFFIX) else k
-        ),  # filename -> sound_id
+        # listing, so id_of_key escapes the id + adds the suffix and key_of_id
+        # reverses it — exposing bare sound_id keys over safe {enc}.json files.
+        id_of_key=_meta_filename,  # sound_id -> escaped filename
+        key_of_id=_meta_key,  # filename -> sound_id
     )
 
 
@@ -155,13 +201,16 @@ def store_sound(
         The same (mutated) ``record``, after it has been written into ``meta``.
 
     Raises:
-        ValueError: If the sound resolves to by-reference storage but ``record.uri``
-            is empty (a by-reference sound must name a fetchable source URL).
+        ValueError: If ``record.id`` is empty/non-``str`` (checked first, so a bad
+            id never leaves an orphan blob), or if the sound resolves to
+            by-reference storage but ``record.uri`` is empty (a by-reference sound
+            must name a fetchable source URL).
 
     Note:
         The blob is written BEFORE the record so a crash can never leave a
         metadata reference dangling against a missing blob.
     """
+    _validate_sound_id(record.id)  # fail-closed before any store side effect
     allow = record.license.cache_bytes_ok if cache_bytes_ok is None else cache_bytes_ok
     if allow and data is not None:
         key = content_key(data)
