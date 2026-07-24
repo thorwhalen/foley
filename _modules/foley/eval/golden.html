@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.eval.golden &mdash; foley 0.0.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=282f96c0"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.eval.golden</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.eval.golden</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The frozen golden set + the deterministic Ring-0 retrieval harness.</span>
+
+<span class="sd">A :class:`GoldenItem` is one ``(narrative context → expected sounds)`` judgment;</span>
+<span class="sd">its ``answer_clip_ids`` + ``grade`` become the TREC ``qrels`` the metrics score</span>
+<span class="sd">against. :func:`build_eval_library` stands up an ephemeral, in-memory library</span>
+<span class="sd">over the bundled Ring-0 synthetic fixture with **injected caption vectors** (via</span>
+<span class="sd">:class:`~foley.eval.embedder.HashingBowEmbedder`), so retrieval is deterministic</span>
+<span class="sd">and CLAP-free; :func:`run_ring0_retrieval_eval` runs every golden query through</span>
+<span class="sd">the real ``SoundLibrary.search`` path and scores it.</span>
+
+<span class="sd">The eval fixtures (``seed.json``, ``baseline.json``) are **package data** under</span>
+<span class="sd">``foley/data/golden/`` — so they ship in the wheel and ``foley.evaluate()`` /</span>
+<span class="sd">``foley eval`` work on a bare ``pip install`` (not only from a source checkout).</span>
+<span class="sd">``build_eval_library`` builds records **directly** with stable</span>
+<span class="sd">``ring0:&lt;stem&gt;`` ids (not via ``ingest_one``&#39;s content-hash ids), so the run doc</span>
+<span class="sd">ids join 1:1 with the qrels — no alias map, no content-hash keyspace trap. The</span>
+<span class="sd">gate therefore does NOT exercise ``ingest_one`` (that path is covered by</span>
+<span class="sd">``test_ingest``/``test_bootstrap``).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoundRecord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.embedder</span><span class="w"> </span><span class="kn">import</span> <span class="n">HashingBowEmbedder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.retrieval</span><span class="w"> </span><span class="kn">import</span> <span class="n">RetrievalReport</span><span class="p">,</span> <span class="n">build_run</span><span class="p">,</span> <span class="n">evaluate_run</span>
+
+<span class="c1">#: Package data root (``foley/eval/golden.py`` → parent.parent = ``foley`` →</span>
+<span class="c1">#: ``foley/data``); both the eval fixtures and the Ring-0 manifest ship here, so</span>
+<span class="c1">#: they resolve identically from a source checkout and an installed wheel.</span>
+<span class="n">_DATA_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span>
+<span class="n">DEFAULT_GOLDEN_PATH</span> <span class="o">=</span> <span class="n">_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;golden&quot;</span> <span class="o">/</span> <span class="s2">&quot;seed.json&quot;</span>
+<span class="n">RING0_MANIFEST_PATH</span> <span class="o">=</span> <span class="n">_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;ring0&quot;</span> <span class="o">/</span> <span class="s2">&quot;manifest.json&quot;</span>
+
+
+<div class="viewcode-block" id="GoldenItem">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/golden.html#foley.eval.GoldenItem">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GoldenItem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One frozen ``(context → expected sounds)`` judgment (report 08 §1.3).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        id: Unique item id (e.g. ``gld_0001``).</span>
+<span class="sd">        context: The narrative paragraph (the future SELECT input).</span>
+<span class="sd">        expected_events: One or more ``{query, ucs_catid, layer, diegetic,</span>
+<span class="sd">            salience, ...}`` dicts; ``query`` is the string fed to ``search``.</span>
+<span class="sd">        answer_clip_ids: ``{ucs_catid: [clip_id, ...]}`` — the acceptable clips.</span>
+<span class="sd">        grade: ``{clip_id: grade}`` (2 ideal / 1 acceptable / 0 wrong).</span>
+<span class="sd">        negatives: Free-text distractors (unused by scoring; documentation).</span>
+<span class="sd">        labeler: Provenance of the labels (``llm+human`` etc.).</span>
+<span class="sd">        schema_version: The GoldenItem schema version.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">expected_events</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="n">answer_clip_ids</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="n">grade</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="n">negatives</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">labeler</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;llm+human&quot;</span>
+    <span class="n">schema_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="load_golden">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/golden.html#foley.eval.load_golden">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_golden</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">DEFAULT_GOLDEN_PATH</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[GoldenItem]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load and validate the frozen golden set from ``path`` (JSON list).&quot;&quot;&quot;</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">GoldenItem</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">it</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">it</span><span class="p">[</span><span class="s2">&quot;context&quot;</span><span class="p">],</span>
+            <span class="n">expected_events</span><span class="o">=</span><span class="n">it</span><span class="p">[</span><span class="s2">&quot;expected_events&quot;</span><span class="p">],</span>
+            <span class="n">answer_clip_ids</span><span class="o">=</span><span class="n">it</span><span class="p">[</span><span class="s2">&quot;answer_clip_ids&quot;</span><span class="p">],</span>
+            <span class="n">grade</span><span class="o">=</span><span class="n">it</span><span class="p">[</span><span class="s2">&quot;grade&quot;</span><span class="p">],</span>
+            <span class="n">negatives</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;negatives&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+            <span class="n">labeler</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;labeler&quot;</span><span class="p">,</span> <span class="s2">&quot;llm+human&quot;</span><span class="p">),</span>
+            <span class="n">schema_version</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;schema_version&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">raw</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="to_qrels">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/golden.html#foley.eval.to_qrels">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_qrels</span><span class="p">(</span><span class="n">golden</span><span class="p">:</span> <span class="s2">&quot;list[GoldenItem]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;dict[str, dict[str, int]]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Flatten the golden set into TREC qrels: ``{query_id: {clip_id: grade}}``.</span>
+
+<span class="sd">    One qrels row per ``(item, event)`` — ``query_id = f&quot;{item.id}::{event_idx}&quot;``</span>
+<span class="sd">    — future-proofing multi-event items (seed items are single-event today). Each</span>
+<span class="sd">    clip in ``answer_clip_ids`` carries its ``grade``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">qrels</span><span class="p">:</span> <span class="s2">&quot;dict[str, dict[str, int]]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">golden</span><span class="p">:</span>
+        <span class="n">clips</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">clip_id</span>
+            <span class="k">for</span> <span class="n">clip_list</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">answer_clip_ids</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">clip_id</span> <span class="ow">in</span> <span class="n">clip_list</span>
+        <span class="p">}</span>
+        <span class="n">judgments</span> <span class="o">=</span> <span class="p">{</span><span class="n">clip_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">grade</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">clip_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="k">for</span> <span class="n">clip_id</span> <span class="ow">in</span> <span class="n">clips</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">ev_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">expected_events</span><span class="p">)):</span>
+            <span class="n">qrels</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">ev_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">judgments</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qrels</span></div>
+
+
+
+<div class="viewcode-block" id="build_eval_library">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/golden.html#foley.eval.build_eval_library">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_eval_library</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">manifest_path</span><span class="o">=</span><span class="n">RING0_MANIFEST_PATH</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the ephemeral Ring-0 eval library (stem ids + injected caption vectors).</span>
+
+<span class="sd">    Each manifest clip becomes a :class:`~foley.base.SoundRecord` with id</span>
+<span class="sd">    ``ring0:&lt;stem&gt;`` and a vector = ``embedder.embed_text(caption + tags)`` — so</span>
+<span class="sd">    both the vector and BM25 legs carry the caption bag-of-words and the answer</span>
+<span class="sd">    clip lands at integer rank 1 (deterministic, cross-platform).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        embedder: A text embedder (default: :class:`HashingBowEmbedder`).</span>
+<span class="sd">        manifest_path: The Ring-0 ``manifest.json`` (default: the bundled fixture).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A populated in-memory :class:`~foley.index.library.SoundLibrary`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..bootstrap</span><span class="w"> </span><span class="kn">import</span> <span class="n">_fresh_memory_library</span><span class="p">,</span> <span class="n">_ring0_license</span>
+
+    <span class="n">emb</span> <span class="o">=</span> <span class="n">embedder</span> <span class="k">if</span> <span class="n">embedder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">HashingBowEmbedder</span><span class="p">()</span>
+    <span class="n">lib</span> <span class="o">=</span> <span class="n">_fresh_memory_library</span><span class="p">(</span><span class="n">embedder</span><span class="o">=</span><span class="n">emb</span><span class="p">)</span>
+    <span class="n">manifest_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">manifest_path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+    <span class="n">manifest</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">manifest_path</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">:</span>
+        <span class="n">stem</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">stem</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;caption&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">SoundRecord</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;ring0:</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="c1"># A real fetchable uri (the fixture wav) so the record stores</span>
+            <span class="c1"># by-reference without the audio bytes — retrieval only needs the</span>
+            <span class="c1"># injected vector + metadata, not the decoded PCM.</span>
+            <span class="n">uri</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">manifest_dir</span> <span class="o">/</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]),</span>
+            <span class="n">caption</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;caption&quot;</span><span class="p">],</span>
+            <span class="n">tags</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[])),</span>
+            <span class="n">ucs_category</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ucs_catid&quot;</span><span class="p">),</span>
+            <span class="n">license</span><span class="o">=</span><span class="n">_ring0_license</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">lib</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="n">emb</span><span class="o">.</span><span class="n">embed_text</span><span class="p">(</span><span class="n">text</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">lib</span></div>
+
+
+
+<div class="viewcode-block" id="run_ring0_retrieval_eval">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/golden.html#foley.eval.run_ring0_retrieval_eval">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_ring0_retrieval_eval</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">golden_path</span><span class="o">=</span><span class="n">DEFAULT_GOLDEN_PATH</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RetrievalReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Score the golden set&#39;s queries against the Ring-0 library — the gate input.</span>
+
+<span class="sd">    Runs every golden ``expected_events[].query`` through the real</span>
+<span class="sd">    :meth:`SoundLibrary.search` path (vector ⊕ BM25 ⊕ RRF) and evaluates the</span>
+<span class="sd">    resulting runs against the golden qrels.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        k: Retrieval cutoff (and the metric ``@k``).</span>
+<span class="sd">        golden_path: The golden set JSON.</span>
+<span class="sd">        embedder: The eval embedder (default: :class:`HashingBowEmbedder`).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`RetrievalReport` (per-query + mean nDCG@10 / recall / mAP / MRR).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">golden</span> <span class="o">=</span> <span class="n">load_golden</span><span class="p">(</span><span class="n">golden_path</span><span class="p">)</span>
+    <span class="n">lib</span> <span class="o">=</span> <span class="n">build_eval_library</span><span class="p">(</span><span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span><span class="p">)</span>
+    <span class="n">qrels</span> <span class="o">=</span> <span class="n">to_qrels</span><span class="p">(</span><span class="n">golden</span><span class="p">)</span>
+    <span class="n">run</span><span class="p">:</span> <span class="s2">&quot;dict[str, dict[str, float]]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">golden</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ev_idx</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">expected_events</span><span class="p">):</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">run</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">::</span><span class="si">{</span><span class="n">ev_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">build_run</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">evaluate_run</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">qrels</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

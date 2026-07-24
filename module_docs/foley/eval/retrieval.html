@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.eval.retrieval &mdash; foley 0.0.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=282f96c0"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.index" href="../index.html" />
+    <link rel="prev" title="foley.eval.golden" href="golden.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.eval.retrieval</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.DEFAULT_METRICS"><code class="docutils literal notranslate"><span class="pre">DEFAULT_METRICS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.RetrievalReport"><code class="docutils literal notranslate"><span class="pre">RetrievalReport</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.retrieval.RetrievalReport.format_regression_diff"><code class="docutils literal notranslate"><span class="pre">RetrievalReport.format_regression_diff()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.average_precision_at_k"><code class="docutils literal notranslate"><span class="pre">average_precision_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.build_run"><code class="docutils literal notranslate"><span class="pre">build_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.evaluate_run"><code class="docutils literal notranslate"><span class="pre">evaluate_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.mean_over_queries"><code class="docutils literal notranslate"><span class="pre">mean_over_queries()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.mrr_at_k"><code class="docutils literal notranslate"><span class="pre">mrr_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.ndcg_at_k"><code class="docutils literal notranslate"><span class="pre">ndcg_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.precision_at_k"><code class="docutils literal notranslate"><span class="pre">precision_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.retrieval.recall_at_k"><code class="docutils literal notranslate"><span class="pre">recall_at_k()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.eval.retrieval</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/eval/retrieval.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.eval.retrieval">
+<span id="foley-eval-retrieval"></span><h1>foley.eval.retrieval<a class="headerlink" href="#module-foley.eval.retrieval" title="Link to this heading"></a></h1>
+<p>Tier-1 retrieval metrics + run assembly — pure stdlib, CI-safe, ranx-exact.</p>
+<p>The metrics (<code class="docutils literal notranslate"><span class="pre">nDCG&#64;10</span></code>, <code class="docutils literal notranslate"><span class="pre">Recall&#64;k</span></code>, <code class="docutils literal notranslate"><span class="pre">Precision&#64;k</span></code>, <code class="docutils literal notranslate"><span class="pre">mAP&#64;10</span></code>, <code class="docutils literal notranslate"><span class="pre">MRR&#64;10</span></code>)
+are hand-rolled in stdlib (no <code class="docutils literal notranslate"><span class="pre">ranx</span></code>/<code class="docutils literal notranslate"><span class="pre">numba</span></code>) so the nDCG PR gate runs in
+foley’s numpy-only CI with zero heavy deps — yet they are <strong>numerically
+identical</strong> to <code class="docutils literal notranslate"><span class="pre">ranx</span></code>/<code class="docutils literal notranslate"><span class="pre">pytrec_eval</span></code> (guarded by the opt-in
+<code class="docutils literal notranslate"><span class="pre">tests/eval/test_metrics_vs_ranx.py</span></code> oracle). nDCG uses the <strong>linear</strong> Järvelin
+gain <code class="docutils literal notranslate"><span class="pre">Σ</span> <span class="pre">grade_i</span> <span class="pre">/</span> <span class="pre">log2(rank+1)</span></code> — the definition <code class="docutils literal notranslate"><span class="pre">ranx</span></code>’s <code class="docutils literal notranslate"><span class="pre">&quot;ndcg&#64;10&quot;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">pytrec_eval</span></code>’s <code class="docutils literal notranslate"><span class="pre">ndcg_cut_10</span></code> actually implement (report 08 §1.1’s
+<code class="docutils literal notranslate"><span class="pre">2^grade−1</span></code> is a doc bug).</p>
+<dl class="simple">
+<dt>Vocabulary (TREC-style):</dt><dd><ul class="simple">
+<li><p><strong>qrels</strong> — <code class="docutils literal notranslate"><span class="pre">{query_id:</span> <span class="pre">{clip_id:</span> <span class="pre">grade}}</span></code> — the ground-truth relevance
+grades (0 = wrong, 1 = acceptable, 2 = ideal); the raw grade is the gain,
+so the metrics are grade-scale-agnostic.</p></li>
+<li><p><strong>run</strong> — <code class="docutils literal notranslate"><span class="pre">{query_id:</span> <span class="pre">{clip_id:</span> <span class="pre">score}}</span></code> — the system’s scored results.</p></li>
+</ul>
+</dd>
+</dl>
+<p><a class="reference internal" href="#foley.eval.retrieval.build_run" title="foley.eval.retrieval.build_run"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_run()</span></code></a> assigns strictly-descending integer scores in the search order,
+so a run has <strong>no score ties</strong> and its ranking reproduces <code class="docutils literal notranslate"><span class="pre">search()</span></code>’s
+(already id-tiebroken) order exactly — the source of cross-platform determinism.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.eval.retrieval.DEFAULT_METRICS">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_METRICS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('ndcg&#64;10',</span> <span class="pre">'recall&#64;10',</span> <span class="pre">'map&#64;10',</span> <span class="pre">'mrr&#64;10')</span></span><a class="headerlink" href="#foley.eval.retrieval.DEFAULT_METRICS" title="Link to this definition"></a></dt>
+<dd><p>The metrics reported by <a class="reference internal" href="#foley.eval.retrieval.evaluate_run" title="foley.eval.retrieval.evaluate_run"><code class="xref py py-func docutils literal notranslate"><span class="pre">evaluate_run()</span></code></a> (<a class="reference external" href="mailto:nDCG&#37;&#52;&#48;10">nDCG<span>&#64;</span>10</a> is the sole PR gate).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.eval.retrieval.RetrievalReport">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">RetrievalReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">per_query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#RetrievalReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.RetrievalReport" title="Link to this definition"></a></dt>
+<dd><p>Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.eval.retrieval.RetrievalReport.format_regression_diff">
+<span class="sig-name descname"><span class="pre">format_regression_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#RetrievalReport.format_regression_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.RetrievalReport.format_regression_diff" title="Link to this definition"></a></dt>
+<dd><p>A human diff for a failing gate: mean vs baseline + the worst queries.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.retrieval.average_precision_at_k">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">average_precision_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qrels_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#average_precision_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.average_precision_at_k" title="Link to this definition"></a></dt>
+<dd><p>Average precision (trec_eval <code class="docutils literal notranslate"><span class="pre">map</span></code>: divide by TOTAL relevant, not <code class="docutils literal notranslate"><span class="pre">min(R,k)</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.retrieval.build_run">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">build_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#build_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.build_run" title="Link to this definition"></a></dt>
+<dd><p>Turn an ordered <code class="docutils literal notranslate"><span class="pre">search()</span></code> result into a run row with distinct scores.</p>
+<p>Assigns each candidate a strictly-descending integer score
+(<code class="docutils literal notranslate"><span class="pre">len</span> <span class="pre">-</span> <span class="pre">rank</span></code>) in the order returned, so the run carries <strong>no score
+ties</strong> and <code class="xref py py-func docutils literal notranslate"><span class="pre">_ranked_ids()</span></code> reproduces the search ranking exactly — the
+determinism the gate relies on. The doc id is <code class="docutils literal notranslate"><span class="pre">candidate.sound.id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>candidates</strong> – An ordered <code class="docutils literal notranslate"><span class="pre">list[Candidate]</span></code> from
+<a class="reference internal" href="../index/library.html#foley.index.library.SoundLibrary.search" title="foley.index.library.SoundLibrary.search"><code class="xref py py-meth docutils literal notranslate"><span class="pre">foley.index.library.SoundLibrary.search()</span></code></a> (best first).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">{clip_id:</span> <span class="pre">score}</span></code> with distinct descending scores.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.retrieval.evaluate_run">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">evaluate_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qrels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('ndcg&#64;10',</span> <span class="pre">'recall&#64;10',</span> <span class="pre">'map&#64;10',</span> <span class="pre">'mrr&#64;10')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.eval.retrieval.RetrievalReport" title="foley.eval.retrieval.RetrievalReport"><span class="pre">RetrievalReport</span></a></span></span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#evaluate_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.evaluate_run" title="Link to this definition"></a></dt>
+<dd><p>Score a <code class="docutils literal notranslate"><span class="pre">run</span></code> against <code class="docutils literal notranslate"><span class="pre">qrels</span></code>, returning a <a class="reference internal" href="#foley.eval.retrieval.RetrievalReport" title="foley.eval.retrieval.RetrievalReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">RetrievalReport</span></code></a>.</p>
+<p>Only query ids present in <code class="docutils literal notranslate"><span class="pre">qrels</span></code> are scored (a run row without a
+ground-truth judgment is ignored). <code class="docutils literal notranslate"><span class="pre">ranks</span></code> records, per query, the 1-based
+rank of the highest-graded answer (for the failure diff).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.retrieval.mean_over_queries">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">mean_over_queries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#mean_over_queries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.mean_over_queries" title="Link to this definition"></a></dt>
+<dd><p>Macro-average of per-query metric values (0.0 for an empty list).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.retrieval.mrr_at_k">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">mrr_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qrels_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#mrr_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.mrr_at_k" title="Link to this definition"></a></dt>
+<dd><p>Reciprocal rank of the first relevant doc in the top-<code class="docutils literal notranslate"><span class="pre">k</span></code> (0.0 if none).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.retrieval.ndcg_at_k">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">ndcg_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qrels_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#ndcg_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.ndcg_at_k" title="Link to this definition"></a></dt>
+<dd><p>Normalized DCG at <code class="docutils literal notranslate"><span class="pre">k</span></code> with linear gains (0.0 when no graded answer).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.retrieval.precision_at_k">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">precision_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qrels_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#precision_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.precision_at_k" title="Link to this definition"></a></dt>
+<dd><p>Fraction of the top-<code class="docutils literal notranslate"><span class="pre">k</span></code> that is relevant (denominator is literal <code class="docutils literal notranslate"><span class="pre">k</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.retrieval.recall_at_k">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.retrieval.</span></span><span class="sig-name descname"><span class="pre">recall_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qrels_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/retrieval.html#recall_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.retrieval.recall_at_k" title="Link to this definition"></a></dt>
+<dd><p>Fraction of ALL relevant docs (grade ≥ <code class="docutils literal notranslate"><span class="pre">rel_lvl</span></code>) retrieved in the top-<code class="docutils literal notranslate"><span class="pre">k</span></code>.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="golden.html" class="btn btn-neutral float-left" title="foley.eval.golden" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../index.html" class="btn btn-neutral float-right" title="foley.index" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

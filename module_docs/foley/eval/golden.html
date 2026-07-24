@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.eval.golden &mdash; foley 0.0.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=282f96c0"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.eval.retrieval" href="retrieval.html" />
+    <link rel="prev" title="foley.eval.embedder" href="embedder.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.eval.golden</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.golden.GoldenItem"><code class="docutils literal notranslate"><span class="pre">GoldenItem</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.golden.GoldenItem.id"><code class="docutils literal notranslate"><span class="pre">GoldenItem.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.golden.GoldenItem.context"><code class="docutils literal notranslate"><span class="pre">GoldenItem.context</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.golden.GoldenItem.expected_events"><code class="docutils literal notranslate"><span class="pre">GoldenItem.expected_events</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.golden.GoldenItem.answer_clip_ids"><code class="docutils literal notranslate"><span class="pre">GoldenItem.answer_clip_ids</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.golden.GoldenItem.grade"><code class="docutils literal notranslate"><span class="pre">GoldenItem.grade</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.golden.GoldenItem.negatives"><code class="docutils literal notranslate"><span class="pre">GoldenItem.negatives</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.golden.GoldenItem.labeler"><code class="docutils literal notranslate"><span class="pre">GoldenItem.labeler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.golden.GoldenItem.schema_version"><code class="docutils literal notranslate"><span class="pre">GoldenItem.schema_version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.golden.build_eval_library"><code class="docutils literal notranslate"><span class="pre">build_eval_library()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.golden.load_golden"><code class="docutils literal notranslate"><span class="pre">load_golden()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.golden.run_ring0_retrieval_eval"><code class="docutils literal notranslate"><span class="pre">run_ring0_retrieval_eval()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.golden.to_qrels"><code class="docutils literal notranslate"><span class="pre">to_qrels()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.eval.golden</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/eval/golden.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.eval.golden">
+<span id="foley-eval-golden"></span><h1>foley.eval.golden<a class="headerlink" href="#module-foley.eval.golden" title="Link to this heading"></a></h1>
+<p>The frozen golden set + the deterministic Ring-0 retrieval harness.</p>
+<p>A <a class="reference internal" href="#foley.eval.golden.GoldenItem" title="foley.eval.golden.GoldenItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">GoldenItem</span></code></a> is one <code class="docutils literal notranslate"><span class="pre">(narrative</span> <span class="pre">context</span> <span class="pre">→</span> <span class="pre">expected</span> <span class="pre">sounds)</span></code> judgment;
+its <code class="docutils literal notranslate"><span class="pre">answer_clip_ids</span></code> + <code class="docutils literal notranslate"><span class="pre">grade</span></code> become the TREC <code class="docutils literal notranslate"><span class="pre">qrels</span></code> the metrics score
+against. <a class="reference internal" href="#foley.eval.golden.build_eval_library" title="foley.eval.golden.build_eval_library"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_eval_library()</span></code></a> stands up an ephemeral, in-memory library
+over the bundled Ring-0 synthetic fixture with <strong>injected caption vectors</strong> (via
+<a class="reference internal" href="embedder.html#foley.eval.embedder.HashingBowEmbedder" title="foley.eval.embedder.HashingBowEmbedder"><code class="xref py py-class docutils literal notranslate"><span class="pre">HashingBowEmbedder</span></code></a>), so retrieval is deterministic
+and CLAP-free; <a class="reference internal" href="#foley.eval.golden.run_ring0_retrieval_eval" title="foley.eval.golden.run_ring0_retrieval_eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_ring0_retrieval_eval()</span></code></a> runs every golden query through
+the real <code class="docutils literal notranslate"><span class="pre">SoundLibrary.search</span></code> path and scores it.</p>
+<p>The eval fixtures (<code class="docutils literal notranslate"><span class="pre">seed.json</span></code>, <code class="docutils literal notranslate"><span class="pre">baseline.json</span></code>) are <strong>package data</strong> under
+<code class="docutils literal notranslate"><span class="pre">foley/data/golden/</span></code> — so they ship in the wheel and <code class="docutils literal notranslate"><span class="pre">foley.evaluate()</span></code> /
+<code class="docutils literal notranslate"><span class="pre">foley</span> <span class="pre">eval</span></code> work on a bare <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> (not only from a source checkout).
+<code class="docutils literal notranslate"><span class="pre">build_eval_library</span></code> builds records <strong>directly</strong> with stable
+<code class="docutils literal notranslate"><span class="pre">ring0:&lt;stem&gt;</span></code> ids (not via <code class="docutils literal notranslate"><span class="pre">ingest_one</span></code>’s content-hash ids), so the run doc
+ids join 1:1 with the qrels — no alias map, no content-hash keyspace trap. The
+gate therefore does NOT exercise <code class="docutils literal notranslate"><span class="pre">ingest_one</span></code> (that path is covered by
+<code class="docutils literal notranslate"><span class="pre">test_ingest</span></code>/<code class="docutils literal notranslate"><span class="pre">test_bootstrap</span></code>).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.eval.golden.GoldenItem">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.golden.</span></span><span class="sig-name descname"><span class="pre">GoldenItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_events</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">answer_clip_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grade</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negatives</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labeler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'llm+human'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/eval/golden.html#GoldenItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.golden.GoldenItem" title="Link to this definition"></a></dt>
+<dd><p>One frozen <code class="docutils literal notranslate"><span class="pre">(context</span> <span class="pre">→</span> <span class="pre">expected</span> <span class="pre">sounds)</span></code> judgment (report 08 §1.3).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.eval.golden.GoldenItem.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#foley.eval.golden.GoldenItem.id" title="Link to this definition"></a></dt>
+<dd><p>Unique item id (e.g. <code class="docutils literal notranslate"><span class="pre">gld_0001</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.eval.golden.GoldenItem.context">
+<span class="sig-name descname"><span class="pre">context</span></span><a class="headerlink" href="#foley.eval.golden.GoldenItem.context" title="Link to this definition"></a></dt>
+<dd><p>The narrative paragraph (the future SELECT input).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.eval.golden.GoldenItem.expected_events">
+<span class="sig-name descname"><span class="pre">expected_events</span></span><a class="headerlink" href="#foley.eval.golden.GoldenItem.expected_events" title="Link to this definition"></a></dt>
+<dd><p>One or more <code class="docutils literal notranslate"><span class="pre">{query,</span> <span class="pre">ucs_catid,</span> <span class="pre">layer,</span> <span class="pre">diegetic,</span>
+<span class="pre">salience,</span> <span class="pre">...}</span></code> dicts; <code class="docutils literal notranslate"><span class="pre">query</span></code> is the string fed to <code class="docutils literal notranslate"><span class="pre">search</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.eval.golden.GoldenItem.answer_clip_ids">
+<span class="sig-name descname"><span class="pre">answer_clip_ids</span></span><a class="headerlink" href="#foley.eval.golden.GoldenItem.answer_clip_ids" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">{ucs_catid:</span> <span class="pre">[clip_id,</span> <span class="pre">...]}</span></code> — the acceptable clips.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.eval.golden.GoldenItem.grade">
+<span class="sig-name descname"><span class="pre">grade</span></span><a class="headerlink" href="#foley.eval.golden.GoldenItem.grade" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">{clip_id:</span> <span class="pre">grade}</span></code> (2 ideal / 1 acceptable / 0 wrong).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.eval.golden.GoldenItem.negatives">
+<span class="sig-name descname"><span class="pre">negatives</span></span><a class="headerlink" href="#foley.eval.golden.GoldenItem.negatives" title="Link to this definition"></a></dt>
+<dd><p>Free-text distractors (unused by scoring; documentation).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.eval.golden.GoldenItem.labeler">
+<span class="sig-name descname"><span class="pre">labeler</span></span><a class="headerlink" href="#foley.eval.golden.GoldenItem.labeler" title="Link to this definition"></a></dt>
+<dd><p>Provenance of the labels (<code class="docutils literal notranslate"><span class="pre">llm+human</span></code> etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.eval.golden.GoldenItem.schema_version">
+<span class="sig-name descname"><span class="pre">schema_version</span></span><a class="headerlink" href="#foley.eval.golden.GoldenItem.schema_version" title="Link to this definition"></a></dt>
+<dd><p>The GoldenItem schema version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.golden.build_eval_library">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.golden.</span></span><span class="sig-name descname"><span class="pre">build_eval_library</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manifest_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/home/runner/work/foley/foley/foley/data/ring0/manifest.json')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/eval/golden.html#build_eval_library"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.golden.build_eval_library" title="Link to this definition"></a></dt>
+<dd><p>Build the ephemeral Ring-0 eval library (stem ids + injected caption vectors).</p>
+<p>Each manifest clip becomes a <a class="reference internal" href="../base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a> with id
+<code class="docutils literal notranslate"><span class="pre">ring0:&lt;stem&gt;</span></code> and a vector = <code class="docutils literal notranslate"><span class="pre">embedder.embed_text(caption</span> <span class="pre">+</span> <span class="pre">tags)</span></code> — so
+both the vector and BM25 legs carry the caption bag-of-words and the answer
+clip lands at integer rank 1 (deterministic, cross-platform).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>embedder</strong> – A text embedder (default: <code class="xref py py-class docutils literal notranslate"><span class="pre">HashingBowEmbedder</span></code>).</p></li>
+<li><p><strong>manifest_path</strong> – The Ring-0 <code class="docutils literal notranslate"><span class="pre">manifest.json</span></code> (default: the bundled fixture).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A populated in-memory <a class="reference internal" href="../index/library.html#foley.index.library.SoundLibrary" title="foley.index.library.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundLibrary</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.golden.load_golden">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.golden.</span></span><span class="sig-name descname"><span class="pre">load_golden</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.eval.golden.GoldenItem" title="foley.eval.golden.GoldenItem"><span class="pre">GoldenItem</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/eval/golden.html#load_golden"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.golden.load_golden" title="Link to this definition"></a></dt>
+<dd><p>Load and validate the frozen golden set from <code class="docutils literal notranslate"><span class="pre">path</span></code> (JSON list).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.golden.run_ring0_retrieval_eval">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.golden.</span></span><span class="sig-name descname"><span class="pre">run_ring0_retrieval_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">golden_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="retrieval.html#foley.eval.retrieval.RetrievalReport" title="foley.eval.retrieval.RetrievalReport"><span class="pre">RetrievalReport</span></a></span></span><a class="reference internal" href="../../../_modules/foley/eval/golden.html#run_ring0_retrieval_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.golden.run_ring0_retrieval_eval" title="Link to this definition"></a></dt>
+<dd><p>Score the golden set’s queries against the Ring-0 library — the gate input.</p>
+<p>Runs every golden <code class="docutils literal notranslate"><span class="pre">expected_events[].query</span></code> through the real
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">SoundLibrary.search()</span></code> path (vector ⊕ BM25 ⊕ RRF) and evaluates the
+resulting runs against the golden qrels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> – Retrieval cutoff (and the metric <code class="docutils literal notranslate"><span class="pre">&#64;k</span></code>).</p></li>
+<li><p><strong>golden_path</strong> – The golden set JSON.</p></li>
+<li><p><strong>embedder</strong> – The eval embedder (default: <code class="xref py py-class docutils literal notranslate"><span class="pre">HashingBowEmbedder</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">RetrievalReport</span></code> (per-query + mean <a class="reference external" href="mailto:nDCG&#37;&#52;&#48;10">nDCG<span>&#64;</span>10</a> / recall / mAP / MRR).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.golden.to_qrels">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.golden.</span></span><span class="sig-name descname"><span class="pre">to_qrels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">golden</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.eval.golden.GoldenItem" title="foley.eval.golden.GoldenItem"><span class="pre">GoldenItem</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/eval/golden.html#to_qrels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.golden.to_qrels" title="Link to this definition"></a></dt>
+<dd><p>Flatten the golden set into TREC qrels: <code class="docutils literal notranslate"><span class="pre">{query_id:</span> <span class="pre">{clip_id:</span> <span class="pre">grade}}</span></code>.</p>
+<p>One qrels row per <code class="docutils literal notranslate"><span class="pre">(item,</span> <span class="pre">event)</span></code> — <code class="docutils literal notranslate"><span class="pre">query_id</span> <span class="pre">=</span> <span class="pre">f&quot;{item.id}::{event_idx}&quot;</span></code>
+— future-proofing multi-event items (seed items are single-event today). Each
+clip in <code class="docutils literal notranslate"><span class="pre">answer_clip_ids</span></code> carries its <code class="docutils literal notranslate"><span class="pre">grade</span></code>.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="embedder.html" class="btn btn-neutral float-left" title="foley.eval.embedder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="retrieval.html" class="btn btn-neutral float-right" title="foley.eval.retrieval" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

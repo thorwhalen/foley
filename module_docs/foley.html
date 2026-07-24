@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.4 documentation</title>
+  <title>foley &mdash; foley 0.0.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../_static/documentation_options.js?v=282f96c0"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -212,6 +212,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.encode"><code class="docutils literal notranslate"><span class="pre">encode()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.ensure_channels"><code class="docutils literal notranslate"><span class="pre">ensure_channels()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.estimate_snr"><code class="docutils literal notranslate"><span class="pre">estimate_snr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.fade"><code class="docutils literal notranslate"><span class="pre">fade()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.fuse_hits"><code class="docutils literal notranslate"><span class="pre">fuse_hits()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.has_nan_inf"><code class="docutils literal notranslate"><span class="pre">has_nan_inf()</span></code></a></li>
@@ -250,6 +251,11 @@
 <li class="toctree-l1"><a class="reference internal" href="foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/bootstrap.html">foley.bootstrap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/index/embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/index/indexes.html">foley.index.indexes</a></li>
@@ -1635,6 +1641,26 @@ an exactly-zero floor returns <code class="docutils literal notranslate"><span c
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>SNR in dB.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.evaluate">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">golden</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley.html#evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Run the Tier-1 retrieval eval over the golden set (<a class="reference external" href="mailto:nDCG&#37;&#52;&#48;10">nDCG<span>&#64;</span>10</a> / recall / mAP / MRR).</p>
+<p>Scores every golden query through the real <a class="reference internal" href="#foley.SoundLibrary.search" title="foley.SoundLibrary.search"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SoundLibrary.search()</span></code></a> path
+against a deterministic, CLAP-free Ring-0 library — the same computation the
+PR gate asserts on. See <a class="reference internal" href="foley/eval.html#module-foley.eval" title="foley.eval"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.eval</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>golden</strong> – Optional path to a golden-set JSON (default: the frozen seed).</p></li>
+<li><p><strong>k</strong> – Retrieval cutoff and metric <code class="docutils literal notranslate"><span class="pre">&#64;k</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="foley/eval.html#foley.eval.RetrievalReport" title="foley.eval.RetrievalReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.eval.RetrievalReport</span></code></a>.</p>
 </dd>
 </dl>
 </dd></dl>

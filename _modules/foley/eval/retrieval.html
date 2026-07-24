@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.eval.retrieval &mdash; foley 0.0.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=282f96c0"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.eval.retrieval</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.eval.retrieval</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tier-1 retrieval metrics + run assembly — pure stdlib, CI-safe, ranx-exact.</span>
+
+<span class="sd">The metrics (``nDCG@10``, ``Recall@k``, ``Precision@k``, ``mAP@10``, ``MRR@10``)</span>
+<span class="sd">are hand-rolled in stdlib (no ``ranx``/``numba``) so the nDCG PR gate runs in</span>
+<span class="sd">foley&#39;s numpy-only CI with zero heavy deps — yet they are **numerically</span>
+<span class="sd">identical** to ``ranx``/``pytrec_eval`` (guarded by the opt-in</span>
+<span class="sd">``tests/eval/test_metrics_vs_ranx.py`` oracle). nDCG uses the **linear** Järvelin</span>
+<span class="sd">gain ``Σ grade_i / log2(rank+1)`` — the definition ``ranx``&#39;s ``&quot;ndcg@10&quot;`` and</span>
+<span class="sd">``pytrec_eval``&#39;s ``ndcg_cut_10`` actually implement (report 08 §1.1&#39;s</span>
+<span class="sd">``2^grade−1`` is a doc bug).</span>
+
+<span class="sd">Vocabulary (TREC-style):</span>
+<span class="sd">    * **qrels** — ``{query_id: {clip_id: grade}}`` — the ground-truth relevance</span>
+<span class="sd">      grades (0 = wrong, 1 = acceptable, 2 = ideal); the raw grade is the gain,</span>
+<span class="sd">      so the metrics are grade-scale-agnostic.</span>
+<span class="sd">    * **run** — ``{query_id: {clip_id: score}}`` — the system&#39;s scored results.</span>
+
+<span class="sd">:func:`build_run` assigns strictly-descending integer scores in the search order,</span>
+<span class="sd">so a run has **no score ties** and its ranking reproduces ``search()``&#39;s</span>
+<span class="sd">(already id-tiebroken) order exactly — the source of cross-platform determinism.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">log2</span>
+
+<span class="c1">#: The metrics reported by :func:`evaluate_run` (nDCG@10 is the sole PR gate).</span>
+<span class="n">DEFAULT_METRICS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;ndcg@10&quot;</span><span class="p">,</span> <span class="s2">&quot;recall@10&quot;</span><span class="p">,</span> <span class="s2">&quot;map@10&quot;</span><span class="p">,</span> <span class="s2">&quot;mrr@10&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ranked_ids</span><span class="p">(</span><span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[str]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Doc ids of one query&#39;s run, best-first: score desc, ties broken by id asc.</span>
+
+<span class="sd">    Deterministic and — because :func:`build_run` makes scores strictly</span>
+<span class="sd">    descending and distinct — equal to the underlying ``search()`` order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">run_q</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="n">run_q</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="ndcg_at_k">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.ndcg_at_k">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ndcg_at_k</span><span class="p">(</span>
+    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalized DCG at ``k`` with linear gains (0.0 when no graded answer).&quot;&quot;&quot;</span>
+    <span class="n">ranked</span> <span class="o">=</span> <span class="n">_ranked_ids</span><span class="p">(</span><span class="n">run_q</span><span class="p">)[:</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">dcg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">qrels_q</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">log2</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ranked</span><span class="p">))</span>
+    <span class="n">ideal</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">qrels_q</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="n">k</span><span class="p">]</span>
+    <span class="n">idcg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">g</span> <span class="o">/</span> <span class="n">log2</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ideal</span><span class="p">))</span>
+    <span class="k">return</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">idcg</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">dcg</span> <span class="o">/</span> <span class="n">idcg</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_relevant</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;set[str]&quot;</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">qrels_q</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">g</span> <span class="o">&gt;=</span> <span class="n">rel_lvl</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="recall_at_k">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.recall_at_k">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">recall_at_k</span><span class="p">(</span>
+    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fraction of ALL relevant docs (grade ≥ ``rel_lvl``) retrieved in the top-``k``.&quot;&quot;&quot;</span>
+    <span class="n">rel</span> <span class="o">=</span> <span class="n">_relevant</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">_ranked_ids</span><span class="p">(</span><span class="n">run_q</span><span class="p">)[:</span><span class="n">k</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rel</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hits</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">rel</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="precision_at_k">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.precision_at_k">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">precision_at_k</span><span class="p">(</span>
+    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fraction of the top-``k`` that is relevant (denominator is literal ``k``).&quot;&quot;&quot;</span>
+    <span class="n">rel</span> <span class="o">=</span> <span class="n">_relevant</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">)</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">_ranked_ids</span><span class="p">(</span><span class="n">run_q</span><span class="p">)[:</span><span class="n">k</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rel</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hits</span> <span class="o">/</span> <span class="n">k</span></div>
+
+
+
+<div class="viewcode-block" id="average_precision_at_k">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.average_precision_at_k">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">average_precision_at_k</span><span class="p">(</span>
+    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Average precision (trec_eval ``map``: divide by TOTAL relevant, not ``min(R,k)``).&quot;&quot;&quot;</span>
+    <span class="n">rel</span> <span class="o">=</span> <span class="n">_relevant</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_ranked_ids</span><span class="p">(</span><span class="n">run_q</span><span class="p">)[:</span><span class="n">k</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rel</span><span class="p">:</span>
+            <span class="n">hits</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="n">hits</span> <span class="o">/</span> <span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">rel</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mrr_at_k">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.mrr_at_k">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mrr_at_k</span><span class="p">(</span>
+    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reciprocal rank of the first relevant doc in the top-``k`` (0.0 if none).&quot;&quot;&quot;</span>
+    <span class="n">rel</span> <span class="o">=</span> <span class="n">_relevant</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_ranked_ids</span><span class="p">(</span><span class="n">run_q</span><span class="p">)[:</span><span class="n">k</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mf">0.0</span></div>
+
+
+
+<div class="viewcode-block" id="mean_over_queries">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.mean_over_queries">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mean_over_queries</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="s2">&quot;list[float]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Macro-average of per-query metric values (0.0 for an empty list).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">if</span> <span class="n">values</span> <span class="k">else</span> <span class="mf">0.0</span></div>
+
+
+
+<span class="c1">#: metric-name -&gt; the callable computing it (``@k`` parsed off the name).</span>
+<span class="n">_METRIC_FNS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ndcg&quot;</span><span class="p">:</span> <span class="n">ndcg_at_k</span><span class="p">,</span>
+    <span class="s2">&quot;recall&quot;</span><span class="p">:</span> <span class="n">recall_at_k</span><span class="p">,</span>
+    <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="n">precision_at_k</span><span class="p">,</span>
+    <span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="n">average_precision_at_k</span><span class="p">,</span>
+    <span class="s2">&quot;mrr&quot;</span><span class="p">:</span> <span class="n">mrr_at_k</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_metric</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[str, int]&quot;</span><span class="p">:</span>
+    <span class="n">base</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">kstr</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">base</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">kstr</span><span class="p">)</span> <span class="k">if</span> <span class="n">kstr</span> <span class="k">else</span> <span class="mi">10</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="build_run">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.build_run">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_run</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Turn an ordered ``search()`` result into a run row with distinct scores.</span>
+
+<span class="sd">    Assigns each candidate a strictly-descending integer score</span>
+<span class="sd">    (``len - rank``) in the order returned, so the run carries **no score</span>
+<span class="sd">    ties** and :func:`_ranked_ids` reproduces the search ranking exactly — the</span>
+<span class="sd">    determinism the gate relies on. The doc id is ``candidate.sound.id``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        candidates: An ordered ``list[Candidate]`` from</span>
+<span class="sd">            :meth:`foley.index.library.SoundLibrary.search` (best first).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``{clip_id: score}`` with distinct descending scores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">rank</span><span class="p">)</span> <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">candidates</span><span class="p">)}</span></div>
+
+
+
+<div class="viewcode-block" id="RetrievalReport">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.RetrievalReport">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RetrievalReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).&quot;&quot;&quot;</span>
+
+    <span class="n">per_query</span><span class="p">:</span> <span class="s2">&quot;dict[str, dict[str, float]]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">mean</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">ranks</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+
+<div class="viewcode-block" id="RetrievalReport.format_regression_diff">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.RetrievalReport.format_regression_diff">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_regression_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">baseline</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A human diff for a failing gate: mean vs baseline + the worst queries.&quot;&quot;&quot;</span>
+        <span class="n">metric</span> <span class="o">=</span> <span class="n">baseline</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metric&quot;</span><span class="p">,</span> <span class="s2">&quot;ndcg@10&quot;</span><span class="p">)</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">baseline</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">: current=</span><span class="si">{</span><span class="n">cur</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> baseline=</span><span class="si">{</span><span class="n">base</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;floor=</span><span class="si">{</span><span class="n">base</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">baseline</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tolerance&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">0.02</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Δ=</span><span class="si">{</span><span class="n">cur</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">base</span><span class="si">:</span><span class="s2">+.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;worst queries (query_id: metric | rank-of-top-answer):&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">worst</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">per_query</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">kv</span><span class="p">:</span> <span class="n">kv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">qid</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">worst</span><span class="p">[:</span><span class="mi">8</span><span class="p">]:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">qid</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | rank=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">qid</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="evaluate_run">
+<a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.evaluate_run">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate_run</span><span class="p">(</span>
+    <span class="n">run</span><span class="p">:</span> <span class="s2">&quot;dict[str, dict[str, float]]&quot;</span><span class="p">,</span>
+    <span class="n">qrels</span><span class="p">:</span> <span class="s2">&quot;dict[str, dict[str, int]]&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...]&quot;</span> <span class="o">=</span> <span class="n">DEFAULT_METRICS</span><span class="p">,</span>
+    <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RetrievalReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Score a ``run`` against ``qrels``, returning a :class:`RetrievalReport`.</span>
+
+<span class="sd">    Only query ids present in ``qrels`` are scored (a run row without a</span>
+<span class="sd">    ground-truth judgment is ignored). ``ranks`` records, per query, the 1-based</span>
+<span class="sd">    rank of the highest-graded answer (for the failure diff).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">RetrievalReport</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">qid</span><span class="p">,</span> <span class="n">qrels_q</span> <span class="ow">in</span> <span class="n">qrels</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">run_q</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">qid</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">scores</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
+            <span class="n">base</span><span class="p">,</span> <span class="n">mk</span> <span class="o">=</span> <span class="n">_parse_metric</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">_METRIC_FNS</span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
+            <span class="n">scores</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">fn</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">run_q</span><span class="p">,</span> <span class="n">mk</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="o">=</span><span class="n">rel_lvl</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">base</span> <span class="o">!=</span> <span class="s2">&quot;ndcg&quot;</span>
+                <span class="k">else</span> <span class="n">fn</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">run_q</span><span class="p">,</span> <span class="n">mk</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">per_query</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span> <span class="o">=</span> <span class="n">scores</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">ranks</span><span class="p">[</span><span class="n">qid</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rank_of_top_answer</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">run_q</span><span class="p">)</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">mean_over_queries</span><span class="p">([</span><span class="n">m</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">per_query</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">metrics</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">report</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_rank_of_top_answer</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;1-based rank of the highest-graded answer clip in the run (0 = not found).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">qrels_q</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">best_clip</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">qrels_q</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">ranked</span> <span class="o">=</span> <span class="n">_ranked_ids</span><span class="p">(</span><span class="n">run_q</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ranked</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">best_clip</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">best_clip</span> <span class="ow">in</span> <span class="n">ranked</span> <span class="k">else</span> <span class="mi">0</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

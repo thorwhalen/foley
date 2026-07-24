@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.bootstrap &mdash; foley 0.0.4 documentation</title>
+  <title>foley.bootstrap &mdash; foley 0.0.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8c5712d9"></script>
+      <script src="../../_static/documentation_options.js?v=282f96c0"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -51,6 +51,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
@@ -184,7 +189,9 @@
             <span class="n">IngestResult</span><span class="p">(</span>
                 <span class="nb">id</span><span class="o">=</span><span class="n">adapter</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                 <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span>
-                <span class="n">notes</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;corpus </span><span class="si">{</span><span class="n">adapter</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> not found at </span><span class="si">{</span><span class="n">root</span><span class="si">!r}</span><span class="s2">; download it first&quot;</span><span class="p">],</span>
+                <span class="n">notes</span><span class="o">=</span><span class="p">[</span>
+                    <span class="sa">f</span><span class="s2">&quot;corpus </span><span class="si">{</span><span class="n">adapter</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> not found at </span><span class="si">{</span><span class="n">root</span><span class="si">!r}</span><span class="s2">; download it first&quot;</span>
+                <span class="p">],</span>
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">report</span>
@@ -224,7 +231,9 @@
             <span class="p">)</span>
             <span class="k">continue</span>
         <span class="n">captioner</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">MetadataCaptioner</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;caption&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;caption&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">MetadataCaptioner</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;caption&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;caption&quot;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="kc">None</span>
         <span class="p">)</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">ingest_one</span><span class="p">(</span>
             <span class="n">spec</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
@@ -322,16 +331,12 @@
 
         <span class="n">embedder</span> <span class="o">=</span> <span class="n">default_embedder</span><span class="p">()</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">MemoryIndex</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">embedder</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">SoundLibrary</span><span class="p">(</span>
-        <span class="n">sounds</span><span class="o">=</span><span class="p">{},</span> <span class="n">meta</span><span class="o">=</span><span class="p">{},</span> <span class="n">vindex</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">kindex</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span>
-    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">SoundLibrary</span><span class="p">(</span><span class="n">sounds</span><span class="o">=</span><span class="p">{},</span> <span class="n">meta</span><span class="o">=</span><span class="p">{},</span> <span class="n">vindex</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">kindex</span><span class="o">=</span><span class="n">idx</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="demo">
 <a class="viewcode-back" href="../../module_docs/foley/bootstrap.html#foley.demo">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">demo</span><span class="p">(</span>
-    <span class="o">*</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;rain on a window&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">demo</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;rain on a window&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ingest the bundled Ring-0 fixture and run one search — the smoke test.</span>
 
 <span class="sd">    Needs no corpus download (the fixture ships in the wheel), but does need the</span>
