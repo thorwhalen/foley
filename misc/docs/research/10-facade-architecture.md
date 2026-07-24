@@ -97,22 +97,26 @@ These four models are the reconciliation of the schemas scattered across the rep
 from dataclasses import dataclass, field
 from typing import Optional
 
+
 @dataclass
 class LicenseRecord:
     """Per-sound rights + provenance. SSOT for BOTH the candidate keep()/reject
     filter (§3) AND the store's by-value/by-reference caching policy (report 09)."""
+
     # ── identity / origin ──────────────────────────────────────────────
-    source: str                                  # adapter that produced it: 'freesound' | 'user' | 'stable_audio' ...
+    source: str  # adapter that produced it: 'freesound' | 'user' | 'stable_audio' ...
     source_id: Optional[str] = None
     source_url: Optional[str] = None
-    acquisition_method: str = "user"             # api | bulk | scrape_pointer | generated | user
-    retrieved_at: Optional[str] = None           # ISO-8601
+    acquisition_method: str = "user"  # api | bulk | scrape_pointer | generated | user
+    retrieved_at: Optional[str] = None  # ISO-8601
     adapter_version: Optional[str] = None
-    content_sha256: Optional[str] = None         # hash of canonical bytes (dedup + provenance key)
+    content_sha256: Optional[str] = (
+        None  # hash of canonical bytes (dedup + provenance key)
+    )
 
     # ── rights (normalized) ────────────────────────────────────────────
-    license_id: str = "unknown"                  # SPDX where possible; else RemArc, Sonniss-GDC,
-                                                 #   ElevenLabs-SFX, Stability-Community, Proprietary-<vendor>
+    license_id: str = "unknown"  # SPDX where possible; else RemArc, Sonniss-GDC,
+    #   ElevenLabs-SFX, Stability-Community, Proprietary-<vendor>
     license_name: Optional[str] = None
     license_version: Optional[str] = None
     license_url: Optional[str] = None
@@ -121,37 +125,49 @@ class LicenseRecord:
     creator_url: Optional[str] = None
 
     # ── derived flags (looked up from license_id → flag-set table; SSOT for filtering) ──
-    commercial_ok: bool = False                  # fail-closed default
-    embed_in_derivative_ok: bool = True          # ~always True (the normal case)
-    redistribute_standalone_ok: bool = False     # COPYRIGHT: raw-file re-exposure / sample pack
-    cache_bytes_ok: bool = False                 # OPERATIONAL: may foley persist the bytes? (Freesound TOS ⇒ False even for CC0)
+    commercial_ok: bool = False  # fail-closed default
+    embed_in_derivative_ok: bool = True  # ~always True (the normal case)
+    redistribute_standalone_ok: bool = (
+        False  # COPYRIGHT: raw-file re-exposure / sample pack
+    )
+    cache_bytes_ok: bool = False  # OPERATIONAL: may foley persist the bytes? (Freesound TOS ⇒ False even for CC0)
     modification_ok: bool = False
-    ai_training_ok: bool = False                 # feed a training/dataset pipeline
-    revenue_cap_usd: Optional[int] = None        # e.g. 1_000_000 for Stability-Community
+    ai_training_ok: bool = False  # feed a training/dataset pipeline
+    revenue_cap_usd: Optional[int] = None  # e.g. 1_000_000 for Stability-Community
 
     # ── attribution ────────────────────────────────────────────────────
     requires_attribution: bool = False
-    attribution_text: Optional[str] = None       # ready-to-print TASL credit line
-    notice_text_required: Optional[str] = None   # e.g. Stability NOTICE when redistributing weights
+    attribution_text: Optional[str] = None  # ready-to-print TASL credit line
+    notice_text_required: Optional[str] = (
+        None  # e.g. Stability NOTICE when redistributing weights
+    )
 
     # ── provenance / transformation ────────────────────────────────────
-    transformations: list = field(default_factory=list)   # ordered ops; non-empty ⇒ credit "(modified)"
+    transformations: list = field(
+        default_factory=list
+    )  # ordered ops; non-empty ⇒ credit "(modified)"
 
     # ── generation (present iff AI-generated) ──────────────────────────
     is_ai_generated: bool = False
-    generator_model: Optional[str] = None        # "elevenlabs:eleven_text_to_sound_v2" | "stable_audio_open:1.0"
+    generator_model: Optional[str] = (
+        None  # "elevenlabs:eleven_text_to_sound_v2" | "stable_audio_open:1.0"
+    )
     generator_version: Optional[str] = None
     generation_prompt: Optional[str] = None
-    generation_seed: Optional[int] = None         # None ⇒ non-deterministic backend (record it)
+    generation_seed: Optional[int] = (
+        None  # None ⇒ non-deterministic backend (record it)
+    )
     generation_params: dict = field(default_factory=dict)
-    watermark: Optional[dict] = None             # {"present": True, "method": "audioseal", "version": ...}
+    watermark: Optional[dict] = (
+        None  # {"present": True, "method": "audioseal", "version": ...}
+    )
     c2pa_manifest_ref: Optional[str] = None
 
     # ── safety / disclosure ────────────────────────────────────────────
     contains_recognizable_voice: bool = False
     potential_trademark: bool = False
-    disclosure_recommended: bool = False         # EU AI Act Art.50 / platform label hint  [21]
-    rights_verified: bool = False                # False ⇒ treated as unknown (fail-closed)
+    disclosure_recommended: bool = False  # EU AI Act Art.50 / platform label hint  [21]
+    rights_verified: bool = False  # False ⇒ treated as unknown (fail-closed)
     verified_at: Optional[str] = None
 ```
 
@@ -164,16 +180,21 @@ Two maintainability rules [7]: (1) a **`license_id → flag-set` table is the SS
 class SoundRecord:
     """Canonical SSOT per sound (report 04 + report 09 storage + report 07 license).
     Audio bytes and the CLAP vector live in SEPARATE stores keyed by the same id."""
+
     # ── identity ───────────────────────────────────────────────────────
-    id: str                                      # stable UUID / content hash (primary key)
-    content_sha256: Optional[str] = None         # content-address key into `sounds`
-    hash_algo: str = "sha256"                    # stored with key so mixed-hash libs stay coherent
+    id: str  # stable UUID / content hash (primary key)
+    content_sha256: Optional[str] = None  # content-address key into `sounds`
+    hash_algo: str = "sha256"  # stored with key so mixed-hash libs stay coherent
 
     # ── storage (report 09) ────────────────────────────────────────────
-    uri: Optional[str] = None                    # blob-ref: content key | local path | s3://… | https://…
-    storage_mode: str = "by_reference"           # by_value | by_reference  (DERIVED from license.cache_bytes_ok)
-    archive_format: Optional[str] = None         # 'flac' (archive) — distinct from delivered `format`
-    source_sample_rate: Optional[int] = None     # preserved native rate (often 96/192 kHz)
+    uri: Optional[str] = None  # blob-ref: content key | local path | s3://… | https://…
+    storage_mode: str = (
+        "by_reference"  # by_value | by_reference  (DERIVED from license.cache_bytes_ok)
+    )
+    archive_format: Optional[str] = (
+        None  # 'flac' (archive) — distinct from delivered `format`
+    )
+    source_sample_rate: Optional[int] = None  # preserved native rate (often 96/192 kHz)
     source_bit_depth: Optional[int] = None
 
     # ── rights + provenance (report 07) ────────────────────────────────
@@ -181,30 +202,36 @@ class SoundRecord:
 
     # ── descriptive text (feeds BM25 + human display) ──────────────────
     caption: Optional[str] = None
-    tags: list = field(default_factory=list)     # free + controlled tags
+    tags: list = field(default_factory=list)  # free + controlled tags
 
     # ── controlled taxonomy (feeds filters & browse) ───────────────────
-    ucs_category: Optional[str] = None           # UCS CatID, e.g. 'WEATHRain'
+    ucs_category: Optional[str] = None  # UCS CatID, e.g. 'WEATHRain'
     ucs_subcategory: Optional[str] = None
-    audioset_labels: list = field(default_factory=list)   # AudioSet MIDs / names (PANNs, ontology-expanded)
+    audioset_labels: list = field(
+        default_factory=list
+    )  # AudioSet MIDs / names (PANNs, ontology-expanded)
 
     # ── audio technical facts ──────────────────────────────────────────
     duration_s: Optional[float] = None
-    sample_rate: Optional[int] = None            # working/delivered rate
+    sample_rate: Optional[int] = None  # working/delivered rate
     channels: Optional[int] = None
-    loudness_lufs: Optional[float] = None        # ITU-R BS.1770-4 / EBU R128
-    format: Optional[str] = None                 # delivered: 'wav'|'flac'|'opus'|'mp3'
+    loudness_lufs: Optional[float] = None  # ITU-R BS.1770-4 / EBU R128
+    format: Optional[str] = None  # delivered: 'wav'|'flac'|'opus'|'mp3'
 
     # ── quality control (report 08; populated on ingest, becomes search filters) ──
-    qc: Optional[dict] = None                    # {clipping, true_peak_dbtp, dc_offset, snr_db, edge_click, pass|warn|fail}
+    qc: Optional[dict] = (
+        None  # {clipping, true_peak_dbtp, dc_offset, snr_db, edge_click, pass|warn|fail}
+    )
 
     # ── retrieval index refs (NOT inlined in list views) ───────────────
-    embedding_model: Optional[str] = None        # 'laion/larger_clap_general'
-    embedding_dim: Optional[int] = None          # 512
-    embedding_ref: Optional[str] = None          # id into vindex
+    embedding_model: Optional[str] = None  # 'laion/larger_clap_general'
+    embedding_dim: Optional[int] = None  # 512
+    embedding_ref: Optional[str] = None  # id into vindex
 
     # ── cross-work continuity (report 12) ──────────────────────────────
-    named_cue: Optional[str] = None              # reusable motif id ("hero_door") for continuity across a work
+    named_cue: Optional[str] = (
+        None  # reusable motif id ("hero_door") for continuity across a work
+    )
 
     schema_version: int = 1
 ```
@@ -215,37 +242,47 @@ class SoundRecord:
 @dataclass
 class SoundEvent:
     """One salient, physically-audible event decomposed from a narrative passage."""
-    query: str                                   # retrieval query ("heavy wooden door creaking open")
-    layer: str = "sfx_fg"                        # sfx_fg | ambience | stinger | music  (== timeline Layer)
-    diegetic: bool = True                        # False ⇒ route to music/generation, judged on mood not literal content
-    salience: str = "medium"                     # high | medium | low  (drives budget/pruning)
-    onset: Optional[str] = None                  # symbolic anchor ("on 'pushed open'") — resolved later by WEAVE
+
+    query: str  # retrieval query ("heavy wooden door creaking open")
+    layer: str = "sfx_fg"  # sfx_fg | ambience | stinger | music  (== timeline Layer)
+    diegetic: bool = (
+        True  # False ⇒ route to music/generation, judged on mood not literal content
+    )
+    salience: str = "medium"  # high | medium | low  (drives budget/pruning)
+    onset: Optional[str] = (
+        None  # symbolic anchor ("on 'pushed open'") — resolved later by WEAVE
+    )
     loop: bool = False
     ucs_catid: Optional[str] = None
     audioset: list = field(default_factory=list)
-    era_place: Optional[str] = None              # plausibility context (anachronism guard, report 12)
+    era_place: Optional[str] = (
+        None  # plausibility context (anachronism guard, report 12)
+    )
+
 
 @dataclass
 class Verdict:
     match: bool
-    confidence: float                            # 0..1
+    confidence: float  # 0..1
     reason: str = ""
-    level: str = "clap"                          # clap | listen | judge  (which ladder rung produced it)
+    level: str = "clap"  # clap | listen | judge  (which ladder rung produced it)
+
 
 @dataclass
 class Candidate:
     """A ranked, license-checked, (optionally) verified sound for one SoundEvent.
     Retrieval and generation return the SAME shape (report 05) — origin is the only difference."""
+
     sound: SoundRecord
-    origin: str = "retrieved"                    # retrieved | generated
-    event: Optional[SoundEvent] = None           # provenance: which event this answers
+    origin: str = "retrieved"  # retrieved | generated
+    event: Optional[SoundEvent] = None  # provenance: which event this answers
     clap_score: Optional[float] = None
     bm25_score: Optional[float] = None
-    rrf_score: Optional[float] = None            # fused rank score (k=60)
-    rerank_score: Optional[float] = None         # optional second-stage
+    rrf_score: Optional[float] = None  # fused rank score (k=60)
+    rerank_score: Optional[float] = None  # optional second-stage
     verdict: Optional[Verdict] = None
-    license_ok: Optional[bool] = None            # result of keep(record, intended_use)
-    preview_uri: Optional[str] = None            # short Opus preview for human audition
+    license_ok: Optional[bool] = None  # result of keep(record, intended_use)
+    preview_uri: Optional[str] = None  # short Opus preview for human audition
 ```
 
 ### 2.4 `SoundDesignTimeline` / `TimelineItem` — the WEAVE deliverable
@@ -256,51 +293,56 @@ Report 06's schema, verbatim in structure — a strict superset of the SELECT pl
 from typing import Literal
 
 Anchor = Literal["absolute", "word", "sentence", "scene", "paragraph"]
-Layer  = Literal["voice", "sfx_fg", "ambience", "stinger", "music"]
+Layer = Literal["voice", "sfx_fg", "ambience", "stinger", "music"]
+
 
 @dataclass
-class Placement:                                 # WHERE/WHEN — symbolic anchor + resolved time
+class Placement:  # WHERE/WHEN — symbolic anchor + resolved time
     anchor: Anchor = "absolute"
-    ref: Optional[str] = None                    # transcript word / sentence id / scene id
-    onset: float = 0.0                           # resolved start (s); filled by the aligner
-    pre_roll: float = 0.0                        # shift so the clip's transient lands on the anchor
-    duration: Optional[float] = None             # None = full clip length
+    ref: Optional[str] = None  # transcript word / sentence id / scene id
+    onset: float = 0.0  # resolved start (s); filled by the aligner
+    pre_roll: float = 0.0  # shift so the clip's transient lands on the anchor
+    duration: Optional[float] = None  # None = full clip length
     loop: bool = False
 
+
 @dataclass
-class Processing:                                # HOW it sounds — all optional, sensible defaults
-    gain_db: float = 0.0                         # relative to the voice bus
-    pan: float = 0.0                             # -1 (L) .. +1 (R), constant-power
-    distance: float = 0.0                        # 0 near .. 1 far → gain+LPF+reverb recipe
-    reverb_send: float = 0.0                     # 0 dry .. 1 wet (scene bus)
-    fade_in: float = 0.008                       # s, declick
+class Processing:  # HOW it sounds — all optional, sensible defaults
+    gain_db: float = 0.0  # relative to the voice bus
+    pan: float = 0.0  # -1 (L) .. +1 (R), constant-power
+    distance: float = 0.0  # 0 near .. 1 far → gain+LPF+reverb recipe
+    reverb_send: float = 0.0  # 0 dry .. 1 wet (scene bus)
+    fade_in: float = 0.008  # s, declick
     fade_out: float = 0.012
     duck_bed: bool = False
+
 
 @dataclass
 class TimelineItem:
     id: str
-    clip_ref: str                                # SoundRecord id in the dol library (by reference!)
+    clip_ref: str  # SoundRecord id in the dol library (by reference!)
     layer: Layer = "sfx_fg"
     placement: Placement = field(default_factory=Placement)
     processing: Processing = field(default_factory=Processing)
-    event: Optional[SoundEvent] = None           # provenance from decompose_context
-    enabled: bool = True                         # non-destructive mute
+    event: Optional[SoundEvent] = None  # provenance from decompose_context
+    enabled: bool = True  # non-destructive mute
+
 
 @dataclass
 class MasterProfile:
-    target_lufs: float = -16.0                   # podcast default (streaming=-14, ebu=-23, atsc=-24)
+    target_lufs: float = -16.0  # podcast default (streaming=-14, ebu=-23, atsc=-24)
     true_peak_db: float = -1.0
     lra: float = 11.0
 
+
 @dataclass
 class SoundDesignTimeline:
-    narration_ref: str                           # the voice audio (dol ref)
+    narration_ref: str  # the voice audio (dol ref)
     transcript: Optional[str] = None
-    word_timeline: list = field(default_factory=list)     # from forced alignment (cached)
-    items: list = field(default_factory=list)             # list[TimelineItem]
+    word_timeline: list = field(default_factory=list)  # from forced alignment (cached)
+    items: list = field(default_factory=list)  # list[TimelineItem]
     master: MasterProfile = field(default_factory=MasterProfile)
-    run_manifest_ref: Optional[str] = None       # join to the obs/ trace + seeds (report 12)
+    run_manifest_ref: Optional[str] = None  # join to the obs/ trace + seeds (report 12)
     schema_version: int = 1
 ```
 
@@ -358,32 +400,53 @@ foley carries **two affordance registries** — a **query vocabulary** (for `fin
 ```python
 @dataclass(frozen=True)
 class Affordance:
-    name: str; type: type; description: str; default: object = None; stage: str = "query"
+    name: str
+    type: type
+    description: str
+    default: object = None
+    stage: str = "query"
 
-QUERY_AFFORDANCES = {   # for search_sounds / find / library.filter
-    "text":            Affordance("text", str, "Natural-language query"),
-    "semantic_text":   Affordance("semantic_text", str, "Query for CLAP semantic space", stage="query"),
-    "k":               Affordance("k", int, "Number of results", 10),
-    "filters":         Affordance("filters", dict, "Metadata predicates (SQL-style)"),
-    "ucs_category":    Affordance("ucs_category", str, "UCS CatID facet"),
-    "audioset_label":  Affordance("audioset_label", str, "AudioSet ontology facet (rolls up children)"),
-    "duration_range":  Affordance("duration_range", tuple, "(min_s, max_s)"),
-    "min_snr":         Affordance("min_snr", float, "QC filter: min SNR dB"),
-    "commercial_ok":   Affordance("commercial_ok", bool, "License filter shorthand"),
-    "license":         Affordance("license", str, "Explicit license id constraint"),
-    "sort":            Affordance("sort", str, "score|duration|created|downloads", "score"),
-    "rerank":          Affordance("rerank", bool, "Apply second-stage CLAP/cross-encoder rerank", False),
+
+QUERY_AFFORDANCES = {  # for search_sounds / find / library.filter
+    "text": Affordance("text", str, "Natural-language query"),
+    "semantic_text": Affordance(
+        "semantic_text", str, "Query for CLAP semantic space", stage="query"
+    ),
+    "k": Affordance("k", int, "Number of results", 10),
+    "filters": Affordance("filters", dict, "Metadata predicates (SQL-style)"),
+    "ucs_category": Affordance("ucs_category", str, "UCS CatID facet"),
+    "audioset_label": Affordance(
+        "audioset_label", str, "AudioSet ontology facet (rolls up children)"
+    ),
+    "duration_range": Affordance("duration_range", tuple, "(min_s, max_s)"),
+    "min_snr": Affordance("min_snr", float, "QC filter: min SNR dB"),
+    "commercial_ok": Affordance("commercial_ok", bool, "License filter shorthand"),
+    "license": Affordance("license", str, "Explicit license id constraint"),
+    "sort": Affordance("sort", str, "score|duration|created|downloads", "score"),
+    "rerank": Affordance(
+        "rerank", bool, "Apply second-stage CLAP/cross-encoder rerank", False
+    ),
 }
 
-GENERATION_AFFORDANCES = {   # for generate (translated per backend; report 02 §Recommendations)
-    "prompt":            Affordance("prompt", str, "Sound description", stage="generate"),
-    "duration":          Affordance("duration", float, "Seconds; None ⇒ backend default", stage="generate"),
-    "prompt_influence":  Affordance("prompt_influence", float, "0..1 unified guidance", 0.3, "generate"),
-    "negative_prompt":   Affordance("negative_prompt", str, "Content to exclude", stage="generate"),
-    "steps":             Affordance("steps", int, "Diffusion/flow steps", stage="generate"),
-    "seed":              Affordance("seed", int, "Reproducibility (capture in provenance)", stage="generate"),
-    "loop":              Affordance("loop", bool, "Seamless-loopable clip", False, "generate"),
-    "output_format":     Affordance("output_format", str, "wav|opus|mp3", "wav", "generate"),
+GENERATION_AFFORDANCES = {  # for generate (translated per backend; report 02 §Recommendations)
+    "prompt": Affordance("prompt", str, "Sound description", stage="generate"),
+    "duration": Affordance(
+        "duration", float, "Seconds; None ⇒ backend default", stage="generate"
+    ),
+    "prompt_influence": Affordance(
+        "prompt_influence", float, "0..1 unified guidance", 0.3, "generate"
+    ),
+    "negative_prompt": Affordance(
+        "negative_prompt", str, "Content to exclude", stage="generate"
+    ),
+    "steps": Affordance("steps", int, "Diffusion/flow steps", stage="generate"),
+    "seed": Affordance(
+        "seed", int, "Reproducibility (capture in provenance)", stage="generate"
+    ),
+    "loop": Affordance("loop", bool, "Seamless-loopable clip", False, "generate"),
+    "output_format": Affordance(
+        "output_format", str, "wav|opus|mp3", "wav", "generate"
+    ),
 }
 
 # translation example (report 02): duration → {elevenlabs: duration_seconds, stable_audio: audio_end_in_s,
@@ -396,9 +459,13 @@ The caller's rights intent is a first-class object the license gate consumes (re
 ```python
 @dataclass
 class IntendedUse:
-    commercial: bool = True; publish: bool = True
-    redistribute_standalone: bool = False; will_train: bool = False
-    can_attribute: bool = True; revenue_usd: int = 0; allow_voice_or_trademark: bool = False
+    commercial: bool = True
+    publish: bool = True
+    redistribute_standalone: bool = False
+    will_train: bool = False
+    can_attribute: bool = True
+    revenue_usd: int = 0
+    allow_voice_or_trademark: bool = False
 ```
 
 ---
@@ -413,30 +480,64 @@ Mirrors `arioso`'s `PLATFORM_CONFIG` exactly — a package under `foley/sources/
 # foley/sources/freesound/config.py
 SOURCE_CONFIG = {
     "name": "freesound",
-    "kind": "retrieve",                          # retrieve | generate
-    "access_type": "rest_api",                   # rest_api | partner_api | bulk_corpus | scrape | no_api
-    "auth": {"type": "api_key", "env_var": "FREESOUND_API_KEY",
-             "query_param": "token", "download_requires": "oauth2"},
-    "dependencies": ["requests"], "optional_dependencies": ["freesound"],
-    "capabilities": ["search", "text_similarity", "similarity", "preview", "download", "analysis"],
+    "kind": "retrieve",  # retrieve | generate
+    "access_type": "rest_api",  # rest_api | partner_api | bulk_corpus | scrape | no_api
+    "auth": {
+        "type": "api_key",
+        "env_var": "FREESOUND_API_KEY",
+        "query_param": "token",
+        "download_requires": "oauth2",
+    },
+    "dependencies": ["requests"],
+    "optional_dependencies": ["freesound"],
+    "capabilities": [
+        "search",
+        "text_similarity",
+        "similarity",
+        "preview",
+        "download",
+        "analysis",
+    ],
     # unified vocabulary → this source's native params
     "query_map": {
-        "text":           {"native_name": "query"},
-        "k":              {"native_name": "page_size", "native_default": 15},   # max 150
-        "duration_range": {"native_name": "filter", "to_native": lambda lo, hi: f"duration:[{lo} TO {hi}]"},
-        "license":        {"native_name": "filter", "to_native": lambda lic: f'license:"{LICENSE_TO_FREESOUND[lic]}"'},
-        "semantic_text":  {"native_name": "similarity_space", "native_default": "laion_clap"},
+        "text": {"native_name": "query"},
+        "k": {"native_name": "page_size", "native_default": 15},  # max 150
+        "duration_range": {
+            "native_name": "filter",
+            "to_native": lambda lo, hi: f"duration:[{lo} TO {hi}]",
+        },
+        "license": {
+            "native_name": "filter",
+            "to_native": lambda lic: f'license:"{LICENSE_TO_FREESOUND[lic]}"',
+        },
+        "semantic_text": {
+            "native_name": "similarity_space",
+            "native_default": "laion_clap",
+        },
     },
     # license policy — resolved per item, gates BOTH filtering and caching
-    "license": {"per_item": True, "field": "license", "default_id": None,
-                "cache_bytes_ok": False},        # TOS: no full DB copies ⇒ store by-reference
-    "output": {"formats": ["wav", "aiff", "flac", "ogg", "mp3"], "preview_formats": ["mp3", "ogg"]},
-    "api": {"base_url": "https://freesound.org/apiv2",
-            "search_endpoint": {"method": "get", "path": "/search/"},
-            "download_endpoint": {"method": "get", "path": "/sounds/{id}/download/"}},
+    "license": {
+        "per_item": True,
+        "field": "license",
+        "default_id": None,
+        "cache_bytes_ok": False,
+    },  # TOS: no full DB copies ⇒ store by-reference
+    "output": {
+        "formats": ["wav", "aiff", "flac", "ogg", "mp3"],
+        "preview_formats": ["mp3", "ogg"],
+    },
+    "api": {
+        "base_url": "https://freesound.org/apiv2",
+        "search_endpoint": {"method": "get", "path": "/search/"},
+        "download_endpoint": {"method": "get", "path": "/sounds/{id}/download/"},
+    },
     "rate_limits": {"per_minute": 60, "per_day": 2000},
-    "cost": {"per_call_usd": 0.0}, "offline_capable": False,
-    "data_egress": {"sees_query_text": True, "sees_narration": False},   # privacy declaration (report 12)
+    "cost": {"per_call_usd": 0.0},
+    "offline_capable": False,
+    "data_egress": {
+        "sees_query_text": True,
+        "sees_narration": False,
+    },  # privacy declaration (report 12)
 }
 ```
 
@@ -449,57 +550,83 @@ Structural interfaces (PEP 544), `@runtime_checkable`, dependency-injected by ke
 ```python
 from typing import Protocol, Optional, runtime_checkable
 
+
 @runtime_checkable
 class SourceAdapter(Protocol):
     """Retrieve OR generate. Both return the same Candidate/SoundRecord shape."""
-    def search(self, query: str, **kw) -> list[Candidate]: ...          # retrieve
+
+    def search(self, query: str, **kw) -> list[Candidate]: ...  # retrieve
     def get(self, source_id: str) -> SoundRecord: ...
     def download(self, source_id: str) -> bytes: ...
-    def generate(self, prompt: str, **kw) -> Candidate: ...             # generate (guarded by commercial_ok)
+    def generate(
+        self, prompt: str, **kw
+    ) -> Candidate: ...  # generate (guarded by commercial_ok)
+
 
 @runtime_checkable
 class Embedder(Protocol):
     """Joint text↔audio space. Default: laion/larger_clap_general (512-d, Apache-2.0)."""
-    model_id: str; dim: int
-    def embed_text(self, text: str | list[str]) -> "ndarray": ...       # L2-normalized
+
+    model_id: str
+    dim: int
+
+    def embed_text(self, text: str | list[str]) -> "ndarray": ...  # L2-normalized
     def embed_audio(self, wav: "ndarray", sr: int) -> "ndarray": ...
 
-@runtime_checkable
-class Tagger(Protocol):                                                  # PANNs CNN14 default; BEATs/AST upgrade
-    def tag(self, wav: "ndarray", sr: int, *, taxonomy: str = "audioset") -> list[tuple[str, float]]: ...
 
 @runtime_checkable
-class Captioner(Protocol):                                               # EnCLAP default; Qwen2-Audio richer
+class Tagger(Protocol):  # PANNs CNN14 default; BEATs/AST upgrade
+    def tag(
+        self, wav: "ndarray", sr: int, *, taxonomy: str = "audioset"
+    ) -> list[tuple[str, float]]: ...
+
+
+@runtime_checkable
+class Captioner(Protocol):  # EnCLAP default; Qwen2-Audio richer
     def caption(self, wav: "ndarray", sr: int) -> str: ...
 
+
 @runtime_checkable
-class VectorIndex(Protocol):                                            # LanceDB default; Qdrant/pgvector cloud
+class VectorIndex(Protocol):  # LanceDB default; Qdrant/pgvector cloud
     def upsert(self, id: str, vector: "ndarray", meta: dict) -> None: ...
-    def knn(self, vector: "ndarray", k: int, *, where: dict | None = None) -> list[tuple[str, float]]: ...
+    def knn(
+        self, vector: "ndarray", k: int, *, where: dict | None = None
+    ) -> list[tuple[str, float]]: ...
+
 
 @runtime_checkable
-class KeywordIndex(Protocol):                                           # LanceDB FTS (Tantivy) / sqlite FTS5
+class KeywordIndex(Protocol):  # LanceDB FTS (Tantivy) / sqlite FTS5
     def index(self, id: str, text: str, meta: dict) -> None: ...
-    def bm25(self, query: str, k: int, *, where: dict | None = None) -> list[tuple[str, float]]: ...
+    def bm25(
+        self, query: str, k: int, *, where: dict | None = None
+    ) -> list[tuple[str, float]]: ...
+
 
 @runtime_checkable
-class Store(Protocol):                                                  # a dol Mapping; Files→S3
+class Store(Protocol):  # a dol Mapping; Files→S3
     def __getitem__(self, key: str) -> bytes: ...
     def __setitem__(self, key: str, value: bytes) -> None: ...
     def __contains__(self, key: str) -> bool: ...
 
-@runtime_checkable
-class Aligner(Protocol):                                                # WhisperX default; MFA/aeneas opt-in
-    def word_timeline(self, audio_path: str, *, transcript: str | None = None,
-                      language: str = "en") -> list[dict]: ...          # [{'word','start','end'}, …]
 
 @runtime_checkable
-class Judge(Protocol):                                                  # verify_match rung: CLAP|audio-LM|LLM
-    def judge(self, event: SoundEvent, candidate: Candidate, *, level: str = "clap") -> Verdict: ...
+class Aligner(Protocol):  # WhisperX default; MFA/aeneas opt-in
+    def word_timeline(
+        self, audio_path: str, *, transcript: str | None = None, language: str = "en"
+    ) -> list[dict]: ...  # [{'word','start','end'}, …]
+
 
 @runtime_checkable
-class ApplyStrategy(Protocol):                                          # how a chosen sound is realized in WEAVE
+class Judge(Protocol):  # verify_match rung: CLAP|audio-LM|LLM
+    def judge(
+        self, event: SoundEvent, candidate: Candidate, *, level: str = "clap"
+    ) -> Verdict: ...
+
+
+@runtime_checkable
+class ApplyStrategy(Protocol):  # how a chosen sound is realized in WEAVE
     """full | camera_only-equivalent (place-only) | diff-preview | transition — swappable render behaviors."""
+
     def apply(self, item: TimelineItem, buses: dict, library, *, sr: int) -> dict: ...
 ```
 

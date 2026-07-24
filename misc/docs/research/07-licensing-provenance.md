@@ -185,58 +185,52 @@ Extend report 01's minimal record into a full rights+provenance object, stored a
 ```python
 LicenseRecord = {
     # ── identity / origin ─────────────────────────────────────────
-    "source": "freesound",                 # adapter that produced it
+    "source": "freesound",  # adapter that produced it
     "source_id": "12345",
     "source_url": "https://freesound.org/s/12345/",
-    "acquisition_method": "api",           # api | bulk | scrape_pointer | generated
+    "acquisition_method": "api",  # api | bulk | scrape_pointer | generated
     "retrieved_at": "2026-07-22T14:30:45Z",
     "adapter_version": "freesound@0.3.1",
-    "content_sha256": "9f2b…",             # hash of canonical bytes (dedup + provenance key)
-
+    "content_sha256": "9f2b…",  # hash of canonical bytes (dedup + provenance key)
     # ── rights (the license, normalized) ──────────────────────────
-    "license_id": "CC-BY-4.0",             # SPDX where possible; else RemArc,
-                                           #   Sonniss-GDC, ElevenLabs-SFX,
-                                           #   Stability-Community, Proprietary-<vendor>
+    "license_id": "CC-BY-4.0",  # SPDX where possible; else RemArc,
+    #   Sonniss-GDC, ElevenLabs-SFX,
+    #   Stability-Community, Proprietary-<vendor>
     "license_name": "Creative Commons Attribution 4.0",
     "license_version": "4.0",
     "license_url": "https://creativecommons.org/licenses/by/4.0/",
     "rights_holder": "user 'foo'",
     "creator_name": "foo",
     "creator_url": "https://freesound.org/people/foo/",
-
     # derived boolean flags (cheap query-time filtering — the SSOT for §8.2)
     "commercial_ok": True,
-    "embed_in_derivative_ok": True,        # ~always True; the normal case
-    "redistribute_standalone_ok": True,    # raw-file re-exposure / sample pack
+    "embed_in_derivative_ok": True,  # ~always True; the normal case
+    "redistribute_standalone_ok": True,  # raw-file re-exposure / sample pack
     "modification_ok": True,
-    "ai_training_ok": True,                # feed a training/dataset pipeline
-    "revenue_cap_usd": None,               # e.g. 1_000_000 for Stability Community
-
+    "ai_training_ok": True,  # feed a training/dataset pipeline
+    "revenue_cap_usd": None,  # e.g. 1_000_000 for Stability Community
     # attribution
     "requires_attribution": True,
-    "attribution_text": "\"door creak\" by foo — https://freesound.org/s/12345/ — licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)",
-    "notice_text_required": None,          # e.g. Stability NOTICE when redistributing weights
-
+    "attribution_text": '"door creak" by foo — https://freesound.org/s/12345/ — licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)',
+    "notice_text_required": None,  # e.g. Stability NOTICE when redistributing weights
     # ── provenance / transformation ───────────────────────────────
-    "transformations": [                   # ordered; non-empty ⇒ credit "(modified)"
+    "transformations": [  # ordered; non-empty ⇒ credit "(modified)"
         {"op": "trim", "params": {"start": 0.2, "end": 3.1}},
         {"op": "normalize_lufs", "params": {"target": -23.0}},
     ],
-
     # ── generation (present iff AI-generated) ─────────────────────
     "is_ai_generated": False,
-    "generator_model": None,               # e.g. "elevenlabs:eleven_text_to_sound_v2"
+    "generator_model": None,  # e.g. "elevenlabs:eleven_text_to_sound_v2"
     "generator_version": None,
     "generation_prompt": None,
     "generation_seed": None,
-    "watermark": None,                     # {"present": True, "method": "audioseal", "version": "..."}
-    "c2pa_manifest_ref": None,             # pointer to written Content Credential
-
+    "watermark": None,  # {"present": True, "method": "audioseal", "version": "..."}
+    "c2pa_manifest_ref": None,  # pointer to written Content Credential
     # ── safety / disclosure ───────────────────────────────────────
     "contains_recognizable_voice": False,
     "potential_trademark": False,
-    "disclosure_recommended": False,       # synthetic-media platform label hint
-    "rights_verified": True,               # False ⇒ treated as unknown (fail-closed)
+    "disclosure_recommended": False,  # synthetic-media platform label hint
+    "rights_verified": True,  # False ⇒ treated as unknown (fail-closed)
     "verified_at": "2026-07-22T14:30:45Z",
 }
 ```
@@ -268,29 +262,36 @@ The caller declares an **`IntendedUse`**; the agent filters candidates by compar
 
 ```python
 IntendedUse = {
-    "commercial": True,               # will the render be monetized?
-    "publish": True,                  # embed-in-derivative (≈ always True for foley)
-    "redistribute_standalone": False, # ship raw files / sample pack? (rare)
-    "will_train": False,              # feed sounds into model training?
-    "can_attribute": True,            # can the pipeline emit credits in this channel?
-    "revenue_usd": 0,                 # caller's annual revenue (for capped licenses)
+    "commercial": True,  # will the render be monetized?
+    "publish": True,  # embed-in-derivative (≈ always True for foley)
+    "redistribute_standalone": False,  # ship raw files / sample pack? (rare)
+    "will_train": False,  # feed sounds into model training?
+    "can_attribute": True,  # can the pipeline emit credits in this channel?
+    "revenue_usd": 0,  # caller's annual revenue (for capped licenses)
     "allow_voice_or_trademark": False,
 }
 
+
 def keep(rec: LicenseRecord, use: IntendedUse) -> bool:
-    if not rec["rights_verified"]:                       return False   # fail-closed
-    if use["commercial"] and not rec["commercial_ok"]:   return False
-    if use["publish"] and not rec["embed_in_derivative_ok"]:            return False
+    if not rec["rights_verified"]:
+        return False  # fail-closed
+    if use["commercial"] and not rec["commercial_ok"]:
+        return False
+    if use["publish"] and not rec["embed_in_derivative_ok"]:
+        return False
     if use["redistribute_standalone"] and not rec["redistribute_standalone_ok"]:
-                                                          return False
-    if use["will_train"] and not rec["ai_training_ok"]:  return False
+        return False
+    if use["will_train"] and not rec["ai_training_ok"]:
+        return False
     cap = rec["revenue_cap_usd"]
-    if cap is not None and use["revenue_usd"] >= cap:     return False   # e.g. Stability >$1M
+    if cap is not None and use["revenue_usd"] >= cap:
+        return False  # e.g. Stability >$1M
     if rec["requires_attribution"] and not use["can_attribute"]:
-                                                          return False   # can't credit ⇒ drop
+        return False  # can't credit ⇒ drop
     if not use["allow_voice_or_trademark"] and (
-        rec["contains_recognizable_voice"] or rec["potential_trademark"]):
-                                                          return False
+        rec["contains_recognizable_voice"] or rec["potential_trademark"]
+    ):
+        return False
     return True
 ```
 

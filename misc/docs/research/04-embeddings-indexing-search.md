@@ -84,16 +84,16 @@ which is why it is foley's default.
   from transformers import ClapModel, ClapProcessor
 
   model = ClapModel.from_pretrained("laion/larger_clap_general")
-  proc  = ClapProcessor.from_pretrained("laion/larger_clap_general")
+  proc = ClapProcessor.from_pretrained("laion/larger_clap_general")
 
   # text -> 512-d embedding
   t = proc(text=["distant thunder rumble"], return_tensors="pt", padding=True)
-  text_emb = model.get_text_features(**t)          # (1, 512)
+  text_emb = model.get_text_features(**t)  # (1, 512)
 
   # audio -> 512-d embedding (48 kHz mono expected)
   wav, _ = librosa.load("thunder.wav", sr=48000, mono=True)
   a = proc(audios=wav, sampling_rate=48000, return_tensors="pt")
-  audio_emb = model.get_audio_features(**a)        # (1, 512)
+  audio_emb = model.get_audio_features(**a)  # (1, 512)
   ```
   `ClapAudioModelWithProjection` / `ClapTextModelWithProjection` expose the same
   outputs if you want only one branch [4]. The alternative `laion_clap` pip package
@@ -223,36 +223,37 @@ live in separate stores keyed by the same `id`. Proposed canonical record
 from dataclasses import dataclass, field
 from typing import Optional
 
+
 @dataclass
 class SoundRecord:
     # --- identity & provenance ---
-    id: str                              # stable UUID / content hash (primary key)
-    source: str                          # 'freesound' | 'bbc' | 'ucs_library' | 'user' ...
-    uri: str                             # blob-ref: local path OR s3://... OR https://...
-    license: str                         # SPDX id or 'CC0'/'CC-BY-4.0'/'proprietary'
-    attribution: Optional[str] = None    # required credit string (CC-BY etc.)
+    id: str  # stable UUID / content hash (primary key)
+    source: str  # 'freesound' | 'bbc' | 'ucs_library' | 'user' ...
+    uri: str  # blob-ref: local path OR s3://... OR https://...
+    license: str  # SPDX id or 'CC0'/'CC-BY-4.0'/'proprietary'
+    attribution: Optional[str] = None  # required credit string (CC-BY etc.)
     provenance: dict = field(default_factory=dict)  # {orig_id, url, downloaded_at, ...}
 
     # --- descriptive text (feeds BM25 + human display) ---
-    caption: Optional[str] = None        # free-text description / one-liner
-    tags: list[str] = field(default_factory=list)     # free + controlled tags
+    caption: Optional[str] = None  # free-text description / one-liner
+    tags: list[str] = field(default_factory=list)  # free + controlled tags
 
     # --- controlled taxonomy (feeds filters & browse) ---
-    ucs_category: Optional[str] = None   # UCS CatID, e.g. 'WEATHRain'
+    ucs_category: Optional[str] = None  # UCS CatID, e.g. 'WEATHRain'
     ucs_subcategory: Optional[str] = None
     audioset_labels: list[str] = field(default_factory=list)  # AudioSet MIDs / names
 
     # --- audio technical facts ---
     duration_s: Optional[float] = None
-    sample_rate: Optional[int] = None    # Hz
-    channels: Optional[int] = None       # 1=mono, 2=stereo
+    sample_rate: Optional[int] = None  # Hz
+    channels: Optional[int] = None  # 1=mono, 2=stereo
     loudness_lufs: Optional[float] = None  # integrated, ITU-R BS.1770-4 / EBU R128
-    format: Optional[str] = None         # 'wav' | 'flac' | 'mp3' | 'ogg'
+    format: Optional[str] = None  # 'wav' | 'flac' | 'mp3' | 'ogg'
 
     # --- retrieval index refs (NOT stored inline in list views) ---
-    embedding_model: Optional[str] = None   # 'laion/larger_clap_general'
-    embedding_dim: Optional[int] = None     # 512
-    embedding_ref: Optional[str] = None     # id into the vector index (or inline vector)
+    embedding_model: Optional[str] = None  # 'laion/larger_clap_general'
+    embedding_dim: Optional[int] = None  # 512
+    embedding_ref: Optional[str] = None  # id into the vector index (or inline vector)
 
     schema_version: int = 1
 ```
@@ -336,12 +337,12 @@ SoundLibrary (facade)
 Public surface (progressive disclosure — the simple thing is one call):
 
 ```python
-lib = foley.SoundLibrary()                 # sensible local defaults, works out of the box
-lib.search("distant thunder rumble", k=10) # hybrid: CLAP vector ⊕ BM25 tags, RRF-fused
-lib.similar(sound_id, k=10)                # audio↔audio via CLAP embeddings
-lib[sound_id]                              # -> SoundRecord (from meta)
-lib.audio(sound_id)                        # -> bytes       (from sounds)
-lib.filter(ucs_category="WEATH", min_lufs=-30)   # metadata facets
+lib = foley.SoundLibrary()  # sensible local defaults, works out of the box
+lib.search("distant thunder rumble", k=10)  # hybrid: CLAP vector ⊕ BM25 tags, RRF-fused
+lib.similar(sound_id, k=10)  # audio↔audio via CLAP embeddings
+lib[sound_id]  # -> SoundRecord (from meta)
+lib.audio(sound_id)  # -> bytes       (from sounds)
+lib.filter(ucs_category="WEATH", min_lufs=-30)  # metadata facets
 ```
 
 `search()` internally: embed query with the default CLAP embedder → vector KNN on

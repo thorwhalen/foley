@@ -148,7 +148,9 @@ that lets foley move bytes in and out of a `dol` store without touching disk [4]
 import io, soundfile as sf, numpy as np
 
 # read (returns float64 by default; ask for float32 for the working array)
-wav, sr = sf.read("door_creak.flac", dtype="float32")   # wav: (frames,) or (frames, channels)
+wav, sr = sf.read(
+    "door_creak.flac", dtype="float32"
+)  # wav: (frames,) or (frames, channels)
 
 # stream a huge file in blocks (constant memory)
 for block in sf.blocks("long_ambience.flac", blocksize=48000, dtype="float32"):
@@ -219,8 +221,9 @@ segmenting a long recording).
 
 ```python
 import librosa
-trimmed, idx = librosa.effects.trim(y, top_db=30)          # strip head/tail silence
-intervals = librosa.effects.split(y, top_db=30)            # (m, 2) sample ranges of sound
+
+trimmed, idx = librosa.effects.trim(y, top_db=30)  # strip head/tail silence
+intervals = librosa.effects.split(y, top_db=30)  # (m, 2) sample ranges of sound
 ```
 
 Gotcha: on **all-silent** input `trim` can misbehave / return an empty span — guard
@@ -233,6 +236,8 @@ crossfades to avoid a mid-fade dip.
 
 ```python
 import numpy as np
+
+
 def fade(y, sr, fade_s=0.02, kind="linear"):
     n = int(fade_s * sr)
     ramp = np.linspace(0, 1, n, dtype=y.dtype)
@@ -250,7 +255,8 @@ points — cheap insurance the ingest pipeline should apply by default.
 
 ```python
 import soxr
-y48 = soxr.resample(y, in_rate=sr, out_rate=48000, quality="HQ")   # or "VHQ"
+
+y48 = soxr.resample(y, in_rate=sr, out_rate=48000, quality="HQ")  # or "VHQ"
 ```
 
 `soxr` is libsoxr, fast and high-quality, with `ResampleStream` for very long
@@ -261,7 +267,7 @@ archive at its native rate.
 ### 3.4 Channel up/down-mix — NumPy
 
 ```python
-mono   = y.mean(axis=1) if y.ndim == 2 else y                    # down-mix for CLAP
+mono = y.mean(axis=1) if y.ndim == 2 else y  # down-mix for CLAP
 stereo = np.column_stack([mono, mono]) if mono.ndim == 1 else y  # up-mix by duplication
 ```
 
@@ -282,7 +288,8 @@ Two tiers:
 
 ```python
 import librosa
-y_fast  = librosa.effects.time_stretch(y, rate=1.2)          # 20% faster, same pitch
+
+y_fast = librosa.effects.time_stretch(y, rate=1.2)  # 20% faster, same pitch
 y_higher = librosa.effects.pitch_shift(y, sr=48000, n_steps=3)  # +3 semitones
 # high quality (optional dep, GPL external binary):
 # import pyrubberband as pyrb; y_hq = pyrb.time_stretch(y, 48000, 1.2)
@@ -298,10 +305,13 @@ LRA) [7]:
 
 ```python
 import pyloudnorm as pyln
-meter = pyln.Meter(48000)                       # BS.1770-4 K-weighted meter
-lufs  = meter.integrated_loudness(y)            # measured LUFS
-if lufs > -70:                                  # skip the gate floor (near-silent)
-    y = pyln.normalize.loudness(y, lufs, -23.0) # normalize to -23 LUFS (EBU R128 target)
+
+meter = pyln.Meter(48000)  # BS.1770-4 K-weighted meter
+lufs = meter.integrated_loudness(y)  # measured LUFS
+if lufs > -70:  # skip the gate floor (near-silent)
+    y = pyln.normalize.loudness(
+        y, lufs, -23.0
+    )  # normalize to -23 LUFS (EBU R128 target)
 ```
 
 Gotcha: very short or near-silent inputs report ≈ **-70 LUFS** (the gate floor) —
@@ -324,11 +334,14 @@ in ingest/search/weave knows which backend is live.
 
 ```python
 # local (default)                         # cloud (same interface, config flip)
-from dol import Files                      # from foley.stores import S3BytesStore
-sounds = Files("~/.local/share/foley/audio/")   # sounds = S3BytesStore("s3://foley/audio/")
+from dol import Files  # from foley.stores import S3BytesStore
 
-sounds[key] = flac_bytes                   # write blob
-raw = sounds[key]                          # read blob   -> bytes
+sounds = Files(
+    "~/.local/share/foley/audio/"
+)  # sounds = S3BytesStore("s3://foley/audio/")
+
+sounds[key] = flac_bytes  # write blob
+raw = sounds[key]  # read blob   -> bytes
 ```
 
 Per the app-data-lifecycle convention, blobs go under `~/.local/share/foley/audio/`
@@ -343,8 +356,10 @@ silently change under a key), which makes caching and cloud sync safe.
 
 ```python
 import hashlib
+
+
 def content_key(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()   # stable, portable, git-like
+    return hashlib.sha256(data).hexdigest()  # stable, portable, git-like
 ```
 
 - **`sha256`** (stdlib `hashlib`) is the recommended default: ubiquitous, portable,
@@ -445,15 +460,18 @@ class SoundLibrary:
         # HEAVY bytes — content-addressed, dedup, license-gated by/ref-or-value
         self.sounds = sounds or ContentAddressed(Files("~/.local/share/foley/audio/"))
         # LIGHT canonical SoundRecord SSOT (report 04 schema)
-        self.meta   = meta   or JsonFiles("~/.local/share/foley/meta/")
+        self.meta = meta or JsonFiles("~/.local/share/foley/meta/")
         # search indexes (report 04) — one LanceDB table, local dir or s3://
-        self.vindex = vindex or LanceVectorIndex(...)   # CLAP 512-d
+        self.vindex = vindex or LanceVectorIndex(...)  # CLAP 512-d
         self.kindex = kindex or LanceKeywordIndex(...)  # BM25 tags+caption
 
-    def audio(self, sid):   return self.sounds[self.meta[sid].uri]   # bytes (or fetch-by-ref)
-    def array(self, sid, sr=48000, mono=True):                        # lazy decode → working array
+    def audio(self, sid):
+        return self.sounds[self.meta[sid].uri]  # bytes (or fetch-by-ref)
+
+    def array(self, sid, sr=48000, mono=True):  # lazy decode → working array
         y, r = sf.read(io.BytesIO(self.audio(sid)), dtype="float32")
-        if mono and y.ndim == 2: y = y.mean(1)
+        if mono and y.ndim == 2:
+            y = y.mean(1)
         return soxr.resample(y, r, sr) if r != sr else y
 ```
 

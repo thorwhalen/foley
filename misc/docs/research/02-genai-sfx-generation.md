@@ -64,8 +64,8 @@ from elevenlabs import ElevenLabs
 client = ElevenLabs(api_key="...")  # or ELEVENLABS_API_KEY env var
 audio = client.text_to_sound_effects.convert(
     text="heavy wooden door creaking open in a stone dungeon",
-    duration_seconds=4.0,        # None => model decides
-    prompt_influence=0.5,        # 0..1  (guidance)
+    duration_seconds=4.0,  # None => model decides
+    prompt_influence=0.5,  # 0..1  (guidance)
     loop=False,
     output_format="mp3_44100_128",
 )
@@ -87,12 +87,16 @@ Stability's *hosted* model targets **music and SFX** and is the pick when **lega
 
 ```python
 import requests
+
 resp = requests.post(
     "https://api.stability.ai/v2beta/audio/stable-audio-2/text-to-audio",
     headers={"authorization": "Bearer sk-...", "accept": "audio/*"},
     files={"none": ""},
-    data={"prompt": "distant thunder rolling over a quiet field",
-          "duration": 10, "output_format": "mp3"},
+    data={
+        "prompt": "distant thunder rolling over a quiet field",
+        "duration": 10,
+        "output_format": "mp3",
+    },
 )
 open("thunder.mp3", "wb").write(resp.content)
 ```
@@ -110,9 +114,14 @@ fal hosts several text-to-audio models behind one client, pay-as-you-go (no subs
 ```python
 # pip install fal-client   (needs FAL_KEY)
 import fal_client
+
 result = fal_client.subscribe(
     "fal-ai/stable-audio",
-    arguments={"prompt": "glass shattering on tile floor", "seconds_total": 5, "steps": 100},
+    arguments={
+        "prompt": "glass shattering on tile floor",
+        "seconds_total": 5,
+        "steps": 100,
+    },
 )
 print(result["audio"]["url"])
 ```
@@ -127,6 +136,7 @@ Container-hosted community/official models, billed by run time. [10,11]
 ```python
 # pip install replicate  (needs REPLICATE_API_TOKEN)
 import replicate
+
 out = replicate.run(
     "stackadoc/stable-audio-open-1.0:<version>",
     input={"prompt": "rain on a tin roof", "seconds_total": 12, "steps": 100},
@@ -152,7 +162,9 @@ from audiocraft.models import AudioGen
 from audiocraft.data.audio import audio_write
 
 model = AudioGen.get_pretrained("facebook/audiogen-medium")
-model.set_generation_params(duration=5)  # seconds; also top_k, top_p, temperature, cfg_coef
+model.set_generation_params(
+    duration=5
+)  # seconds; also top_k, top_p, temperature, cfg_coef
 wav = model.generate(["dog barking", "footsteps in a corridor"])
 for i, one in enumerate(wav):
     audio_write(f"sfx_{i}", one.cpu(), model.sample_rate, strategy="loudness")
@@ -177,7 +189,7 @@ audio = pipe(
     prompt="a creaking ship's hull with waves lapping",
     negative_prompt="music, speech",
     num_inference_steps=100,
-    audio_end_in_s=10.0,          # duration control
+    audio_end_in_s=10.0,  # duration control
 ).audios[0]
 sf.write("ship.wav", audio.T.float().cpu().numpy(), pipe.vae.sampling_rate)
 ```
@@ -199,10 +211,16 @@ sf.write("ship.wav", audio.T.float().cpu().numpy(), pipe.vae.sampling_rate)
 # pip install diffusers transformers torch scipy
 import torch, scipy.io.wavfile as wav
 from diffusers import AudioLDM2Pipeline
-pipe = AudioLDM2Pipeline.from_pretrained("cvssp/audioldm2", torch_dtype=torch.float16).to("cuda")
-audio = pipe("a hammer hitting a nail, echoing in a workshop",
-             negative_prompt="low quality",
-             num_inference_steps=200, audio_length_in_s=5.0).audios[0]
+
+pipe = AudioLDM2Pipeline.from_pretrained(
+    "cvssp/audioldm2", torch_dtype=torch.float16
+).to("cuda")
+audio = pipe(
+    "a hammer hitting a nail, echoing in a workshop",
+    negative_prompt="low quality",
+    num_inference_steps=200,
+    audio_length_in_s=5.0,
+).audios[0]
 wav.write("hammer.wav", 16000, audio)
 ```
 
@@ -277,13 +295,14 @@ Define one `SfxGenerationBackend` protocol and per-backend adapters selected by 
 # foley/generation — sketch
 from typing import Protocol, Optional
 
+
 class SfxGenerationBackend(Protocol):
     def generate(
         self,
         prompt: str,
         *,
-        duration: Optional[float] = None,   # seconds; None => backend default/auto
-        prompt_influence: float = 0.3,      # 0..1 unified "guidance"
+        duration: Optional[float] = None,  # seconds; None => backend default/auto
+        prompt_influence: float = 0.3,  # 0..1 unified "guidance"
         negative_prompt: Optional[str] = None,
         seed: Optional[int] = None,
         steps: Optional[int] = None,

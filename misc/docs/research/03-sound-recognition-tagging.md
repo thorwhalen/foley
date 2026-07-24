@@ -48,10 +48,10 @@ import librosa
 from panns_inference import AudioTagging, labels  # labels = 527 AudioSet class names
 
 audio, _ = librosa.load("door_slam.wav", sr=32000, mono=True)  # PANNs expects 32 kHz
-audio = audio[None, :]                                          # (batch, samples)
+audio = audio[None, :]  # (batch, samples)
 
-at = AudioTagging(checkpoint_path=None, device="cpu")          # downloads CNN14
-clipwise, embedding = at.inference(audio)                       # (1,527), (1,2048)
+at = AudioTagging(checkpoint_path=None, device="cpu")  # downloads CNN14
+clipwise, embedding = at.inference(audio)  # (1,527), (1,2048)
 
 top = sorted(zip(labels, clipwise[0]), key=lambda kv: -kv[1])[:5]
 # e.g. [('Slam', 0.62), ('Door', 0.41), ('Wood', 0.22), ...]
@@ -66,8 +66,8 @@ Best Hugging Face ergonomics; single-model mAP **0.459**, ensemble **0.485**. Mo
 ```python
 # pip install transformers torch torchaudio
 from transformers import pipeline
-clf = pipeline("audio-classification",
-               model="MIT/ast-finetuned-audioset-10-10-0.4593")
+
+clf = pipeline("audio-classification", model="MIT/ast-finetuned-audioset-10-10-0.4593")
 clf("door_slam.wav", top_k=5)
 # [{'score': 0.58, 'label': 'Door'}, {'score': 0.30, 'label': 'Slam'}, ...]
 ```
@@ -117,18 +117,19 @@ from transformers import ClapModel, ClapProcessor
 import librosa, torch
 
 model = ClapModel.from_pretrained("laion/larger_clap_general")
-proc  = ClapProcessor.from_pretrained("laion/larger_clap_general")
+proc = ClapProcessor.from_pretrained("laion/larger_clap_general")
 
 audio, _ = librosa.load("whoosh.wav", sr=48000, mono=True)  # CLAP expects 48 kHz
 # YOUR custom taxonomy — not AudioSet:
 labels = ["magical whoosh", "sword swing", "wind gust", "UI swipe", "cloth movement"]
 prompts = [f"this is a sound of {l}" for l in labels]
 
-inp = proc(text=prompts, audios=audio, sampling_rate=48000,
-           return_tensors="pt", padding=True)
+inp = proc(
+    text=prompts, audios=audio, sampling_rate=48000, return_tensors="pt", padding=True
+)
 with torch.no_grad():
-    logits = model(**inp).logits_per_audio          # (1, n_labels)
-    probs  = logits.softmax(dim=-1)[0]
+    logits = model(**inp).logits_per_audio  # (1, n_labels)
+    probs = logits.softmax(dim=-1)[0]
 ranked = sorted(zip(labels, probs.tolist()), key=lambda kv: -kv[1])
 # [('magical whoosh', 0.71), ('UI swipe', 0.12), ...]
 ```
@@ -180,17 +181,28 @@ from transformers import Qwen2AudioForConditionalGeneration, AutoProcessor
 import librosa, torch
 
 mid = "Qwen/Qwen2-Audio-7B-Instruct"
-proc  = AutoProcessor.from_pretrained(mid)
+proc = AutoProcessor.from_pretrained(mid)
 model = Qwen2AudioForConditionalGeneration.from_pretrained(mid, device_map="auto")
 
-audio, sr = librosa.load("door.wav", sr=16000, mono=True)   # 16 kHz
-conv = [{"role": "user", "content": [
+audio, sr = librosa.load("door.wav", sr=16000, mono=True)  # 16 kHz
+conv = [
+    {
+        "role": "user",
+        "content": [
             {"type": "audio", "audio": audio},
-            {"type": "text",  "text": "Describe this sound effect: object, material, action."}]}]
+            {
+                "type": "text",
+                "text": "Describe this sound effect: object, material, action.",
+            },
+        ],
+    }
+]
 text = proc.apply_chat_template(conv, add_generation_prompt=True, tokenize=False)
-inp  = proc(text=text, audios=[audio], sampling_rate=16000, return_tensors="pt").to(model.device)
-out  = model.generate(**inp, max_new_tokens=64)
-print(proc.batch_decode(out[:, inp.input_ids.shape[1]:], skip_special_tokens=True)[0])
+inp = proc(text=text, audios=[audio], sampling_rate=16000, return_tensors="pt").to(
+    model.device
+)
+out = model.generate(**inp, max_new_tokens=64)
+print(proc.batch_decode(out[:, inp.input_ids.shape[1] :], skip_special_tokens=True)[0])
 # "A heavy wooden door creaks as it swings open, then slams shut with a solid thud."
 ```
 
@@ -227,15 +239,19 @@ import librosa, numpy as np
 
 audio, _ = librosa.load("ambience_2min.wav", sr=32000, mono=True)
 sed = SoundEventDetection(checkpoint_path=None, device="cpu")
-framewise = sed.inference(audio[None, :])[0]          # (frames, 527), ~50 fps
+framewise = sed.inference(audio[None, :])[0]  # (frames, 527), ~50 fps
+
 
 # turn a class's frame probs into (start,end) spans over a threshold
 def spans(cls_idx, thr=0.3, fps=50):
     hot = framewise[:, cls_idx] > thr
     out, s = [], None
     for i, on in enumerate(hot):
-        if on and s is None: s = i
-        if not on and s is not None: out.append((s/fps, i/fps)); s = None
+        if on and s is None:
+            s = i
+        if not on and s is not None:
+            out.append((s / fps, i / fps))
+            s = None
     return out
 ```
 
@@ -285,13 +301,13 @@ Load audio, read duration/sr/channels. **Branch on duration**: short (< ~20 s, t
 class SoundMetadata:
     path: str
     duration_s: float
-    audioset_tags: list[tuple[str, float]]      # supervised, ontology-expanded
-    custom_tags: list[tuple[str, float]]        # zero-shot CLAP vs your taxonomy
-    caption: str                                # natural language
-    clap_embedding: list[float]                 # 512-d, for semantic search
-    audioset_embedding: list[float]             # 2048-d, "sounds like this"
-    events: list[dict] | None = None            # SED spans, if long
-    parent_file: str | None = None              # if a segment/stem
+    audioset_tags: list[tuple[str, float]]  # supervised, ontology-expanded
+    custom_tags: list[tuple[str, float]]  # zero-shot CLAP vs your taxonomy
+    caption: str  # natural language
+    clap_embedding: list[float]  # 512-d, for semantic search
+    audioset_embedding: list[float]  # 2048-d, "sounds like this"
+    events: list[dict] | None = None  # SED spans, if long
+    parent_file: str | None = None  # if a segment/stem
 ```
 Store records in a `dol` Mapping (JSON/Parquet locally, growing into a vector DB / S3 later without touching the analysis code). Index: full-text over `caption` + `*_tags`; ANN over `clap_embedding` (semantic) and `audioset_embedding` (acoustic similarity).
 

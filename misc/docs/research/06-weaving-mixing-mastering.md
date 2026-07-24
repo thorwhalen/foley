@@ -70,6 +70,7 @@ zero-ML-download fallback for line-level anchoring [3,4,5].
 ```python
 import whisperx
 
+
 def word_timeline(audio_path, *, device="cpu", language="en"):
     """Return [{'word','start','end'}, ...] for a narration file."""
     model = whisperx.load_model("small", device, language=language)
@@ -151,20 +152,24 @@ external key routing:
 ```python
 import numpy as np
 
-def speech_duck_gain(n_samples, sr, speech_spans, *, duck_db=-10.0,
-                     attack=0.02, release=0.3):
+
+def speech_duck_gain(
+    n_samples, sr, speech_spans, *, duck_db=-10.0, attack=0.02, release=0.3
+):
     """Gain envelope (linear) that dips to duck_db during speech spans."""
     g = np.ones(n_samples, dtype=np.float32)
     duck = 10 ** (duck_db / 20)
-    for start, end in speech_spans:            # from the word timeline
+    for start, end in speech_spans:  # from the word timeline
         a, b = int(start * sr), int(end * sr)
         g[a:b] = duck
     # one-pole smoothing to make attack/release clickless
-    ca, cr = np.exp(-1/(attack*sr)), np.exp(-1/(release*sr))
-    out = np.empty_like(g); acc = 1.0
+    ca, cr = np.exp(-1 / (attack * sr)), np.exp(-1 / (release * sr))
+    out = np.empty_like(g)
+    acc = 1.0
     for i, target in enumerate(g):
         coef = ca if target < acc else cr
-        acc = target + coef * (acc - target); out[i] = acc
+        acc = target + coef * (acc - target)
+        out[i] = acc
     return out
 ```
 
@@ -196,11 +201,12 @@ room via the image-source model and convolves sources with them [18]:
 
 ```python
 import pyroomacoustics as pra, numpy as np
+
 room = pra.ShoeBox([6, 5, 3], fs=sr, materials=pra.Material(0.4), max_order=12)
-room.add_source([1.5, 4.0, 1.2], signal=clip)     # place the SFX in the room
-room.add_microphone([3.0, 1.0, 1.6])              # listener position
+room.add_source([1.5, 4.0, 1.2], signal=clip)  # place the SFX in the room
+room.add_microphone([3.0, 1.0, 1.6])  # listener position
 room.simulate()
-wet = room.mic_array.signals[0]                    # clip, now "in the room"
+wet = room.mic_array.signals[0]  # clip, now "in the room"
 ```
 
 Alternatively, convolve against a **recorded IR** (church, hall, forest) with
@@ -283,10 +289,11 @@ brickwall (`ffmpeg alimiter`, or a mastering limiter) can be chained if more con
 
   ```python
   import pyloudnorm as pyln, soundfile as sf
+
   data, rate = sf.read("mix.wav")
-  meter = pyln.Meter(rate)                          # BS.1770-4
-  loudness = meter.integrated_loudness(data)        # e.g. -21.3 LUFS
-  norm = pyln.normalize.loudness(data, loudness, -16.0)   # → -16 LUFS
+  meter = pyln.Meter(rate)  # BS.1770-4
+  loudness = meter.integrated_loudness(data)  # e.g. -21.3 LUFS
+  norm = pyln.normalize.loudness(data, loudness, -16.0)  # → -16 LUFS
   ```
 
   (Note: pyloudnorm measures loudness and normalises by a single gain; it does **not** itself do
@@ -352,51 +359,58 @@ from dataclasses import dataclass, field
 from typing import Literal, Optional
 
 Anchor = Literal["absolute", "word", "sentence", "scene", "paragraph"]
-Layer  = Literal["voice", "sfx_fg", "ambience", "stinger", "music"]
+Layer = Literal["voice", "sfx_fg", "ambience", "stinger", "music"]
+
 
 @dataclass
 class Placement:
     """WHERE/WHEN a clip sits — symbolic anchor + resolved time."""
+
     anchor: Anchor = "absolute"
-    ref: Optional[str] = None      # e.g. transcript word / sentence id / scene id
-    onset: float = 0.0             # resolved start (s); filled by the aligner
-    pre_roll: float = 0.0          # shift so the clip's transient lands on the anchor
-    duration: Optional[float] = None   # None = full clip length
-    loop: bool = False             # seamless-loop to fill `duration` (beds)
+    ref: Optional[str] = None  # e.g. transcript word / sentence id / scene id
+    onset: float = 0.0  # resolved start (s); filled by the aligner
+    pre_roll: float = 0.0  # shift so the clip's transient lands on the anchor
+    duration: Optional[float] = None  # None = full clip length
+    loop: bool = False  # seamless-loop to fill `duration` (beds)
+
 
 @dataclass
 class Processing:
     """HOW a clip sounds — all optional, sensible defaults."""
-    gain_db: float = 0.0           # relative to the voice bus
-    pan: float = 0.0               # -1 (L) .. +1 (R), constant-power
-    distance: float = 0.0          # 0 near .. 1 far → gain+LPF+reverb recipe
-    reverb_send: float = 0.0       # 0 dry .. 1 wet (scene bus)
-    fade_in: float = 0.008         # s, declick
-    fade_out: float = 0.012        # s, declick
-    duck_bed: bool = False         # does this item duck the ambience bus?
+
+    gain_db: float = 0.0  # relative to the voice bus
+    pan: float = 0.0  # -1 (L) .. +1 (R), constant-power
+    distance: float = 0.0  # 0 near .. 1 far → gain+LPF+reverb recipe
+    reverb_send: float = 0.0  # 0 dry .. 1 wet (scene bus)
+    fade_in: float = 0.008  # s, declick
+    fade_out: float = 0.012  # s, declick
+    duck_bed: bool = False  # does this item duck the ambience bus?
+
 
 @dataclass
 class TimelineItem:
     id: str
-    clip_ref: str                  # SoundRecord id in the dol library (by reference!)
+    clip_ref: str  # SoundRecord id in the dol library (by reference!)
     layer: Layer = "sfx_fg"
     placement: Placement = field(default_factory=Placement)
     processing: Processing = field(default_factory=Processing)
-    event: Optional[dict] = None   # provenance: the SoundEvent from decompose_context
-    enabled: bool = True           # non-destructive mute
+    event: Optional[dict] = None  # provenance: the SoundEvent from decompose_context
+    enabled: bool = True  # non-destructive mute
+
 
 @dataclass
 class MasterProfile:
-    target_lufs: float = -16.0     # podcast default
+    target_lufs: float = -16.0  # podcast default
     true_peak_db: float = -1.0
     lra: float = 11.0
 
+
 @dataclass
 class SoundDesignTimeline:
-    narration_ref: str             # the voice audio (dol ref)
+    narration_ref: str  # the voice audio (dol ref)
     transcript: Optional[str] = None
-    word_timeline: list = field(default_factory=list)   # from forced alignment
-    items: list = field(default_factory=list)           # list[TimelineItem]
+    word_timeline: list = field(default_factory=list)  # from forced alignment
+    items: list = field(default_factory=list)  # list[TimelineItem]
     master: MasterProfile = field(default_factory=MasterProfile)
     schema_version: int = 1
 ```
@@ -412,19 +426,19 @@ library, the timeline stays tiny and diffable.
 def render(tl: SoundDesignTimeline, library, *, sr=48_000):
     voice = load(library[tl.narration_ref], sr)
     if not tl.word_timeline:
-        tl.word_timeline = word_timeline_from(voice, tl.transcript)   # §2
+        tl.word_timeline = word_timeline_from(voice, tl.transcript)  # §2
     buses = {layer: silence(len(voice), sr) for layer in LAYERS}
     for item in tl.items:
         if not item.enabled:
             continue
-        onset = resolve_anchor(item.placement, tl.word_timeline)      # §2.4
-        clip  = load(library[item.clip_ref], sr)
-        clip  = fit_duration(clip, item.placement, sr)                # loop/trim + xfade
-        clip  = apply_processing(clip, item.processing, sr)           # gain/pan/dist/reverb/fades
+        onset = resolve_anchor(item.placement, tl.word_timeline)  # §2.4
+        clip = load(library[item.clip_ref], sr)
+        clip = fit_duration(clip, item.placement, sr)  # loop/trim + xfade
+        clip = apply_processing(clip, item.processing, sr)  # gain/pan/dist/reverb/fades
         buses[item.layer] = overlay(buses[item.layer], clip, onset)
     buses["ambience"] = duck(buses["ambience"], voice, tl.word_timeline)  # §3.2
-    mix = sum_buses(voice_bus(voice), buses)                          # gain-staged sum
-    return master(mix, tl.master, sr)                                 # §5: LUFS + true-peak
+    mix = sum_buses(voice_bus(voice), buses)  # gain-staged sum
+    return master(mix, tl.master, sr)  # §5: LUFS + true-peak
 ```
 
 Every stage is a pure function of data + library; editing any field and re-calling `render`

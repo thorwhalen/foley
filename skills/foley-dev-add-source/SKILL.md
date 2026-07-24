@@ -37,39 +37,38 @@ The source is auto-discovered by `registry.py`; third parties can also
 ```python
 SOURCE_CONFIG = {
     "name": "<name>",
-    "kind": "retrieve",              # or "generate"
+    "kind": "retrieve",  # or "generate"
     "display_name": "...",
     "website": "https://...",
-
     "auth": {"type": "bearer_token", "env_var": "<NAME>_API_KEY"},  # or None
-
     # unified foley vocabulary -> this source's native names
     "param_map": {
-        "query": {"native_name": "text", "required": True},   # retrieve
+        "query": {"native_name": "text", "required": True},  # retrieve
         "duration": {"native_name": "length_s"},
         # generate uses GENERATION_AFFORDANCES (prompt, duration, prompt_influence, ...)
     },
     "supported_affordances": ["query", "duration", "license"],
     "on_unsupported_param": "warn",
-
     # REST sources: endpoints; local models: omit and implement adapter.generate()
-    "api": {"base_url": "https://...", "search_endpoint": {...}, "download_endpoint": {...}},
-
+    "api": {
+        "base_url": "https://...",
+        "search_endpoint": {...},
+        "download_endpoint": {...},
+    },
     "output": {"default_format": "wav", "returns": "bytes"},  # or "url" / "array"
-
     # ⚠️ MANDATORY license policy — see invariants below
     "license": {
-        "default_license_id": "CC0-1.0",     # per-item value can override
+        "default_license_id": "CC0-1.0",  # per-item value can override
         "commercial_ok": True,
-        "redistribute_standalone_ok": True,   # copyright: may the raw file be re-exposed?
-        "cache_bytes_ok": False,              # TOS: may we store the bytes? (Freesound: no)
+        "redistribute_standalone_ok": True,  # copyright: may the raw file be re-exposed?
+        "cache_bytes_ok": False,  # TOS: may we store the bytes? (Freesound: no)
         "ai_training_ok": True,
         "requires_attribution": False,
     },
-    "commercial_ok": True,                    # generate guardrail (+ revenue_cap for Stable Audio Open)
+    "commercial_ok": True,  # generate guardrail (+ revenue_cap for Stable Audio Open)
     "rate": {"per_min": 60, "per_day": 2000},
     "cost": {...},
-    "data_egress": "external",                # for offline/sensitive-narration mode
+    "data_egress": "external",  # for offline/sensitive-narration mode
 }
 ```
 

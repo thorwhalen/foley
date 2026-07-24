@@ -211,15 +211,15 @@ Because licensing is **per-sound and heterogeneous** (Freesound and FSD50K mix C
 ```python
 # one record per sound, stored alongside the audio blob in a dol store
 LicenseRecord = {
-    "source": "freesound",                 # which adapter produced it
-    "source_id": "12345",                  # id within that source
+    "source": "freesound",  # which adapter produced it
+    "source_id": "12345",  # id within that source
     "source_url": "https://freesound.org/s/12345/",
-    "license_id": "CC0-1.0",               # SPDX-style where possible;
-                                           # else "RemArc", "Sonniss-GDC", "Proprietary"
+    "license_id": "CC0-1.0",  # SPDX-style where possible;
+    # else "RemArc", "Sonniss-GDC", "Proprietary"
     "attribution": "user 'foo' — freesound.org/s/12345",  # ready-to-print credit line
-    "commercial_ok": True,                 # derived flags for cheap query-time filtering
-    "redistribute_ok": True,               # standalone redistribution allowed?
-    "ai_training_ok": True,                # may this feed a training pipeline?
+    "commercial_ok": True,  # derived flags for cheap query-time filtering
+    "redistribute_ok": True,  # standalone redistribution allowed?
+    "ai_training_ok": True,  # may this feed a training pipeline?
     "requires_attribution": False,
     "retrieved_at": "2026-07-22T...",
 }
@@ -242,38 +242,54 @@ SOURCE_CONFIG = {
     "name": "freesound",
     "display_name": "Freesound",
     "website": "https://freesound.org",
-    "access_type": "rest_api",          # rest_api | partner_api | bulk_corpus | scrape | no_api
+    "access_type": "rest_api",  # rest_api | partner_api | bulk_corpus | scrape | no_api
     "auth": {
-        "type": "api_key",              # api_key | oauth2 | hmac | none
+        "type": "api_key",  # api_key | oauth2 | hmac | none
         "env_var": "FREESOUND_API_KEY",
         "query_param": "token",
         "download_requires": "oauth2",  # original-file download needs OAuth2
     },
     "dependencies": ["requests"],
-    "optional_dependencies": ["freesound"],   # official MTG client
-    "capabilities": ["search", "text_similarity", "similarity", "preview", "download", "analysis"],
+    "optional_dependencies": ["freesound"],  # official MTG client
+    "capabilities": [
+        "search",
+        "text_similarity",
+        "similarity",
+        "preview",
+        "download",
+        "analysis",
+    ],
     # unified retrieval vocabulary -> this source's native search params
     "query_map": {
-        "text":            {"native_name": "query"},
-        "max_results":     {"native_name": "page_size", "native_default": 15},  # max 150
-        "duration_range":  {"native_name": "filter",
-                            "to_native": lambda lo, hi: f"duration:[{lo} TO {hi}]"},
-        "license":         {"native_name": "filter",
-                            "to_native": lambda lic: f'license:"{LICENSE_TO_FREESOUND[lic]}"'},
-        "sort":            {"native_name": "sort", "native_default": "score"},
-        "semantic_text":   {"native_name": "similarity_space", "native_default": "laion_clap"},
+        "text": {"native_name": "query"},
+        "max_results": {"native_name": "page_size", "native_default": 15},  # max 150
+        "duration_range": {
+            "native_name": "filter",
+            "to_native": lambda lo, hi: f"duration:[{lo} TO {hi}]",
+        },
+        "license": {
+            "native_name": "filter",
+            "to_native": lambda lic: f'license:"{LICENSE_TO_FREESOUND[lic]}"',
+        },
+        "sort": {"native_name": "sort", "native_default": "score"},
+        "semantic_text": {
+            "native_name": "similarity_space",
+            "native_default": "laion_clap",
+        },
     },
     # how to resolve the license of each returned item (per-sound here)
     "license": {
-        "per_item": True,               # license varies by sound; read from the 'license' field
+        "per_item": True,  # license varies by sound; read from the 'license' field
         "field": "license",
-        "default_id": None,             # no single default; resolved per item
+        "default_id": None,  # no single default; resolved per item
     },
-    "output": {"formats": ["wav", "aiff", "flac", "ogg", "mp3"],
-               "preview_formats": ["mp3", "ogg"]},
+    "output": {
+        "formats": ["wav", "aiff", "flac", "ogg", "mp3"],
+        "preview_formats": ["mp3", "ogg"],
+    },
     "api": {
         "base_url": "https://freesound.org/apiv2",
-        "search_endpoint":   {"method": "get", "path": "/search/"},
+        "search_endpoint": {"method": "get", "path": "/search/"},
         "instance_endpoint": {"method": "get", "path": "/sounds/{id}/"},
         "download_endpoint": {"method": "get", "path": "/sounds/{id}/download/"},
     },

@@ -30,7 +30,9 @@ candidates = foley.find("She pushed open the heavy oak door; rain hammered outsi
 hits = foley.search("distant thunder rumble", k=10, commercial_ok=True)
 
 # Generate a sound when nothing fits (arioso-style; pluggable backends)
-clip = foley.generate("a single wooden door creak", backend="stable_audio_open", duration=3)
+clip = foley.generate(
+    "a single wooden door creak", backend="stable_audio_open", duration=3
+)
 
 # Grow the library — ingest auto-tags, captions, and embeds every file
 foley.ingest("~/my_sounds/")

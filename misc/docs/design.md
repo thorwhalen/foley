@@ -130,10 +130,12 @@ candidates = foley.find("She pushed open the heavy oak door; rain hammered outsi
 hits = foley.search("distant thunder rumble", k=10, commercial_ok=True)
 
 # Generate when nothing fits (arioso-style; backend + unified params)
-clip = foley.generate("a single wooden door creak", backend="stable_audio_open", duration=3)
+clip = foley.generate(
+    "a single wooden door creak", backend="stable_audio_open", duration=3
+)
 
 # Grow the library: ingest auto-tags, captions, and embeds
-foley.ingest("~/my_sounds/")                 # a folder (dol store)
+foley.ingest("~/my_sounds/")  # a folder (dol store)
 foley.add_from("freesound", query="ocean waves", license="cc0")
 
 # Compose (future): render the sound design onto a narration audio/track
