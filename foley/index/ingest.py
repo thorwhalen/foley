@@ -251,6 +251,8 @@ def ingest_one(
     src: "AudioSource",
     *,
     library=None,
+    sound_id: Optional[str] = None,
+    source_uri: Optional[str] = None,
     license: Optional[LicenseRecord] = None,
     tagger=None,
     zeroshot_tagger=None,
@@ -275,6 +277,20 @@ def ingest_one(
         src: A path, ``bytes``, or file-like audio source.
         library: Target :class:`~foley.index.library.SoundLibrary` (default: the
             process-wide default library).
+        sound_id: Optional canonical id override. Defaults to ``None`` → the
+            content-hash of the decoded PCM (the local-ingest identity, used as the
+            record ``id`` and dedup key). A live source adapter passes a short,
+            case-stable, source-native id (e.g. ``'freesound:12345'``) so dedup keys
+            on the stable id rather than on re-fetched (lossy, byte-varying) preview
+            bytes; when it does, the PCM hash is computed only for the (skipped)
+            default and is not persisted. Separately, ``content_sha256`` records the
+            hash of the stored FLAC **archive** bytes (set by ``store_sound``), which
+            is a different byte source from this PCM hash.
+        source_uri: Optional by-reference fetchable URI override. Defaults to
+            ``None`` → the resolved local path when ``src`` is path-like. A live
+            adapter passes the stable source page URL (e.g.
+            ``'https://freesound.org/s/12345/'``) that :func:`foley.stores.store_sound`
+            requires for a by-reference sound.
         license: Rights record (default: a user-owned, cacheable license).
         tagger: Supervised :class:`~foley.index.protocols.Tagger` (default: PANNs
             via :func:`~foley.index.taggers.default_tagger`).
@@ -317,9 +333,13 @@ def ingest_one(
     probe = _probe(src)
     work = to_working(probe.wav, probe.native_sr)
     archive = encode(probe.wav, probe.native_sr)  # FLAC bytes
-    sound_id = _audio_identity(probe.wav)
-    if store and sound_id in lib:
-        return IngestResult(id=sound_id, status="skipped_dup")
+    content_id = _audio_identity(probe.wav)  # PCM content-hash: the default id/dedup key
+    # Canonical id: the PCM content-hash for a local ingest, or a caller-supplied
+    # short, case-stable source id (e.g. 'freesound:12345') for a live adapter —
+    # so dedup keys on the stable id, not on re-fetched (byte-varying) preview bytes.
+    sid = content_id if sound_id is None else sound_id
+    if store and sid in lib:
+        return IngestResult(id=sid, status="skipped_dup")
 
     # Stage 1 — QC gate (report 08 §3)
     qc_report = (
@@ -327,7 +347,7 @@ def ingest_one(
     )
     if qc_report is not None and _below(qc_report.status, min_status):
         return IngestResult(
-            id=sound_id,
+            id=sid,
             status="quarantined",
             qc=qc_report.to_dict(),
             notes=list(qc_report.notes),
@@ -341,11 +361,11 @@ def ingest_one(
     # here — CLAP-embedding + persisting the corpus IS a form of training on it —
     # unless the caller passes explicit consent. Guards every path into the
     # library, not just bootstrap (report 07; invariant #3 of foley-dev-implement).
-    ref_uri = _reference_uri(src)
+    ref_uri = source_uri if source_uri is not None else _reference_uri(src)
     lic = license if license is not None else _default_user_license(ref_uri)
     if not lic.ai_training_ok and not allow_ai_training_forbidden:
         return IngestResult(
-            id=sound_id,
+            id=sid,
             status="rights_blocked",
             notes=[
                 f"license {lic.license_id!r} forbids AI training; embed + persist "
@@ -392,7 +412,7 @@ def ingest_one(
     delivered_format = ARCHIVE_FORMAT if lic.cache_bytes_ok else probe.format
 
     record = SoundRecord(
-        id=sound_id,
+        id=sid,
         uri=ref_uri,  # a fetchable ref for by-reference; overwritten by the content
         license=lic,  #   key when store_sound caches by-value
         caption=caption,
@@ -418,7 +438,7 @@ def ingest_one(
 
     status = qc_report.status.value if qc_report else "pass"
     return IngestResult(
-        id=sound_id, status=status, record=record, qc=record.qc, notes=notes
+        id=sid, status=status, record=record, qc=record.qc, notes=notes
     )
 
 

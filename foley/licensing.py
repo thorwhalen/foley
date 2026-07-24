@@ -63,11 +63,73 @@ LICENSE_FLAGS: dict[str, LicenseFlags] = {
     ),
     "MIT": LicenseFlags(True, True, True, True, True, True, True, None),
     # The user's own local content (default for `foley.ingest`): full rights and
-    # cacheable => stored by-value. The natural contrast to Freesound-API (below,
-    # to be added by the adapter) whose TOS forces cache_bytes_ok=False.
+    # cacheable => stored by-value. The natural contrast to a Freesound-API pull:
+    # a Freesound sound keeps its own per-clip CC id (CC0-1.0 / CC-BY-4.0 / …) but
+    # the adapter passes ``overrides={'cache_bytes_ok': False}`` to
+    # :func:`apply_license_flags` because the Freesound API TOS forbids caching the
+    # bytes even for CC0 — a by-reference override on top of the CC row, NOT a
+    # separate flattened ``Freesound-API`` license_id (which would lose the per-CC
+    # commercial/attribution variance). See ``foley.sources.freesound``.
     "user-owned": LicenseFlags(True, True, True, True, True, True, False, None),
     "unknown": UNKNOWN_LICENSE_FLAGS,
 }
+
+#: Creative-Commons URL / label substrings, checked in order (NC and Sampling+
+#: BEFORE the bare ``by`` so a compound license never mis-maps to plain CC-BY).
+#: Each entry is ``(needle, license_id)``; a match sets ``rights_verified=True``.
+_CC_URL_MARKERS: "tuple[tuple[tuple[str, ...], str], ...]" = (
+    (("zero", "publicdomain", "creative commons 0", "cc0"), "CC0-1.0"),
+    (("by-nc", "attribution noncommercial"), "CC-BY-NC-4.0"),
+    (("sampling",), "CC-Sampling+-1.0"),
+)
+
+
+def license_id_from_cc_url(url: Optional[str]) -> "tuple[str, bool]":
+    """Map a Creative-Commons license URL **or label** to ``(license_id, verified)``.
+
+    The single SSOT for turning an external source's license string into a foley
+    ``license_id`` (used by the FSD50K bulk adapter and the Freesound API adapter).
+    Recognized CC families map to their foley ``license_id`` with
+    ``rights_verified=True``; anything unknown/missing fails closed to
+    ``('unknown', False)`` so :func:`keep` drops it while its provenance is still
+    recorded.
+
+    Both representations Freesound uses are handled: the CC **URL** form
+    (``http://creativecommons.org/publicdomain/zero/1.0/``) and the plain **label**
+    the search API returns (``"Creative Commons 0"``, ``"Attribution"``,
+    ``"Attribution NonCommercial"``).
+
+    **Fail-closed for NoDerivatives / ShareAlike.** Any ``-nd`` / ``-sa`` variant —
+    including the ``by-nc-nd`` and ``by-nc-sa`` compounds — has NO foley
+    ``LICENSE_FLAGS`` row: its extra restrictions (no derivatives / share-alike) are
+    not expressible by any row we have, so it maps to ``('unknown', False)`` and is
+    rejected everywhere. This check runs first, so ``by-nc-nd`` / ``by-nc-sa`` are
+    NOT mis-mapped to plain ``CC-BY-NC-4.0`` (which would fail-open by granting the
+    modification / derivative / standalone-redistribution rights those licenses
+    forbid). Only *after* it are ``by-nc`` / ``sampling`` tested before the bare
+    ``by``.
+
+    Args:
+        url: A CC license URL, a CC label string, or ``None``.
+
+    Returns:
+        ``(license_id, rights_verified)`` — ``('unknown', False)`` when
+        unrecognized, missing, or a fail-closed ND/SA variant.
+    """
+    if not url:
+        return "unknown", False
+    u = url.lower()
+    # NoDerivatives / ShareAlike (and the nc-nd / nc-sa compounds) fail closed —
+    # BEFORE the by-nc marker, which would otherwise substring-match 'by-nc-nd' /
+    # 'by-nc-sa' and mis-map a stricter license to plain CC-BY-NC (fail-open).
+    if any(marker in u for marker in ("-nd", "-sa", "noderiv", "sharealike")):
+        return "unknown", False
+    for needles, license_id in _CC_URL_MARKERS:
+        if any(n in u for n in needles):
+            return license_id, True
+    if "/by/" in u or u.rstrip("/").endswith("/by") or "attribution" in u:
+        return "CC-BY-4.0", True
+    return "unknown", False
 
 
 def derive_license_flags(

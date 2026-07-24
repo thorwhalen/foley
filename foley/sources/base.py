@@ -27,10 +27,13 @@ auto-discovery / ``SOURCE_CONFIG`` (that is #5's concern).
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Iterator, Optional, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Iterator, Optional, Protocol, runtime_checkable
 
 from ..base import AcquisitionMethod, LicenseRecord
 from ..licensing import apply_license_flags
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from ..base import Candidate, SoundRecord
 
 
 @dataclass
@@ -82,6 +85,80 @@ class CorpusAdapter(Protocol):
         ...
 
 
+@runtime_checkable
+class SourceAdapter(Protocol):
+    """The live/HTTP source contract (report 10 §4.2): ``search`` + ``get`` + ``download``.
+
+    A **retrieve** adapter (Freesound, #5) fetches existing sounds from a service:
+    ``search`` returns ranked :class:`~foley.base.Candidate`\\ s, ``get`` resolves
+    one id to a :class:`~foley.base.SoundRecord`, and ``download`` returns the
+    (transient, TOS-permitting) bytes to embed. It returns the SAME
+    ``Candidate`` / ``SoundRecord`` shapes as the retrieval index, so callers see
+    one uniform interface whether audio is remote, cached, or local.
+
+    Distinct from (and complementary to) the narrow bulk-corpus
+    :class:`CorpusAdapter`: a live adapter does NOT re-implement enrichment or
+    storage — it converges on the same :func:`foley.index.ingest.ingest_one`
+    pipeline via :func:`foley.sources.pull.add_from` (it *wraps* the corpus
+    machinery, it does not fork it). **Generation** adapters (#6: Stable Audio
+    Open, ElevenLabs) will add a sibling ``generate`` surface; it is intentionally
+    out of scope here so this Protocol stays runtime-checkable for retrieve
+    adapters.
+    """
+
+    def search(self, query: str, **kw) -> "list[Candidate]":
+        """Return ranked candidates for ``query`` (license filter pushed native)."""
+        ...
+
+    def get(self, source_id: str) -> "SoundRecord":
+        """Resolve one source id to a metadata :class:`~foley.base.SoundRecord`."""
+        ...
+
+    def download(self, source_id: str) -> bytes:
+        """Return a sound's bytes (honoring ``cache_bytes_ok`` at the storage gate)."""
+        ...
+
+
+def _build_license(
+    *,
+    source: str,
+    license_id: str,
+    rights_verified: bool,
+    acquisition_method: AcquisitionMethod,
+    overrides: Optional[dict] = None,
+    source_id: Optional[str] = None,
+    source_url: Optional[str] = None,
+    license_url: Optional[str] = None,
+    creator_name: Optional[str] = None,
+    attribution_text: Optional[str] = None,
+) -> LicenseRecord:
+    """Construct a :class:`~foley.base.LicenseRecord` and derive its flags (SSOT).
+
+    The shared core of :func:`bulk_license` (``acquisition_method=bulk``) and
+    :func:`api_license` (``acquisition_method=api``): it builds the record and
+    routes it through :func:`~foley.licensing.apply_license_flags` so the eight
+    permission flags are DERIVED from ``license_id`` (+ optional per-source
+    ``overrides``) — never hand-set. ``rights_verified`` is passed through
+    unchanged (it is not a derived flag): ``True`` only for an
+    authoritatively-recognized license, so an unknown id stays fail-closed and
+    :func:`foley.keep` drops it while its provenance is still recorded.
+    """
+    record = LicenseRecord(
+        source=source,
+        source_id=source_id,
+        source_url=source_url,
+        license_url=license_url,
+        license_id=license_id,
+        acquisition_method=acquisition_method,
+        creator_name=creator_name,
+        attribution_text=attribution_text,
+        rights_verified=rights_verified,
+    )
+    # The eight permission flags are DERIVED from license_id (+ overrides) by
+    # apply_license_flags — never hand-set here.
+    return apply_license_flags(record, overrides=overrides)
+
+
 def bulk_license(
     *,
     source: str,
@@ -94,13 +171,10 @@ def bulk_license(
 ) -> LicenseRecord:
     """Build a bulk-acquisition :class:`~foley.base.LicenseRecord`, flags derived.
 
-    The single SSOT license builder every corpus adapter routes through: it
-    constructs a ``LicenseRecord`` with ``acquisition_method=bulk`` and then
-    :func:`~foley.licensing.apply_license_flags` to derive the eight permission
-    flags from ``license_id`` (never hand-set). ``rights_verified`` is set
-    explicitly by the caller — ``True`` only for an authoritatively-recognized
-    license, so an unknown/unmapped id stays fail-closed and :func:`foley.keep`
-    drops it while its provenance is still recorded.
+    The SSOT license builder every **bulk-corpus** adapter routes through
+    (``acquisition_method=bulk``); a thin wrapper over :func:`_build_license`. Its
+    signature is unchanged from #4 — no ``overrides`` (a downloaded corpus is
+    cacheable by-value), so every existing corpus adapter keeps working verbatim.
 
     Args:
         source: Provenance source tag (e.g. ``'fsd50k'``, ``'foleyset'``).
@@ -116,19 +190,72 @@ def bulk_license(
     Returns:
         A populated ``LicenseRecord`` with its derived flags applied.
     """
-    record = LicenseRecord(
+    return _build_license(
         source=source,
+        license_id=license_id,
+        rights_verified=rights_verified,
+        acquisition_method=AcquisitionMethod.bulk,
         source_id=source_id,
         source_url=source_url,
-        license_id=license_id,
-        acquisition_method=AcquisitionMethod.bulk,
         creator_name=creator_name,
         attribution_text=attribution_text,
-        rights_verified=rights_verified,
     )
-    # requires_attribution (and the other 7 flags) are DERIVED from license_id
-    # by apply_license_flags — never hand-set here.
-    return apply_license_flags(record)
+
+
+def api_license(
+    *,
+    source: str,
+    license_id: str,
+    rights_verified: bool,
+    overrides: Optional[dict] = None,
+    source_id: Optional[str] = None,
+    source_url: Optional[str] = None,
+    license_url: Optional[str] = None,
+    creator_name: Optional[str] = None,
+    attribution_text: Optional[str] = None,
+) -> LicenseRecord:
+    """Build an API-acquisition :class:`~foley.base.LicenseRecord`, flags derived.
+
+    The live-source sibling of :func:`bulk_license` (``acquisition_method=api``),
+    used by HTTP :class:`SourceAdapter`\\ s (Freesound, …). It exposes the
+    ``overrides`` seam so an adapter can flip an operational flag on top of the
+    per-item copyright license **without** minting a new ``license_id`` — the
+    Freesound case: keep the sound's own CC id (``CC0-1.0`` / ``CC-BY-4.0`` / …)
+    but pass ``overrides={'cache_bytes_ok': False}`` because the API TOS forbids
+    caching the bytes even for CC0. ``redistribute_standalone_ok`` (copyright) and
+    ``cache_bytes_ok`` (TOS) are distinct; only the latter is flipped.
+
+    Args:
+        source: Provenance source tag (e.g. ``'freesound'``).
+        license_id: The per-item normalized license id (a key of ``LICENSE_FLAGS``).
+        rights_verified: ``True`` only for an authoritatively-recognized license
+            (fail-closed gate input); MUST be ``True`` for :func:`foley.keep` to
+            admit the sound.
+        overrides: Per-source flag overrides applied on top of ``license_id``'s row
+            (e.g. ``{'cache_bytes_ok': False}``). Keys must be ``LicenseFlags``
+            fields (validated by :func:`~foley.licensing.derive_license_flags`).
+        source_id: The source-native id (e.g. a Freesound numeric id), for provenance.
+        source_url: A human-resolvable URL for the item (attribution + the stable
+            by-reference re-fetch handle).
+        license_url: The license URL/label exactly as the source served it.
+        creator_name: The uploader/creator (required for CC-BY attribution).
+        attribution_text: A ready-made attribution string, if supplied.
+
+    Returns:
+        A populated ``LicenseRecord`` with its derived flags (+ overrides) applied.
+    """
+    return _build_license(
+        source=source,
+        license_id=license_id,
+        rights_verified=rights_verified,
+        acquisition_method=AcquisitionMethod.api,
+        overrides=overrides,
+        source_id=source_id,
+        source_url=source_url,
+        license_url=license_url,
+        creator_name=creator_name,
+        attribution_text=attribution_text,
+    )
 
 
 @dataclass

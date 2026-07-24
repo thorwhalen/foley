@@ -98,6 +98,13 @@ caption = [
     "torch",
     "torchaudio",
 ]
+# Live Freesound APIv2 retrieve adapter (by-reference; CC0). `requests` is imported
+# lazily inside foley.sources.http.requests_transport ONLY, so the core stays
+# dol-only. Deliberately NOT added to [tool.wads.ci.install] — the adapter tests
+# inject a fake transport and never touch the network, keeping CI hermetic.
+freesound = [
+    "requests",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",

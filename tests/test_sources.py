@@ -106,14 +106,25 @@ def test_license_id_from_url_unknown_is_fail_closed():
     )
 
 
-def test_license_id_from_url_nc_variants_stay_non_commercial():
-    # by-nc-nd / by-nc-sa carry the NC restriction -> map to CC-BY-NC (commercial_ok
-    # False), so the commercial filter still drops them (never leaks as commercial).
+def test_license_id_from_url_nd_sa_variants_fail_closed():
+    # Hardened in #5 (was CC-BY-NC-4.0): by-nc-nd / by-nc-sa (and bare by-nd / by-sa)
+    # have NO foley LICENSE_FLAGS row, so mapping them to CC-BY-NC-4.0 fail-OPEN'd —
+    # CC-BY-NC grants modification / derivative / standalone-redistribution rights
+    # that ND/SA forbid, which keep() would admit for a non-commercial derivative
+    # use. They now map to ('unknown', False): still dropped from commercial use (as
+    # before), and now also rejected for derivative/redistribution use (fail-closed).
     for url in (
         "https://creativecommons.org/licenses/by-nc-nd/4.0/",
         "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "https://creativecommons.org/licenses/by-nd/4.0/",
+        "https://creativecommons.org/licenses/by-sa/4.0/",
     ):
-        assert _license_id_from_url(url) == ("CC-BY-NC-4.0", True)
+        assert _license_id_from_url(url) == ("unknown", False)
+    # the plain by-nc (no ND/SA) still maps to CC-BY-NC-4.0 (a row we DO have)
+    assert _license_id_from_url("https://creativecommons.org/licenses/by-nc/4.0/") == (
+        "CC-BY-NC-4.0",
+        True,
+    )
 
 
 # ---------------------------------------------------------------------------
