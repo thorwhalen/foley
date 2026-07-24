@@ -35,9 +35,15 @@ SOURCE_CONFIG = {
     "param_map": {
         "query": {"native_name": "query", "required": True},
         "k": {"native_name": "page_size"},  # capped at 150 by the API
-        "duration_range": {"native_name": "filter", "to_native": "duration:[{lo} TO {hi}]"},
+        "duration_range": {
+            "native_name": "filter",
+            "to_native": "duration:[{lo} TO {hi}]",
+        },
         # CC0-only for #5; pushed into the server-side Solr filter
-        "license": {"native_name": "filter", "to_native": 'license:"Creative Commons 0"'},
+        "license": {
+            "native_name": "filter",
+            "to_native": 'license:"Creative Commons 0"',
+        },
         "sort": {"native_name": "sort"},
     },
     "supported_affordances": ["query", "k", "duration_range", "license", "sort"],

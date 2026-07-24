@@ -333,7 +333,9 @@ def ingest_one(
     probe = _probe(src)
     work = to_working(probe.wav, probe.native_sr)
     archive = encode(probe.wav, probe.native_sr)  # FLAC bytes
-    content_id = _audio_identity(probe.wav)  # PCM content-hash: the default id/dedup key
+    content_id = _audio_identity(
+        probe.wav
+    )  # PCM content-hash: the default id/dedup key
     # Canonical id: the PCM content-hash for a local ingest, or a caller-supplied
     # short, case-stable source id (e.g. 'freesound:12345') for a live adapter —
     # so dedup keys on the stable id, not on re-fetched (byte-varying) preview bytes.
@@ -437,9 +439,7 @@ def ingest_one(
         lib.add(record, data=archive, vector=audio_vec)
 
     status = qc_report.status.value if qc_report else "pass"
-    return IngestResult(
-        id=sid, status=status, record=record, qc=record.qc, notes=notes
-    )
+    return IngestResult(id=sid, status=status, record=record, qc=record.qc, notes=notes)
 
 
 def _run_supervised(tagger, probe: _Probe, notes: list) -> list:

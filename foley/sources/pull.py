@@ -69,7 +69,9 @@ def add_from(
         stored records (each ``storage_mode == by_reference`` for Freesound) and
         ``.summary()`` for counts, exactly like :func:`foley.ingest`.
     """
-    from ..bootstrap import MetadataCaptioner  # local: avoids a sources<->bootstrap cycle
+    from ..bootstrap import (
+        MetadataCaptioner,
+    )  # local: avoids a sources<->bootstrap cycle
     from ..index.library import default_library
 
     lib = library if library is not None else default_library()
@@ -82,7 +84,9 @@ def add_from(
     try:
         candidates = src_adapter.search(query, license=license, k=limit, **affordances)
     except Exception as exc:
-        report.record(IngestResult(id=f"{source}:search", status="error", error=repr(exc)))
+        report.record(
+            IngestResult(id=f"{source}:search", status="error", error=repr(exc))
+        )
         return report
 
     for cand in candidates:
@@ -115,7 +119,9 @@ def add_from(
                 captioner=MetadataCaptioner(rec.caption) if rec.caption else None,
                 seed_tags=rec.tags,
             )
-        except Exception as exc:  # transient fetch/decode failure never aborts the batch
+        except (
+            Exception
+        ) as exc:  # transient fetch/decode failure never aborts the batch
             report.record(IngestResult(id=rec.id, status="error", error=repr(exc)))
             continue
         report.record(res)
