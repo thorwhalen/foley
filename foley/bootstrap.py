@@ -76,7 +76,9 @@ def _ingest_corpus(
             IngestResult(
                 id=adapter.name,
                 status="error",
-                notes=[f"corpus {adapter.name!r} not found at {root!r}; download it first"],
+                notes=[
+                    f"corpus {adapter.name!r} not found at {root!r}; download it first"
+                ],
             )
         )
         return report
@@ -116,7 +118,9 @@ def _ingest_corpus(
             )
             continue
         captioner = (
-            MetadataCaptioner(spec.meta["caption"]) if spec.meta.get("caption") else None
+            MetadataCaptioner(spec.meta["caption"])
+            if spec.meta.get("caption")
+            else None
         )
         res = ingest_one(
             spec.path,
@@ -211,14 +215,10 @@ def _fresh_memory_library(*, embedder=None):
 
         embedder = default_embedder()
     idx = MemoryIndex(dim=embedder.dim)
-    return SoundLibrary(
-        sounds={}, meta={}, vindex=idx, kindex=idx, embedder=embedder
-    )
+    return SoundLibrary(sounds={}, meta={}, vindex=idx, kindex=idx, embedder=embedder)
 
 
-def demo(
-    *, library=None, query: str = "rain on a window", k: int = 3
-) -> dict:
+def demo(*, library=None, query: str = "rain on a window", k: int = 3) -> dict:
     """Ingest the bundled Ring-0 fixture and run one search — the smoke test.
 
     Needs no corpus download (the fixture ships in the wheel), but does need the

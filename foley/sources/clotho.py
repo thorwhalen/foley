@@ -39,14 +39,14 @@ def _load_captions(root: Path) -> "dict[str, str]":
             # "﻿file_name" and every lookup misses); errors="replace" keeps a
             # non-UTF-8 export (Excel/cp1252) from raising UnicodeDecodeError —
             # which is a ValueError, NOT caught below — and aborting the ingest.
-            with open(csv_path, newline="", encoding="utf-8-sig", errors="replace") as fh:
+            with open(
+                csv_path, newline="", encoding="utf-8-sig", errors="replace"
+            ) as fh:
                 for row in csv.DictReader(fh):
                     name = row.get(_FILE_COL)
                     if not name:
                         continue
-                    caption = next(
-                        (row[c] for c in _CAPTION_COLS if row.get(c)), None
-                    )
+                    caption = next((row[c] for c in _CAPTION_COLS if row.get(c)), None)
                     if caption:
                         captions.setdefault(name, caption)
         except (OSError, csv.Error):

@@ -87,12 +87,48 @@ def wind_gust(rng):
 
 
 CLIPS = [
-    ("door_slam.wav", door_slam, "a heavy wooden door slams shut", ["door", "slam", "wood"], "DOORSlam"),
-    ("rain_on_window.wav", rain_on_window, "steady rain falling on a window pane", ["rain", "window", "weather"], "RAINGnrl"),
-    ("footsteps.wav", footsteps, "footsteps walking on a hard floor", ["footsteps", "walking", "foot"], "FOOTHard"),
-    ("water_drip.wav", water_drip, "water drips dripping into a sink", ["water", "drip", "drop"], "WATRDrip"),
-    ("glass_clink.wav", glass_clink, "two glasses clink together in a toast", ["glass", "clink", "toast"], "GLASClink"),
-    ("wind_gust.wav", wind_gust, "a gust of wind blowing past", ["wind", "gust", "weather"], "WINDGust"),
+    (
+        "door_slam.wav",
+        door_slam,
+        "a heavy wooden door slams shut",
+        ["door", "slam", "wood"],
+        "DOORSlam",
+    ),
+    (
+        "rain_on_window.wav",
+        rain_on_window,
+        "steady rain falling on a window pane",
+        ["rain", "window", "weather"],
+        "RAINGnrl",
+    ),
+    (
+        "footsteps.wav",
+        footsteps,
+        "footsteps walking on a hard floor",
+        ["footsteps", "walking", "foot"],
+        "FOOTHard",
+    ),
+    (
+        "water_drip.wav",
+        water_drip,
+        "water drips dripping into a sink",
+        ["water", "drip", "drop"],
+        "WATRDrip",
+    ),
+    (
+        "glass_clink.wav",
+        glass_clink,
+        "two glasses clink together in a toast",
+        ["glass", "clink", "toast"],
+        "GLASClink",
+    ),
+    (
+        "wind_gust.wav",
+        wind_gust,
+        "a gust of wind blowing past",
+        ["wind", "gust", "weather"],
+        "WINDGust",
+    ),
 ]
 
 

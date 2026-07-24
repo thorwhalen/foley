@@ -99,7 +99,9 @@ def _cmd_search(args) -> int:
     hits = search(args.query, k=args.k, commercial_ok=args.commercial_ok or None)
     for hit in hits:
         rec = hit.sound
-        print(f"{rec.id[:12]}  {rec.caption or '(no caption)'}  [{rec.license.license_id}]")
+        print(
+            f"{rec.id[:12]}  {rec.caption or '(no caption)'}  [{rec.license.license_id}]"
+        )
     if not hits:
         print("(no hits)")
     return 0
@@ -107,18 +109,26 @@ def _cmd_search(args) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     """Build the ``foley`` argument parser."""
-    parser = argparse.ArgumentParser(prog="foley", description="foley — sound-effects retrieval facade")
+    parser = argparse.ArgumentParser(
+        prog="foley", description="foley — sound-effects retrieval facade"
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_demo = sub.add_parser("demo", help="offline ingest->search over the bundled fixture")
+    p_demo = sub.add_parser(
+        "demo", help="offline ingest->search over the bundled fixture"
+    )
     p_demo.add_argument("--query", default="rain on a window")
     p_demo.add_argument("-k", type=int, default=3)
     p_demo.set_defaults(func=_cmd_demo)
 
     p_boot = sub.add_parser("bootstrap", help="seed the library from bulk corpora")
     p_boot.add_argument("--rings", help="comma-separated rings (default 0,1)")
-    p_boot.add_argument("--corpora", help="comma-separated corpus names (overrides --rings)")
-    p_boot.add_argument("--data-dir", help="root holding downloaded corpora (data_dir/<name>)")
+    p_boot.add_argument(
+        "--corpora", help="comma-separated corpus names (overrides --rings)"
+    )
+    p_boot.add_argument(
+        "--data-dir", help="root holding downloaded corpora (data_dir/<name>)"
+    )
     p_boot.add_argument(
         "--accept-ai-restricted",
         action="store_true",
@@ -141,7 +151,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_search = sub.add_parser("search", help="hybrid search of the default library")
     p_search.add_argument("query")
     p_search.add_argument("-k", type=int, default=10)
-    p_search.add_argument("--commercial-ok", action="store_true", help="keep only commercially-usable sounds")
+    p_search.add_argument(
+        "--commercial-ok",
+        action="store_true",
+        help="keep only commercially-usable sounds",
+    )
     p_search.set_defaults(func=_cmd_search)
 
     return parser
