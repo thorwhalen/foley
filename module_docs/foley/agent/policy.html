@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.agent.policy &mdash; foley 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.agent.protocols" href="protocols.html" />
+    <link rel="prev" title="foley.agent.decompose" href="decompose.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.agent.policy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.policy.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.agent.policy.Budget.gen_ok"><code class="docutils literal notranslate"><span class="pre">Budget.gen_ok()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.agent.policy.Budget.refine_ok"><code class="docutils literal notranslate"><span class="pre">Budget.refine_ok()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.agent.policy.Budget.spend_gen"><code class="docutils literal notranslate"><span class="pre">Budget.spend_gen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.agent.policy.Budget.spend_refine"><code class="docutils literal notranslate"><span class="pre">Budget.spend_refine()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.policy.DecideAction"><code class="docutils literal notranslate"><span class="pre">DecideAction</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.policy.Decision"><code class="docutils literal notranslate"><span class="pre">Decision</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.policy.decide"><code class="docutils literal notranslate"><span class="pre">decide()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.policy.gate_candidates"><code class="docutils literal notranslate"><span class="pre">gate_candidates()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.agent.policy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/agent/policy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.agent.policy">
+<span id="foley-agent-policy"></span><h1>foley.agent.policy<a class="headerlink" href="#module-foley.agent.policy" title="Link to this heading"></a></h1>
+<p>The SELECT policy: the fail-closed rights gate + the single generate-vs-retrieve branch.</p>
+<p>Two load-bearing invariants live here as two <strong>physically separate pure functions</strong>, so
+neither can bypass the other:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#foley.agent.policy.gate_candidates" title="foley.agent.policy.gate_candidates"><code class="xref py py-func docutils literal notranslate"><span class="pre">gate_candidates()</span></code></a> — the ONLY rights-rejection point. Runs the fail-closed
+<a class="reference internal" href="../licensing.html#foley.licensing.keep_sound" title="foley.licensing.keep_sound"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.licensing.keep_sound()</span></code></a> gate over the candidate set <strong>before</strong> any
+verification/ranking (invariant #3), sets <code class="docutils literal notranslate"><span class="pre">Candidate.license_ok</span></code>, and drops every
+non-<code class="docutils literal notranslate"><span class="pre">True</span></code> candidate.</p></li>
+<li><p><a class="reference internal" href="#foley.agent.policy.decide" title="foley.agent.policy.decide"><code class="xref py py-func docutils literal notranslate"><span class="pre">decide()</span></code></a> — the ONLY generate-vs-retrieve branch. A <strong>pure</strong> function of an
+already-gated+verified set; it never calls <code class="docutils literal notranslate"><span class="pre">keep</span></code>/<code class="docutils literal notranslate"><span class="pre">search</span></code>/<code class="docutils literal notranslate"><span class="pre">generate</span></code> (the
+<a class="reference internal" href="tools.html#module-foley.agent.tools" title="foley.agent.tools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.agent.tools</span></code></a> loop owns all side effects).</p></li>
+</ul>
+<p><a class="reference internal" href="#foley.agent.policy.Budget" title="foley.agent.policy.Budget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Budget</span></code></a> bounds the refine→re-retrieve and generate loops so a hard event can’t
+run away. This module is stdlib-only (imports only <a class="reference internal" href="../base.html#module-foley.base" title="foley.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.base</span></code></a> /
+<a class="reference internal" href="../licensing.html#module-foley.licensing" title="foley.licensing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.licensing</span></code></a>) and does no I/O and no obs — the loop emits the audit Steps.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.agent.policy.</span></span><span class="sig-name descname"><span class="pre">Budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_refine_loops</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_generations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_generate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_refines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/agent/policy.html#Budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget" title="Link to this definition"></a></dt>
+<dd><p>Bounded-cost accounting for the per-event refine/generate loops.</p>
+<p>Prevents unbounded cost on a hard event. The loop calls <a class="reference internal" href="#foley.agent.policy.Budget.refine_ok" title="foley.agent.policy.Budget.refine_ok"><code class="xref py py-meth docutils literal notranslate"><span class="pre">refine_ok()</span></code></a> /
+<a class="reference internal" href="#foley.agent.policy.Budget.gen_ok" title="foley.agent.policy.Budget.gen_ok"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gen_ok()</span></code></a> to test, then <a class="reference internal" href="#foley.agent.policy.Budget.spend_refine" title="foley.agent.policy.Budget.spend_refine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">spend_refine()</span></code></a> / <a class="reference internal" href="#foley.agent.policy.Budget.spend_gen" title="foley.agent.policy.Budget.spend_gen"><code class="xref py py-meth docutils literal notranslate"><span class="pre">spend_gen()</span></code></a> to charge.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.gen_ok">
+<span class="sig-name descname"><span class="pre">gen_ok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/policy.html#Budget.gen_ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.gen_ok" title="Link to this definition"></a></dt>
+<dd><p>Whether a generation fallback is allowed and within budget.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.refine_ok">
+<span class="sig-name descname"><span class="pre">refine_ok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/policy.html#Budget.refine_ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.refine_ok" title="Link to this definition"></a></dt>
+<dd><p>Whether another refine→re-retrieve pass is within budget.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.spend_gen">
+<span class="sig-name descname"><span class="pre">spend_gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/policy.html#Budget.spend_gen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.spend_gen" title="Link to this definition"></a></dt>
+<dd><p>Charge one generation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.spend_refine">
+<span class="sig-name descname"><span class="pre">spend_refine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/policy.html#Budget.spend_refine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.spend_refine" title="Link to this definition"></a></dt>
+<dd><p>Charge one refine loop.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.agent.policy.DecideAction">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.agent.policy.</span></span><span class="sig-name descname"><span class="pre">DecideAction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/agent/policy.html#DecideAction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.DecideAction" title="Link to this definition"></a></dt>
+<dd><p>What <a class="reference internal" href="#foley.agent.policy.decide" title="foley.agent.policy.decide"><code class="xref py py-func docutils literal notranslate"><span class="pre">decide()</span></code></a> chose for one event (the single branch’s outcomes).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.agent.policy.Decision">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.agent.policy.</span></span><span class="sig-name descname"><span class="pre">Decision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.agent.policy.DecideAction" title="foley.agent.policy.DecideAction"><span class="pre">DecideAction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reason</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/agent/policy.html#Decision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Decision" title="Link to this definition"></a></dt>
+<dd><p>The tiny result of <a class="reference internal" href="#foley.agent.policy.decide" title="foley.agent.policy.decide"><code class="xref py py-func docutils literal notranslate"><span class="pre">decide()</span></code></a>; <code class="docutils literal notranslate"><span class="pre">reason</span></code> feeds the refine hint + the audit Step.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.policy.decide">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.policy.</span></span><span class="sig-name descname"><span class="pre">decide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.SoundEvent" title="foley.base.SoundEvent"><span class="pre">SoundEvent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">kept</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verified</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau_retrieve</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.agent.policy.Budget" title="foley.agent.policy.Budget"><span class="pre">Budget</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.agent.policy.Decision" title="foley.agent.policy.Decision"><span class="pre">Decision</span></a></span></span><a class="reference internal" href="../../../_modules/foley/agent/policy.html#decide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.decide" title="Link to this definition"></a></dt>
+<dd><p>The single generate-vs-retrieve branch — a PURE function (report 05 §4).</p>
+<p>Chooses among <a class="reference internal" href="#foley.agent.policy.DecideAction" title="foley.agent.policy.DecideAction"><code class="xref py py-class docutils literal notranslate"><span class="pre">DecideAction</span></code></a> from the already-gated (<code class="docutils literal notranslate"><span class="pre">kept</span></code>) and
+already-verified (<code class="docutils literal notranslate"><span class="pre">verified</span></code>) sets. It performs no I/O and never calls
+<code class="docutils literal notranslate"><span class="pre">keep</span></code>/<code class="docutils literal notranslate"><span class="pre">search</span></code>/<code class="docutils literal notranslate"><span class="pre">generate</span></code> — the <a class="reference internal" href="tools.html#module-foley.agent.tools" title="foley.agent.tools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.agent.tools</span></code></a> loop acts on the
+returned <a class="reference internal" href="#foley.agent.policy.Decision" title="foley.agent.policy.Decision"><code class="xref py py-class docutils literal notranslate"><span class="pre">Decision</span></code></a>.</p>
+<dl class="simple">
+<dt>Policy (report 05 §4):</dt><dd><ul class="simple">
+<li><p>a verified clip clearing <code class="docutils literal notranslate"><span class="pre">tau_retrieve</span></code> → <code class="docutils literal notranslate"><span class="pre">USE</span></code> (the best one);</p></li>
+<li><p>verified-but-low-confidence with refine budget → <code class="docutils literal notranslate"><span class="pre">REFINE</span></code> (feed the reason back);</p></li>
+<li><p>a non-diegetic cue, or a diegetic gap with no verified match, with generate budget
+→ <code class="docutils literal notranslate"><span class="pre">GENERATE</span></code>;</p></li>
+<li><p>otherwise → <code class="docutils literal notranslate"><span class="pre">DROP</span></code> (silence), unless a lower-confidence verified clip exists and
+generation is off, in which case fall back to that best-effort pick.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – The event being resolved.</p></li>
+<li><p><strong>kept</strong> – The license-clean candidates (each <code class="docutils literal notranslate"><span class="pre">license_ok</span> <span class="pre">is</span> <span class="pre">True</span></code>).</p></li>
+<li><p><strong>verified</strong> – The subset of <code class="docutils literal notranslate"><span class="pre">kept</span></code> whose verdict matched.</p></li>
+<li><p><strong>tau_retrieve</strong> – The confidence threshold for auto-accepting a retrieved clip.</p></li>
+<li><p><strong>budget</strong> – The per-event cost budget.</p></li>
+<li><p><strong>loop</strong> – The current refine-loop index (for the audit reason).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#foley.agent.policy.Decision" title="foley.agent.policy.Decision"><code class="xref py py-class docutils literal notranslate"><span class="pre">Decision</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.policy.gate_candidates">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.policy.</span></span><span class="sig-name descname"><span class="pre">gate_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intended_use</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.IntendedUse" title="foley.base.IntendedUse"><span class="pre">IntendedUse</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/agent/policy.html#gate_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.gate_candidates" title="Link to this definition"></a></dt>
+<dd><p>Fail-closed license gate — run BEFORE verification/ranking (invariant #3).</p>
+<p>For each candidate: apply <a class="reference internal" href="../licensing.html#foley.licensing.keep_sound" title="foley.licensing.keep_sound"><code class="xref py py-func docutils literal notranslate"><span class="pre">keep_sound()</span></code></a> (any exception ⇒
+<code class="docutils literal notranslate"><span class="pre">False</span></code>, fail-closed), record the result on <code class="docutils literal notranslate"><span class="pre">candidate.license_ok</span></code>, and keep
+ONLY where it is <code class="docutils literal notranslate"><span class="pre">True</span></code> — a <code class="docutils literal notranslate"><span class="pre">None</span></code> (never gated) or <code class="docutils literal notranslate"><span class="pre">False</span></code> is dropped. This is
+the single rights-rejection point; <a class="reference internal" href="verify.html#foley.agent.verify.verify_match" title="foley.agent.verify.verify_match"><code class="xref py py-func docutils literal notranslate"><span class="pre">verify_match()</span></code></a> asserts
+its survivors are license-clean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>candidates</strong> – The retrieved shortlist (<code class="docutils literal notranslate"><span class="pre">license_ok</span></code> typically <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
+<li><p><strong>intended_use</strong> – The caller’s declared rights intent.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The license-clean sublist (each with <code class="docutils literal notranslate"><span class="pre">license_ok</span> <span class="pre">is</span> <span class="pre">True</span></code>), order preserved.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="decompose.html" class="btn btn-neutral float-left" title="foley.agent.decompose" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="protocols.html" class="btn btn-neutral float-right" title="foley.agent.protocols" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

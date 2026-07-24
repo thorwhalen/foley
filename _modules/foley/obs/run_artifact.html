@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.obs.run_artifact &mdash; foley 0.0.10 documentation</title>
+  <title>foley.obs.run_artifact &mdash; foley 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -47,6 +47,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
@@ -174,8 +182,34 @@
     <span class="n">duration_ms</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span>  <span class="c1"># &#39;ok&#39; | &#39;error&#39;</span>
     <span class="n">attributes</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># gen_ai.* + foley.* (REDACTED)</span>
-    <span class="n">events</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># redacted content events (reserved for #7)</span>
+    <span class="n">events</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span>
+    <span class="p">)</span>  <span class="c1"># redacted content events (reserved for #7)</span>
     <span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="Step">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/run_artifact.html#foley.Step">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Step</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One SELECT-stage step of a ``find()`` run (the plan half of the artifact, #7).</span>
+
+<span class="sd">    The typed entry type of :attr:`RunManifest.steps`: a compact, redacted record of</span>
+<span class="sd">    each ``decompose``/``refine``/``search``/``license_gate``/``verify``/``decide``/</span>
+<span class="sd">    ``generate``/``place`` stage, in ``seq`` order, with ``span_id`` joining the step</span>
+<span class="sd">    back to the :class:`SpanRecord` that timed it. ``detail`` is a small,</span>
+<span class="sd">    already-redacted dict (event text lives under the ``query`` key so the redactor</span>
+<span class="sd">    catches it). Rehydrated element-wise by :meth:`RunManifest.from_dict` exactly like</span>
+<span class="sd">    ``spans`` (see the module docstring).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># decompose|refine|search|license_gate|verify|decide|generate|place</span>
+    <span class="n">seq</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># position in RunManifest.steps (assigned by RunRecorder.add_step)</span>
+    <span class="n">event_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># which SoundEvent (None for the run-level decompose)</span>
+    <span class="n">span_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># join to the timing SpanRecord</span>
+    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span>  <span class="c1"># &#39;ok&#39; | &#39;error&#39;</span>
+    <span class="n">detail</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># REDACTED at record time</span></div>
 
 
 
@@ -195,18 +229,34 @@
     <span class="n">op</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &#39;generate&#39;|&#39;add_from&#39;|&#39;ingest&#39;|&#39;search&#39;|&#39;similar&#39; (+ &#39;find&#39;/&#39;run&#39; when aggregated)</span>
     <span class="n">created_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># ISO-8601; None in deterministic/test mode</span>
     <span class="n">foley_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># REDACTED request (query/prompt via REDACT_FIELDS)</span>
-    <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># resolved-effective kwargs (open-closed)</span>
-    <span class="n">spans</span><span class="p">:</span> <span class="s2">&quot;list[SpanRecord]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># THE TRACE (rehydrated via _decode)</span>
-    <span class="n">steps</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># RESERVED for #7 decompose/verify/decide + branch</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span>
+    <span class="p">)</span>  <span class="c1"># REDACTED request (query/prompt via REDACT_FIELDS)</span>
+    <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span>
+    <span class="p">)</span>  <span class="c1"># resolved-effective kwargs (open-closed)</span>
+    <span class="n">spans</span><span class="p">:</span> <span class="s2">&quot;list[SpanRecord]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span>
+    <span class="p">)</span>  <span class="c1"># THE TRACE (rehydrated via _decode)</span>
+    <span class="n">steps</span><span class="p">:</span> <span class="s2">&quot;list[Step]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span>
+    <span class="p">)</span>  <span class="c1"># #7 decompose/verify/decide trail (rehydrated element-wise)</span>
     <span class="n">ingest_report</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># IngestReport.to_dict() — embeds, never forks</span>
     <span class="n">result_ids</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># produced/returned SoundRecord ids</span>
     <span class="n">candidate_scores</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># [{id,clap,bm25,rrf,rerank}]</span>
-    <span class="n">credits_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># credits_for(records).manifest (TASL + disclosure)</span>
-    <span class="n">disclosure_refs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># {id:{watermark,c2pa_manifest_ref,...}}</span>
-    <span class="n">seeds</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># {id:{backend,model,version,prompt(REDACTED),seed,...}}</span>
+    <span class="n">credits_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="kc">None</span>  <span class="c1"># credits_for(records).manifest (TASL + disclosure)</span>
+    <span class="p">)</span>
+    <span class="n">disclosure_refs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span>
+    <span class="p">)</span>  <span class="c1"># {id:{watermark,c2pa_manifest_ref,...}}</span>
+    <span class="n">seeds</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span>
+    <span class="p">)</span>  <span class="c1"># {id:{backend,model,version,prompt(REDACTED),seed,...}}</span>
     <span class="n">plan_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># RESERVED for #8 SoundDesignTimeline / OTIO plan</span>
-    <span class="n">trace_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># OTel trace id hex — ONLY when a recording SDK is configured</span>
+    <span class="n">trace_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="kc">None</span>  <span class="c1"># OTel trace id hex — ONLY when a recording SDK is configured</span>
+    <span class="p">)</span>
     <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span>
     <span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">schema_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SCHEMA_VERSION</span></div>

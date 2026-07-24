@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.obs.recorder &mdash; foley 0.0.10 documentation</title>
+  <title>foley.obs.recorder &mdash; foley 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -47,6 +47,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
@@ -157,7 +165,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.redact</span><span class="w"> </span><span class="kn">import</span> <span class="n">RedactionMode</span><span class="p">,</span> <span class="n">Redactor</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.run_artifact</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunManifest</span><span class="p">,</span> <span class="n">SpanRecord</span><span class="p">,</span> <span class="n">emit_run_manifest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.run_artifact</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunManifest</span><span class="p">,</span> <span class="n">SpanRecord</span><span class="p">,</span> <span class="n">Step</span><span class="p">,</span> <span class="n">emit_run_manifest</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.trace</span><span class="w"> </span><span class="kn">import</span> <span class="n">GENAI</span><span class="p">,</span> <span class="n">Tracer</span><span class="p">,</span> <span class="n">get_tracer</span>
 
 
@@ -192,14 +200,20 @@
 
 
 <span class="n">_CONFIG</span> <span class="o">=</span> <span class="n">ObsConfig</span><span class="p">()</span>
-<span class="n">_CURRENT_RUN</span><span class="p">:</span> <span class="s2">&quot;ContextVar[Optional[RunRecorder]]&quot;</span> <span class="o">=</span> <span class="n">ContextVar</span><span class="p">(</span><span class="s2">&quot;foley_run&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">_CURRENT_RUN</span><span class="p">:</span> <span class="s2">&quot;ContextVar[Optional[RunRecorder]]&quot;</span> <span class="o">=</span> <span class="n">ContextVar</span><span class="p">(</span>
+    <span class="s2">&quot;foley_run&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="is_enabled">
 <a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.is_enabled">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">is_enabled</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether observability is on (via :func:`enable` or ``$FOLEY_OBS`` in {1,true,yes}).&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_CONFIG</span><span class="o">.</span><span class="n">enabled</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FOLEY_OBS&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_CONFIG</span><span class="o">.</span><span class="n">enabled</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FOLEY_OBS&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 
@@ -279,11 +293,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span> <span class="o">=</span> <span class="n">mirror</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_redactor</span> <span class="o">=</span> <span class="n">redactor</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">span_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The manifest ``SpanRecord.span_id`` (join target for a #7 :class:`Step`).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="o">.</span><span class="n">span_id</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a (redacted) attribute on both the manifest span record and the OTel mirror.&quot;&quot;&quot;</span>
         <span class="n">redacted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redactor</span><span class="o">.</span><span class="n">redact_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">redacted</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">redacted</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">redacted</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">redacted</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span>
+            <span class="n">key</span><span class="p">,</span>
+            <span class="n">redacted</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">redacted</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
+            <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">redacted</span><span class="p">),</span>
+        <span class="p">)</span>
 
 
 <div class="viewcode-block" id="RunRecorder">
@@ -329,7 +353,9 @@
             <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tracer</span><span class="o">.</span><span class="n">start_as_current_span</span><span class="p">(</span>
                 <span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">rec</span><span class="o">.</span><span class="n">attributes</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">mirror</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">trace_ref</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mirror</span><span class="p">,</span> <span class="s2">&quot;trace_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">trace_ref</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span>
+                    <span class="n">mirror</span><span class="p">,</span> <span class="s2">&quot;trace_id&quot;</span><span class="p">,</span> <span class="kc">None</span>
+                <span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">trace_ref</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="n">trace_id</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="k">yield</span> <span class="n">_SpanHandle</span><span class="p">(</span><span class="n">rec</span><span class="p">,</span> <span class="n">mirror</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redactor</span><span class="p">)</span>
@@ -379,6 +405,29 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">add_disclosure_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">disclosure_refs</span><span class="p">[</span><span class="n">sound_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span>
 
+<div class="viewcode-block" id="RunRecorder.add_step">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.RunRecorder.add_step">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="n">Step</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a SELECT-stage :class:`Step` (#7), deep-redacting ``detail`` at record time.</span>
+
+<span class="sd">        The record-time net (belt over the emit-time sweep): event text carried in</span>
+<span class="sd">        ``detail`` (under the ``query`` key) is hashed here so a manifest read straight</span>
+<span class="sd">        off ``self.manifest.steps`` — before any emit — never holds raw narration.</span>
+<span class="sd">        ``seq`` is assigned here (append position) when the caller left it ``None``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">step</span><span class="o">.</span><span class="n">seq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">step</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+        <span class="n">step</span><span class="o">.</span><span class="n">detail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redactor</span><span class="o">.</span><span class="n">redact_manifest</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="n">detail</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">step</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RunRecorder.set_plan_ref">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.RunRecorder.set_plan_ref">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_plan_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan_ref</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill the reserved #8 ``plan_ref`` slot (a light join dict — no text).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">plan_ref</span> <span class="o">=</span> <span class="n">plan_ref</span></div>
+
+
     <span class="k">def</span><span class="w"> </span><span class="nf">set_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
 
@@ -404,6 +453,8 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_NullSpanHandle</span><span class="p">:</span>
+    <span class="n">span_id</span> <span class="o">=</span> <span class="kc">None</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: D102</span>
         <span class="k">pass</span>
 
@@ -426,6 +477,8 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">set_credits_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">credits_manifest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_disclosure_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="n">Step</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_plan_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan_ref</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
 
@@ -440,7 +493,11 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_new_recorder</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">ObsConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RunRecorder</span><span class="p">:</span>
     <span class="n">redactor</span> <span class="o">=</span> <span class="n">Redactor</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">redaction_mode</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span>
-    <span class="n">tracer</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">tracer</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">tracer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">get_tracer</span><span class="p">(</span><span class="n">prefer_otel</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">prefer_otel</span><span class="p">)</span>
+    <span class="n">tracer</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">tracer</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">tracer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="n">get_tracer</span><span class="p">(</span><span class="n">prefer_otel</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">prefer_otel</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">store</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">run_store</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">run_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_default_store</span><span class="p">()</span>
     <span class="n">manifest</span> <span class="o">=</span> <span class="n">RunManifest</span><span class="p">(</span>
         <span class="n">run_id</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">id_factory</span><span class="p">(),</span>

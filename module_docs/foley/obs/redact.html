@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.obs.redact &mdash; foley 0.0.10 documentation</title>
+  <title>foley.obs.redact &mdash; foley 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,6 +50,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
@@ -162,7 +170,7 @@ manifest before the store write, catching anything stuffed past record-time.</p>
 </ul>
 <dl class="py data">
 <dt class="sig sig-object py" id="foley.obs.redact.REDACT_FIELDS">
-<span class="sig-prename descclassname"><span class="pre">foley.obs.redact.</span></span><span class="sig-name descname"><span class="pre">REDACT_FIELDS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">frozenset({'context_text',</span> <span class="pre">'gen_ai.completion',</span> <span class="pre">'gen_ai.prompt',</span> <span class="pre">'generation_prompt',</span> <span class="pre">'narration',</span> <span class="pre">'negative_prompt',</span> <span class="pre">'prompt',</span> <span class="pre">'query'})</span></span><a class="headerlink" href="#foley.obs.redact.REDACT_FIELDS" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">foley.obs.redact.</span></span><span class="sig-name descname"><span class="pre">REDACT_FIELDS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">frozenset({'context_text',</span> <span class="pre">'gen_ai.completion',</span> <span class="pre">'gen_ai.prompt',</span> <span class="pre">'generation_prompt',</span> <span class="pre">'narration',</span> <span class="pre">'negative_prompt',</span> <span class="pre">'onset',</span> <span class="pre">'prompt',</span> <span class="pre">'query'})</span></span><a class="headerlink" href="#foley.obs.redact.REDACT_FIELDS" title="Link to this definition"></a></dt>
 <dd><p>The attribute / field keys whose string values are sensitive and redacted. The
 narration/prompt/query surfaces report 12 §11 names; <code class="docutils literal notranslate"><span class="pre">context_text</span></code> / <code class="docutils literal notranslate"><span class="pre">narration</span></code>
 / <code class="docutils literal notranslate"><span class="pre">gen_ai.*</span></code> producers arrive with the #7 agent, but the seam + keys exist now.</p>

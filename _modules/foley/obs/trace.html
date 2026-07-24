@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.obs.trace &mdash; foley 0.0.10 documentation</title>
+  <title>foley.obs.trace &mdash; foley 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -47,6 +47,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
@@ -160,8 +168,9 @@
     <span class="s2">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.provider.name&quot;</span><span class="p">,</span>
     <span class="s2">&quot;request_model&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.request.model&quot;</span><span class="p">,</span>
     <span class="s2">&quot;response_model&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.response.model&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;input_tokens&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.usage.input_tokens&quot;</span><span class="p">,</span>  <span class="c1"># reserved for #7</span>
-    <span class="s2">&quot;output_tokens&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.usage.output_tokens&quot;</span><span class="p">,</span>  <span class="c1"># reserved for #7</span>
+    <span class="s2">&quot;input_tokens&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.usage.input_tokens&quot;</span><span class="p">,</span>  <span class="c1"># #7 decompose/refine/judge LLM spans</span>
+    <span class="s2">&quot;output_tokens&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.usage.output_tokens&quot;</span><span class="p">,</span>  <span class="c1"># #7 decompose/refine/judge LLM spans</span>
+    <span class="s2">&quot;finish_reasons&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.response.finish_reasons&quot;</span><span class="p">,</span>  <span class="c1"># #7 LLM stop_reason (STABLE)</span>
     <span class="s2">&quot;data_source_id&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.data_source.id&quot;</span><span class="p">,</span>  <span class="c1"># the index/library id (retrieval)</span>
     <span class="s2">&quot;error_type&quot;</span><span class="p">:</span> <span class="s2">&quot;error.type&quot;</span><span class="p">,</span>  <span class="c1"># STABLE</span>
 <span class="p">}</span>
@@ -188,7 +197,11 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Starts mirror spans; the DI seam (default no-op, OTel-backed when present).&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">start_as_current_span</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContextManager[Span]&quot;</span><span class="p">:</span> <span class="o">...</span></div>
 
 
@@ -228,7 +241,11 @@
 <a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.NoOpTracer.start_as_current_span">[docs]</a>
     <span class="nd">@contextmanager</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">start_as_current_span</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield the no-op span (context-manager protocol; nothing is recorded).&quot;&quot;&quot;</span>
         <span class="k">yield</span> <span class="n">_NOOP_SPAN</span></div>
@@ -286,12 +303,18 @@
 <a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.OTelTracer.start_as_current_span">[docs]</a>
     <span class="nd">@contextmanager</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">start_as_current_span</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Open a real OTel span, mapping ``kind`` to ``SpanKind`` and yielding a mirror.&quot;&quot;&quot;</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">opentelemetry.trace</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanKind</span>
 
-        <span class="n">span_kind</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">SpanKind</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">SpanKind</span><span class="o">.</span><span class="n">INTERNAL</span><span class="p">)</span> <span class="k">if</span> <span class="n">kind</span> <span class="k">else</span> <span class="n">SpanKind</span><span class="o">.</span><span class="n">INTERNAL</span>
+        <span class="n">span_kind</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">SpanKind</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">SpanKind</span><span class="o">.</span><span class="n">INTERNAL</span><span class="p">)</span> <span class="k">if</span> <span class="n">kind</span> <span class="k">else</span> <span class="n">SpanKind</span><span class="o">.</span><span class="n">INTERNAL</span>
+        <span class="p">)</span>
         <span class="c1"># foley OWNS exception recording via the mirror (redacted), so disable OTel&#39;s</span>
         <span class="c1"># auto record_exception / set_status_on_exception to avoid a double event + a</span>
         <span class="c1"># raw-message leak on the auto-recorded exception.</span>

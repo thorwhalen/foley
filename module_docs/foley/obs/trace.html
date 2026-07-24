@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.obs.trace &mdash; foley 0.0.10 documentation</title>
+  <title>foley.obs.trace &mdash; foley 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,6 +50,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
@@ -162,7 +170,7 @@ foley never configures an SDK / exporter — that is the host application’s jo
 free <code class="docutils literal notranslate"><span class="pre">ProxyTracer</span></code> no-op, so instrumentation is safe and ~zero-cost by default.</p>
 <dl class="py data">
 <dt class="sig sig-object py" id="foley.obs.trace.GENAI">
-<span class="sig-prename descclassname"><span class="pre">foley.obs.trace.</span></span><span class="sig-name descname"><span class="pre">GENAI</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'data_source_id':</span> <span class="pre">'gen_ai.data_source.id',</span> <span class="pre">'error_type':</span> <span class="pre">'error.type',</span> <span class="pre">'input_tokens':</span> <span class="pre">'gen_ai.usage.input_tokens',</span> <span class="pre">'operation':</span> <span class="pre">'gen_ai.operation.name',</span> <span class="pre">'output_tokens':</span> <span class="pre">'gen_ai.usage.output_tokens',</span> <span class="pre">'provider':</span> <span class="pre">'gen_ai.provider.name',</span> <span class="pre">'request_model':</span> <span class="pre">'gen_ai.request.model',</span> <span class="pre">'response_model':</span> <span class="pre">'gen_ai.response.model'}</span></span><a class="headerlink" href="#foley.obs.trace.GENAI" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">foley.obs.trace.</span></span><span class="sig-name descname"><span class="pre">GENAI</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'data_source_id':</span> <span class="pre">'gen_ai.data_source.id',</span> <span class="pre">'error_type':</span> <span class="pre">'error.type',</span> <span class="pre">'finish_reasons':</span> <span class="pre">'gen_ai.response.finish_reasons',</span> <span class="pre">'input_tokens':</span> <span class="pre">'gen_ai.usage.input_tokens',</span> <span class="pre">'operation':</span> <span class="pre">'gen_ai.operation.name',</span> <span class="pre">'output_tokens':</span> <span class="pre">'gen_ai.usage.output_tokens',</span> <span class="pre">'provider':</span> <span class="pre">'gen_ai.provider.name',</span> <span class="pre">'request_model':</span> <span class="pre">'gen_ai.request.model',</span> <span class="pre">'response_model':</span> <span class="pre">'gen_ai.response.model'}</span></span><a class="headerlink" href="#foley.obs.trace.GENAI" title="Link to this definition"></a></dt>
 <dd><p>The GenAI semantic-convention attribute keys foley emits. HARDCODED as strings on
 purpose — the <code class="docutils literal notranslate"><span class="pre">opentelemetry.semconv._incubating</span></code> constants are Development-
 stability and shift across minor versions. This dict is the single place they are named.</p>

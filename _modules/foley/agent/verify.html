@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.agent.verify &mdash; foley 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.agent.verify</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.agent.verify</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;``verify_match`` — the retrieve→verify ladder (clap → listen → judge) + ``Judge`` impls.</span>
+
+<span class="sd">Retrieval gives a ranked shortlist; verification confirms the *intent* before a clip is</span>
+<span class="sd">accepted (report 05 §3). Three rungs, cheapest first:</span>
+
+<span class="sd">* ``clap`` — :class:`ClapJudge`, the zero-config gate on the retrieval cosine (no ML).</span>
+<span class="sd">* ``listen`` — an audio-LM &quot;does this contain {event}?&quot; check; **#7 ships the</span>
+<span class="sd">  deterministic :class:`StringOverlapJudge`** here (caption/tag overlap). The real</span>
+<span class="sd">  Qwen2-Audio impl is a future :class:`~foley.agent.protocols.Judge` behind this same</span>
+<span class="sd">  ``VerifyLevel`` seam — no orchestrator change.</span>
+<span class="sd">* ``judge`` — :class:`AnthropicJudge`, an LLM arbiter (ties + scene consistency),</span>
+<span class="sd">  ``foley[agent]``; ``anthropic`` imported lazily.</span>
+
+<span class="sd">The ladder is AND-confirming: the ``clap`` gate must pass before a higher rung is asked</span>
+<span class="sd">to confirm. **This module is the extension point #10b (the Tier-2 fit-judge) plugs</span>
+<span class="sd">into** — a new ``Judge`` bound at ``level=judge`` via the ``judge=`` keyword, with its</span>
+<span class="sd">own fit-precision metric; it does not touch retrieval ranking (the nDCG@10 gate).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">SoundEvent</span><span class="p">,</span> <span class="n">Verdict</span><span class="p">,</span> <span class="n">VerifyLevel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._genai</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_AGENT_MODEL</span><span class="p">,</span> <span class="n">record_genai</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">Judge</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;set[str]&quot;</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z0-9]+&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+
+
+<div class="viewcode-block" id="ClapJudge">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/verify.html#foley.ClapJudge">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ClapJudge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The zero-config ``clap`` rung: gate on the retrieval cosine (no ML, no network).</span>
+
+<span class="sd">    ``match`` iff the candidate&#39;s ``clap_score`` clears ``tau_clap``; ``confidence`` is</span>
+<span class="sd">    the score clamped to ``0..1`` so it is comparable to the higher rungs&#39; 0..1 scores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ClapJudge.judge">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/verify.html#foley.ClapJudge.judge">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">judge</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">event</span><span class="p">:</span> <span class="n">SoundEvent</span><span class="p">,</span>
+        <span class="n">candidate</span><span class="p">:</span> <span class="n">Candidate</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">level</span><span class="p">:</span> <span class="n">VerifyLevel</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">,</span>
+        <span class="n">tau_clap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.35</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Verdict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the ``clap``-rung :class:`Verdict` for ``candidate``.&quot;&quot;&quot;</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="n">candidate</span><span class="o">.</span><span class="n">clap_score</span> <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">clap_score</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">confidence</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">score</span> <span class="o">&gt;=</span> <span class="n">tau_clap</span>
+        <span class="k">return</span> <span class="n">Verdict</span><span class="p">(</span>
+            <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;clap_score=</span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> vs tau=</span><span class="si">{</span><span class="n">tau_clap</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="StringOverlapJudge">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/verify.html#foley.StringOverlapJudge">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StringOverlapJudge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deterministic stand-in for the ``listen``/``judge`` rungs (the hermetic CI fake).</span>
+
+<span class="sd">    Jaccard token overlap of the event query vs the candidate&#39;s caption + tags. Lets the</span>
+<span class="sd">    full ladder + :func:`~foley.agent.policy.decide` branch run with zero ML/network. The</span>
+<span class="sd">    returned :class:`Verdict` echoes back the requested ``level``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+
+<div class="viewcode-block" id="StringOverlapJudge.judge">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/verify.html#foley.StringOverlapJudge.judge">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">judge</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">event</span><span class="p">:</span> <span class="n">SoundEvent</span><span class="p">,</span>
+        <span class="n">candidate</span><span class="p">:</span> <span class="n">Candidate</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">level</span><span class="p">:</span> <span class="n">VerifyLevel</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">listen</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Verdict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the token-overlap :class:`Verdict` at the requested ``level``.&quot;&quot;&quot;</span>
+        <span class="n">want</span> <span class="o">=</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">sound</span> <span class="o">=</span> <span class="n">candidate</span><span class="o">.</span><span class="n">sound</span>
+        <span class="n">have</span> <span class="o">=</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">sound</span><span class="o">.</span><span class="n">caption</span><span class="p">)</span> <span class="o">|</span> <span class="p">{</span><span class="n">t</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="n">sound</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">tag</span><span class="p">)}</span>
+        <span class="n">union</span> <span class="o">=</span> <span class="n">want</span> <span class="o">|</span> <span class="n">have</span>
+        <span class="n">overlap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">want</span> <span class="o">&amp;</span> <span class="n">have</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">union</span><span class="p">)</span> <span class="k">if</span> <span class="n">union</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="n">Verdict</span><span class="p">(</span>
+            <span class="n">match</span><span class="o">=</span><span class="n">overlap</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
+            <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">overlap</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> token overlap&quot;</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">VerifyLevel</span><span class="p">(</span><span class="n">level</span><span class="p">),</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># The real, LLM-backed judge rung (behind foley[agent]; anthropic imported lazily)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">_JUDGE_JSON_SCHEMA</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;match&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="s2">&quot;confidence&quot;</span><span class="p">,</span> <span class="s2">&quot;reason&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">_JUDGE_SYSTEM</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;You are an audio-match judge. Given a wanted sound EVENT and a candidate clip&#39;s &quot;</span>
+    <span class="s2">&quot;description, decide whether the clip genuinely depicts the event (the right object, &quot;</span>
+    <span class="s2">&quot;not merely a similar vibe) and is consistent with the scene. Return a structured &quot;</span>
+    <span class="s2">&quot;verdict: match (bool), confidence (0..1), and a one-line reason.&quot;</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="AnthropicJudge">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/verify.html#foley.AnthropicJudge">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnthropicJudge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LLM arbiter for the ``judge`` rung (``foley[agent]``): Claude → a :class:`Verdict`.</span>
+
+<span class="sd">    ``anthropic`` imported lazily inside :meth:`judge`. Stashes the ``Message`` on</span>
+<span class="sd">    ``self.last_response`` for the GenAI span.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_AGENT_MODEL</span><span class="p">,</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span> <span class="o">=</span> <span class="n">max_tokens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_response</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="AnthropicJudge.judge">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/verify.html#foley.AnthropicJudge.judge">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">judge</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">event</span><span class="p">:</span> <span class="n">SoundEvent</span><span class="p">,</span>
+        <span class="n">candidate</span><span class="p">:</span> <span class="n">Candidate</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">level</span><span class="p">:</span> <span class="n">VerifyLevel</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">judge</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Verdict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Call Claude to arbitrate the match; returns a :class:`Verdict` at ``level``.&quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+        <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span>
+        <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">anthropic</span>  <span class="c1"># lazy — only on the real path</span>
+
+            <span class="n">client</span> <span class="o">=</span> <span class="n">anthropic</span><span class="o">.</span><span class="n">Anthropic</span><span class="p">()</span>
+        <span class="n">sound</span> <span class="o">=</span> <span class="n">candidate</span><span class="o">.</span><span class="n">sound</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="n">sound</span><span class="o">.</span><span class="n">caption</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sound</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+            <span class="n">desc</span> <span class="o">+=</span> <span class="s2">&quot; [tags: &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sound</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Wanted event: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="si">}</span><span class="se">\n</span><span class="s2">Candidate clip: </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">max_tokens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span><span class="p">,</span>
+            <span class="n">thinking</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;adaptive&quot;</span><span class="p">},</span>
+            <span class="n">system</span><span class="o">=</span><span class="n">_JUDGE_SYSTEM</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">}],</span>
+            <span class="n">output_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_schema&quot;</span><span class="p">,</span> <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">_JUDGE_JSON_SCHEMA</span><span class="p">}},</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_response</span> <span class="o">=</span> <span class="n">resp</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Verdict</span><span class="p">(</span>
+            <span class="n">match</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;match&quot;</span><span class="p">]),</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;confidence&quot;</span><span class="p">]),</span>
+            <span class="n">reason</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reason&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">VerifyLevel</span><span class="p">(</span><span class="n">level</span><span class="p">),</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_judge</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="s2">&quot;str | VerifyLevel&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Judge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The zero-config judge for a rung: ClapJudge for ``clap``; else Anthropic or the fake.&quot;&quot;&quot;</span>
+    <span class="n">level</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ClapJudge</span><span class="p">()</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.decompose</span><span class="w"> </span><span class="kn">import</span> <span class="n">_anthropic_available</span>
+
+    <span class="k">return</span> <span class="n">AnthropicJudge</span><span class="p">()</span> <span class="k">if</span> <span class="n">_anthropic_available</span><span class="p">()</span> <span class="k">else</span> <span class="n">StringOverlapJudge</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="verify_match">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/verify.html#foley.verify_match">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">verify_match</span><span class="p">(</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">SoundEvent</span><span class="p">,</span>
+    <span class="n">candidate</span><span class="p">:</span> <span class="n">Candidate</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">level</span><span class="p">:</span> <span class="s2">&quot;str | VerifyLevel&quot;</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">,</span>
+    <span class="n">judge</span><span class="p">:</span> <span class="s2">&quot;Optional[Judge]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">tau_clap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">_span</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Verdict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify ``candidate`` against ``event`` up to rung ``level`` (AND-confirming ladder).</span>
+
+<span class="sd">    Runs the ``clap`` gate always; if ``level`` is higher **and** the clap gate passed,</span>
+<span class="sd">    escalates to the injected/​default judge for that rung and returns *its* verdict</span>
+<span class="sd">    (``Verdict.level`` == the producing rung).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event: The wanted :class:`SoundEvent`.</span>
+<span class="sd">        candidate: A **license-clean** :class:`Candidate` — this MUST run after the</span>
+<span class="sd">            :func:`~foley.agent.policy.gate_candidates` gate (asserted).</span>
+<span class="sd">        level: The max rung to climb (``clap`` | ``listen`` | ``judge``).</span>
+<span class="sd">        judge: An injected :class:`~foley.agent.protocols.Judge` for the higher rungs</span>
+<span class="sd">            (the DI seam; defaults per :func:`_default_judge`).</span>
+<span class="sd">        tau_clap: The clap-gate threshold.</span>
+<span class="sd">        _span: Internal — the obs span handle for GenAI recording on the LLM rung.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: If ``candidate.license_ok`` is not ``True`` (verify-before-gate</span>
+<span class="sd">            is a bug — the license gate is the fail-closed first pass).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">candidate</span><span class="o">.</span><span class="n">license_ok</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span>
+        <span class="s2">&quot;verify_match must run AFTER the license gate (candidate.license_ok is not True)&quot;</span>
+    <span class="p">)</span>
+    <span class="n">level</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+    <span class="n">clap_verdict</span> <span class="o">=</span> <span class="n">ClapJudge</span><span class="p">()</span><span class="o">.</span><span class="n">judge</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">,</span> <span class="n">tau_clap</span><span class="o">=</span><span class="n">tau_clap</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clap_verdict</span>
+    <span class="c1"># The clap GATE only blocks a *retrieved* clip whose score is present and failing; a</span>
+    <span class="c1"># generated clip has no retrieval score (clap_score is None) and escalates directly —</span>
+    <span class="c1"># the higher rung &quot;listens&quot; to the generated audio (report 05 §4).</span>
+    <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">clap_score</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">clap_verdict</span><span class="o">.</span><span class="n">match</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clap_verdict</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">judge</span> <span class="ow">or</span> <span class="n">_default_judge</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+    <span class="n">verdict</span> <span class="o">=</span> <span class="n">j</span><span class="o">.</span><span class="n">judge</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
+    <span class="n">record_genai</span><span class="p">(</span>
+        <span class="n">_span</span><span class="p">,</span>
+        <span class="n">request_model</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">DEFAULT_AGENT_MODEL</span><span class="p">),</span>
+        <span class="n">response</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="s2">&quot;last_response&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">verdict</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

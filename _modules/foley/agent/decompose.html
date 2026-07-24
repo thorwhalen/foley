@@ -1,0 +1,450 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.agent.decompose &mdash; foley 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.agent.decompose</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.agent.decompose</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;``decompose_context`` — narrative passage → a sparse, salience-ranked event list.</span>
+
+<span class="sd">The moat of the SELECT stage (report 05 §2): turning prose into a *tastefully sparse,</span>
+<span class="sd">correctly-diegetic* :class:`~foley.base.SoundEvent` list is the hard, defensible part —</span>
+<span class="sd">not the CLAP encoder. Two impls sit behind the :class:`~foley.agent.protocols.Decomposer`</span>
+<span class="sd">seam:</span>
+
+<span class="sd">* :class:`KeywordDecomposer` — the deterministic default *and* the hermetic CI fake:</span>
+<span class="sd">  a built-in cue lexicon, zero dependencies, same passage → identical list.</span>
+<span class="sd">* :class:`AnthropicDecomposer` — the LLM-backed impl behind the ``foley[agent]`` extra;</span>
+<span class="sd">  ``anthropic`` is imported lazily **inside** ``.decompose`` only, so ``import foley``</span>
+<span class="sd">  stays dol-only.</span>
+
+<span class="sd">:func:`decompose_context` is the pure tool wrapper (Python-API == agent == future-MCP</span>
+<span class="sd">surface): it resolves the default decomposer, calls it, and records the GenAI span on</span>
+<span class="sd">the real path.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Layer</span><span class="p">,</span> <span class="n">Salience</span><span class="p">,</span> <span class="n">SoundEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._genai</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_AGENT_MODEL</span><span class="p">,</span> <span class="n">record_genai</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decomposer</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover - typing only</span>
+    <span class="k">pass</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># The deterministic default / CI fake</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1">#: Cue lexicon: a matched keyword → ``(canonical query, layer, diegetic, loop)``.</span>
+<span class="c1">#: Ambience beds loop; a heartbeat is a non-diegetic tension cue (audience-only). The</span>
+<span class="c1">#: KeywordDecomposer scans a passage against these and emits one event per matched cue</span>
+<span class="c1">#: in first-appearance order (so the salience ranking falls out of reading order).</span>
+<span class="n">_CUE_LEXICON</span><span class="p">:</span> <span class="s2">&quot;tuple[tuple[str, str, Layer, bool, bool], ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="c1"># keyword,   canonical query,                 layer,          diegetic, loop</span>
+    <span class="p">(</span><span class="s2">&quot;door&quot;</span><span class="p">,</span> <span class="s2">&quot;heavy wooden door creaking open&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;creak&quot;</span><span class="p">,</span> <span class="s2">&quot;wood creaking&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;footstep&quot;</span><span class="p">,</span> <span class="s2">&quot;footsteps on a hard floor&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;thunder&quot;</span><span class="p">,</span> <span class="s2">&quot;distant thunder rumble&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;rain&quot;</span><span class="p">,</span> <span class="s2">&quot;steady rain ambience&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;storm&quot;</span><span class="p">,</span> <span class="s2">&quot;howling storm wind bed&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;wind&quot;</span><span class="p">,</span> <span class="s2">&quot;gusting wind ambience&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;ocean&quot;</span><span class="p">,</span> <span class="s2">&quot;ocean waves on a shore&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;wave&quot;</span><span class="p">,</span> <span class="s2">&quot;ocean waves on a shore&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;fire&quot;</span><span class="p">,</span> <span class="s2">&quot;crackling fire&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;gun&quot;</span><span class="p">,</span> <span class="s2">&quot;gunshot&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;shot&quot;</span><span class="p">,</span> <span class="s2">&quot;gunshot&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;glass&quot;</span><span class="p">,</span> <span class="s2">&quot;glass shattering&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;bell&quot;</span><span class="p">,</span> <span class="s2">&quot;a ringing bell&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;phone&quot;</span><span class="p">,</span> <span class="s2">&quot;a ringing telephone&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;clock&quot;</span><span class="p">,</span> <span class="s2">&quot;a ticking clock&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;bird&quot;</span><span class="p">,</span> <span class="s2">&quot;birds chirping&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;dog&quot;</span><span class="p">,</span> <span class="s2">&quot;a dog barking&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;bark&quot;</span><span class="p">,</span> <span class="s2">&quot;a dog barking&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="s2">&quot;a cat meowing&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;car&quot;</span><span class="p">,</span> <span class="s2">&quot;a passing car&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;engine&quot;</span><span class="p">,</span> <span class="s2">&quot;an engine running&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;crowd&quot;</span><span class="p">,</span> <span class="s2">&quot;a murmuring crowd&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;footsteps&quot;</span><span class="p">,</span> <span class="s2">&quot;footsteps on a hard floor&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;heartbeat&quot;</span><span class="p">,</span> <span class="s2">&quot;a slow heartbeat&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">stinger</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;scream&quot;</span><span class="p">,</span> <span class="s2">&quot;a distant scream&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;water&quot;</span><span class="p">,</span> <span class="s2">&quot;running water&quot;</span><span class="p">,</span> <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1">#: Salience by first-appearance rank (report 05 §2.3: cap density, rank by prominence).</span>
+<span class="n">_SALIENCE_BY_RANK</span><span class="p">:</span> <span class="s2">&quot;tuple[Salience, ...]&quot;</span> <span class="o">=</span> <span class="p">(</span><span class="n">Salience</span><span class="o">.</span><span class="n">high</span><span class="p">,</span> <span class="n">Salience</span><span class="o">.</span><span class="n">medium</span><span class="p">,</span> <span class="n">Salience</span><span class="o">.</span><span class="n">low</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="KeywordDecomposer">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/decompose.html#foley.KeywordDecomposer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KeywordDecomposer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deterministic cue-lexicon decomposer — the zero-dependency default and CI fake.</span>
+
+<span class="sd">    Scans the passage against :data:`_CUE_LEXICON`, emits one :class:`SoundEvent` per</span>
+<span class="sd">    matched cue in first-appearance order (so salience descends with reading order),</span>
+<span class="sd">    dedupes by canonical query, and truncates to ``max_events`` (the sparse density</span>
+<span class="sd">    budget). No RNG, no network, no ``anthropic`` — same passage → identical list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="KeywordDecomposer.decompose">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/decompose.html#foley.KeywordDecomposer.decompose">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decompose</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[SoundEvent]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return ``&lt;= max_events`` deterministic :class:`SoundEvent`\\ s for ``context``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            context: The narrative passage.</span>
+<span class="sd">            max_events: The sparse density cap (the salience budget).</span>
+<span class="sd">            seconds: Accepted for signature parity (the per-second density window is a</span>
+<span class="sd">                later refinement); ignored here.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">matched</span><span class="p">:</span> <span class="s2">&quot;list[tuple[int, str, Layer, bool, bool]]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">seen_queries</span><span class="p">:</span> <span class="s2">&quot;set[str]&quot;</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">diegetic</span><span class="p">,</span> <span class="n">loop</span> <span class="ow">in</span> <span class="n">_CUE_LEXICON</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\b&quot;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">keyword</span><span class="p">),</span> <span class="n">text</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">seen_queries</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">seen_queries</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">matched</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span> <span class="n">query</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">diegetic</span><span class="p">,</span> <span class="n">loop</span><span class="p">))</span>
+        <span class="n">matched</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># first-appearance order == descending salience</span>
+        <span class="n">events</span><span class="p">:</span> <span class="s2">&quot;list[SoundEvent]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">diegetic</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">matched</span><span class="p">[:</span><span class="n">max_events</span><span class="p">]):</span>
+            <span class="n">salience</span> <span class="o">=</span> <span class="n">_SALIENCE_BY_RANK</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">_SALIENCE_BY_RANK</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="n">keyword</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z0-9]+&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">[</span><span class="n">pos</span><span class="p">:])[:</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">onset</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;on &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">if</span> <span class="n">keyword</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">SoundEvent</span><span class="p">(</span>
+                    <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+                    <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
+                    <span class="n">diegetic</span><span class="o">=</span><span class="n">diegetic</span><span class="p">,</span>
+                    <span class="n">salience</span><span class="o">=</span><span class="n">salience</span><span class="p">,</span>
+                    <span class="n">onset</span><span class="o">=</span><span class="n">onset</span><span class="p">,</span>
+                    <span class="n">loop</span><span class="o">=</span><span class="n">loop</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">events</span></div>
+</div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># The real, LLM-backed impl (behind foley[agent]; anthropic imported lazily)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1">#: The structured-output schema for one decomposed event. Keys MUST equal</span>
+<span class="c1">#: ``SoundEvent`` field names exactly (``ucs_catid`` not ``ucs_category``; ``audioset`` a</span>
+<span class="c1">#: list) — :meth:`SoundEvent.from_dict` coerces enums and silently drops unknown keys.</span>
+<span class="n">_EVENT_JSON_SCHEMA</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;events&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+                    <span class="s2">&quot;layer&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;voice&quot;</span><span class="p">,</span> <span class="s2">&quot;sfx_fg&quot;</span><span class="p">,</span> <span class="s2">&quot;ambience&quot;</span><span class="p">,</span> <span class="s2">&quot;stinger&quot;</span><span class="p">,</span> <span class="s2">&quot;music&quot;</span><span class="p">],</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;diegetic&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">},</span>
+                    <span class="s2">&quot;salience&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span> <span class="s2">&quot;low&quot;</span><span class="p">]},</span>
+                    <span class="s2">&quot;onset&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;null&quot;</span><span class="p">]},</span>
+                    <span class="s2">&quot;loop&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">},</span>
+                    <span class="s2">&quot;era_place&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;null&quot;</span><span class="p">]},</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;layer&quot;</span><span class="p">,</span> <span class="s2">&quot;diegetic&quot;</span><span class="p">,</span> <span class="s2">&quot;salience&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;events&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">_DECOMPOSE_SYSTEM</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;You are a Foley sound designer. Given a narrative passage, list the discrete, &quot;</span>
+    <span class="s2">&quot;physically-audible sound EVENTS a listener would hear — not every clause, only the &quot;</span>
+    <span class="s2">&quot;salient ones. Rank by narrative salience (high|medium|low) and keep the list SPARSE. &quot;</span>
+    <span class="s2">&quot;Tag each event: diegetic (true = exists in the story world; false = a non-diegetic, &quot;</span>
+    <span class="s2">&quot;audience-only mood cue that will be generated, not retrieved). Mark loop=true for a &quot;</span>
+    <span class="s2">&quot;sustained ambience bed. Set onset to a short SYMBOLIC anchor phrase quoting the words &quot;</span>
+    <span class="s2">&quot;the sound lands on (e.g. </span><span class="se">\&quot;</span><span class="s2">on &#39;pushed open&#39;</span><span class="se">\&quot;</span><span class="s2">), never a number. If the passage fixes an &quot;</span>
+    <span class="s2">&quot;era or place, set era_place so anachronistic sounds are avoided. Return ONLY the &quot;</span>
+    <span class="s2">&quot;structured event list.&quot;</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="AnthropicDecomposer">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/decompose.html#foley.AnthropicDecomposer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnthropicDecomposer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LLM-backed decomposer (``foley[agent]``): Claude → a structured event list.</span>
+
+<span class="sd">    ``anthropic`` is imported lazily inside :meth:`decompose` so ``import foley`` stays</span>
+<span class="sd">    dol-only. Stashes the returned ``Message`` on ``self.last_response`` so</span>
+<span class="sd">    :func:`decompose_context` can record the GenAI span (token usage / model /</span>
+<span class="sd">    stop_reason). Model, thinking, and structured-output shape follow the ``claude-api``</span>
+<span class="sd">    conventions (``claude-opus-4-8``, adaptive thinking — never ``budget_tokens``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_AGENT_MODEL</span><span class="p">,</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span> <span class="o">=</span> <span class="n">max_tokens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_response</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="AnthropicDecomposer.decompose">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/decompose.html#foley.AnthropicDecomposer.decompose">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decompose</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[SoundEvent]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Call Claude and round-trip each event through :meth:`SoundEvent.from_dict`.&quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+        <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span>
+        <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">anthropic</span>  <span class="c1"># lazy — only on the real path, behind foley[agent]</span>
+
+            <span class="n">client</span> <span class="o">=</span> <span class="n">anthropic</span><span class="o">.</span><span class="n">Anthropic</span><span class="p">()</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">max_tokens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span><span class="p">,</span>
+            <span class="n">thinking</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;adaptive&quot;</span><span class="p">},</span>
+            <span class="n">system</span><span class="o">=</span><span class="n">_DECOMPOSE_SYSTEM</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; Emit at most </span><span class="si">{</span><span class="n">max_events</span><span class="si">}</span><span class="s2"> events, most salient first.&quot;</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">context</span><span class="p">}],</span>
+            <span class="n">output_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_schema&quot;</span><span class="p">,</span> <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">_EVENT_JSON_SCHEMA</span><span class="p">}},</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_response</span> <span class="o">=</span> <span class="n">resp</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">SoundEvent</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;events&quot;</span><span class="p">,</span> <span class="p">[])][:</span><span class="n">max_events</span><span class="p">]</span></div>
+</div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Default resolution + the pure tool wrapper</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_anthropic_available</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;True iff the ``anthropic`` SDK is importable AND a credential is configured.</span>
+
+<span class="sd">    Mirrors foley&#39;s progressive-disclosure rule: auto-upgrade to the LLM path only when</span>
+<span class="sd">    it can actually run (``foley[agent]`` installed + a key), else the hermetic fake.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+    <span class="k">if</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;anthropic&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ANTHROPIC_API_KEY&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ANTHROPIC_AUTH_TOKEN&quot;</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_decomposer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Decomposer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The zero-config decomposer: :class:`AnthropicDecomposer` when usable, else the fake.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">AnthropicDecomposer</span><span class="p">()</span> <span class="k">if</span> <span class="n">_anthropic_available</span><span class="p">()</span> <span class="k">else</span> <span class="n">KeywordDecomposer</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="decompose_context">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/decompose.html#foley.decompose_context">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">decompose_context</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">seconds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">decomposer</span><span class="p">:</span> <span class="s2">&quot;Optional[Decomposer]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">_span</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[SoundEvent]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decompose a passage into ``&lt;= max_events`` sparse :class:`SoundEvent`\\ s.</span>
+
+<span class="sd">    The pure SELECT tool (Python-API == agent == future-MCP surface): resolves the</span>
+<span class="sd">    default decomposer when ``decomposer`` is ``None``, calls it, and records the GenAI</span>
+<span class="sd">    span on the real path (the fake&#39;s ``last_response`` is ``None`` → no-op).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        context: The narrative passage.</span>
+<span class="sd">        max_events: The sparse density cap.</span>
+<span class="sd">        seconds: Optional passage duration (density-window hint; forwarded, else ignored).</span>
+<span class="sd">        decomposer: An injected :class:`~foley.agent.protocols.Decomposer` (the DI seam);</span>
+<span class="sd">            defaults to :func:`_default_decomposer`.</span>
+<span class="sd">        _span: Internal — the obs span handle ``find()`` opens for GenAI recording.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">decomposer</span> <span class="o">=</span> <span class="n">decomposer</span> <span class="ow">or</span> <span class="n">_default_decomposer</span><span class="p">()</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">decomposer</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">)</span>
+    <span class="n">record_genai</span><span class="p">(</span>
+        <span class="n">_span</span><span class="p">,</span>
+        <span class="n">request_model</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">decomposer</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">DEFAULT_AGENT_MODEL</span><span class="p">),</span>
+        <span class="n">response</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">decomposer</span><span class="p">,</span> <span class="s2">&quot;last_response&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">events</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

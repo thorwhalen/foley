@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.base &mdash; foley 0.0.10 documentation</title>
+  <title>foley.base &mdash; foley 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -47,6 +47,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
@@ -637,6 +645,55 @@
     <span class="n">can_attribute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">revenue_usd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">allow_voice_or_trademark</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># WEAVE-seed models — the SPARSE plan the SELECT agent emits (report 10 §2.4)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># These are the sparse *subset* of report 06&#39;s full render model. The SELECT</span>
+<span class="c1"># agent (#7) emits only ``onset·gain·layer·loop`` per item; the WEAVE stage (#8)</span>
+<span class="c1"># extends the model in place with the ``Placement`` / ``Processing`` /</span>
+<span class="c1"># ``MasterProfile`` / ``word_timeline`` fields that resolve anchors, mix, align,</span>
+<span class="c1"># and master. Do NOT add those here — #8 grows this superset.</span>
+
+
+<div class="viewcode-block" id="TimelineItem">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.TimelineItem">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TimelineItem</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One placed sound in the sparse sound-design plan (the WEAVE-seed subset).</span>
+
+<span class="sd">    Holds only what SELECT decides: which clip, when (as a *symbolic* anchor),</span>
+<span class="sd">    how loud (relative), on which layer, and whether it loops. WEAVE (#8) resolves</span>
+<span class="sd">    ``onset`` to an absolute time and fills the processing/mix defaults.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">clip_ref</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># SoundRecord id in the dol library (by reference, never bytes)</span>
+    <span class="n">onset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># SYMBOLIC anchor (&quot;on &#39;pushed open&#39;&quot;); WEAVE resolves it</span>
+    <span class="n">gain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># dB relative to the voice bus</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span> <span class="o">=</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span>
+    <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="SoundDesignTimeline">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SoundDesignTimeline">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SoundDesignTimeline</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The sparse, editable sound-design plan SELECT emits — the SELECT→WEAVE bridge.</span>
+
+<span class="sd">    A strict *subset* of report 06&#39;s render model: a list of :class:`TimelineItem`</span>
+<span class="sd">    plus a join back to the reproducible run-artifact (``run_manifest_ref`` ==</span>
+<span class="sd">    :attr:`foley.obs.RunManifest.run_id`, satisfying the #8 ``plan_ref`` reservation).</span>
+<span class="sd">    WEAVE (#8) resolves anchors, adds ``word_timeline`` / ``master`` / per-item</span>
+<span class="sd">    ``Placement``+``Processing``, and renders.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">items</span><span class="p">:</span> <span class="s2">&quot;list[TimelineItem]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># rehydrated element-wise</span>
+    <span class="n">run_manifest_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># join to the obs RunManifest.run_id</span>
+    <span class="n">transcript_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># narration transcript ref (resolved by WEAVE)</span>
+    <span class="n">schema_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SCHEMA_VERSION</span></div>
 
 </pre></div>
 

@@ -1,0 +1,658 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.agent.tools &mdash; foley 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.agent.tools</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.agent.tools</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The SELECT orchestration: ``find()`` / ``plan()`` + the small pure tool wrappers.</span>
+
+<span class="sd">This is the one seam that serves the Python API, the agent loop, and the future MCP</span>
+<span class="sd">server (#12) — the same functions, three surfaces (report 05 §5.2). It OWNS every</span>
+<span class="sd">side-effecting call (``search`` → ``gate`` → ``verify`` → ``decide`` → ``generate`` →</span>
+<span class="sd">``place``); :func:`~foley.agent.policy.decide` is a pure tail step that only branches.</span>
+
+<span class="sd">``find()`` opens **one** ``foley.obs.run(&#39;find&#39;)`` scope, so the nested</span>
+<span class="sd">:func:`foley.search` / :func:`foley.generate` façade calls aggregate into a single</span>
+<span class="sd">reproducible run-manifest (report 10 §1.3); each stage emits a typed</span>
+<span class="sd">:class:`~foley.obs.run_artifact.Step` and each LLM rung a GenAI span. The plan it emits</span>
+<span class="sd">is the **sparse** :class:`~foley.base.SoundDesignTimeline` subset — WEAVE (#8) resolves</span>
+<span class="sd">anchors, mix, and mastering.</span>
+
+<span class="sd">``import foley`` stays dol-only: ``foley.search`` / ``foley.generate`` and the</span>
+<span class="sd">generation-error hierarchy are imported lazily inside the functions that call them.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Candidate</span><span class="p">,</span>
+    <span class="n">IntendedUse</span><span class="p">,</span>
+    <span class="n">Layer</span><span class="p">,</span>
+    <span class="n">SoundDesignTimeline</span><span class="p">,</span>
+    <span class="n">TimelineItem</span><span class="p">,</span>
+    <span class="n">VerifyLevel</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..index</span><span class="w"> </span><span class="kn">import</span> <span class="n">RRF_K</span><span class="p">,</span> <span class="n">default_library</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..obs.recorder</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_run</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..obs.recorder</span><span class="w"> </span><span class="kn">import</span> <span class="n">run</span> <span class="k">as</span> <span class="n">_obs_run</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..obs.run_artifact</span><span class="w"> </span><span class="kn">import</span> <span class="n">Step</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.decompose</span><span class="w"> </span><span class="kn">import</span> <span class="n">decompose_context</span><span class="p">,</span> <span class="n">_default_decomposer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.policy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Budget</span><span class="p">,</span> <span class="n">DecideAction</span><span class="p">,</span> <span class="n">decide</span><span class="p">,</span> <span class="n">gate_candidates</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.refine</span><span class="w"> </span><span class="kn">import</span> <span class="n">refine_query</span><span class="p">,</span> <span class="n">_default_refiner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.verify</span><span class="w"> </span><span class="kn">import</span> <span class="n">_default_judge</span><span class="p">,</span> <span class="n">verify_match</span>
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># small pure tool wrappers (Python-API == agent == future MCP surface)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_license_prefilter</span><span class="p">(</span><span class="n">intended_use</span><span class="p">:</span> <span class="n">IntendedUse</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Optional[dict]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map an :class:`IntendedUse` to search filters — a retrieval pushdown OPTIMIZATION.</span>
+
+<span class="sd">    Narrows the shortlist so fewer license-incompatible clips are fetched; it is NOT the</span>
+<span class="sd">    authoritative gate (:func:`~foley.agent.policy.gate_candidates` is). Returns ``None``</span>
+<span class="sd">    when nothing needs pushing down.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">intended_use</span><span class="o">.</span><span class="n">commercial</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">[</span><span class="s2">&quot;commercial_ok&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">f</span> <span class="ow">or</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="search_sounds">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/tools.html#foley.search_sounds">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">search_sounds</span><span class="p">(</span>
+    <span class="n">queries</span><span class="p">:</span> <span class="s2">&quot;Union[str, list[str]]&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">filters</span><span class="p">:</span> <span class="s2">&quot;Optional[dict]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hybrid search for one query, or a multi-query RRF-merge (the SELECT retrieval tool).</span>
+
+<span class="sd">    Delegates a single query VERBATIM to :meth:`SoundLibrary.search` (so the retrieval</span>
+<span class="sd">    ranking the nDCG@10 gate measures is untouched); a multi-query list runs each query</span>
+<span class="sd">    and RRF-merges (``k=RRF_K``) — the query-expansion recall lever, exercised only on a</span>
+<span class="sd">    refine pass.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        queries: One query string, or a list of paraphrases to merge.</span>
+<span class="sd">        k: Number of results.</span>
+<span class="sd">        library: Target library (default: the process-wide default).</span>
+<span class="sd">        filters: Extra :meth:`SoundLibrary.search` kwargs (e.g. the license prefilter).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">library</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">queries</span> <span class="o">=</span> <span class="p">[</span><span class="n">queries</span><span class="p">]</span>
+    <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">filters</span> <span class="ow">or</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">queries</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">library</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">queries</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+    <span class="n">result_lists</span> <span class="o">=</span> <span class="p">[</span><span class="n">library</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">_rrf_merge</span><span class="p">(</span><span class="n">result_lists</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_rrf_merge</span><span class="p">(</span><span class="n">result_lists</span><span class="p">:</span> <span class="s2">&quot;list[list[Candidate]]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reciprocal-rank-fuse several ranked candidate lists into one top-``k`` (``k=RRF_K``).&quot;&quot;&quot;</span>
+    <span class="n">scores</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">best</span><span class="p">:</span> <span class="s2">&quot;dict[str, Candidate]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">hits</span> <span class="ow">in</span> <span class="n">result_lists</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hits</span><span class="p">):</span>
+            <span class="n">sid</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">scores</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">RRF_K</span> <span class="o">+</span> <span class="n">rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">best</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="n">ordered</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">best</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">scores</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ordered</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">rrf_score</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ordered</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="generate_sound">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/tools.html#foley.generate_sound">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_sound</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Candidate</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a clip for ``query`` (the fallback tool) — a thin wrapper over ``foley.generate``.</span>
+
+<span class="sd">    Returns a :class:`Candidate` (``origin=generated``); raises the ``GenerationError``</span>
+<span class="sd">    hierarchy on refusal / no-result (caught fail-closed by :func:`_generate_and_reverify`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">foley</span>  <span class="c1"># lazy: avoids the foley → foley.agent import cycle at module load</span>
+
+    <span class="n">kw</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">foley</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="place_in_timeline">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/tools.html#foley.place_in_timeline">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">place_in_timeline</span><span class="p">(</span>
+    <span class="n">clip</span><span class="p">:</span> <span class="n">Candidate</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">onset</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">gain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="s2">&quot;Union[str, Layer]&quot;</span> <span class="o">=</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">,</span>
+    <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TimelineItem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Emit the SPARSE per-item plan subset (``clip_ref·onset·gain·layer·loop``) — no more.</span>
+
+<span class="sd">    ``onset`` stays a SYMBOLIC anchor string (never a resolved offset); mix / processing /</span>
+<span class="sd">    alignment / mastering are WEAVE&#39;s (#8) job, not SELECT&#39;s.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">TimelineItem</span><span class="p">(</span>
+        <span class="n">clip_ref</span><span class="o">=</span><span class="n">clip</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">onset</span><span class="o">=</span><span class="n">onset</span><span class="p">,</span>
+        <span class="n">gain</span><span class="o">=</span><span class="n">gain</span><span class="p">,</span>
+        <span class="n">layer</span><span class="o">=</span><span class="n">Layer</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">layer</span><span class="p">,</span>
+        <span class="n">loop</span><span class="o">=</span><span class="n">loop</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># obs step helpers</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_emit_step</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">event_index</span><span class="p">:</span> <span class="s2">&quot;Optional[int]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Append a typed :class:`Step` (``seq`` auto-assigned; ``detail`` redacted at record time).&quot;&quot;&quot;</span>
+    <span class="n">run</span><span class="o">.</span><span class="n">add_step</span><span class="p">(</span>
+        <span class="n">Step</span><span class="p">(</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span>
+            <span class="n">event_index</span><span class="o">=</span><span class="n">event_index</span><span class="p">,</span>
+            <span class="n">span_id</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">span</span><span class="p">,</span> <span class="s2">&quot;span_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">detail</span><span class="o">=</span><span class="n">detail</span> <span class="ow">or</span> <span class="p">{},</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_verify_kept</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">kept</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">event_index</span><span class="p">,</span> <span class="n">max_level</span><span class="p">,</span> <span class="n">judge</span><span class="p">,</span> <span class="n">tau_clap</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the verify ladder over each license-clean candidate; return the matches.</span>
+
+<span class="sd">    Opens ONE child span per candidate (``CLIENT`` on the LLM rungs so each judged clip</span>
+<span class="sd">    gets its own GenAI-attributed span — 1 call : 1 span, like decompose/refine;</span>
+<span class="sd">    ``INTERNAL`` for the zero-cost ``clap`` rung). Records a ``verify`` Step per candidate</span>
+<span class="sd">    (match/confidence/level only — the LLM&#39;s free-text ``reason`` is NOT persisted, since</span>
+<span class="sd">    it can echo the query and is not a redacted key).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">verified</span><span class="p">:</span> <span class="s2">&quot;list[Candidate]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">span_kind</span> <span class="o">=</span> <span class="s2">&quot;CLIENT&quot;</span> <span class="k">if</span> <span class="n">max_level</span> <span class="o">!=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span> <span class="k">else</span> <span class="s2">&quot;INTERNAL&quot;</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">kept</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">run</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s2">&quot;verify_match&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">span_kind</span><span class="p">)</span> <span class="k">as</span> <span class="n">sp</span><span class="p">:</span>
+            <span class="n">verdict</span> <span class="o">=</span> <span class="n">verify_match</span><span class="p">(</span>
+                <span class="n">event</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">max_level</span><span class="p">,</span> <span class="n">judge</span><span class="o">=</span><span class="n">judge</span><span class="p">,</span> <span class="n">tau_clap</span><span class="o">=</span><span class="n">tau_clap</span><span class="p">,</span> <span class="n">_span</span><span class="o">=</span><span class="n">sp</span>
+            <span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">verdict</span> <span class="o">=</span> <span class="n">verdict</span>
+        <span class="n">_emit_step</span><span class="p">(</span>
+            <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;verify&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">event_index</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;candidate_id&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">verdict</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="s2">&quot;match&quot;</span><span class="p">:</span> <span class="n">verdict</span><span class="o">.</span><span class="n">match</span><span class="p">,</span>
+                <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">verdict</span><span class="o">.</span><span class="n">match</span><span class="p">:</span>
+            <span class="n">verified</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">verified</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_score_row</span><span class="p">(</span><span class="n">c</span><span class="p">:</span> <span class="n">Candidate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A leak-free candidate-score row for ``RunManifest.candidate_scores`` (ids + scores only).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s2">&quot;clap&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">clap_score</span><span class="p">,</span>
+        <span class="s2">&quot;bm25&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">bm25_score</span><span class="p">,</span>
+        <span class="s2">&quot;rrf&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">rrf_score</span><span class="p">,</span>
+        <span class="s2">&quot;rerank&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">rerank_score</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># the generate-and-re-verify fallback (loop-owned side effect)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate_and_reverify</span><span class="p">(</span>
+    <span class="n">event</span><span class="p">,</span> <span class="n">intended_use</span><span class="p">:</span> <span class="n">IntendedUse</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">judge</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">VerifyLevel</span><span class="p">,</span> <span class="n">library</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Optional[Candidate]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a clip, then RE-GATE + RE-VERIFY it before acceptance (the flywheel admission gate).</span>
+
+<span class="sd">    A generated clip is not pre-vetted: it must pass the SAME fail-closed license gate</span>
+<span class="sd">    (generations keep ``ai_training_ok=False``) and the SAME verify ladder as a retrieved</span>
+<span class="sd">    one before it is accepted into the plan. The generation-error hierarchy</span>
+<span class="sd">    (``TrademarkRefusal`` / ``RecognizableVoiceRefusal`` &lt; ``SafetyRefusal`` &lt;</span>
+<span class="sd">    ``GenerationError``) is caught fail-closed → the event is skipped, ``find()`` continues.</span>
+<span class="sd">    Handles the ``skipped_dup`` byte-twin (a bare ``Candidate`` with event/verdict/​license</span>
+<span class="sd">    unset — still gated + verified here, never assumed pre-vetted).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..sources</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenerationError</span>  <span class="c1"># lazy: keeps import foley dol-only</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">gc</span> <span class="o">=</span> <span class="n">generate_sound</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">GenerationError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">gc</span><span class="o">.</span><span class="n">event</span> <span class="o">=</span> <span class="n">event</span>  <span class="c1"># (origin is already &#39;generated&#39; from foley.generate)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">gate_candidates</span><span class="p">([</span><span class="n">gc</span><span class="p">],</span> <span class="n">intended_use</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># A generated clip has no retrieval clap_score to gate on, so re-verify at the</span>
+    <span class="c1"># &#39;listen&#39; rung (an audio/judge rung) even when find(verify=&#39;clap&#39;) — otherwise the</span>
+    <span class="c1"># clap gate would drop EVERY generation (emptying all non-diegetic output). At</span>
+    <span class="c1"># verify=&#39;clap&#39; the injected judge is the ClapJudge (no use here), so resolve a</span>
+    <span class="c1"># listen-capable one; higher rungs keep the caller&#39;s judge.</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">:</span>
+        <span class="n">reverify_level</span><span class="p">,</span> <span class="n">reverify_judge</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">listen</span><span class="p">,</span> <span class="n">_default_judge</span><span class="p">(</span><span class="n">VerifyLevel</span><span class="o">.</span><span class="n">listen</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">reverify_level</span><span class="p">,</span> <span class="n">reverify_judge</span> <span class="o">=</span> <span class="n">level</span><span class="p">,</span> <span class="n">judge</span>
+    <span class="n">verdict</span> <span class="o">=</span> <span class="n">verify_match</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">gc</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">reverify_level</span><span class="p">,</span> <span class="n">judge</span><span class="o">=</span><span class="n">reverify_judge</span><span class="p">)</span>
+    <span class="n">gc</span><span class="o">.</span><span class="n">verdict</span> <span class="o">=</span> <span class="n">verdict</span>
+    <span class="k">return</span> <span class="n">gc</span> <span class="k">if</span> <span class="n">verdict</span><span class="o">.</span><span class="n">match</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># the headline: find() / plan()</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="find">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/tools.html#foley.find">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">find</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">seconds</span><span class="p">:</span> <span class="s2">&quot;Optional[float]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">intended_use</span><span class="p">:</span> <span class="s2">&quot;Optional[IntendedUse]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">verify</span><span class="p">:</span> <span class="s2">&quot;Union[str, VerifyLevel]&quot;</span> <span class="o">=</span> <span class="s2">&quot;listen&quot;</span><span class="p">,</span>
+    <span class="n">stream</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">tau_retrieve</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">tau_clap</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.35</span><span class="p">,</span>
+    <span class="n">max_refine_loops</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">budget</span><span class="p">:</span> <span class="s2">&quot;Optional[Budget]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">decomposer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">judge</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">refiner</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Union[list[Candidate], Iterator[Candidate]]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The headline: a narrative context → verified, license-clean sound candidates.</span>
+
+<span class="sd">    ``decompose → (per event) refine/search → verify_match ladder → decide (with the</span>
+<span class="sd">    fail-closed license gate FIRST) → place`` (report 05 §5). Works out of the box —</span>
+<span class="sd">    ``foley.find(&quot;She pushed open the heavy oak door; rain hammered outside.&quot;)`` — with</span>
+<span class="sd">    deterministic defaults; every model / threshold / seam is an optional keyword.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        context: The narrative passage.</span>
+<span class="sd">        max_events: The sparse density cap on decomposed events.</span>
+<span class="sd">        seconds: Optional passage duration (density-window hint; forwarded).</span>
+<span class="sd">        intended_use: The caller&#39;s rights intent (default: a conservative</span>
+<span class="sd">            :class:`IntendedUse` — ``allow_voice_or_trademark`` stays ``False``).</span>
+<span class="sd">        backend: Generation backend for the fallback (``&#39;auto&#39;`` → ``foley.generate``&#39;s default).</span>
+<span class="sd">        verify: The max verify rung — ``&#39;clap&#39;`` | ``&#39;listen&#39;`` | ``&#39;judge&#39;``.</span>
+<span class="sd">        stream: If ``True``, return a generator yielding one :class:`Candidate` per</span>
+<span class="sd">            resolved event; else return the collected ``list``.</span>
+<span class="sd">        k: Retrieval shortlist depth per query.</span>
+<span class="sd">        tau_retrieve: Confidence threshold to auto-accept a retrieved clip.</span>
+<span class="sd">        tau_clap: The ``clap``-rung gate threshold.</span>
+<span class="sd">        max_refine_loops: Max refine→re-retrieve passes per event (also the default</span>
+<span class="sd">            :class:`Budget`).</span>
+<span class="sd">        budget: An explicit :class:`Budget` (overrides ``max_refine_loops``).</span>
+<span class="sd">        library: Target :class:`SoundLibrary` (default: the process-wide default).</span>
+<span class="sd">        decomposer / judge / refiner: Injected DI seams</span>
+<span class="sd">            (:class:`~foley.agent.protocols.Decomposer` / ``Judge`` / ``Refiner``);</span>
+<span class="sd">            each defaults to the hermetic fake when ``foley[agent]`` is absent.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``list[Candidate]`` (``stream=False``) or an ``Iterator[Candidate]``</span>
+<span class="sd">        (``stream=True``) — one verified, license-clean candidate per resolved event.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gen</span> <span class="o">=</span> <span class="n">_find_stream</span><span class="p">(</span>
+        <span class="n">context</span><span class="p">,</span>
+        <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span>
+        <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span>
+        <span class="n">intended_use</span><span class="o">=</span><span class="n">intended_use</span><span class="p">,</span>
+        <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
+        <span class="n">verify</span><span class="o">=</span><span class="n">verify</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">tau_retrieve</span><span class="o">=</span><span class="n">tau_retrieve</span><span class="p">,</span>
+        <span class="n">tau_clap</span><span class="o">=</span><span class="n">tau_clap</span><span class="p">,</span>
+        <span class="n">max_refine_loops</span><span class="o">=</span><span class="n">max_refine_loops</span><span class="p">,</span>
+        <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
+        <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
+        <span class="n">decomposer</span><span class="o">=</span><span class="n">decomposer</span><span class="p">,</span>
+        <span class="n">judge</span><span class="o">=</span><span class="n">judge</span><span class="p">,</span>
+        <span class="n">refiner</span><span class="o">=</span><span class="n">refiner</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">gen</span> <span class="k">if</span> <span class="n">stream</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_stream</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_events</span><span class="p">,</span>
+    <span class="n">seconds</span><span class="p">,</span>
+    <span class="n">intended_use</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">,</span>
+    <span class="n">verify</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">,</span>
+    <span class="n">tau_retrieve</span><span class="p">,</span>
+    <span class="n">tau_clap</span><span class="p">,</span>
+    <span class="n">max_refine_loops</span><span class="p">,</span>
+    <span class="n">budget</span><span class="p">,</span>
+    <span class="n">library</span><span class="p">,</span>
+    <span class="n">decomposer</span><span class="p">,</span>
+    <span class="n">judge</span><span class="p">,</span>
+    <span class="n">refiner</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Iterator[Candidate]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The streaming body of :func:`find` (``find(stream=False)`` == ``list(_find_stream(...))``).&quot;&quot;&quot;</span>
+    <span class="n">use</span> <span class="o">=</span> <span class="n">intended_use</span> <span class="ow">or</span> <span class="n">IntendedUse</span><span class="p">()</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="n">budget</span> <span class="ow">or</span> <span class="n">Budget</span><span class="p">(</span><span class="n">max_refine_loops</span><span class="o">=</span><span class="n">max_refine_loops</span><span class="p">)</span>
+    <span class="n">library</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
+    <span class="n">decomposer</span> <span class="o">=</span> <span class="n">decomposer</span> <span class="ow">or</span> <span class="n">_default_decomposer</span><span class="p">()</span>
+    <span class="n">max_level</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">verify</span><span class="p">)</span>
+    <span class="n">judge</span> <span class="o">=</span> <span class="n">judge</span> <span class="ow">or</span> <span class="n">_default_judge</span><span class="p">(</span><span class="n">max_level</span><span class="p">)</span>
+    <span class="n">refiner</span> <span class="o">=</span> <span class="n">refiner</span> <span class="ow">or</span> <span class="n">_default_refiner</span><span class="p">()</span>
+    <span class="n">prefilter</span> <span class="o">=</span> <span class="n">_license_prefilter</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">_obs_run</span><span class="p">(</span>
+        <span class="s2">&quot;find&quot;</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;context_text&quot;</span><span class="p">:</span> <span class="n">context</span><span class="p">},</span>
+        <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;max_events&quot;</span><span class="p">:</span> <span class="n">max_events</span><span class="p">,</span>
+            <span class="s2">&quot;verify&quot;</span><span class="p">:</span> <span class="n">max_level</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span>
+            <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span>
+            <span class="s2">&quot;tau_retrieve&quot;</span><span class="p">:</span> <span class="n">tau_retrieve</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">run</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s2">&quot;decompose_context&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;CLIENT&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sp</span><span class="p">:</span>
+            <span class="n">events</span> <span class="o">=</span> <span class="n">decompose_context</span><span class="p">(</span>
+                <span class="n">context</span><span class="p">,</span> <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span> <span class="n">decomposer</span><span class="o">=</span><span class="n">decomposer</span><span class="p">,</span> <span class="n">_span</span><span class="o">=</span><span class="n">sp</span>
+            <span class="p">)</span>
+            <span class="n">_emit_step</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="s2">&quot;decompose&quot;</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n_events&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)})</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">events</span><span class="p">):</span>
+            <span class="n">chosen</span><span class="p">:</span> <span class="s2">&quot;Optional[Candidate]&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">queries</span> <span class="o">=</span> <span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">]</span>
+            <span class="n">last_reason</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">loop</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">loop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">run</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s2">&quot;refine_query&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;CLIENT&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sp</span><span class="p">:</span>
+                        <span class="n">queries</span> <span class="o">=</span> <span class="n">refine_query</span><span class="p">(</span>
+                            <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">last_reason</span><span class="p">,</span> <span class="n">refiner</span><span class="o">=</span><span class="n">refiner</span><span class="p">,</span> <span class="n">_span</span><span class="o">=</span><span class="n">sp</span>
+                        <span class="p">)</span>
+                        <span class="n">_emit_step</span><span class="p">(</span>
+                            <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;refine&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
+                            <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">queries</span><span class="p">)},</span>
+                        <span class="p">)</span>
+
+                <span class="n">cands</span> <span class="o">=</span> <span class="n">search_sounds</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="n">prefilter</span><span class="p">)</span>
+                <span class="n">run</span><span class="o">.</span><span class="n">add_candidate_scores</span><span class="p">([</span><span class="n">_score_row</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cands</span><span class="p">])</span>
+                <span class="n">_emit_step</span><span class="p">(</span>
+                    <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                    <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+                        <span class="s2">&quot;n_hits&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">cands</span><span class="p">),</span>
+                        <span class="s2">&quot;candidate_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cands</span><span class="p">],</span>
+                    <span class="p">},</span>
+                <span class="p">)</span>
+
+                <span class="n">kept</span> <span class="o">=</span> <span class="n">gate_candidates</span><span class="p">(</span><span class="n">cands</span><span class="p">,</span> <span class="n">use</span><span class="p">)</span>
+                <span class="n">_emit_step</span><span class="p">(</span>
+                    <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;license_gate&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                    <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;n_in&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">cands</span><span class="p">),</span>
+                        <span class="s2">&quot;n_kept&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">kept</span><span class="p">),</span>
+                        <span class="s2">&quot;rejected_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cands</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">license_ok</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">],</span>
+                        <span class="s2">&quot;intended_use&quot;</span><span class="p">:</span> <span class="n">asdict</span><span class="p">(</span><span class="n">use</span><span class="p">),</span>
+                    <span class="p">},</span>
+                <span class="p">)</span>
+
+                <span class="n">verified</span> <span class="o">=</span> <span class="n">_verify_kept</span><span class="p">(</span>
+                    <span class="n">run</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">kept</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">max_level</span><span class="o">=</span><span class="n">max_level</span><span class="p">,</span> <span class="n">judge</span><span class="o">=</span><span class="n">judge</span><span class="p">,</span> <span class="n">tau_clap</span><span class="o">=</span><span class="n">tau_clap</span>
+                <span class="p">)</span>
+
+                <span class="n">decision</span> <span class="o">=</span> <span class="n">decide</span><span class="p">(</span>
+                    <span class="n">event</span><span class="p">,</span> <span class="n">kept</span><span class="p">,</span> <span class="n">verified</span><span class="p">,</span> <span class="n">tau_retrieve</span><span class="o">=</span><span class="n">tau_retrieve</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="n">loop</span>
+                <span class="p">)</span>
+                <span class="n">_emit_step</span><span class="p">(</span>
+                    <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;decide&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                    <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="n">decision</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                        <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="n">decision</span><span class="o">.</span><span class="n">reason</span><span class="p">,</span>
+                        <span class="s2">&quot;chosen_id&quot;</span><span class="p">:</span> <span class="n">decision</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">decision</span><span class="o">.</span><span class="n">candidate</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s2">&quot;loop&quot;</span><span class="p">:</span> <span class="n">loop</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">decision</span><span class="o">.</span><span class="n">action</span> <span class="ow">is</span> <span class="n">DecideAction</span><span class="o">.</span><span class="n">USE</span><span class="p">:</span>
+                    <span class="n">chosen</span> <span class="o">=</span> <span class="n">decision</span><span class="o">.</span><span class="n">candidate</span>
+                    <span class="k">break</span>
+                <span class="k">if</span> <span class="n">decision</span><span class="o">.</span><span class="n">action</span> <span class="ow">is</span> <span class="n">DecideAction</span><span class="o">.</span><span class="n">REFINE</span> <span class="ow">and</span> <span class="n">budget</span><span class="o">.</span><span class="n">refine_ok</span><span class="p">():</span>
+                    <span class="n">budget</span><span class="o">.</span><span class="n">spend_refine</span><span class="p">()</span>
+                    <span class="n">last_reason</span> <span class="o">=</span> <span class="n">decision</span><span class="o">.</span><span class="n">reason</span>
+                    <span class="n">loop</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">decision</span><span class="o">.</span><span class="n">action</span> <span class="ow">is</span> <span class="n">DecideAction</span><span class="o">.</span><span class="n">GENERATE</span> <span class="ow">and</span> <span class="n">budget</span><span class="o">.</span><span class="n">gen_ok</span><span class="p">():</span>
+                    <span class="n">budget</span><span class="o">.</span><span class="n">spend_gen</span><span class="p">()</span>
+                    <span class="n">chosen</span> <span class="o">=</span> <span class="n">_generate_and_reverify</span><span class="p">(</span>
+                        <span class="n">event</span><span class="p">,</span> <span class="n">use</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">judge</span><span class="o">=</span><span class="n">judge</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">max_level</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">_emit_step</span><span class="p">(</span>
+                        <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;generate&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                        <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="s2">&quot;accepted&quot;</span><span class="p">:</span> <span class="n">chosen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">},</span>
+                    <span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">break</span>  <span class="c1"># DROP / exhausted → silence (a valid Foley choice)</span>
+
+            <span class="k">if</span> <span class="n">chosen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">chosen</span><span class="o">.</span><span class="n">event</span> <span class="o">=</span> <span class="n">event</span>  <span class="c1"># attach provenance so plan() reads onset/layer/loop</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">place_in_timeline</span><span class="p">(</span>
+                    <span class="n">chosen</span><span class="p">,</span> <span class="n">onset</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">onset</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">loop</span>
+                <span class="p">)</span>
+                <span class="n">_emit_step</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="s2">&quot;place&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+                <span class="k">yield</span> <span class="n">chosen</span>
+
+        <span class="n">run</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="s2">&quot;ok&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="plan">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/tools.html#foley.plan">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plan</span><span class="p">(</span><span class="n">candidates</span><span class="p">:</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">transcript</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fold verified candidates into the SPARSE :class:`SoundDesignTimeline` (the SELECT→WEAVE bridge).</span>
+
+<span class="sd">    One :class:`TimelineItem` per candidate (``onset·gain·layer·loop`` only, from its</span>
+<span class="sd">    :class:`SoundEvent`), joined to the run-artifact via ``run_manifest_ref`` — the</span>
+<span class="sd">    reserved #8 ``plan_ref`` slot is filled when called inside an active ``foley.obs``</span>
+<span class="sd">    run scope (``None``-safe otherwise).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        candidates: The candidates returned by :func:`find`.</span>
+<span class="sd">        transcript: Optional narration transcript (WEAVE resolves the reference).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">run</span> <span class="o">=</span> <span class="n">current_run</span><span class="p">()</span>
+    <span class="n">run_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="s2">&quot;manifest&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;run_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">place_in_timeline</span><span class="p">(</span>
+            <span class="n">c</span><span class="p">,</span>
+            <span class="n">onset</span><span class="o">=</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">onset</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">event</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">layer</span><span class="o">=</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">layer</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">event</span> <span class="k">else</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">),</span>
+            <span class="n">loop</span><span class="o">=</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">loop</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">event</span> <span class="k">else</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">candidates</span>
+    <span class="p">]</span>
+    <span class="n">timeline</span> <span class="o">=</span> <span class="n">SoundDesignTimeline</span><span class="p">(</span>
+        <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span>
+        <span class="n">run_manifest_ref</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
+        <span class="n">transcript_ref</span><span class="o">=</span><span class="s2">&quot;narration&quot;</span> <span class="k">if</span> <span class="n">transcript</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">run</span><span class="o">.</span><span class="n">set_plan_ref</span><span class="p">({</span><span class="s2">&quot;n_items&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">),</span> <span class="s2">&quot;run_manifest_ref&quot;</span><span class="p">:</span> <span class="n">run_id</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">timeline</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.10 documentation</title>
+  <title>foley &mdash; foley 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../_static/documentation_options.js?v=0c446633"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -47,6 +47,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
@@ -206,9 +214,11 @@
     <span class="n">LicenseRecord</span><span class="p">,</span>
     <span class="n">Salience</span><span class="p">,</span>
     <span class="n">SerializableMixin</span><span class="p">,</span>
+    <span class="n">SoundDesignTimeline</span><span class="p">,</span>
     <span class="n">SoundEvent</span><span class="p">,</span>
     <span class="n">SoundRecord</span><span class="p">,</span>
     <span class="n">StorageMode</span><span class="p">,</span>
+    <span class="n">TimelineItem</span><span class="p">,</span>
     <span class="n">Verdict</span><span class="p">,</span>
     <span class="n">VerifyLevel</span><span class="p">,</span>
 <span class="p">)</span>
@@ -333,6 +343,23 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">obs</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.obs</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunManifest</span><span class="p">,</span> <span class="n">SpanRecord</span>
 
+<span class="c1"># --- agent: the SELECT stage — find() + the sparse plan (#7) --------------------</span>
+<span class="c1"># The agent package is dol-only at import (the LLM rungs sit behind DI-seam</span>
+<span class="c1"># protocols with deterministic fakes; anthropic — foley[agent] — is imported lazily</span>
+<span class="c1"># inside the real impls only), so this keeps `import foley` dol-only.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.agent</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Budget</span><span class="p">,</span>
+    <span class="n">Decision</span><span class="p">,</span>
+    <span class="n">Judge</span><span class="p">,</span>
+    <span class="n">decide</span><span class="p">,</span>
+    <span class="n">decompose_context</span><span class="p">,</span>
+    <span class="n">find</span><span class="p">,</span>
+    <span class="n">plan</span><span class="p">,</span>
+    <span class="n">refine_query</span><span class="p">,</span>
+    <span class="n">verify_match</span><span class="p">,</span>
+<span class="p">)</span>
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># --- base: constants + enums ---------------------------------------------</span>
     <span class="s2">&quot;SCHEMA_VERSION&quot;</span><span class="p">,</span>
@@ -354,6 +381,8 @@
     <span class="s2">&quot;Verdict&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Candidate&quot;</span><span class="p">,</span>
     <span class="s2">&quot;IntendedUse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TimelineItem&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SoundDesignTimeline&quot;</span><span class="p">,</span>
     <span class="c1"># --- licensing: policy ---------------------------------------------------</span>
     <span class="s2">&quot;LicenseFlags&quot;</span><span class="p">,</span>
     <span class="s2">&quot;LICENSE_FLAGS&quot;</span><span class="p">,</span>
@@ -469,6 +498,17 @@
     <span class="s2">&quot;obs&quot;</span><span class="p">,</span>
     <span class="s2">&quot;RunManifest&quot;</span><span class="p">,</span>
     <span class="s2">&quot;SpanRecord&quot;</span><span class="p">,</span>
+    <span class="c1"># --- agent: the SELECT stage — find() + sparse plan (#7) ------------------</span>
+    <span class="s2">&quot;agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;find&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;plan&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;decompose_context&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;refine_query&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;verify_match&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;decide&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Judge&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Budget&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Decision&quot;</span><span class="p">,</span>
     <span class="c1"># --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------</span>
     <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
     <span class="s2">&quot;evaluate&quot;</span><span class="p">,</span>

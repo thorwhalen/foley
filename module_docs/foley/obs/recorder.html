@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.obs.recorder &mdash; foley 0.0.10 documentation</title>
+  <title>foley.obs.recorder &mdash; foley 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,6 +50,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
@@ -82,7 +90,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.obs.recorder.RunRecorder"><code class="docutils literal notranslate"><span class="pre">RunRecorder</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.obs.recorder.RunRecorder.add_step"><code class="docutils literal notranslate"><span class="pre">RunRecorder.add_step()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.obs.recorder.RunRecorder.emit"><code class="docutils literal notranslate"><span class="pre">RunRecorder.emit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.obs.recorder.RunRecorder.set_plan_ref"><code class="docutils literal notranslate"><span class="pre">RunRecorder.set_plan_ref()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.obs.recorder.RunRecorder.span"><code class="docutils literal notranslate"><span class="pre">RunRecorder.span()</span></code></a></li>
 </ul>
 </li>
@@ -190,9 +200,25 @@ Fractions of a second may be present if the system clock provides them.</p>
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.obs.recorder.</span></span><span class="sig-name descname"><span class="pre">RunRecorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">manifest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="run_artifact.html#foley.obs.run_artifact.RunManifest" title="foley.obs.run_artifact.RunManifest"><span class="pre">RunManifest</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="trace.html#foley.obs.trace.Tracer" title="foley.obs.trace.Tracer"><span class="pre">Tracer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">redactor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="redact.html#foley.obs.redact.Redactor" title="foley.obs.redact.Redactor"><span class="pre">Redactor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MutableMapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clock</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/obs/recorder.html#RunRecorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.recorder.RunRecorder" title="Link to this definition"></a></dt>
 <dd><p>Builds one <code class="xref py py-class docutils literal notranslate"><span class="pre">RunManifest</span></code> (span tree + composed shapes), tracer-independent.</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="foley.obs.recorder.RunRecorder.add_step">
+<span class="sig-name descname"><span class="pre">add_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="run_artifact.html#foley.obs.run_artifact.Step" title="foley.obs.run_artifact.Step"><span class="pre">Step</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/obs/recorder.html#RunRecorder.add_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.recorder.RunRecorder.add_step" title="Link to this definition"></a></dt>
+<dd><p>Append a SELECT-stage <code class="xref py py-class docutils literal notranslate"><span class="pre">Step</span></code> (#7), deep-redacting <code class="docutils literal notranslate"><span class="pre">detail</span></code> at record time.</p>
+<p>The record-time net (belt over the emit-time sweep): event text carried in
+<code class="docutils literal notranslate"><span class="pre">detail</span></code> (under the <code class="docutils literal notranslate"><span class="pre">query</span></code> key) is hashed here so a manifest read straight
+off <code class="docutils literal notranslate"><span class="pre">self.manifest.steps</span></code> — before any emit — never holds raw narration.
+<code class="docutils literal notranslate"><span class="pre">seq</span></code> is assigned here (append position) when the caller left it <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="foley.obs.recorder.RunRecorder.emit">
 <span class="sig-name descname"><span class="pre">emit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/obs/recorder.html#RunRecorder.emit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.recorder.RunRecorder.emit" title="Link to this definition"></a></dt>
 <dd><p>Persist the manifest to the run store — swallowing any write failure.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.obs.recorder.RunRecorder.set_plan_ref">
+<span class="sig-name descname"><span class="pre">set_plan_ref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plan_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/obs/recorder.html#RunRecorder.set_plan_ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.recorder.RunRecorder.set_plan_ref" title="Link to this definition"></a></dt>
+<dd><p>Fill the reserved #8 <code class="docutils literal notranslate"><span class="pre">plan_ref</span></code> slot (a light join dict — no text).</p>
 </dd></dl>
 
 <dl class="py method">
