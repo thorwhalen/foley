@@ -206,7 +206,10 @@ def test_ingest_facade_qc_kwarg_maps_to_do_qc(library, tmp_path):
 
 
 def test_demo_ring0_round_trip(library):
-    result = demo(library=library, query="rain on a window", k=3)
+    # Distinctive query tokens (no common "a"/"on") so BM25 matches ONLY the rain
+    # clip -> deterministic top-1 with the noise-vector FakeEmbedder, cross-platform.
+    # (demo()'s natural default query is for the real-CLAP demo, not this fixture.)
+    result = demo(library=library, query="rain window", k=3)
     assert result["ingested"]["ingested"] == 6
     assert result["caption"] and "rain" in result["caption"].lower()
 
