@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.base &mdash; foley 0.0.7 documentation</title>
+  <title>foley.sources.base &mdash; foley 0.0.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=bbaf98b3"></script>
+      <script src="../../../_static/documentation_options.js?v=53b53b71"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -95,6 +95,17 @@
 <li class="toctree-l3"><a class="reference internal" href="#foley.sources.base.CorpusAdapter.ring"><code class="docutils literal notranslate"><span class="pre">CorpusAdapter.ring</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.GenerateAdapter"><code class="docutils literal notranslate"><span class="pre">GenerateAdapter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.sources.base.GenerateAdapter.generate"><code class="docutils literal notranslate"><span class="pre">GenerateAdapter.generate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.sources.base.GenerateAdapter.name"><code class="docutils literal notranslate"><span class="pre">GenerateAdapter.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.GeneratedClip"><code class="docutils literal notranslate"><span class="pre">GeneratedClip</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.sources.base.GeneratedClip.audio_bytes"><code class="docutils literal notranslate"><span class="pre">GeneratedClip.audio_bytes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.sources.base.GeneratedClip.candidate"><code class="docutils literal notranslate"><span class="pre">GeneratedClip.candidate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.sources.base.GeneratedClip.notes"><code class="docutils literal notranslate"><span class="pre">GeneratedClip.notes</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.SourceAdapter"><code class="docutils literal notranslate"><span class="pre">SourceAdapter</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.sources.base.SourceAdapter.download"><code class="docutils literal notranslate"><span class="pre">SourceAdapter.download()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.sources.base.SourceAdapter.get"><code class="docutils literal notranslate"><span class="pre">SourceAdapter.get()</span></code></a></li>
@@ -110,6 +121,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.api_license"><code class="docutils literal notranslate"><span class="pre">api_license()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.bulk_license"><code class="docutils literal notranslate"><span class="pre">bulk_license()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.corpora_in_rings"><code class="docutils literal notranslate"><span class="pre">corpora_in_rings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.generated_license"><code class="docutils literal notranslate"><span class="pre">generated_license()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.register_corpus"><code class="docutils literal notranslate"><span class="pre">register_corpus()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.ring_of"><code class="docutils literal notranslate"><span class="pre">ring_of()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.base.select_corpora"><code class="docutils literal notranslate"><span class="pre">select_corpora()</span></code></a></li>
@@ -117,15 +129,22 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="bbc_remarc.html">foley.sources.bbc_remarc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foleyset.html">foley.sources.foleyset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="freesound.html">foley.sources.freesound</a></li>
 <li class="toctree-l1"><a class="reference internal" href="freesound/adapter.html">foley.sources.freesound.adapter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="freesound/config.html">foley.sources.freesound.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generate.html">foley.sources.generate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="http.html">foley.sources.http</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pull.html">foley.sources.pull</a></li>
 <li class="toctree-l1"><a class="reference internal" href="registry.html">foley.sources.registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stable_audio/config.html">foley.sources.stable_audio.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
 </ul>
 
@@ -179,6 +198,14 @@ authoritatively-recognized license (fail-closed otherwise).</p></li>
 <a class="reference internal" href="#foley.sources.base.register_corpus" title="foley.sources.base.register_corpus"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_corpus()</span></code></a>; <a class="reference internal" href="#foley.sources.base.corpora_in_rings" title="foley.sources.base.corpora_in_rings"><code class="xref py py-func docutils literal notranslate"><span class="pre">corpora_in_rings()</span></code></a> / <a class="reference internal" href="#foley.sources.base.select_corpora" title="foley.sources.base.select_corpora"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_corpora()</span></code></a> drive
 the ring policy in the bootstrap orchestrator. The registry is a plain dict — no
 auto-discovery / <code class="docutils literal notranslate"><span class="pre">SOURCE_CONFIG</span></code> (that is #5’s concern).</p>
+<p>This module is also the home of the <strong>live-source contracts</strong> (auto-discovered by
+<a class="reference internal" href="registry.html#module-foley.sources.registry" title="foley.sources.registry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.sources.registry</span></code></a>, not registered here): the retrieve
+<a class="reference internal" href="#foley.sources.base.SourceAdapter" title="foley.sources.base.SourceAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceAdapter</span></code></a> (<code class="docutils literal notranslate"><span class="pre">search</span></code> / <code class="docutils literal notranslate"><span class="pre">get</span></code> / <code class="docutils literal notranslate"><span class="pre">download</span></code> — Freesound, #5) and
+its sibling generate <a class="reference internal" href="#foley.sources.base.GenerateAdapter" title="foley.sources.base.GenerateAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenerateAdapter</span></code></a> (<code class="docutils literal notranslate"><span class="pre">generate</span></code> → <a class="reference internal" href="#foley.sources.base.GeneratedClip" title="foley.sources.base.GeneratedClip"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneratedClip</span></code></a>
+— Stable Audio Open, ElevenLabs, #6). All three adapter kinds share the license
+SSOT builders — <a class="reference internal" href="#foley.sources.base.bulk_license" title="foley.sources.base.bulk_license"><code class="xref py py-func docutils literal notranslate"><span class="pre">bulk_license()</span></code></a> (bulk), <a class="reference internal" href="#foley.sources.base.api_license" title="foley.sources.base.api_license"><code class="xref py py-func docutils literal notranslate"><span class="pre">api_license()</span></code></a> (retrieve), and
+<a class="reference internal" href="#foley.sources.base.generated_license" title="foley.sources.base.generated_license"><code class="xref py py-func docutils literal notranslate"><span class="pre">generated_license()</span></code></a> (generate) — thin wrappers over <code class="xref py py-func docutils literal notranslate"><span class="pre">_build_license()</span></code>
+so the derived permission flags stay single-sourced.</p>
 <dl class="py data">
 <dt class="sig sig-object py" id="foley.sources.base.CORPUS_REGISTRY">
 <span class="sig-prename descclassname"><span class="pre">foley.sources.base.</span></span><span class="sig-name descname"><span class="pre">CORPUS_REGISTRY</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#foley.sources.base.CorpusAdapter" title="foley.sources.base.CorpusAdapter"><span class="pre">CorpusAdapter</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'bbc_remarc':</span> <span class="pre">UniformCorpus(name='bbc_remarc',</span> <span class="pre">ring=2,</span> <span class="pre">default_license_id='RemArc',</span> <span class="pre">source='bbc_remarc',</span> <span class="pre">rights_verified=True,</span> <span class="pre">tag_hints_from_path=False),</span> <span class="pre">'clotho':</span> <span class="pre">ClothoEvalCorpus(name='clotho',</span> <span class="pre">ring=0,</span> <span class="pre">default_license_id='CC-BY-4.0',</span> <span class="pre">source='clotho',</span> <span class="pre">rights_verified=True,</span> <span class="pre">tag_hints_from_path=False),</span> <span class="pre">'foleyset':</span> <span class="pre">UniformCorpus(name='foleyset',</span> <span class="pre">ring=0,</span> <span class="pre">default_license_id='CC-BY-4.0',</span> <span class="pre">source='foleyset',</span> <span class="pre">rights_verified=True,</span> <span class="pre">tag_hints_from_path=True),</span> <span class="pre">'fsd50k':</span> <span class="pre">&lt;foley.sources.fsd50k.Fsd50kCorpus</span> <span class="pre">object&gt;,</span> <span class="pre">'sonniss':</span> <span class="pre">UniformCorpus(name='sonniss',</span> <span class="pre">ring=2,</span> <span class="pre">default_license_id='Sonniss-GDC',</span> <span class="pre">source='sonniss',</span> <span class="pre">rights_verified=True,</span> <span class="pre">tag_hints_from_path=False)}</span></span><a class="headerlink" href="#foley.sources.base.CORPUS_REGISTRY" title="Link to this definition"></a></dt>
@@ -273,6 +300,104 @@ two methods below. They perform <strong>no</strong> embedding, storage, or libra
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Bootstrap ring</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.sources.base.GenerateAdapter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.sources.base.</span></span><span class="sig-name descname"><span class="pre">GenerateAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/sources/base.html#GenerateAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.base.GenerateAdapter" title="Link to this definition"></a></dt>
+<dd><p>The generation source contract (report 10 §4.2) — a SIBLING of <code class="docutils literal notranslate"><span class="pre">SourceAdapter</span></code>.</p>
+<p>A <strong>generate</strong> adapter (Stable Audio Open local, ElevenLabs Sound Effects
+hosted; #6) synthesizes a sound from a prompt. It is a deliberate sibling of
+the retrieve <a class="reference internal" href="#foley.sources.base.SourceAdapter" title="foley.sources.base.SourceAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceAdapter</span></code></a> rather than an extra method on it, so that
+<code class="docutils literal notranslate"><span class="pre">SourceAdapter</span></code> stays <code class="docutils literal notranslate"><span class="pre">runtime_checkable</span></code> for the retrieve trio
+(<code class="docutils literal notranslate"><span class="pre">search</span></code> / <code class="docutils literal notranslate"><span class="pre">get</span></code> / <code class="docutils literal notranslate"><span class="pre">download</span></code>) alone.</p>
+<p>Like a retrieve adapter, a generate adapter performs <strong>no</strong> storage or library
+access: it maps foley’s unified <a class="reference internal" href="../base.html#foley.base.GENERATION_AFFORDANCES" title="foley.base.GENERATION_AFFORDANCES"><code class="xref py py-data docutils literal notranslate"><span class="pre">GENERATION_AFFORDANCES</span></code></a>
+(prompt, duration, prompt_influence, negative_prompt, steps, seed, loop,
+output_format) to its backend’s native params (via <code class="docutils literal notranslate"><span class="pre">SOURCE_CONFIG['param_map']</span></code>,
+warning-and-dropping unsupported ones), builds the audio + a generated
+<a class="reference internal" href="../base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a>, and returns a <a class="reference internal" href="#foley.sources.base.GeneratedClip" title="foley.sources.base.GeneratedClip"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneratedClip</span></code></a>. The
+<a class="reference internal" href="generate.html#foley.sources.generate.generate" title="foley.sources.generate.generate"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.sources.generate.generate()</span></code></a> façade converges it on the shared
+<code class="docutils literal notranslate"><span class="pre">ingest_one</span></code> pipeline (by-value, operator-consented).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.sources.base.GenerateAdapter.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">affordances</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.sources.base.GeneratedClip" title="foley.sources.base.GeneratedClip"><span class="pre">GeneratedClip</span></a></span></span><a class="reference internal" href="../../../_modules/foley/sources/base.html#GenerateAdapter.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.base.GenerateAdapter.generate" title="Link to this definition"></a></dt>
+<dd><p>Synthesize a sound for <code class="docutils literal notranslate"><span class="pre">prompt</span></code>; return its bytes + provisional candidate.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.sources.base.GenerateAdapter.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#foley.sources.base.GenerateAdapter.name" title="Link to this definition"></a></dt>
+<dd><p>Registry / façade key — <code class="docutils literal notranslate"><span class="pre">'stable_audio'</span></code> | <code class="docutils literal notranslate"><span class="pre">'elevenlabs'</span></code> | …</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.sources.base.GeneratedClip">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.sources.base.</span></span><span class="sig-name descname"><span class="pre">GeneratedClip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.Candidate" title="foley.Candidate"><span class="pre">Candidate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/sources/base.html#GeneratedClip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.base.GeneratedClip" title="Link to this definition"></a></dt>
+<dd><p>One freshly-generated sound: its transient bytes + a provisional candidate.</p>
+<p>The return type of a <a class="reference internal" href="#foley.sources.base.GenerateAdapter" title="foley.sources.base.GenerateAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenerateAdapter</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">generate</span></code> — the envelope
+that reconciles report 10 §4.2 (<code class="docutils literal notranslate"><span class="pre">generate</span> <span class="pre">-&gt;</span> <span class="pre">Candidate</span></code>: retrieval and
+generation return the same shape) with foley’s two non-negotiables:</p>
+<ul class="simple">
+<li><p><strong>adapters never touch storage</strong> — so the bytes ride <em>with</em> the candidate in
+an explicit field rather than being written anywhere, and</p></li>
+<li><p><strong>``ingest_one`` is never forked</strong> — the <a class="reference internal" href="generate.html#foley.sources.generate.generate" title="foley.sources.generate.generate"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.sources.generate.generate()</span></code></a>
+façade hands <a class="reference internal" href="#foley.sources.base.GeneratedClip.audio_bytes" title="foley.sources.base.GeneratedClip.audio_bytes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">audio_bytes</span></code></a> to the one shared pipeline (by-value), exactly
+as <a class="reference internal" href="pull.html#foley.sources.pull.add_from" title="foley.sources.pull.add_from"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.sources.pull.add_from()</span></code></a> does for a retrieved download.</p></li>
+</ul>
+<p>Generation is retrieval’s <code class="docutils literal notranslate"><span class="pre">search</span> <span class="pre">-&gt;</span> <span class="pre">Candidate</span></code> and <code class="docutils literal notranslate"><span class="pre">download</span> <span class="pre">-&gt;</span> <span class="pre">bytes</span></code>
+<em>fused</em> into one call, because there is no server to re-fetch the bytes from.</p>
+<p>Provisional/canonical split — on <a class="reference internal" href="#foley.sources.base.GeneratedClip.candidate" title="foley.sources.base.GeneratedClip.candidate"><code class="xref py py-attr docutils literal notranslate"><span class="pre">candidate</span></code></a><code class="docutils literal notranslate"><span class="pre">.sound</span></code> only
+<code class="docutils literal notranslate"><span class="pre">license</span></code> / <code class="docutils literal notranslate"><span class="pre">caption</span></code> / <code class="docutils literal notranslate"><span class="pre">tags</span></code> are authoritative. <code class="docutils literal notranslate"><span class="pre">id</span></code> (a discarded
+<code class="docutils literal notranslate"><span class="pre">&quot;&lt;source&gt;:pending&quot;</span></code> placeholder), <code class="docutils literal notranslate"><span class="pre">uri</span></code>, <code class="docutils literal notranslate"><span class="pre">content_sha256</span></code>,
+<code class="docutils literal notranslate"><span class="pre">storage_mode</span></code>, <code class="docutils literal notranslate"><span class="pre">qc</span></code>, <code class="docutils literal notranslate"><span class="pre">duration_s</span></code>, <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code>, <code class="docutils literal notranslate"><span class="pre">channels</span></code> and the
+<code class="docutils literal notranslate"><span class="pre">embedding_*</span></code> fields are all minted downstream by
+<a class="reference internal" href="../index/ingest.html#foley.index.ingest.ingest_one" title="foley.index.ingest.ingest_one"><code class="xref py py-func docutils literal notranslate"><span class="pre">ingest_one()</span></code></a> (the façade passes <code class="docutils literal notranslate"><span class="pre">sound_id=None</span></code> so
+the stored id is the decoded-PCM content hash). <a class="reference internal" href="#foley.sources.base.GeneratedClip.audio_bytes" title="foley.sources.base.GeneratedClip.audio_bytes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">audio_bytes</span></code></a> lives ONLY
+here and is never serialized — a <code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code> holds a <code class="docutils literal notranslate"><span class="pre">uri</span></code>, never bytes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.sources.base.GeneratedClip.audio_bytes">
+<span class="sig-name descname"><span class="pre">audio_bytes</span></span><a class="headerlink" href="#foley.sources.base.GeneratedClip.audio_bytes" title="Link to this definition"></a></dt>
+<dd><p>The generated audio as encoded container bytes (WAV/FLAC/…),
+transient and in-memory only — consumed once by the ingest pipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.sources.base.GeneratedClip.candidate">
+<span class="sig-name descname"><span class="pre">candidate</span></span><a class="headerlink" href="#foley.sources.base.GeneratedClip.candidate" title="Link to this definition"></a></dt>
+<dd><p>The report-10 <a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>
+(<code class="docutils literal notranslate"><span class="pre">origin=CandidateOrigin.generated</span></code>) carrying the authoritative
+<a class="reference internal" href="../base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a> (<code class="docutils literal notranslate"><span class="pre">is_ai_generated=True</span></code> + the
+generation-provenance block) plus the prompt caption + seed tags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../foley.html#foley.Candidate" title="foley.Candidate">Candidate</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.sources.base.GeneratedClip.notes">
+<span class="sig-name descname"><span class="pre">notes</span></span><a class="headerlink" href="#foley.sources.base.GeneratedClip.notes" title="Link to this definition"></a></dt>
+<dd><p>Generation-time messages (<code class="docutils literal notranslate"><span class="pre">on_unsupported_param='warn'</span></code> drops,
+output-format fallbacks, …). The
+<a class="reference internal" href="generate.html#foley.sources.generate.generate" title="foley.sources.generate.generate"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.sources.generate.generate()</span></code></a> façade folds these into the
+stored <a class="reference internal" href="../index/ingest.html#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestResult</span></code></a>‘s <code class="docutils literal notranslate"><span class="pre">notes</span></code> so they
+surface in the run report.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -419,6 +544,60 @@ gate input — pass <code class="docutils literal notranslate"><span class="pre"
 <dt class="sig sig-object py" id="foley.sources.base.corpora_in_rings">
 <span class="sig-prename descclassname"><span class="pre">foley.sources.base.</span></span><span class="sig-name descname"><span class="pre">corpora_in_rings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.sources.base.CorpusAdapter" title="foley.sources.base.CorpusAdapter"><span class="pre">CorpusAdapter</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/sources/base.html#corpora_in_rings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.base.corpora_in_rings" title="Link to this definition"></a></dt>
 <dd><p>Registered adapters whose ring is in <code class="docutils literal notranslate"><span class="pre">rings</span></code> (sorted by name).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.sources.base.generated_license">
+<span class="sig-prename descclassname"><span class="pre">foley.sources.base.</span></span><span class="sig-name descname"><span class="pre">generated_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generation_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rights_verified</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generation_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generation_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disclosure_recommended</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watermark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c2pa_manifest_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overrides</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">creator_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribution_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><span class="pre">LicenseRecord</span></a></span></span><a class="reference internal" href="../../../_modules/foley/sources/base.html#generated_license"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.base.generated_license" title="Link to this definition"></a></dt>
+<dd><p>Build an AI-generated <a class="reference internal" href="../base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a>, flags derived + provenance stamped.</p>
+<p>The generation sibling of <a class="reference internal" href="#foley.sources.base.bulk_license" title="foley.sources.base.bulk_license"><code class="xref py py-func docutils literal notranslate"><span class="pre">bulk_license()</span></code></a> / <a class="reference internal" href="#foley.sources.base.api_license" title="foley.sources.base.api_license"><code class="xref py py-func docutils literal notranslate"><span class="pre">api_license()</span></code></a>
+(<code class="docutils literal notranslate"><span class="pre">acquisition_method=generated</span></code>): it routes through the shared
+<code class="xref py py-func docutils literal notranslate"><span class="pre">_build_license()</span></code> core — so the eight permission flags are DERIVED from
+<code class="docutils literal notranslate"><span class="pre">license_id</span></code> by <a class="reference internal" href="../licensing.html#foley.licensing.apply_license_flags" title="foley.licensing.apply_license_flags"><code class="xref py py-func docutils literal notranslate"><span class="pre">apply_license_flags()</span></code></a>, never hand-set —
+and then stamps the generation-provenance block in exactly one place, so every
+generate adapter (Stable Audio Open, ElevenLabs, …) records provenance
+identically (open-closed).</p>
+<p>The consequences flow automatically from the two generator rows in
+<a class="reference internal" href="../licensing.html#foley.licensing.LICENSE_FLAGS" title="foley.licensing.LICENSE_FLAGS"><code class="xref py py-data docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code></a>: <code class="docutils literal notranslate"><span class="pre">cache_bytes_ok=True</span></code> (⇒ by-value
+storage), <code class="docutils literal notranslate"><span class="pre">ai_training_ok=False</span></code> (the record keeps this restriction — the
+generate façade consents to <em>embed+persist</em> via <code class="docutils literal notranslate"><span class="pre">allow_ai_training_forbidden</span></code>
+but never flips the flag, so <a class="reference internal" href="../../foley.html#foley.keep" title="foley.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.keep()</span></code></a> still rejects the sound for any
+<code class="docutils literal notranslate"><span class="pre">IntendedUse(will_train=True)</span></code>), and — for <code class="docutils literal notranslate"><span class="pre">Stability-Community</span></code> —
+<code class="docutils literal notranslate"><span class="pre">revenue_cap_usd=1_000_000</span></code> (enforced by <a class="reference internal" href="../../foley.html#foley.keep" title="foley.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.keep()</span></code></a> at select time).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – The generator tag (e.g. <code class="docutils literal notranslate"><span class="pre">'stable_audio'</span></code> / <code class="docutils literal notranslate"><span class="pre">'elevenlabs'</span></code>).</p></li>
+<li><p><strong>license_id</strong> – The generator license id (<code class="docutils literal notranslate"><span class="pre">'Stability-Community'</span></code> /
+<code class="docutils literal notranslate"><span class="pre">'ElevenLabs-SFX'</span></code> — a key of <code class="docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code>).</p></li>
+<li><p><strong>generator_model</strong> – The model identifier (e.g. <code class="docutils literal notranslate"><span class="pre">'stable-audio-open-1.0'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'eleven_text_to_sound_v2'</span></code>).</p></li>
+<li><p><strong>generation_prompt</strong> – The user prompt, verbatim.</p></li>
+<li><p><strong>rights_verified</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> (a generator license is authoritatively known);
+MUST be <code class="docutils literal notranslate"><span class="pre">True</span></code> or <a class="reference internal" href="../../foley.html#foley.keep" title="foley.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.keep()</span></code></a> rejects the sound.</p></li>
+<li><p><strong>generator_version</strong> – Optional model/version string.</p></li>
+<li><p><strong>generation_seed</strong> – The reproducibility seed (an <code class="docutils literal notranslate"><span class="pre">int</span></code> for a seeded
+Stable-Audio-Open run; <code class="docutils literal notranslate"><span class="pre">None</span></code> for a non-deterministic backend).</p></li>
+<li><p><strong>generation_params</strong> – The RESOLVED NATIVE params actually sent to the backend
+(e.g. <code class="docutils literal notranslate"><span class="pre">guidance_scale</span></code> — not the unified <code class="docutils literal notranslate"><span class="pre">prompt_influence</span></code> —
+<code class="docutils literal notranslate"><span class="pre">audio_end_in_s</span></code>, …), for reproducibility + audit.</p></li>
+<li><p><strong>disclosure_recommended</strong> – EU AI Act Art. 50 hint (default <code class="docutils literal notranslate"><span class="pre">True</span></code>); makes the
+credits AI-disclosure line render immediately (#9a already reads it).</p></li>
+<li><p><strong>watermark</strong> – Pass-through carrier for #9b (AudioSeal); <code class="docutils literal notranslate"><span class="pre">None</span></code> until then.</p></li>
+<li><p><strong>c2pa_manifest_ref</strong> – Pass-through carrier for #9b (C2PA); <code class="docutils literal notranslate"><span class="pre">None</span></code> until then.</p></li>
+<li><p><strong>overrides</strong> – Optional per-source flag overrides (rare for generation).</p></li>
+<li><p><strong>source_id</strong> – Optional source-native id, for provenance.</p></li>
+<li><p><strong>source_url</strong> – Optional human-resolvable URL.</p></li>
+<li><p><strong>license_url</strong> – Optional license URL/label.</p></li>
+<li><p><strong>creator_name</strong> – Optional creator (usually unset for generation).</p></li>
+<li><p><strong>attribution_text</strong> – Optional ready-made attribution string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A populated <code class="docutils literal notranslate"><span class="pre">LicenseRecord</span></code> with derived flags applied AND
+<code class="docutils literal notranslate"><span class="pre">is_ai_generated=True</span></code> plus the full generation-provenance block.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

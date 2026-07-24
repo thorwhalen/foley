@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.sources.generate &mdash; foley 0.0.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=53b53b71"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.sources.generate</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.sources.generate</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;``generate`` — the live generation-source façade (SOURCE → INDEX in one call).</span>
+
+<span class="sd">The generate sibling of :func:`foley.sources.pull.add_from`: resolve a registered</span>
+<span class="sd">:class:`~foley.sources.base.GenerateAdapter`, synthesize a sound from a prompt, and</span>
+<span class="sd">run the resulting bytes through the SAME :func:`foley.index.ingest.ingest_one`</span>
+<span class="sd">pipeline the local, bulk, and retrieve paths use — so decode / QC / embed / tag /</span>
+<span class="sd">store are **not forked**. The division of labor mirrors ``add_from`` exactly: the</span>
+<span class="sd">ADAPTER owns audio synthesis + license construction (it holds the model, seed, and</span>
+<span class="sd">resolved native params), the FAÇADE owns the ``ingest_one`` call + the</span>
+<span class="sd">:class:`~foley.index.ingest.IngestReport`.</span>
+
+<span class="sd">Two differences from the retrieve path, both load-bearing:</span>
+
+<span class="sd">* **By-value storage — the generation flywheel.** Both generator licenses</span>
+<span class="sd">  (``Stability-Community``, ``ElevenLabs-SFX``) carry ``cache_bytes_ok=True``, so</span>
+<span class="sd">  the bytes are stored by-value (the opposite of Freesound&#39;s by-reference); every</span>
+<span class="sd">  generation becomes a first-class, re-searchable, locally-served library entry —</span>
+<span class="sd">  a future free retrieval. The id is the decoded-PCM content hash</span>
+<span class="sd">  (``sound_id=None``), so a byte-identical regeneration content-dedups</span>
+<span class="sd">  (``skipped_dup``) and is never stored twice.</span>
+<span class="sd">* **Operator-consented AI-training gate.** Both generator licenses carry</span>
+<span class="sd">  ``ai_training_ok=False``, which ``ingest_one``&#39;s universal fail-closed gate would</span>
+<span class="sd">  reject. The user calling :func:`foley.generate` and keeping the result IS the</span>
+<span class="sd">  explicit consent (they asked to create + persist THIS sound), so the façade calls</span>
+<span class="sd">  ``ingest_one(..., allow_ai_training_forbidden=True)`` — the SAME lever</span>
+<span class="sd">  :func:`foley.bootstrap.bootstrap` uses for Sonniss / BBC RemArc. The consent is to</span>
+<span class="sd">  *embed + persist only*: ``ai_training_ok`` stays ``False`` on the record, so</span>
+<span class="sd">  :func:`foley.keep` still refuses the sound for any ``IntendedUse(will_train=True)``</span>
+<span class="sd">  downstream.</span>
+
+<span class="sd">The public :func:`foley.generate` (a thin wrapper in :mod:`foley`) returns the</span>
+<span class="sd">single stored :class:`~foley.base.Candidate` (report 10 §4.2); this workhorse</span>
+<span class="sd">returns the full :class:`~foley.index.ingest.IngestReport` for ``add_from``-symmetric</span>
+<span class="sd">resilience — a backend failure becomes a recorded ``error`` entry, never an</span>
+<span class="sd">unhandled exception.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">CandidateOrigin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..index.ingest</span><span class="w"> </span><span class="kn">import</span> <span class="n">IngestReport</span><span class="p">,</span> <span class="n">IngestResult</span><span class="p">,</span> <span class="n">ingest_one</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_source</span>
+
+<span class="c1">#: The consent note stamped on a stored generation whose license forbids AI</span>
+<span class="c1">#: training (mirrors :func:`foley.bootstrap.bootstrap`&#39;s Ring-2 acknowledgement).</span>
+<span class="n">_CONSENT_NOTE</span> <span class="o">=</span> <span class="s2">&quot;AI-training restriction acknowledged by operator (consent recorded)&quot;</span>
+
+
+<div class="viewcode-block" id="GenerationError">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.GenerationError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GenerationError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised by :func:`foley.generate` when a backend yields no stored sound.</span>
+
+<span class="sd">    Carries the full :class:`~foley.index.ingest.IngestReport` and the terminal</span>
+<span class="sd">    :attr:`status` so a caller can react distinctly to ``quarantined`` (QC-rejected —</span>
+<span class="sd">    e.g. regenerate), ``rights_blocked``, or ``error``. The lower-level</span>
+<span class="sd">    :func:`generate` workhorse never raises this — it always returns an inspectable</span>
+<span class="sd">    report; only the public :func:`foley.generate` promise raises.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        report: The :class:`~foley.index.ingest.IngestReport` from the run.</span>
+<span class="sd">        status: The terminal :class:`~foley.index.ingest.IngestResult` status</span>
+<span class="sd">            (``&#39;quarantined&#39;`` | ``&#39;rights_blocked&#39;`` | ``&#39;error&#39;`` | …).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">report</span><span class="p">:</span> <span class="n">IngestReport</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="n">report</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span></div>
+
+
+
+<div class="viewcode-block" id="candidate_of">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.candidate_of">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">candidate_of</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">IngestResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Candidate</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap a stored :class:`~foley.index.ingest.IngestResult` as a generated candidate.</span>
+
+<span class="sd">    The report-10 §4.2 shape: retrieval and generation return the same</span>
+<span class="sd">    :class:`~foley.base.Candidate`, differing only in ``origin``. Use on a</span>
+<span class="sd">    ``pass`` / ``warn`` result (its ``record`` is the canonical, stored</span>
+<span class="sd">    :class:`~foley.base.SoundRecord`).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        result: A stored ingest result (``result.record`` is not ``None``).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`~foley.base.Candidate` with ``origin=CandidateOrigin.generated``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Candidate</span><span class="p">(</span><span class="n">sound</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">record</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">CandidateOrigin</span><span class="o">.</span><span class="n">generated</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="generate">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.generate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stable_audio&quot;</span><span class="p">,</span>
+    <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">store</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">adapter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">affordances</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a sound via ``backend`` and ingest it (by-value) into ``library``.</span>
+
+<span class="sd">    Progressive disclosure: ``generate(&quot;a single wooden door creak&quot;)`` works out of</span>
+<span class="sd">    the box (the local Stable Audio Open backend, into the process-wide default</span>
+<span class="sd">    library); every other knob is an optional keyword. The generated bytes are</span>
+<span class="sd">    routed through the shared :func:`~foley.index.ingest.ingest_one` pipeline</span>
+<span class="sd">    (decode → QC → embed → tag → store), stored by-value with a content-hash id.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: The natural-language sound description.</span>
+<span class="sd">        backend: A registered generate-source name (``&#39;stable_audio&#39;`` (default,</span>
+<span class="sd">            local) | ``&#39;elevenlabs&#39;`` (hosted)).</span>
+<span class="sd">        library: Target :class:`~foley.index.library.SoundLibrary` (default: the</span>
+<span class="sd">            process-wide default library).</span>
+<span class="sd">        store: If ``False``, synthesize + enrich but do not add to the library</span>
+<span class="sd">            (probe/QC/embed only — a preview).</span>
+<span class="sd">        adapter: An optional pre-built adapter to use instead of the registry&#39;s</span>
+<span class="sd">            (the dependency-injection seam — a test passes a fake-transport /</span>
+<span class="sd">            fake-pipeline adapter; production omits it and the registry lazily</span>
+<span class="sd">            builds one).</span>
+<span class="sd">        **affordances: Unified generation affordances forwarded to the adapter&#39;s</span>
+<span class="sd">            ``generate`` (``duration``, ``prompt_influence``, ``negative_prompt``,</span>
+<span class="sd">            ``steps``, ``seed``, ``loop``, ``output_format`` — see</span>
+<span class="sd">            :data:`foley.base.GENERATION_AFFORDANCES`); unsupported ones are</span>
+<span class="sd">            warn-and-dropped per the source&#39;s ``on_unsupported_param``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An :class:`~foley.index.ingest.IngestReport` — inspect ``.ingested`` for the</span>
+<span class="sd">        stored record (``storage_mode == by_value``) and ``.summary()`` for counts.</span>
+<span class="sd">        A backend or ingest failure is recorded as a single ``error`` result, never</span>
+<span class="sd">        raised (``add_from``-symmetric resilience).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..index.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_library</span>
+
+    <span class="n">lib</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
+    <span class="n">gen</span> <span class="o">=</span> <span class="n">adapter</span> <span class="k">if</span> <span class="n">adapter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">get_source</span><span class="p">(</span><span class="n">backend</span><span class="p">)[</span><span class="s2">&quot;adapter&quot;</span><span class="p">]</span>
+
+    <span class="n">report</span> <span class="o">=</span> <span class="n">IngestReport</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># A synthesis failure (auth / rate-limit / model load / bad response) yields an</span>
+    <span class="c1"># inspectable report with one error entry, never an unhandled exception.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
+            <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:generate&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">report</span>
+
+    <span class="n">lic</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span>
+    <span class="c1"># The bytes ride WITH the candidate on the transient GeneratedClip (adapters</span>
+    <span class="c1"># never touch storage); the façade hands them to the ONE shared ingest_one —</span>
+    <span class="c1"># by-value (cache_bytes_ok=True), PCM-hash id (sound_id=None), with operator</span>
+    <span class="c1"># consent for the ai_training_ok=False generator license. A separate try guards</span>
+    <span class="c1"># the fetch/decode so an undecodable response is an error, not a crash.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">ingest_one</span><span class="p">(</span>
+            <span class="n">clip</span><span class="o">.</span><span class="n">audio_bytes</span><span class="p">,</span>
+            <span class="n">library</span><span class="o">=</span><span class="n">lib</span><span class="p">,</span>
+            <span class="n">sound_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># generated audio → decoded-PCM content-hash id (+dedup)</span>
+            <span class="n">license</span><span class="o">=</span><span class="n">lic</span><span class="p">,</span>  <span class="c1"># is_ai_generated + provenance + flags derived from license_id</span>
+            <span class="n">captioner</span><span class="o">=</span><span class="n">_metadata_captioner</span><span class="p">(</span><span class="n">prompt</span><span class="p">),</span>
+            <span class="n">seed_tags</span><span class="o">=</span><span class="p">(</span><span class="n">clip</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span>
+            <span class="n">allow_ai_training_forbidden</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># operator consent (embed+persist only)</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
+            <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:ingest&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">report</span>
+
+    <span class="c1"># Surface the adapter&#39;s generation-time notes (unsupported-affordance drops,</span>
+    <span class="c1"># output-format fallbacks) in the run report.</span>
+    <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="p">:</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="p">)</span>
+    <span class="c1"># Record the operator-consent acknowledgement on a stored generation whose</span>
+    <span class="c1"># license forbids AI training (mirrors bootstrap&#39;s Ring-2 note). ai_training_ok</span>
+    <span class="c1"># stays False on the record — keep() still rejects it for will_train uses.</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span><span class="p">:</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_CONSENT_NOTE</span><span class="p">)</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">report</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_metadata_captioner</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The prompt as the sound&#39;s caption (feeds the BM25 keyword index).</span>
+
+<span class="sd">    Imported from :mod:`foley.bootstrap` locally to avoid a</span>
+<span class="sd">    ``sources`` ↔ ``bootstrap`` import cycle (same seam :func:`add_from` uses).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..bootstrap</span><span class="w"> </span><span class="kn">import</span> <span class="n">MetadataCaptioner</span>
+
+    <span class="k">return</span> <span class="n">MetadataCaptioner</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span> <span class="k">if</span> <span class="n">prompt</span> <span class="k">else</span> <span class="kc">None</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

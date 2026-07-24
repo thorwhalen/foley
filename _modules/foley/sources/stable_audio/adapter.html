@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.sources.stable_audio.adapter &mdash; foley 0.0.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=53b53b71"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.sources.stable_audio.adapter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.sources.stable_audio.adapter</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Stable Audio Open 1.0 generate adapter — local ``diffusers`` inference.</span>
+
+<span class="sd">Turns a natural-language prompt into a :class:`~foley.sources.base.GeneratedClip`</span>
+<span class="sd">via ``diffusers.StableAudioPipeline`` running on-device (report 02 §Stable Audio</span>
+<span class="sd">Open). The model produces a 44.1 kHz stereo waveform (up to ~47 s); the adapter</span>
+<span class="sd">encodes it to container bytes, which the :func:`foley.sources.generate.generate`</span>
+<span class="sd">façade stores **by-value** (the generation flywheel) through the shared</span>
+<span class="sd">:func:`~foley.index.ingest.ingest_one` pipeline.</span>
+
+<span class="sd">Load-bearing details verified against the diffusers docs + HF model card:</span>
+
+<span class="sd">* **The CFG kwarg is ``guidance_scale``** (NOT ``cfg_scale``), and it MUST be passed</span>
+<span class="sd">  explicitly or the pipeline silently uses its own default 7.0. foley maps its</span>
+<span class="sd">  unified ``prompt_influence`` (0..1) onto it via</span>
+<span class="sd">  ``guidance_scale = 1 + prompt_influence * (cfg_max - 1)`` (``cfg_max`` configurable).</span>
+<span class="sd">* **Output is channel-first ``(channels, samples)``** — transposed to the</span>
+<span class="sd">  time-first ``(frames, channels)`` foley/soundfile convention before encoding.</span>
+<span class="sd">* **The sample rate is read off the pipeline** (``pipe.vae.sampling_rate`` = 44100),</span>
+<span class="sd">  never hardcoded.</span>
+<span class="sd">* **``loop`` and ``output_format`` have no native pipeline param** (loop is a future</span>
+<span class="sd">  WEAVE crossfade; format is the audio-write layer) — they warn-and-drop; the</span>
+<span class="sd">  adapter never fabricates a pipeline kwarg.</span>
+
+<span class="sd">``torch`` / ``diffusers`` are imported lazily inside the methods (the</span>
+<span class="sd">``foley[stable-audio]`` extra), so ``import foley`` and source discovery stay</span>
+<span class="sd">dol-only. The local-model DI seam is ``pipeline=`` (the analog of the hosted</span>
+<span class="sd">adapters&#39; ``http=``): inject a fake pipeline and no ML stack loads at all — the</span>
+<span class="sd">whole adapter is testable with no torch. The adapter performs NO storage/library</span>
+<span class="sd">access; the façade converges it on the shared ingest pipeline.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">...base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">CandidateOrigin</span><span class="p">,</span> <span class="n">SoundRecord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeneratedClip</span><span class="p">,</span> <span class="n">generated_license</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOURCE_CONFIG</span>
+
+
+<div class="viewcode-block" id="StableAudioAdapter">
+<a class="viewcode-back" href="../../../../module_docs/foley/sources/stable_audio/adapter.html#foley.sources.stable_audio.adapter.StableAudioAdapter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StableAudioAdapter</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Local Stable Audio Open 1.0 generate adapter (a :class:`~foley.sources.base.GenerateAdapter`).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: The ``SOURCE_CONFIG`` (defaults to the module&#39;s). Passed positionally</span>
+<span class="sd">            by the registry&#39;s lazy loader (the arioso ``Adapter(config)`` convention).</span>
+<span class="sd">        pipeline: An optional pre-built pipeline (the dependency-injection seam —</span>
+<span class="sd">            a test injects a fake callable exposing ``.vae.sampling_rate`` +</span>
+<span class="sd">            ``.device``; production omits it and the real</span>
+<span class="sd">            ``diffusers.StableAudioPipeline`` lazy-loads on first generation).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">SOURCE_CONFIG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_injected_pipeline</span> <span class="o">=</span> <span class="n">pipeline</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_pipeline</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># -- pipeline lifecycle -------------------------------------------------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_pipe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the pipeline — the injected one, else lazy-load + cache it.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_injected_pipeline</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_injected_pipeline</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_pipeline</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_pipeline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_pipeline</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_pipeline</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Lazy-load ``StableAudioPipeline`` (float16 on CUDA, float32 on CPU).&quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>  <span class="c1"># lazy: foley[stable-audio]; keeps `import foley` dol-only</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">diffusers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StableAudioPipeline</span>
+
+        <span class="n">model_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;native_defaults&quot;</span><span class="p">][</span><span class="s2">&quot;model_id&quot;</span><span class="p">]</span>
+        <span class="n">cuda</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span>
+        <span class="c1"># float16-on-CPU is broken/very slow — branch the dtype on the device.</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float16</span> <span class="k">if</span> <span class="n">cuda</span> <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">float32</span>
+        <span class="n">pipe</span> <span class="o">=</span> <span class="n">StableAudioPipeline</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="n">torch_dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pipe</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">cuda</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+
+    <span class="c1"># -- GenerateAdapter surface --------------------------------------------</span>
+
+<div class="viewcode-block" id="StableAudioAdapter.generate">
+<a class="viewcode-back" href="../../../../module_docs/foley/sources/stable_audio/adapter.html#foley.sources.stable_audio.adapter.StableAudioAdapter.generate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prompt_influence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
+        <span class="n">negative_prompt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">steps</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;wav&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GeneratedClip</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a sound for ``prompt``; return its bytes + provisional candidate.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            prompt: The natural-language sound description (required).</span>
+<span class="sd">            duration: Seconds (clamped to the model&#39;s ~47.55 s max). ``None`` uses a</span>
+<span class="sd">                sane 10 s default (NOT the 47.55 s maximum).</span>
+<span class="sd">            prompt_influence: ``0..1`` unified guidance; mapped to the native</span>
+<span class="sd">                ``guidance_scale`` via ``1 + prompt_influence * (cfg_max - 1)``.</span>
+<span class="sd">                Default ``0.3`` → ``guidance_scale ≈ 5.2``.</span>
+<span class="sd">            negative_prompt: Content to exclude (ignored by the model when guidance</span>
+<span class="sd">                ≤ 1).</span>
+<span class="sd">            steps: Diffusion steps (native ``num_inference_steps``); default 200.</span>
+<span class="sd">            seed: Reproducibility seed → a per-device ``torch.Generator``; recorded</span>
+<span class="sd">                in provenance. ``None`` → non-deterministic (no torch import).</span>
+<span class="sd">            loop: No native param (a future WEAVE crossfade) — warn-and-drop.</span>
+<span class="sd">            output_format: No native param (the audio-write layer) — warn-and-drop;</span>
+<span class="sd">                the clip is archived as FLAC by ingest regardless.</span>
+<span class="sd">            **kw: Extra/unknown affordances (warn-and-dropped).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A :class:`~foley.sources.base.GeneratedClip` (``origin=generated``,</span>
+<span class="sd">            ``license_id=&#39;Stability-Community&#39;``, ``is_ai_generated=True``,</span>
+<span class="sd">            ``generation_seed`` captured).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;native_defaults&quot;</span><span class="p">]</span>
+        <span class="n">notes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_warn_unsupported</span><span class="p">(</span><span class="n">loop</span><span class="o">=</span><span class="n">loop</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="n">output_format</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+        <span class="c1"># Resolve unified affordances -&gt; native params (recorded verbatim, so</span>
+        <span class="c1"># provenance never carries the unified names — the guard against arioso&#39;s</span>
+        <span class="c1"># confirmed cfg_scale mislabel + dropped-guidance bug).</span>
+        <span class="n">guidance_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">prompt_influence</span> <span class="o">*</span> <span class="p">(</span><span class="n">nd</span><span class="p">[</span><span class="s2">&quot;cfg_max&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">audio_end_in_s</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+            <span class="n">duration</span> <span class="k">if</span> <span class="n">duration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">nd</span><span class="p">[</span><span class="s2">&quot;duration_default_s&quot;</span><span class="p">],</span>
+            <span class="n">nd</span><span class="p">[</span><span class="s2">&quot;duration_max_s&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">native</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;audio_end_in_s&quot;</span><span class="p">:</span> <span class="n">audio_end_in_s</span><span class="p">,</span>
+            <span class="s2">&quot;audio_start_in_s&quot;</span><span class="p">:</span> <span class="n">nd</span><span class="p">[</span><span class="s2">&quot;audio_start_in_s&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;num_inference_steps&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="n">steps</span> <span class="k">if</span> <span class="n">steps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">nd</span><span class="p">[</span><span class="s2">&quot;num_inference_steps_default&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;guidance_scale&quot;</span><span class="p">:</span> <span class="n">guidance_scale</span><span class="p">,</span>
+            <span class="s2">&quot;negative_prompt&quot;</span><span class="p">:</span> <span class="n">negative_prompt</span><span class="p">,</span>
+            <span class="s2">&quot;num_waveforms_per_prompt&quot;</span><span class="p">:</span> <span class="n">nd</span><span class="p">[</span><span class="s2">&quot;num_waveforms_per_prompt&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+
+        <span class="n">audio_bytes</span><span class="p">,</span> <span class="n">sample_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invoke</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">native</span><span class="o">=</span><span class="n">native</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+        <span class="n">resolved</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">native</span><span class="p">,</span> <span class="n">sample_rate</span><span class="o">=</span><span class="n">sample_rate</span><span class="p">,</span> <span class="n">model_id</span><span class="o">=</span><span class="n">nd</span><span class="p">[</span><span class="s2">&quot;model_id&quot;</span><span class="p">])</span>
+        <span class="n">lic</span> <span class="o">=</span> <span class="n">generated_license</span><span class="p">(</span>
+            <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">license_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;license&quot;</span><span class="p">][</span><span class="s2">&quot;default_license_id&quot;</span><span class="p">],</span>
+            <span class="n">generator_model</span><span class="o">=</span><span class="n">nd</span><span class="p">[</span><span class="s2">&quot;generator_version&quot;</span><span class="p">],</span>
+            <span class="n">generator_version</span><span class="o">=</span><span class="n">nd</span><span class="p">[</span><span class="s2">&quot;generator_version&quot;</span><span class="p">],</span>
+            <span class="n">generation_prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+            <span class="n">generation_seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>  <span class="c1"># captured even when None</span>
+            <span class="n">generation_params</span><span class="o">=</span><span class="n">resolved</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">SoundRecord</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:pending&quot;</span><span class="p">,</span>  <span class="c1"># discarded placeholder (façade ingests sound_id=None)</span>
+            <span class="n">license</span><span class="o">=</span><span class="n">lic</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">Candidate</span><span class="p">(</span><span class="n">sound</span><span class="o">=</span><span class="n">record</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">CandidateOrigin</span><span class="o">.</span><span class="n">generated</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GeneratedClip</span><span class="p">(</span><span class="n">audio_bytes</span><span class="o">=</span><span class="n">audio_bytes</span><span class="p">,</span> <span class="n">candidate</span><span class="o">=</span><span class="n">candidate</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="n">notes</span><span class="p">)</span></div>
+
+
+    <span class="c1"># -- helpers ------------------------------------------------------------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_warn_unsupported</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Collect notes for affordances the pipeline has no native param for.&quot;&quot;&quot;</span>
+        <span class="n">notes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">loop</span><span class="p">:</span>
+            <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s2">&quot;loop has no native Stable Audio Open param (a future WEAVE &quot;</span>
+                <span class="s2">&quot;crossfade); ignored&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">output_format</span> <span class="ow">and</span> <span class="n">output_format</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">][</span><span class="s2">&quot;default_format&quot;</span><span class="p">]:</span>
+            <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;output_format </span><span class="si">{</span><span class="n">output_format</span><span class="si">!r}</span><span class="s2"> is applied by the audio layer, &quot;</span>
+                <span class="s2">&quot;not the model; ignored (archived as FLAC on ingest)&quot;</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kw</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;affordance </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> is not a known Stable Audio param; ignored&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">notes</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_invoke</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">native</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the pipeline and return ``(encoded_bytes, sample_rate)``.</span>
+
+<span class="sd">        Builds a per-device ``torch.Generator`` only when ``seed`` is set (so a</span>
+<span class="sd">        ``seed=None`` generation never imports torch — the fake-pipeline test path).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pipe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipe</span><span class="p">()</span>
+        <span class="n">generator</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>  <span class="c1"># lazy: only a seeded run needs a Generator</span>
+
+            <span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">pipe</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">seed</span><span class="p">))</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span>
+            <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+            <span class="n">output_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;native_defaults&quot;</span><span class="p">][</span><span class="s2">&quot;output_type&quot;</span><span class="p">],</span>
+            <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">native</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">sample_rate</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">vae</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">)</span>  <span class="c1"># read off the pipeline (44100)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">audios</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sample_rate</span><span class="p">),</span> <span class="n">sample_rate</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">audio</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Encode one waveform to container (FLAC) bytes for ingest.</span>
+
+<span class="sd">        The pipeline emits channel-first ``(channels, samples)``; transpose to the</span>
+<span class="sd">        time-first ``(frames, channels)`` foley/soundfile convention before encoding.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+        <span class="kn">from</span><span class="w"> </span><span class="nn">...audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">encode</span>
+
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># (channels, samples) -&gt; (samples, channels)</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">return</span> <span class="n">encode</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">)</span></div>
+
+
+
+<span class="c1">#: Registry convention (arioso): the loader imports ``adapter.Adapter``.</span>
+<span class="n">Adapter</span> <span class="o">=</span> <span class="n">StableAudioAdapter</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

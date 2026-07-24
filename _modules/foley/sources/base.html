@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.base &mdash; foley 0.0.7 documentation</title>
+  <title>foley.sources.base &mdash; foley 0.0.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=bbaf98b3"></script>
+      <script src="../../../_static/documentation_options.js?v=53b53b71"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -78,15 +78,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
 </ul>
 
@@ -140,6 +147,15 @@
 <span class="sd">:func:`register_corpus`; :func:`corpora_in_rings` / :func:`select_corpora` drive</span>
 <span class="sd">the ring policy in the bootstrap orchestrator. The registry is a plain dict — no</span>
 <span class="sd">auto-discovery / ``SOURCE_CONFIG`` (that is #5&#39;s concern).</span>
+
+<span class="sd">This module is also the home of the **live-source contracts** (auto-discovered by</span>
+<span class="sd">:mod:`foley.sources.registry`, not registered here): the retrieve</span>
+<span class="sd">:class:`SourceAdapter` (``search`` / ``get`` / ``download`` — Freesound, #5) and</span>
+<span class="sd">its sibling generate :class:`GenerateAdapter` (``generate`` → :class:`GeneratedClip`</span>
+<span class="sd">— Stable Audio Open, ElevenLabs, #6). All three adapter kinds share the license</span>
+<span class="sd">SSOT builders — :func:`bulk_license` (bulk), :func:`api_license` (retrieve), and</span>
+<span class="sd">:func:`generated_license` (generate) — thin wrappers over :func:`_build_license`</span>
+<span class="sd">so the derived permission flags stay single-sourced.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
@@ -152,6 +168,23 @@
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover - typing only</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">SoundRecord</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;ClipSpec&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CorpusAdapter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SourceAdapter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GenerateAdapter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GeneratedClip&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;UniformCorpus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;bulk_license&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;api_license&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;generated_license&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CORPUS_REGISTRY&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;register_corpus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ring_of&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;corpora_in_rings&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;select_corpora&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="ClipSpec">
@@ -259,6 +292,88 @@
 <a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.SourceAdapter.download">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a sound&#39;s bytes (honoring ``cache_bytes_ok`` at the storage gate).&quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="GeneratedClip">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.GeneratedClip">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GeneratedClip</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One freshly-generated sound: its transient bytes + a provisional candidate.</span>
+
+<span class="sd">    The return type of a :class:`GenerateAdapter`&#39;s ``generate`` — the envelope</span>
+<span class="sd">    that reconciles report 10 §4.2 (``generate -&gt; Candidate``: retrieval and</span>
+<span class="sd">    generation return the same shape) with foley&#39;s two non-negotiables:</span>
+
+<span class="sd">    * **adapters never touch storage** — so the bytes ride *with* the candidate in</span>
+<span class="sd">      an explicit field rather than being written anywhere, and</span>
+<span class="sd">    * **``ingest_one`` is never forked** — the :func:`foley.sources.generate.generate`</span>
+<span class="sd">      façade hands :attr:`audio_bytes` to the one shared pipeline (by-value), exactly</span>
+<span class="sd">      as :func:`foley.sources.pull.add_from` does for a retrieved download.</span>
+
+<span class="sd">    Generation is retrieval&#39;s ``search -&gt; Candidate`` and ``download -&gt; bytes``</span>
+<span class="sd">    *fused* into one call, because there is no server to re-fetch the bytes from.</span>
+
+<span class="sd">    Provisional/canonical split — on :attr:`candidate`\\ ``.sound`` only</span>
+<span class="sd">    ``license`` / ``caption`` / ``tags`` are authoritative. ``id`` (a discarded</span>
+<span class="sd">    ``&quot;&lt;source&gt;:pending&quot;`` placeholder), ``uri``, ``content_sha256``,</span>
+<span class="sd">    ``storage_mode``, ``qc``, ``duration_s``, ``sample_rate``, ``channels`` and the</span>
+<span class="sd">    ``embedding_*`` fields are all minted downstream by</span>
+<span class="sd">    :func:`~foley.index.ingest.ingest_one` (the façade passes ``sound_id=None`` so</span>
+<span class="sd">    the stored id is the decoded-PCM content hash). :attr:`audio_bytes` lives ONLY</span>
+<span class="sd">    here and is never serialized — a ``SoundRecord`` holds a ``uri``, never bytes.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        audio_bytes: The generated audio as encoded container bytes (WAV/FLAC/…),</span>
+<span class="sd">            transient and in-memory only — consumed once by the ingest pipeline.</span>
+<span class="sd">        candidate: The report-10 :class:`~foley.base.Candidate`</span>
+<span class="sd">            (``origin=CandidateOrigin.generated``) carrying the authoritative</span>
+<span class="sd">            :class:`~foley.base.LicenseRecord` (``is_ai_generated=True`` + the</span>
+<span class="sd">            generation-provenance block) plus the prompt caption + seed tags.</span>
+<span class="sd">        notes: Generation-time messages (``on_unsupported_param=&#39;warn&#39;`` drops,</span>
+<span class="sd">            output-format fallbacks, …). The</span>
+<span class="sd">            :func:`foley.sources.generate.generate` façade folds these into the</span>
+<span class="sd">            stored :class:`~foley.index.ingest.IngestResult`\\ &#39;s ``notes`` so they</span>
+<span class="sd">            surface in the run report.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span>
+    <span class="n">candidate</span><span class="p">:</span> <span class="s2">&quot;Candidate&quot;</span>
+    <span class="n">notes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="GenerateAdapter">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.GenerateAdapter">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GenerateAdapter</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The generation source contract (report 10 §4.2) — a SIBLING of ``SourceAdapter``.</span>
+
+<span class="sd">    A **generate** adapter (Stable Audio Open local, ElevenLabs Sound Effects</span>
+<span class="sd">    hosted; #6) synthesizes a sound from a prompt. It is a deliberate sibling of</span>
+<span class="sd">    the retrieve :class:`SourceAdapter` rather than an extra method on it, so that</span>
+<span class="sd">    ``SourceAdapter`` stays ``runtime_checkable`` for the retrieve trio</span>
+<span class="sd">    (``search`` / ``get`` / ``download``) alone.</span>
+
+<span class="sd">    Like a retrieve adapter, a generate adapter performs **no** storage or library</span>
+<span class="sd">    access: it maps foley&#39;s unified :data:`~foley.base.GENERATION_AFFORDANCES`</span>
+<span class="sd">    (prompt, duration, prompt_influence, negative_prompt, steps, seed, loop,</span>
+<span class="sd">    output_format) to its backend&#39;s native params (via ``SOURCE_CONFIG[&#39;param_map&#39;]``,</span>
+<span class="sd">    warning-and-dropping unsupported ones), builds the audio + a generated</span>
+<span class="sd">    :class:`~foley.base.LicenseRecord`, and returns a :class:`GeneratedClip`. The</span>
+<span class="sd">    :func:`foley.sources.generate.generate` façade converges it on the shared</span>
+<span class="sd">    ``ingest_one`` pipeline (by-value, operator-consented).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: Registry / façade key — ``&#39;stable_audio&#39;`` | ``&#39;elevenlabs&#39;`` | …</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+
+<div class="viewcode-block" id="GenerateAdapter.generate">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.GenerateAdapter.generate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GeneratedClip&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Synthesize a sound for ``prompt``; return its bytes + provisional candidate.&quot;&quot;&quot;</span>
         <span class="o">...</span></div>
 </div>
 
@@ -406,6 +521,103 @@
         <span class="n">creator_name</span><span class="o">=</span><span class="n">creator_name</span><span class="p">,</span>
         <span class="n">attribution_text</span><span class="o">=</span><span class="n">attribution_text</span><span class="p">,</span>
     <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="generated_license">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.generated_license">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generated_license</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">generator_model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">generation_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">rights_verified</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">generator_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">generation_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">generation_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">disclosure_recommended</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">watermark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">c2pa_manifest_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">overrides</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">license_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">creator_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">attribution_text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build an AI-generated :class:`~foley.base.LicenseRecord`, flags derived + provenance stamped.</span>
+
+<span class="sd">    The generation sibling of :func:`bulk_license` / :func:`api_license`</span>
+<span class="sd">    (``acquisition_method=generated``): it routes through the shared</span>
+<span class="sd">    :func:`_build_license` core — so the eight permission flags are DERIVED from</span>
+<span class="sd">    ``license_id`` by :func:`~foley.licensing.apply_license_flags`, never hand-set —</span>
+<span class="sd">    and then stamps the generation-provenance block in exactly one place, so every</span>
+<span class="sd">    generate adapter (Stable Audio Open, ElevenLabs, …) records provenance</span>
+<span class="sd">    identically (open-closed).</span>
+
+<span class="sd">    The consequences flow automatically from the two generator rows in</span>
+<span class="sd">    :data:`~foley.licensing.LICENSE_FLAGS`: ``cache_bytes_ok=True`` (⇒ by-value</span>
+<span class="sd">    storage), ``ai_training_ok=False`` (the record keeps this restriction — the</span>
+<span class="sd">    generate façade consents to *embed+persist* via ``allow_ai_training_forbidden``</span>
+<span class="sd">    but never flips the flag, so :func:`foley.keep` still rejects the sound for any</span>
+<span class="sd">    ``IntendedUse(will_train=True)``), and — for ``Stability-Community`` —</span>
+<span class="sd">    ``revenue_cap_usd=1_000_000`` (enforced by :func:`foley.keep` at select time).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        source: The generator tag (e.g. ``&#39;stable_audio&#39;`` / ``&#39;elevenlabs&#39;``).</span>
+<span class="sd">        license_id: The generator license id (``&#39;Stability-Community&#39;`` /</span>
+<span class="sd">            ``&#39;ElevenLabs-SFX&#39;`` — a key of ``LICENSE_FLAGS``).</span>
+<span class="sd">        generator_model: The model identifier (e.g. ``&#39;stable-audio-open-1.0&#39;``,</span>
+<span class="sd">            ``&#39;eleven_text_to_sound_v2&#39;``).</span>
+<span class="sd">        generation_prompt: The user prompt, verbatim.</span>
+<span class="sd">        rights_verified: ``True`` (a generator license is authoritatively known);</span>
+<span class="sd">            MUST be ``True`` or :func:`foley.keep` rejects the sound.</span>
+<span class="sd">        generator_version: Optional model/version string.</span>
+<span class="sd">        generation_seed: The reproducibility seed (an ``int`` for a seeded</span>
+<span class="sd">            Stable-Audio-Open run; ``None`` for a non-deterministic backend).</span>
+<span class="sd">        generation_params: The RESOLVED NATIVE params actually sent to the backend</span>
+<span class="sd">            (e.g. ``guidance_scale`` — not the unified ``prompt_influence`` —</span>
+<span class="sd">            ``audio_end_in_s``, …), for reproducibility + audit.</span>
+<span class="sd">        disclosure_recommended: EU AI Act Art. 50 hint (default ``True``); makes the</span>
+<span class="sd">            credits AI-disclosure line render immediately (#9a already reads it).</span>
+<span class="sd">        watermark: Pass-through carrier for #9b (AudioSeal); ``None`` until then.</span>
+<span class="sd">        c2pa_manifest_ref: Pass-through carrier for #9b (C2PA); ``None`` until then.</span>
+<span class="sd">        overrides: Optional per-source flag overrides (rare for generation).</span>
+<span class="sd">        source_id: Optional source-native id, for provenance.</span>
+<span class="sd">        source_url: Optional human-resolvable URL.</span>
+<span class="sd">        license_url: Optional license URL/label.</span>
+<span class="sd">        creator_name: Optional creator (usually unset for generation).</span>
+<span class="sd">        attribution_text: Optional ready-made attribution string.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A populated ``LicenseRecord`` with derived flags applied AND</span>
+<span class="sd">        ``is_ai_generated=True`` plus the full generation-provenance block.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">record</span> <span class="o">=</span> <span class="n">_build_license</span><span class="p">(</span>
+        <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+        <span class="n">license_id</span><span class="o">=</span><span class="n">license_id</span><span class="p">,</span>
+        <span class="n">rights_verified</span><span class="o">=</span><span class="n">rights_verified</span><span class="p">,</span>
+        <span class="n">acquisition_method</span><span class="o">=</span><span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">generated</span><span class="p">,</span>
+        <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">,</span>
+        <span class="n">source_id</span><span class="o">=</span><span class="n">source_id</span><span class="p">,</span>
+        <span class="n">source_url</span><span class="o">=</span><span class="n">source_url</span><span class="p">,</span>
+        <span class="n">license_url</span><span class="o">=</span><span class="n">license_url</span><span class="p">,</span>
+        <span class="n">creator_name</span><span class="o">=</span><span class="n">creator_name</span><span class="p">,</span>
+        <span class="n">attribution_text</span><span class="o">=</span><span class="n">attribution_text</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Generation-provenance block — stamped after flag derivation, in one place, so</span>
+    <span class="c1"># no adapter hand-sets flags and every generator populates provenance identically.</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">is_ai_generated</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">generator_model</span> <span class="o">=</span> <span class="n">generator_model</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">generator_version</span> <span class="o">=</span> <span class="n">generator_version</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">generation_prompt</span> <span class="o">=</span> <span class="n">generation_prompt</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">generation_seed</span> <span class="o">=</span> <span class="n">generation_seed</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">generation_params</span> <span class="o">=</span> <span class="n">generation_params</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">disclosure_recommended</span> <span class="o">=</span> <span class="n">disclosure_recommended</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">watermark</span> <span class="o">=</span> <span class="n">watermark</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span> <span class="o">=</span> <span class="n">c2pa_manifest_ref</span>
+    <span class="k">return</span> <span class="n">record</span></div>
 
 
 

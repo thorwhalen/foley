@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.http &mdash; foley 0.0.7 documentation</title>
+  <title>foley.sources.http &mdash; foley 0.0.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=bbaf98b3"></script>
+      <script src="../../../_static/documentation_options.js?v=53b53b71"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -78,15 +78,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
 </ul>
 
@@ -130,11 +137,17 @@
 
 <span class="sd">A :class:`Transport` is any callable with the shape::</span>
 
-<span class="sd">    transport(method, url, *, params=None, headers=None) -&gt; Response</span>
+<span class="sd">    transport(method, url, *, params=None, headers=None, json=None) -&gt; Response</span>
 
 <span class="sd">and a :class:`Response` is any object exposing ``status_code`` / ``content`` /</span>
 <span class="sd">``json()`` — a structural subset of ``requests.Response`` (which therefore</span>
 <span class="sd">satisfies it with no wrapper).</span>
+
+<span class="sd">The keyword-only ``json`` body was added for the hosted **generate** adapters (#6:</span>
+<span class="sd">ElevenLabs Sound Effects POSTs a JSON body), where Freesound (#5) only ever did</span>
+<span class="sd">GET-with-params. It defaults to ``None`` and is passed straight through to</span>
+<span class="sd">``requests.request(..., json=...)``, so every existing GET caller (and the</span>
+<span class="sd">Freesound fake transport) is unaffected.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
@@ -185,6 +198,7 @@
         <span class="o">*</span><span class="p">,</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">json</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the request and return the response.&quot;&quot;&quot;</span>
         <span class="o">...</span></div>
@@ -199,27 +213,34 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">json</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Response&quot;</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The default :class:`Transport` — a thin, lazy wrapper over ``requests``.</span>
 
-<span class="sd">    ``requests`` is imported HERE and only here (the ``foley[freesound]`` extra),</span>
-<span class="sd">    so the foley core stays dol-only and the fake-injection test path never needs</span>
-<span class="sd">    an HTTP library at all. The returned ``requests.Response`` structurally</span>
-<span class="sd">    satisfies :class:`Response`.</span>
+<span class="sd">    ``requests`` is imported HERE and only here (the ``foley[freesound]`` /</span>
+<span class="sd">    ``foley[elevenlabs]`` extras), so the foley core stays dol-only and the</span>
+<span class="sd">    fake-injection test path never needs an HTTP library at all. The returned</span>
+<span class="sd">    ``requests.Response`` structurally satisfies :class:`Response`.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        method: HTTP method (``&#39;GET&#39;`` …).</span>
+<span class="sd">        method: HTTP method (``&#39;GET&#39;`` / ``&#39;POST&#39;`` …).</span>
 <span class="sd">        url: The full request URL.</span>
 <span class="sd">        params: Optional query-string parameters.</span>
-<span class="sd">        headers: Optional request headers (e.g. the ``Authorization`` token).</span>
+<span class="sd">        headers: Optional request headers (e.g. the auth token).</span>
+<span class="sd">        json: Optional JSON request body (POST), serialized by ``requests``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The ``requests.Response`` (a :class:`Response`).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># lazy: foley[freesound]; keeps `import foley` dol-only</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># lazy: foley[freesound]/[elevenlabs]; keeps `import foley` dol-only</span>
 
     <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
-        <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">DEFAULT_TIMEOUT_S</span>
+        <span class="n">method</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">,</span>
+        <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+        <span class="n">json</span><span class="o">=</span><span class="n">json</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="n">DEFAULT_TIMEOUT_S</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 </pre></div>
