@@ -48,6 +48,27 @@ class SpanRecord(SerializableMixin):
 
 
 @dataclass
+class Step(SerializableMixin):
+    """One SELECT-stage step of a ``find()`` run (the plan half of the artifact, #7).
+
+    The typed entry type of :attr:`RunManifest.steps`: a compact, redacted record of
+    each ``decompose``/``refine``/``search``/``license_gate``/``verify``/``decide``/
+    ``generate``/``place`` stage, in ``seq`` order, with ``span_id`` joining the step
+    back to the :class:`SpanRecord` that timed it. ``detail`` is a small,
+    already-redacted dict (event text lives under the ``query`` key so the redactor
+    catches it). Rehydrated element-wise by :meth:`RunManifest.from_dict` exactly like
+    ``spans`` (see the module docstring).
+    """
+
+    kind: str  # decompose|refine|search|license_gate|verify|decide|generate|place
+    seq: Optional[int] = None  # position in RunManifest.steps (assigned by RunRecorder.add_step)
+    event_index: Optional[int] = None  # which SoundEvent (None for the run-level decompose)
+    span_id: Optional[str] = None  # join to the timing SpanRecord
+    status: str = "ok"  # 'ok' | 'error'
+    detail: dict = field(default_factory=dict)  # REDACTED at record time
+
+
+@dataclass
 class RunManifest(SerializableMixin):
     """The reproducible run-artifact for one foley operation (trace ⊕ plan ⊕ provenance).
 
@@ -70,9 +91,9 @@ class RunManifest(SerializableMixin):
     spans: "list[SpanRecord]" = field(
         default_factory=list
     )  # THE TRACE (rehydrated via _decode)
-    steps: list = field(
+    steps: "list[Step]" = field(
         default_factory=list
-    )  # RESERVED for #7 decompose/verify/decide + branch
+    )  # #7 decompose/verify/decide trail (rehydrated element-wise)
     ingest_report: Optional[dict] = None  # IngestReport.to_dict() — embeds, never forks
     result_ids: list = field(default_factory=list)  # produced/returned SoundRecord ids
     candidate_scores: list = field(default_factory=list)  # [{id,clap,bm25,rrf,rerank}]

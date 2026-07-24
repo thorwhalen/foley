@@ -35,6 +35,7 @@ REDACT_FIELDS: "frozenset[str]" = frozenset(
         "query",
         "context_text",
         "narration",
+        "onset",  # SELECT symbolic anchor — quotes narration words verbatim (#7)
         "gen_ai.prompt",
         "gen_ai.completion",
     }

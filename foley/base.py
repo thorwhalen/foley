@@ -453,3 +453,46 @@ class IntendedUse(SerializableMixin):
     can_attribute: bool = True
     revenue_usd: int = 0
     allow_voice_or_trademark: bool = False
+
+
+# ---------------------------------------------------------------------------
+# WEAVE-seed models — the SPARSE plan the SELECT agent emits (report 10 §2.4)
+# ---------------------------------------------------------------------------
+# These are the sparse *subset* of report 06's full render model. The SELECT
+# agent (#7) emits only ``onset·gain·layer·loop`` per item; the WEAVE stage (#8)
+# extends the model in place with the ``Placement`` / ``Processing`` /
+# ``MasterProfile`` / ``word_timeline`` fields that resolve anchors, mix, align,
+# and master. Do NOT add those here — #8 grows this superset.
+
+
+@dataclass
+class TimelineItem(SerializableMixin):
+    """One placed sound in the sparse sound-design plan (the WEAVE-seed subset).
+
+    Holds only what SELECT decides: which clip, when (as a *symbolic* anchor),
+    how loud (relative), on which layer, and whether it loops. WEAVE (#8) resolves
+    ``onset`` to an absolute time and fills the processing/mix defaults.
+    """
+
+    clip_ref: str  # SoundRecord id in the dol library (by reference, never bytes)
+    onset: Optional[str] = None  # SYMBOLIC anchor ("on 'pushed open'"); WEAVE resolves it
+    gain: float = 0.0  # dB relative to the voice bus
+    layer: Layer = Layer.sfx_fg
+    loop: bool = False
+
+
+@dataclass
+class SoundDesignTimeline(SerializableMixin):
+    """The sparse, editable sound-design plan SELECT emits — the SELECT→WEAVE bridge.
+
+    A strict *subset* of report 06's render model: a list of :class:`TimelineItem`
+    plus a join back to the reproducible run-artifact (``run_manifest_ref`` ==
+    :attr:`foley.obs.RunManifest.run_id`, satisfying the #8 ``plan_ref`` reservation).
+    WEAVE (#8) resolves anchors, adds ``word_timeline`` / ``master`` / per-item
+    ``Placement``+``Processing``, and renders.
+    """
+
+    items: "list[TimelineItem]" = field(default_factory=list)  # rehydrated element-wise
+    run_manifest_ref: Optional[str] = None  # join to the obs RunManifest.run_id
+    transcript_ref: Optional[str] = None  # narration transcript ref (resolved by WEAVE)
+    schema_version: int = SCHEMA_VERSION

@@ -151,6 +151,17 @@ provenance = [
 obs = [
     "opentelemetry-sdk>=1.37",
 ]
+# The SELECT agent's LLM rungs (#7): decompose_context + the LLM-judge + refine.
+# `anthropic` is imported LAZILY inside AnthropicDecomposer / AnthropicJudge /
+# AnthropicRefiner method bodies ONLY, so `import foley` + `import foley.agent` stay
+# dol-only. form-B json_schema structured output means no pydantic — the extra is just
+# the LLM client. Deliberately NOT in [tool.wads.ci.install] — the deterministic fakes
+# (KeywordDecomposer / ClapJudge / StringOverlapJudge / KeywordRefiner) are the resolved
+# defaults, so the whole find() loop runs in CI with no network / ANTHROPIC_API_KEY /
+# anthropic import; the real-path test injects a fake client (importorskip-guarded).
+agent = [
+    "anthropic",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
