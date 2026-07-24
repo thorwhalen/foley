@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.sources.freesound.adapter &mdash; foley 0.0.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=1fd71caa"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.sources.freesound.adapter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.sources.freesound.adapter</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Freesound APIv2 retrieve adapter — CC0 sounds, stored strictly by-reference.</span>
+
+<span class="sd">Freesound (report 01 §Freesound) is foley&#39;s anchor retrieve source. This adapter</span>
+<span class="sd">turns a natural-language query into ranked, license-clean</span>
+<span class="sd">:class:`~foley.base.Candidate`\\ s over the Freesound APIv2, honoring two</span>
+<span class="sd">load-bearing constraints:</span>
+
+<span class="sd">* **CC0-only (for #5), pushed into the query.** The CC0 filter is sent as the</span>
+<span class="sd">  native ``filter=license:&quot;Creative Commons 0&quot;`` so non-CC0 sounds never leave the</span>
+<span class="sd">  server; each returned item is *also* re-checked fail-closed against the</span>
+<span class="sd">  ``accepted_license_ids`` allowlist — the server filter is a promise foley does</span>
+<span class="sd">  not control, so a non-CC0 item that slips through is dropped, never indexed.</span>
+<span class="sd">* **By-reference storage (TOS).** The Freesound API TOS forbids caching the audio</span>
+<span class="sd">  bytes even for CC0, so every sound is licensed ``cache_bytes_ok=False`` (a</span>
+<span class="sd">  per-item override on top of its own CC id — see</span>
+<span class="sd">  :func:`~foley.sources.base.api_license`). foley keeps the stable sound-page URI</span>
+<span class="sd">  + provenance + the CLAP vector; the bytes fetched here (a token-tier preview</span>
+<span class="sd">  transcode) are transient — embedded once by :func:`~foley.index.ingest.ingest_one`,</span>
+<span class="sd">  then discarded, never persisted.</span>
+
+<span class="sd">HTTP is dependency-injected (a :class:`~foley.sources.http.Transport`), so the</span>
+<span class="sd">adapter is fully testable with no network and ``import foley`` stays dol-only; the</span>
+<span class="sd">real ``requests`` lives only behind</span>
+<span class="sd">:func:`~foley.sources.http.requests_transport` (the ``foley[freesound]`` extra).</span>
+<span class="sd">Ingestion (decode / QC / embed / tag / store) is NOT reimplemented here — the</span>
+<span class="sd">:func:`foley.sources.pull.add_from` façade routes every hit through the shared</span>
+<span class="sd">``ingest_one`` pipeline (it wraps the corpus machinery, it does not fork it).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">...base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">CandidateOrigin</span><span class="p">,</span> <span class="n">SoundRecord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">license_id_from_cc_url</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">api_license</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..http</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transport</span><span class="p">,</span> <span class="n">requests_transport</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOURCE_CONFIG</span>
+
+<span class="c1">#: Preview keys in the Freesound ``previews`` object, best (highest fidelity) first.</span>
+<span class="n">_PREVIEW_KEYS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;preview-hq-mp3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;preview-hq-ogg&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;preview-lq-mp3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;preview-lq-ogg&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_raw_id</span><span class="p">(</span><span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Strip the ``freesound:`` namespace prefix (accept either id form).&quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">source_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;freesound:&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_preview_url</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The best available preview URL for a sound item (token-tier, public CDN).&quot;&quot;&quot;</span>
+    <span class="n">previews</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;previews&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">_PREVIEW_KEYS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">previews</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">previews</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_safe_detail</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Best-effort extract of the Freesound error ``detail`` (never raises).&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;no detail&gt;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;detail&quot;</span><span class="p">,</span> <span class="n">body</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FreesoundAdapter">
+<a class="viewcode-back" href="../../../../module_docs/foley/sources/freesound/adapter.html#foley.sources.freesound.adapter.FreesoundAdapter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FreesoundAdapter</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Live Freesound APIv2 retrieve adapter (a :class:`~foley.sources.base.SourceAdapter`).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: The ``SOURCE_CONFIG`` (defaults to the module&#39;s). Passed positionally</span>
+<span class="sd">            by the registry&#39;s lazy loader (the arioso ``Adapter(config)`` convention).</span>
+<span class="sd">        api_key: The Freesound token. Defaults to ``$FREESOUND_API_KEY``.</span>
+<span class="sd">        http: The injected :class:`~foley.sources.http.Transport` (defaults to</span>
+<span class="sd">            :func:`~foley.sources.http.requests_transport`); tests pass a fake.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">http</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Transport</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">SOURCE_CONFIG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="p">:</span> <span class="n">Transport</span> <span class="o">=</span> <span class="n">http</span> <span class="k">if</span> <span class="n">http</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">requests_transport</span>
+        <span class="c1"># id -&gt; preview URL, populated as search hits are parsed, so a subsequent</span>
+        <span class="c1"># download(id) needs no extra sound-instance round-trip (the pull path calls</span>
+        <span class="c1"># download with only the id — the SourceAdapter contract).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_preview_cache</span><span class="p">:</span> <span class="s2">&quot;dict[str, str]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># -- auth / http helpers ------------------------------------------------</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">api_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The Freesound token (from the constructor or ``$FREESOUND_API_KEY``).&quot;&quot;&quot;</span>
+        <span class="n">env_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">][</span><span class="s2">&quot;env_var&quot;</span><span class="p">]</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">env_var</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Freesound needs an API token: set $</span><span class="si">{</span><span class="n">env_var</span><span class="si">}</span><span class="s2"> or pass api_key=. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Get one at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;auth&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;apply_url&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;https://freesound.org/apiv2/apply/&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">key</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">scheme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scheme&quot;</span><span class="p">,</span> <span class="s2">&quot;Token &quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scheme</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">][</span><span class="s2">&quot;base_url&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">path</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Freesound GET </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">_safe_detail</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Freesound byte fetch </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span>
+
+    <span class="c1"># -- SourceAdapter surface ----------------------------------------------</span>
+
+<div class="viewcode-block" id="FreesoundAdapter.search">
+<a class="viewcode-back" href="../../../../module_docs/foley/sources/freesound/adapter.html#foley.sources.freesound.adapter.FreesoundAdapter.search">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">license</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cc0&quot;</span><span class="p">,</span>
+        <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+        <span class="n">duration_range</span><span class="p">:</span> <span class="s2">&quot;Optional[tuple[float, float]]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search Freesound for ``query``; return license-clean candidates.</span>
+
+<span class="sd">        The ``license=&#39;cc0&#39;`` filter is pushed into the native Solr ``filter`` so</span>
+<span class="sd">        non-CC0 sounds never leave the server; every returned item is still</span>
+<span class="sd">        re-checked fail-closed before it becomes a candidate.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            license: License constraint. ``&#39;cc0&#39;`` (default) sends the CC0 filter;</span>
+<span class="sd">                ``None`` sends none (the per-item guard still enforces the</span>
+<span class="sd">                ``accepted_license_ids`` allowlist, so results stay CC0 for #5).</span>
+<span class="sd">            k: Max results (Freesound caps ``page_size`` at 150).</span>
+<span class="sd">            duration_range: Optional ``(min_s, max_s)`` native duration filter.</span>
+<span class="sd">            sort: Optional native sort key (default: Freesound relevance).</span>
+<span class="sd">            **kw: Ignored extra affordances (``on_unsupported_param=&#39;warn&#39;``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Up to ``k`` :class:`~foley.base.Candidate`\\ s (``origin=retrieved``),</span>
+<span class="sd">            each carrying a by-reference :class:`~foley.base.LicenseRecord` and a</span>
+<span class="sd">            transient ``preview_uri``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;page_size&quot;</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="mi">150</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">filters</span><span class="p">:</span> <span class="s2">&quot;list[str]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">license</span> <span class="o">==</span> <span class="s2">&quot;cc0&quot;</span><span class="p">:</span>
+            <span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;param_map&quot;</span><span class="p">][</span><span class="s2">&quot;license&quot;</span><span class="p">][</span><span class="s2">&quot;to_native&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">duration_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">duration_range</span>
+            <span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;param_map&quot;</span><span class="p">][</span><span class="s2">&quot;duration_range&quot;</span><span class="p">][</span><span class="s2">&quot;to_native&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lo</span><span class="o">=</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">hi</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">filters</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sort</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">][</span><span class="s2">&quot;search_endpoint&quot;</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]),</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span>
+        <span class="n">candidates</span><span class="p">:</span> <span class="s2">&quot;list[Candidate]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">cand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_from_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cand</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># None =&gt; fail-closed drop (non-accepted license)</span>
+                <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cand</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">candidates</span></div>
+
+
+<div class="viewcode-block" id="FreesoundAdapter.get">
+<a class="viewcode-back" href="../../../../module_docs/foley/sources/freesound/adapter.html#foley.sources.freesound.adapter.FreesoundAdapter.get">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundRecord</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve one Freesound id (``&#39;12345&#39;`` or ``&#39;freesound:12345&#39;``) to a record.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            LookupError: If the sound&#39;s license is not in the accepted allowlist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rid</span> <span class="o">=</span> <span class="n">_raw_id</span><span class="p">(</span><span class="n">source_id</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">][</span><span class="s2">&quot;sound_endpoint&quot;</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">rid</span><span class="p">)</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+        <span class="n">cand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_from_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cand</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Freesound sound </span><span class="si">{</span><span class="n">rid</span><span class="si">}</span><span class="s2"> has a non-accepted license; refused (fail-closed).&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">cand</span><span class="o">.</span><span class="n">sound</span></div>
+
+
+<div class="viewcode-block" id="FreesoundAdapter.download">
+<a class="viewcode-back" href="../../../../module_docs/foley/sources/freesound/adapter.html#foley.sources.freesound.adapter.FreesoundAdapter.download">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">preview_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a sound&#39;s transient preview bytes (token-tier; never cached).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source_id: The Freesound id (either id form).</span>
+<span class="sd">            preview_url: Optional known preview URL (from a prior search hit) — used</span>
+<span class="sd">                directly to save a round-trip; otherwise the sound instance is</span>
+<span class="sd">                fetched to resolve it.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The preview audio bytes (embedded once, then discarded — see the</span>
+<span class="sd">            by-reference storage contract).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            LookupError: If the sound exposes no preview.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rid</span> <span class="o">=</span> <span class="n">_raw_id</span><span class="p">(</span><span class="n">source_id</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">preview_url</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_preview_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># not from a prior search hit -&gt; resolve via the instance</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">][</span><span class="s2">&quot;sound_endpoint&quot;</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">rid</span><span class="p">)</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">_preview_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Freesound sound </span><span class="si">{</span><span class="n">rid</span><span class="si">}</span><span class="s2"> exposes no downloadable preview.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bytes</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
+
+
+    <span class="c1"># -- item -&gt; license-checked Candidate ----------------------------------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_candidate_from_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Optional[Candidate]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a license-checked :class:`~foley.base.Candidate` (None =&gt; drop).</span>
+
+<span class="sd">        The per-item fail-closed guard: an item whose license is unverified or not</span>
+<span class="sd">        in ``accepted_license_ids`` returns ``None`` (dropped, never indexed) even</span>
+<span class="sd">        if the server-side filter returned it. Every kept item gets a</span>
+<span class="sd">        by-reference :class:`~foley.base.LicenseRecord` (``cache_bytes_ok=False``)</span>
+<span class="sd">        and a short, case-stable ``freesound:&lt;id&gt;`` canonical id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">raw_id</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">raw_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">license_id</span><span class="p">,</span> <span class="n">verified</span> <span class="o">=</span> <span class="n">license_id_from_cc_url</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">))</span>
+        <span class="n">accepted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;license&quot;</span><span class="p">][</span><span class="s2">&quot;accepted_license_ids&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">verified</span> <span class="ow">or</span> <span class="n">license_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">accepted</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># fail-closed: never index a non-accepted-license sound</span>
+
+        <span class="n">overrides</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cache_bytes_ok&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>  <span class="c1"># TOS: by-reference even for CC0</span>
+        <span class="c1"># Honor the uploader&#39;s AI-training preference: CLAP-embedding + persisting</span>
+        <span class="c1"># IS a form of training, so a &#39;no-gen-ai&#39; sound is marked ai_training_ok</span>
+        <span class="c1"># False and then refused by ingest_one&#39;s fail-closed gate.</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;gen_ai_preference&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;no-gen-ai&quot;</span><span class="p">:</span>
+            <span class="n">overrides</span><span class="p">[</span><span class="s2">&quot;ai_training_ok&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">page</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">&quot;https://freesound.org/s/</span><span class="si">{</span><span class="n">raw_id</span><span class="si">}</span><span class="s2">/&quot;</span>
+        <span class="n">lic</span> <span class="o">=</span> <span class="n">api_license</span><span class="p">(</span>
+            <span class="n">source</span><span class="o">=</span><span class="s2">&quot;freesound&quot;</span><span class="p">,</span>
+            <span class="n">source_id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">raw_id</span><span class="p">),</span>
+            <span class="n">source_url</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>  <span class="c1"># stable human page = the by-reference re-fetch handle</span>
+            <span class="n">license_url</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">),</span>  <span class="c1"># the CC URL/label as served</span>
+            <span class="n">license_id</span><span class="o">=</span><span class="n">license_id</span><span class="p">,</span>
+            <span class="n">rights_verified</span><span class="o">=</span><span class="n">verified</span><span class="p">,</span>  <span class="c1"># True — required or keep() rejects</span>
+            <span class="n">creator_name</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">),</span>
+            <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">SoundRecord</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;freesound:</span><span class="si">{</span><span class="n">raw_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># short, case-stable, no URL</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>
+            <span class="n">license</span><span class="o">=</span><span class="n">lic</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+            <span class="n">tags</span><span class="o">=</span><span class="nb">sorted</span><span class="p">({</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="n">t</span><span class="p">}),</span>
+            <span class="n">duration_s</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;duration&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">preview</span> <span class="o">=</span> <span class="n">_preview_url</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">preview</span><span class="p">:</span>  <span class="c1"># remember it so download(id) needs no extra instance fetch</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_preview_cache</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">raw_id</span><span class="p">)]</span> <span class="o">=</span> <span class="n">preview</span>
+        <span class="k">return</span> <span class="n">Candidate</span><span class="p">(</span>
+            <span class="n">sound</span><span class="o">=</span><span class="n">record</span><span class="p">,</span>
+            <span class="n">origin</span><span class="o">=</span><span class="n">CandidateOrigin</span><span class="o">.</span><span class="n">retrieved</span><span class="p">,</span>
+            <span class="n">preview_uri</span><span class="o">=</span><span class="n">preview</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="c1">#: Registry convention (arioso): the loader imports ``adapter.Adapter``.</span>
+<span class="n">Adapter</span> <span class="o">=</span> <span class="n">FreesoundAdapter</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

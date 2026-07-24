@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.base &mdash; foley 0.0.5 documentation</title>
+  <title>foley.sources.base &mdash; foley 0.0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=282f96c0"></script>
+      <script src="../../../_static/documentation_options.js?v=1fd71caa"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -77,7 +77,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
 </ul>
@@ -137,10 +143,13 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AcquisitionMethod</span><span class="p">,</span> <span class="n">LicenseRecord</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_license_flags</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover - typing only</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">SoundRecord</span>
 
 
 <div class="viewcode-block" id="ClipSpec">
@@ -207,6 +216,92 @@
 
 
 
+<div class="viewcode-block" id="SourceAdapter">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.SourceAdapter">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SourceAdapter</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The live/HTTP source contract (report 10 §4.2): ``search`` + ``get`` + ``download``.</span>
+
+<span class="sd">    A **retrieve** adapter (Freesound, #5) fetches existing sounds from a service:</span>
+<span class="sd">    ``search`` returns ranked :class:`~foley.base.Candidate`\\ s, ``get`` resolves</span>
+<span class="sd">    one id to a :class:`~foley.base.SoundRecord`, and ``download`` returns the</span>
+<span class="sd">    (transient, TOS-permitting) bytes to embed. It returns the SAME</span>
+<span class="sd">    ``Candidate`` / ``SoundRecord`` shapes as the retrieval index, so callers see</span>
+<span class="sd">    one uniform interface whether audio is remote, cached, or local.</span>
+
+<span class="sd">    Distinct from (and complementary to) the narrow bulk-corpus</span>
+<span class="sd">    :class:`CorpusAdapter`: a live adapter does NOT re-implement enrichment or</span>
+<span class="sd">    storage — it converges on the same :func:`foley.index.ingest.ingest_one`</span>
+<span class="sd">    pipeline via :func:`foley.sources.pull.add_from` (it *wraps* the corpus</span>
+<span class="sd">    machinery, it does not fork it). **Generation** adapters (#6: Stable Audio</span>
+<span class="sd">    Open, ElevenLabs) will add a sibling ``generate`` surface; it is intentionally</span>
+<span class="sd">    out of scope here so this Protocol stays runtime-checkable for retrieve</span>
+<span class="sd">    adapters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SourceAdapter.search">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.SourceAdapter.search">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return ranked candidates for ``query`` (license filter pushed native).&quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+<div class="viewcode-block" id="SourceAdapter.get">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.SourceAdapter.get">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SoundRecord&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve one source id to a metadata :class:`~foley.base.SoundRecord`.&quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+<div class="viewcode-block" id="SourceAdapter.download">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.SourceAdapter.download">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a sound&#39;s bytes (honoring ``cache_bytes_ok`` at the storage gate).&quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_license</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">rights_verified</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">acquisition_method</span><span class="p">:</span> <span class="n">AcquisitionMethod</span><span class="p">,</span>
+    <span class="n">overrides</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">license_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">creator_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">attribution_text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct a :class:`~foley.base.LicenseRecord` and derive its flags (SSOT).</span>
+
+<span class="sd">    The shared core of :func:`bulk_license` (``acquisition_method=bulk``) and</span>
+<span class="sd">    :func:`api_license` (``acquisition_method=api``): it builds the record and</span>
+<span class="sd">    routes it through :func:`~foley.licensing.apply_license_flags` so the eight</span>
+<span class="sd">    permission flags are DERIVED from ``license_id`` (+ optional per-source</span>
+<span class="sd">    ``overrides``) — never hand-set. ``rights_verified`` is passed through</span>
+<span class="sd">    unchanged (it is not a derived flag): ``True`` only for an</span>
+<span class="sd">    authoritatively-recognized license, so an unknown id stays fail-closed and</span>
+<span class="sd">    :func:`foley.keep` drops it while its provenance is still recorded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">record</span> <span class="o">=</span> <span class="n">LicenseRecord</span><span class="p">(</span>
+        <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+        <span class="n">source_id</span><span class="o">=</span><span class="n">source_id</span><span class="p">,</span>
+        <span class="n">source_url</span><span class="o">=</span><span class="n">source_url</span><span class="p">,</span>
+        <span class="n">license_url</span><span class="o">=</span><span class="n">license_url</span><span class="p">,</span>
+        <span class="n">license_id</span><span class="o">=</span><span class="n">license_id</span><span class="p">,</span>
+        <span class="n">acquisition_method</span><span class="o">=</span><span class="n">acquisition_method</span><span class="p">,</span>
+        <span class="n">creator_name</span><span class="o">=</span><span class="n">creator_name</span><span class="p">,</span>
+        <span class="n">attribution_text</span><span class="o">=</span><span class="n">attribution_text</span><span class="p">,</span>
+        <span class="n">rights_verified</span><span class="o">=</span><span class="n">rights_verified</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># The eight permission flags are DERIVED from license_id (+ overrides) by</span>
+    <span class="c1"># apply_license_flags — never hand-set here.</span>
+    <span class="k">return</span> <span class="n">apply_license_flags</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="bulk_license">
 <a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.bulk_license">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">bulk_license</span><span class="p">(</span>
@@ -221,13 +316,10 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a bulk-acquisition :class:`~foley.base.LicenseRecord`, flags derived.</span>
 
-<span class="sd">    The single SSOT license builder every corpus adapter routes through: it</span>
-<span class="sd">    constructs a ``LicenseRecord`` with ``acquisition_method=bulk`` and then</span>
-<span class="sd">    :func:`~foley.licensing.apply_license_flags` to derive the eight permission</span>
-<span class="sd">    flags from ``license_id`` (never hand-set). ``rights_verified`` is set</span>
-<span class="sd">    explicitly by the caller — ``True`` only for an authoritatively-recognized</span>
-<span class="sd">    license, so an unknown/unmapped id stays fail-closed and :func:`foley.keep`</span>
-<span class="sd">    drops it while its provenance is still recorded.</span>
+<span class="sd">    The SSOT license builder every **bulk-corpus** adapter routes through</span>
+<span class="sd">    (``acquisition_method=bulk``); a thin wrapper over :func:`_build_license`. Its</span>
+<span class="sd">    signature is unchanged from #4 — no ``overrides`` (a downloaded corpus is</span>
+<span class="sd">    cacheable by-value), so every existing corpus adapter keeps working verbatim.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        source: Provenance source tag (e.g. ``&#39;fsd50k&#39;``, ``&#39;foleyset&#39;``).</span>
@@ -243,19 +335,75 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        A populated ``LicenseRecord`` with its derived flags applied.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">record</span> <span class="o">=</span> <span class="n">LicenseRecord</span><span class="p">(</span>
+    <span class="k">return</span> <span class="n">_build_license</span><span class="p">(</span>
         <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+        <span class="n">license_id</span><span class="o">=</span><span class="n">license_id</span><span class="p">,</span>
+        <span class="n">rights_verified</span><span class="o">=</span><span class="n">rights_verified</span><span class="p">,</span>
+        <span class="n">acquisition_method</span><span class="o">=</span><span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">bulk</span><span class="p">,</span>
         <span class="n">source_id</span><span class="o">=</span><span class="n">source_id</span><span class="p">,</span>
         <span class="n">source_url</span><span class="o">=</span><span class="n">source_url</span><span class="p">,</span>
-        <span class="n">license_id</span><span class="o">=</span><span class="n">license_id</span><span class="p">,</span>
-        <span class="n">acquisition_method</span><span class="o">=</span><span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">bulk</span><span class="p">,</span>
         <span class="n">creator_name</span><span class="o">=</span><span class="n">creator_name</span><span class="p">,</span>
         <span class="n">attribution_text</span><span class="o">=</span><span class="n">attribution_text</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="api_license">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/base.html#foley.sources.api_license">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">api_license</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">rights_verified</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">overrides</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">license_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">creator_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">attribution_text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build an API-acquisition :class:`~foley.base.LicenseRecord`, flags derived.</span>
+
+<span class="sd">    The live-source sibling of :func:`bulk_license` (``acquisition_method=api``),</span>
+<span class="sd">    used by HTTP :class:`SourceAdapter`\\ s (Freesound, …). It exposes the</span>
+<span class="sd">    ``overrides`` seam so an adapter can flip an operational flag on top of the</span>
+<span class="sd">    per-item copyright license **without** minting a new ``license_id`` — the</span>
+<span class="sd">    Freesound case: keep the sound&#39;s own CC id (``CC0-1.0`` / ``CC-BY-4.0`` / …)</span>
+<span class="sd">    but pass ``overrides={&#39;cache_bytes_ok&#39;: False}`` because the API TOS forbids</span>
+<span class="sd">    caching the bytes even for CC0. ``redistribute_standalone_ok`` (copyright) and</span>
+<span class="sd">    ``cache_bytes_ok`` (TOS) are distinct; only the latter is flipped.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        source: Provenance source tag (e.g. ``&#39;freesound&#39;``).</span>
+<span class="sd">        license_id: The per-item normalized license id (a key of ``LICENSE_FLAGS``).</span>
+<span class="sd">        rights_verified: ``True`` only for an authoritatively-recognized license</span>
+<span class="sd">            (fail-closed gate input); MUST be ``True`` for :func:`foley.keep` to</span>
+<span class="sd">            admit the sound.</span>
+<span class="sd">        overrides: Per-source flag overrides applied on top of ``license_id``&#39;s row</span>
+<span class="sd">            (e.g. ``{&#39;cache_bytes_ok&#39;: False}``). Keys must be ``LicenseFlags``</span>
+<span class="sd">            fields (validated by :func:`~foley.licensing.derive_license_flags`).</span>
+<span class="sd">        source_id: The source-native id (e.g. a Freesound numeric id), for provenance.</span>
+<span class="sd">        source_url: A human-resolvable URL for the item (attribution + the stable</span>
+<span class="sd">            by-reference re-fetch handle).</span>
+<span class="sd">        license_url: The license URL/label exactly as the source served it.</span>
+<span class="sd">        creator_name: The uploader/creator (required for CC-BY attribution).</span>
+<span class="sd">        attribution_text: A ready-made attribution string, if supplied.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A populated ``LicenseRecord`` with its derived flags (+ overrides) applied.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_build_license</span><span class="p">(</span>
+        <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+        <span class="n">license_id</span><span class="o">=</span><span class="n">license_id</span><span class="p">,</span>
         <span class="n">rights_verified</span><span class="o">=</span><span class="n">rights_verified</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="c1"># requires_attribution (and the other 7 flags) are DERIVED from license_id</span>
-    <span class="c1"># by apply_license_flags — never hand-set here.</span>
-    <span class="k">return</span> <span class="n">apply_license_flags</span><span class="p">(</span><span class="n">record</span><span class="p">)</span></div>
+        <span class="n">acquisition_method</span><span class="o">=</span><span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">api</span><span class="p">,</span>
+        <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">,</span>
+        <span class="n">source_id</span><span class="o">=</span><span class="n">source_id</span><span class="p">,</span>
+        <span class="n">source_url</span><span class="o">=</span><span class="n">source_url</span><span class="p">,</span>
+        <span class="n">license_url</span><span class="o">=</span><span class="n">license_url</span><span class="p">,</span>
+        <span class="n">creator_name</span><span class="o">=</span><span class="n">creator_name</span><span class="p">,</span>
+        <span class="n">attribution_text</span><span class="o">=</span><span class="n">attribution_text</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 

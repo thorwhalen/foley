@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.index.ingest &mdash; foley 0.0.5 documentation</title>
+  <title>foley.index.ingest &mdash; foley 0.0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=282f96c0"></script>
+      <script src="../../../_static/documentation_options.js?v=1fd71caa"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -77,7 +77,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
 </ul>
@@ -378,6 +384,8 @@
     <span class="n">src</span><span class="p">:</span> <span class="s2">&quot;AudioSource&quot;</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sound_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">license</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LicenseRecord</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">tagger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">zeroshot_tagger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -402,6 +410,20 @@
 <span class="sd">        src: A path, ``bytes``, or file-like audio source.</span>
 <span class="sd">        library: Target :class:`~foley.index.library.SoundLibrary` (default: the</span>
 <span class="sd">            process-wide default library).</span>
+<span class="sd">        sound_id: Optional canonical id override. Defaults to ``None`` → the</span>
+<span class="sd">            content-hash of the decoded PCM (the local-ingest identity, used as the</span>
+<span class="sd">            record ``id`` and dedup key). A live source adapter passes a short,</span>
+<span class="sd">            case-stable, source-native id (e.g. ``&#39;freesound:12345&#39;``) so dedup keys</span>
+<span class="sd">            on the stable id rather than on re-fetched (lossy, byte-varying) preview</span>
+<span class="sd">            bytes; when it does, the PCM hash is computed only for the (skipped)</span>
+<span class="sd">            default and is not persisted. Separately, ``content_sha256`` records the</span>
+<span class="sd">            hash of the stored FLAC **archive** bytes (set by ``store_sound``), which</span>
+<span class="sd">            is a different byte source from this PCM hash.</span>
+<span class="sd">        source_uri: Optional by-reference fetchable URI override. Defaults to</span>
+<span class="sd">            ``None`` → the resolved local path when ``src`` is path-like. A live</span>
+<span class="sd">            adapter passes the stable source page URL (e.g.</span>
+<span class="sd">            ``&#39;https://freesound.org/s/12345/&#39;``) that :func:`foley.stores.store_sound`</span>
+<span class="sd">            requires for a by-reference sound.</span>
 <span class="sd">        license: Rights record (default: a user-owned, cacheable license).</span>
 <span class="sd">        tagger: Supervised :class:`~foley.index.protocols.Tagger` (default: PANNs</span>
 <span class="sd">            via :func:`~foley.index.taggers.default_tagger`).</span>
@@ -444,9 +466,13 @@
     <span class="n">probe</span> <span class="o">=</span> <span class="n">_probe</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
     <span class="n">work</span> <span class="o">=</span> <span class="n">to_working</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">,</span> <span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">)</span>
     <span class="n">archive</span> <span class="o">=</span> <span class="n">encode</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">,</span> <span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">)</span>  <span class="c1"># FLAC bytes</span>
-    <span class="n">sound_id</span> <span class="o">=</span> <span class="n">_audio_identity</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">store</span> <span class="ow">and</span> <span class="n">sound_id</span> <span class="ow">in</span> <span class="n">lib</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;skipped_dup&quot;</span><span class="p">)</span>
+    <span class="n">content_id</span> <span class="o">=</span> <span class="n">_audio_identity</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">)</span>  <span class="c1"># PCM content-hash: the default id/dedup key</span>
+    <span class="c1"># Canonical id: the PCM content-hash for a local ingest, or a caller-supplied</span>
+    <span class="c1"># short, case-stable source id (e.g. &#39;freesound:12345&#39;) for a live adapter —</span>
+    <span class="c1"># so dedup keys on the stable id, not on re-fetched (byte-varying) preview bytes.</span>
+    <span class="n">sid</span> <span class="o">=</span> <span class="n">content_id</span> <span class="k">if</span> <span class="n">sound_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">sound_id</span>
+    <span class="k">if</span> <span class="n">store</span> <span class="ow">and</span> <span class="n">sid</span> <span class="ow">in</span> <span class="n">lib</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;skipped_dup&quot;</span><span class="p">)</span>
 
     <span class="c1"># Stage 1 — QC gate (report 08 §3)</span>
     <span class="n">qc_report</span> <span class="o">=</span> <span class="p">(</span>
@@ -454,7 +480,7 @@
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">qc_report</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">_below</span><span class="p">(</span><span class="n">qc_report</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">min_status</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span>
-            <span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span>
             <span class="n">status</span><span class="o">=</span><span class="s2">&quot;quarantined&quot;</span><span class="p">,</span>
             <span class="n">qc</span><span class="o">=</span><span class="n">qc_report</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
             <span class="n">notes</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">qc_report</span><span class="o">.</span><span class="n">notes</span><span class="p">),</span>
@@ -468,11 +494,11 @@
     <span class="c1"># here — CLAP-embedding + persisting the corpus IS a form of training on it —</span>
     <span class="c1"># unless the caller passes explicit consent. Guards every path into the</span>
     <span class="c1"># library, not just bootstrap (report 07; invariant #3 of foley-dev-implement).</span>
-    <span class="n">ref_uri</span> <span class="o">=</span> <span class="n">_reference_uri</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">ref_uri</span> <span class="o">=</span> <span class="n">source_uri</span> <span class="k">if</span> <span class="n">source_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_reference_uri</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
     <span class="n">lic</span> <span class="o">=</span> <span class="n">license</span> <span class="k">if</span> <span class="n">license</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_default_user_license</span><span class="p">(</span><span class="n">ref_uri</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_ai_training_forbidden</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span>
-            <span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span>
             <span class="n">status</span><span class="o">=</span><span class="s2">&quot;rights_blocked&quot;</span><span class="p">,</span>
             <span class="n">notes</span><span class="o">=</span><span class="p">[</span>
                 <span class="sa">f</span><span class="s2">&quot;license </span><span class="si">{</span><span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="si">!r}</span><span class="s2"> forbids AI training; embed + persist &quot;</span>
@@ -519,7 +545,7 @@
     <span class="n">delivered_format</span> <span class="o">=</span> <span class="n">ARCHIVE_FORMAT</span> <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">cache_bytes_ok</span> <span class="k">else</span> <span class="n">probe</span><span class="o">.</span><span class="n">format</span>
 
     <span class="n">record</span> <span class="o">=</span> <span class="n">SoundRecord</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span>
         <span class="n">uri</span><span class="o">=</span><span class="n">ref_uri</span><span class="p">,</span>  <span class="c1"># a fetchable ref for by-reference; overwritten by the content</span>
         <span class="n">license</span><span class="o">=</span><span class="n">lic</span><span class="p">,</span>  <span class="c1">#   key when store_sound caches by-value</span>
         <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
@@ -545,7 +571,7 @@
 
     <span class="n">status</span> <span class="o">=</span> <span class="n">qc_report</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">qc_report</span> <span class="k">else</span> <span class="s2">&quot;pass&quot;</span>
     <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="n">record</span><span class="p">,</span> <span class="n">qc</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">qc</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="n">notes</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="n">record</span><span class="p">,</span> <span class="n">qc</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">qc</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="n">notes</span>
     <span class="p">)</span></div>
 
 

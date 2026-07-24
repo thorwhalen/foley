@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.eval.retrieval &mdash; foley 0.0.5 documentation</title>
+  <title>foley.eval.retrieval &mdash; foley 0.0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=282f96c0"></script>
+      <script src="../../../_static/documentation_options.js?v=1fd71caa"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -77,7 +77,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
 </ul>
@@ -169,7 +175,11 @@
 <div class="viewcode-block" id="recall_at_k">
 <a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.recall_at_k">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">recall_at_k</span><span class="p">(</span>
-    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span>
+    <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fraction of ALL relevant docs (grade ≥ ``rel_lvl``) retrieved in the top-``k``.&quot;&quot;&quot;</span>
     <span class="n">rel</span> <span class="o">=</span> <span class="n">_relevant</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">)</span>
@@ -183,7 +193,11 @@
 <div class="viewcode-block" id="precision_at_k">
 <a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.precision_at_k">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">precision_at_k</span><span class="p">(</span>
-    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span>
+    <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fraction of the top-``k`` that is relevant (denominator is literal ``k``).&quot;&quot;&quot;</span>
     <span class="n">rel</span> <span class="o">=</span> <span class="n">_relevant</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">)</span>
@@ -195,7 +209,11 @@
 <div class="viewcode-block" id="average_precision_at_k">
 <a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.average_precision_at_k">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">average_precision_at_k</span><span class="p">(</span>
-    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span>
+    <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Average precision (trec_eval ``map``: divide by TOTAL relevant, not ``min(R,k)``).&quot;&quot;&quot;</span>
     <span class="n">rel</span> <span class="o">=</span> <span class="n">_relevant</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">)</span>
@@ -214,7 +232,11 @@
 <div class="viewcode-block" id="mrr_at_k">
 <a class="viewcode-back" href="../../../module_docs/foley/eval/retrieval.html#foley.eval.mrr_at_k">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">mrr_at_k</span><span class="p">(</span>
-    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span> <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">qrels_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span><span class="p">,</span>
+    <span class="n">run_q</span><span class="p">:</span> <span class="s2">&quot;dict[str, float]&quot;</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rel_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reciprocal rank of the first relevant doc in the top-``k`` (0.0 if none).&quot;&quot;&quot;</span>
     <span class="n">rel</span> <span class="o">=</span> <span class="n">_relevant</span><span class="p">(</span><span class="n">qrels_q</span><span class="p">,</span> <span class="n">rel_lvl</span><span class="p">)</span>
@@ -296,7 +318,9 @@
         <span class="p">]</span>
         <span class="n">worst</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">per_query</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">kv</span><span class="p">:</span> <span class="n">kv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">qid</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">worst</span><span class="p">[:</span><span class="mi">8</span><span class="p">]:</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">qid</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | rank=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">qid</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">qid</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | rank=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ranks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">qid</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 </div>
 
