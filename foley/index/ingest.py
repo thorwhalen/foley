@@ -22,6 +22,7 @@ module costs only the stdlib.
 
 from __future__ import annotations
 
+import functools
 import io
 import os
 from dataclasses import dataclass, field
@@ -260,7 +261,7 @@ def _default_user_license(source_url: Optional[str] = None) -> LicenseRecord:
 # ---------------------------------------------------------------------------
 
 
-def ingest_one(
+def _ingest_one(
     src: "AudioSource",
     *,
     library=None,
@@ -455,6 +456,29 @@ def ingest_one(
     return IngestResult(id=sid, status=status, record=record, qc=record.qc, notes=notes)
 
 
+@functools.wraps(_ingest_one)
+def ingest_one(*args, **kwargs) -> "IngestResult":
+    """Instrumented :func:`_ingest_one`: the SHARED per-clip child span (#11).
+
+    Wraps every clip ingest in an ``ingest_one`` span so all three source paths
+    (local ``ingest`` / ``add_from`` / ``generate``) get per-clip auditability from
+    one instrumentation point. A no-op with zero overhead unless a run is active
+    (observability enabled). The signature + docstring are inherited from
+    :func:`_ingest_one` via :func:`functools.wraps`.
+    """
+    from ..obs.recorder import current_run
+
+    with current_run().span("ingest_one") as sp:
+        res = _ingest_one(*args, **kwargs)
+        sp.set_attribute("foley.sound_id", res.id)
+        sp.set_attribute("foley.status", res.status)
+        if res.qc:
+            sp.set_attribute("qc.status", str(res.qc.get("status")))
+        if res.record is not None and res.record.storage_mode is not None:
+            sp.set_attribute("foley.storage_mode", res.record.storage_mode.value)
+        return res
+
+
 def _run_supervised(tagger, probe: _Probe, notes: list) -> list:
     from .taggers import default_tagger
 
@@ -552,13 +576,19 @@ def ingest_folder(
     """
     from .library import default_library
 
+    from ..obs.recorder import facade_run
+    from ..obs.run_artifact import ingest_digest
+
     lib = library if library is not None else default_library()
     report = IngestReport(root=str(path))
-    for fp in iter_audio_files(path, recursive=recursive, exts=exts):
-        try:
-            report.record(ingest_one(str(fp), library=lib, **ingest_one_kw))
-        except Exception as exc:
-            if on_error == "raise":
-                raise
-            report.error(fp, exc)
+    # Root run-span for the ingest op; a no-op unless observability is enabled (#11).
+    with facade_run("ingest", inputs={"root": str(path), "recursive": recursive}) as run:
+        for fp in iter_audio_files(path, recursive=recursive, exts=exts):
+            try:
+                report.record(ingest_one(str(fp), library=lib, **ingest_one_kw))
+            except Exception as exc:
+                if on_error == "raise":
+                    raise
+                report.error(fp, exc)
+        run.set_ingest_report(ingest_digest(report))
     return report

@@ -16,6 +16,7 @@ remote by-reference sound; that is the contract).
 
 from __future__ import annotations
 
+import functools
 from typing import Optional
 
 from ..base import IntendedUse
@@ -28,7 +29,7 @@ from .registry import get_source
 DEFAULT_INTENDED_USE = IntendedUse(commercial=True, publish=True, can_attribute=True)
 
 
-def add_from(
+def _add_from(
     source: str,
     *,
     query: str,
@@ -78,11 +79,18 @@ def add_from(
     src_adapter = adapter if adapter is not None else get_source(source)["adapter"]
     use = intended_use if intended_use is not None else DEFAULT_INTENDED_USE
 
+    from ..obs.recorder import current_run
+    from ..obs.trace import GENAI
+
     report = IngestReport(root=f"{source}:{query}")
     # A batch-level search failure (rate-limit 429 / 5xx / auth) yields an
     # inspectable report with one error entry, never an unhandled exception.
     try:
-        candidates = src_adapter.search(query, license=license, k=limit, **affordances)
+        # Retrieval child span (no-op unless obs is enabled, #11).
+        with current_run().span("adapter.search", **{GENAI["data_source_id"]: source}):
+            candidates = src_adapter.search(
+                query, license=license, k=limit, **affordances
+            )
     except Exception as exc:
         report.record(
             IngestResult(id=f"{source}:search", status="error", error=repr(exc))
@@ -126,3 +134,42 @@ def add_from(
             continue
         report.record(res)
     return report
+
+
+@functools.wraps(_add_from)
+def add_from(source: str, **kwargs) -> IngestReport:
+    """Observability wrapper over :func:`_add_from` (#11).
+
+    Opens a root ``add_from`` run-span (a no-op unless observability is enabled) and,
+    on completion, appends the run-manifest facts — result ids, per-clip disclosure
+    refs, and the embedded :class:`~foley.index.ingest.IngestReport`. The adapter
+    search + per-clip ``ingest_one`` child spans are emitted inside ``_add_from``. The
+    signature + docstring are inherited from :func:`_add_from` via
+    :func:`functools.wraps`.
+    """
+    from ..obs.recorder import facade_run
+    from ..obs.run_artifact import ingest_digest
+
+    with facade_run(
+        "add_from",
+        inputs={
+            "source": source,
+            "query": kwargs.get("query"),
+            "license": kwargs.get("license", "cc0"),
+            "limit": kwargs.get("limit", 50),
+        },
+    ) as run:
+        report = _add_from(source, **kwargs)
+        for res in report.ingested:
+            lic = res.record.license
+            run.add_result_ids([res.record.id])
+            run.add_disclosure_ref(
+                res.record.id,
+                {
+                    "watermark": lic.watermark,
+                    "c2pa_manifest_ref": lic.c2pa_manifest_ref,
+                    "disclosure_recommended": lic.disclosure_recommended,
+                },
+            )
+        run.set_ingest_report(ingest_digest(report))
+        return report
