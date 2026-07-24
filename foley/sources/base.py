@@ -22,6 +22,15 @@ Concrete adapters register themselves in :data:`CORPUS_REGISTRY` via
 :func:`register_corpus`; :func:`corpora_in_rings` / :func:`select_corpora` drive
 the ring policy in the bootstrap orchestrator. The registry is a plain dict — no
 auto-discovery / ``SOURCE_CONFIG`` (that is #5's concern).
+
+This module is also the home of the **live-source contracts** (auto-discovered by
+:mod:`foley.sources.registry`, not registered here): the retrieve
+:class:`SourceAdapter` (``search`` / ``get`` / ``download`` — Freesound, #5) and
+its sibling generate :class:`GenerateAdapter` (``generate`` → :class:`GeneratedClip`
+— Stable Audio Open, ElevenLabs, #6). All three adapter kinds share the license
+SSOT builders — :func:`bulk_license` (bulk), :func:`api_license` (retrieve), and
+:func:`generated_license` (generate) — thin wrappers over :func:`_build_license`
+so the derived permission flags stay single-sourced.
 """
 
 from __future__ import annotations
@@ -34,6 +43,23 @@ from ..licensing import apply_license_flags
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from ..base import Candidate, SoundRecord
+
+__all__ = [
+    "ClipSpec",
+    "CorpusAdapter",
+    "SourceAdapter",
+    "GenerateAdapter",
+    "GeneratedClip",
+    "UniformCorpus",
+    "bulk_license",
+    "api_license",
+    "generated_license",
+    "CORPUS_REGISTRY",
+    "register_corpus",
+    "ring_of",
+    "corpora_in_rings",
+    "select_corpora",
+]
 
 
 @dataclass
@@ -116,6 +142,79 @@ class SourceAdapter(Protocol):
 
     def download(self, source_id: str) -> bytes:
         """Return a sound's bytes (honoring ``cache_bytes_ok`` at the storage gate)."""
+        ...
+
+
+@dataclass
+class GeneratedClip:
+    """One freshly-generated sound: its transient bytes + a provisional candidate.
+
+    The return type of a :class:`GenerateAdapter`'s ``generate`` — the envelope
+    that reconciles report 10 §4.2 (``generate -> Candidate``: retrieval and
+    generation return the same shape) with foley's two non-negotiables:
+
+    * **adapters never touch storage** — so the bytes ride *with* the candidate in
+      an explicit field rather than being written anywhere, and
+    * **``ingest_one`` is never forked** — the :func:`foley.sources.generate.generate`
+      façade hands :attr:`audio_bytes` to the one shared pipeline (by-value), exactly
+      as :func:`foley.sources.pull.add_from` does for a retrieved download.
+
+    Generation is retrieval's ``search -> Candidate`` and ``download -> bytes``
+    *fused* into one call, because there is no server to re-fetch the bytes from.
+
+    Provisional/canonical split — on :attr:`candidate`\\ ``.sound`` only
+    ``license`` / ``caption`` / ``tags`` are authoritative. ``id`` (a discarded
+    ``"<source>:pending"`` placeholder), ``uri``, ``content_sha256``,
+    ``storage_mode``, ``qc``, ``duration_s``, ``sample_rate``, ``channels`` and the
+    ``embedding_*`` fields are all minted downstream by
+    :func:`~foley.index.ingest.ingest_one` (the façade passes ``sound_id=None`` so
+    the stored id is the decoded-PCM content hash). :attr:`audio_bytes` lives ONLY
+    here and is never serialized — a ``SoundRecord`` holds a ``uri``, never bytes.
+
+    Attributes:
+        audio_bytes: The generated audio as encoded container bytes (WAV/FLAC/…),
+            transient and in-memory only — consumed once by the ingest pipeline.
+        candidate: The report-10 :class:`~foley.base.Candidate`
+            (``origin=CandidateOrigin.generated``) carrying the authoritative
+            :class:`~foley.base.LicenseRecord` (``is_ai_generated=True`` + the
+            generation-provenance block) plus the prompt caption + seed tags.
+        notes: Generation-time messages (``on_unsupported_param='warn'`` drops,
+            output-format fallbacks, …). The
+            :func:`foley.sources.generate.generate` façade folds these into the
+            stored :class:`~foley.index.ingest.IngestResult`\\ 's ``notes`` so they
+            surface in the run report.
+    """
+
+    audio_bytes: bytes
+    candidate: "Candidate"
+    notes: list = field(default_factory=list)
+
+
+@runtime_checkable
+class GenerateAdapter(Protocol):
+    """The generation source contract (report 10 §4.2) — a SIBLING of ``SourceAdapter``.
+
+    A **generate** adapter (Stable Audio Open local, ElevenLabs Sound Effects
+    hosted; #6) synthesizes a sound from a prompt. It is a deliberate sibling of
+    the retrieve :class:`SourceAdapter` rather than an extra method on it, so that
+    ``SourceAdapter`` stays ``runtime_checkable`` for the retrieve trio
+    (``search`` / ``get`` / ``download``) alone.
+
+    Like a retrieve adapter, a generate adapter performs **no** storage or library
+    access: it maps foley's unified :data:`~foley.base.GENERATION_AFFORDANCES`
+    (prompt, duration, prompt_influence, negative_prompt, steps, seed, loop,
+    output_format) to its backend's native params (via ``SOURCE_CONFIG['param_map']``,
+    warning-and-dropping unsupported ones), builds the audio + a generated
+    :class:`~foley.base.LicenseRecord`, and returns a :class:`GeneratedClip`. The
+    :func:`foley.sources.generate.generate` façade converges it on the shared
+    ``ingest_one`` pipeline (by-value, operator-consented).
+    """
+
+    #: Registry / façade key — ``'stable_audio'`` | ``'elevenlabs'`` | …
+    name: str
+
+    def generate(self, prompt: str, **affordances) -> "GeneratedClip":
+        """Synthesize a sound for ``prompt``; return its bytes + provisional candidate."""
         ...
 
 
@@ -256,6 +355,100 @@ def api_license(
         creator_name=creator_name,
         attribution_text=attribution_text,
     )
+
+
+def generated_license(
+    *,
+    source: str,
+    license_id: str,
+    generator_model: str,
+    generation_prompt: str,
+    rights_verified: bool = True,
+    generator_version: Optional[str] = None,
+    generation_seed: Optional[int] = None,
+    generation_params: Optional[dict] = None,
+    disclosure_recommended: bool = True,
+    watermark: Optional[dict] = None,
+    c2pa_manifest_ref: Optional[str] = None,
+    overrides: Optional[dict] = None,
+    source_id: Optional[str] = None,
+    source_url: Optional[str] = None,
+    license_url: Optional[str] = None,
+    creator_name: Optional[str] = None,
+    attribution_text: Optional[str] = None,
+) -> LicenseRecord:
+    """Build an AI-generated :class:`~foley.base.LicenseRecord`, flags derived + provenance stamped.
+
+    The generation sibling of :func:`bulk_license` / :func:`api_license`
+    (``acquisition_method=generated``): it routes through the shared
+    :func:`_build_license` core — so the eight permission flags are DERIVED from
+    ``license_id`` by :func:`~foley.licensing.apply_license_flags`, never hand-set —
+    and then stamps the generation-provenance block in exactly one place, so every
+    generate adapter (Stable Audio Open, ElevenLabs, …) records provenance
+    identically (open-closed).
+
+    The consequences flow automatically from the two generator rows in
+    :data:`~foley.licensing.LICENSE_FLAGS`: ``cache_bytes_ok=True`` (⇒ by-value
+    storage), ``ai_training_ok=False`` (the record keeps this restriction — the
+    generate façade consents to *embed+persist* via ``allow_ai_training_forbidden``
+    but never flips the flag, so :func:`foley.keep` still rejects the sound for any
+    ``IntendedUse(will_train=True)``), and — for ``Stability-Community`` —
+    ``revenue_cap_usd=1_000_000`` (enforced by :func:`foley.keep` at select time).
+
+    Args:
+        source: The generator tag (e.g. ``'stable_audio'`` / ``'elevenlabs'``).
+        license_id: The generator license id (``'Stability-Community'`` /
+            ``'ElevenLabs-SFX'`` — a key of ``LICENSE_FLAGS``).
+        generator_model: The model identifier (e.g. ``'stable-audio-open-1.0'``,
+            ``'eleven_text_to_sound_v2'``).
+        generation_prompt: The user prompt, verbatim.
+        rights_verified: ``True`` (a generator license is authoritatively known);
+            MUST be ``True`` or :func:`foley.keep` rejects the sound.
+        generator_version: Optional model/version string.
+        generation_seed: The reproducibility seed (an ``int`` for a seeded
+            Stable-Audio-Open run; ``None`` for a non-deterministic backend).
+        generation_params: The RESOLVED NATIVE params actually sent to the backend
+            (e.g. ``guidance_scale`` — not the unified ``prompt_influence`` —
+            ``audio_end_in_s``, …), for reproducibility + audit.
+        disclosure_recommended: EU AI Act Art. 50 hint (default ``True``); makes the
+            credits AI-disclosure line render immediately (#9a already reads it).
+        watermark: Pass-through carrier for #9b (AudioSeal); ``None`` until then.
+        c2pa_manifest_ref: Pass-through carrier for #9b (C2PA); ``None`` until then.
+        overrides: Optional per-source flag overrides (rare for generation).
+        source_id: Optional source-native id, for provenance.
+        source_url: Optional human-resolvable URL.
+        license_url: Optional license URL/label.
+        creator_name: Optional creator (usually unset for generation).
+        attribution_text: Optional ready-made attribution string.
+
+    Returns:
+        A populated ``LicenseRecord`` with derived flags applied AND
+        ``is_ai_generated=True`` plus the full generation-provenance block.
+    """
+    record = _build_license(
+        source=source,
+        license_id=license_id,
+        rights_verified=rights_verified,
+        acquisition_method=AcquisitionMethod.generated,
+        overrides=overrides,
+        source_id=source_id,
+        source_url=source_url,
+        license_url=license_url,
+        creator_name=creator_name,
+        attribution_text=attribution_text,
+    )
+    # Generation-provenance block — stamped after flag derivation, in one place, so
+    # no adapter hand-sets flags and every generator populates provenance identically.
+    record.is_ai_generated = True
+    record.generator_model = generator_model
+    record.generator_version = generator_version
+    record.generation_prompt = generation_prompt
+    record.generation_seed = generation_seed
+    record.generation_params = generation_params or {}
+    record.disclosure_recommended = disclosure_recommended
+    record.watermark = watermark
+    record.c2pa_manifest_ref = c2pa_manifest_ref
+    return record
 
 
 @dataclass

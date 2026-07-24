@@ -5,10 +5,12 @@ opt-in Sonniss / BBC RemArc) as an ingestable stream of clips + per-clip
 licenses, consumed by :func:`foley.bootstrap.bootstrap`. Importing the package
 registers every adapter in :data:`CORPUS_REGISTRY`.
 
-The contract here is the narrow **bulk-corpus** :class:`CorpusAdapter` (enumerate
-+ license, reusing the existing ingest pipeline); the live/HTTP
-``SourceAdapter`` + ``SOURCE_CONFIG`` registry (Freesound tap, generation) is
-subtask #5, which will *wrap* these, not replace them.
+Three adapter kinds share the one ingest pipeline: the narrow **bulk-corpus**
+:class:`CorpusAdapter` (#4 — enumerate + license), the live **retrieve**
+:class:`SourceAdapter` (#5 — Freesound, via :func:`add_from`), and the live
+**generate** :class:`GenerateAdapter` (#6 — Stable Audio Open / ElevenLabs, via
+:func:`generate`). The retrieve + generate adapters are auto-discovered by
+:mod:`foley.sources.registry` and *wrap* the ingest machinery, never fork it.
 """
 
 from __future__ import annotations
@@ -17,11 +19,14 @@ from .base import (
     CORPUS_REGISTRY,
     ClipSpec,
     CorpusAdapter,
+    GenerateAdapter,
+    GeneratedClip,
     SourceAdapter,
     UniformCorpus,
     api_license,
     bulk_license,
     corpora_in_rings,
+    generated_license,
     register_corpus,
     ring_of,
     select_corpora,
@@ -45,6 +50,11 @@ from .registry import (
     list_sources,
     register_source,
 )
+
+# Generate-source contract (#6): the generate facade (sibling of add_from). The
+# stable_audio / elevenlabs adapter packages are NOT imported here — they are
+# auto-discovered lazily, exactly like freesound, so torch/requests stay lazy.
+from .generate import GenerationError, candidate_of, generate
 
 __all__ = [
     # bulk-corpus contract (#4)
@@ -73,4 +83,11 @@ __all__ = [
     "get_source",
     "list_sources",
     "register_source",
+    # generate-source contract (#6)
+    "GenerateAdapter",
+    "GeneratedClip",
+    "generated_license",
+    "generate",
+    "candidate_of",
+    "GenerationError",
 ]

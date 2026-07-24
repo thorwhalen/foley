@@ -105,6 +105,26 @@ caption = [
 freesound = [
     "requests",
 ]
+# Hosted ElevenLabs Sound Effects generator (#6). `requests` is imported lazily
+# inside foley.sources.http.requests_transport ONLY, so the core stays dol-only.
+# Deliberately NOT in [tool.wads.ci.install] — the adapter tests inject a fake
+# transport and never touch the network (same rationale as freesound).
+elevenlabs = [
+    "requests",
+]
+# Local Stable Audio Open 1.0 generator (#6) — diffusers StableAudioPipeline. Heavy
+# ML stack, lazy-imported inside foley.sources.stable_audio.adapter ONLY, so
+# `import foley` + source discovery stay dol-only. Deliberately NOT in
+# [tool.wads.ci.install] — the primary adapter test injects a fake pipeline (no
+# torch) and the seeded-determinism test is importorskip('torch')-guarded, keeping
+# CI hermetic and numba-free.
+stable-audio = [
+    "torch",
+    "diffusers>=0.27",
+    "transformers>=4.40",
+    "soundfile",
+    "accelerate",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
