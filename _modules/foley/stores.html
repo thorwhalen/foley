@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.stores &mdash; foley 0.0.8 documentation</title>
+  <title>foley.stores &mdash; foley 0.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+      <script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -73,6 +73,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/licensing.html">foley.licensing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
@@ -187,6 +188,8 @@
 <span class="p">)</span>
 <span class="n">DEFAULT_AUDIO_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;audio&quot;</span>
 <span class="n">DEFAULT_META_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;meta&quot;</span>
+<span class="c1">#: Content-credential sidecars (#9b): ``Mapping[content_id -&gt; credential dict]``.</span>
+<span class="n">DEFAULT_PROVENANCE_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;provenance&quot;</span>
 
 <span class="c1">#: A filesystem location (path or path-like string) for a local store root.</span>
 <span class="n">Rootdir</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;os.PathLike[str]&quot;</span><span class="p">]</span>
@@ -298,6 +301,32 @@
         <span class="n">id_of_key</span><span class="o">=</span><span class="n">_meta_filename</span><span class="p">,</span>  <span class="c1"># sound_id -&gt; escaped filename</span>
         <span class="n">key_of_id</span><span class="o">=</span><span class="n">_meta_key</span><span class="p">,</span>  <span class="c1"># filename -&gt; sound_id</span>
     <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="make_provenance_store">
+<a class="viewcode-back" href="../../module_docs/foley/stores.html#foley.make_provenance_store">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_provenance_store</span><span class="p">(</span>
+    <span class="n">rootdir</span><span class="p">:</span> <span class="n">Rootdir</span> <span class="o">=</span> <span class="n">DEFAULT_PROVENANCE_DIR</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the content-credential store: ``Mapping[content_id -&gt; dict]`` (JSON files).</span>
+
+<span class="sd">    The by-value sidecar carrier for #9b&#39;s portable &quot;content credential&quot; (a</span>
+<span class="sd">    C2PA-shaped assertion dict written next to each generated clip; a</span>
+<span class="sd">    ``SoundRecord``&#39;s ``license.c2pa_manifest_ref`` points here by content id). Like</span>
+<span class="sd">    :func:`make_meta_store` it escapes the id to a safe ``{enc}.json`` filename</span>
+<span class="sd">    (invariant #3) while exposing bare ``content_id`` keys; values are plain dicts</span>
+<span class="sd">    ((de)serialized natively by ``dol.JsonFiles``). Local ``dol.JsonFiles`` by</span>
+<span class="sd">    default; swap in any ``dol`` Mapping to move sidecars to the cloud.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rootdir: Directory that holds the credential JSON files (created if missing).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``MutableMapping[str, dict]`` keyed by content id.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_store</span> <span class="o">=</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">JsonFiles</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">wrap_kvs</span><span class="p">(</span><span class="n">json_store</span><span class="p">,</span> <span class="n">id_of_key</span><span class="o">=</span><span class="n">_meta_filename</span><span class="p">,</span> <span class="n">key_of_id</span><span class="o">=</span><span class="n">_meta_key</span><span class="p">)</span></div>
 
 
 

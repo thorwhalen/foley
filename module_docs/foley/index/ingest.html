@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.index.ingest &mdash; foley 0.0.8 documentation</title>
+  <title>foley.index.ingest &mdash; foley 0.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=53b53b71"></script>
+      <script src="../../../_static/documentation_options.js?v=f7cdbf68"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -76,6 +76,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.IngestResult"><code class="docutils literal notranslate"><span class="pre">IngestResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.content_id"><code class="docutils literal notranslate"><span class="pre">content_id()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.ingest_folder"><code class="docutils literal notranslate"><span class="pre">ingest_folder()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.ingest_one"><code class="docutils literal notranslate"><span class="pre">ingest_one()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.index.ingest.iter_audio_files"><code class="docutils literal notranslate"><span class="pre">iter_audio_files()</span></code></a></li>
@@ -94,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
@@ -235,6 +237,18 @@ not added), <code class="docutils literal notranslate"><span class="pre">'skippe
 embed — see <a class="reference internal" href="#foley.index.ingest.ingest_one" title="foley.index.ingest.ingest_one"><code class="xref py py-func docutils literal notranslate"><span class="pre">ingest_one()</span></code></a>), <code class="docutils literal notranslate"><span class="pre">'skipped_license'</span></code> (dropped by a
 bootstrap commercial-use / fail-closed license filter), or <code class="docutils literal notranslate"><span class="pre">'error'</span></code>.
 <code class="docutils literal notranslate"><span class="pre">record</span></code> is present only when the clip was ingested.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.ingest.content_id">
+<span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">content_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../audio.html#foley.audio.AudioSource" title="foley.audio.AudioSource"><span class="pre">AudioSource</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/foley/index/ingest.html#content_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.content_id" title="Link to this definition"></a></dt>
+<dd><p>Return the reproducible content-hash id foley assigns to <code class="docutils literal notranslate"><span class="pre">src</span></code>.</p>
+<p>Decodes <code class="docutils literal notranslate"><span class="pre">src</span></code> (path / bytes / file-like) to canonical PCM and hashes it —
+the SAME value <a class="reference internal" href="#foley.index.ingest.ingest_one" title="foley.index.ingest.ingest_one"><code class="xref py py-func docutils literal notranslate"><span class="pre">ingest_one()</span></code></a> mints as the record id when <code class="docutils literal notranslate"><span class="pre">sound_id</span></code> is
+<code class="docutils literal notranslate"><span class="pre">None</span></code>. Exposed so a caller can learn a clip’s stored id <em>before</em> ingesting
+it (e.g. the generate façade keys a content-credential sidecar by the id and
+sets <code class="docutils literal notranslate"><span class="pre">license.c2pa_manifest_ref</span></code> in the same pass — see
+<a class="reference internal" href="../sources/generate.html#foley.sources.generate.generate" title="foley.sources.generate.generate"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.sources.generate.generate()</span></code></a>). Cheap-ish: it fully decodes <code class="docutils literal notranslate"><span class="pre">src</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">

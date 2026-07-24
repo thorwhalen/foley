@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.generate &mdash; foley 0.0.8 documentation</title>
+  <title>foley.sources.generate &mdash; foley 0.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=53b53b71"></script>
+      <script src="../../../_static/documentation_options.js?v=f7cdbf68"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -73,6 +73,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
@@ -197,6 +198,40 @@
 
 
 
+<div class="viewcode-block" id="SafetyRefusal">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.SafetyRefusal">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SafetyRefusal</span><span class="p">(</span><span class="n">GenerationError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised (fail-closed) when a generation prompt trips a #9b safety gate.</span>
+
+<span class="sd">    A pre-synthesis hard stop: nothing is generated or stored. Distinct from a</span>
+<span class="sd">    resilience ``error`` result (a backend/ingest failure the workhorse records</span>
+<span class="sd">    without raising) — a safety refusal is a deliberate refusal of an unsafe</span>
+<span class="sd">    request. Its ``report`` is an empty pre-generation report and ``status`` is</span>
+<span class="sd">    ``&#39;refused&#39;``. Carries :attr:`hits` (the matched marks/patterns). Subclass of</span>
+<span class="sd">    :class:`GenerationError` so the public :func:`foley.generate` ``Raises`` clause</span>
+<span class="sd">    already covers it. See :func:`foley.provenance.disclosure.scan_prompt`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hits</span><span class="p">:</span> <span class="s2">&quot;list[str]&quot;</span><span class="p">,</span> <span class="n">report</span><span class="p">:</span> <span class="n">IngestReport</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="n">report</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;refused&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hits</span> <span class="o">=</span> <span class="n">hits</span></div>
+
+
+
+<div class="viewcode-block" id="TrademarkRefusal">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.TrademarkRefusal">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TrademarkRefusal</span><span class="p">(</span><span class="n">SafetyRefusal</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`SafetyRefusal` for a prompt naming a trademarked audio logo (report 07 §7.2).&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="RecognizableVoiceRefusal">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.RecognizableVoiceRefusal">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RecognizableVoiceRefusal</span><span class="p">(</span><span class="n">SafetyRefusal</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`SafetyRefusal` for a prompt requesting a recognizable / cloned voice (report 07 §7.1).&quot;&quot;&quot;</span></div>
+
+
+
 <div class="viewcode-block" id="candidate_of">
 <a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.candidate_of">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">candidate_of</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">IngestResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Candidate</span><span class="p">:</span>
@@ -226,6 +261,10 @@
     <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">store</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">adapter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">watermark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">on_flagged</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;refuse&quot;</span><span class="p">,</span>
+    <span class="n">watermarker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">provenance_store</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">affordances</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestReport</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a sound via ``backend`` and ingest it (by-value) into ``library``.</span>
@@ -236,6 +275,22 @@
 <span class="sd">    routed through the shared :func:`~foley.index.ingest.ingest_one` pipeline</span>
 <span class="sd">    (decode → QC → embed → tag → store), stored by-value with a content-hash id.</span>
 
+<span class="sd">    Disclosure/safety (#9b), all optional and degrading gracefully:</span>
+
+<span class="sd">    * **Safety gate** — the prompt is scanned for trademarked audio logos + cloned</span>
+<span class="sd">      voices *before* any synthesis spend (:func:`foley.provenance.disclosure.scan_prompt`).</span>
+<span class="sd">      Fail-closed by default (``on_flagged=&#39;refuse&#39;`` raises :class:`SafetyRefusal`);</span>
+<span class="sd">      ``on_flagged=&#39;warn&#39;`` proceeds but stamps ``potential_trademark`` /</span>
+<span class="sd">      ``contains_recognizable_voice`` on the record so :func:`foley.keep` drops it</span>
+<span class="sd">      downstream.</span>
+<span class="sd">    * **Watermark** — with ``foley[provenance]`` installed, the generated bytes are</span>
+<span class="sd">      AudioSeal-watermarked *before* ingest (the stored bytes carry the mark),</span>
+<span class="sd">      setting ``license.watermark``. Without the extra, generation proceeds</span>
+<span class="sd">      unmarked (a note is recorded).</span>
+<span class="sd">    * **Content credential** — a portable C2PA-shaped JSON sidecar recording the</span>
+<span class="sd">      AI origin + license is written for every stored generation and referenced by</span>
+<span class="sd">      ``license.c2pa_manifest_ref`` (stdlib; always on).</span>
+
 <span class="sd">    Args:</span>
 <span class="sd">        prompt: The natural-language sound description.</span>
 <span class="sd">        backend: A registered generate-source name (``&#39;stable_audio&#39;`` (default,</span>
@@ -243,11 +298,19 @@
 <span class="sd">        library: Target :class:`~foley.index.library.SoundLibrary` (default: the</span>
 <span class="sd">            process-wide default library).</span>
 <span class="sd">        store: If ``False``, synthesize + enrich but do not add to the library</span>
-<span class="sd">            (probe/QC/embed only — a preview).</span>
-<span class="sd">        adapter: An optional pre-built adapter to use instead of the registry&#39;s</span>
-<span class="sd">            (the dependency-injection seam — a test passes a fake-transport /</span>
-<span class="sd">            fake-pipeline adapter; production omits it and the registry lazily</span>
-<span class="sd">            builds one).</span>
+<span class="sd">            (probe/QC/embed only — a preview; no content-credential sidecar).</span>
+<span class="sd">        adapter: An optional pre-built adapter (the dependency-injection seam — a</span>
+<span class="sd">            test passes a fake-transport / fake-pipeline adapter; production omits</span>
+<span class="sd">            it and the registry lazily builds one).</span>
+<span class="sd">        watermark: ``True`` require an AudioSeal watermark (error if</span>
+<span class="sd">            ``foley[provenance]`` absent), ``False`` never watermark, ``None``</span>
+<span class="sd">            (default, auto) watermark iff AudioSeal is installed.</span>
+<span class="sd">        on_flagged: ``&#39;refuse&#39;`` (default, fail-closed) raise on a safety-flagged</span>
+<span class="sd">            prompt; ``&#39;warn&#39;`` proceed and flag the record.</span>
+<span class="sd">        watermarker: An injected :class:`~foley.provenance.disclosure.Watermarker`</span>
+<span class="sd">            (the DI seam; wins over auto-detect — tests pass a fake).</span>
+<span class="sd">        provenance_store: A ``MutableMapping[str, dict]`` for content-credential</span>
+<span class="sd">            sidecars (default: :func:`foley.stores.make_provenance_store`).</span>
 <span class="sd">        **affordances: Unified generation affordances forwarded to the adapter&#39;s</span>
 <span class="sd">            ``generate`` (``duration``, ``prompt_influence``, ``negative_prompt``,</span>
 <span class="sd">            ``steps``, ``seed``, ``loop``, ``output_format`` — see</span>
@@ -259,8 +322,38 @@
 <span class="sd">        stored record (``storage_mode == by_value``) and ``.summary()`` for counts.</span>
 <span class="sd">        A backend or ingest failure is recorded as a single ``error`` result, never</span>
 <span class="sd">        raised (``add_from``-symmetric resilience).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        SafetyRefusal: If the prompt trips a safety gate and ``on_flagged=&#39;refuse&#39;``.</span>
+<span class="sd">        WatermarkUnavailable: If ``watermark=True`` but ``foley[provenance]`` is absent.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..index.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_library</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..provenance</span><span class="w"> </span><span class="kn">import</span> <span class="n">disclosure</span>  <span class="c1"># stdlib top-level; heavy deps lazy inside</span>
+
+    <span class="k">if</span> <span class="n">on_flagged</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;refuse&quot;</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;on_flagged must be &#39;refuse&#39; or &#39;warn&#39;, got </span><span class="si">{</span><span class="n">on_flagged</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># -- Safety gate (fail-closed) — BEFORE any GPU/HTTP spend ------------------</span>
+    <span class="n">scan</span> <span class="o">=</span> <span class="n">disclosure</span><span class="o">.</span><span class="n">scan_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">flagged</span> <span class="ow">and</span> <span class="n">on_flagged</span> <span class="o">==</span> <span class="s2">&quot;refuse&quot;</span><span class="p">:</span>
+        <span class="n">empty</span> <span class="o">=</span> <span class="n">IngestReport</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TrademarkRefusal</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;prompt matches trademarked audio logo(s): </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;Pass on_flagged=&#39;warn&#39; to override (the clip is then flagged and keep() drops it).&quot;</span><span class="p">,</span>
+                <span class="n">hits</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="p">),</span>
+                <span class="n">report</span><span class="o">=</span><span class="n">empty</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">RecognizableVoiceRefusal</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;prompt requests a recognizable / cloned voice: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;Pass on_flagged=&#39;warn&#39; to override (the clip is then flagged and keep() drops it).&quot;</span><span class="p">,</span>
+            <span class="n">hits</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">),</span>
+            <span class="n">report</span><span class="o">=</span><span class="n">empty</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Resolve the watermarker fail-fast: watermark=True without foley[provenance]</span>
+    <span class="c1"># errors BEFORE spending on generation.</span>
+    <span class="n">wm</span> <span class="o">=</span> <span class="n">disclosure</span><span class="o">.</span><span class="n">resolve_watermarker</span><span class="p">(</span><span class="n">watermark</span><span class="p">,</span> <span class="n">watermarker</span><span class="p">)</span>
 
     <span class="n">lib</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
     <span class="n">gen</span> <span class="o">=</span> <span class="n">adapter</span> <span class="k">if</span> <span class="n">adapter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">get_source</span><span class="p">(</span><span class="n">backend</span><span class="p">)[</span><span class="s2">&quot;adapter&quot;</span><span class="p">]</span>
@@ -277,17 +370,66 @@
         <span class="k">return</span> <span class="n">report</span>
 
     <span class="n">lic</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span>
-    <span class="c1"># The bytes ride WITH the candidate on the transient GeneratedClip (adapters</span>
-    <span class="c1"># never touch storage); the façade hands them to the ONE shared ingest_one —</span>
-    <span class="c1"># by-value (cache_bytes_ok=True), PCM-hash id (sound_id=None), with operator</span>
-    <span class="c1"># consent for the ai_training_ok=False generator license. A separate try guards</span>
-    <span class="c1"># the fetch/decode so an undecodable response is an error, not a crash.</span>
+
+    <span class="c1"># Warn-mode: reaching here with a flagged scan means on_flagged=&#39;warn&#39;. Stamp the</span>
+    <span class="c1"># safety flags on the record so the fail-closed keep() gate drops it downstream.</span>
+    <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">flagged</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">potential_trademark</span><span class="p">:</span>
+            <span class="n">lic</span><span class="o">.</span><span class="n">potential_trademark</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">contains_recognizable_voice</span><span class="p">:</span>
+            <span class="n">lic</span><span class="o">.</span><span class="n">contains_recognizable_voice</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;safety: proceeded in warn mode; flagged </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">scan</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Watermark BEFORE ingest so the stored bytes carry the mark AND the content-hash</span>
+    <span class="c1"># id hashes the watermarked PCM. Graceful degrade: a watermark failure never</span>
+    <span class="c1"># fails the generation (the mark is descriptive provenance, not a license gate).</span>
+    <span class="n">audio_bytes</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">audio_bytes</span>
+    <span class="k">if</span> <span class="n">wm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">wres</span> <span class="o">=</span> <span class="n">wm</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">clip</span><span class="o">.</span><span class="n">audio_bytes</span><span class="p">)</span>
+            <span class="n">audio_bytes</span> <span class="o">=</span> <span class="n">wres</span><span class="o">.</span><span class="n">audio_bytes</span>
+            <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span> <span class="o">=</span> <span class="n">wres</span><span class="o">.</span><span class="n">meta</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 - any embed failure degrades gracefully</span>
+            <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;watermarking skipped: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">watermark</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;watermarking skipped: foley[provenance] not installed&quot;</span><span class="p">)</span>
+
+    <span class="c1"># One try guards BOTH the content-credential sidecar (which decodes the bytes to</span>
+    <span class="c1"># pre-compute the id) AND the ingest — so an undecodable response (a hosted API</span>
+    <span class="c1"># returning HTTP 200 with a non-audio body) is recorded as an error, not a crash.</span>
+    <span class="n">sound_id</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pstore</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">credential</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Content-credential prep (stdlib). Single-pass: pre-compute the content-hash</span>
+        <span class="c1"># id from the (watermarked) bytes so the sidecar key and license.c2pa_manifest_ref</span>
+        <span class="c1"># match the id ingest_one re-mints — no meta re-store. The sidecar is WRITTEN</span>
+        <span class="c1"># only after a stored result (below), so a quarantined / errored generation</span>
+        <span class="c1"># leaves no orphan credential.</span>
+        <span class="k">if</span> <span class="n">store</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">..index.ingest</span><span class="w"> </span><span class="kn">import</span> <span class="n">content_id</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">..stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">content_key</span><span class="p">,</span> <span class="n">make_provenance_store</span>
+
+            <span class="n">sound_id</span> <span class="o">=</span> <span class="n">content_id</span><span class="p">(</span><span class="n">audio_bytes</span><span class="p">)</span>
+            <span class="n">pstore</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">provenance_store</span>
+                <span class="k">if</span> <span class="n">provenance_store</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="n">make_provenance_store</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="n">credential</span> <span class="o">=</span> <span class="n">disclosure</span><span class="o">.</span><span class="n">build_content_credential</span><span class="p">(</span>
+                <span class="n">clip</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="p">,</span>
+                <span class="n">asset_id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span>
+                <span class="n">asset_hash</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alg&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">content_key</span><span class="p">(</span><span class="n">audio_bytes</span><span class="p">)},</span>
+            <span class="p">)</span>
+            <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span> <span class="o">=</span> <span class="n">sound_id</span>  <span class="c1"># the stored record carries the ref</span>
+
         <span class="n">res</span> <span class="o">=</span> <span class="n">ingest_one</span><span class="p">(</span>
-            <span class="n">clip</span><span class="o">.</span><span class="n">audio_bytes</span><span class="p">,</span>
+            <span class="n">audio_bytes</span><span class="p">,</span>
             <span class="n">library</span><span class="o">=</span><span class="n">lib</span><span class="p">,</span>
-            <span class="n">sound_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># generated audio → decoded-PCM content-hash id (+dedup)</span>
-            <span class="n">license</span><span class="o">=</span><span class="n">lic</span><span class="p">,</span>  <span class="c1"># is_ai_generated + provenance + flags derived from license_id</span>
+            <span class="n">sound_id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span>  <span class="c1"># == content_id(audio_bytes); ingest re-mints the same id</span>
+            <span class="n">license</span><span class="o">=</span><span class="n">lic</span><span class="p">,</span>  <span class="c1"># watermark + c2pa_manifest_ref + provenance, flags derived</span>
             <span class="n">captioner</span><span class="o">=</span><span class="n">_metadata_captioner</span><span class="p">(</span><span class="n">prompt</span><span class="p">),</span>
             <span class="n">seed_tags</span><span class="o">=</span><span class="p">(</span><span class="n">clip</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">),</span>
             <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span>
@@ -299,8 +441,14 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">report</span>
 
-    <span class="c1"># Surface the adapter&#39;s generation-time notes (unsupported-affordance drops,</span>
-    <span class="c1"># output-format fallbacks) in the run report.</span>
+    <span class="c1"># Write the content-credential sidecar ONLY for a freshly stored clip — a</span>
+    <span class="c1"># quarantined (QC-failed), duplicate, or errored generation was never added to the</span>
+    <span class="c1"># library, so it gets no orphan credential (its already-stored twin keeps one).</span>
+    <span class="k">if</span> <span class="n">credential</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">):</span>
+        <span class="n">disclosure</span><span class="o">.</span><span class="n">write_content_credential</span><span class="p">(</span><span class="n">pstore</span><span class="p">,</span> <span class="n">sound_id</span><span class="p">,</span> <span class="n">credential</span><span class="p">)</span>
+
+    <span class="c1"># Surface the adapter&#39;s + disclosure notes (unsupported affordances, warn-mode</span>
+    <span class="c1"># flag, watermark-skip) in the run report.</span>
     <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="p">:</span>
         <span class="n">res</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="p">)</span>
     <span class="c1"># Record the operator-consent acknowledgement on a stored generation whose</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.stores &mdash; foley 0.0.8 documentation</title>
+  <title>foley.stores &mdash; foley 0.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=53b53b71"></script>
+      <script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -75,6 +75,7 @@
 <li class="toctree-l1"><a class="reference internal" href="licensing.html">foley.licensing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/base.html">foley.sources.base</a></li>
@@ -97,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">foley.stores</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.stores.DEFAULT_PROVENANCE_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_PROVENANCE_DIR</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.FOLEY_DATA_DIR"><code class="docutils literal notranslate"><span class="pre">FOLEY_DATA_DIR</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.HASH_ALGO"><code class="docutils literal notranslate"><span class="pre">HASH_ALGO</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.META_FILE_SUFFIX"><code class="docutils literal notranslate"><span class="pre">META_FILE_SUFFIX</span></code></a></li>
@@ -104,6 +106,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.content_key"><code class="docutils literal notranslate"><span class="pre">content_key()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.make_byte_store"><code class="docutils literal notranslate"><span class="pre">make_byte_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.make_meta_store"><code class="docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.stores.make_provenance_store"><code class="docutils literal notranslate"><span class="pre">make_provenance_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.store_sound"><code class="docutils literal notranslate"><span class="pre">store_sound()</span></code></a></li>
 </ul>
 </li>
@@ -176,6 +179,17 @@ ids are unaffected (percent-encoding is a no-op on them).</p>
 </dl>
 </dd>
 </dl>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.stores.DEFAULT_PROVENANCE_DIR">
+<span class="sig-prename descclassname"><span class="pre">foley.stores.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_PROVENANCE_DIR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/.local/share/foley/provenance')</span></span><a class="headerlink" href="#foley.stores.DEFAULT_PROVENANCE_DIR" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">Mapping[content_id</span> <span class="pre">-&gt;</span> <span class="pre">credential</span> <span class="pre">dict]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Content-credential sidecars (#9b)</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="foley.stores.FOLEY_DATA_DIR">
 <span class="sig-prename descclassname"><span class="pre">foley.stores.</span></span><span class="sig-name descname"><span class="pre">FOLEY_DATA_DIR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/.local/share/foley')</span></span><a class="headerlink" href="#foley.stores.FOLEY_DATA_DIR" title="Link to this definition"></a></dt>
@@ -259,6 +273,27 @@ externally-derived id can never escape <code class="docutils literal notranslate
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">SoundRecord]</span></code> keyed by <code class="docutils literal notranslate"><span class="pre">sound_id</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.stores.make_provenance_store">
+<span class="sig-prename descclassname"><span class="pre">foley.stores.</span></span><span class="sig-name descname"><span class="pre">make_provenance_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/runner/.local/share/foley/provenance')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MutableMapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/stores.html#make_provenance_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.stores.make_provenance_store" title="Link to this definition"></a></dt>
+<dd><p>Build the content-credential store: <code class="docutils literal notranslate"><span class="pre">Mapping[content_id</span> <span class="pre">-&gt;</span> <span class="pre">dict]</span></code> (JSON files).</p>
+<p>The by-value sidecar carrier for #9b’s portable “content credential” (a
+C2PA-shaped assertion dict written next to each generated clip; a
+<code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code>’s <code class="docutils literal notranslate"><span class="pre">license.c2pa_manifest_ref</span></code> points here by content id). Like
+<a class="reference internal" href="#foley.stores.make_meta_store" title="foley.stores.make_meta_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a> it escapes the id to a safe <code class="docutils literal notranslate"><span class="pre">{enc}.json</span></code> filename
+(invariant #3) while exposing bare <code class="docutils literal notranslate"><span class="pre">content_id</span></code> keys; values are plain dicts
+((de)serialized natively by <code class="docutils literal notranslate"><span class="pre">dol.JsonFiles</span></code>). Local <code class="docutils literal notranslate"><span class="pre">dol.JsonFiles</span></code> by
+default; swap in any <code class="docutils literal notranslate"><span class="pre">dol</span></code> Mapping to move sidecars to the cloud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rootdir</strong> – Directory that holds the credential JSON files (created if missing).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">dict]</span></code> keyed by content id.</p>
 </dd>
 </dl>
 </dd></dl>

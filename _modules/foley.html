@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.8 documentation</title>
+  <title>foley &mdash; foley 0.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=53b53b71"></script>
+      <script src="../_static/documentation_options.js?v=f7cdbf68"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -73,6 +73,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/licensing.html">foley.licensing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/base.html">foley.sources.base</a></li>
@@ -296,7 +297,13 @@
 <span class="c1"># --- source: generation adapters (Stable Audio Open / ElevenLabs) — #6 ---------</span>
 <span class="c1"># The generate facade + its helpers. The generator adapter packages (and their</span>
 <span class="c1"># torch/requests deps) are auto-discovered lazily, so `import foley` stays dol-only.</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.sources</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenerationError</span><span class="p">,</span> <span class="n">candidate_of</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sources</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GenerationError</span><span class="p">,</span>
+    <span class="n">RecognizableVoiceRefusal</span><span class="p">,</span>
+    <span class="n">SafetyRefusal</span><span class="p">,</span>
+    <span class="n">TrademarkRefusal</span><span class="p">,</span>
+    <span class="n">candidate_of</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.sources</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate</span> <span class="k">as</span> <span class="n">_generate_backend</span>
 
 <span class="c1"># --- eval: Tier-1 retrieval metrics + the nDCG PR gate (numpy lazy) -----------</span>
@@ -436,6 +443,12 @@
     <span class="s2">&quot;generate&quot;</span><span class="p">,</span>
     <span class="s2">&quot;candidate_of&quot;</span><span class="p">,</span>
     <span class="s2">&quot;GenerationError&quot;</span><span class="p">,</span>
+    <span class="c1"># --- provenance: generation disclosure / watermark / safety (#9b) --------</span>
+    <span class="s2">&quot;SafetyRefusal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TrademarkRefusal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RecognizableVoiceRefusal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;art50_checklist&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;scan_prompt&quot;</span><span class="p">,</span>
     <span class="c1"># --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------</span>
     <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
     <span class="s2">&quot;evaluate&quot;</span><span class="p">,</span>
@@ -563,6 +576,10 @@
     <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">store</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">adapter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">watermark</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">on_flagged</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;refuse&quot;</span><span class="p">,</span>
+    <span class="n">watermarker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">provenance_store</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">affordances</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a sound effect for ``prompt`` and add it to the library (by-value).</span>
@@ -586,6 +603,13 @@
 <span class="sd">        store: If ``False``, synthesize + enrich a preview without adding it.</span>
 <span class="sd">        adapter: Optional pre-built adapter (the DI seam; production omits it and the</span>
 <span class="sd">            registry lazily builds one).</span>
+<span class="sd">        watermark: ``True`` require an AudioSeal watermark, ``False`` never, ``None``</span>
+<span class="sd">            (default, auto) watermark iff ``foley[provenance]`` is installed (#9b).</span>
+<span class="sd">        on_flagged: ``&#39;refuse&#39;`` (default, fail-closed) or ``&#39;warn&#39;`` for a prompt</span>
+<span class="sd">            that trips the trademarked-audio / recognizable-voice safety gate (#9b).</span>
+<span class="sd">        watermarker: An injected watermarker (the DI seam; tests pass a fake).</span>
+<span class="sd">        provenance_store: A ``MutableMapping`` for content-credential sidecars</span>
+<span class="sd">            (default: :func:`foley.stores.make_provenance_store`).</span>
 <span class="sd">        **affordances: Unified generation affordances (``duration``,</span>
 <span class="sd">            ``prompt_influence``, ``negative_prompt``, ``steps``, ``seed``, ``loop``,</span>
 <span class="sd">            ``output_format`` — see :data:`GENERATION_AFFORDANCES`); a backend</span>
@@ -596,6 +620,9 @@
 <span class="sd">        canonical, by-value :class:`SoundRecord` (a content-hash id).</span>
 
 <span class="sd">    Raises:</span>
+<span class="sd">        SafetyRefusal: If the prompt trips a safety gate and ``on_flagged=&#39;refuse&#39;``</span>
+<span class="sd">            (a :class:`GenerationError` subclass — ``TrademarkRefusal`` /</span>
+<span class="sd">            ``RecognizableVoiceRefusal``).</span>
 <span class="sd">        GenerationError: If the backend yields no stored sound (QC-quarantined,</span>
 <span class="sd">            rights-blocked, or a synthesis/ingest error). The exception carries the</span>
 <span class="sd">            full ``report`` and terminal ``status`` so callers can react distinctly.</span>
@@ -606,6 +633,10 @@
         <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
         <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span>
         <span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">,</span>
+        <span class="n">watermark</span><span class="o">=</span><span class="n">watermark</span><span class="p">,</span>
+        <span class="n">on_flagged</span><span class="o">=</span><span class="n">on_flagged</span><span class="p">,</span>
+        <span class="n">watermarker</span><span class="o">=</span><span class="n">watermarker</span><span class="p">,</span>
+        <span class="n">provenance_store</span><span class="o">=</span><span class="n">provenance_store</span><span class="p">,</span>
         <span class="o">**</span><span class="n">affordances</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">results</span>
@@ -673,12 +704,19 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lazily expose ``foley.library`` (the default :class:`SoundLibrary`).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lazily expose ``foley.library`` + the #9b disclosure helpers.</span>
 
-<span class="sd">    Kept lazy so ``import foley`` never constructs the CLAP model or the index.</span>
+<span class="sd">    ``library`` is kept lazy so ``import foley`` never constructs the CLAP model or</span>
+<span class="sd">    the index; the disclosure helpers are lazy so the (stdlib-only)</span>
+<span class="sd">    :mod:`foley.provenance.disclosure` module is not imported until first use,</span>
+<span class="sd">    keeping the eager ``import foley`` graph minimal.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;library&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">default_library</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;art50_checklist&quot;</span><span class="p">,</span> <span class="s2">&quot;scan_prompt&quot;</span><span class="p">,</span> <span class="s2">&quot;build_content_credential&quot;</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.provenance</span><span class="w"> </span><span class="kn">import</span> <span class="n">disclosure</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">disclosure</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
     <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;module </span><span class="si">{</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> has no attribute </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 

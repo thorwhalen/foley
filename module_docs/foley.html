@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.8 documentation</title>
+  <title>foley &mdash; foley 0.0.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=53b53b71"></script>
+      <script src="../_static/documentation_options.js?v=f7cdbf68"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -159,6 +159,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.QCStatus"><code class="docutils literal notranslate"><span class="pre">QCStatus</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.QCThresholds"><code class="docutils literal notranslate"><span class="pre">QCThresholds</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.RecognizableVoiceRefusal"><code class="docutils literal notranslate"><span class="pre">RecognizableVoiceRefusal</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.SafetyRefusal"><code class="docutils literal notranslate"><span class="pre">SafetyRefusal</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.Salience"><code class="docutils literal notranslate"><span class="pre">Salience</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.SerializableMixin"><code class="docutils literal notranslate"><span class="pre">SerializableMixin</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.SerializableMixin.from_dict"><code class="docutils literal notranslate"><span class="pre">SerializableMixin.from_dict()</span></code></a></li>
@@ -200,6 +202,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#foley.Tagger.tag"><code class="docutils literal notranslate"><span class="pre">Tagger.tag()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.TrademarkRefusal"><code class="docutils literal notranslate"><span class="pre">TrademarkRefusal</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.VectorIndex"><code class="docutils literal notranslate"><span class="pre">VectorIndex</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.VectorIndex.get_vector"><code class="docutils literal notranslate"><span class="pre">VectorIndex.get_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.VectorIndex.knn"><code class="docutils literal notranslate"><span class="pre">VectorIndex.knn()</span></code></a></li>
@@ -296,6 +299,7 @@
 <li class="toctree-l1"><a class="reference internal" href="foley/licensing.html">foley.licensing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources/base.html">foley.sources.base</a></li>
@@ -1092,6 +1096,25 @@ field.</p>
 per-check keyword arguments) to override any threshold without editing code.</p>
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="foley.RecognizableVoiceRefusal">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">RecognizableVoiceRefusal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="foley/index/ingest.html#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><span class="pre">IngestReport</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/generate.html#RecognizableVoiceRefusal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.RecognizableVoiceRefusal" title="Link to this definition"></a></dt>
+<dd><p>A <a class="reference internal" href="#foley.SafetyRefusal" title="foley.SafetyRefusal"><code class="xref py py-class docutils literal notranslate"><span class="pre">SafetyRefusal</span></code></a> for a prompt requesting a recognizable / cloned voice (report 07 §7.1).</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="foley.SafetyRefusal">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">SafetyRefusal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="foley/index/ingest.html#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><span class="pre">IngestReport</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/generate.html#SafetyRefusal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SafetyRefusal" title="Link to this definition"></a></dt>
+<dd><p>Raised (fail-closed) when a generation prompt trips a #9b safety gate.</p>
+<p>A pre-synthesis hard stop: nothing is generated or stored. Distinct from a
+resilience <code class="docutils literal notranslate"><span class="pre">error</span></code> result (a backend/ingest failure the workhorse records
+without raising) — a safety refusal is a deliberate refusal of an unsafe
+request. Its <code class="docutils literal notranslate"><span class="pre">report</span></code> is an empty pre-generation report and <code class="docutils literal notranslate"><span class="pre">status</span></code> is
+<code class="docutils literal notranslate"><span class="pre">'refused'</span></code>. Carries <code class="xref py py-attr docutils literal notranslate"><span class="pre">hits</span></code> (the matched marks/patterns). Subclass of
+<a class="reference internal" href="#foley.GenerationError" title="foley.GenerationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenerationError</span></code></a> so the public <a class="reference internal" href="#foley.generate" title="foley.generate"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.generate()</span></code></a> <code class="docutils literal notranslate"><span class="pre">Raises</span></code> clause
+already covers it. See <a class="reference internal" href="foley/provenance/disclosure.html#foley.provenance.disclosure.scan_prompt" title="foley.provenance.disclosure.scan_prompt"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.provenance.disclosure.scan_prompt()</span></code></a>.</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.Salience">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">Salience</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/base.html#Salience"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.Salience" title="Link to this definition"></a></dt>
@@ -1419,6 +1442,12 @@ working array (<code class="docutils literal notranslate"><span class="pre">floa
 <dd><p>Return the top-<code class="docutils literal notranslate"><span class="pre">k</span></code> <code class="docutils literal notranslate"><span class="pre">(label,</span> <span class="pre">score)</span></code> tags for the clip, best first.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="foley.TrademarkRefusal">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">TrademarkRefusal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="foley/index/ingest.html#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><span class="pre">IngestReport</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/generate.html#TrademarkRefusal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.TrademarkRefusal" title="Link to this definition"></a></dt>
+<dd><p>A <a class="reference internal" href="#foley.SafetyRefusal" title="foley.SafetyRefusal"><code class="xref py py-class docutils literal notranslate"><span class="pre">SafetyRefusal</span></code></a> for a prompt naming a trademarked audio logo (report 07 §7.2).</p>
 </dd></dl>
 
 <dl class="py class">
@@ -1958,7 +1987,7 @@ out-ramps never overlap on tiny inputs.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="foley.generate">
-<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stable_audio'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">affordances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley.html#generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.generate" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stable_audio'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watermark</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_flagged</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'refuse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watermarker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provenance_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">affordances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley.html#generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.generate" title="Link to this definition"></a></dt>
 <dd><p>Generate a sound effect for <code class="docutils literal notranslate"><span class="pre">prompt</span></code> and add it to the library (by-value).</p>
 <p>Progressive disclosure: <code class="docutils literal notranslate"><span class="pre">foley.generate(&quot;a</span> <span class="pre">single</span> <span class="pre">wooden</span> <span class="pre">door</span> <span class="pre">creak&quot;)</span></code> works
 out of the box (the local Stable Audio Open backend, into the process-wide
@@ -1980,6 +2009,13 @@ needs <code class="docutils literal notranslate"><span class="pre">foley[stable-
 <li><p><strong>store</strong> – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, synthesize + enrich a preview without adding it.</p></li>
 <li><p><strong>adapter</strong> – Optional pre-built adapter (the DI seam; production omits it and the
 registry lazily builds one).</p></li>
+<li><p><strong>watermark</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> require an AudioSeal watermark, <code class="docutils literal notranslate"><span class="pre">False</span></code> never, <code class="docutils literal notranslate"><span class="pre">None</span></code>
+(default, auto) watermark iff <code class="docutils literal notranslate"><span class="pre">foley[provenance]</span></code> is installed (#9b).</p></li>
+<li><p><strong>on_flagged</strong> – <code class="docutils literal notranslate"><span class="pre">'refuse'</span></code> (default, fail-closed) or <code class="docutils literal notranslate"><span class="pre">'warn'</span></code> for a prompt
+that trips the trademarked-audio / recognizable-voice safety gate (#9b).</p></li>
+<li><p><strong>watermarker</strong> – An injected watermarker (the DI seam; tests pass a fake).</p></li>
+<li><p><strong>provenance_store</strong> – A <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> for content-credential sidecars
+(default: <a class="reference internal" href="foley/stores.html#foley.stores.make_provenance_store" title="foley.stores.make_provenance_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.stores.make_provenance_store()</span></code></a>).</p></li>
 <li><p><strong>**affordances</strong> – Unified generation affordances (<code class="docutils literal notranslate"><span class="pre">duration</span></code>,
 <code class="docutils literal notranslate"><span class="pre">prompt_influence</span></code>, <code class="docutils literal notranslate"><span class="pre">negative_prompt</span></code>, <code class="docutils literal notranslate"><span class="pre">steps</span></code>, <code class="docutils literal notranslate"><span class="pre">seed</span></code>, <code class="docutils literal notranslate"><span class="pre">loop</span></code>,
 <code class="docutils literal notranslate"><span class="pre">output_format</span></code> — see <code class="xref py py-data docutils literal notranslate"><span class="pre">GENERATION_AFFORDANCES</span></code>); a backend
@@ -1991,9 +2027,14 @@ warns-and-drops the ones it does not support.</p></li>
 canonical, by-value <a class="reference internal" href="#foley.SoundRecord" title="foley.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a> (a content-hash id).</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#foley.GenerationError" title="foley.GenerationError"><strong>GenerationError</strong></a> – If the backend yields no stored sound (QC-quarantined,
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#foley.SafetyRefusal" title="foley.SafetyRefusal"><strong>SafetyRefusal</strong></a> – If the prompt trips a safety gate and <code class="docutils literal notranslate"><span class="pre">on_flagged='refuse'</span></code>
+    (a <a class="reference internal" href="#foley.GenerationError" title="foley.GenerationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenerationError</span></code></a> subclass — <code class="docutils literal notranslate"><span class="pre">TrademarkRefusal</span></code> /
+    <code class="docutils literal notranslate"><span class="pre">RecognizableVoiceRefusal</span></code>).</p></li>
+<li><p><a class="reference internal" href="#foley.GenerationError" title="foley.GenerationError"><strong>GenerationError</strong></a> – If the backend yields no stored sound (QC-quarantined,
     rights-blocked, or a synthesis/ingest error). The exception carries the
-    full <code class="docutils literal notranslate"><span class="pre">report</span></code> and terminal <code class="docutils literal notranslate"><span class="pre">status</span></code> so callers can react distinctly.</p>
+    full <code class="docutils literal notranslate"><span class="pre">report</span></code> and terminal <code class="docutils literal notranslate"><span class="pre">status</span></code> so callers can react distinctly.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

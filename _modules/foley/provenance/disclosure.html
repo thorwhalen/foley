@@ -1,0 +1,840 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.provenance.disclosure &mdash; foley 0.0.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.provenance.disclosure</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.provenance.disclosure</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Disclosure, watermarking &amp; safety for AI-generated audio (#9b).</span>
+
+<span class="sd">The sibling of :mod:`foley.provenance.credits`: where ``credits`` renders TASL</span>
+<span class="sd">attribution, this module makes a *generated* clip **traceable, disclosed, and</span>
+<span class="sd">safe** for a published product (report 07 §6–7):</span>
+
+<span class="sd">* **AudioSeal watermark** — an imperceptible, detectable mark embedded on every</span>
+<span class="sd">  generated clip so downstream systems (and foley itself) can verify it was</span>
+<span class="sd">  machine-made. Populates ``LicenseRecord.watermark``. Meta AudioSeal is MIT</span>
+<span class="sd">  (code + weights) but a **16 kHz mono speech** model used off-label on 44.1 kHz</span>
+<span class="sd">  stereo SFX, so the per-clip mark is a **soft-binding** provenance signal (the</span>
+<span class="sd">  achieved detection probability is recorded); C2PA is the hard-binding carrier.</span>
+<span class="sd">* **Content Credential (C2PA)** — #9b writes a portable, self-asserted JSON</span>
+<span class="sd">  &quot;content credential&quot; *sidecar* (a C2PA-shaped assertion dict: the &quot;AI use&quot;</span>
+<span class="sd">  action, the training-mining opt-out, and the TASL/license) into a provenance</span>
+<span class="sd">  store, and points ``LicenseRecord.c2pa_manifest_ref`` at it. A real</span>
+<span class="sd">  *signed + embedded* C2PA manifest (via ``c2pa-python``) over the final mix is a</span>
+<span class="sd">  weave/export concern deferred to #8; :func:`build_content_credential` is the SSOT</span>
+<span class="sd">  dict that step promotes verbatim.</span>
+<span class="sd">* **EU AI Act Art. 50** — :func:`art50_checklist` is a pure reader over the</span>
+<span class="sd">  ``LicenseRecord`` reporting which transparency obligations a clip has met vs.</span>
+<span class="sd">  still pending (deadline **2 Aug 2026**).</span>
+<span class="sd">* **Safety gates** — :func:`scan_prompt` matches a generation prompt against a</span>
+<span class="sd">  registry of trademarked audio logos (THX, NBC chimes, Netflix Ta-dum, …) and</span>
+<span class="sd">  recognizable-voice patterns. The generate façade *decides* on the result</span>
+<span class="sd">  (fail-closed refuse by default, or warn-and-flag); this module only *detects*.</span>
+
+<span class="sd">Layering: this module depends only on :mod:`foley.base` / :mod:`foley.stores`</span>
+<span class="sd">(never on :mod:`foley.sources`). The safety-refusal exceptions live in</span>
+<span class="sd">:mod:`foley.sources.generate` (their ``GenerationError`` taxonomy home) and are</span>
+<span class="sd">*raised there*; ``disclosure`` returns a :class:`PromptScan` and the caller</span>
+<span class="sd">decides. The module top level is **stdlib-only** — ``audioseal`` / ``torch`` /</span>
+<span class="sd">``torchaudio`` are imported *inside* the watermark functions (the</span>
+<span class="sd">``foley[provenance]`` extra), so importing this module (and ``import foley``) stays</span>
+<span class="sd">dependency-light.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover - typing only</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">LicenseRecord</span><span class="p">,</span> <span class="n">SoundRecord</span>
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># constants</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1">#: The FIXED 16-bit foley provenance id embedded by AudioSeal. It MUST be constant</span>
+<span class="c1">#: (no per-call nonce / timestamp): a deterministic watermark keeps the stored</span>
+<span class="c1">#: content-hash id reproducible so a byte-identical regeneration still dedups</span>
+<span class="c1">#: (``skipped_dup``) — the #6 generation-flywheel promise. See</span>
+<span class="c1">#: :meth:`AudioSealWatermarker.embed`.</span>
+<span class="n">DEFAULT_WATERMARK_MESSAGE</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0xF01E</span>  <span class="c1"># 61470; &lt;= 65535 (16 bits)</span>
+
+<span class="n">WATERMARK_METHOD</span> <span class="o">=</span> <span class="s2">&quot;audioseal&quot;</span>
+<span class="n">AUDIOSEAL_GENERATOR</span> <span class="o">=</span> <span class="s2">&quot;audioseal_wm_16bits&quot;</span>
+<span class="n">AUDIOSEAL_DETECTOR</span> <span class="o">=</span> <span class="s2">&quot;audioseal_detector_16bits&quot;</span>
+<span class="n">AUDIOSEAL_NBITS</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">WATERMARK_EMBED_SR</span> <span class="o">=</span> <span class="mi">16_000</span>  <span class="c1"># AudioSeal&#39;s native (mono) rate</span>
+
+<span class="n">CONTENT_CREDENTIAL_SCHEMA</span> <span class="o">=</span> <span class="s2">&quot;foley/content-credential/v1&quot;</span>
+<span class="c1">#: IPTC digitalSourceType vocabulary (C2PA ``c2pa.actions`` assertion).</span>
+<span class="n">IPTC_TRAINED_ALGORITHMIC_MEDIA</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia&quot;</span>
+<span class="p">)</span>
+<span class="n">IPTC_DIGITAL_CREATION</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation&quot;</span>
+<span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># safety registries (report 07 §7.2) — stdlib data, extensible</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="TrademarkEntry">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.TrademarkEntry">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TrademarkEntry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One trademarked audio logo + the casefolded prompt substrings that flag it.&quot;&quot;&quot;</span>
+
+    <span class="n">canonical</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">aliases</span><span class="p">:</span> <span class="s2">&quot;frozenset[str]&quot;</span></div>
+
+
+
+<span class="c1">#: Seed registry of branded audio logos foley must not knowingly generate for</span>
+<span class="c1">#: commercial use (report 07 §7.2). Each entry maps a canonical mark to a set of</span>
+<span class="c1">#: casefolded trigger substrings. Extend freely — this is a best-effort aid, not a</span>
+<span class="c1">#: legal guarantee.</span>
+<span class="n">TRADEMARK_REGISTRY</span><span class="p">:</span> <span class="s2">&quot;tuple[TrademarkEntry, ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">&quot;THX Deep Note&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;thx&quot;</span><span class="p">,</span> <span class="s2">&quot;deep note&quot;</span><span class="p">})),</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">&quot;NBC chimes&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;nbc chimes&quot;</span><span class="p">,</span> <span class="s2">&quot;nbc chime&quot;</span><span class="p">,</span> <span class="s2">&quot;nbc three-note&quot;</span><span class="p">})),</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span>
+        <span class="s2">&quot;Netflix Ta-dum&quot;</span><span class="p">,</span>
+        <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;ta-dum&quot;</span><span class="p">,</span> <span class="s2">&quot;ta dum&quot;</span><span class="p">,</span> <span class="s2">&quot;tudum&quot;</span><span class="p">,</span> <span class="s2">&quot;netflix intro&quot;</span><span class="p">,</span> <span class="s2">&quot;netflix sound&quot;</span><span class="p">,</span> <span class="s2">&quot;netflix chime&quot;</span><span class="p">}),</span>
+    <span class="p">),</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">&quot;MGM lion roar&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;mgm roar&quot;</span><span class="p">,</span> <span class="s2">&quot;mgm lion&quot;</span><span class="p">,</span> <span class="s2">&quot;metro-goldwyn-mayer lion&quot;</span><span class="p">})),</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span>
+        <span class="s2">&quot;20th Century Fox fanfare&quot;</span><span class="p">,</span>
+        <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;20th century fox fanfare&quot;</span><span class="p">,</span> <span class="s2">&quot;fox fanfare&quot;</span><span class="p">,</span> <span class="s2">&quot;century fox intro&quot;</span><span class="p">}),</span>
+    <span class="p">),</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span>
+        <span class="s2">&quot;Intel five-note bong&quot;</span><span class="p">,</span>
+        <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;intel bong&quot;</span><span class="p">,</span> <span class="s2">&quot;intel inside&quot;</span><span class="p">,</span> <span class="s2">&quot;intel jingle&quot;</span><span class="p">,</span> <span class="s2">&quot;intel chime&quot;</span><span class="p">}),</span>
+    <span class="p">),</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">&quot;Homer Simpson D&#39;oh&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;d&#39;oh&quot;</span><span class="p">,</span> <span class="s2">&quot;homer doh&quot;</span><span class="p">,</span> <span class="s2">&quot;homer simpson doh&quot;</span><span class="p">})),</span>
+<span class="p">)</span>
+
+<span class="c1">#: Explicit voice-clone / human-voice-request cues (report 07 §7.1) — matched</span>
+<span class="c1">#: case-INSENSITIVELY, because these phrasings are unambiguous requests for a human</span>
+<span class="c1">#: voice and warrant a disclosure flag regardless of case.</span>
+<span class="n">_VOICE_CUE_PATTERNS</span><span class="p">:</span> <span class="s2">&quot;tuple[re.Pattern, ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;in the voice of&quot;</span><span class="p">),</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;voice[ -]?clon\w*&quot;</span><span class="p">),</span>  <span class="c1"># &quot;voice clone&quot;, &quot;voice-cloning&quot;</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;clon(?:e|ed|ing)\b.{0,20}\bvoice&quot;</span><span class="p">),</span>  <span class="c1"># &quot;clone her voice&quot;</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;deep[ -]?fake&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1">#: Proper-name voice patterns (report 07 §7.1) — matched on the ORIGINAL (cased)</span>
+<span class="c1">#: prompt and requiring a Title-case proper name, so ordinary lowercase SFX</span>
+<span class="c1">#: descriptions (&quot;sounds like breaking glass&quot;, &quot;voice of thunder&quot;, &quot;impersonating a</span>
+<span class="c1">#: robot&quot;) are NOT flagged — only a named person is (e.g. &quot;sounds like Morgan</span>
+<span class="c1">#: Freeman&quot;). Best-effort: a lowercase real name is a known false-negative and a</span>
+<span class="c1">#: Title-case non-person (e.g. &quot;Big Ben&quot;) a known false-positive; the gate is a</span>
+<span class="c1">#: warn/refuse aid, not a legal guarantee.</span>
+<span class="n">_VOICE_NAME_PATTERNS</span><span class="p">:</span> <span class="s2">&quot;tuple[re.Pattern, ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bvoice of ([A-Z][a-z]+(?: [A-Z][a-z]+)+)&quot;</span><span class="p">),</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bsounds? like ([A-Z][a-z]+ [A-Z][a-z]+)&quot;</span><span class="p">),</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bimpersonat\w*\s+([A-Z][a-z]+)&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="PromptScan">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.PromptScan">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PromptScan</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of scanning a generation prompt for safety flags (pure).&quot;&quot;&quot;</span>
+
+    <span class="n">trademark_hits</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...]&quot;</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">voice_hits</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...]&quot;</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">flagged</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the prompt matched any trademark or recognizable-voice pattern.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trademark_hits</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">potential_trademark</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the prompt matched a branded-audio-logo entry.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trademark_hits</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">contains_recognizable_voice</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the prompt matched a recognizable-voice / clone pattern.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="scan_prompt">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.scan_prompt">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">scan_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PromptScan</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan a generation ``prompt`` for trademarked-audio-logo + voice-clone risk.</span>
+
+<span class="sd">    Pure and stdlib-only (casefold substring + regex). Returns a</span>
+<span class="sd">    :class:`PromptScan`; it never raises and makes no decision — the generate</span>
+<span class="sd">    façade decides (fail-closed refuse by default, or warn-and-flag).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prompt: The natural-language generation prompt.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`PromptScan` naming the matched marks / voice patterns.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">original</span> <span class="o">=</span> <span class="n">prompt</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">original</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span>
+    <span class="n">trademark_hits</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">canonical</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">TRADEMARK_REGISTRY</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">alias</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">aliases</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># Explicit clone cues match case-insensitively; proper-name patterns match the</span>
+    <span class="c1"># ORIGINAL (cased) prompt so lowercase SFX descriptions are never flagged.</span>
+    <span class="n">voice_hits</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pattern</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_VOICE_CUE_PATTERNS</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">text</span><span class="p">))</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">pattern</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_VOICE_NAME_PATTERNS</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">PromptScan</span><span class="p">(</span><span class="n">trademark_hits</span><span class="o">=</span><span class="n">trademark_hits</span><span class="p">,</span> <span class="n">voice_hits</span><span class="o">=</span><span class="n">voice_hits</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># watermarking — AudioSeal (lazy) behind a DI seam</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="WatermarkUnavailable">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.WatermarkUnavailable">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">WatermarkUnavailable</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a watermark is explicitly requested but ``foley[provenance]`` is absent.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="WatermarkResult">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.WatermarkResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">WatermarkResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The output of a :class:`Watermarker`: the marked bytes + provenance meta.&quot;&quot;&quot;</span>
+
+    <span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span>
+    <span class="n">detection_prob</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="Watermarker">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.Watermarker">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Watermarker</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Embeds a detectable provenance watermark into audio bytes (the DI seam).</span>
+
+<span class="sd">    The default is :class:`AudioSealWatermarker`; tests inject a deterministic</span>
+<span class="sd">    fake — exactly the ``adapter=`` / ``pipeline=`` seam the source adapters use.</span>
+<span class="sd">    ``embed`` MUST be deterministic for a fixed ``message`` (same input bytes →</span>
+<span class="sd">    same output bytes) so the stored content-hash id stays reproducible and the</span>
+<span class="sd">    generation-flywheel dedup keeps working.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span>
+
+<div class="viewcode-block" id="Watermarker.embed">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.Watermarker.embed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_WATERMARK_MESSAGE</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WatermarkResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the watermarked bytes + a provenance meta dict.&quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_int_to_bits</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nbits</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;``message`` → a ``(1, nbits)`` torch.long bit tensor (bit i = (message&gt;&gt;i)&amp;1).&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+    <span class="n">bits</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">int</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbits</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">bits</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_bits_to_int</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inverse of :func:`_int_to_bits` over a length-``nbits`` 0/1 sequence.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bits</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="AudioSealWatermarker">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.AudioSealWatermarker">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AudioSealWatermarker</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The default :class:`Watermarker` — Meta AudioSeal, run on CPU, deterministic.</span>
+
+<span class="sd">    ``audioseal`` / ``torch`` / ``torchaudio`` are imported lazily inside the</span>
+<span class="sd">    methods (the ``foley[provenance]`` extra), so importing this class stays</span>
+<span class="sd">    dependency-light. Watermarking runs on **CPU** with a **fixed message** and</span>
+<span class="sd">    ``eval()``/``no_grad`` for cross-machine reproducibility (the dedup invariant).</span>
+<span class="sd">    Because AudioSeal is a 16 kHz mono model, 44.1 kHz stereo SFX is watermarked</span>
+<span class="sd">    per channel via a 16 kHz round-trip (lossy) — the mark is a soft-binding</span>
+<span class="sd">    signal and the achieved detection probability is recorded in the meta.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">method</span> <span class="o">=</span> <span class="n">WATERMARK_METHOD</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_WATERMARK_MESSAGE</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="o">=</span> <span class="n">message</span>
+
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The installed ``audioseal`` package version (best-effort).&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
+
+            <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="s2">&quot;audioseal&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pragma: no cover - metadata edge</span>
+            <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span>
+
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>  <span class="c1"># noqa: F401 - ensures torch present for the model</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">audioseal</span><span class="w"> </span><span class="kn">import</span> <span class="n">AudioSeal</span>
+
+        <span class="k">return</span> <span class="n">AudioSeal</span><span class="o">.</span><span class="n">load_generator</span><span class="p">(</span><span class="n">AUDIOSEAL_GENERATOR</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AudioSealWatermarker.embed">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.AudioSealWatermarker.embed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WatermarkResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Embed the AudioSeal watermark; return the marked bytes + meta.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            audio_bytes: The clip&#39;s container bytes (WAV/FLAC/…).</span>
+<span class="sd">            message: The 16-bit id to embed (default :data:`DEFAULT_WATERMARK_MESSAGE`).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A :class:`WatermarkResult` whose ``audio_bytes`` is lossless WAV</span>
+<span class="sd">            (float32) — a deterministic PCM round-trip so its content-hash id is</span>
+<span class="sd">            reproducible — and whose ``meta`` is the ``LicenseRecord.watermark`` dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+
+        <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">torchaudio</span>
+
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
+
+        <span class="n">msg_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_message</span> <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">message</span>
+        <span class="n">samples</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">audio_bytes</span><span class="p">)</span>  <span class="c1"># native rate, not mono</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">n_frames</span><span class="p">,</span> <span class="n">channels</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="n">gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">_int_to_bits</span><span class="p">(</span><span class="n">msg_int</span><span class="p">,</span> <span class="n">AUDIOSEAL_NBITS</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">channels</span><span class="p">):</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">arr</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]))[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">x16</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">torchaudio</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sr</span><span class="p">,</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">sr</span> <span class="o">!=</span> <span class="n">WATERMARK_EMBED_SR</span>
+                    <span class="k">else</span> <span class="n">x</span>
+                <span class="p">)</span>
+                <span class="n">wm</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">get_watermark</span><span class="p">(</span><span class="n">x16</span><span class="p">,</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+                <span class="n">y16</span> <span class="o">=</span> <span class="n">x16</span> <span class="o">+</span> <span class="n">wm</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">torchaudio</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">y16</span><span class="p">,</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">,</span> <span class="n">sr</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">sr</span> <span class="o">!=</span> <span class="n">WATERMARK_EMBED_SR</span>
+                    <span class="k">else</span> <span class="n">y16</span>
+                <span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                <span class="c1"># resample can drift the length by a sample or two — crop/pad to match</span>
+                <span class="k">if</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">n_frames</span><span class="p">:</span>
+                    <span class="n">out</span><span class="p">[:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_frames</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span><span class="p">[:</span><span class="n">n_frames</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+                    <span class="n">out</span><span class="p">[:</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+        <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">out</span> <span class="k">if</span> <span class="n">channels</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">out</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sr</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;WAV&quot;</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="s2">&quot;FLOAT&quot;</span><span class="p">)</span>
+        <span class="n">wm_bytes</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+
+        <span class="n">prob</span><span class="p">,</span> <span class="n">recovered</span> <span class="o">=</span> <span class="n">detect_watermark</span><span class="p">(</span><span class="n">wm_bytes</span><span class="p">)</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;present&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">WATERMARK_METHOD</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">AUDIOSEAL_GENERATOR</span><span class="p">,</span>
+            <span class="s2">&quot;detector&quot;</span><span class="p">:</span> <span class="n">AUDIOSEAL_DETECTOR</span><span class="p">,</span>
+            <span class="s2">&quot;nbits&quot;</span><span class="p">:</span> <span class="n">AUDIOSEAL_NBITS</span><span class="p">,</span>
+            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">msg_int</span><span class="p">,</span>
+            <span class="s2">&quot;embed_sample_rate&quot;</span><span class="p">:</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">,</span>
+            <span class="s2">&quot;embed_channels&quot;</span><span class="p">:</span> <span class="s2">&quot;per-channel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;detection_prob&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">prob</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">WatermarkResult</span><span class="p">(</span><span class="n">audio_bytes</span><span class="o">=</span><span class="n">wm_bytes</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span> <span class="n">detection_prob</span><span class="o">=</span><span class="n">prob</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="detect_watermark">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.detect_watermark">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">detect_watermark</span><span class="p">(</span><span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[float, Optional[int]]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect a foley watermark in ``audio_bytes`` (lazy AudioSeal).</span>
+
+<span class="sd">    Downmixes to mono + resamples to 16 kHz, then runs the AudioSeal detector.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        audio_bytes: The clip&#39;s container bytes.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``(probability, recovered_message)`` — ``probability`` in ``[0, 1]`` that a</span>
+<span class="sd">        watermark is present, and the recovered 16-bit id (``None`` if the</span>
+<span class="sd">        probability is below 0.5).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">torchaudio</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">audioseal</span><span class="w"> </span><span class="kn">import</span> <span class="n">AudioSeal</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
+
+    <span class="n">samples</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">audio_bytes</span><span class="p">,</span> <span class="n">mono</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)))[</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">sr</span> <span class="o">!=</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torchaudio</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sr</span><span class="p">,</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">)</span>
+    <span class="n">detector</span> <span class="o">=</span> <span class="n">AudioSeal</span><span class="o">.</span><span class="n">load_detector</span><span class="p">(</span><span class="n">AUDIOSEAL_DETECTOR</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">prob</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">detect_watermark</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">)</span>
+    <span class="n">prob</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+    <span class="n">recovered</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">prob</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="ow">and</span> <span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">recovered</span> <span class="o">=</span> <span class="n">_bits_to_int</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">prob</span><span class="p">,</span> <span class="n">recovered</span></div>
+
+
+
+<div class="viewcode-block" id="resolve_watermarker">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.resolve_watermarker">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_watermarker</span><span class="p">(</span>
+    <span class="n">watermark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span> <span class="n">watermarker</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Watermarker</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Watermarker</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve the effective :class:`Watermarker` for a generate call.</span>
+
+<span class="sd">    Progressive disclosure: generation works with or without ``foley[provenance]``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        watermark: ``True`` require a watermark (raise if unavailable), ``False``</span>
+<span class="sd">            never watermark, ``None`` (auto) watermark iff ``audioseal`` is installed.</span>
+<span class="sd">        watermarker: An injected watermarker (the DI seam) — wins over auto-detect.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`Watermarker`, or ``None`` when watermarking is off/unavailable.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        WatermarkUnavailable: If ``watermark=True`` but ``audioseal`` is not installed</span>
+<span class="sd">            (and no ``watermarker`` was injected).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">watermark</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">watermarker</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">watermarker</span>
+    <span class="n">available</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;audioseal&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">watermark</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">available</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">WatermarkUnavailable</span><span class="p">(</span>
+            <span class="s2">&quot;watermark=True but AudioSeal is not installed. &quot;</span>
+            <span class="s2">&quot;Install it with `pip install &#39;foley[provenance]&#39;`, pass watermark=False, &quot;</span>
+            <span class="s2">&quot;or leave watermark=None (auto).&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">AudioSealWatermarker</span><span class="p">()</span> <span class="k">if</span> <span class="n">available</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># C2PA content credential — portable JSON sidecar (signed embed deferred to #8)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="s2">&quot;CreditInput&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize a credit input to ``(license, caption, fmt)``.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">LicenseRecord</span><span class="p">,</span> <span class="n">SoundRecord</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">Candidate</span><span class="p">):</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">sound</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">SoundRecord</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">license</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">caption</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">format</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">LicenseRecord</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">record</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+        <span class="s2">&quot;content-credential input must be SoundRecord | Candidate | LicenseRecord, &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">record</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+
+    <span class="n">CreditInput</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;SoundRecord&quot;</span><span class="p">,</span> <span class="s2">&quot;Candidate&quot;</span><span class="p">,</span> <span class="s2">&quot;LicenseRecord&quot;</span><span class="p">]</span>
+
+<span class="n">_MIME_BY_FORMAT</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;wav&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/wav&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;flac&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/flac&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mp3&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/mpeg&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;opus&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/opus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;m4a&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/mp4&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_foley_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
+
+        <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="s2">&quot;foley&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span>
+
+
+<div class="viewcode-block" id="build_content_credential">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.build_content_credential">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_content_credential</span><span class="p">(</span>
+    <span class="n">record</span><span class="p">:</span> <span class="s2">&quot;CreditInput&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">asset_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the portable, self-asserted C2PA-shaped content-credential dict.</span>
+
+<span class="sd">    A pure reader over the ``LicenseRecord`` SSOT (flags never re-derived), mirroring</span>
+<span class="sd">    :func:`foley.provenance.credits.credit_entry`&#39;s discipline. The ``manifest``</span>
+<span class="sd">    sub-object is byte-for-byte the dict a future signer (``c2pa.Builder``, #8/weave)</span>
+<span class="sd">    promotes into a real signed + embedded manifest — so the credential shape can</span>
+<span class="sd">    never fork between the generate-time sidecar and the export-time manifest.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        record: A :class:`~foley.base.SoundRecord`, :class:`~foley.base.Candidate`,</span>
+<span class="sd">            or :class:`~foley.base.LicenseRecord`.</span>
+<span class="sd">        asset_id: The clip&#39;s content-hash id (the sidecar store key / ref).</span>
+<span class="sd">        asset_hash: Optional ``{&quot;alg&quot;: &quot;sha256&quot;, &quot;value&quot;: &lt;hex&gt;}`` of the asset bytes.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A JSON-serializable content-credential dict (``signed``/``embedded`` False —</span>
+<span class="sd">        it is self-asserted until #8 signs it).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">license_meta</span>
+
+    <span class="n">lic</span><span class="p">,</span> <span class="n">caption</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">_coerce</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+    <span class="n">source_type</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">IPTC_TRAINED_ALGORITHMIC_MEDIA</span> <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">is_ai_generated</span> <span class="k">else</span> <span class="n">IPTC_DIGITAL_CREATION</span>
+    <span class="p">)</span>
+    <span class="c1"># Prefer the record&#39;s own URL, else the canonical URL from the licensing SSOT</span>
+    <span class="c1"># (a resolvable URL is what a machine-readable credential needs), else the id.</span>
+    <span class="n">license_ref</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">license_url</span> <span class="ow">or</span> <span class="n">license_meta</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="p">)</span><span class="o">.</span><span class="n">url</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">license_id</span>
+    <span class="n">software_agent</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span><span class="p">:</span>
+        <span class="n">software_agent</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span>
+    <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span><span class="p">:</span>
+        <span class="n">software_agent</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span>
+
+    <span class="n">created_action</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;c2pa.created&quot;</span><span class="p">,</span> <span class="s2">&quot;digitalSourceType&quot;</span><span class="p">:</span> <span class="n">source_type</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">software_agent</span><span class="p">:</span>
+        <span class="n">created_action</span><span class="p">[</span><span class="s2">&quot;softwareAgent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">software_agent</span>
+
+    <span class="n">ai_use</span> <span class="o">=</span> <span class="s2">&quot;notAllowed&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span> <span class="k">else</span> <span class="s2">&quot;allowed&quot;</span>
+    <span class="n">assertions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;c2pa.actions&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">created_action</span><span class="p">]}},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;cawg.training-mining&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;entries&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;cawg.ai_inference&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;use&quot;</span><span class="p">:</span> <span class="n">ai_use</span><span class="p">},</span>
+                    <span class="s2">&quot;cawg.ai_generative_training&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;use&quot;</span><span class="p">:</span> <span class="n">ai_use</span><span class="p">},</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;stds.schema-org.CreativeWork&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;@context&quot;</span><span class="p">:</span> <span class="s2">&quot;https://schema.org&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;@type&quot;</span><span class="p">:</span> <span class="s2">&quot;CreativeWork&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;license&quot;</span><span class="p">:</span> <span class="n">license_ref</span><span class="p">,</span>
+                <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;@type&quot;</span><span class="p">:</span> <span class="s2">&quot;Organization&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">creator_name</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">rights_holder</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+    <span class="c1"># foley-native reproducibility assertion (self-asserted; kept in the local sidecar)</span>
+    <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">is_ai_generated</span><span class="p">:</span>
+        <span class="n">assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;foley.generation&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span><span class="p">,</span>
+                    <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_seed</span><span class="p">,</span>
+                    <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_params</span> <span class="ow">or</span> <span class="p">{},</span>
+                    <span class="s2">&quot;watermark&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="n">manifest</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;claim_generator_info&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;foley&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">_foley_version</span><span class="p">()}],</span>
+        <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="n">_MIME_BY_FORMAT</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">fmt</span> <span class="ow">or</span> <span class="s2">&quot;wav&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;audio/wav&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">caption</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span> <span class="ow">or</span> <span class="n">asset_id</span><span class="p">,</span>
+        <span class="s2">&quot;ingredients&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;assertions&quot;</span><span class="p">:</span> <span class="n">assertions</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="n">CONTENT_CREDENTIAL_SCHEMA</span><span class="p">,</span>
+        <span class="s2">&quot;signed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;embedded&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;asset_ref&quot;</span><span class="p">:</span> <span class="n">asset_id</span><span class="p">,</span>
+        <span class="s2">&quot;asset_hash&quot;</span><span class="p">:</span> <span class="n">asset_hash</span><span class="p">,</span>
+        <span class="s2">&quot;manifest&quot;</span><span class="p">:</span> <span class="n">manifest</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="write_content_credential">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.write_content_credential">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_content_credential</span><span class="p">(</span>
+    <span class="n">store</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credential</span><span class="p">:</span> <span class="nb">dict</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write ``credential`` into ``store`` keyed by ``asset_id``; return ``asset_id``.</span>
+
+<span class="sd">    ``store`` is any ``MutableMapping[str, dict]`` (default:</span>
+<span class="sd">    :func:`foley.stores.make_provenance_store`, a local JSON-file store; swap for a</span>
+<span class="sd">    cloud ``dol`` store to move sidecars off-box).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">store</span><span class="p">[</span><span class="n">asset_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">credential</span>
+    <span class="k">return</span> <span class="n">asset_id</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># EU AI Act Art. 50 disclosure checklist (pure reader)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="art50_checklist">
+<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.art50_checklist">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">art50_checklist</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="s2">&quot;CreditInput&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the per-clip EU AI Act Art. 50 transparency checklist (pure reader).</span>
+
+<span class="sd">    Reports, per obligation, whether it is ``required`` for this clip and whether it</span>
+<span class="sd">    has been ``met`` — so a caller can see what a publish still needs (e.g. the</span>
+<span class="sd">    machine-readable mark is *pending* when ``foley[provenance]`` was absent at</span>
+<span class="sd">    generation). A pure :class:`~foley.base.LicenseRecord` reader (flags never</span>
+<span class="sd">    re-derived), mirroring :mod:`foley.provenance.credits`. The render-scoped</span>
+<span class="sd">    rollup over a whole mix is a weave/#8 concern.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        record: A :class:`~foley.base.SoundRecord`, :class:`~foley.base.Candidate`,</span>
+<span class="sd">            or :class:`~foley.base.LicenseRecord`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``{&quot;is_ai_generated&quot;, &quot;obligations&quot;: {name: {required, met, detail}},</span>
+<span class="sd">        &quot;pending&quot;: [...], &quot;publish_ready&quot;: bool, &quot;provenance&quot;: {...}}``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lic</span><span class="p">,</span> <span class="n">_caption</span><span class="p">,</span> <span class="n">_fmt</span> <span class="o">=</span> <span class="n">_coerce</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+    <span class="n">ai</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">is_ai_generated</span>
+    <span class="n">watermarked</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">watermark</span> <span class="ow">and</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;present&quot;</span><span class="p">))</span>
+    <span class="n">has_manifest</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="n">obligations</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;machine_readable_mark&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="n">ai</span><span class="p">,</span>
+            <span class="s2">&quot;met&quot;</span><span class="p">:</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ai</span><span class="p">)</span> <span class="ow">or</span> <span class="n">watermarked</span><span class="p">,</span>
+            <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;AudioSeal watermark on the generated clip (Art. 50(2))&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;provenance_manifest&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="n">ai</span><span class="p">,</span>
+            <span class="s2">&quot;met&quot;</span><span class="p">:</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ai</span><span class="p">)</span> <span class="ow">or</span> <span class="n">has_manifest</span><span class="p">,</span>
+            <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;C2PA / content-credential recording the AI origin&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;platform_label&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">),</span>
+            <span class="s2">&quot;met&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">),</span>  <span class="c1"># recommendation surfaced = met</span>
+            <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;synthetic-media platform-label recommendation (Art. 50(4))&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;voice_disclosure&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">contains_recognizable_voice</span><span class="p">),</span>
+            <span class="s2">&quot;met&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">contains_recognizable_voice</span>
+            <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;recognizable-voice deepfake disclosure&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+    <span class="n">pending</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obligations</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">o</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">o</span><span class="p">[</span><span class="s2">&quot;met&quot;</span><span class="p">]</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;is_ai_generated&quot;</span><span class="p">:</span> <span class="n">ai</span><span class="p">,</span>
+        <span class="s2">&quot;obligations&quot;</span><span class="p">:</span> <span class="n">obligations</span><span class="p">,</span>
+        <span class="s2">&quot;pending&quot;</span><span class="p">:</span> <span class="n">pending</span><span class="p">,</span>
+        <span class="s2">&quot;publish_ready&quot;</span><span class="p">:</span> <span class="ow">not</span> <span class="n">pending</span><span class="p">,</span>
+        <span class="s2">&quot;provenance&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;generator_model&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span><span class="p">,</span>
+            <span class="s2">&quot;generator_version&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span><span class="p">,</span>
+            <span class="s2">&quot;generation_prompt&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span><span class="p">,</span>
+            <span class="s2">&quot;generation_seed&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_seed</span><span class="p">,</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="s2">&quot;license_id&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

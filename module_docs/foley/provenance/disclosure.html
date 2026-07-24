@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.provenance.disclosure &mdash; foley 0.0.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.qc" href="../qc.html" />
+    <link rel="prev" title="foley.provenance.credits" href="credits.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.provenance.disclosure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.AudioSealWatermarker"><code class="docutils literal notranslate"><span class="pre">AudioSealWatermarker</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.provenance.disclosure.AudioSealWatermarker.embed"><code class="docutils literal notranslate"><span class="pre">AudioSealWatermarker.embed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.provenance.disclosure.AudioSealWatermarker.version"><code class="docutils literal notranslate"><span class="pre">AudioSealWatermarker.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_WATERMARK_MESSAGE</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.IPTC_TRAINED_ALGORITHMIC_MEDIA"><code class="docutils literal notranslate"><span class="pre">IPTC_TRAINED_ALGORITHMIC_MEDIA</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.PromptScan"><code class="docutils literal notranslate"><span class="pre">PromptScan</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.provenance.disclosure.PromptScan.contains_recognizable_voice"><code class="docutils literal notranslate"><span class="pre">PromptScan.contains_recognizable_voice</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.provenance.disclosure.PromptScan.flagged"><code class="docutils literal notranslate"><span class="pre">PromptScan.flagged</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.provenance.disclosure.PromptScan.potential_trademark"><code class="docutils literal notranslate"><span class="pre">PromptScan.potential_trademark</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.TRADEMARK_REGISTRY"><code class="docutils literal notranslate"><span class="pre">TRADEMARK_REGISTRY</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.TrademarkEntry"><code class="docutils literal notranslate"><span class="pre">TrademarkEntry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.WatermarkResult"><code class="docutils literal notranslate"><span class="pre">WatermarkResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.WatermarkUnavailable"><code class="docutils literal notranslate"><span class="pre">WatermarkUnavailable</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.Watermarker"><code class="docutils literal notranslate"><span class="pre">Watermarker</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.provenance.disclosure.Watermarker.embed"><code class="docutils literal notranslate"><span class="pre">Watermarker.embed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.art50_checklist"><code class="docutils literal notranslate"><span class="pre">art50_checklist()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.build_content_credential"><code class="docutils literal notranslate"><span class="pre">build_content_credential()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.detect_watermark"><code class="docutils literal notranslate"><span class="pre">detect_watermark()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.resolve_watermarker"><code class="docutils literal notranslate"><span class="pre">resolve_watermarker()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.scan_prompt"><code class="docutils literal notranslate"><span class="pre">scan_prompt()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.disclosure.write_content_credential"><code class="docutils literal notranslate"><span class="pre">write_content_credential()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.provenance.disclosure</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/provenance/disclosure.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.provenance.disclosure">
+<span id="foley-provenance-disclosure"></span><h1>foley.provenance.disclosure<a class="headerlink" href="#module-foley.provenance.disclosure" title="Link to this heading"></a></h1>
+<p>Disclosure, watermarking &amp; safety for AI-generated audio (#9b).</p>
+<p>The sibling of <a class="reference internal" href="credits.html#module-foley.provenance.credits" title="foley.provenance.credits"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.provenance.credits</span></code></a>: where <code class="docutils literal notranslate"><span class="pre">credits</span></code> renders TASL
+attribution, this module makes a <em>generated</em> clip <strong>traceable, disclosed, and
+safe</strong> for a published product (report 07 §6–7):</p>
+<ul class="simple">
+<li><p><strong>AudioSeal watermark</strong> — an imperceptible, detectable mark embedded on every
+generated clip so downstream systems (and foley itself) can verify it was
+machine-made. Populates <code class="docutils literal notranslate"><span class="pre">LicenseRecord.watermark</span></code>. Meta AudioSeal is MIT
+(code + weights) but a <strong>16 kHz mono speech</strong> model used off-label on 44.1 kHz
+stereo SFX, so the per-clip mark is a <strong>soft-binding</strong> provenance signal (the
+achieved detection probability is recorded); C2PA is the hard-binding carrier.</p></li>
+<li><p><strong>Content Credential (C2PA)</strong> — #9b writes a portable, self-asserted JSON
+“content credential” <em>sidecar</em> (a C2PA-shaped assertion dict: the “AI use”
+action, the training-mining opt-out, and the TASL/license) into a provenance
+store, and points <code class="docutils literal notranslate"><span class="pre">LicenseRecord.c2pa_manifest_ref</span></code> at it. A real
+<em>signed + embedded</em> C2PA manifest (via <code class="docutils literal notranslate"><span class="pre">c2pa-python</span></code>) over the final mix is a
+weave/export concern deferred to #8; <a class="reference internal" href="#foley.provenance.disclosure.build_content_credential" title="foley.provenance.disclosure.build_content_credential"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_content_credential()</span></code></a> is the SSOT
+dict that step promotes verbatim.</p></li>
+<li><p><strong>EU AI Act Art. 50</strong> — <a class="reference internal" href="#foley.provenance.disclosure.art50_checklist" title="foley.provenance.disclosure.art50_checklist"><code class="xref py py-func docutils literal notranslate"><span class="pre">art50_checklist()</span></code></a> is a pure reader over the
+<code class="docutils literal notranslate"><span class="pre">LicenseRecord</span></code> reporting which transparency obligations a clip has met vs.
+still pending (deadline <strong>2 Aug 2026</strong>).</p></li>
+<li><p><strong>Safety gates</strong> — <a class="reference internal" href="#foley.provenance.disclosure.scan_prompt" title="foley.provenance.disclosure.scan_prompt"><code class="xref py py-func docutils literal notranslate"><span class="pre">scan_prompt()</span></code></a> matches a generation prompt against a
+registry of trademarked audio logos (THX, NBC chimes, Netflix Ta-dum, …) and
+recognizable-voice patterns. The generate façade <em>decides</em> on the result
+(fail-closed refuse by default, or warn-and-flag); this module only <em>detects</em>.</p></li>
+</ul>
+<p>Layering: this module depends only on <a class="reference internal" href="../base.html#module-foley.base" title="foley.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.base</span></code></a> / <a class="reference internal" href="../stores.html#module-foley.stores" title="foley.stores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.stores</span></code></a>
+(never on <a class="reference internal" href="../sources.html#module-foley.sources" title="foley.sources"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.sources</span></code></a>). The safety-refusal exceptions live in
+<a class="reference internal" href="../sources/generate.html#module-foley.sources.generate" title="foley.sources.generate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.sources.generate</span></code></a> (their <code class="docutils literal notranslate"><span class="pre">GenerationError</span></code> taxonomy home) and are
+<em>raised there</em>; <code class="docutils literal notranslate"><span class="pre">disclosure</span></code> returns a <a class="reference internal" href="#foley.provenance.disclosure.PromptScan" title="foley.provenance.disclosure.PromptScan"><code class="xref py py-class docutils literal notranslate"><span class="pre">PromptScan</span></code></a> and the caller
+decides. The module top level is <strong>stdlib-only</strong> — <code class="docutils literal notranslate"><span class="pre">audioseal</span></code> / <code class="docutils literal notranslate"><span class="pre">torch</span></code> /
+<code class="docutils literal notranslate"><span class="pre">torchaudio</span></code> are imported <em>inside</em> the watermark functions (the
+<code class="docutils literal notranslate"><span class="pre">foley[provenance]</span></code> extra), so importing this module (and <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code>) stays
+dependency-light.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.AudioSealWatermarker">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">AudioSealWatermarker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">61470</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#AudioSealWatermarker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.AudioSealWatermarker" title="Link to this definition"></a></dt>
+<dd><p>The default <a class="reference internal" href="#foley.provenance.disclosure.Watermarker" title="foley.provenance.disclosure.Watermarker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Watermarker</span></code></a> — Meta AudioSeal, run on CPU, deterministic.</p>
+<p><code class="docutils literal notranslate"><span class="pre">audioseal</span></code> / <code class="docutils literal notranslate"><span class="pre">torch</span></code> / <code class="docutils literal notranslate"><span class="pre">torchaudio</span></code> are imported lazily inside the
+methods (the <code class="docutils literal notranslate"><span class="pre">foley[provenance]</span></code> extra), so importing this class stays
+dependency-light. Watermarking runs on <strong>CPU</strong> with a <strong>fixed message</strong> and
+<code class="docutils literal notranslate"><span class="pre">eval()</span></code>/<code class="docutils literal notranslate"><span class="pre">no_grad</span></code> for cross-machine reproducibility (the dedup invariant).
+Because AudioSeal is a 16 kHz mono model, 44.1 kHz stereo SFX is watermarked
+per channel via a 16 kHz round-trip (lossy) — the mark is a soft-binding
+signal and the achieved detection probability is recorded in the meta.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.AudioSealWatermarker.embed">
+<span class="sig-name descname"><span class="pre">embed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.provenance.disclosure.WatermarkResult" title="foley.provenance.disclosure.WatermarkResult"><span class="pre">WatermarkResult</span></a></span></span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#AudioSealWatermarker.embed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.AudioSealWatermarker.embed" title="Link to this definition"></a></dt>
+<dd><p>Embed the AudioSeal watermark; return the marked bytes + meta.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>audio_bytes</strong> – The clip’s container bytes (WAV/FLAC/…).</p></li>
+<li><p><strong>message</strong> – The 16-bit id to embed (default <a class="reference internal" href="#foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE" title="foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE"><code class="xref py py-data docutils literal notranslate"><span class="pre">DEFAULT_WATERMARK_MESSAGE</span></code></a>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#foley.provenance.disclosure.WatermarkResult" title="foley.provenance.disclosure.WatermarkResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">WatermarkResult</span></code></a> whose <code class="docutils literal notranslate"><span class="pre">audio_bytes</span></code> is lossless WAV
+(float32) — a deterministic PCM round-trip so its content-hash id is
+reproducible — and whose <code class="docutils literal notranslate"><span class="pre">meta</span></code> is the <code class="docutils literal notranslate"><span class="pre">LicenseRecord.watermark</span></code> dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.AudioSealWatermarker.version">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">version</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#foley.provenance.disclosure.AudioSealWatermarker.version" title="Link to this definition"></a></dt>
+<dd><p>The installed <code class="docutils literal notranslate"><span class="pre">audioseal</span></code> package version (best-effort).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_WATERMARK_MESSAGE</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">61470</span></span><a class="headerlink" href="#foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE" title="Link to this definition"></a></dt>
+<dd><p>The FIXED 16-bit foley provenance id embedded by AudioSeal. It MUST be constant
+(no per-call nonce / timestamp): a deterministic watermark keeps the stored
+content-hash id reproducible so a byte-identical regeneration still dedups
+(<code class="docutils literal notranslate"><span class="pre">skipped_dup</span></code>) — the #6 generation-flywheel promise. See
+<a class="reference internal" href="#foley.provenance.disclosure.AudioSealWatermarker.embed" title="foley.provenance.disclosure.AudioSealWatermarker.embed"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AudioSealWatermarker.embed()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.IPTC_TRAINED_ALGORITHMIC_MEDIA">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">IPTC_TRAINED_ALGORITHMIC_MEDIA</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia'</span></span><a class="headerlink" href="#foley.provenance.disclosure.IPTC_TRAINED_ALGORITHMIC_MEDIA" title="Link to this definition"></a></dt>
+<dd><p>IPTC digitalSourceType vocabulary (C2PA <code class="docutils literal notranslate"><span class="pre">c2pa.actions</span></code> assertion).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.PromptScan">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">PromptScan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trademark_hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voice_hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#PromptScan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.PromptScan" title="Link to this definition"></a></dt>
+<dd><p>The result of scanning a generation prompt for safety flags (pure).</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.PromptScan.contains_recognizable_voice">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">contains_recognizable_voice</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#foley.provenance.disclosure.PromptScan.contains_recognizable_voice" title="Link to this definition"></a></dt>
+<dd><p>True if the prompt matched a recognizable-voice / clone pattern.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.PromptScan.flagged">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">flagged</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#foley.provenance.disclosure.PromptScan.flagged" title="Link to this definition"></a></dt>
+<dd><p>True if the prompt matched any trademark or recognizable-voice pattern.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.PromptScan.potential_trademark">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">potential_trademark</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#foley.provenance.disclosure.PromptScan.potential_trademark" title="Link to this definition"></a></dt>
+<dd><p>True if the prompt matched a branded-audio-logo entry.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.TRADEMARK_REGISTRY">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">TRADEMARK_REGISTRY</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.provenance.disclosure.TrademarkEntry" title="foley.provenance.disclosure.TrademarkEntry"><span class="pre">TrademarkEntry</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(TrademarkEntry(canonical='THX</span> <span class="pre">Deep</span> <span class="pre">Note',</span> <span class="pre">aliases=frozenset({'thx',</span> <span class="pre">'deep</span> <span class="pre">note'})),</span> <span class="pre">TrademarkEntry(canonical='NBC</span> <span class="pre">chimes',</span> <span class="pre">aliases=frozenset({'nbc</span> <span class="pre">chimes',</span> <span class="pre">'nbc</span> <span class="pre">three-note',</span> <span class="pre">'nbc</span> <span class="pre">chime'})),</span> <span class="pre">TrademarkEntry(canonical='Netflix</span> <span class="pre">Ta-dum',</span> <span class="pre">aliases=frozenset({'tudum',</span> <span class="pre">'ta-dum',</span> <span class="pre">'ta</span> <span class="pre">dum',</span> <span class="pre">'netflix</span> <span class="pre">intro',</span> <span class="pre">'netflix</span> <span class="pre">sound',</span> <span class="pre">'netflix</span> <span class="pre">chime'})),</span> <span class="pre">TrademarkEntry(canonical='MGM</span> <span class="pre">lion</span> <span class="pre">roar',</span> <span class="pre">aliases=frozenset({'mgm</span> <span class="pre">lion',</span> <span class="pre">'metro-goldwyn-mayer</span> <span class="pre">lion',</span> <span class="pre">'mgm</span> <span class="pre">roar'})),</span> <span class="pre">TrademarkEntry(canonical='20th</span> <span class="pre">Century</span> <span class="pre">Fox</span> <span class="pre">fanfare',</span> <span class="pre">aliases=frozenset({'fox</span> <span class="pre">fanfare',</span> <span class="pre">'century</span> <span class="pre">fox</span> <span class="pre">intro',</span> <span class="pre">'20th</span> <span class="pre">century</span> <span class="pre">fox</span> <span class="pre">fanfare'})),</span> <span class="pre">TrademarkEntry(canonical='Intel</span> <span class="pre">five-note</span> <span class="pre">bong',</span> <span class="pre">aliases=frozenset({'intel</span> <span class="pre">inside',</span> <span class="pre">'intel</span> <span class="pre">chime',</span> <span class="pre">'intel</span> <span class="pre">jingle',</span> <span class="pre">'intel</span> <span class="pre">bong'})),</span> <span class="pre">TrademarkEntry(canonical=&quot;Homer</span> <span class="pre">Simpson</span> <span class="pre">D'oh&quot;,</span> <span class="pre">aliases=frozenset({'homer</span> <span class="pre">doh',</span> <span class="pre">&quot;d'oh&quot;,</span> <span class="pre">'homer</span> <span class="pre">simpson</span> <span class="pre">doh'})))</span></span><a class="headerlink" href="#foley.provenance.disclosure.TRADEMARK_REGISTRY" title="Link to this definition"></a></dt>
+<dd><p>Seed registry of branded audio logos foley must not knowingly generate for
+commercial use (report 07 §7.2). Each entry maps a canonical mark to a set of
+casefolded trigger substrings. Extend freely — this is a best-effort aid, not a
+legal guarantee.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.TrademarkEntry">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">TrademarkEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#TrademarkEntry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.TrademarkEntry" title="Link to this definition"></a></dt>
+<dd><p>One trademarked audio logo + the casefolded prompt substrings that flag it.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.WatermarkResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">WatermarkResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detection_prob</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#WatermarkResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.WatermarkResult" title="Link to this definition"></a></dt>
+<dd><p>The output of a <a class="reference internal" href="#foley.provenance.disclosure.Watermarker" title="foley.provenance.disclosure.Watermarker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Watermarker</span></code></a>: the marked bytes + provenance meta.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.WatermarkUnavailable">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">WatermarkUnavailable</span></span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#WatermarkUnavailable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.WatermarkUnavailable" title="Link to this definition"></a></dt>
+<dd><p>Raised when a watermark is explicitly requested but <code class="docutils literal notranslate"><span class="pre">foley[provenance]</span></code> is absent.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.Watermarker">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">Watermarker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#Watermarker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.Watermarker" title="Link to this definition"></a></dt>
+<dd><p>Embeds a detectable provenance watermark into audio bytes (the DI seam).</p>
+<p>The default is <a class="reference internal" href="#foley.provenance.disclosure.AudioSealWatermarker" title="foley.provenance.disclosure.AudioSealWatermarker"><code class="xref py py-class docutils literal notranslate"><span class="pre">AudioSealWatermarker</span></code></a>; tests inject a deterministic
+fake — exactly the <code class="docutils literal notranslate"><span class="pre">adapter=</span></code> / <code class="docutils literal notranslate"><span class="pre">pipeline=</span></code> seam the source adapters use.
+<code class="docutils literal notranslate"><span class="pre">embed</span></code> MUST be deterministic for a fixed <code class="docutils literal notranslate"><span class="pre">message</span></code> (same input bytes →
+same output bytes) so the stored content-hash id stays reproducible and the
+generation-flywheel dedup keeps working.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.Watermarker.embed">
+<span class="sig-name descname"><span class="pre">embed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">61470</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.provenance.disclosure.WatermarkResult" title="foley.provenance.disclosure.WatermarkResult"><span class="pre">WatermarkResult</span></a></span></span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#Watermarker.embed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.Watermarker.embed" title="Link to this definition"></a></dt>
+<dd><p>Return the watermarked bytes + a provenance meta dict.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.art50_checklist">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">art50_checklist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="credits.html#foley.provenance.credits.CreditInput" title="foley.provenance.credits.CreditInput"><span class="pre">CreditInput</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#art50_checklist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.art50_checklist" title="Link to this definition"></a></dt>
+<dd><p>Return the per-clip EU AI Act Art. 50 transparency checklist (pure reader).</p>
+<p>Reports, per obligation, whether it is <code class="docutils literal notranslate"><span class="pre">required</span></code> for this clip and whether it
+has been <code class="docutils literal notranslate"><span class="pre">met</span></code> — so a caller can see what a publish still needs (e.g. the
+machine-readable mark is <em>pending</em> when <code class="docutils literal notranslate"><span class="pre">foley[provenance]</span></code> was absent at
+generation). A pure <a class="reference internal" href="../base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a> reader (flags never
+re-derived), mirroring <a class="reference internal" href="credits.html#module-foley.provenance.credits" title="foley.provenance.credits"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.provenance.credits</span></code></a>. The render-scoped
+rollup over a whole mix is a weave/#8 concern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>record</strong> – A <a class="reference internal" href="../base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a>, <a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>,
+or <a class="reference internal" href="../base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>{name: {required, met, detail}},
+“pending”: […], “publish_ready”: bool, “provenance”: {…}}``.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a href="#id1"><span class="problematic" id="id2">``</span></a>{“is_ai_generated”, “obligations”</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.build_content_credential">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">build_content_credential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="credits.html#foley.provenance.credits.CreditInput" title="foley.provenance.credits.CreditInput"><span class="pre">CreditInput</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_hash</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#build_content_credential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.build_content_credential" title="Link to this definition"></a></dt>
+<dd><p>Build the portable, self-asserted C2PA-shaped content-credential dict.</p>
+<p>A pure reader over the <code class="docutils literal notranslate"><span class="pre">LicenseRecord</span></code> SSOT (flags never re-derived), mirroring
+<a class="reference internal" href="credits.html#foley.provenance.credits.credit_entry" title="foley.provenance.credits.credit_entry"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.provenance.credits.credit_entry()</span></code></a>’s discipline. The <code class="docutils literal notranslate"><span class="pre">manifest</span></code>
+sub-object is byte-for-byte the dict a future signer (<code class="docutils literal notranslate"><span class="pre">c2pa.Builder</span></code>, #8/weave)
+promotes into a real signed + embedded manifest — so the credential shape can
+never fork between the generate-time sidecar and the export-time manifest.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>record</strong> – A <a class="reference internal" href="../base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a>, <a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>,
+or <a class="reference internal" href="../base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a>.</p></li>
+<li><p><strong>asset_id</strong> – The clip’s content-hash id (the sidecar store key / ref).</p></li>
+<li><p><strong>asset_hash</strong> – Optional <code class="docutils literal notranslate"><span class="pre">{&quot;alg&quot;:</span> <span class="pre">&quot;sha256&quot;,</span> <span class="pre">&quot;value&quot;:</span> <span class="pre">&lt;hex&gt;}</span></code> of the asset bytes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A JSON-serializable content-credential dict (<code class="docutils literal notranslate"><span class="pre">signed</span></code>/<code class="docutils literal notranslate"><span class="pre">embedded</span></code> False —
+it is self-asserted until #8 signs it).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.detect_watermark">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">detect_watermark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#detect_watermark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.detect_watermark" title="Link to this definition"></a></dt>
+<dd><p>Detect a foley watermark in <code class="docutils literal notranslate"><span class="pre">audio_bytes</span></code> (lazy AudioSeal).</p>
+<p>Downmixes to mono + resamples to 16 kHz, then runs the AudioSeal detector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>audio_bytes</strong> – The clip’s container bytes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(probability,</span> <span class="pre">recovered_message)</span></code> — <code class="docutils literal notranslate"><span class="pre">probability</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> that a
+watermark is present, and the recovered 16-bit id (<code class="docutils literal notranslate"><span class="pre">None</span></code> if the
+probability is below 0.5).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.resolve_watermarker">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">resolve_watermarker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">watermark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watermarker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.provenance.disclosure.Watermarker" title="foley.provenance.disclosure.Watermarker"><span class="pre">Watermarker</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.provenance.disclosure.Watermarker" title="foley.provenance.disclosure.Watermarker"><span class="pre">Watermarker</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#resolve_watermarker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.resolve_watermarker" title="Link to this definition"></a></dt>
+<dd><p>Resolve the effective <a class="reference internal" href="#foley.provenance.disclosure.Watermarker" title="foley.provenance.disclosure.Watermarker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Watermarker</span></code></a> for a generate call.</p>
+<p>Progressive disclosure: generation works with or without <code class="docutils literal notranslate"><span class="pre">foley[provenance]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>watermark</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> require a watermark (raise if unavailable), <code class="docutils literal notranslate"><span class="pre">False</span></code>
+never watermark, <code class="docutils literal notranslate"><span class="pre">None</span></code> (auto) watermark iff <code class="docutils literal notranslate"><span class="pre">audioseal</span></code> is installed.</p></li>
+<li><p><strong>watermarker</strong> – An injected watermarker (the DI seam) — wins over auto-detect.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#foley.provenance.disclosure.Watermarker" title="foley.provenance.disclosure.Watermarker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Watermarker</span></code></a>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when watermarking is off/unavailable.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#foley.provenance.disclosure.WatermarkUnavailable" title="foley.provenance.disclosure.WatermarkUnavailable"><strong>WatermarkUnavailable</strong></a> – If <code class="docutils literal notranslate"><span class="pre">watermark=True</span></code> but <code class="docutils literal notranslate"><span class="pre">audioseal</span></code> is not installed
+    (and no <code class="docutils literal notranslate"><span class="pre">watermarker</span></code> was injected).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.scan_prompt">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">scan_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.provenance.disclosure.PromptScan" title="foley.provenance.disclosure.PromptScan"><span class="pre">PromptScan</span></a></span></span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#scan_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.scan_prompt" title="Link to this definition"></a></dt>
+<dd><p>Scan a generation <code class="docutils literal notranslate"><span class="pre">prompt</span></code> for trademarked-audio-logo + voice-clone risk.</p>
+<p>Pure and stdlib-only (casefold substring + regex). Returns a
+<a class="reference internal" href="#foley.provenance.disclosure.PromptScan" title="foley.provenance.disclosure.PromptScan"><code class="xref py py-class docutils literal notranslate"><span class="pre">PromptScan</span></code></a>; it never raises and makes no decision — the generate
+façade decides (fail-closed refuse by default, or warn-and-flag).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prompt</strong> – The natural-language generation prompt.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#foley.provenance.disclosure.PromptScan" title="foley.provenance.disclosure.PromptScan"><code class="xref py py-class docutils literal notranslate"><span class="pre">PromptScan</span></code></a> naming the matched marks / voice patterns.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.disclosure.write_content_credential">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.disclosure.</span></span><span class="sig-name descname"><span class="pre">write_content_credential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MutableMapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credential</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/foley/provenance/disclosure.html#write_content_credential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.disclosure.write_content_credential" title="Link to this definition"></a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">credential</span></code> into <code class="docutils literal notranslate"><span class="pre">store</span></code> keyed by <code class="docutils literal notranslate"><span class="pre">asset_id</span></code>; return <code class="docutils literal notranslate"><span class="pre">asset_id</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">store</span></code> is any <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">dict]</span></code> (default:
+<a class="reference internal" href="../stores.html#foley.stores.make_provenance_store" title="foley.stores.make_provenance_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.stores.make_provenance_store()</span></code></a>, a local JSON-file store; swap for a
+cloud <code class="docutils literal notranslate"><span class="pre">dol</span></code> store to move sidecars off-box).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="credits.html" class="btn btn-neutral float-left" title="foley.provenance.credits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../qc.html" class="btn btn-neutral float-right" title="foley.qc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
