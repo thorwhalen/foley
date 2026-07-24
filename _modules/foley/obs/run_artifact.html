@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.obs.run_artifact &mdash; foley 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.obs.run_artifact</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.obs.run_artifact</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The reproducible run-artifact SSOT — ``RunManifest`` + ``SpanRecord`` (#11).</span>
+
+<span class="sd">Every instrumented foley operation (``generate`` / ``add_from`` / ``ingest`` /</span>
+<span class="sd">``search`` / ``similar`` — and, later, a #7 ``find()`` / #8 ``weave()`` scope) emits</span>
+<span class="sd">one :class:`RunManifest`: simultaneously the debug **trace** (the span tree), the</span>
+<span class="sd">reproducible **plan/seed** record (inputs, params, seeds, chosen clips), and the</span>
+<span class="sd">**provenance** record (credits + disclosure refs) — report 10 §1.3. It is the join</span>
+<span class="sd">that makes foley debuggable, evaluable, and reproducible; #8&#39;s</span>
+<span class="sd">``SoundDesignTimeline.run_manifest_ref`` will point at :attr:`RunManifest.run_id`.</span>
+
+<span class="sd">Pure data: both dataclasses subclass :class:`~foley.base.SerializableMixin`, so</span>
+<span class="sd">``to_dict`` / ``to_json`` / ``from_dict`` (incl. ``spans`` rehydrating element-wise to</span>
+<span class="sd">:class:`SpanRecord`, exactly like ``IngestReport.results``) come for free, and adding</span>
+<span class="sd">fields later (token usage, cost, timings for #7) is schema-safe with no</span>
+<span class="sd">``SCHEMA_VERSION`` bump. The manifest **composes** the existing shapes — it embeds</span>
+<span class="sd">``IngestReport.to_dict()`` and ``Credits.manifest`` and references ``Candidate`` ids +</span>
+<span class="sd">``LicenseRecord`` generation fields — it never forks them.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">SCHEMA_VERSION</span><span class="p">,</span> <span class="n">SerializableMixin</span>
+
+
+<div class="viewcode-block" id="SpanRecord">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/run_artifact.html#foley.SpanRecord">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SpanRecord</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One node of the run&#39;s span tree (the trace half of the artifact).</span>
+
+<span class="sd">    Built by the recorder from its own clock + id-factory, independent of any tracer,</span>
+<span class="sd">    so the tree is complete even when the OTel mirror is a total no-op.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">span_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parent_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># &#39;CLIENT&#39; | &#39;INTERNAL&#39;</span>
+    <span class="n">start_ms</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">duration_ms</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span>  <span class="c1"># &#39;ok&#39; | &#39;error&#39;</span>
+    <span class="n">attributes</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># gen_ai.* + foley.* (REDACTED)</span>
+    <span class="n">events</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># redacted content events (reserved for #7)</span>
+    <span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="RunManifest">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/run_artifact.html#foley.RunManifest">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RunManifest</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The reproducible run-artifact for one foley operation (trace ⊕ plan ⊕ provenance).</span>
+
+<span class="sd">    Persisted by :func:`emit_run_manifest` into a run store keyed by :attr:`run_id`.</span>
+<span class="sd">    Sensitive prompt/query text lives redacted (see :mod:`foley.obs.redact`); chosen</span>
+<span class="sd">    clips are held by reference (``SoundRecord`` id) so the manifest stays light and a</span>
+<span class="sd">    trace can be replayed against a fresh index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># uuid4 hex — store key + the #8 SoundDesignTimeline.run_manifest_ref target</span>
+    <span class="n">op</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &#39;generate&#39;|&#39;add_from&#39;|&#39;ingest&#39;|&#39;search&#39;|&#39;similar&#39; (+ &#39;find&#39;/&#39;run&#39; when aggregated)</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># ISO-8601; None in deterministic/test mode</span>
+    <span class="n">foley_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># REDACTED request (query/prompt via REDACT_FIELDS)</span>
+    <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># resolved-effective kwargs (open-closed)</span>
+    <span class="n">spans</span><span class="p">:</span> <span class="s2">&quot;list[SpanRecord]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># THE TRACE (rehydrated via _decode)</span>
+    <span class="n">steps</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># RESERVED for #7 decompose/verify/decide + branch</span>
+    <span class="n">ingest_report</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># IngestReport.to_dict() — embeds, never forks</span>
+    <span class="n">result_ids</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># produced/returned SoundRecord ids</span>
+    <span class="n">candidate_scores</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># [{id,clap,bm25,rrf,rerank}]</span>
+    <span class="n">credits_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># credits_for(records).manifest (TASL + disclosure)</span>
+    <span class="n">disclosure_refs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># {id:{watermark,c2pa_manifest_ref,...}}</span>
+    <span class="n">seeds</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>  <span class="c1"># {id:{backend,model,version,prompt(REDACTED),seed,...}}</span>
+    <span class="n">plan_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># RESERVED for #8 SoundDesignTimeline / OTIO plan</span>
+    <span class="n">trace_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># OTel trace id hex — ONLY when a recording SDK is configured</span>
+    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span>
+    <span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">schema_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SCHEMA_VERSION</span></div>
+
+
+
+<div class="viewcode-block" id="emit_run_manifest">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/run_artifact.html#foley.emit_run_manifest">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">emit_run_manifest</span><span class="p">(</span>
+    <span class="n">store</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">manifest</span><span class="p">:</span> <span class="n">RunManifest</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">redactor</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serialize ``manifest`` (redacting the payload) and write it to ``store``.</span>
+
+<span class="sd">    The plain-dict write path keeps an emit-time interposition point for the</span>
+<span class="sd">    belt-and-suspenders redaction sweep (do NOT couple the write to</span>
+<span class="sd">    auto-serialization). Returns the ``run_id``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        store: A ``MutableMapping[str, dict]`` (default:</span>
+<span class="sd">            :func:`foley.stores.make_run_store`; a dict in tests).</span>
+<span class="sd">        manifest: The :class:`RunManifest` to persist.</span>
+<span class="sd">        redactor: An optional :class:`~foley.obs.redact.Redactor` applied to the full</span>
+<span class="sd">            payload before the write (the emit-time net).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">redactor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">redactor</span><span class="o">.</span><span class="n">redact_manifest</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+    <span class="n">store</span><span class="p">[</span><span class="n">manifest</span><span class="o">.</span><span class="n">run_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">payload</span>
+    <span class="k">return</span> <span class="n">manifest</span><span class="o">.</span><span class="n">run_id</span></div>
+
+
+
+<div class="viewcode-block" id="load_run">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/run_artifact.html#foley.load_run">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_run</span><span class="p">(</span><span class="n">store</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RunManifest</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load and typed-rehydrate a :class:`RunManifest` from ``store`` (the read helper).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">RunManifest</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">store</span><span class="p">[</span><span class="n">run_id</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="ingest_digest">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/run_artifact.html#foley.ingest_digest">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ingest_digest</span><span class="p">(</span><span class="n">report</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A leak-free digest of an :class:`~foley.index.ingest.IngestReport` for a manifest.</span>
+
+<span class="sd">    Records the per-clip **outcomes** (id, status, QC status, notes) + summary counts —</span>
+<span class="sd">    NOT the full ``SoundRecord``\\ s. The records carry ``caption`` (which equals the</span>
+<span class="sd">    raw generation prompt for a generated clip) + ``tags`` and already live in the meta</span>
+<span class="sd">    store keyed by the id referenced in ``result_ids``, so embedding them would both</span>
+<span class="sd">    leak prompt text into the manifest and duplicate data. Duck-typed over the report</span>
+<span class="sd">    (``.summary()`` + ``.results``) to avoid an obs → index import coupling.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">summary</span><span class="p">(),</span>
+        <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+                <span class="s2">&quot;qc&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">qc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">qc</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="s2">&quot;notes&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">notes</span><span class="p">),</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">results</span>
+        <span class="p">],</span>
+    <span class="p">}</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

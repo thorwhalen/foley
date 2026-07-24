@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; foley 0.0.9 documentation</title>
+  <title>&lt;no title&gt; &mdash; foley 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="_static/documentation_options.js?v=a83ce22a"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -72,6 +72,11 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
@@ -155,12 +160,14 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.QCStatus"><code class="docutils literal notranslate"><span class="pre">QCStatus</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.QCThresholds"><code class="docutils literal notranslate"><span class="pre">QCThresholds</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.RecognizableVoiceRefusal"><code class="docutils literal notranslate"><span class="pre">RecognizableVoiceRefusal</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.RunManifest"><code class="docutils literal notranslate"><span class="pre">RunManifest</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.SafetyRefusal"><code class="docutils literal notranslate"><span class="pre">SafetyRefusal</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.Salience"><code class="docutils literal notranslate"><span class="pre">Salience</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.SerializableMixin"><code class="docutils literal notranslate"><span class="pre">SerializableMixin</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.SoundEvent"><code class="docutils literal notranslate"><span class="pre">SoundEvent</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.SoundLibrary"><code class="docutils literal notranslate"><span class="pre">SoundLibrary</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.SoundRecord"><code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.SpanRecord"><code class="docutils literal notranslate"><span class="pre">SpanRecord</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.SqliteVecIndex"><code class="docutils literal notranslate"><span class="pre">SqliteVecIndex</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.StorageMode"><code class="docutils literal notranslate"><span class="pre">StorageMode</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.Tagger"><code class="docutils literal notranslate"><span class="pre">Tagger</span></code></a></li>
@@ -210,6 +217,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.loudness_normalize"><code class="docutils literal notranslate"><span class="pre">loudness_normalize()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.make_byte_store"><code class="docutils literal notranslate"><span class="pre">make_byte_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.make_meta_store"><code class="docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.make_run_store"><code class="docutils literal notranslate"><span class="pre">make_run_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.measure_lufs"><code class="docutils literal notranslate"><span class="pre">measure_lufs()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.needs_edge_fade"><code class="docutils literal notranslate"><span class="pre">needs_edge_fade()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.parse_ucs_filename"><code class="docutils literal notranslate"><span class="pre">parse_ucs_filename()</span></code></a></li>
@@ -485,6 +493,68 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/licensing.html#foley.licensing.license_meta"><code class="docutils literal notranslate"><span class="pre">license_meta()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs.html">foley.obs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.NoOpTracer"><code class="docutils literal notranslate"><span class="pre">NoOpTracer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.ObsConfig"><code class="docutils literal notranslate"><span class="pre">ObsConfig</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.RedactionMode"><code class="docutils literal notranslate"><span class="pre">RedactionMode</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.Redactor"><code class="docutils literal notranslate"><span class="pre">Redactor</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.RunManifest"><code class="docutils literal notranslate"><span class="pre">RunManifest</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.RunRecorder"><code class="docutils literal notranslate"><span class="pre">RunRecorder</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.SpanRecord"><code class="docutils literal notranslate"><span class="pre">SpanRecord</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.Tracer"><code class="docutils literal notranslate"><span class="pre">Tracer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.configure"><code class="docutils literal notranslate"><span class="pre">configure()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.current_run"><code class="docutils literal notranslate"><span class="pre">current_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.disable"><code class="docutils literal notranslate"><span class="pre">disable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.emit_run_manifest"><code class="docutils literal notranslate"><span class="pre">emit_run_manifest()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.enable"><code class="docutils literal notranslate"><span class="pre">enable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.facade_run"><code class="docutils literal notranslate"><span class="pre">facade_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.get_tracer"><code class="docutils literal notranslate"><span class="pre">get_tracer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.ingest_digest"><code class="docutils literal notranslate"><span class="pre">ingest_digest()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.is_enabled"><code class="docutils literal notranslate"><span class="pre">is_enabled()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.load_run"><code class="docutils literal notranslate"><span class="pre">load_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.redact_text"><code class="docutils literal notranslate"><span class="pre">redact_text()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs.html#foley.obs.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs/recorder.html">foley.obs.recorder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.ObsConfig"><code class="docutils literal notranslate"><span class="pre">ObsConfig</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.RunRecorder"><code class="docutils literal notranslate"><span class="pre">RunRecorder</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.configure"><code class="docutils literal notranslate"><span class="pre">configure()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.current_run"><code class="docutils literal notranslate"><span class="pre">current_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.disable"><code class="docutils literal notranslate"><span class="pre">disable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.enable"><code class="docutils literal notranslate"><span class="pre">enable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.facade_run"><code class="docutils literal notranslate"><span class="pre">facade_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.is_enabled"><code class="docutils literal notranslate"><span class="pre">is_enabled()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/recorder.html#foley.obs.recorder.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs/redact.html">foley.obs.redact</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/redact.html#foley.obs.redact.REDACT_FIELDS"><code class="docutils literal notranslate"><span class="pre">REDACT_FIELDS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/redact.html#foley.obs.redact.RedactionMode"><code class="docutils literal notranslate"><span class="pre">RedactionMode</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/redact.html#foley.obs.redact.Redactor"><code class="docutils literal notranslate"><span class="pre">Redactor</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/redact.html#foley.obs.redact.redact_text"><code class="docutils literal notranslate"><span class="pre">redact_text()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/run_artifact.html#foley.obs.run_artifact.RunManifest"><code class="docutils literal notranslate"><span class="pre">RunManifest</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/run_artifact.html#foley.obs.run_artifact.SpanRecord"><code class="docutils literal notranslate"><span class="pre">SpanRecord</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/run_artifact.html#foley.obs.run_artifact.emit_run_manifest"><code class="docutils literal notranslate"><span class="pre">emit_run_manifest()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/run_artifact.html#foley.obs.run_artifact.ingest_digest"><code class="docutils literal notranslate"><span class="pre">ingest_digest()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/run_artifact.html#foley.obs.run_artifact.load_run"><code class="docutils literal notranslate"><span class="pre">load_run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/obs/trace.html">foley.obs.trace</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/trace.html#foley.obs.trace.GENAI"><code class="docutils literal notranslate"><span class="pre">GENAI</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/trace.html#foley.obs.trace.NoOpSpan"><code class="docutils literal notranslate"><span class="pre">NoOpSpan</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/trace.html#foley.obs.trace.NoOpTracer"><code class="docutils literal notranslate"><span class="pre">NoOpTracer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/trace.html#foley.obs.trace.OTelTracer"><code class="docutils literal notranslate"><span class="pre">OTelTracer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/trace.html#foley.obs.trace.Span"><code class="docutils literal notranslate"><span class="pre">Span</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/trace.html#foley.obs.trace.Tracer"><code class="docutils literal notranslate"><span class="pre">Tracer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/obs/trace.html#foley.obs.trace.get_tracer"><code class="docutils literal notranslate"><span class="pre">get_tracer()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/provenance.html">foley.provenance</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/provenance.html#foley.provenance.CreditEntry"><code class="docutils literal notranslate"><span class="pre">CreditEntry</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/provenance.html#foley.provenance.Credits"><code class="docutils literal notranslate"><span class="pre">Credits</span></code></a></li>
@@ -662,6 +732,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/stores.html">foley.stores</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.DEFAULT_PROVENANCE_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_PROVENANCE_DIR</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.DEFAULT_RUN_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_RUN_DIR</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.FOLEY_DATA_DIR"><code class="docutils literal notranslate"><span class="pre">FOLEY_DATA_DIR</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.HASH_ALGO"><code class="docutils literal notranslate"><span class="pre">HASH_ALGO</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.META_FILE_SUFFIX"><code class="docutils literal notranslate"><span class="pre">META_FILE_SUFFIX</span></code></a></li>
@@ -670,6 +741,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.make_byte_store"><code class="docutils literal notranslate"><span class="pre">make_byte_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.make_meta_store"><code class="docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.make_provenance_store"><code class="docutils literal notranslate"><span class="pre">make_provenance_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.make_run_store"><code class="docutils literal notranslate"><span class="pre">make_run_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/stores.html#foley.stores.store_sound"><code class="docutils literal notranslate"><span class="pre">store_sound()</span></code></a></li>
 </ul>
 </li>

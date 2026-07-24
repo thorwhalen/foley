@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.9 documentation</title>
+  <title>foley &mdash; foley 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
@@ -240,10 +245,12 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.stores</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">DEFAULT_AUDIO_DIR</span><span class="p">,</span>
     <span class="n">DEFAULT_META_DIR</span><span class="p">,</span>
+    <span class="n">DEFAULT_RUN_DIR</span><span class="p">,</span>
     <span class="n">FOLEY_DATA_DIR</span><span class="p">,</span>
     <span class="n">content_key</span><span class="p">,</span>
     <span class="n">make_byte_store</span><span class="p">,</span>
     <span class="n">make_meta_store</span><span class="p">,</span>
+    <span class="n">make_run_store</span><span class="p">,</span>
     <span class="n">store_sound</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">index</span>
@@ -319,6 +326,13 @@
     <span class="n">credits_for</span><span class="p">,</span>
 <span class="p">)</span>
 
+<span class="c1"># --- obs: observability + reproducible run-artifact (#11) ----------------------</span>
+<span class="c1"># The obs package is stdlib-only at import (opentelemetry loads lazily inside the</span>
+<span class="c1"># OTel-backed tracer only, behind foley[obs]), so this keeps `import foley` dol-only.</span>
+<span class="c1"># Off by default: a plain façade call is a byte-for-byte no-op until obs is enabled.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">obs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.obs</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunManifest</span><span class="p">,</span> <span class="n">SpanRecord</span>
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># --- base: constants + enums ---------------------------------------------</span>
     <span class="s2">&quot;SCHEMA_VERSION&quot;</span><span class="p">,</span>
@@ -357,10 +371,12 @@
     <span class="s2">&quot;content_key&quot;</span><span class="p">,</span>
     <span class="s2">&quot;make_byte_store&quot;</span><span class="p">,</span>
     <span class="s2">&quot;make_meta_store&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;make_run_store&quot;</span><span class="p">,</span>
     <span class="s2">&quot;store_sound&quot;</span><span class="p">,</span>
     <span class="s2">&quot;FOLEY_DATA_DIR&quot;</span><span class="p">,</span>
     <span class="s2">&quot;DEFAULT_AUDIO_DIR&quot;</span><span class="p">,</span>
     <span class="s2">&quot;DEFAULT_META_DIR&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DEFAULT_RUN_DIR&quot;</span><span class="p">,</span>
     <span class="c1"># --- qc: Tier-0 deterministic audio QC -----------------------------------</span>
     <span class="s2">&quot;QCStatus&quot;</span><span class="p">,</span>
     <span class="s2">&quot;QCThresholds&quot;</span><span class="p">,</span>
@@ -449,6 +465,10 @@
     <span class="s2">&quot;RecognizableVoiceRefusal&quot;</span><span class="p">,</span>
     <span class="s2">&quot;art50_checklist&quot;</span><span class="p">,</span>
     <span class="s2">&quot;scan_prompt&quot;</span><span class="p">,</span>
+    <span class="c1"># --- obs: observability + reproducible run-artifact (#11) -----------------</span>
+    <span class="s2">&quot;obs&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RunManifest&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SpanRecord&quot;</span><span class="p">,</span>
     <span class="c1"># --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------</span>
     <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
     <span class="s2">&quot;evaluate&quot;</span><span class="p">,</span>

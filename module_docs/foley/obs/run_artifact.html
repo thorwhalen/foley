@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.obs.run_artifact &mdash; foley 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.obs.trace" href="trace.html" />
+    <link rel="prev" title="foley.obs.redact" href="redact.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.obs.run_artifact</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.obs.run_artifact.RunManifest"><code class="docutils literal notranslate"><span class="pre">RunManifest</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.obs.run_artifact.SpanRecord"><code class="docutils literal notranslate"><span class="pre">SpanRecord</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.obs.run_artifact.emit_run_manifest"><code class="docutils literal notranslate"><span class="pre">emit_run_manifest()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.obs.run_artifact.ingest_digest"><code class="docutils literal notranslate"><span class="pre">ingest_digest()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.obs.run_artifact.load_run"><code class="docutils literal notranslate"><span class="pre">load_run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.obs.run_artifact</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/obs/run_artifact.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.obs.run_artifact">
+<span id="foley-obs-run-artifact"></span><h1>foley.obs.run_artifact<a class="headerlink" href="#module-foley.obs.run_artifact" title="Link to this heading"></a></h1>
+<p>The reproducible run-artifact SSOT — <code class="docutils literal notranslate"><span class="pre">RunManifest</span></code> + <code class="docutils literal notranslate"><span class="pre">SpanRecord</span></code> (#11).</p>
+<p>Every instrumented foley operation (<code class="docutils literal notranslate"><span class="pre">generate</span></code> / <code class="docutils literal notranslate"><span class="pre">add_from</span></code> / <code class="docutils literal notranslate"><span class="pre">ingest</span></code> /
+<code class="docutils literal notranslate"><span class="pre">search</span></code> / <code class="docutils literal notranslate"><span class="pre">similar</span></code> — and, later, a #7 <code class="docutils literal notranslate"><span class="pre">find()</span></code> / #8 <code class="docutils literal notranslate"><span class="pre">weave()</span></code> scope) emits
+one <a class="reference internal" href="#foley.obs.run_artifact.RunManifest" title="foley.obs.run_artifact.RunManifest"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunManifest</span></code></a>: simultaneously the debug <strong>trace</strong> (the span tree), the
+reproducible <strong>plan/seed</strong> record (inputs, params, seeds, chosen clips), and the
+<strong>provenance</strong> record (credits + disclosure refs) — report 10 §1.3. It is the join
+that makes foley debuggable, evaluable, and reproducible; #8’s
+<code class="docutils literal notranslate"><span class="pre">SoundDesignTimeline.run_manifest_ref</span></code> will point at <code class="xref py py-attr docutils literal notranslate"><span class="pre">RunManifest.run_id</span></code>.</p>
+<p>Pure data: both dataclasses subclass <a class="reference internal" href="../base.html#foley.base.SerializableMixin" title="foley.base.SerializableMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">SerializableMixin</span></code></a>, so
+<code class="docutils literal notranslate"><span class="pre">to_dict</span></code> / <code class="docutils literal notranslate"><span class="pre">to_json</span></code> / <code class="docutils literal notranslate"><span class="pre">from_dict</span></code> (incl. <code class="docutils literal notranslate"><span class="pre">spans</span></code> rehydrating element-wise to
+<a class="reference internal" href="#foley.obs.run_artifact.SpanRecord" title="foley.obs.run_artifact.SpanRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpanRecord</span></code></a>, exactly like <code class="docutils literal notranslate"><span class="pre">IngestReport.results</span></code>) come for free, and adding
+fields later (token usage, cost, timings for #7) is schema-safe with no
+<code class="docutils literal notranslate"><span class="pre">SCHEMA_VERSION</span></code> bump. The manifest <strong>composes</strong> the existing shapes — it embeds
+<code class="docutils literal notranslate"><span class="pre">IngestReport.to_dict()</span></code> and <code class="docutils literal notranslate"><span class="pre">Credits.manifest</span></code> and references <code class="docutils literal notranslate"><span class="pre">Candidate</span></code> ids +
+<code class="docutils literal notranslate"><span class="pre">LicenseRecord</span></code> generation fields — it never forks them.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.obs.run_artifact.RunManifest">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.obs.run_artifact.</span></span><span class="sig-name descname"><span class="pre">RunManifest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">foley_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spans</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.obs.run_artifact.SpanRecord" title="foley.obs.run_artifact.SpanRecord"><span class="pre">SpanRecord</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ingest_report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credits_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disclosure_refs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plan_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ok'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/obs/run_artifact.html#RunManifest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.run_artifact.RunManifest" title="Link to this definition"></a></dt>
+<dd><p>The reproducible run-artifact for one foley operation (trace ⊕ plan ⊕ provenance).</p>
+<p>Persisted by <a class="reference internal" href="#foley.obs.run_artifact.emit_run_manifest" title="foley.obs.run_artifact.emit_run_manifest"><code class="xref py py-func docutils literal notranslate"><span class="pre">emit_run_manifest()</span></code></a> into a run store keyed by <code class="xref py py-attr docutils literal notranslate"><span class="pre">run_id</span></code>.
+Sensitive prompt/query text lives redacted (see <a class="reference internal" href="redact.html#module-foley.obs.redact" title="foley.obs.redact"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.obs.redact</span></code></a>); chosen
+clips are held by reference (<code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code> id) so the manifest stays light and a
+trace can be replayed against a fresh index.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.obs.run_artifact.SpanRecord">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.obs.run_artifact.</span></span><span class="sig-name descname"><span class="pre">SpanRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">span_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ok'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/obs/run_artifact.html#SpanRecord"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.run_artifact.SpanRecord" title="Link to this definition"></a></dt>
+<dd><p>One node of the run’s span tree (the trace half of the artifact).</p>
+<p>Built by the recorder from its own clock + id-factory, independent of any tracer,
+so the tree is complete even when the OTel mirror is a total no-op.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.obs.run_artifact.emit_run_manifest">
+<span class="sig-prename descclassname"><span class="pre">foley.obs.run_artifact.</span></span><span class="sig-name descname"><span class="pre">emit_run_manifest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MutableMapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manifest</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.obs.run_artifact.RunManifest" title="foley.obs.run_artifact.RunManifest"><span class="pre">RunManifest</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">redactor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/foley/obs/run_artifact.html#emit_run_manifest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.run_artifact.emit_run_manifest" title="Link to this definition"></a></dt>
+<dd><p>Serialize <code class="docutils literal notranslate"><span class="pre">manifest</span></code> (redacting the payload) and write it to <code class="docutils literal notranslate"><span class="pre">store</span></code>.</p>
+<p>The plain-dict write path keeps an emit-time interposition point for the
+belt-and-suspenders redaction sweep (do NOT couple the write to
+auto-serialization). Returns the <code class="docutils literal notranslate"><span class="pre">run_id</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>store</strong> – A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">dict]</span></code> (default:
+<a class="reference internal" href="../stores.html#foley.stores.make_run_store" title="foley.stores.make_run_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.stores.make_run_store()</span></code></a>; a dict in tests).</p></li>
+<li><p><strong>manifest</strong> – The <a class="reference internal" href="#foley.obs.run_artifact.RunManifest" title="foley.obs.run_artifact.RunManifest"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunManifest</span></code></a> to persist.</p></li>
+<li><p><strong>redactor</strong> – An optional <a class="reference internal" href="redact.html#foley.obs.redact.Redactor" title="foley.obs.redact.Redactor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Redactor</span></code></a> applied to the full
+payload before the write (the emit-time net).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.obs.run_artifact.ingest_digest">
+<span class="sig-prename descclassname"><span class="pre">foley.obs.run_artifact.</span></span><span class="sig-name descname"><span class="pre">ingest_digest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/obs/run_artifact.html#ingest_digest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.run_artifact.ingest_digest" title="Link to this definition"></a></dt>
+<dd><p>A leak-free digest of an <a class="reference internal" href="../index/ingest.html#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestReport</span></code></a> for a manifest.</p>
+<p>Records the per-clip <strong>outcomes</strong> (id, status, QC status, notes) + summary counts —
+NOT the full <code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code>s. The records carry <code class="docutils literal notranslate"><span class="pre">caption</span></code> (which equals the
+raw generation prompt for a generated clip) + <code class="docutils literal notranslate"><span class="pre">tags</span></code> and already live in the meta
+store keyed by the id referenced in <code class="docutils literal notranslate"><span class="pre">result_ids</span></code>, so embedding them would both
+leak prompt text into the manifest and duplicate data. Duck-typed over the report
+(<code class="docutils literal notranslate"><span class="pre">.summary()</span></code> + <code class="docutils literal notranslate"><span class="pre">.results</span></code>) to avoid an obs → index import coupling.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.obs.run_artifact.load_run">
+<span class="sig-prename descclassname"><span class="pre">foley.obs.run_artifact.</span></span><span class="sig-name descname"><span class="pre">load_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MutableMapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.obs.run_artifact.RunManifest" title="foley.obs.run_artifact.RunManifest"><span class="pre">RunManifest</span></a></span></span><a class="reference internal" href="../../../_modules/foley/obs/run_artifact.html#load_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.run_artifact.load_run" title="Link to this definition"></a></dt>
+<dd><p>Load and typed-rehydrate a <a class="reference internal" href="#foley.obs.run_artifact.RunManifest" title="foley.obs.run_artifact.RunManifest"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunManifest</span></code></a> from <code class="docutils literal notranslate"><span class="pre">store</span></code> (the read helper).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="redact.html" class="btn btn-neutral float-left" title="foley.obs.redact" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="trace.html" class="btn btn-neutral float-right" title="foley.obs.trace" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

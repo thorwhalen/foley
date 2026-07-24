@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.stores &mdash; foley 0.0.9 documentation</title>
+  <title>foley.stores &mdash; foley 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
@@ -190,6 +195,8 @@
 <span class="n">DEFAULT_META_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;meta&quot;</span>
 <span class="c1">#: Content-credential sidecars (#9b): ``Mapping[content_id -&gt; credential dict]``.</span>
 <span class="n">DEFAULT_PROVENANCE_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;provenance&quot;</span>
+<span class="c1">#: Reproducible run-manifests (#11): ``Mapping[run_id -&gt; RunManifest dict]``.</span>
+<span class="n">DEFAULT_RUN_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;runs&quot;</span>
 
 <span class="c1">#: A filesystem location (path or path-like string) for a local store root.</span>
 <span class="n">Rootdir</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;os.PathLike[str]&quot;</span><span class="p">]</span>
@@ -324,6 +331,28 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A ``MutableMapping[str, dict]`` keyed by content id.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_store</span> <span class="o">=</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">JsonFiles</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">wrap_kvs</span><span class="p">(</span><span class="n">json_store</span><span class="p">,</span> <span class="n">id_of_key</span><span class="o">=</span><span class="n">_meta_filename</span><span class="p">,</span> <span class="n">key_of_id</span><span class="o">=</span><span class="n">_meta_key</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="make_run_store">
+<a class="viewcode-back" href="../../module_docs/foley/stores.html#foley.make_run_store">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_run_store</span><span class="p">(</span><span class="n">rootdir</span><span class="p">:</span> <span class="n">Rootdir</span> <span class="o">=</span> <span class="n">DEFAULT_RUN_DIR</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the run-artifact store: ``Mapping[run_id -&gt; RunManifest dict]`` (JSON files).</span>
+
+<span class="sd">    The by-value carrier for #11&#39;s reproducible run-manifests (one per instrumented</span>
+<span class="sd">    ``find()`` / ``generate()`` / … ). An exact sibling of :func:`make_provenance_store`:</span>
+<span class="sd">    escapes the ``run_id`` to a safe ``{enc}.json`` filename (invariant #3) while</span>
+<span class="sd">    exposing bare ``run_id`` keys; values are plain dicts ((de)serialized by</span>
+<span class="sd">    ``dol.JsonFiles``). Local by default; swap in any ``dol`` Mapping for the cloud.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rootdir: Directory that holds the run JSON files (created if missing).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``MutableMapping[str, dict]`` keyed by ``run_id``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">json_store</span> <span class="o">=</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">JsonFiles</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">wrap_kvs</span><span class="p">(</span><span class="n">json_store</span><span class="p">,</span> <span class="n">id_of_key</span><span class="o">=</span><span class="n">_meta_filename</span><span class="p">,</span> <span class="n">key_of_id</span><span class="o">=</span><span class="n">_meta_key</span><span class="p">)</span></div>

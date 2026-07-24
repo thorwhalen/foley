@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.obs.redact &mdash; foley 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.obs.redact</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.obs.redact</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Redaction of sensitive narration / prompt / query text in telemetry (#11).</span>
+
+<span class="sd">A published product&#39;s narration is frequently confidential or pre-release, yet foley</span>
+<span class="sd">exfiltrates prompt/query text to LLM, generation, and search backends (report 12</span>
+<span class="sd">§privacy). So every value foley writes into a span attribute or a run-manifest is</span>
+<span class="sd">passed through this module&#39;s SSOT redactor, which — by **default** — replaces a</span>
+<span class="sd">sensitive string with a salted content **hash** + length (never the raw text), so a</span>
+<span class="sd">manifest still *joins* a prompt to its provenance without exposing it.</span>
+
+<span class="sd">Stdlib-only. Applied at TWO boundaries (belt-and-suspenders, mirroring</span>
+<span class="sd">``qc._json_safe``&#39;s construction-time clamp + serialization sweep):</span>
+
+<span class="sd">* **record-time** (primary): the recorder routes every sensitive value through</span>
+<span class="sd">  :meth:`Redactor.redact_value` before it enters the in-memory ``SpanRecord`` /</span>
+<span class="sd">  ``RunManifest`` — so raw text never reaches the OTel mirror either;</span>
+<span class="sd">* **emit-time** (net): :meth:`Redactor.redact_manifest` deep-walks the serialized</span>
+<span class="sd">  manifest before the store write, catching anything stuffed past record-time.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="c1">#: The attribute / field keys whose string values are sensitive and redacted. The</span>
+<span class="c1">#: narration/prompt/query surfaces report 12 §11 names; ``context_text`` / ``narration``</span>
+<span class="c1">#: / ``gen_ai.*`` producers arrive with the #7 agent, but the seam + keys exist now.</span>
+<span class="n">REDACT_FIELDS</span><span class="p">:</span> <span class="s2">&quot;frozenset[str]&quot;</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;prompt&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;generation_prompt&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;negative_prompt&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;query&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;context_text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;narration&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gen_ai.prompt&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gen_ai.completion&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1">#: A fixed default salt keeps redacted manifests byte-stable + diffable (the</span>
+<span class="c1">#: credits.py ethos). Inject a secret per-deployment salt for stronger</span>
+<span class="c1">#: dictionary-attack resistance (at the cost of cross-process diffability).</span>
+<span class="n">_DEFAULT_SALT</span> <span class="o">=</span> <span class="s2">&quot;foley-obs-v1&quot;</span>
+
+
+<div class="viewcode-block" id="RedactionMode">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/redact.html#foley.obs.RedactionMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RedactionMode</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How a sensitive string is rendered in telemetry (``str``-Enum → serializes cleanly).&quot;&quot;&quot;</span>
+
+    <span class="n">off</span> <span class="o">=</span> <span class="s2">&quot;off&quot;</span>  <span class="c1"># drop the value entirely (None)</span>
+    <span class="nb">hash</span> <span class="o">=</span> <span class="s2">&quot;hash&quot;</span>  <span class="c1"># DEFAULT: salted sha256 + length (no raw content)</span>
+    <span class="n">full</span> <span class="o">=</span> <span class="s2">&quot;full&quot;</span>  <span class="c1"># opt-in local-debug ONLY: raw text passes through</span></div>
+
+
+
+<div class="viewcode-block" id="redact_text">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/redact.html#foley.obs.redact_text">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">redact_text</span><span class="p">(</span>
+    <span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">RedactionMode</span> <span class="o">=</span> <span class="n">RedactionMode</span><span class="o">.</span><span class="n">hash</span><span class="p">,</span>
+    <span class="n">salt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_DEFAULT_SALT</span><span class="p">,</span>
+    <span class="n">preview_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Redact one string per ``mode``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text: The (possibly sensitive) string, or ``None``.</span>
+<span class="sd">        mode: ``off`` → ``None``; ``full`` → ``text`` verbatim; ``hash`` (default) →</span>
+<span class="sd">            ``{&quot;sha256&quot;: &lt;salted hex&gt;, &quot;len&quot;: &lt;n&gt;}`` (+ ``&quot;preview&quot;`` only if</span>
+<span class="sd">            ``preview_chars &gt; 0``).</span>
+<span class="sd">        salt: Salt mixed into the hash (injectable; default fixed for diffability).</span>
+<span class="sd">        preview_chars: If &gt; 0 (hash mode), include a leading ``text[:preview_chars]``</span>
+<span class="sd">            preview. Default 0 → **zero content leak**.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``None``, the raw string, or a hash dict — depending on ``mode``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">RedactionMode</span><span class="o">.</span><span class="n">full</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">RedactionMode</span><span class="o">.</span><span class="n">off</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">salt</span> <span class="o">+</span> <span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sha256&quot;</span><span class="p">:</span> <span class="n">digest</span><span class="p">,</span> <span class="s2">&quot;len&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)}</span>
+    <span class="k">if</span> <span class="n">preview_chars</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;preview&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span><span class="p">[:</span><span class="n">preview_chars</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+
+<div class="viewcode-block" id="Redactor">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/redact.html#foley.obs.Redactor">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Redactor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifests.&quot;&quot;&quot;</span>
+
+    <span class="n">mode</span><span class="p">:</span> <span class="n">RedactionMode</span> <span class="o">=</span> <span class="n">RedactionMode</span><span class="o">.</span><span class="n">hash</span>
+    <span class="n">salt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_DEFAULT_SALT</span>
+    <span class="n">preview_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">fields</span><span class="p">:</span> <span class="s2">&quot;frozenset[str]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">REDACT_FIELDS</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Redactor.redact_value">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/redact.html#foley.obs.Redactor.redact_value">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">redact_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Redact ``value`` iff ``key`` is a sensitive field and ``value`` is a string.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">redact_text</span><span class="p">(</span>
+                <span class="n">value</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">salt</span><span class="p">,</span> <span class="n">preview_chars</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">preview_chars</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="Redactor.redact_attrs">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/redact.html#foley.obs.Redactor.redact_attrs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">redact_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attrs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Redact every sensitive key in a (shallow) attribute/inputs dict.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">attrs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">redact_value</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
+
+<div class="viewcode-block" id="Redactor.redact_error">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/redact.html#foley.obs.Redactor.redact_error">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">redact_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Redact an exception for storage/export.</span>
+
+<span class="sd">        An exception message can echo the raw prompt/query/narration (hosted</span>
+<span class="sd">        backends commonly do), so by default only the exception **type name** is</span>
+<span class="sd">        recorded (safe + still useful); the full ``repr`` is kept only in</span>
+<span class="sd">        ``full`` mode (opt-in local debug).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">RedactionMode</span><span class="o">.</span><span class="n">full</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span></div>
+
+
+<div class="viewcode-block" id="Redactor.redact_manifest">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/redact.html#foley.obs.Redactor.redact_manifest">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">redact_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deep-walk ``payload`` (dict/list), redacting any sensitive key at any depth.</span>
+
+<span class="sd">        The emit-time net: catches ``inputs.query`` / ``seeds[*].prompt`` / any nested</span>
+<span class="sd">        sensitive value a caller stuffed past the record-time layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">redact_value</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+                    <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">redact_manifest</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">payload</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">redact_manifest</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">payload</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">payload</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

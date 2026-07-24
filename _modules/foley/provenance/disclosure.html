@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.provenance.disclosure &mdash; foley 0.0.9 documentation</title>
+  <title>foley.provenance.disclosure &mdash; foley 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
@@ -194,9 +199,7 @@
 <span class="n">IPTC_TRAINED_ALGORITHMIC_MEDIA</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">&quot;http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia&quot;</span>
 <span class="p">)</span>
-<span class="n">IPTC_DIGITAL_CREATION</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation&quot;</span>
-<span class="p">)</span>
+<span class="n">IPTC_DIGITAL_CREATION</span> <span class="o">=</span> <span class="s2">&quot;http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation&quot;</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -221,12 +224,25 @@
 <span class="c1">#: legal guarantee.</span>
 <span class="n">TRADEMARK_REGISTRY</span><span class="p">:</span> <span class="s2">&quot;tuple[TrademarkEntry, ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">&quot;THX Deep Note&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;thx&quot;</span><span class="p">,</span> <span class="s2">&quot;deep note&quot;</span><span class="p">})),</span>
-    <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">&quot;NBC chimes&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;nbc chimes&quot;</span><span class="p">,</span> <span class="s2">&quot;nbc chime&quot;</span><span class="p">,</span> <span class="s2">&quot;nbc three-note&quot;</span><span class="p">})),</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span>
+        <span class="s2">&quot;NBC chimes&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;nbc chimes&quot;</span><span class="p">,</span> <span class="s2">&quot;nbc chime&quot;</span><span class="p">,</span> <span class="s2">&quot;nbc three-note&quot;</span><span class="p">})</span>
+    <span class="p">),</span>
     <span class="n">TrademarkEntry</span><span class="p">(</span>
         <span class="s2">&quot;Netflix Ta-dum&quot;</span><span class="p">,</span>
-        <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;ta-dum&quot;</span><span class="p">,</span> <span class="s2">&quot;ta dum&quot;</span><span class="p">,</span> <span class="s2">&quot;tudum&quot;</span><span class="p">,</span> <span class="s2">&quot;netflix intro&quot;</span><span class="p">,</span> <span class="s2">&quot;netflix sound&quot;</span><span class="p">,</span> <span class="s2">&quot;netflix chime&quot;</span><span class="p">}),</span>
+        <span class="nb">frozenset</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;ta-dum&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ta dum&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;tudum&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;netflix intro&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;netflix sound&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;netflix chime&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
     <span class="p">),</span>
-    <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">&quot;MGM lion roar&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;mgm roar&quot;</span><span class="p">,</span> <span class="s2">&quot;mgm lion&quot;</span><span class="p">,</span> <span class="s2">&quot;metro-goldwyn-mayer lion&quot;</span><span class="p">})),</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span>
+        <span class="s2">&quot;MGM lion roar&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;mgm roar&quot;</span><span class="p">,</span> <span class="s2">&quot;mgm lion&quot;</span><span class="p">,</span> <span class="s2">&quot;metro-goldwyn-mayer lion&quot;</span><span class="p">})</span>
+    <span class="p">),</span>
     <span class="n">TrademarkEntry</span><span class="p">(</span>
         <span class="s2">&quot;20th Century Fox fanfare&quot;</span><span class="p">,</span>
         <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;20th century fox fanfare&quot;</span><span class="p">,</span> <span class="s2">&quot;fox fanfare&quot;</span><span class="p">,</span> <span class="s2">&quot;century fox intro&quot;</span><span class="p">}),</span>
@@ -235,7 +251,9 @@
         <span class="s2">&quot;Intel five-note bong&quot;</span><span class="p">,</span>
         <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;intel bong&quot;</span><span class="p">,</span> <span class="s2">&quot;intel inside&quot;</span><span class="p">,</span> <span class="s2">&quot;intel jingle&quot;</span><span class="p">,</span> <span class="s2">&quot;intel chime&quot;</span><span class="p">}),</span>
     <span class="p">),</span>
-    <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">&quot;Homer Simpson D&#39;oh&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;d&#39;oh&quot;</span><span class="p">,</span> <span class="s2">&quot;homer doh&quot;</span><span class="p">,</span> <span class="s2">&quot;homer simpson doh&quot;</span><span class="p">})),</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span>
+        <span class="s2">&quot;Homer Simpson D&#39;oh&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;d&#39;oh&quot;</span><span class="p">,</span> <span class="s2">&quot;homer doh&quot;</span><span class="p">,</span> <span class="s2">&quot;homer simpson doh&quot;</span><span class="p">})</span>
+    <span class="p">),</span>
 <span class="p">)</span>
 
 <span class="c1">#: Explicit voice-clone / human-voice-request cues (report 07 §7.1) — matched</span>
@@ -312,9 +330,9 @@
     <span class="p">)</span>
     <span class="c1"># Explicit clone cues match case-insensitively; proper-name patterns match the</span>
     <span class="c1"># ORIGINAL (cased) prompt so lowercase SFX descriptions are never flagged.</span>
-    <span class="n">voice_hits</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pattern</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_VOICE_CUE_PATTERNS</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">text</span><span class="p">))</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span>
-        <span class="n">p</span><span class="o">.</span><span class="n">pattern</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_VOICE_NAME_PATTERNS</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
-    <span class="p">)</span>
+    <span class="n">voice_hits</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">pattern</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_VOICE_CUE_PATTERNS</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">pattern</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_VOICE_NAME_PATTERNS</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">original</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">PromptScan</span><span class="p">(</span><span class="n">trademark_hits</span><span class="o">=</span><span class="n">trademark_hits</span><span class="p">,</span> <span class="n">voice_hits</span><span class="o">=</span><span class="n">voice_hits</span><span class="p">)</span></div>
 
 
@@ -479,7 +497,9 @@
         <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
         <span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
-        <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">out</span> <span class="k">if</span> <span class="n">channels</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">out</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sr</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;WAV&quot;</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="s2">&quot;FLOAT&quot;</span><span class="p">)</span>
+        <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="n">buf</span><span class="p">,</span> <span class="n">out</span> <span class="k">if</span> <span class="n">channels</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">out</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sr</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;WAV&quot;</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="s2">&quot;FLOAT&quot;</span>
+        <span class="p">)</span>
         <span class="n">wm_bytes</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
 
         <span class="n">prob</span><span class="p">,</span> <span class="n">recovered</span> <span class="o">=</span> <span class="n">detect_watermark</span><span class="p">(</span><span class="n">wm_bytes</span><span class="p">)</span>

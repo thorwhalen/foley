@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.generate &mdash; foley 0.0.9 documentation</title>
+  <title>foley.sources.generate &mdash; foley 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
@@ -163,6 +168,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">CandidateOrigin</span>
@@ -252,9 +258,7 @@
 
 
 
-<div class="viewcode-block" id="generate">
-<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.generate">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate</span><span class="p">(</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stable_audio&quot;</span><span class="p">,</span>
@@ -362,7 +366,20 @@
     <span class="c1"># A synthesis failure (auth / rate-limit / model load / bad response) yields an</span>
     <span class="c1"># inspectable report with one error entry, never an unhandled exception.</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">clip</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">)</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.recorder</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_run</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.trace</span><span class="w"> </span><span class="kn">import</span> <span class="n">GENAI</span>
+
+        <span class="c1"># GenAI child span for the actual synthesis (no-op unless obs is enabled, #11).</span>
+        <span class="k">with</span> <span class="n">current_run</span><span class="p">()</span><span class="o">.</span><span class="n">span</span><span class="p">(</span>
+            <span class="s2">&quot;gen.generate&quot;</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;CLIENT&quot;</span><span class="p">,</span>
+            <span class="o">**</span><span class="p">{</span>
+                <span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;operation&quot;</span><span class="p">]:</span> <span class="s2">&quot;generate_content&quot;</span><span class="p">,</span>
+                <span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;provider&quot;</span><span class="p">]:</span> <span class="n">backend</span><span class="p">,</span>
+                <span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;request_model&quot;</span><span class="p">]:</span> <span class="n">backend</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">):</span>
+            <span class="n">clip</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
             <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:generate&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
@@ -457,7 +474,69 @@
     <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span><span class="p">:</span>
         <span class="n">res</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_CONSENT_NOTE</span><span class="p">)</span>
     <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">report</span></div>
+    <span class="k">return</span> <span class="n">report</span>
+
+
+<span class="c1">#: Non-affordance keyword params of :func:`_generate` (the rest are GENERATION_AFFORDANCES).</span>
+<span class="n">_GENERATE_KNOWN</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;backend&quot;</span><span class="p">,</span> <span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="s2">&quot;adapter&quot;</span><span class="p">,</span> <span class="s2">&quot;watermark&quot;</span><span class="p">,</span> <span class="s2">&quot;on_flagged&quot;</span><span class="p">,</span> <span class="s2">&quot;watermarker&quot;</span><span class="p">,</span> <span class="s2">&quot;provenance_store&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="generate">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.generate">[docs]</a>
+<span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">_generate</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Observability wrapper over :func:`_generate` (#11).</span>
+
+<span class="sd">    Opens a root ``generate`` run-span (a no-op unless observability is enabled) and,</span>
+<span class="sd">    on completion, appends the run-manifest facts read off the stored records — result</span>
+<span class="sd">    ids, per-clip generation seeds + disclosure refs (from the ``LicenseRecord``), and</span>
+<span class="sd">    the embedded :class:`~foley.index.ingest.IngestReport`. The signature + docstring</span>
+<span class="sd">    are inherited from :func:`_generate` via :func:`functools.wraps`; the internal</span>
+<span class="sd">    ``gen.generate`` GenAI child span is emitted inside ``_generate``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.recorder</span><span class="w"> </span><span class="kn">import</span> <span class="n">facade_run</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.run_artifact</span><span class="w"> </span><span class="kn">import</span> <span class="n">ingest_digest</span>
+
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;prompt&quot;</span><span class="p">)</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;backend&quot;</span><span class="p">,</span> <span class="s2">&quot;stable_audio&quot;</span><span class="p">)</span>
+    <span class="n">affordances</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_GENERATE_KNOWN</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;prompt&quot;</span>
+    <span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="s2">&quot;on_flagged&quot;</span><span class="p">,</span> <span class="s2">&quot;watermark&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">}</span>
+    <span class="k">with</span> <span class="n">facade_run</span><span class="p">(</span>
+        <span class="s2">&quot;generate&quot;</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span> <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">},</span>
+        <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">_generate</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">ingested</span><span class="p">:</span>
+            <span class="n">rec</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">record</span>
+            <span class="n">lic</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">license</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">add_result_ids</span><span class="p">([</span><span class="n">rec</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">add_seed</span><span class="p">(</span>
+                <span class="n">rec</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span>
+                    <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span><span class="p">,</span>
+                    <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span><span class="p">,</span>
+                    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span><span class="p">,</span>
+                    <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_seed</span><span class="p">,</span>
+                    <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_params</span><span class="p">,</span>
+                    <span class="s2">&quot;c2pa_manifest_ref&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">add_disclosure_ref</span><span class="p">(</span>
+                <span class="n">rec</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;watermark&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="p">,</span>
+                    <span class="s2">&quot;c2pa_manifest_ref&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span><span class="p">,</span>
+                    <span class="s2">&quot;disclosure_recommended&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">set_ingest_report</span><span class="p">(</span><span class="n">ingest_digest</span><span class="p">(</span><span class="n">report</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">report</span></div>
 
 
 

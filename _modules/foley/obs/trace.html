@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.obs.trace &mdash; foley 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.obs.trace</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.obs.trace</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The OpenTelemetry MIRROR seam for foley&#39;s observability (#11).</span>
+
+<span class="sd">foley&#39;s reproducible run-artifact (the :class:`~foley.obs.run_artifact.RunManifest`)</span>
+<span class="sd">is built by the recorder from its own clock + id-factory, **independent of any</span>
+<span class="sd">tracer** — so a bare ``pip install foley`` still emits a complete manifest with zero</span>
+<span class="sd">dependencies. This module is *only* the optional OpenTelemetry **mirror**: when the</span>
+<span class="sd">``foley[obs]`` extra is installed, foley additionally emits vendor-neutral OTel GenAI</span>
+<span class="sd">spans (consumable by Langfuse / Datadog / Honeycomb / …); when it is not, a</span>
+<span class="sd">stdlib :class:`NoOpTracer` makes every instrumentation call a free no-op.</span>
+
+<span class="sd">``opentelemetry`` is imported **lazily inside** :class:`OTelTracer` only, never at</span>
+<span class="sd">module top level, so importing this module (and ``import foley``) stays dol-only.</span>
+<span class="sd">foley never configures an SDK / exporter — that is the host application&#39;s job</span>
+<span class="sd">(``trace.set_tracer_provider(...)``); until it does, even the OTel-backed tracer is a</span>
+<span class="sd">free ``ProxyTracer`` no-op, so instrumentation is safe and ~zero-cost by default.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextManager</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="c1">#: The GenAI semantic-convention attribute keys foley emits. HARDCODED as strings on</span>
+<span class="c1">#: purpose — the ``opentelemetry.semconv._incubating`` constants are Development-</span>
+<span class="c1">#: stability and shift across minor versions. This dict is the single place they are named.</span>
+<span class="n">GENAI</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.operation.name&quot;</span><span class="p">,</span>  <span class="c1"># &#39;embeddings&#39; | &#39;generate_content&#39;</span>
+    <span class="s2">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.provider.name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;request_model&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.request.model&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;response_model&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.response.model&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;input_tokens&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.usage.input_tokens&quot;</span><span class="p">,</span>  <span class="c1"># reserved for #7</span>
+    <span class="s2">&quot;output_tokens&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.usage.output_tokens&quot;</span><span class="p">,</span>  <span class="c1"># reserved for #7</span>
+    <span class="s2">&quot;data_source_id&quot;</span><span class="p">:</span> <span class="s2">&quot;gen_ai.data_source.id&quot;</span><span class="p">,</span>  <span class="c1"># the index/library id (retrieval)</span>
+    <span class="s2">&quot;error_type&quot;</span><span class="p">:</span> <span class="s2">&quot;error.type&quot;</span><span class="p">,</span>  <span class="c1"># STABLE</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="Span">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.Span">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Span</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The minimal mirror-span surface foley code calls (structural).&quot;&quot;&quot;</span>
+
+    <span class="n">trace_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">record_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ok</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Tracer">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.Tracer">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Tracer</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Starts mirror spans; the DI seam (default no-op, OTel-backed when present).&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">start_as_current_span</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ContextManager[Span]&quot;</span><span class="p">:</span> <span class="o">...</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># stdlib no-op default (a bare install has NO opentelemetry to lean on)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="NoOpSpan">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.NoOpSpan">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoOpSpan</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A zero-cost span: every method does nothing; ``trace_id`` is always ``None``.&quot;&quot;&quot;</span>
+
+    <span class="n">trace_id</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: D102</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">record_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: D102</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ok</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: D102</span>
+        <span class="k">pass</span></div>
+
+
+
+<span class="n">_NOOP_SPAN</span> <span class="o">=</span> <span class="n">NoOpSpan</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="NoOpTracer">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.NoOpTracer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoOpTracer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The default :class:`Tracer` — yields the shared :data:`_NOOP_SPAN`, zero deps.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NoOpTracer.start_as_current_span">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.NoOpTracer.start_as_current_span">[docs]</a>
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start_as_current_span</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield the no-op span (context-manager protocol; nothing is recorded).&quot;&quot;&quot;</span>
+        <span class="k">yield</span> <span class="n">_NOOP_SPAN</span></div>
+</div>
+
+
+
+<span class="n">_NOOP_TRACER</span> <span class="o">=</span> <span class="n">NoOpTracer</span><span class="p">()</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># lazy OTel-backed mirror (only touched when foley[obs] is installed)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_OTelMirror</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wraps a live OpenTelemetry span behind the :class:`Span` protocol.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">span</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_span</span> <span class="o">=</span> <span class="n">span</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">trace_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The 32-hex trace id — only when a recording SDK is configured, else ``None``.&quot;&quot;&quot;</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="o">.</span><span class="n">get_span_context</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">format</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">trace_id</span><span class="p">,</span> <span class="s2">&quot;032x&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">ctx</span><span class="o">.</span><span class="n">is_valid</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: D102</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">record_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: D102</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="o">.</span><span class="n">record_exception</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ok</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: D102</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">opentelemetry.trace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Status</span><span class="p">,</span> <span class="n">StatusCode</span>
+
+        <span class="c1"># The caller (RunRecorder) sets the semconv error.type (the exception class</span>
+        <span class="c1"># name) explicitly; the status description carries only the redacted message.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_span</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span>
+            <span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">.</span><span class="n">OK</span><span class="p">)</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="n">Status</span><span class="p">(</span><span class="n">StatusCode</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">message</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="OTelTracer">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.OTelTracer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OTelTracer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An OpenTelemetry-backed :class:`Tracer` (lazy import; requires ``foley[obs]``).&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">opentelemetry</span><span class="w"> </span><span class="kn">import</span> <span class="n">trace</span>  <span class="c1"># lazy: foley[obs]; keeps import foley dol-only</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_otel</span> <span class="o">=</span> <span class="n">trace</span><span class="o">.</span><span class="n">get_tracer</span><span class="p">(</span><span class="s2">&quot;foley&quot;</span><span class="p">,</span> <span class="n">_foley_version</span><span class="p">())</span>
+
+<div class="viewcode-block" id="OTelTracer.start_as_current_span">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.OTelTracer.start_as_current_span">[docs]</a>
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start_as_current_span</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open a real OTel span, mapping ``kind`` to ``SpanKind`` and yielding a mirror.&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">opentelemetry.trace</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanKind</span>
+
+        <span class="n">span_kind</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">SpanKind</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">SpanKind</span><span class="o">.</span><span class="n">INTERNAL</span><span class="p">)</span> <span class="k">if</span> <span class="n">kind</span> <span class="k">else</span> <span class="n">SpanKind</span><span class="o">.</span><span class="n">INTERNAL</span>
+        <span class="c1"># foley OWNS exception recording via the mirror (redacted), so disable OTel&#39;s</span>
+        <span class="c1"># auto record_exception / set_status_on_exception to avoid a double event + a</span>
+        <span class="c1"># raw-message leak on the auto-recorded exception.</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_otel</span><span class="o">.</span><span class="n">start_as_current_span</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">span_kind</span><span class="p">,</span>
+            <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span> <span class="ow">or</span> <span class="p">{},</span>
+            <span class="n">record_exception</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">set_status_on_exception</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">span</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">_OTelMirror</span><span class="p">(</span><span class="n">span</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_otel_importable</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="c1"># NOT cached: find_spec is cheap (called once per top-level run scope) and caching</span>
+    <span class="c1"># would freeze a bare-install process into the no-op path even after opentelemetry</span>
+    <span class="c1"># is installed mid-process (or, in tests, across an install/uninstall).</span>
+    <span class="k">return</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;opentelemetry&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_foley_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
+
+        <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="s2">&quot;foley&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span>
+
+
+<div class="viewcode-block" id="get_tracer">
+<a class="viewcode-back" href="../../../module_docs/foley/obs/trace.html#foley.obs.get_tracer">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_tracer</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">prefer_otel</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tracer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the effective :class:`Tracer` (OTel-backed when available, else no-op).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        prefer_otel: When ``True`` (default) and ``opentelemetry`` is importable, return</span>
+<span class="sd">            an :class:`OTelTracer` (itself a free no-op until the host configures an SDK);</span>
+<span class="sd">            any construction failure falls back to the no-op. ``False`` forces the stdlib</span>
+<span class="sd">            :class:`NoOpTracer` — the hermetic-test lever (this dev env may have otel).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`Tracer` (never raises).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">prefer_otel</span> <span class="ow">and</span> <span class="n">_otel_importable</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">OTelTracer</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pragma: no cover - defensive fallback</span>
+            <span class="k">return</span> <span class="n">_NOOP_TRACER</span>
+    <span class="k">return</span> <span class="n">_NOOP_TRACER</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

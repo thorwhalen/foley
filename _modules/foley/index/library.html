@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.index.library &mdash; foley 0.0.9 documentation</title>
+  <title>foley.index.library &mdash; foley 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
@@ -424,36 +429,74 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            Up to ``k`` :class:`~foley.base.Candidate`s, best first.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filtering</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
-            <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">commercial_ok</span><span class="p">,</span> <span class="n">ucs_category</span><span class="p">,</span> <span class="n">min_snr</span><span class="p">,</span> <span class="n">duration_range</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">fetch_k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">_OVERFETCH_FACTOR</span> <span class="k">if</span> <span class="n">filtering</span> <span class="k">else</span> <span class="n">k</span>
-        <span class="n">hits</span> <span class="o">=</span> <span class="n">hybrid_search</span><span class="p">(</span>
-            <span class="n">query</span><span class="p">,</span>
-            <span class="n">embedder</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">embedder</span><span class="p">,</span>
-            <span class="n">vindex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vindex</span><span class="p">,</span>
-            <span class="n">kindex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kindex</span><span class="p">,</span>
-            <span class="n">k</span><span class="o">=</span><span class="n">fetch_k</span><span class="p">,</span>
-            <span class="n">candidate_k</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">candidate_k</span><span class="p">,</span> <span class="n">fetch_k</span><span class="p">),</span>
-            <span class="n">rrf_k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rrf_k</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hits_to_candidates</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span>
-        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">c</span>
-            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">candidates</span>
-            <span class="k">if</span> <span class="n">_record_matches</span><span class="p">(</span>
-                <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="p">,</span>
-                <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
-                <span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">,</span>
-                <span class="n">ucs_category</span><span class="o">=</span><span class="n">ucs_category</span><span class="p">,</span>
-                <span class="n">min_snr</span><span class="o">=</span><span class="n">min_snr</span><span class="p">,</span>
-                <span class="n">duration_range</span><span class="o">=</span><span class="n">duration_range</span><span class="p">,</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.recorder</span><span class="w"> </span><span class="kn">import</span> <span class="n">facade_run</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.trace</span><span class="w"> </span><span class="kn">import</span> <span class="n">GENAI</span>
+
+        <span class="c1"># Root run-span for the retrieval op; a no-op unless observability is on (#11).</span>
+        <span class="k">with</span> <span class="n">facade_run</span><span class="p">(</span>
+            <span class="s2">&quot;search&quot;</span><span class="p">,</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+                <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span>
+                <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="n">filters</span><span class="p">,</span>
+                <span class="s2">&quot;commercial_ok&quot;</span><span class="p">:</span> <span class="n">commercial_ok</span><span class="p">,</span>
+                <span class="s2">&quot;ucs_category&quot;</span><span class="p">:</span> <span class="n">ucs_category</span><span class="p">,</span>
+                <span class="s2">&quot;min_snr&quot;</span><span class="p">:</span> <span class="n">min_snr</span><span class="p">,</span>
+                <span class="s2">&quot;duration_range&quot;</span><span class="p">:</span> <span class="n">duration_range</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rerank&quot;</span><span class="p">:</span> <span class="n">rerank</span><span class="p">,</span> <span class="s2">&quot;rrf_k&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rrf_k</span><span class="p">},</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
+            <span class="n">filtering</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">commercial_ok</span><span class="p">,</span> <span class="n">ucs_category</span><span class="p">,</span> <span class="n">min_snr</span><span class="p">,</span> <span class="n">duration_range</span><span class="p">)</span>
             <span class="p">)</span>
-        <span class="p">]</span>
-        <span class="k">if</span> <span class="n">rerank</span><span class="p">:</span>
-            <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rerank</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">candidates</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">candidates</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span></div>
+            <span class="n">fetch_k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="n">_OVERFETCH_FACTOR</span> <span class="k">if</span> <span class="n">filtering</span> <span class="k">else</span> <span class="n">k</span>
+            <span class="k">with</span> <span class="n">run</span><span class="o">.</span><span class="n">span</span><span class="p">(</span>
+                <span class="s2">&quot;retrieve&quot;</span><span class="p">,</span>
+                <span class="o">**</span><span class="p">{</span>
+                    <span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;operation&quot;</span><span class="p">]:</span> <span class="s2">&quot;embeddings&quot;</span><span class="p">,</span>
+                    <span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;data_source_id&quot;</span><span class="p">]:</span> <span class="s2">&quot;foley-index&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">):</span>
+                <span class="n">hits</span> <span class="o">=</span> <span class="n">hybrid_search</span><span class="p">(</span>
+                    <span class="n">query</span><span class="p">,</span>
+                    <span class="n">embedder</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">embedder</span><span class="p">,</span>
+                    <span class="n">vindex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vindex</span><span class="p">,</span>
+                    <span class="n">kindex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kindex</span><span class="p">,</span>
+                    <span class="n">k</span><span class="o">=</span><span class="n">fetch_k</span><span class="p">,</span>
+                    <span class="n">candidate_k</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">candidate_k</span><span class="p">,</span> <span class="n">fetch_k</span><span class="p">),</span>
+                    <span class="n">rrf_k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rrf_k</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hits_to_candidates</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">c</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">candidates</span>
+                <span class="k">if</span> <span class="n">_record_matches</span><span class="p">(</span>
+                    <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="p">,</span>
+                    <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
+                    <span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">,</span>
+                    <span class="n">ucs_category</span><span class="o">=</span><span class="n">ucs_category</span><span class="p">,</span>
+                    <span class="n">min_snr</span><span class="o">=</span><span class="n">min_snr</span><span class="p">,</span>
+                    <span class="n">duration_range</span><span class="o">=</span><span class="n">duration_range</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">rerank</span><span class="p">:</span>
+                <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rerank</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">candidates</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">add_result_ids</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">result</span><span class="p">])</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">add_candidate_scores</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                        <span class="s2">&quot;clap&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">clap_score</span><span class="p">,</span>
+                        <span class="s2">&quot;bm25&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">bm25_score</span><span class="p">,</span>
+                        <span class="s2">&quot;rrf&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">rrf_score</span><span class="p">,</span>
+                        <span class="s2">&quot;rerank&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">rerank_score</span><span class="p">,</span>
+                    <span class="p">}</span>
+                    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">result</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span></div>
 
 
 <div class="viewcode-block" id="SoundLibrary.search_clip">
@@ -486,12 +529,17 @@
 <span class="sd">        Uses the stored vector (no re-decoding); the query sound itself is</span>
 <span class="sd">        excluded from the results.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">qvec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vindex</span><span class="o">.</span><span class="n">get_vector</span><span class="p">(</span><span class="n">sound_id</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">qvec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[]</span>
-        <span class="n">hits</span> <span class="o">=</span> <span class="n">vector_search</span><span class="p">(</span><span class="n">qvec</span><span class="p">,</span> <span class="n">vindex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vindex</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hits_to_candidates</span><span class="p">(</span><span class="n">hits</span><span class="p">,</span> <span class="n">exclude_id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">candidates</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span></div>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.recorder</span><span class="w"> </span><span class="kn">import</span> <span class="n">facade_run</span>
+
+        <span class="k">with</span> <span class="n">facade_run</span><span class="p">(</span><span class="s2">&quot;similar&quot;</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sound_id&quot;</span><span class="p">:</span> <span class="n">sound_id</span><span class="p">,</span> <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">})</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
+            <span class="n">qvec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vindex</span><span class="o">.</span><span class="n">get_vector</span><span class="p">(</span><span class="n">sound_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">qvec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="n">vector_search</span><span class="p">(</span><span class="n">qvec</span><span class="p">,</span> <span class="n">vindex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vindex</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hits_to_candidates</span><span class="p">(</span><span class="n">hits</span><span class="p">,</span> <span class="n">exclude_id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">add_result_ids</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">result</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">result</span></div>
 
 
 <div class="viewcode-block" id="SoundLibrary.filter">

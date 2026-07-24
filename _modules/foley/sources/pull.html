@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.pull &mdash; foley 0.0.9 documentation</title>
+  <title>foley.sources.pull &mdash; foley 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=f7cdbf68"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
@@ -142,6 +147,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntendedUse</span>
@@ -154,9 +160,7 @@
 <span class="n">DEFAULT_INTENDED_USE</span> <span class="o">=</span> <span class="n">IntendedUse</span><span class="p">(</span><span class="n">commercial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">publish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">can_attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="add_from">
-<a class="viewcode-back" href="../../../module_docs/foley/sources/pull.html#foley.add_from">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">add_from</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_add_from</span><span class="p">(</span>
     <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -206,11 +210,18 @@
     <span class="n">src_adapter</span> <span class="o">=</span> <span class="n">adapter</span> <span class="k">if</span> <span class="n">adapter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">get_source</span><span class="p">(</span><span class="n">source</span><span class="p">)[</span><span class="s2">&quot;adapter&quot;</span><span class="p">]</span>
     <span class="n">use</span> <span class="o">=</span> <span class="n">intended_use</span> <span class="k">if</span> <span class="n">intended_use</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">DEFAULT_INTENDED_USE</span>
 
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.recorder</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_run</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.trace</span><span class="w"> </span><span class="kn">import</span> <span class="n">GENAI</span>
+
     <span class="n">report</span> <span class="o">=</span> <span class="n">IngestReport</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="c1"># A batch-level search failure (rate-limit 429 / 5xx / auth) yields an</span>
     <span class="c1"># inspectable report with one error entry, never an unhandled exception.</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">candidates</span> <span class="o">=</span> <span class="n">src_adapter</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">license</span><span class="o">=</span><span class="n">license</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">)</span>
+        <span class="c1"># Retrieval child span (no-op unless obs is enabled, #11).</span>
+        <span class="k">with</span> <span class="n">current_run</span><span class="p">()</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s2">&quot;adapter.search&quot;</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;data_source_id&quot;</span><span class="p">]:</span> <span class="n">source</span><span class="p">}):</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="n">src_adapter</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">query</span><span class="p">,</span> <span class="n">license</span><span class="o">=</span><span class="n">license</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span>
+            <span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
             <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">:search&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
@@ -253,7 +264,48 @@
             <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">rec</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">)))</span>
             <span class="k">continue</span>
         <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">report</span></div>
+    <span class="k">return</span> <span class="n">report</span>
+
+
+<div class="viewcode-block" id="add_from">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/pull.html#foley.add_from">[docs]</a>
+<span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">_add_from</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_from</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Observability wrapper over :func:`_add_from` (#11).</span>
+
+<span class="sd">    Opens a root ``add_from`` run-span (a no-op unless observability is enabled) and,</span>
+<span class="sd">    on completion, appends the run-manifest facts — result ids, per-clip disclosure</span>
+<span class="sd">    refs, and the embedded :class:`~foley.index.ingest.IngestReport`. The adapter</span>
+<span class="sd">    search + per-clip ``ingest_one`` child spans are emitted inside ``_add_from``. The</span>
+<span class="sd">    signature + docstring are inherited from :func:`_add_from` via</span>
+<span class="sd">    :func:`functools.wraps`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.recorder</span><span class="w"> </span><span class="kn">import</span> <span class="n">facade_run</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.run_artifact</span><span class="w"> </span><span class="kn">import</span> <span class="n">ingest_digest</span>
+
+    <span class="k">with</span> <span class="n">facade_run</span><span class="p">(</span>
+        <span class="s2">&quot;add_from&quot;</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;license&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">,</span> <span class="s2">&quot;cc0&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;limit&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">_add_from</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">ingested</span><span class="p">:</span>
+            <span class="n">lic</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">license</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">add_result_ids</span><span class="p">([</span><span class="n">res</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">add_disclosure_ref</span><span class="p">(</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;watermark&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="p">,</span>
+                    <span class="s2">&quot;c2pa_manifest_ref&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span><span class="p">,</span>
+                    <span class="s2">&quot;disclosure_recommended&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">set_ingest_report</span><span class="p">(</span><span class="n">ingest_digest</span><span class="p">(</span><span class="n">report</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">report</span></div>
 
 </pre></div>
 
