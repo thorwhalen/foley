@@ -54,7 +54,14 @@ from .registry import (
 # Generate-source contract (#6): the generate facade (sibling of add_from). The
 # stable_audio / elevenlabs adapter packages are NOT imported here — they are
 # auto-discovered lazily, exactly like freesound, so torch/requests stay lazy.
-from .generate import GenerationError, candidate_of, generate
+from .generate import (
+    GenerationError,
+    RecognizableVoiceRefusal,
+    SafetyRefusal,
+    TrademarkRefusal,
+    candidate_of,
+    generate,
+)
 
 __all__ = [
     # bulk-corpus contract (#4)
@@ -90,4 +97,8 @@ __all__ = [
     "generate",
     "candidate_of",
     "GenerationError",
+    # generation safety refusals (#9b)
+    "SafetyRefusal",
+    "TrademarkRefusal",
+    "RecognizableVoiceRefusal",
 ]

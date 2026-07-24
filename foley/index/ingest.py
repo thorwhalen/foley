@@ -225,6 +225,19 @@ def _audio_identity(wav) -> str:
     return content_key(canonical.tobytes())
 
 
+def content_id(src: "AudioSource") -> str:
+    """Return the reproducible content-hash id foley assigns to ``src``.
+
+    Decodes ``src`` (path / bytes / file-like) to canonical PCM and hashes it —
+    the SAME value :func:`ingest_one` mints as the record id when ``sound_id`` is
+    ``None``. Exposed so a caller can learn a clip's stored id *before* ingesting
+    it (e.g. the generate façade keys a content-credential sidecar by the id and
+    sets ``license.c2pa_manifest_ref`` in the same pass — see
+    :func:`foley.sources.generate.generate`). Cheap-ish: it fully decodes ``src``.
+    """
+    return _audio_identity(_probe(src).wav)
+
+
 def _default_user_license(source_url: Optional[str] = None) -> LicenseRecord:
     """The default license for a local ingest: user-owned => cacheable (by-value).
 

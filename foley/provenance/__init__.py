@@ -4,10 +4,14 @@ This subpackage keeps published output legal and traceable. Its first half (#9a)
 is :mod:`foley.provenance.credits` — the stdlib-only TASL attribution / credits
 generator (``CREDITS.md`` + JSON manifest) that reads the ``LicenseRecord`` SSOT.
 
-The sibling ``disclosure.py`` (#9b, after generation lands) — AudioSeal
-watermarking, C2PA content-credential writers, and the EU AI Act Art. 50
-disclosure checklist — is intentionally NOT imported here so ``import foley``
-stays dependency-light; it arrives with the ``foley[provenance]`` extra.
+Its second half (#9b) is :mod:`foley.provenance.disclosure` — AudioSeal
+watermarking, the portable C2PA content-credential sidecar, the EU AI Act Art. 50
+checklist, and the trademarked-audio / recognizable-voice safety scan. It is
+intentionally NOT imported here so ``import foley`` stays dependency-light: its
+module top level is stdlib-only, but ``audioseal`` / ``torch`` / ``torchaudio``
+(the ``foley[provenance]`` extra) are imported lazily inside its watermark
+functions. Import it explicitly (``from foley.provenance import disclosure``) or
+reach the pure helpers via ``foley.art50_checklist`` / ``foley.scan_prompt``.
 """
 
 from __future__ import annotations
