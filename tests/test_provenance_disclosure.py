@@ -131,8 +131,31 @@ def test_scan_prompt_trademark_hits():
 
 
 def test_scan_prompt_voice_hits():
-    for p in ("in the voice of a narrator", "clone her voice please", "sounds like morgan freeman"):
+    # explicit clone cues (any case) + a Title-case proper name after a voice trigger
+    for p in (
+        "in the voice of a narrator",
+        "clone her voice please",
+        "a deepfake of someone",
+        "sounds like Morgan Freeman",
+        "voice of Oprah Winfrey",
+        "impersonate Obama",
+    ):
         assert disclosure.scan_prompt(p).contains_recognizable_voice, p
+
+
+def test_scan_prompt_does_not_flag_benign_sfx():
+    # the tightened patterns must NOT refuse ordinary SFX descriptions (the review's
+    # HIGH false-positive bug): lowercase 'sounds like'/'voice of'/'impersonating'
+    for p in (
+        "sounds like breaking glass",
+        "a whoosh that sounds like rushing wind",
+        "it sounds like heavy machinery",
+        "the voice of the storm howling",
+        "voice of thunder",
+        "impersonating a robot",
+        "a metal clang that sounds like a bell",
+    ):
+        assert not disclosure.scan_prompt(p).flagged, p
 
 
 def test_scan_prompt_clean():
@@ -276,10 +299,31 @@ def test_content_credential_sidecar_written(library):
     cc = pstore[rec.id]
     assert cc["$schema"] == "foley/content-credential/v1"
     assert cc["signed"] is False and cc["embedded"] is False
-    labels = [a["label"] for a in cc["manifest"]["assertions"]]
-    assert "c2pa.actions" in labels and "cawg.training-mining" in labels
-    action = cc["manifest"]["assertions"][0]["data"]["actions"][0]
+    assertions = {a["label"]: a["data"] for a in cc["manifest"]["assertions"]}
+    assert "c2pa.actions" in assertions and "cawg.training-mining" in assertions
+    action = assertions["c2pa.actions"]["actions"][0]
     assert action["digitalSourceType"].endswith("trainedAlgorithmicMedia")
+    # the machine-readable AI-training opt-out — the core of the training-mining assertion
+    entries = assertions["cawg.training-mining"]["entries"]
+    assert entries["cawg.ai_inference"]["use"] == "notAllowed"
+    assert entries["cawg.ai_generative_training"]["use"] == "notAllowed"
+    # the credential carries the canonical license URL (via the licensing SSOT), not a bare token
+    assert assertions["stds.schema-org.CreativeWork"]["license"] == (
+        "https://stability.ai/community-license-agreement"
+    )
+
+
+def test_content_credential_training_mining_allowed_for_permissive_license():
+    from foley.sources.base import api_license
+
+    lic = api_license(source="freesound", license_id="CC0-1.0", rights_verified=True)
+    cc = disclosure.build_content_credential(SoundRecord(id="x", license=lic), asset_id="x")
+    entries = next(
+        a["data"]["entries"]
+        for a in cc["manifest"]["assertions"]
+        if a["label"] == "cawg.training-mining"
+    )
+    assert entries["cawg.ai_inference"]["use"] == "allowed"  # ai_training_ok=True
 
 
 def test_content_credential_written_without_provenance_extra(library, monkeypatch):
@@ -346,6 +390,20 @@ def test_art50_checklist_non_ai_not_required():
     assert chk["publish_ready"] is True
 
 
+def test_art50_checklist_voice_disclosure_branch():
+    lic = _ai_license(watermark={"present": True}, c2pa_manifest_ref="x")
+    lic.contains_recognizable_voice = True
+    lic.disclosure_recommended = False  # a recognizable voice needs disclosure surfaced
+    chk = disclosure.art50_checklist(SoundRecord(id="a", license=lic))
+    assert chk["obligations"]["voice_disclosure"]["required"] is True
+    assert chk["obligations"]["voice_disclosure"]["met"] is False
+    assert "voice_disclosure" in chk["pending"] and chk["publish_ready"] is False
+    lic.disclosure_recommended = True
+    chk2 = disclosure.art50_checklist(SoundRecord(id="a", license=lic))
+    assert chk2["obligations"]["voice_disclosure"]["met"] is True
+    assert "voice_disclosure" not in chk2["pending"]
+
+
 # ---------------------------------------------------------------------------
 # (h) watermark=True without the extra -> WatermarkUnavailable (fail-fast)
 # ---------------------------------------------------------------------------
@@ -364,6 +422,82 @@ def test_public_generate_forwards_disclosure_kwargs(library, monkeypatch):
     _force_no_audioseal(monkeypatch)
     with pytest.raises(TrademarkRefusal):
         foley.generate("the thx deep note", backend="stable_audio", library=library, adapter=_sa_adapter(), provenance_store={})
+
+
+# ---------------------------------------------------------------------------
+# (h2) watermark-embed failure degrades fail-OPEN (never fails the generation)
+# ---------------------------------------------------------------------------
+
+
+class RaisingWatermarker:
+    method = "boom"
+    version = "0"
+
+    def embed(self, audio_bytes, *, message=disclosure.DEFAULT_WATERMARK_MESSAGE):
+        raise RuntimeError("watermark model exploded")
+
+
+def test_watermark_embed_failure_degrades_gracefully(library):
+    pstore: dict = {}
+    report = generate_backend(
+        "a creak", backend="stable_audio", library=library, adapter=_sa_adapter(),
+        watermarker=RaisingWatermarker(), provenance_store=pstore,
+    )
+    rec = report.ingested[0].record  # still stored despite the watermark failure
+    assert rec.license.watermark is None
+    # the id hashes the RAW (un-watermarked) bytes the adapter produced
+    raw = _sa_adapter().generate("a creak").audio_bytes
+    assert rec.id == content_id(raw)
+    assert any("watermarking skipped" in n for n in report.ingested[0].notes)
+    assert rec.license.c2pa_manifest_ref == rec.id and rec.id in pstore
+
+
+# ---------------------------------------------------------------------------
+# (h3) store=False preview writes no sidecar; multi-category scan + refusal
+# ---------------------------------------------------------------------------
+
+
+def test_generate_store_false_writes_no_sidecar(library):
+    pstore: dict = {}
+    report = generate_backend(
+        "a creak", backend="stable_audio", library=library, adapter=_sa_adapter(),
+        watermarker=FakeWatermarker(), provenance_store=pstore, store=False,
+    )
+    assert len(library) == 0
+    assert pstore == {}  # no content-credential sidecar for a preview
+    assert report.results[0].record.license.c2pa_manifest_ref is None
+
+
+def test_multi_category_scan_and_refuse_precedence(library):
+    prompt = "the netflix ta-dum in the voice of Morgan Freeman"
+    scan = disclosure.scan_prompt(prompt)
+    assert scan.potential_trademark and scan.contains_recognizable_voice
+    # refuse precedence: trademark wins when both fire
+    with pytest.raises(TrademarkRefusal):
+        generate_backend(prompt, backend="stable_audio", library=library, adapter=_sa_adapter())
+
+
+def test_warn_mode_stamps_both_flags(library):
+    prompt = "the netflix ta-dum in the voice of Morgan Freeman"
+    report = generate_backend(
+        prompt, backend="stable_audio", library=library, adapter=_sa_adapter(),
+        provenance_store={}, on_flagged="warn", watermark=False,
+    )
+    rec = report.ingested[0].record
+    assert rec.license.potential_trademark and rec.license.contains_recognizable_voice
+    assert keep(rec.license, IntendedUse(commercial=True)) is False
+
+
+def test_make_provenance_store_roundtrip(tmp_path):
+    from foley.stores import make_provenance_store
+
+    store = make_provenance_store(tmp_path / "prov")
+    sid = "abcd1234" * 8  # a 64-char hex-like content id
+    cred = {"$schema": "foley/content-credential/v1", "manifest": {"assertions": []}}
+    store[sid] = cred
+    assert store[sid] == cred
+    assert sid in list(store)  # bare id key exposed over an escaped {enc}.json file
+    assert make_provenance_store(tmp_path / "prov")[sid] == cred  # survives re-open
 
 
 # ---------------------------------------------------------------------------

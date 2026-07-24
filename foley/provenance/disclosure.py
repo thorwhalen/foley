@@ -109,13 +109,27 @@ TRADEMARK_REGISTRY: "tuple[TrademarkEntry, ...]" = (
     TrademarkEntry("Homer Simpson D'oh", frozenset({"d'oh", "homer doh", "homer simpson doh"})),
 )
 
-#: Recognizable-voice / voice-clone prompt patterns (report 07 §7.1).
-RECOGNIZABLE_VOICE_PATTERNS: "tuple[re.Pattern, ...]" = (
-    re.compile(r"voice of \w+"),
+#: Explicit voice-clone / human-voice-request cues (report 07 §7.1) — matched
+#: case-INSENSITIVELY, because these phrasings are unambiguous requests for a human
+#: voice and warrant a disclosure flag regardless of case.
+_VOICE_CUE_PATTERNS: "tuple[re.Pattern, ...]" = (
     re.compile(r"in the voice of"),
-    re.compile(r"sounds? like [a-z]+ [a-z]+"),  # "sounds like morgan freeman"
-    re.compile(r"clon(?:e|ed|ing)\b.{0,20}voice"),
-    re.compile(r"impersonat\w*\s+\w+"),
+    re.compile(r"voice[ -]?clon\w*"),  # "voice clone", "voice-cloning"
+    re.compile(r"clon(?:e|ed|ing)\b.{0,20}\bvoice"),  # "clone her voice"
+    re.compile(r"deep[ -]?fake"),
+)
+
+#: Proper-name voice patterns (report 07 §7.1) — matched on the ORIGINAL (cased)
+#: prompt and requiring a Title-case proper name, so ordinary lowercase SFX
+#: descriptions ("sounds like breaking glass", "voice of thunder", "impersonating a
+#: robot") are NOT flagged — only a named person is (e.g. "sounds like Morgan
+#: Freeman"). Best-effort: a lowercase real name is a known false-negative and a
+#: Title-case non-person (e.g. "Big Ben") a known false-positive; the gate is a
+#: warn/refuse aid, not a legal guarantee.
+_VOICE_NAME_PATTERNS: "tuple[re.Pattern, ...]" = (
+    re.compile(r"\bvoice of ([A-Z][a-z]+(?: [A-Z][a-z]+)+)"),
+    re.compile(r"\bsounds? like ([A-Z][a-z]+ [A-Z][a-z]+)"),
+    re.compile(r"\bimpersonat\w*\s+([A-Z][a-z]+)"),
 )
 
 
@@ -155,14 +169,17 @@ def scan_prompt(prompt: str) -> PromptScan:
     Returns:
         A :class:`PromptScan` naming the matched marks / voice patterns.
     """
-    text = (prompt or "").casefold()
+    original = prompt or ""
+    text = original.casefold()
     trademark_hits = tuple(
         e.canonical
         for e in TRADEMARK_REGISTRY
         if any(alias in text for alias in e.aliases)
     )
-    voice_hits = tuple(
-        pat.pattern for pat in RECOGNIZABLE_VOICE_PATTERNS if pat.search(text)
+    # Explicit clone cues match case-insensitively; proper-name patterns match the
+    # ORIGINAL (cased) prompt so lowercase SFX descriptions are never flagged.
+    voice_hits = tuple(p.pattern for p in _VOICE_CUE_PATTERNS if p.search(text)) + tuple(
+        p.pattern for p in _VOICE_NAME_PATTERNS if p.search(original)
     )
     return PromptScan(trademark_hits=trademark_hits, voice_hits=voice_hits)
 
@@ -464,10 +481,15 @@ def build_content_credential(
         A JSON-serializable content-credential dict (``signed``/``embedded`` False —
         it is self-asserted until #8 signs it).
     """
+    from ..licensing import license_meta
+
     lic, caption, fmt = _coerce(record)
     source_type = (
         IPTC_TRAINED_ALGORITHMIC_MEDIA if lic.is_ai_generated else IPTC_DIGITAL_CREATION
     )
+    # Prefer the record's own URL, else the canonical URL from the licensing SSOT
+    # (a resolvable URL is what a machine-readable credential needs), else the id.
+    license_ref = lic.license_url or license_meta(lic.license_id).url or lic.license_id
     software_agent = {}
     if lic.generator_model:
         software_agent["name"] = lic.generator_model
@@ -495,7 +517,7 @@ def build_content_credential(
             "data": {
                 "@context": "https://schema.org",
                 "@type": "CreativeWork",
-                "license": lic.license_url or lic.license_id,
+                "license": license_ref,
                 "author": [
                     {
                         "@type": "Organization",

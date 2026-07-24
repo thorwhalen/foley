@@ -257,11 +257,14 @@ def generate(
     # pre-compute the id) AND the ingest — so an undecodable response (a hosted API
     # returning HTTP 200 with a non-audio body) is recorded as an error, not a crash.
     sound_id = None
+    pstore = None
+    credential = None
     try:
-        # Content-credential sidecar (stdlib; every STORED generated clip). Single-pass:
-        # pre-compute the content-hash id from the (watermarked) bytes so the sidecar
-        # key and license.c2pa_manifest_ref match the id ingest_one re-mints — no
-        # meta re-store.
+        # Content-credential prep (stdlib). Single-pass: pre-compute the content-hash
+        # id from the (watermarked) bytes so the sidecar key and license.c2pa_manifest_ref
+        # match the id ingest_one re-mints — no meta re-store. The sidecar is WRITTEN
+        # only after a stored result (below), so a quarantined / errored generation
+        # leaves no orphan credential.
         if store:
             from ..index.ingest import content_id
             from ..stores import content_key, make_provenance_store
@@ -277,8 +280,7 @@ def generate(
                 asset_id=sound_id,
                 asset_hash={"alg": "sha256", "value": content_key(audio_bytes)},
             )
-            disclosure.write_content_credential(pstore, sound_id, credential)
-            lic.c2pa_manifest_ref = sound_id
+            lic.c2pa_manifest_ref = sound_id  # the stored record carries the ref
 
         res = ingest_one(
             audio_bytes,
@@ -295,6 +297,12 @@ def generate(
             IngestResult(id=f"{backend}:ingest", status="error", error=repr(exc))
         )
         return report
+
+    # Write the content-credential sidecar ONLY for a freshly stored clip — a
+    # quarantined (QC-failed), duplicate, or errored generation was never added to the
+    # library, so it gets no orphan credential (its already-stored twin keeps one).
+    if credential is not None and res.status in ("pass", "warn"):
+        disclosure.write_content_credential(pstore, sound_id, credential)
 
     # Surface the adapter's + disclosure notes (unsupported affordances, warn-mode
     # flag, watermark-skip) in the run report.
