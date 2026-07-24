@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.base &mdash; foley 0.0.12 documentation</title>
+  <title>foley.base &mdash; foley 0.0.13 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3bbcec59"></script>
+      <script src="../../_static/documentation_options.js?v=9fc46840"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -112,6 +112,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
 </ul>
 
         </div>
@@ -233,6 +242,24 @@
     <span class="n">ambience</span> <span class="o">=</span> <span class="s2">&quot;ambience&quot;</span>
     <span class="n">stinger</span> <span class="o">=</span> <span class="s2">&quot;stinger&quot;</span>
     <span class="n">music</span> <span class="o">=</span> <span class="s2">&quot;music&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Anchor">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Anchor">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Anchor</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How a WEAVE ``Placement`` binds its symbolic time to the narration (report 06 §2.4).</span>
+
+<span class="sd">    ``absolute`` is a fixed offset; the rest resolve against the forced-aligned</span>
+<span class="sd">    ``word_timeline`` — ``word`` to a trigger word&#39;s onset, ``sentence`` across a</span>
+<span class="sd">    sentence span, ``scene``/``paragraph`` to a boundary&#39;s first spoken word.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">absolute</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span>
+    <span class="n">word</span> <span class="o">=</span> <span class="s2">&quot;word&quot;</span>
+    <span class="n">sentence</span> <span class="o">=</span> <span class="s2">&quot;sentence&quot;</span>
+    <span class="n">scene</span> <span class="o">=</span> <span class="s2">&quot;scene&quot;</span>
+    <span class="n">paragraph</span> <span class="o">=</span> <span class="s2">&quot;paragraph&quot;</span></div>
 
 
 
@@ -652,33 +679,141 @@
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
-<span class="c1"># WEAVE-seed models — the SPARSE plan the SELECT agent emits (report 10 §2.4)</span>
+<span class="c1"># WEAVE render model — the editable, re-renderable sound-design timeline (report 06 §6)</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
-<span class="c1"># These are the sparse *subset* of report 06&#39;s full render model. The SELECT</span>
-<span class="c1"># agent (#7) emits only ``onset·gain·layer·loop`` per item; the WEAVE stage (#8)</span>
-<span class="c1"># extends the model in place with the ``Placement`` / ``Processing`` /</span>
-<span class="c1"># ``MasterProfile`` / ``word_timeline`` fields that resolve anchors, mix, align,</span>
-<span class="c1"># and master. Do NOT add those here — #8 grows this superset.</span>
+<span class="c1"># The SELECT agent (#7) emits the SPARSE seed — ``TimelineItem`` with only</span>
+<span class="c1"># ``onset·gain·layer·loop`` and ``SoundDesignTimeline`` with just ``items`` — via</span>
+<span class="c1"># ``foley.agent.plan()``. The WEAVE stage (#8) GROWS this model *in place*,</span>
+<span class="c1"># additively: the sparse flat fields stay untouched (so ``plan()`` /</span>
+<span class="c1"># ``place_in_timeline`` keep working), and the resolved render model layers on top</span>
+<span class="c1"># through ``Placement`` / ``Processing`` (per item) and ``word_timeline`` / ``master``</span>
+<span class="c1"># (per timeline). ``TimelineItem.onset`` (a SYMBOLIC str — SELECT&#39;s input) and</span>
+<span class="c1"># ``Placement.onset`` (a RESOLVED float — WEAVE&#39;s output) deliberately coexist;</span>
+<span class="c1"># ``foley.weave.anchor.parse_symbolic_anchor`` is the single bridge between them.</span>
+
+
+<div class="viewcode-block" id="Placement">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Placement">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Placement</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;WHERE/WHEN a clip sits — a symbolic anchor plus its resolved time (report 06 §6.3).</span>
+
+<span class="sd">    Filled by WEAVE&#39;s aligner+anchor pass. ``onset`` is the resolved start in</span>
+<span class="sd">    seconds (distinct from the sparse :attr:`TimelineItem.onset` symbolic string);</span>
+<span class="sd">    ``pre_roll`` shifts the clip earlier so its salient transient — not its file</span>
+<span class="sd">    start — lands on the anchor (report 06 §2.4).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">anchor</span><span class="p">:</span> <span class="n">Anchor</span> <span class="o">=</span> <span class="n">Anchor</span><span class="o">.</span><span class="n">absolute</span>
+    <span class="n">ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="kc">None</span>  <span class="c1"># transcript word / sentence / scene id the anchor binds to</span>
+    <span class="p">)</span>
+    <span class="n">onset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># RESOLVED start (seconds), filled by the aligner+anchor pass</span>
+    <span class="n">pre_roll</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># lead so the clip&#39;s transient lands on the anchor</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># None = full clip length</span>
+    <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># seamless-loop to fill ``duration`` (beds)</span></div>
+
+
+
+<div class="viewcode-block" id="Processing">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Processing">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Processing</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HOW a clip sounds — all optional with identity defaults (report 06 §3, §6.3).</span>
+
+<span class="sd">    Every field is a no-op at its default, so a sparse item (no ``processing``)</span>
+<span class="sd">    renders untouched; the mixer departs from dry/centered/full-level only when a</span>
+<span class="sd">    field is set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gain_db</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># relative to the voice bus</span>
+    <span class="n">pan</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># -1 (L) .. +1 (R), constant-power</span>
+    <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># 0 near .. 1 far -&gt; gain + LPF + reverb recipe</span>
+    <span class="n">reverb_send</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># 0 dry .. 1 wet (scene bus)</span>
+    <span class="n">fade_in</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.008</span>  <span class="c1"># s, declick</span>
+    <span class="n">fade_out</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.012</span>  <span class="c1"># s, declick</span>
+    <span class="n">duck_bed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># does this item duck the ambience bus?</span></div>
+
 
 
 <div class="viewcode-block" id="TimelineItem">
 <a class="viewcode-back" href="../../module_docs/foley/base.html#foley.TimelineItem">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">TimelineItem</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;One placed sound in the sparse sound-design plan (the WEAVE-seed subset).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One placed sound on the sound-design timeline — sparse seed + resolved render fields.</span>
 
-<span class="sd">    Holds only what SELECT decides: which clip, when (as a *symbolic* anchor),</span>
-<span class="sd">    how loud (relative), on which layer, and whether it loops. WEAVE (#8) resolves</span>
-<span class="sd">    ``onset`` to an absolute time and fills the processing/mix defaults.</span>
+<span class="sd">    SELECT (#7) sets only the sparse flat fields (``clip_ref·onset·gain·layer·loop``);</span>
+<span class="sd">    WEAVE (#8) additively fills ``id`` / ``placement`` / ``processing`` (and may carry</span>
+<span class="sd">    the originating ``event`` for provenance). ``enabled`` is a non-destructive mute.</span>
+<span class="sd">    The sparse flat fields are never removed — they stay SELECT&#39;s SSOT input; the render</span>
+<span class="sd">    reads the resolved ``placement``/``processing`` (falling back to the flat fields when</span>
+<span class="sd">    those are absent).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">clip_ref</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># SoundRecord id in the dol library (by reference, never bytes)</span>
     <span class="n">onset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="kc">None</span>  <span class="c1"># SYMBOLIC anchor (&quot;on &#39;pushed open&#39;&quot;); WEAVE resolves it</span>
+        <span class="kc">None</span>  <span class="c1"># SYMBOLIC anchor (&quot;on &#39;pushed open&#39;&quot;); WEAVE resolves it into ``placement``</span>
     <span class="p">)</span>
-    <span class="n">gain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># dB relative to the voice bus</span>
+    <span class="n">gain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># dB relative to the voice bus (SELECT&#39;s sparse level)</span>
     <span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span> <span class="o">=</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span>
-    <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+    <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="c1"># --- WEAVE-resolved (all default to None/identity, so a sparse item is valid) ---</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># stable cue id (WEAVE fills it via a content hash)</span>
+    <span class="n">placement</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Placement</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># resolved WHERE/WHEN</span>
+    <span class="n">processing</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Processing</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># resolved HOW-it-sounds</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># provenance: the originating SoundEvent</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># non-destructive mute</span></div>
+
+
+
+<div class="viewcode-block" id="MasterProfile">
+<a class="viewcode-back" href="../../module_docs/foley/weave.html#foley.MasterProfile">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MasterProfile</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loudness master target — the delivery spec as data, not code (report 06 §5.2).&quot;&quot;&quot;</span>
+
+    <span class="n">target_lufs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.0</span>  <span class="c1"># podcast default (the dominant spoken-word norm)</span>
+    <span class="n">true_peak_db</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="n">lra</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">11.0</span></div>
+
+
+
+<span class="c1">#: The named delivery targets (report 06 §5.2). :func:`resolve_master` maps a</span>
+<span class="c1">#: profile name to one of these; these values are the SSOT so no LUFS literal</span>
+<span class="c1">#: hides in code.</span>
+<span class="n">MASTER_PROFILES</span><span class="p">:</span> <span class="s2">&quot;dict[str, MasterProfile]&quot;</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;podcast&quot;</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">16.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">11.0</span><span class="p">),</span>
+    <span class="s2">&quot;streaming&quot;</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">14.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">11.0</span><span class="p">),</span>
+    <span class="s2">&quot;broadcast_ebu&quot;</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">23.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">7.0</span><span class="p">),</span>
+    <span class="s2">&quot;broadcast_atsc&quot;</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">24.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">7.0</span><span class="p">),</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="resolve_master">
+<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.resolve_master">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_master</span><span class="p">(</span><span class="n">master</span><span class="p">:</span> <span class="s2">&quot;Union[str, MasterProfile, None]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MasterProfile</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve a master spec (profile name, explicit profile, or ``None``) to a ``MasterProfile``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        master: A :data:`MASTER_PROFILES` key (e.g. ``&#39;podcast&#39;``), an explicit</span>
+<span class="sd">            :class:`MasterProfile`, or ``None`` (-&gt; the podcast default).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The resolved :class:`MasterProfile`.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If ``master`` is an unknown profile name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">master</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MasterProfile</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">master</span><span class="p">,</span> <span class="n">MasterProfile</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">master</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MASTER_PROFILES</span><span class="p">[</span><span class="n">master</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;unknown master profile </span><span class="si">{</span><span class="n">master</span><span class="si">!r}</span><span class="s2">; known: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">MASTER_PROFILES</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span></div>
 
 
 
@@ -686,19 +821,28 @@
 <a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SoundDesignTimeline">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SoundDesignTimeline</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The sparse, editable sound-design plan SELECT emits — the SELECT→WEAVE bridge.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The editable, re-renderable sound-design plan — the SELECT→WEAVE bridge and render SSOT.</span>
 
-<span class="sd">    A strict *subset* of report 06&#39;s render model: a list of :class:`TimelineItem`</span>
-<span class="sd">    plus a join back to the reproducible run-artifact (``run_manifest_ref`` ==</span>
-<span class="sd">    :attr:`foley.obs.RunManifest.run_id`, satisfying the #8 ``plan_ref`` reservation).</span>
-<span class="sd">    WEAVE (#8) resolves anchors, adds ``word_timeline`` / ``master`` / per-item</span>
-<span class="sd">    ``Placement``+``Processing``, and renders.</span>
+<span class="sd">    SELECT (#7) emits the SPARSE form (just ``items`` + the run/transcript joins) via</span>
+<span class="sd">    ``foley.agent.plan()``. WEAVE (#8) grows it additively: ``narration_ref`` binds the</span>
+<span class="sd">    voice audio, ``word_timeline`` caches the forced alignment (the reproducible seed),</span>
+<span class="sd">    ``master`` carries the loudness target, and each item gains its resolved</span>
+<span class="sd">    ``Placement``/``Processing``. ``render(timeline, library)`` is then a PURE function of</span>
+<span class="sd">    this data + the library, so editing any field and re-rendering reproduces exactly that</span>
+<span class="sd">    change. ``run_manifest_ref`` == :attr:`foley.obs.RunManifest.run_id` (the reserved #8</span>
+<span class="sd">    ``plan_ref`` join).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">items</span><span class="p">:</span> <span class="s2">&quot;list[TimelineItem]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># rehydrated element-wise</span>
     <span class="n">run_manifest_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># join to the obs RunManifest.run_id</span>
     <span class="n">transcript_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># narration transcript ref (resolved by WEAVE)</span>
-    <span class="n">schema_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SCHEMA_VERSION</span></div>
+    <span class="n">schema_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SCHEMA_VERSION</span>
+    <span class="c1"># --- WEAVE-resolved (all defaulted, so the sparse SELECT form stays valid) ---</span>
+    <span class="n">narration_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># the voice audio (dol ref); WEAVE binds it</span>
+    <span class="n">word_timeline</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span>
+    <span class="p">)</span>  <span class="c1"># [{&#39;word&#39;,&#39;start&#39;,&#39;end&#39;}, ...] from forced alignment (the reproducible seed)</span>
+    <span class="n">master</span><span class="p">:</span> <span class="n">MasterProfile</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">MasterProfile</span><span class="p">)</span>  <span class="c1"># loudness target</span></div>
 
 </pre></div>
 

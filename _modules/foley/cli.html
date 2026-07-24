@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.cli &mdash; foley 0.0.12 documentation</title>
+  <title>foley.cli &mdash; foley 0.0.13 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3bbcec59"></script>
+      <script src="../../_static/documentation_options.js?v=9fc46840"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -112,6 +112,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
 </ul>
 
         </div>
@@ -299,7 +308,9 @@
         <span class="sa">f</span><span class="s2">&quot;f1=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">fit_f1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> fit_score=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">fit_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> &quot;</span>
         <span class="sa">f</span><span class="s2">&quot;auto_accept=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">auto_accept_rate</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;judge=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">judge_model</span><span class="si">}</span><span class="s2"> accepted=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">n_accepted</span><span class="si">}</span><span class="s2"> confirmed=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">n_confirmed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;judge=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">judge_model</span><span class="si">}</span><span class="s2"> accepted=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">n_accepted</span><span class="si">}</span><span class="s2"> confirmed=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">n_confirmed</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
     <span class="k">for</span> <span class="n">stratum</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">stratum</span><span class="si">}</span><span class="s2">: fit_precision=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;fit_precision&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (n=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
     <span class="c1"># Report-only unless a floor is supplied (Tier-2 is nightly/pre-release, not a PR gate).</span>
@@ -386,8 +397,12 @@
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Tier-2 fit eval (nightly/pre-release; report-only unless --min-fit-precision)&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-k&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--golden&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to a golden-set JSON (default: the frozen seed)&quot;</span><span class="p">)</span>
-    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sample&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;stratified sample cap (cost gate)&quot;</span><span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--golden&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to a golden-set JSON (default: the frozen seed)&quot;</span>
+    <span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--sample&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;stratified sample cap (cost gate)&quot;</span>
+    <span class="p">)</span>
     <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--level&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;judge&quot;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;listen&quot;</span><span class="p">,</span> <span class="s2">&quot;judge&quot;</span><span class="p">],</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;fit-judge rung&quot;</span>
     <span class="p">)</span>
@@ -399,7 +414,9 @@
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;min_fit_precision&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;optional gate floor (nightly/pre-release only); omit for report-only&quot;</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--json&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;emit the full FitReport as JSON&quot;</span><span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--json&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;emit the full FitReport as JSON&quot;</span>
+    <span class="p">)</span>
     <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">_cmd_eval_fit</span><span class="p">)</span>
 
     <span class="n">p_search</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;hybrid search of the default library&quot;</span><span class="p">)</span>

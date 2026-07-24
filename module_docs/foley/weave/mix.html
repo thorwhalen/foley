@@ -1,0 +1,403 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.weave.mix &mdash; foley 0.0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.weave.protocols" href="protocols.html" />
+    <link rel="prev" title="foley.weave.master" href="master.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="master.html">foley.weave.master</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.weave.mix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.DISTANCE_MAX_ATTEN_DB"><code class="docutils literal notranslate"><span class="pre">DISTANCE_MAX_ATTEN_DB</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.DISTANCE_MAX_LP"><code class="docutils literal notranslate"><span class="pre">DISTANCE_MAX_LP</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.LAYER_GAIN_DB"><code class="docutils literal notranslate"><span class="pre">LAYER_GAIN_DB</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.REVERB_IR_S"><code class="docutils literal notranslate"><span class="pre">REVERB_IR_S</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.apply_distance"><code class="docutils literal notranslate"><span class="pre">apply_distance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.constant_power_pan"><code class="docutils literal notranslate"><span class="pre">constant_power_pan()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.db_to_lin"><code class="docutils literal notranslate"><span class="pre">db_to_lin()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.declick"><code class="docutils literal notranslate"><span class="pre">declick()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.equal_power_crossfade"><code class="docutils literal notranslate"><span class="pre">equal_power_crossfade()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.fit_duration"><code class="docutils literal notranslate"><span class="pre">fit_duration()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.overlay"><code class="docutils literal notranslate"><span class="pre">overlay()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.reverb_send"><code class="docutils literal notranslate"><span class="pre">reverb_send()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.mix.speech_duck_gain"><code class="docutils literal notranslate"><span class="pre">speech_duck_gain()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.weave.mix</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/weave/mix.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.weave.mix">
+<span id="foley-weave-mix"></span><h1>foley.weave.mix<a class="headerlink" href="#module-foley.weave.mix" title="Link to this heading"></a></h1>
+<p>Pure-numpy mixing DSP — making a clip sit under the voice (report 06 §3).</p>
+<p>Deterministic, testable, shell-out-free primitives for the WEAVE mixer: level
+(gain staging), envelope-follower ducking, constant-power panning, a distance
+recipe (attenuation + air-absorption low-pass), a pure-numpy reverb send,
+equal-power crossfades / declicks, seamless loop/trim to a duration, and overlay.</p>
+<p>Everything operates on the working representation (<code class="docutils literal notranslate"><span class="pre">float32</span></code>, time on axis 0);
+the mix graph is <strong>stereo</strong> <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">2)</span></code> so panning composes — <a class="reference internal" href="#foley.weave.mix.constant_power_pan" title="foley.weave.mix.constant_power_pan"><code class="xref py py-func docutils literal notranslate"><span class="pre">constant_power_pan()</span></code></a>
+is the mono→stereo point. <code class="docutils literal notranslate"><span class="pre">numpy</span></code> is imported lazily inside each function so
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley.weave</span></code> stays dol-only (mirroring <a class="reference internal" href="../audio.html#module-foley.audio" title="foley.audio"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.audio</span></code></a>). Nothing here
+reaches for <code class="docutils literal notranslate"><span class="pre">scipy</span></code>/<code class="docutils literal notranslate"><span class="pre">pyroomacoustics</span></code>; those are optional-upgrade paths for a
+later slice behind <code class="docutils literal notranslate"><span class="pre">foley[weave]</span></code>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.weave.mix.DISTANCE_MAX_ATTEN_DB">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">DISTANCE_MAX_ATTEN_DB</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-12.0</span></span><a class="headerlink" href="#foley.weave.mix.DISTANCE_MAX_ATTEN_DB" title="Link to this definition"></a></dt>
+<dd><p>Attenuation (dB) applied at maximum distance (distance == 1.0); ~inverse-distance.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.weave.mix.DISTANCE_MAX_LP">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">DISTANCE_MAX_LP</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.85</span></span><a class="headerlink" href="#foley.weave.mix.DISTANCE_MAX_LP" title="Link to this definition"></a></dt>
+<dd><p>Air-absorption one-pole low-pass coefficient at maximum distance (0 = none, →1 = darkest).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.weave.mix.LAYER_GAIN_DB">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">LAYER_GAIN_DB</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#foley.base.Layer" title="foley.base.Layer"><span class="pre">Layer</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Layer.ambience:</span> <span class="pre">-21.0,</span> <span class="pre">Layer.music:</span> <span class="pre">-21.0,</span> <span class="pre">Layer.sfx_fg:</span> <span class="pre">-9.0,</span> <span class="pre">Layer.stinger:</span> <span class="pre">-6.0,</span> <span class="pre">Layer.voice:</span> <span class="pre">0.0}</span></span><a class="headerlink" href="#foley.weave.mix.LAYER_GAIN_DB" title="Link to this definition"></a></dt>
+<dd><p>Base per-layer gain (dB, relative to the voice bus at 0 dB). The render applies
+this before each item’s own <code class="docutils literal notranslate"><span class="pre">processing.gain_db</span></code> so levels have a sane default.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.weave.mix.REVERB_IR_S">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">REVERB_IR_S</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.18</span></span><a class="headerlink" href="#foley.weave.mix.REVERB_IR_S" title="Link to this definition"></a></dt>
+<dd><p>Reverb-send impulse-response length (seconds) and decay time-constant.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.mix.apply_distance">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">apply_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/mix.html#apply_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.mix.apply_distance" title="Link to this definition"></a></dt>
+<dd><p>Apply a distance recipe: attenuation + air-absorption low-pass (report 06 §3.4).</p>
+<p>Distance reads as a <em>combination</em> of cues: quieter (~inverse-distance) and duller
+(a low-pass, as air absorbs highs). The reverb component of distance is applied
+separately via <a class="reference internal" href="#foley.weave.mix.reverb_send" title="foley.weave.mix.reverb_send"><code class="xref py py-func docutils literal notranslate"><span class="pre">reverb_send()</span></code></a>. <code class="docutils literal notranslate"><span class="pre">distance</span> <span class="pre">==</span> <span class="pre">0</span></code> is a no-op.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clip</strong> – Working array (mono or stereo).</p></li>
+<li><p><strong>sample_rate</strong> – Sample rate in Hz (kept for API symmetry / future filters).</p></li>
+<li><p><strong>distance</strong> – 0 (near) .. 1 (far).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The attenuated, low-passed clip (a new array; input not mutated).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.mix.constant_power_pan">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">constant_power_pan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pan</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/mix.html#constant_power_pan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.mix.constant_power_pan" title="Link to this definition"></a></dt>
+<dd><p>Pan a (mono or stereo) clip to a stereo image with a constant-power law (report 06 §3.3).</p>
+<p><code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">=</span> <span class="pre">cos(θ)</span></code>, <code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">=</span> <span class="pre">sin(θ)</span></code> with <code class="docutils literal notranslate"><span class="pre">θ</span> <span class="pre">=</span> <span class="pre">(pan+1)·π/4</span></code> and <code class="docutils literal notranslate"><span class="pre">pan</span> <span class="pre">∈</span> <span class="pre">[-1,</span> <span class="pre">1]</span></code>, so
+<code class="docutils literal notranslate"><span class="pre">L²</span> <span class="pre">+</span> <span class="pre">R²</span></code> (perceived loudness) stays flat across the field — no ~3 dB centre dip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clip</strong> – Mono <code class="docutils literal notranslate"><span class="pre">(frames,)</span></code> or stereo <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">2)</span></code> working array.</p></li>
+<li><p><strong>pan</strong> – -1 (hard left) .. 0 (centre) .. +1 (hard right).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A stereo <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">2)</span></code> array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.mix.db_to_lin">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">db_to_lin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/mix.html#db_to_lin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.mix.db_to_lin" title="Link to this definition"></a></dt>
+<dd><p>Convert decibels to a linear amplitude factor (<code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">**</span> <span class="pre">(db/20)</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.mix.declick">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">declick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fade_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.008</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fade_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.012</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/mix.html#declick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.mix.declick" title="Link to this definition"></a></dt>
+<dd><p>Apply short in/out fades so an edit point produces no click (report 06 §3.6).</p>
+<p>Thin wrapper over <a class="reference internal" href="../audio.html#foley.audio.fade" title="foley.audio.fade"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.audio.fade()</span></code></a> (linear ramps), sized in seconds.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.mix.equal_power_crossfade">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">equal_power_crossfade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/mix.html#equal_power_crossfade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.mix.equal_power_crossfade" title="Link to this definition"></a></dt>
+<dd><p>Concatenate <code class="docutils literal notranslate"><span class="pre">a</span></code> then <code class="docutils literal notranslate"><span class="pre">b</span></code> with an equal-power crossfade over <code class="docutils literal notranslate"><span class="pre">overlap_samples</span></code> (report 06 §3.6).</p>
+<p>The tail of <code class="docutils literal notranslate"><span class="pre">a</span></code> and head of <code class="docutils literal notranslate"><span class="pre">b</span></code> are ramped with <code class="docutils literal notranslate"><span class="pre">cos</span></code>/<code class="docutils literal notranslate"><span class="pre">sin</span></code> gains so
+perceived loudness stays flat across the seam (no ~3 dB dip). Used for seamless
+bed loops and ambience swaps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – The leading clip (mono or stereo).</p></li>
+<li><p><strong>b</strong> – The trailing clip (same channel layout as <code class="docutils literal notranslate"><span class="pre">a</span></code>).</p></li>
+<li><p><strong>overlap_samples</strong> – Crossfade length in samples (clamped to both clip lengths).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The crossfaded concatenation <code class="docutils literal notranslate"><span class="pre">(len(a)</span> <span class="pre">+</span> <span class="pre">len(b)</span> <span class="pre">-</span> <span class="pre">overlap,)</span></code> frames.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.mix.fit_duration">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">fit_duration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crossfade_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/mix.html#fit_duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.mix.fit_duration" title="Link to this definition"></a></dt>
+<dd><p>Fit <code class="docutils literal notranslate"><span class="pre">clip</span></code> to <code class="docutils literal notranslate"><span class="pre">duration</span></code> seconds — seamless loop (beds) or trim/pass-through (report 06 §4).</p>
+<p><code class="docutils literal notranslate"><span class="pre">duration</span> <span class="pre">is</span> <span class="pre">None</span></code> returns the clip unchanged (a one-shot plays once). When
+<code class="docutils literal notranslate"><span class="pre">loop</span></code> and the clip is shorter than <code class="docutils literal notranslate"><span class="pre">duration</span></code>, it is tiled and equal-power
+crossfaded at the seam to fill the span; anything longer than <code class="docutils literal notranslate"><span class="pre">duration</span></code> is
+trimmed. A non-looping short clip is returned as-is (it plays once).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clip</strong> – Working array (mono or stereo).</p></li>
+<li><p><strong>sample_rate</strong> – Sample rate in Hz.</p></li>
+<li><p><strong>duration</strong> – Target duration in seconds (<code class="docutils literal notranslate"><span class="pre">None</span></code> = full clip length).</p></li>
+<li><p><strong>loop</strong> – Seamless-loop to fill <code class="docutils literal notranslate"><span class="pre">duration</span></code> when shorter.</p></li>
+<li><p><strong>crossfade_s</strong> – Equal-power crossfade length at each loop seam.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The duration-fitted clip.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.mix.overlay">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">overlay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onset_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/mix.html#overlay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.mix.overlay" title="Link to this definition"></a></dt>
+<dd><p>Add <code class="docutils literal notranslate"><span class="pre">clip</span></code> into <code class="docutils literal notranslate"><span class="pre">bus</span></code> at <code class="docutils literal notranslate"><span class="pre">onset_samples</span></code> (report 06 §6.4 <code class="docutils literal notranslate"><span class="pre">overlay</span></code>).</p>
+<p>Sums (never replaces) into a copy of the bus; a clip whose tail would exceed the
+bus length is truncated to fit (the mix length equals the narration length).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bus</strong> – The destination layer bus (stereo <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">2)</span></code>).</p></li>
+<li><p><strong>clip</strong> – The (mono or stereo) clip to place.</p></li>
+<li><p><strong>onset_samples</strong> – Start offset in samples (clamped at 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new bus with the clip summed in.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.mix.reverb_send">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">reverb_send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/mix.html#reverb_send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.mix.reverb_send" title="Link to this definition"></a></dt>
+<dd><p>Mix a pure-numpy exponential-decay reverb tail into <code class="docutils literal notranslate"><span class="pre">clip</span></code> (report 06 §3.5).</p>
+<p>A deterministic dry/wet blend: the clip is convolved with a short
+exponentially-decaying impulse response and mixed back at <code class="docutils literal notranslate"><span class="pre">amount</span></code>. This is the
+zero-dependency default; <code class="docutils literal notranslate"><span class="pre">pyroomacoustics</span></code> / recorded-IR convolution is the
+optional <code class="docutils literal notranslate"><span class="pre">foley[weave]</span></code> upgrade. <code class="docutils literal notranslate"><span class="pre">amount</span> <span class="pre">==</span> <span class="pre">0</span></code> is a no-op (fully dry).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clip</strong> – Working array (mono or stereo).</p></li>
+<li><p><strong>sample_rate</strong> – Sample rate in Hz.</p></li>
+<li><p><strong>amount</strong> – 0 (dry) .. 1 (fully wet).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The dry/wet-blended clip (a new array; input not mutated).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.mix.speech_duck_gain">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.mix.</span></span><span class="sig-name descname"><span class="pre">speech_duck_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speech_spans</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">duck_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/mix.html#speech_duck_gain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.mix.speech_duck_gain" title="Link to this definition"></a></dt>
+<dd><p>Build a (linear) gain envelope that dips to <code class="docutils literal notranslate"><span class="pre">duck_db</span></code> during speech spans (report 06 §3.2).</p>
+<p>A one-pole attack/release smooths the transitions so the bed dips and recovers
+without clicks. Deterministic and testable — the envelope-follower alternative to
+<code class="docutils literal notranslate"><span class="pre">ffmpeg</span> <span class="pre">sidechaincompress</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_samples</strong> – Length of the bed bus in samples.</p></li>
+<li><p><strong>sample_rate</strong> – Sample rate in Hz.</p></li>
+<li><p><strong>speech_spans</strong> – <code class="docutils literal notranslate"><span class="pre">[(start_s,</span> <span class="pre">end_s),</span> <span class="pre">...]</span></code> from the word timeline.</p></li>
+<li><p><strong>duck_db</strong> – Attenuation depth during speech (negative dB).</p></li>
+<li><p><strong>attack</strong> – Attack time constant (seconds) as the bed drops.</p></li>
+<li><p><strong>release</strong> – Release time constant (seconds) as the bed recovers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">(n_samples,)</span></code> linear gain envelope in <code class="docutils literal notranslate"><span class="pre">[db_to_lin(duck_db),</span> <span class="pre">1.0]</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="master.html" class="btn btn-neutral float-left" title="foley.weave.master" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="protocols.html" class="btn btn-neutral float-right" title="foley.weave.protocols" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.weave.protocols &mdash; foley 0.0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.weave.render" href="render.html" />
+    <link rel="prev" title="foley.weave.mix" href="mix.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.weave.protocols</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.protocols.Aligner"><code class="docutils literal notranslate"><span class="pre">Aligner</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.protocols.ApplyStrategy"><code class="docutils literal notranslate"><span class="pre">ApplyStrategy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.weave.protocols</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/weave/protocols.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.weave.protocols">
+<span id="foley-weave-protocols"></span><h1>foley.weave.protocols<a class="headerlink" href="#module-foley.weave.protocols" title="Link to this heading"></a></h1>
+<p>The structural DI seams of the WEAVE stage — <code class="docutils literal notranslate"><span class="pre">Aligner</span></code> / <code class="docutils literal notranslate"><span class="pre">ApplyStrategy</span></code>.</p>
+<p>Two <code class="docutils literal notranslate"><span class="pre">&#64;runtime_checkable</span></code> <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Protocol</span></code>s (PEP 544), each a
+behaviour-free, open-closed contract that every implementation (the deterministic
+fake <em>and</em> the heavy real impl) satisfies. They are dependency-injected into
+<a class="reference internal" href="render.html#module-foley.weave.render" title="foley.weave.render"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.weave.render()</span></code></a> / <a class="reference internal" href="../weave.html#foley.weave.weave" title="foley.weave.weave"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.weave.weave()</span></code></a> by keyword
+(<code class="docutils literal notranslate"><span class="pre">aligner=</span></code> / <code class="docutils literal notranslate"><span class="pre">apply_strategy=</span></code>), defaulting to a hermetic fake / pure-numpy
+impl when the heavy extra (<code class="docutils literal notranslate"><span class="pre">foley[align]</span></code>) is absent — mirroring
+<a class="reference internal" href="../agent/protocols.html#module-foley.agent.protocols" title="foley.agent.protocols"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.agent.protocols</span></code></a> exactly.</p>
+<p>Stdlib-only: the <code class="docutils literal notranslate"><span class="pre">base</span></code> shapes are imported under <code class="docutils literal notranslate"><span class="pre">TYPE_CHECKING</span></code> only, so
+importing this module pulls no heavy dependency and keeps <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code> and
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley.weave</span></code> dol-only.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.weave.protocols.Aligner">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.weave.protocols.</span></span><span class="sig-name descname"><span class="pre">Aligner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/weave/protocols.html#Aligner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.protocols.Aligner" title="Link to this definition"></a></dt>
+<dd><p>Narration audio + its transcript → word-level timestamps (forced alignment).</p>
+<p>Returns a <code class="docutils literal notranslate"><span class="pre">word_timeline</span></code>: a list of <code class="docutils literal notranslate"><span class="pre">{'word':</span> <span class="pre">str,</span> <span class="pre">'start':</span> <span class="pre">float,</span> <span class="pre">'end':</span>
+<span class="pre">float}</span></code> dicts (seconds), the raw material the anchor heuristics (report 06
+§2.4) turn into sample onsets. The default is the deterministic,
+torch-free <a class="reference internal" href="align.html#foley.weave.align.FakeAligner" title="foley.weave.align.FakeAligner"><code class="xref py py-class docutils literal notranslate"><span class="pre">FakeAligner</span></code></a> (evenly spaces the
+transcript’s words across the clip); <a class="reference internal" href="align.html#foley.weave.align.WhisperXAligner" title="foley.weave.align.WhisperXAligner"><code class="xref py py-class docutils literal notranslate"><span class="pre">WhisperXAligner</span></code></a>
+is the real ≈±50 ms impl behind <code class="docutils literal notranslate"><span class="pre">foley[align]</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.weave.protocols.ApplyStrategy">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.weave.protocols.</span></span><span class="sig-name descname"><span class="pre">ApplyStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/weave/protocols.html#ApplyStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.protocols.ApplyStrategy" title="Link to this definition"></a></dt>
+<dd><p>How ONE hydrated item’s clip is placed onto its layer bus (report 10 §4.2).</p>
+<p>The seam that lets the render swap placement policy without touching the
+render loop: the default <a class="reference internal" href="render.html#foley.weave.render.FullRender" title="foley.weave.render.FullRender"><code class="xref py py-class docutils literal notranslate"><span class="pre">FullRender</span></code></a> applies the
+full per-item DSP chain (fit-duration → gain/pan/distance/reverb → declick →
+overlay), while <a class="reference internal" href="render.html#foley.weave.render.PlaceOnly" title="foley.weave.render.PlaceOnly"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlaceOnly</span></code></a> does a dry declicked
+overlay (fast preview / DSP-free fallback). <code class="docutils literal notranslate"><span class="pre">item</span></code> is already anchor-resolved
+(<code class="docutils literal notranslate"><span class="pre">item.placement.onset</span></code> is in seconds); <code class="docutils literal notranslate"><span class="pre">bus</span></code> and <code class="docutils literal notranslate"><span class="pre">clip</span></code> are stereo
+<code class="docutils literal notranslate"><span class="pre">float32</span></code> working arrays at <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code>.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mix.html" class="btn btn-neutral float-left" title="foley.weave.mix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="render.html" class="btn btn-neutral float-right" title="foley.weave.render" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.weave.timeline &mdash; foley 0.0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+          <li class="breadcrumb-item"><a href="../weave.html">foley.weave</a></li>
+      <li class="breadcrumb-item active">foley.weave.timeline</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.weave.timeline</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The sound-design timeline as an editable document — hydrate, edit, caption.</span>
+
+<span class="sd">The timeline is the SSOT and the reproducible seed; :func:`foley.weave.render` is a</span>
+<span class="sd">pure projection of it. This module owns the *document* operations, all pure and</span>
+<span class="sd">stdlib-only (no numpy, no I/O):</span>
+
+<span class="sd">* :func:`hydrate` — resolve each item&#39;s symbolic anchor into a concrete</span>
+<span class="sd">  :class:`~foley.base.Placement` and fill processing/id defaults, **idempotently**</span>
+<span class="sd">  (``hydrate ∘ hydrate == hydrate``) and without clobbering a hand-set placement.</span>
+<span class="sd">* Pure edit transforms (:func:`swap_clip`, :func:`nudge`, :func:`set_gain`,</span>
+<span class="sd">  :func:`toggle`, :func:`set_master`) — each returns a NEW timeline, so an edit +</span>
+<span class="sd">  re-render reproduces exactly that change (the &quot;editable, re-renderable&quot; DoD).</span>
+<span class="sd">* Accessibility **SDH captions** (:func:`to_webvtt` / :func:`to_srt`) — bracketed</span>
+<span class="sd">  SFX labels (``[door creak]``) derived from the *items*, never from the narration</span>
+<span class="sd">  transcript, so no speech text leaks into a shipped caption file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">replace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Processing</span><span class="p">,</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="n">TimelineItem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.anchor</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_symbolic_anchor</span><span class="p">,</span> <span class="n">resolve_anchor</span>
+
+<span class="c1">#: How long a one-shot&#39;s caption stays on screen (seconds) when the item has no</span>
+<span class="c1">#: resolved duration of its own.</span>
+<span class="n">DISPLAY_WINDOW_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cue_id</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">TimelineItem</span><span class="p">,</span> <span class="n">placement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A stable, content-derived cue id for ``item`` (clip + symbolic anchor + layer).</span>
+
+<span class="sd">    Deterministic across re-renders (so caches and diffs are stable) and independent</span>
+<span class="sd">    of list position. Collisions between genuinely-identical placements are</span>
+<span class="sd">    disambiguated by :func:`hydrate`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">clip_ref</span><span class="p">,</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">onset</span><span class="p">,</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">layer</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">item</span><span class="o">.</span><span class="n">layer</span><span class="p">,</span>
+            <span class="n">placement</span><span class="o">.</span><span class="n">anchor</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">placement</span><span class="o">.</span><span class="n">anchor</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">placement</span><span class="o">.</span><span class="n">anchor</span><span class="p">,</span>
+            <span class="n">placement</span><span class="o">.</span><span class="n">ref</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">12</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="hydrate">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/timeline.html#foley.weave.hydrate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">hydrate</span><span class="p">(</span>
+    <span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="n">word_timeline</span><span class="p">:</span> <span class="s2">&quot;Optional[list]&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve every item&#39;s anchor + fill processing/id, returning a NEW timeline.</span>
+
+<span class="sd">    Idempotent: an item that already carries a :class:`~foley.base.Placement` keeps</span>
+<span class="sd">    its symbolic anchor (a hand edit is never clobbered) but is re-resolved against</span>
+<span class="sd">    ``word_timeline`` so a re-recorded/re-aligned narration re-flows the SFX</span>
+<span class="sd">    (report 06 §6.1). ``processing`` falls back to the sparse ``gain`` and ``id`` to a</span>
+<span class="sd">    stable content hash. The resolved ``word_timeline`` is cached on the returned</span>
+<span class="sd">    timeline (the reproducible seed).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        timeline: The (sparse or partially-resolved) timeline.</span>
+<span class="sd">        word_timeline: The forced alignment; defaults to ``timeline.word_timeline``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A hydrated copy with resolved placements, filled processing, stable ids.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wt</span> <span class="o">=</span> <span class="n">word_timeline</span> <span class="k">if</span> <span class="n">word_timeline</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">timeline</span><span class="o">.</span><span class="n">word_timeline</span>
+    <span class="n">items</span><span class="p">:</span> <span class="s2">&quot;list[TimelineItem]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">seen</span><span class="p">:</span> <span class="s2">&quot;dict[str, int]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">placement</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">placement</span> <span class="ow">or</span> <span class="n">parse_symbolic_anchor</span><span class="p">(</span>
+            <span class="n">it</span><span class="o">.</span><span class="n">onset</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">layer</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">loop</span>
+        <span class="p">)</span>
+        <span class="n">onset</span><span class="p">,</span> <span class="n">duration</span> <span class="o">=</span> <span class="n">resolve_anchor</span><span class="p">(</span><span class="n">placement</span><span class="p">,</span> <span class="n">wt</span><span class="p">)</span>
+        <span class="n">resolved</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span>
+            <span class="n">placement</span><span class="p">,</span>
+            <span class="n">onset</span><span class="o">=</span><span class="n">onset</span><span class="p">,</span>
+            <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span>
+            <span class="n">loop</span><span class="o">=</span><span class="n">placement</span><span class="o">.</span><span class="n">loop</span> <span class="ow">or</span> <span class="n">it</span><span class="o">.</span><span class="n">loop</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">processing</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">processing</span> <span class="ow">or</span> <span class="n">Processing</span><span class="p">(</span><span class="n">gain_db</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">gain</span><span class="p">)</span>
+        <span class="n">cue</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">id</span> <span class="ow">or</span> <span class="n">_cue_id</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">resolved</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cue</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>  <span class="c1"># disambiguate identical placements, deterministically</span>
+            <span class="n">seen</span><span class="p">[</span><span class="n">cue</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">cue</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cue</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">seen</span><span class="p">[</span><span class="n">cue</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seen</span><span class="p">[</span><span class="n">cue</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">replace</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">cue</span><span class="p">,</span> <span class="n">placement</span><span class="o">=</span><span class="n">resolved</span><span class="p">,</span> <span class="n">processing</span><span class="o">=</span><span class="n">processing</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span> <span class="n">word_timeline</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">wt</span><span class="p">))</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_find</span><span class="p">(</span><span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Index of the item whose id (or clip_ref) matches ``item_id``; -1 if none.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">it</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span> <span class="ow">or</span> <span class="n">it</span><span class="o">.</span><span class="n">clip_ref</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_edit_item</span><span class="p">(</span>
+    <span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">changes</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a NEW timeline with ``changes`` applied to the matching item.&quot;&quot;&quot;</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">_find</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no timeline item with id/clip_ref </span><span class="si">{</span><span class="n">item_id</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+    <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="o">**</span><span class="n">changes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="swap_clip">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/timeline.html#foley.weave.swap_clip">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">swap_clip</span><span class="p">(</span>
+    <span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_clip_ref</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Swap an item&#39;s clip (keeping its placement/processing) — a NEW timeline.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_edit_item</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">,</span> <span class="n">clip_ref</span><span class="o">=</span><span class="n">new_clip_ref</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="nudge">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/timeline.html#foley.weave.nudge">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">nudge</span><span class="p">(</span>
+    <span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">delta_s</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift an item&#39;s resolved onset by ``delta_s`` seconds — a NEW timeline.</span>
+
+<span class="sd">    Nudges the resolved :class:`~foley.base.Placement.onset` and pins the anchor to</span>
+<span class="sd">    ``absolute`` so the manual offset survives a re-hydrate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">_find</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no timeline item with id/clip_ref </span><span class="si">{</span><span class="n">item_id</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">it</span> <span class="o">=</span> <span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Anchor</span>
+
+    <span class="n">base</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">placement</span> <span class="ow">or</span> <span class="n">parse_symbolic_anchor</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">onset</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">layer</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">loop</span><span class="p">)</span>
+    <span class="n">moved</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="n">Anchor</span><span class="o">.</span><span class="n">absolute</span><span class="p">,</span> <span class="n">onset</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">onset</span> <span class="o">+</span> <span class="n">delta_s</span><span class="p">))</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+    <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">placement</span><span class="o">=</span><span class="n">moved</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_gain">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/timeline.html#foley.weave.set_gain">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_gain</span><span class="p">(</span>
+    <span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">gain_db</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set an item&#39;s processing gain (dB, voice-relative) — a NEW timeline.&quot;&quot;&quot;</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">_find</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no timeline item with id/clip_ref </span><span class="si">{</span><span class="n">item_id</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">it</span> <span class="o">=</span> <span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">processing</span> <span class="ow">or</span> <span class="n">Processing</span><span class="p">(</span><span class="n">gain_db</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">gain</span><span class="p">),</span> <span class="n">gain_db</span><span class="o">=</span><span class="n">gain_db</span><span class="p">)</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+    <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">processing</span><span class="o">=</span><span class="n">proc</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="n">gain_db</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="toggle">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/timeline.html#foley.weave.toggle">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">toggle</span><span class="p">(</span>
+    <span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Non-destructively mute/unmute an item — a NEW timeline.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_edit_item</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="n">enabled</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_master">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/timeline.html#foley.weave.set_master">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_master</span><span class="p">(</span><span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="n">master</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the timeline&#39;s master profile (name or :class:`MasterProfile`) — a NEW timeline.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_master</span>
+
+    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="n">resolve_master</span><span class="p">(</span><span class="n">master</span><span class="p">))</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># SDH captions (WebVTT / SRT) — from the items, never the narration transcript</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_label</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">TimelineItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A bracketed SDH label for ``item`` (e.g. ``[door creak]``), from its event/clip.</span>
+
+<span class="sd">    Prefers the originating :class:`~foley.base.SoundEvent`&#39;s ``query``/``caption``</span>
+<span class="sd">    (carried on ``item.event``), else a humanised ``clip_ref``. Never reads the</span>
+<span class="sd">    narration transcript, so no speech text can leak into the caption file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">item</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;caption&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">clip_ref</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">]&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fmt_ts</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format ``seconds`` as ``HH:MM:SS&lt;sep&gt;mmm`` (``sep=&#39;.&#39;`` VTT, ``&#39;,&#39;`` SRT).&quot;&quot;&quot;</span>
+    <span class="n">seconds</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
+    <span class="n">ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">seconds</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">seconds</span><span class="p">))</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ms</span> <span class="o">==</span> <span class="mi">1000</span><span class="p">:</span>  <span class="c1"># rounding spilled into the next second</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">ms</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">rem</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">3600</span><span class="p">)</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">sec</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">rem</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">h</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">m</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">sec</span><span class="si">:</span><span class="s2">02d</span><span class="si">}{</span><span class="n">sep</span><span class="si">}{</span><span class="n">ms</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_caption_cues</span><span class="p">(</span>
+    <span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">window_s</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[tuple[float, float, str]]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ordered ``(start, end, label)`` caption cues for enabled, placed items.&quot;&quot;&quot;</span>
+    <span class="n">cues</span><span class="p">:</span> <span class="s2">&quot;list[tuple[float, float, str]]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">it</span><span class="o">.</span><span class="n">enabled</span> <span class="ow">or</span> <span class="n">it</span><span class="o">.</span><span class="n">placement</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">placement</span><span class="o">.</span><span class="n">onset</span><span class="p">)</span>
+        <span class="n">dur</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">placement</span><span class="o">.</span><span class="n">duration</span> <span class="k">if</span> <span class="n">it</span><span class="o">.</span><span class="n">placement</span><span class="o">.</span><span class="n">duration</span> <span class="k">else</span> <span class="n">window_s</span>
+        <span class="n">cues</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">dur</span><span class="p">),</span> <span class="n">_label</span><span class="p">(</span><span class="n">it</span><span class="p">)))</span>
+    <span class="n">cues</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">cues</span>
+
+
+<div class="viewcode-block" id="to_webvtt">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/timeline.html#foley.weave.to_webvtt">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_webvtt</span><span class="p">(</span>
+    <span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">window_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DISPLAY_WINDOW_S</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render the timeline&#39;s SFX cues as a WebVTT SDH caption file (report 06 / issue #8).</span>
+
+<span class="sd">    Each enabled, placed item becomes one ``[bracketed]`` cue at its resolved onset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;WEBVTT&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">_caption_cues</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">window_s</span><span class="o">=</span><span class="n">window_s</span><span class="p">):</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_fmt_ts</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">_fmt_ts</span><span class="p">(</span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="to_srt">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/timeline.html#foley.weave.to_srt">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_srt</span><span class="p">(</span><span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">window_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DISPLAY_WINDOW_S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render the timeline&#39;s SFX cues as an SRT SDH caption file (report 06 / issue #8).&quot;&quot;&quot;</span>
+    <span class="n">blocks</span><span class="p">:</span> <span class="s2">&quot;list[str]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+        <span class="n">_caption_cues</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">window_s</span><span class="o">=</span><span class="n">window_s</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">):</span>
+        <span class="n">blocks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">_fmt_ts</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">_fmt_ts</span><span class="p">(</span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

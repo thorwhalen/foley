@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.weave.render &mdash; foley 0.0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.weave.requirements" href="requirements.html" />
+    <link rel="prev" title="foley.weave.protocols" href="protocols.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.weave.render</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.DUCKED_LAYERS"><code class="docutils literal notranslate"><span class="pre">DUCKED_LAYERS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.EDL_NOMINAL_CLIP_S"><code class="docutils literal notranslate"><span class="pre">EDL_NOMINAL_CLIP_S</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.FullRender"><code class="docutils literal notranslate"><span class="pre">FullRender</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.PlaceOnly"><code class="docutils literal notranslate"><span class="pre">PlaceOnly</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.RENDER_LAYERS"><code class="docutils literal notranslate"><span class="pre">RENDER_LAYERS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.RenderCache"><code class="docutils literal notranslate"><span class="pre">RenderCache</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.RenderResult"><code class="docutils literal notranslate"><span class="pre">RenderResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.load_clip_mono"><code class="docutils literal notranslate"><span class="pre">load_clip_mono()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.render"><code class="docutils literal notranslate"><span class="pre">render()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.to_edl"><code class="docutils literal notranslate"><span class="pre">to_edl()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.render.to_otio"><code class="docutils literal notranslate"><span class="pre">to_otio()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.weave.render</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/weave/render.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.weave.render">
+<span id="foley-weave-render"></span><h1>foley.weave.render<a class="headerlink" href="#module-foley.weave.render" title="Link to this heading"></a></h1>
+<p>The render — a PURE, deterministic projection of the timeline into audio (report 06 §6.4).</p>
+<p><code class="docutils literal notranslate"><span class="pre">render(timeline,</span> <span class="pre">library)</span></code> is a pure function of <code class="docutils literal notranslate"><span class="pre">(narration,</span> <span class="pre">timeline,</span> <span class="pre">library,</span>
+<span class="pre">master)</span></code>: it aligns (once, cached), resolves each item’s anchor, mixes each layer
+bus (per-item DSP via the <a class="reference internal" href="protocols.html#foley.weave.protocols.ApplyStrategy" title="foley.weave.protocols.ApplyStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplyStrategy</span></code></a> seam), ducks
+the ambience/music beds under speech, sums the buses, and masters to the timeline’s
+<a class="reference internal" href="../base.html#foley.base.MasterProfile" title="foley.base.MasterProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MasterProfile</span></code></a>. Re-running after an edit reproduces exactly that
+change and nothing else.</p>
+<p>An opt-in <a class="reference internal" href="#foley.weave.render.RenderCache" title="foley.weave.render.RenderCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">RenderCache</span></code></a> memoises each layer’s <em>pre-duck</em> bus by a content hash
+of its items, so an incremental re-render recomputes only the changed layer(s) yet is
+<strong>byte-identical</strong> to a full render (ducking and mastering are always recomputed
+deterministically). The two shipped <code class="xref py py-class docutils literal notranslate"><span class="pre">ApplyStrategy</span></code> impls are
+<a class="reference internal" href="#foley.weave.render.FullRender" title="foley.weave.render.FullRender"><code class="xref py py-class docutils literal notranslate"><span class="pre">FullRender</span></code></a> (default, full DSP) and <a class="reference internal" href="#foley.weave.render.PlaceOnly" title="foley.weave.render.PlaceOnly"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlaceOnly</span></code></a> (dry declicked
+placement); <code class="docutils literal notranslate"><span class="pre">diff-preview</span></code> / <code class="docutils literal notranslate"><span class="pre">transition</span></code> are reserved behind the same seam.</p>
+<p>This module also owns the timeline <strong>export adapters</strong>: a pure-stdlib CMX3600
+<a class="reference internal" href="#foley.weave.render.to_edl" title="foley.weave.render.to_edl"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_edl()</span></code></a> (always available) and a lazy <a class="reference internal" href="#foley.weave.render.to_otio" title="foley.weave.render.to_otio"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_otio()</span></code></a> (<code class="docutils literal notranslate"><span class="pre">foley[weave]</span></code>);
+<a class="reference internal" href="#foley.weave.render.export" title="foley.weave.render.export"><code class="xref py py-func docutils literal notranslate"><span class="pre">export()</span></code></a> prefers OTIO and falls back to EDL so export always succeeds.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.weave.render.DUCKED_LAYERS">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">DUCKED_LAYERS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#foley.base.Layer" title="foley.base.Layer"><span class="pre">Layer</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(Layer.ambience,</span> <span class="pre">Layer.music)</span></span><a class="headerlink" href="#foley.weave.render.DUCKED_LAYERS" title="Link to this definition"></a></dt>
+<dd><p>Layers ducked under speech (report 06 §3.2).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.weave.render.EDL_NOMINAL_CLIP_S">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">EDL_NOMINAL_CLIP_S</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></span><a class="headerlink" href="#foley.weave.render.EDL_NOMINAL_CLIP_S" title="Link to this definition"></a></dt>
+<dd><p>Nominal clip length (seconds) used for EDL source-out when a clip’s true length
+is unknown at export time.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.weave.render.FullRender">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">FullRender</span></span><a class="reference internal" href="../../../_modules/foley/weave/render.html#FullRender"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.render.FullRender" title="Link to this definition"></a></dt>
+<dd><p>Default <code class="xref py py-class docutils literal notranslate"><span class="pre">ApplyStrategy</span></code> — the full per-item DSP chain (report 06 §3-4).</p>
+<p><code class="docutils literal notranslate"><span class="pre">fit-duration</span></code> (loop/trim) → distance → reverb send → constant-power pan →
+declick → gain (base layer level + item <code class="docutils literal notranslate"><span class="pre">gain_db</span></code>) → overlay at the resolved
+onset.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.weave.render.PlaceOnly">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">PlaceOnly</span></span><a class="reference internal" href="../../../_modules/foley/weave/render.html#PlaceOnly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.render.PlaceOnly" title="Link to this definition"></a></dt>
+<dd><p>Dry <code class="xref py py-class docutils literal notranslate"><span class="pre">ApplyStrategy</span></code> — declicked placement, no gain/pan/distance/reverb.</p>
+<p>The fast preview / DSP-free fallback path: fit-duration → declick → overlay at the
+resolved onset, at unity gain.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.weave.render.RENDER_LAYERS">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">RENDER_LAYERS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#foley.base.Layer" title="foley.base.Layer"><span class="pre">Layer</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(Layer.sfx_fg,</span> <span class="pre">Layer.ambience,</span> <span class="pre">Layer.stinger,</span> <span class="pre">Layer.music)</span></span><a class="headerlink" href="#foley.weave.render.RENDER_LAYERS" title="Link to this definition"></a></dt>
+<dd><p>The non-voice layers the render mixes, in sum order (voice is the 0 dB anchor).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.weave.render.RenderCache">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">RenderCache</span></span><a class="reference internal" href="../../../_modules/foley/weave/render.html#RenderCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.render.RenderCache" title="Link to this definition"></a></dt>
+<dd><p>Per-layer render memo (<code class="docutils literal notranslate"><span class="pre">bus_hash</span> <span class="pre">-&gt;</span> <span class="pre">stereo</span> <span class="pre">bus</span> <span class="pre">array</span></code>) for incremental re-render.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.weave.render.RenderResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">RenderResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.SoundDesignTimeline" title="foley.SoundDesignTimeline"><span class="pre">SoundDesignTimeline</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">master_report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../weave.html#foley.weave.MasterReport" title="foley.weave.MasterReport"><span class="pre">MasterReport</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">buses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/weave/render.html#RenderResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.render.RenderResult" title="Link to this definition"></a></dt>
+<dd><p>The output of <a class="reference internal" href="#foley.weave.render.render" title="foley.weave.render.render"><code class="xref py py-func docutils literal notranslate"><span class="pre">render()</span></code></a>: the mastered mix + the hydrated (re-renderable) timeline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.render.export">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.SoundDesignTimeline" title="foley.base.SoundDesignTimeline"><span class="pre">SoundDesignTimeline</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/weave/render.html#export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.render.export" title="Link to this definition"></a></dt>
+<dd><p>Export <code class="docutils literal notranslate"><span class="pre">timeline</span></code> as <code class="docutils literal notranslate"><span class="pre">(format,</span> <span class="pre">text)</span></code> — OTIO when available, else EDL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timeline</strong> – The timeline to export.</p></li>
+<li><p><strong>fmt</strong> – <code class="docutils literal notranslate"><span class="pre">'auto'</span></code> (OTIO if installed, else EDL), <code class="docutils literal notranslate"><span class="pre">'otio'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'edl'</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(format_name,</span> <span class="pre">serialized_text)</span></code> — export always succeeds (EDL is the
+dependency-free fallback).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.render.load_clip_mono">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">load_clip_mono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">library</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/render.html#load_clip_mono"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.render.load_clip_mono" title="Link to this definition"></a></dt>
+<dd><p>Load <code class="docutils literal notranslate"><span class="pre">ref</span></code> from <code class="docutils literal notranslate"><span class="pre">library</span></code> as a mono working array at <code class="docutils literal notranslate"><span class="pre">sr</span></code>.</p>
+<p>Accepts a <a class="reference internal" href="../index.html#foley.index.SoundLibrary" title="foley.index.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.index.SoundLibrary</span></code></a> (via <code class="docutils literal notranslate"><span class="pre">.array</span></code>) or a plain mapping
+yielding an ndarray, raw bytes, or a <code class="docutils literal notranslate"><span class="pre">(samples,</span> <span class="pre">orig_sr)</span></code> tuple — so the render
+is testable with a trivial dict library. Shared by <a class="reference internal" href="#foley.weave.render.render" title="foley.weave.render.render"><code class="xref py py-func docutils literal notranslate"><span class="pre">render()</span></code></a> and the WEAVE
+façade’s narration-binding view, so it carries no underscore.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.render.render">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../foley.html#foley.SoundDesignTimeline" title="foley.SoundDesignTimeline"><span class="pre">SoundDesignTimeline</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">48000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transcript</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aligner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../weave.html#foley.weave.ApplyStrategy" title="foley.weave.ApplyStrategy"><span class="pre">ApplyStrategy</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../weave.html#foley.weave.ApplyStrategy" title="foley.weave.ApplyStrategy"><span class="pre">ApplyStrategy</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.weave.render.RenderCache" title="foley.weave.render.RenderCache"><span class="pre">RenderCache</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.weave.render.RenderResult" title="foley.weave.render.RenderResult"><span class="pre">RenderResult</span></a></span></span><a class="reference internal" href="../../../_modules/foley/weave/render.html#render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.render.render" title="Link to this definition"></a></dt>
+<dd><p>Render <code class="docutils literal notranslate"><span class="pre">timeline</span></code> against <code class="docutils literal notranslate"><span class="pre">library</span></code> into a mastered mix (PURE, deterministic).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timeline</strong> – The sound-design timeline (sparse or hydrated). <code class="docutils literal notranslate"><span class="pre">narration_ref</span></code>
+must resolve in <code class="docutils literal notranslate"><span class="pre">library</span></code>; <code class="docutils literal notranslate"><span class="pre">master</span></code> carries the loudness target.</p></li>
+<li><p><strong>library</strong> – A <a class="reference internal" href="../index.html#foley.index.SoundLibrary" title="foley.index.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.index.SoundLibrary</span></code></a> (or a mapping of ref → audio).</p></li>
+<li><p><strong>sr</strong> – Working/render sample rate in Hz.</p></li>
+<li><p><strong>transcript</strong> – Narration transcript for alignment when <code class="docutils literal notranslate"><span class="pre">timeline.word_timeline</span></code>
+is empty (else alignment is skipped — the cached timeline is the seed).</p></li>
+<li><p><strong>aligner</strong> – The <a class="reference internal" href="protocols.html#foley.weave.protocols.Aligner" title="foley.weave.protocols.Aligner"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aligner</span></code></a> (default: WhisperX if
+<code class="docutils literal notranslate"><span class="pre">foley[align]</span></code> installed, else the deterministic fake).</p></li>
+<li><p><strong>apply_strategy</strong> – The per-item <a class="reference internal" href="protocols.html#foley.weave.protocols.ApplyStrategy" title="foley.weave.protocols.ApplyStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApplyStrategy</span></code></a>
+(default <a class="reference internal" href="#foley.weave.render.FullRender" title="foley.weave.render.FullRender"><code class="xref py py-class docutils literal notranslate"><span class="pre">FullRender</span></code></a>).</p></li>
+<li><p><strong>cache</strong> – An optional <a class="reference internal" href="#foley.weave.render.RenderCache" title="foley.weave.render.RenderCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">RenderCache</span></code></a> for byte-identical incremental
+re-render (only changed layers recompute).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#foley.weave.render.RenderResult" title="foley.weave.render.RenderResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">RenderResult</span></code></a> — the mastered stereo mix, the hydrated timeline (with
+<code class="docutils literal notranslate"><span class="pre">word_timeline</span></code> cached), and the <a class="reference internal" href="master.html#foley.weave.master.MasterReport" title="foley.weave.master.MasterReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">MasterReport</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.render.to_edl">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">to_edl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.SoundDesignTimeline" title="foley.base.SoundDesignTimeline"><span class="pre">SoundDesignTimeline</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley</span> <span class="pre">SFX'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/render.html#to_edl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.render.to_edl" title="Link to this definition"></a></dt>
+<dd><p>Export <code class="docutils literal notranslate"><span class="pre">timeline</span></code> as a pure-stdlib CMX3600 EDL (deterministic, pinned ids).</p>
+<p>A lightweight interchange for DAWs; each enabled, placed item is one event with
+its clip name as the source comment. Always available (no dependency).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.render.to_otio">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.render.</span></span><span class="sig-name descname"><span class="pre">to_otio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.SoundDesignTimeline" title="foley.base.SoundDesignTimeline"><span class="pre">SoundDesignTimeline</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/foley/weave/render.html#to_otio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.render.to_otio" title="Link to this definition"></a></dt>
+<dd><p>Export <code class="docutils literal notranslate"><span class="pre">timeline</span></code> as an OpenTimelineIO JSON string (lazy <code class="docutils literal notranslate"><span class="pre">foley[weave]</span></code>).</p>
+<p>One track per non-voice layer; each enabled, placed item is a clip with an
+external media reference (by clip_ref) — non-destructive, minimal-viable
+fidelity (tracks/clips/onsets; effects/markers are a later slice).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If <code class="docutils literal notranslate"><span class="pre">opentimelineio</span></code> is not installed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="protocols.html" class="btn btn-neutral float-left" title="foley.weave.protocols" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="requirements.html" class="btn btn-neutral float-right" title="foley.weave.requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

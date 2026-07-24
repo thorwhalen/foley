@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.weave.mix &mdash; foley 0.0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+          <li class="breadcrumb-item"><a href="../weave.html">foley.weave</a></li>
+      <li class="breadcrumb-item active">foley.weave.mix</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.weave.mix</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Pure-numpy mixing DSP — making a clip sit under the voice (report 06 §3).</span>
+
+<span class="sd">Deterministic, testable, shell-out-free primitives for the WEAVE mixer: level</span>
+<span class="sd">(gain staging), envelope-follower ducking, constant-power panning, a distance</span>
+<span class="sd">recipe (attenuation + air-absorption low-pass), a pure-numpy reverb send,</span>
+<span class="sd">equal-power crossfades / declicks, seamless loop/trim to a duration, and overlay.</span>
+
+<span class="sd">Everything operates on the working representation (``float32``, time on axis 0);</span>
+<span class="sd">the mix graph is **stereo** ``(frames, 2)`` so panning composes — :func:`constant_power_pan`</span>
+<span class="sd">is the mono→stereo point. ``numpy`` is imported lazily inside each function so</span>
+<span class="sd">``import foley.weave`` stays dol-only (mirroring :mod:`foley.audio`). Nothing here</span>
+<span class="sd">reaches for ``scipy``/``pyroomacoustics``; those are optional-upgrade paths for a</span>
+<span class="sd">later slice behind ``foley[weave]``.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Layer</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover - typing only</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndarray</span>
+
+<span class="c1"># --- Dialogue-relative default levels (report 06 §3.1), as named constants ------</span>
+<span class="n">ONE_SHOT_GAIN_DB</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">9.0</span>  <span class="c1"># foreground one-shots: -6..-12 dB under the voice</span>
+<span class="n">AMBIENCE_GAIN_DB</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">21.0</span>  <span class="c1"># ambience beds: -18..-24 dB under the voice</span>
+<span class="n">STINGER_GAIN_DB</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.0</span>  <span class="c1"># non-diegetic stingers: prominent but &lt; voice</span>
+<span class="n">DUCK_DB</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.0</span>  <span class="c1"># ducking depth under speech (report 06 §3.2: ~8-12 dB)</span>
+<span class="n">DUCK_ATTACK_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># side-chain attack (report 06 §3.2)</span>
+<span class="n">DUCK_RELEASE_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># side-chain release (report 06 §3.2)</span>
+
+<span class="c1">#: Base per-layer gain (dB, relative to the voice bus at 0 dB). The render applies</span>
+<span class="c1">#: this before each item&#39;s own ``processing.gain_db`` so levels have a sane default.</span>
+<span class="n">LAYER_GAIN_DB</span><span class="p">:</span> <span class="s2">&quot;dict[Layer, float]&quot;</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Layer</span><span class="o">.</span><span class="n">voice</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span><span class="p">:</span> <span class="n">ONE_SHOT_GAIN_DB</span><span class="p">,</span>
+    <span class="n">Layer</span><span class="o">.</span><span class="n">ambience</span><span class="p">:</span> <span class="n">AMBIENCE_GAIN_DB</span><span class="p">,</span>
+    <span class="n">Layer</span><span class="o">.</span><span class="n">stinger</span><span class="p">:</span> <span class="n">STINGER_GAIN_DB</span><span class="p">,</span>
+    <span class="n">Layer</span><span class="o">.</span><span class="n">music</span><span class="p">:</span> <span class="n">AMBIENCE_GAIN_DB</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">#: Attenuation (dB) applied at maximum distance (distance == 1.0); ~inverse-distance.</span>
+<span class="n">DISTANCE_MAX_ATTEN_DB</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">12.0</span>
+<span class="c1">#: Air-absorption one-pole low-pass coefficient at maximum distance (0 = none, →1 = darkest).</span>
+<span class="n">DISTANCE_MAX_LP</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.85</span>
+<span class="c1">#: Reverb-send impulse-response length (seconds) and decay time-constant.</span>
+<span class="n">REVERB_IR_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.18</span>
+<span class="n">REVERB_TAU_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span>
+
+
+<div class="viewcode-block" id="db_to_lin">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.db_to_lin">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">db_to_lin</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert decibels to a linear amplitude factor (``10 ** (db/20)``).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="n">db</span> <span class="o">/</span> <span class="mf">20.0</span><span class="p">))</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_stereo</span><span class="p">(</span><span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``clip`` as ``(frames, 2)`` (mono is duplicated across channels).&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">clip</span><span class="p">,</span> <span class="n">clip</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">clip</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clip</span>
+    <span class="n">mono</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">mono</span><span class="p">,</span> <span class="n">mono</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="constant_power_pan">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.constant_power_pan">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">constant_power_pan</span><span class="p">(</span><span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">pan</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pan a (mono or stereo) clip to a stereo image with a constant-power law (report 06 §3.3).</span>
+
+<span class="sd">    ``L = cos(θ)``, ``R = sin(θ)`` with ``θ = (pan+1)·π/4`` and ``pan ∈ [-1, 1]``, so</span>
+<span class="sd">    ``L² + R²`` (perceived loudness) stays flat across the field — no ~3 dB centre dip.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        clip: Mono ``(frames,)`` or stereo ``(frames, 2)`` working array.</span>
+<span class="sd">        pan: -1 (hard left) .. 0 (centre) .. +1 (hard right).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A stereo ``(frames, 2)`` array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">mono</span> <span class="o">=</span> <span class="n">clip</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">clip</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">pan</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">)</span>
+    <span class="n">gains</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">mono</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mono</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">gains</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span></div>
+
+
+
+<div class="viewcode-block" id="speech_duck_gain">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.speech_duck_gain">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">speech_duck_gain</span><span class="p">(</span>
+    <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">speech_spans</span><span class="p">:</span> <span class="s2">&quot;list[tuple[float, float]]&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">duck_db</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DUCK_DB</span><span class="p">,</span>
+    <span class="n">attack</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DUCK_ATTACK_S</span><span class="p">,</span>
+    <span class="n">release</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DUCK_RELEASE_S</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a (linear) gain envelope that dips to ``duck_db`` during speech spans (report 06 §3.2).</span>
+
+<span class="sd">    A one-pole attack/release smooths the transitions so the bed dips and recovers</span>
+<span class="sd">    without clicks. Deterministic and testable — the envelope-follower alternative to</span>
+<span class="sd">    ``ffmpeg sidechaincompress``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n_samples: Length of the bed bus in samples.</span>
+<span class="sd">        sample_rate: Sample rate in Hz.</span>
+<span class="sd">        speech_spans: ``[(start_s, end_s), ...]`` from the word timeline.</span>
+<span class="sd">        duck_db: Attenuation depth during speech (negative dB).</span>
+<span class="sd">        attack: Attack time constant (seconds) as the bed drops.</span>
+<span class="sd">        release: Release time constant (seconds) as the bed recovers.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``(n_samples,)`` linear gain envelope in ``[db_to_lin(duck_db), 1.0]``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">duck</span> <span class="o">=</span> <span class="n">db_to_lin</span><span class="p">(</span><span class="n">duck_db</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">speech_spans</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">end</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">:</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">a</span><span class="p">:</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">duck</span>
+    <span class="n">ca</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">attack</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">)))</span>
+    <span class="n">cr</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">release</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">)))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">coef</span> <span class="o">=</span> <span class="n">ca</span> <span class="k">if</span> <span class="n">target</span> <span class="o">&lt;</span> <span class="n">acc</span> <span class="k">else</span> <span class="n">cr</span>
+        <span class="n">acc</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="n">coef</span> <span class="o">*</span> <span class="p">(</span><span class="n">acc</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">acc</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_one_pole_lowpass</span><span class="p">(</span><span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">coef</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a one-pole low-pass ``y[n] = (1-c)·x[n] + c·y[n-1]`` along axis 0.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="k">if</span> <span class="n">coef</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clip</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">clip</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">clip</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">prev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">one_minus</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">coef</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="n">one_minus</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="n">coef</span> <span class="o">*</span> <span class="n">prev</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">prev</span>
+    <span class="k">return</span> <span class="n">out</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">out</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="apply_distance">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.apply_distance">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_distance</span><span class="p">(</span><span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a distance recipe: attenuation + air-absorption low-pass (report 06 §3.4).</span>
+
+<span class="sd">    Distance reads as a *combination* of cues: quieter (~inverse-distance) and duller</span>
+<span class="sd">    (a low-pass, as air absorbs highs). The reverb component of distance is applied</span>
+<span class="sd">    separately via :func:`reverb_send`. ``distance == 0`` is a no-op.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        clip: Working array (mono or stereo).</span>
+<span class="sd">        sample_rate: Sample rate in Hz (kept for API symmetry / future filters).</span>
+<span class="sd">        distance: 0 (near) .. 1 (far).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The attenuated, low-passed clip (a new array; input not mutated).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distance</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clip</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">clip</span> <span class="o">*</span> <span class="n">db_to_lin</span><span class="p">(</span><span class="n">DISTANCE_MAX_ATTEN_DB</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_one_pole_lowpass</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">DISTANCE_MAX_LP</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="reverb_send">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.reverb_send">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reverb_send</span><span class="p">(</span><span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mix a pure-numpy exponential-decay reverb tail into ``clip`` (report 06 §3.5).</span>
+
+<span class="sd">    A deterministic dry/wet blend: the clip is convolved with a short</span>
+<span class="sd">    exponentially-decaying impulse response and mixed back at ``amount``. This is the</span>
+<span class="sd">    zero-dependency default; ``pyroomacoustics`` / recorded-IR convolution is the</span>
+<span class="sd">    optional ``foley[weave]`` upgrade. ``amount == 0`` is a no-op (fully dry).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        clip: Working array (mono or stereo).</span>
+<span class="sd">        sample_rate: Sample rate in Hz.</span>
+<span class="sd">        amount: 0 (dry) .. 1 (fully wet).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The dry/wet-blended clip (a new array; input not mutated).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">amount</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clip</span>
+    <span class="n">n_ir</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">REVERB_IR_S</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">))</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_ir</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">ir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">REVERB_TAU_S</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">ir</span> <span class="o">/=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ir</span><span class="p">))</span>  <span class="c1"># unity-gain tail</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">clip</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">clip</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">wet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">wet</span><span class="p">[:,</span> <span class="n">ch</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">ch</span><span class="p">],</span> <span class="n">ir</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)[:</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">wet</span> <span class="o">=</span> <span class="n">wet</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">wet</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">clip</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">wet</span></div>
+
+
+
+<div class="viewcode-block" id="equal_power_crossfade">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.equal_power_crossfade">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">equal_power_crossfade</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">overlap_samples</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatenate ``a`` then ``b`` with an equal-power crossfade over ``overlap_samples`` (report 06 §3.6).</span>
+
+<span class="sd">    The tail of ``a`` and head of ``b`` are ramped with ``cos``/``sin`` gains so</span>
+<span class="sd">    perceived loudness stays flat across the seam (no ~3 dB dip). Used for seamless</span>
+<span class="sd">    bed loops and ambience swaps.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: The leading clip (mono or stereo).</span>
+<span class="sd">        b: The trailing clip (same channel layout as ``a``).</span>
+<span class="sd">        overlap_samples: Crossfade length in samples (clamped to both clip lengths).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The crossfaded concatenation ``(len(a) + len(b) - overlap,)`` frames.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">_match_layout</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">_match_layout</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">ov</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">overlap_samples</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="k">if</span> <span class="n">ov</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">ov</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">fade_out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+    <span class="n">fade_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">ov</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="p">(</span><span class="n">ov</span><span class="p">,)</span>
+    <span class="n">seam</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="n">ov</span><span class="p">:]</span> <span class="o">*</span> <span class="n">fade_out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">[:</span><span class="n">ov</span><span class="p">]</span> <span class="o">*</span> <span class="n">fade_in</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="n">ov</span><span class="p">],</span> <span class="n">seam</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="n">ov</span><span class="p">:]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_match_layout</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">like</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``x`` with the same channel-dimensionality as ``like`` (mono⇄stereo).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="n">like</span><span class="o">.</span><span class="n">ndim</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="k">return</span> <span class="n">_as_stereo</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">like</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="declick">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.declick">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">declick</span><span class="p">(</span>
+    <span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">fade_in</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.008</span><span class="p">,</span>
+    <span class="n">fade_out</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.012</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply short in/out fades so an edit point produces no click (report 06 §3.6).</span>
+
+<span class="sd">    Thin wrapper over :func:`foley.audio.fade` (linear ramps), sized in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">fade</span>
+
+    <span class="k">return</span> <span class="n">fade</span><span class="p">(</span>
+        <span class="n">clip</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">fade_in_s</span><span class="o">=</span><span class="n">fade_in</span><span class="p">,</span> <span class="n">fade_out_s</span><span class="o">=</span><span class="n">fade_out</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="fit_duration">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.fit_duration">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fit_duration</span><span class="p">(</span>
+    <span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="s2">&quot;float | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">crossfade_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fit ``clip`` to ``duration`` seconds — seamless loop (beds) or trim/pass-through (report 06 §4).</span>
+
+<span class="sd">    ``duration is None`` returns the clip unchanged (a one-shot plays once). When</span>
+<span class="sd">    ``loop`` and the clip is shorter than ``duration``, it is tiled and equal-power</span>
+<span class="sd">    crossfaded at the seam to fill the span; anything longer than ``duration`` is</span>
+<span class="sd">    trimmed. A non-looping short clip is returned as-is (it plays once).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        clip: Working array (mono or stereo).</span>
+<span class="sd">        sample_rate: Sample rate in Hz.</span>
+<span class="sd">        duration: Target duration in seconds (``None`` = full clip length).</span>
+<span class="sd">        loop: Seamless-loop to fill ``duration`` when shorter.</span>
+<span class="sd">        crossfade_s: Equal-power crossfade length at each loop seam.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The duration-fitted clip.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="k">if</span> <span class="n">duration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clip</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clip</span><span class="p">[:</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clip</span><span class="p">[:</span><span class="n">target</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">loop</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clip</span>  <span class="c1"># a one-shot shorter than the span plays once</span>
+    <span class="n">ov</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">crossfade_s</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">clip</span>
+    <span class="k">while</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">equal_power_crossfade</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">clip</span><span class="p">,</span> <span class="n">ov</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span><span class="p">[:</span><span class="n">target</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="overlay">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.overlay">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">overlay</span><span class="p">(</span><span class="n">bus</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">onset_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add ``clip`` into ``bus`` at ``onset_samples`` (report 06 §6.4 ``overlay``).</span>
+
+<span class="sd">    Sums (never replaces) into a copy of the bus; a clip whose tail would exceed the</span>
+<span class="sd">    bus length is truncated to fit (the mix length equals the narration length).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        bus: The destination layer bus (stereo ``(frames, 2)``).</span>
+<span class="sd">        clip: The (mono or stereo) clip to place.</span>
+<span class="sd">        onset_samples: Start offset in samples (clamped at 0).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A new bus with the clip summed in.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">onset_samples</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="n">piece</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">_as_stereo</span><span class="p">(</span><span class="n">clip</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">else</span> <span class="p">(</span><span class="n">clip</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">clip</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">start</span> <span class="o">+</span> <span class="n">piece</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">+=</span> <span class="n">piece</span><span class="p">[:</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

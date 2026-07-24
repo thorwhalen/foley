@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.weave.anchor &mdash; foley 0.0.13 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.weave.master" href="master.html" />
+    <link rel="prev" title="foley.weave.align" href="align.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align.html">foley.weave.align</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.weave.anchor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.anchor.SEGMENT_GAP_S"><code class="docutils literal notranslate"><span class="pre">SEGMENT_GAP_S</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.anchor.parse_symbolic_anchor"><code class="docutils literal notranslate"><span class="pre">parse_symbolic_anchor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.weave.anchor.resolve_anchor"><code class="docutils literal notranslate"><span class="pre">resolve_anchor()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.weave.anchor</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/weave/anchor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.weave.anchor">
+<span id="foley-weave-anchor"></span><h1>foley.weave.anchor<a class="headerlink" href="#module-foley.weave.anchor" title="Link to this heading"></a></h1>
+<p>Symbolic-anchor → sample-onset heuristics — the SELECT→WEAVE timing bridge (report 06 §2.4).</p>
+<p>Pure, stdlib-only functions that turn a placed sound’s <em>symbolic</em> anchor (SELECT’s
+<code class="docutils literal notranslate"><span class="pre">&quot;on</span> <span class="pre">'pushed</span> <span class="pre">open'&quot;</span></code> string, or a resolved <a class="reference internal" href="../base.html#foley.base.Placement" title="foley.base.Placement"><code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code></a>) into a
+concrete trigger time (seconds) against a forced-aligned <code class="docutils literal notranslate"><span class="pre">word_timeline</span></code>
+(<code class="docutils literal notranslate"><span class="pre">[{'word','start','end'},</span> <span class="pre">...]</span></code>). Cheapest-first, exactly as report 06 §2.4:</p>
+<ul class="simple">
+<li><p><strong>word anchor</strong> (one-shots) — fire on the onset of the trigger word;</p></li>
+<li><p><strong>pre-roll</strong> — shift a clip earlier so its salient transient lands on the anchor;</p></li>
+<li><p><strong>sentence span</strong> (beds) — start at the first word of the sentence, run to the last;</p></li>
+<li><p><strong>scene / paragraph boundary</strong> (stingers, ambience swaps) — the boundary’s first word;</p></li>
+<li><p><strong>pause snapping</strong> — nudge an onset to the nearest inter-word gap to avoid masking speech.</p></li>
+</ul>
+<p>These are pure <code class="docutils literal notranslate"><span class="pre">(anchor,</span> <span class="pre">word_timeline)</span> <span class="pre">-&gt;</span> <span class="pre">seconds</span></code> functions with no I/O and no
+heavy dependency, so they are independently unit-testable and keep <code class="docutils literal notranslate"><span class="pre">import</span>
+<span class="pre">foley.weave</span></code> dol-only. <code class="docutils literal notranslate"><span class="pre">foley.weave.anchor.parse_symbolic_anchor</span></code> is the single
+SSOT bridge from SELECT’s sparse <code class="docutils literal notranslate"><span class="pre">TimelineItem.onset</span></code> string to a
+<a class="reference internal" href="../base.html#foley.base.Placement" title="foley.base.Placement"><code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.weave.anchor.SEGMENT_GAP_S">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.anchor.</span></span><span class="sig-name descname"><span class="pre">SEGMENT_GAP_S</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.35</span></span><a class="headerlink" href="#foley.weave.anchor.SEGMENT_GAP_S" title="Link to this definition"></a></dt>
+<dd><p>Inter-word gap (seconds) that ends a sentence segment (report 06 §2.4 uses
+<code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">~350</span> <span class="pre">ms</span></code> as a lightweight sentence segmenter over the aligned transcript).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.anchor.parse_symbolic_anchor">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.anchor.</span></span><span class="sig-name descname"><span class="pre">parse_symbolic_anchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">onset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.Layer" title="foley.base.Layer"><span class="pre">Layer</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Layer.sfx_fg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#foley.base.Placement" title="foley.base.Placement"><span class="pre">Placement</span></a></span></span><a class="reference internal" href="../../../_modules/foley/weave/anchor.html#parse_symbolic_anchor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.anchor.parse_symbolic_anchor" title="Link to this definition"></a></dt>
+<dd><p>Parse SELECT’s sparse symbolic <code class="docutils literal notranslate"><span class="pre">onset</span></code> string into a resolved-later <code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code>.</p>
+<p>The anchor <em>type</em> follows the item’s role (report 06 §2.4): beds
+(<code class="docutils literal notranslate"><span class="pre">loop</span></code> / <code class="docutils literal notranslate"><span class="pre">ambience</span></code> / <code class="docutils literal notranslate"><span class="pre">music</span></code>) span a <strong>sentence</strong>, stingers land on a
+<strong>scene</strong> boundary, and everything else is a <strong>word</strong> anchor; the <code class="docutils literal notranslate"><span class="pre">ref</span></code> is the
+quoted phrase the sound lands on. A <code class="docutils literal notranslate"><span class="pre">None</span></code> onset means “no cue”: beds span from
+the start, one-shots sit at <code class="docutils literal notranslate"><span class="pre">absolute</span></code> 0. A bare number (defensive — SELECT is
+told never to emit one) is read as an absolute offset in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>onset</strong> – The symbolic anchor string (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;on</span> <span class="pre">'pushed</span> <span class="pre">open'&quot;</span></code>) or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>layer</strong> – The item’s mix layer (selects span/boundary vs word anchoring).</p></li>
+<li><p><strong>loop</strong> – Whether the item is a looping bed (span-anchored).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code> whose <code class="docutils literal notranslate"><span class="pre">onset</span></code> (seconds) is resolved later by
+<a class="reference internal" href="#foley.weave.anchor.resolve_anchor" title="foley.weave.anchor.resolve_anchor"><code class="xref py py-func docutils literal notranslate"><span class="pre">resolve_anchor()</span></code></a> against the <code class="docutils literal notranslate"><span class="pre">word_timeline</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.anchor.resolve_anchor">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.anchor.</span></span><span class="sig-name descname"><span class="pre">resolve_anchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">placement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.Placement" title="foley.base.Placement"><span class="pre">Placement</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">snap_pauses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/weave/anchor.html#resolve_anchor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.anchor.resolve_anchor" title="Link to this definition"></a></dt>
+<dd><p>Resolve a <code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code> to a concrete <code class="docutils literal notranslate"><span class="pre">(onset_seconds,</span> <span class="pre">duration_seconds)</span></code>.</p>
+<p>Dispatches on <code class="docutils literal notranslate"><span class="pre">placement.anchor</span></code> (report 06 §2.4): <code class="docutils literal notranslate"><span class="pre">absolute</span></code> uses the
+stored offset; <code class="docutils literal notranslate"><span class="pre">word</span></code> fires on the trigger word; <code class="docutils literal notranslate"><span class="pre">sentence</span></code> spans its
+sentence (filling <code class="docutils literal notranslate"><span class="pre">duration</span></code> when unset — beds loop to fill it); <code class="docutils literal notranslate"><span class="pre">scene</span></code> /
+<code class="docutils literal notranslate"><span class="pre">paragraph</span></code> land on the boundary. <code class="docutils literal notranslate"><span class="pre">pre_roll</span></code> is then subtracted (clamped at
+0), and — when <code class="docutils literal notranslate"><span class="pre">snap_pauses</span></code> — the onset snaps to the nearest inter-word gap.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>placement</strong> – The symbolic placement to resolve.</p></li>
+<li><p><strong>word_timeline</strong> – The forced-aligned <code class="docutils literal notranslate"><span class="pre">[{'word','start','end'},</span> <span class="pre">...]</span></code>.</p></li>
+<li><p><strong>snap_pauses</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, snap the resolved onset to the nearest pause.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(onset_seconds,</span> <span class="pre">duration_seconds_or_None)</span></code>. <code class="docutils literal notranslate"><span class="pre">duration</span></code> is filled only
+for a span anchor whose <code class="docutils literal notranslate"><span class="pre">placement.duration</span></code> was unset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="align.html" class="btn btn-neutral float-left" title="foley.weave.align" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="master.html" class="btn btn-neutral float-right" title="foley.weave.master" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

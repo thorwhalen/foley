@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.12 documentation</title>
+  <title>foley &mdash; foley 0.0.13 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3bbcec59"></script>
+      <script src="../_static/documentation_options.js?v=9fc46840"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -112,6 +112,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/weave/align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/weave/master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/weave/render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
 </ul>
 
         </div>
@@ -206,15 +215,20 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">GENERATION_AFFORDANCES</span><span class="p">,</span>
+    <span class="n">MASTER_PROFILES</span><span class="p">,</span>
     <span class="n">QUERY_AFFORDANCES</span><span class="p">,</span>
     <span class="n">SCHEMA_VERSION</span><span class="p">,</span>
     <span class="n">AcquisitionMethod</span><span class="p">,</span>
     <span class="n">Affordance</span><span class="p">,</span>
+    <span class="n">Anchor</span><span class="p">,</span>
     <span class="n">Candidate</span><span class="p">,</span>
     <span class="n">CandidateOrigin</span><span class="p">,</span>
     <span class="n">IntendedUse</span><span class="p">,</span>
     <span class="n">Layer</span><span class="p">,</span>
     <span class="n">LicenseRecord</span><span class="p">,</span>
+    <span class="n">MasterProfile</span><span class="p">,</span>
+    <span class="n">Placement</span><span class="p">,</span>
+    <span class="n">Processing</span><span class="p">,</span>
     <span class="n">Salience</span><span class="p">,</span>
     <span class="n">SerializableMixin</span><span class="p">,</span>
     <span class="n">SoundDesignTimeline</span><span class="p">,</span>
@@ -224,6 +238,7 @@
     <span class="n">TimelineItem</span><span class="p">,</span>
     <span class="n">Verdict</span><span class="p">,</span>
     <span class="n">VerifyLevel</span><span class="p">,</span>
+    <span class="n">resolve_master</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.licensing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">LICENSE_FLAGS</span><span class="p">,</span>
@@ -363,6 +378,16 @@
     <span class="n">verify_match</span><span class="p">,</span>
 <span class="p">)</span>
 
+<span class="c1"># --- weave: the WEAVE stage — weave() renders the finished, editable mix (#8) ----</span>
+<span class="c1"># The weave package is dol-only at import (the aligner + apply-strategy sit behind</span>
+<span class="c1"># DI-seam protocols with deterministic defaults; whisperx/pyloudnorm/opentimelineio/</span>
+<span class="c1"># audioseal/c2pa are imported lazily inside methods only). ``weave`` here is the</span>
+<span class="c1"># façade: the ``weave`` package is made *callable* (see foley/weave/__init__.py), so</span>
+<span class="c1"># ``foley.weave(narration, timeline)`` runs the façade while ``foley.weave.&lt;submodule&gt;``</span>
+<span class="c1"># (``foley.weave.render`` etc.) stays fully importable.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">weave</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.weave</span><span class="w"> </span><span class="kn">import</span> <span class="n">WeaveResult</span>
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># --- base: constants + enums ---------------------------------------------</span>
     <span class="s2">&quot;SCHEMA_VERSION&quot;</span><span class="p">,</span>
@@ -386,6 +411,12 @@
     <span class="s2">&quot;IntendedUse&quot;</span><span class="p">,</span>
     <span class="s2">&quot;TimelineItem&quot;</span><span class="p">,</span>
     <span class="s2">&quot;SoundDesignTimeline&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Anchor&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Placement&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Processing&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MasterProfile&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MASTER_PROFILES&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;resolve_master&quot;</span><span class="p">,</span>
     <span class="c1"># --- licensing: policy ---------------------------------------------------</span>
     <span class="s2">&quot;LicenseFlags&quot;</span><span class="p">,</span>
     <span class="s2">&quot;LICENSE_FLAGS&quot;</span><span class="p">,</span>
@@ -512,6 +543,9 @@
     <span class="s2">&quot;Judge&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Budget&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Decision&quot;</span><span class="p">,</span>
+    <span class="c1"># --- weave: the WEAVE stage — weave() (#8) --------------------------------</span>
+    <span class="s2">&quot;weave&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;WeaveResult&quot;</span><span class="p">,</span>
     <span class="c1"># --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------</span>
     <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
     <span class="s2">&quot;evaluate&quot;</span><span class="p">,</span>
