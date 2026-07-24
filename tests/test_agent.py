@@ -119,10 +119,11 @@ def library():
 
 
 def test_import_purity():
-    """`import foley` + `import foley.agent` pull no LLM/ML dependency (dol-only)."""
+    """`import foley` + `import foley.agent` + `import foley.weave` are dol-only (no LLM/ML/DSP dep)."""
     code = (
-        "import sys, foley, foley.agent;"
-        "heavy={'anthropic','torch','transformers','lancedb','opentelemetry'};"
+        "import sys, foley, foley.agent, foley.weave;"
+        "heavy={'anthropic','torch','transformers','lancedb','opentelemetry',"
+        "'whisperx','opentimelineio','audioseal','c2pa','scipy','pyroomacoustics','numpy'};"
         "bad=heavy & set(sys.modules);"
         "assert not bad, bad"
     )
@@ -445,15 +446,24 @@ def test_nullrun_parity():
 
 
 def test_plan_is_sparse(library):
-    """plan() emits only the sparse TimelineItem subset, joined to the find() run_id, round-trippable."""
+    """plan() emits UNRESOLVED items — SELECT's flat fields set, every WEAVE field at default.
+
+    Post-#8 the model is the grown superset, so "sparse" is a property of plan()'s
+    *output* (it does not resolve anchors / fill processing — that is WEAVE's job),
+    not of the dataclass shape. Round-trippable either way.
+    """
     with foley.obs.run("session") as run:
         cands = foley.find(DEMO, library=library)
         tl = foley.plan(cands, transcript="the door opened")
         assert tl.run_manifest_ref == run.manifest.run_id
-    item_fields = {f.name for f in fields(TimelineItem)}
-    assert item_fields == {"clip_ref", "onset", "gain", "layer", "loop"}  # no Placement/Processing/Master
     rain = next(it for it in tl.items if it.clip_ref == "rain")
     assert rain.layer is Layer.ambience and rain.loop is True and isinstance(rain.onset, str)
+    # SPARSE = every WEAVE-resolved field stays at its default (anchor resolution and
+    # per-item processing are the render's job, not plan()'s).
+    for it in tl.items:
+        assert it.placement is None and it.processing is None
+        assert it.id is None and it.event is None and it.enabled is True
+    assert tl.word_timeline == [] and tl.narration_ref is None
     rt = SoundDesignTimeline.from_dict(tl.to_dict())
     assert isinstance(rt.items[0], TimelineItem) and rt.run_manifest_ref == tl.run_manifest_ref
 

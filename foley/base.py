@@ -79,6 +79,21 @@ class Layer(str, Enum):
     music = "music"
 
 
+class Anchor(str, Enum):
+    """How a WEAVE ``Placement`` binds its symbolic time to the narration (report 06 §2.4).
+
+    ``absolute`` is a fixed offset; the rest resolve against the forced-aligned
+    ``word_timeline`` — ``word`` to a trigger word's onset, ``sentence`` across a
+    sentence span, ``scene``/``paragraph`` to a boundary's first spoken word.
+    """
+
+    absolute = "absolute"
+    word = "word"
+    sentence = "sentence"
+    scene = "scene"
+    paragraph = "paragraph"
+
+
 class VerifyLevel(str, Enum):
     """Which rung of the verification ladder produced a ``Verdict``."""
 
@@ -456,45 +471,150 @@ class IntendedUse(SerializableMixin):
 
 
 # ---------------------------------------------------------------------------
-# WEAVE-seed models — the SPARSE plan the SELECT agent emits (report 10 §2.4)
+# WEAVE render model — the editable, re-renderable sound-design timeline (report 06 §6)
 # ---------------------------------------------------------------------------
-# These are the sparse *subset* of report 06's full render model. The SELECT
-# agent (#7) emits only ``onset·gain·layer·loop`` per item; the WEAVE stage (#8)
-# extends the model in place with the ``Placement`` / ``Processing`` /
-# ``MasterProfile`` / ``word_timeline`` fields that resolve anchors, mix, align,
-# and master. Do NOT add those here — #8 grows this superset.
+# The SELECT agent (#7) emits the SPARSE seed — ``TimelineItem`` with only
+# ``onset·gain·layer·loop`` and ``SoundDesignTimeline`` with just ``items`` — via
+# ``foley.agent.plan()``. The WEAVE stage (#8) GROWS this model *in place*,
+# additively: the sparse flat fields stay untouched (so ``plan()`` /
+# ``place_in_timeline`` keep working), and the resolved render model layers on top
+# through ``Placement`` / ``Processing`` (per item) and ``word_timeline`` / ``master``
+# (per timeline). ``TimelineItem.onset`` (a SYMBOLIC str — SELECT's input) and
+# ``Placement.onset`` (a RESOLVED float — WEAVE's output) deliberately coexist;
+# ``foley.weave.anchor.parse_symbolic_anchor`` is the single bridge between them.
+
+
+@dataclass
+class Placement(SerializableMixin):
+    """WHERE/WHEN a clip sits — a symbolic anchor plus its resolved time (report 06 §6.3).
+
+    Filled by WEAVE's aligner+anchor pass. ``onset`` is the resolved start in
+    seconds (distinct from the sparse :attr:`TimelineItem.onset` symbolic string);
+    ``pre_roll`` shifts the clip earlier so its salient transient — not its file
+    start — lands on the anchor (report 06 §2.4).
+    """
+
+    anchor: Anchor = Anchor.absolute
+    ref: Optional[str] = (
+        None  # transcript word / sentence / scene id the anchor binds to
+    )
+    onset: float = 0.0  # RESOLVED start (seconds), filled by the aligner+anchor pass
+    pre_roll: float = 0.0  # lead so the clip's transient lands on the anchor
+    duration: Optional[float] = None  # None = full clip length
+    loop: bool = False  # seamless-loop to fill ``duration`` (beds)
+
+
+@dataclass
+class Processing(SerializableMixin):
+    """HOW a clip sounds — all optional with identity defaults (report 06 §3, §6.3).
+
+    Every field is a no-op at its default, so a sparse item (no ``processing``)
+    renders untouched; the mixer departs from dry/centered/full-level only when a
+    field is set.
+    """
+
+    gain_db: float = 0.0  # relative to the voice bus
+    pan: float = 0.0  # -1 (L) .. +1 (R), constant-power
+    distance: float = 0.0  # 0 near .. 1 far -> gain + LPF + reverb recipe
+    reverb_send: float = 0.0  # 0 dry .. 1 wet (scene bus)
+    fade_in: float = 0.008  # s, declick
+    fade_out: float = 0.012  # s, declick
+    duck_bed: bool = False  # does this item duck the ambience bus?
 
 
 @dataclass
 class TimelineItem(SerializableMixin):
-    """One placed sound in the sparse sound-design plan (the WEAVE-seed subset).
+    """One placed sound on the sound-design timeline — sparse seed + resolved render fields.
 
-    Holds only what SELECT decides: which clip, when (as a *symbolic* anchor),
-    how loud (relative), on which layer, and whether it loops. WEAVE (#8) resolves
-    ``onset`` to an absolute time and fills the processing/mix defaults.
+    SELECT (#7) sets only the sparse flat fields (``clip_ref·onset·gain·layer·loop``);
+    WEAVE (#8) additively fills ``id`` / ``placement`` / ``processing`` (and may carry
+    the originating ``event`` for provenance). ``enabled`` is a non-destructive mute.
+    The sparse flat fields are never removed — they stay SELECT's SSOT input; the render
+    reads the resolved ``placement``/``processing`` (falling back to the flat fields when
+    those are absent).
     """
 
     clip_ref: str  # SoundRecord id in the dol library (by reference, never bytes)
     onset: Optional[str] = (
-        None  # SYMBOLIC anchor ("on 'pushed open'"); WEAVE resolves it
+        None  # SYMBOLIC anchor ("on 'pushed open'"); WEAVE resolves it into ``placement``
     )
-    gain: float = 0.0  # dB relative to the voice bus
+    gain: float = 0.0  # dB relative to the voice bus (SELECT's sparse level)
     layer: Layer = Layer.sfx_fg
     loop: bool = False
+    # --- WEAVE-resolved (all default to None/identity, so a sparse item is valid) ---
+    id: Optional[str] = None  # stable cue id (WEAVE fills it via a content hash)
+    placement: Optional[Placement] = None  # resolved WHERE/WHEN
+    processing: Optional[Processing] = None  # resolved HOW-it-sounds
+    event: Optional[dict] = None  # provenance: the originating SoundEvent
+    enabled: bool = True  # non-destructive mute
+
+
+@dataclass
+class MasterProfile(SerializableMixin):
+    """Loudness master target — the delivery spec as data, not code (report 06 §5.2)."""
+
+    target_lufs: float = -16.0  # podcast default (the dominant spoken-word norm)
+    true_peak_db: float = -1.0
+    lra: float = 11.0
+
+
+#: The named delivery targets (report 06 §5.2). :func:`resolve_master` maps a
+#: profile name to one of these; these values are the SSOT so no LUFS literal
+#: hides in code.
+MASTER_PROFILES: "dict[str, MasterProfile]" = {
+    "podcast": MasterProfile(target_lufs=-16.0, true_peak_db=-1.0, lra=11.0),
+    "streaming": MasterProfile(target_lufs=-14.0, true_peak_db=-1.0, lra=11.0),
+    "broadcast_ebu": MasterProfile(target_lufs=-23.0, true_peak_db=-1.0, lra=7.0),
+    "broadcast_atsc": MasterProfile(target_lufs=-24.0, true_peak_db=-2.0, lra=7.0),
+}
+
+
+def resolve_master(master: "Union[str, MasterProfile, None]") -> MasterProfile:
+    """Resolve a master spec (profile name, explicit profile, or ``None``) to a ``MasterProfile``.
+
+    Args:
+        master: A :data:`MASTER_PROFILES` key (e.g. ``'podcast'``), an explicit
+            :class:`MasterProfile`, or ``None`` (-> the podcast default).
+
+    Returns:
+        The resolved :class:`MasterProfile`.
+
+    Raises:
+        ValueError: If ``master`` is an unknown profile name.
+    """
+    if master is None:
+        return MasterProfile()
+    if isinstance(master, MasterProfile):
+        return master
+    try:
+        return MASTER_PROFILES[master]
+    except KeyError:
+        raise ValueError(
+            f"unknown master profile {master!r}; known: {sorted(MASTER_PROFILES)}"
+        ) from None
 
 
 @dataclass
 class SoundDesignTimeline(SerializableMixin):
-    """The sparse, editable sound-design plan SELECT emits — the SELECT→WEAVE bridge.
+    """The editable, re-renderable sound-design plan — the SELECT→WEAVE bridge and render SSOT.
 
-    A strict *subset* of report 06's render model: a list of :class:`TimelineItem`
-    plus a join back to the reproducible run-artifact (``run_manifest_ref`` ==
-    :attr:`foley.obs.RunManifest.run_id`, satisfying the #8 ``plan_ref`` reservation).
-    WEAVE (#8) resolves anchors, adds ``word_timeline`` / ``master`` / per-item
-    ``Placement``+``Processing``, and renders.
+    SELECT (#7) emits the SPARSE form (just ``items`` + the run/transcript joins) via
+    ``foley.agent.plan()``. WEAVE (#8) grows it additively: ``narration_ref`` binds the
+    voice audio, ``word_timeline`` caches the forced alignment (the reproducible seed),
+    ``master`` carries the loudness target, and each item gains its resolved
+    ``Placement``/``Processing``. ``render(timeline, library)`` is then a PURE function of
+    this data + the library, so editing any field and re-rendering reproduces exactly that
+    change. ``run_manifest_ref`` == :attr:`foley.obs.RunManifest.run_id` (the reserved #8
+    ``plan_ref`` join).
     """
 
     items: "list[TimelineItem]" = field(default_factory=list)  # rehydrated element-wise
     run_manifest_ref: Optional[str] = None  # join to the obs RunManifest.run_id
     transcript_ref: Optional[str] = None  # narration transcript ref (resolved by WEAVE)
     schema_version: int = SCHEMA_VERSION
+    # --- WEAVE-resolved (all defaulted, so the sparse SELECT form stays valid) ---
+    narration_ref: Optional[str] = None  # the voice audio (dol ref); WEAVE binds it
+    word_timeline: list = field(
+        default_factory=list
+    )  # [{'word','start','end'}, ...] from forced alignment (the reproducible seed)
+    master: MasterProfile = field(default_factory=MasterProfile)  # loudness target
