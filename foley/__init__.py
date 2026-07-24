@@ -65,15 +65,20 @@ from .audio import (
 )
 from .base import (
     GENERATION_AFFORDANCES,
+    MASTER_PROFILES,
     QUERY_AFFORDANCES,
     SCHEMA_VERSION,
     AcquisitionMethod,
     Affordance,
+    Anchor,
     Candidate,
     CandidateOrigin,
     IntendedUse,
     Layer,
     LicenseRecord,
+    MasterProfile,
+    Placement,
+    Processing,
     Salience,
     SerializableMixin,
     SoundDesignTimeline,
@@ -83,6 +88,7 @@ from .base import (
     TimelineItem,
     Verdict,
     VerifyLevel,
+    resolve_master,
 )
 from .licensing import (
     LICENSE_FLAGS,
@@ -222,6 +228,16 @@ from .agent import (
     verify_match,
 )
 
+# --- weave: the WEAVE stage — weave() renders the finished, editable mix (#8) ----
+# The weave package is dol-only at import (the aligner + apply-strategy sit behind
+# DI-seam protocols with deterministic defaults; whisperx/pyloudnorm/opentimelineio/
+# audioseal/c2pa are imported lazily inside methods only). ``weave`` here is the
+# façade: the ``weave`` package is made *callable* (see foley/weave/__init__.py), so
+# ``foley.weave(narration, timeline)`` runs the façade while ``foley.weave.<submodule>``
+# (``foley.weave.render`` etc.) stays fully importable.
+from . import weave
+from .weave import WeaveResult
+
 __all__ = [
     # --- base: constants + enums ---------------------------------------------
     "SCHEMA_VERSION",
@@ -245,6 +261,12 @@ __all__ = [
     "IntendedUse",
     "TimelineItem",
     "SoundDesignTimeline",
+    "Anchor",
+    "Placement",
+    "Processing",
+    "MasterProfile",
+    "MASTER_PROFILES",
+    "resolve_master",
     # --- licensing: policy ---------------------------------------------------
     "LicenseFlags",
     "LICENSE_FLAGS",
@@ -371,6 +393,9 @@ __all__ = [
     "Judge",
     "Budget",
     "Decision",
+    # --- weave: the WEAVE stage — weave() (#8) --------------------------------
+    "weave",
+    "WeaveResult",
     # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
     "eval",
     "evaluate",

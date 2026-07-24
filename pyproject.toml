@@ -176,6 +176,35 @@ fit = [
     "torch",
     "torchaudio",
 ]
+# WEAVE forced alignment (#8): the real WhisperXAligner (≈±50 ms word timestamps).
+# `whisperx`/`torch` are imported LAZILY inside WhisperXAligner.word_timeline ONLY, so
+# `import foley` + `import foley.weave` stay dol-only; the deterministic FakeAligner
+# (evenly-spaced words, torch-free) is the resolved default, so the whole weave()
+# pipeline runs in CI with no torch. Deliberately NOT in [tool.wads.ci.install] — the
+# real-alignment test is importorskip('whisperx')-guarded, keeping CI hermetic.
+align = [
+    "whisperx",
+    "torch",
+]
+# WEAVE optional DSP/export upgrades (#8): OpenTimelineIO export (to_otio) and the
+# reserved pyroomacoustics/recorded-IR reverb path. `opentimelineio` is imported
+# LAZILY inside to_otio ONLY (to_edl is a pure-stdlib CMX3600 fallback, always
+# available), so `import foley.weave` stays dol-only. The default render/mix/master
+# path is pure-numpy + pyloudnorm (the existing `audio` extra — NO redundant
+# pyloudnorm here, per invariant 4). Deliberately NOT in [tool.wads.ci.install] — the
+# OTIO round-trip test is importorskip('opentimelineio')-guarded.
+weave = [
+    "opentimelineio",
+]
+# WEAVE signed + embedded C2PA (#8, re-asserting PR #25's deferral): the signer that
+# would promote the content-credential sidecar into a signed, embedded manifest over
+# the final mix. `c2pa` is imported LAZILY inside _sign_and_embed ONLY, which is a
+# fail-safe no-op (sidecar-only) without the lib AND a cert — so `import foley.weave`
+# stays dol-only and weaving never depends on it. Deliberately NOT in
+# [tool.wads.ci.install]; the sidecar (build_content_credential) needs none of this.
+c2pa = [
+    "c2pa-python",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
