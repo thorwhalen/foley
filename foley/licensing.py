@@ -132,6 +132,82 @@ def license_id_from_cc_url(url: Optional[str]) -> "tuple[str, bool]":
     return "unknown", False
 
 
+# ---------------------------------------------------------------------------
+# License display metadata — the license_id -> (human name, canonical URL) SSOT
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class LicenseMeta:
+    """Human-facing display metadata for one ``license_id`` (name + canonical URL).
+
+    The presentation sibling of :class:`LicenseFlags`: where ``LicenseFlags`` holds
+    the *permission* row consulted by :func:`keep`, ``LicenseMeta`` holds the
+    *display* row consulted by the credits/attribution layer
+    (:mod:`foley.provenance.credits`). Kept here so ``licensing`` stays the single
+    license authority; a record's own ``license_name`` / ``license_url`` (when a
+    source populated them) take precedence over this default.
+    """
+
+    display_name: str
+    url: Optional[str] = None
+
+
+#: Fail-closed display fallback for unknown / ``Proprietary-*`` license ids.
+UNKNOWN_LICENSE_META = LicenseMeta("Unknown / unverified license", None)
+
+#: SSOT: ``license_id`` -> display name + canonical URL (one row per
+#: :data:`LICENSE_FLAGS` key). Used only for human-readable credits; never for
+#: permission decisions (those come from :data:`LICENSE_FLAGS`).
+LICENSE_META: dict[str, LicenseMeta] = {
+    "CC0-1.0": LicenseMeta(
+        "CC0 1.0 Universal (Public Domain Dedication)",
+        "https://creativecommons.org/publicdomain/zero/1.0/",
+    ),
+    "CC-BY-4.0": LicenseMeta(
+        "CC BY 4.0", "https://creativecommons.org/licenses/by/4.0/"
+    ),
+    "CC-BY-NC-4.0": LicenseMeta(
+        "CC BY-NC 4.0", "https://creativecommons.org/licenses/by-nc/4.0/"
+    ),
+    "CC-Sampling+-1.0": LicenseMeta(
+        "CC Sampling+ 1.0", "https://creativecommons.org/licenses/sampling+/1.0/"
+    ),
+    "RemArc": LicenseMeta(
+        "BBC RemArc Licence", "https://sound-effects.bbcrewind.co.uk/licensing"
+    ),
+    "Sonniss-GDC": LicenseMeta(
+        "Sonniss GDC Game Audio Bundle License", "https://sonniss.com/gdc-bundle-license"
+    ),
+    "Pixabay-Content": LicenseMeta(
+        "Pixabay Content License", "https://pixabay.com/service/license-summary/"
+    ),
+    "ElevenLabs-SFX": LicenseMeta(
+        "ElevenLabs Sound Effects Terms", "https://elevenlabs.io/terms-of-use"
+    ),
+    "Stability-Community": LicenseMeta(
+        "Stability AI Community License",
+        "https://stability.ai/community-license-agreement",
+    ),
+    "MIT": LicenseMeta("MIT License", "https://opensource.org/license/mit"),
+    "user-owned": LicenseMeta("User-owned / original work", None),
+    "unknown": UNKNOWN_LICENSE_META,
+}
+
+
+def license_meta(license_id: str) -> LicenseMeta:
+    """Return the display :class:`LicenseMeta` for ``license_id`` (fail-closed fallback).
+
+    Args:
+        license_id: The normalized license id.
+
+    Returns:
+        The mapped :class:`LicenseMeta`, or :data:`UNKNOWN_LICENSE_META` for an
+        unrecognized / ``Proprietary-*`` id.
+    """
+    return LICENSE_META.get(license_id, UNKNOWN_LICENSE_META)
+
+
 def derive_license_flags(
     license_id: str, *, overrides: Optional[dict] = None
 ) -> LicenseFlags:

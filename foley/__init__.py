@@ -84,12 +84,17 @@ from .base import (
 )
 from .licensing import (
     LICENSE_FLAGS,
+    LICENSE_META,
     UNKNOWN_LICENSE_FLAGS,
+    UNKNOWN_LICENSE_META,
     LicenseFlags,
+    LicenseMeta,
     apply_license_flags,
     derive_license_flags,
     keep,
     keep_sound,
+    license_id_from_cc_url,
+    license_meta,
 )
 from .qc import (
     DEFAULT_QC_THRESHOLDS,
@@ -167,6 +172,16 @@ from .sources import add_from, list_sources, register_source
 # --- eval: Tier-1 retrieval metrics + the nDCG PR gate (numpy lazy) -----------
 from . import eval  # noqa: A004 - deliberate: foley.eval is the retrieval-eval subpackage
 
+# --- provenance: TASL attribution / credits (stdlib-only; #9b disclosure later) --
+from . import provenance
+from .provenance import (
+    CreditEntry,
+    Credits,
+    attribution_line,
+    credit_entry,
+    credits_for,
+)
+
 __all__ = [
     # --- base: constants + enums ---------------------------------------------
     "SCHEMA_VERSION",
@@ -192,6 +207,11 @@ __all__ = [
     "LicenseFlags",
     "LICENSE_FLAGS",
     "UNKNOWN_LICENSE_FLAGS",
+    "LicenseMeta",
+    "LICENSE_META",
+    "UNKNOWN_LICENSE_META",
+    "license_meta",
+    "license_id_from_cc_url",
     "derive_license_flags",
     "apply_license_flags",
     "keep",
@@ -285,6 +305,14 @@ __all__ = [
     # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
     "eval",
     "evaluate",
+    # --- provenance: TASL attribution / credits ------------------------------
+    "provenance",
+    "credits",
+    "Credits",
+    "CreditEntry",
+    "credits_for",
+    "attribution_line",
+    "credit_entry",
 ]
 
 
@@ -308,6 +336,37 @@ def evaluate(*, golden=None, k: int = 10):
     if golden is not None:
         kw["golden_path"] = golden
     return run_ring0_retrieval_eval(**kw)
+
+
+def credits(sounds, *, title: str = "Credits", only_required: bool = False, write_to=None):
+    """Build the TASL attribution :class:`~foley.provenance.Credits` for ``sounds``.
+
+    Works standalone today (given any iterable of sounds), and is what the WEAVE
+    stage will call at render time. Inspect ``.markdown`` (a ``CREDITS.md``
+    document) / ``.manifest`` (a JSON-serializable dict) on the result.
+
+    Args:
+        sounds: An iterable of :class:`SoundRecord` / :class:`Candidate` /
+            :class:`LicenseRecord` (e.g. the result of :func:`search`, or the
+            sounds placed in a timeline).
+        title: The credits heading.
+        only_required: Keep only legally-required attributions (drops CC0 /
+            user-owned courtesy credits). Default credits everything.
+        write_to: Optional directory; when given, writes ``CREDITS.md`` and
+            ``credits.json`` into it (created if missing).
+
+    Returns:
+        A :class:`~foley.provenance.Credits`.
+    """
+    result = provenance.credits_for(sounds, title=title, only_required=only_required)
+    if write_to is not None:
+        from pathlib import Path
+
+        out = Path(write_to)
+        out.mkdir(parents=True, exist_ok=True)
+        (out / "CREDITS.md").write_text(result.markdown, encoding="utf-8")
+        (out / "credits.json").write_text(result.to_json(indent=2), encoding="utf-8")
+    return result
 
 
 def search(
