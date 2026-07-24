@@ -18,6 +18,7 @@ only, the flag never flips); the unified affordances map to RESOLVED native para
 dol-only.
 """
 
+import io
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -27,7 +28,7 @@ from typing import Any
 import pytest
 
 np = pytest.importorskip("numpy")
-pytest.importorskip("soundfile")  # the facade decodes/encodes real audio bytes
+sf = pytest.importorskip("soundfile")  # the facade decodes/encodes real audio bytes
 
 from foley.audio import encode  # noqa: E402
 from foley.base import (  # noqa: E402
@@ -75,6 +76,10 @@ def _stereo_tone(freq=440.0, seconds=1.0, amp=0.4):
     return np.stack([mono, mono])
 
 
+def _silent(seconds=1.0):
+    return np.zeros(int(SR * seconds), dtype=np.float32)
+
+
 def _flac(samples):
     return encode(samples, SR)
 
@@ -116,13 +121,17 @@ class FakeTransport:
 
 
 class FakePipeline:
-    """A stand-in for ``diffusers.StableAudioPipeline`` — records call kwargs."""
+    """A stand-in for ``diffusers.StableAudioPipeline`` — records call kwargs.
 
-    def __init__(self, *, sr=SR):
+    ``audio`` defaults to a healthy stereo tone; inject channel-distinct or silent
+    audio to exercise the transpose orientation / QC-quarantine paths.
+    """
+
+    def __init__(self, *, sr=SR, audio=None):
         self.vae = SimpleNamespace(sampling_rate=sr)
         self.device = "cpu"
         self.calls = []
-        self._audio = _stereo_tone()
+        self._audio = _stereo_tone() if audio is None else audio
 
     def __call__(self, **kwargs):
         self.calls.append(kwargs)
@@ -179,7 +188,8 @@ def test_elevenlabs_request_shape():
     _el_adapter(transport).generate("rain", duration=3.0, prompt_influence=0.7, loop=True)
     call = transport.calls[0]
     assert call.method == "POST"
-    assert call.url.endswith("/v1/sound-generation")
+    # full URL (base_url + path), not just the suffix — catches a dropped base_url
+    assert call.url == EL_CONFIG["api"]["base_url"] + "/v1/sound-generation"
     # output_format is a QUERY param, never in the JSON body
     assert "output_format" in call.params
     assert "output_format" not in call.json
@@ -196,6 +206,20 @@ def test_elevenlabs_omits_duration_when_none():
     transport = FakeTransport()
     _el_adapter(transport).generate("rain")  # no duration -> model auto
     assert "duration_seconds" not in transport.calls[0].json
+
+
+def test_elevenlabs_honors_residency_base_url():
+    # base_url is overridable for data-residency customers — the emitted URL must use it
+    cfg = {
+        **EL_CONFIG,
+        "api": {**EL_CONFIG["api"], "base_url": "https://api.eu.residency.elevenlabs.io"},
+    }
+    transport = FakeTransport()
+    ElevenLabsAdapter(cfg, api_key="test-key", http=transport).generate("rain")
+    assert (
+        transport.calls[0].url
+        == "https://api.eu.residency.elevenlabs.io/v1/sound-generation"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -272,6 +296,15 @@ def test_stable_audio_generation_params_record_native_names():
     assert "audio_end_in_s" in gp and "duration" not in gp
     assert gp["num_inference_steps"] == 80
     assert gp["guidance_scale"] == pytest.approx(1.0 + 0.5 * (15.0 - 1.0))
+
+
+def test_stable_audio_passes_negative_prompt():
+    # negative_prompt IS a supported Stable Audio affordance — verify it reaches the
+    # pipeline and is recorded in provenance (contrast ElevenLabs, where it drops).
+    pipe = FakePipeline()
+    clip = _sa_adapter(pipe).generate("creak", negative_prompt="hiss, static")
+    assert pipe.calls[0]["negative_prompt"] == "hiss, static"
+    assert clip.candidate.sound.license.generation_params["negative_prompt"] == "hiss, static"
 
 
 # ---------------------------------------------------------------------------
@@ -375,6 +408,27 @@ def test_facade_stores_by_value(library, backend):
     assert lic.cache_bytes_ok is True
 
 
+def test_facade_preserves_stereo_channel_orientation(library):
+    # The pipeline emits channel-FIRST (2, N); the adapter must transpose to
+    # time-first (N, 2) before encode. A symmetric L==R tone would hide a wrong-axis
+    # reshape, so emit a channel-DISTINCT signal (L = tone, R = silence) and decode
+    # the STORED archive to prove orientation, not just non-emptiness.
+    chan_first = np.stack([_mono_tone(amp=0.5), _silent()])  # (2, N): L tone, R silent
+    report = generate_backend(
+        "creak",
+        backend="stable_audio",
+        library=library,
+        adapter=_sa_adapter(FakePipeline(audio=chan_first)),
+    )
+    rec = report.ingested[0].record
+    arr, sr = sf.read(io.BytesIO(library.audio(rec.id)))
+    assert arr.ndim == 2 and arr.shape[1] == 2  # (frames, channels), not scrambled
+    assert abs(arr.shape[0] / sr - 1.0) < 0.05  # ~1 s preserved
+    assert float(np.abs(arr[:, 0]).max()) > 0.1  # L carries the tone
+    assert float(np.abs(arr[:, 1]).max()) < 1e-3  # R stays silent (orientation proven)
+    assert rec.channels == 2
+
+
 # ---------------------------------------------------------------------------
 # (l) operator-consent: ai_training_ok stays False + the consent note is stamped
 # ---------------------------------------------------------------------------
@@ -387,6 +441,49 @@ def test_facade_records_operator_consent(library):
     res = report.ingested[0]
     assert res.record.license.ai_training_ok is False  # never flipped
     assert any("consent recorded" in n for n in res.notes)
+
+
+# ---------------------------------------------------------------------------
+# (l2) QC-quarantine: a generation whose audio fails Tier-0 QC is not stored
+# ---------------------------------------------------------------------------
+
+
+def _silent_stable_audio_adapter():
+    return _sa_adapter(FakePipeline(audio=np.stack([_silent(), _silent()])))
+
+
+def _silent_elevenlabs_adapter():
+    return _el_adapter(FakeTransport(FakeResponse(200, None, _flac(_silent()))))
+
+
+@pytest.mark.parametrize("backend", ["stable_audio", "elevenlabs"])
+def test_facade_quarantines_qc_failing_generation(library, backend):
+    # A weak prompt can make a real generator emit near-silence — ingest_one must
+    # QC-quarantine it (not store it), and the consent note must NOT be stamped on a
+    # record-less quarantined result.
+    adapter = (
+        _silent_stable_audio_adapter()
+        if backend == "stable_audio"
+        else _silent_elevenlabs_adapter()
+    )
+    report = generate_backend("hush", backend=backend, library=library, adapter=adapter)
+    assert report.ingested == []
+    assert len(report.quarantined) == 1
+    assert len(library) == 0 and len(library.sounds) == 0
+    assert report.quarantined[0].record is None
+    assert not any("consent recorded" in n for n in report.quarantined[0].notes)
+
+
+def test_public_generate_raises_generation_error_on_quarantine(library):
+    with pytest.raises(foley.GenerationError) as exc:
+        foley.generate(
+            "hush",
+            backend="stable_audio",
+            library=library,
+            adapter=_silent_stable_audio_adapter(),
+        )
+    assert exc.value.status == "quarantined"
+    assert exc.value.report is not None
 
 
 # ---------------------------------------------------------------------------
@@ -498,6 +595,23 @@ def test_elevenlabs_non_200_raises_with_detail():
     transport = FakeTransport(FakeResponse(422, {"detail": "bad request"}, b""))
     with pytest.raises(RuntimeError, match="422"):
         _el_adapter(transport).generate("rain")
+
+
+def test_facade_undecodable_200_body_is_error_not_crash(library):
+    # a hosted API returning HTTP 200 with a non-audio body (HTML/JSON error page,
+    # truncated audio) must be recorded as an error, never crash the run — the
+    # generate sibling of tests/test_freesound.py::test_add_from_undecodable_200_...
+    transport = FakeTransport(FakeResponse(200, None, b"NOT_AUDIO_BYTES" * 20))
+    report = generate_backend(
+        "rain", backend="elevenlabs", library=library, adapter=_el_adapter(transport)
+    )
+    assert [r.status for r in report.results] == ["error"]
+    assert len(library) == 0 and len(library.sounds) == 0
+    with pytest.raises(foley.GenerationError) as exc:
+        foley.generate(
+            "rain", backend="elevenlabs", library=library, adapter=_el_adapter(transport)
+        )
+    assert exc.value.status == "error"
 
 
 def test_elevenlabs_missing_api_key_is_a_clear_error(monkeypatch):
