@@ -62,6 +62,8 @@ FOLEY_DATA_DIR = Path(
 )
 DEFAULT_AUDIO_DIR = FOLEY_DATA_DIR / "audio"
 DEFAULT_META_DIR = FOLEY_DATA_DIR / "meta"
+#: Content-credential sidecars (#9b): ``Mapping[content_id -> credential dict]``.
+DEFAULT_PROVENANCE_DIR = FOLEY_DATA_DIR / "provenance"
 
 #: A filesystem location (path or path-like string) for a local store root.
 Rootdir = Union[str, "os.PathLike[str]"]
@@ -165,6 +167,29 @@ def make_meta_store(
         id_of_key=_meta_filename,  # sound_id -> escaped filename
         key_of_id=_meta_key,  # filename -> sound_id
     )
+
+
+def make_provenance_store(
+    rootdir: Rootdir = DEFAULT_PROVENANCE_DIR,
+) -> MutableMapping[str, dict]:
+    """Build the content-credential store: ``Mapping[content_id -> dict]`` (JSON files).
+
+    The by-value sidecar carrier for #9b's portable "content credential" (a
+    C2PA-shaped assertion dict written next to each generated clip; a
+    ``SoundRecord``'s ``license.c2pa_manifest_ref`` points here by content id). Like
+    :func:`make_meta_store` it escapes the id to a safe ``{enc}.json`` filename
+    (invariant #3) while exposing bare ``content_id`` keys; values are plain dicts
+    ((de)serialized natively by ``dol.JsonFiles``). Local ``dol.JsonFiles`` by
+    default; swap in any ``dol`` Mapping to move sidecars to the cloud.
+
+    Args:
+        rootdir: Directory that holds the credential JSON files (created if missing).
+
+    Returns:
+        A ``MutableMapping[str, dict]`` keyed by content id.
+    """
+    json_store = mk_dirs_if_missing(JsonFiles(str(rootdir)))
+    return wrap_kvs(json_store, id_of_key=_meta_filename, key_of_id=_meta_key)
 
 
 def store_sound(

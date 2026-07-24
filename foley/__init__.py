@@ -172,7 +172,13 @@ from .sources import add_from, list_sources, register_source
 # --- source: generation adapters (Stable Audio Open / ElevenLabs) — #6 ---------
 # The generate facade + its helpers. The generator adapter packages (and their
 # torch/requests deps) are auto-discovered lazily, so `import foley` stays dol-only.
-from .sources import GenerationError, candidate_of
+from .sources import (
+    GenerationError,
+    RecognizableVoiceRefusal,
+    SafetyRefusal,
+    TrademarkRefusal,
+    candidate_of,
+)
 from .sources import generate as _generate_backend
 
 # --- eval: Tier-1 retrieval metrics + the nDCG PR gate (numpy lazy) -----------
@@ -312,6 +318,12 @@ __all__ = [
     "generate",
     "candidate_of",
     "GenerationError",
+    # --- provenance: generation disclosure / watermark / safety (#9b) --------
+    "SafetyRefusal",
+    "TrademarkRefusal",
+    "RecognizableVoiceRefusal",
+    "art50_checklist",
+    "scan_prompt",
     # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
     "eval",
     "evaluate",
@@ -425,6 +437,10 @@ def generate(
     library=None,
     store: bool = True,
     adapter=None,
+    watermark=None,
+    on_flagged: str = "refuse",
+    watermarker=None,
+    provenance_store=None,
     **affordances,
 ):
     """Generate a sound effect for ``prompt`` and add it to the library (by-value).
@@ -448,6 +464,13 @@ def generate(
         store: If ``False``, synthesize + enrich a preview without adding it.
         adapter: Optional pre-built adapter (the DI seam; production omits it and the
             registry lazily builds one).
+        watermark: ``True`` require an AudioSeal watermark, ``False`` never, ``None``
+            (default, auto) watermark iff ``foley[provenance]`` is installed (#9b).
+        on_flagged: ``'refuse'`` (default, fail-closed) or ``'warn'`` for a prompt
+            that trips the trademarked-audio / recognizable-voice safety gate (#9b).
+        watermarker: An injected watermarker (the DI seam; tests pass a fake).
+        provenance_store: A ``MutableMapping`` for content-credential sidecars
+            (default: :func:`foley.stores.make_provenance_store`).
         **affordances: Unified generation affordances (``duration``,
             ``prompt_influence``, ``negative_prompt``, ``steps``, ``seed``, ``loop``,
             ``output_format`` — see :data:`GENERATION_AFFORDANCES`); a backend
@@ -458,6 +481,9 @@ def generate(
         canonical, by-value :class:`SoundRecord` (a content-hash id).
 
     Raises:
+        SafetyRefusal: If the prompt trips a safety gate and ``on_flagged='refuse'``
+            (a :class:`GenerationError` subclass — ``TrademarkRefusal`` /
+            ``RecognizableVoiceRefusal``).
         GenerationError: If the backend yields no stored sound (QC-quarantined,
             rights-blocked, or a synthesis/ingest error). The exception carries the
             full ``report`` and terminal ``status`` so callers can react distinctly.
@@ -468,6 +494,10 @@ def generate(
         library=library,
         store=store,
         adapter=adapter,
+        watermark=watermark,
+        on_flagged=on_flagged,
+        watermarker=watermarker,
+        provenance_store=provenance_store,
         **affordances,
     )
     results = report.results
@@ -531,10 +561,17 @@ def ingest(
 
 
 def __getattr__(name: str):
-    """Lazily expose ``foley.library`` (the default :class:`SoundLibrary`).
+    """Lazily expose ``foley.library`` + the #9b disclosure helpers.
 
-    Kept lazy so ``import foley`` never constructs the CLAP model or the index.
+    ``library`` is kept lazy so ``import foley`` never constructs the CLAP model or
+    the index; the disclosure helpers are lazy so the (stdlib-only)
+    :mod:`foley.provenance.disclosure` module is not imported until first use,
+    keeping the eager ``import foley`` graph minimal.
     """
     if name == "library":
         return default_library()
+    if name in ("art50_checklist", "scan_prompt", "build_content_credential"):
+        from .provenance import disclosure
+
+        return getattr(disclosure, name)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

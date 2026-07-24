@@ -125,6 +125,21 @@ stable-audio = [
     "soundfile",
     "accelerate",
 ]
+# Generation disclosure / watermarking (#9b): AudioSeal (MIT code+weights) marks
+# generated clips; torchaudio does the 44.1k<->16k resample. Imported lazily inside
+# foley.sources.disclosure watermark functions ONLY, so `import foley` + source
+# discovery stay dol-only; the stdlib safety-scan / Art.50-checklist / JSON
+# content-credential sidecar need none of this. Deliberately NOT in
+# [tool.wads.ci.install] — tests inject a fake watermarker + a dict provenance store;
+# the real-AudioSeal round-trip test is importorskip-guarded, keeping CI torch-free.
+# (The signed+embedded C2PA writer — c2pa-python — arrives with weave/#8.)
+provenance = [
+    "audioseal",
+    "torch",
+    "torchaudio",
+    "numpy",
+    "soundfile",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
