@@ -159,6 +159,11 @@ from .index import (
 # --- source: bulk-corpus bootstrap (stdlib-only at import; numpy is lazy) ------
 from .bootstrap import bootstrap, demo
 
+# --- source: live-source adapters (Freesound) + the add_from pull facade -------
+# Auto-discovery is lazy, so the Freesound adapter (and requests) is not imported
+# until first use — `import foley` stays dol-only.
+from .sources import add_from, list_sources, register_source
+
 # --- eval: Tier-1 retrieval metrics + the nDCG PR gate (numpy lazy) -----------
 from . import eval  # noqa: A004 - deliberate: foley.eval is the retrieval-eval subpackage
 
@@ -273,6 +278,10 @@ __all__ = [
     # --- source: bulk-corpus bootstrap ---------------------------------------
     "bootstrap",
     "demo",
+    # --- source: live-source adapters + add_from pull facade -----------------
+    "add_from",
+    "list_sources",
+    "register_source",
     # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
     "eval",
     "evaluate",
@@ -365,10 +374,10 @@ def ingest(
         **kw: Forwarded to :func:`foley.index.ingest_one`.
     """
     if backend != "local":
-        raise NotImplementedError(
-            f"ingest backend {backend!r} not implemented; only 'local' is "
-            f"available (source-adapter pulls arrive with subtask #5)."
-        )
+        # A non-local backend names a live source adapter (#5): treat ``path`` as
+        # the query and route through the add_from pull facade (search -> license
+        # gate -> download -> the shared ingest_one pipeline).
+        return add_from(backend, query=path, library=library, **kw)
     return ingest_folder(
         path,
         library=library if library is not None else default_library(),

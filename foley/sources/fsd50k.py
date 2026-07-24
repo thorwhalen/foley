@@ -30,32 +30,16 @@ from pathlib import Path
 from typing import Iterator, Optional
 
 from ..base import LicenseRecord
+from ..licensing import license_id_from_cc_url
 from .base import ClipSpec, bulk_license, register_corpus
 
 #: Glob for the FSD50K per-clip info JSONs (dev + eval).
 _CLIPS_INFO_GLOB = "*clips_info*.json"
 
-
-def _license_id_from_url(url: Optional[str]) -> "tuple[str, bool]":
-    """Map a Creative-Commons license URL to ``(license_id, rights_verified)``.
-
-    Recognized CC families map to their foley ``license_id`` (rights_verified
-    True); anything unknown/missing returns the fail-closed
-    ``('unknown', False)``. Order matters: ``by-nc`` and ``sampling`` are checked
-    before the bare ``by``.
-    """
-    if not url:
-        return "unknown", False
-    u = url.lower()
-    if "zero" in u or "publicdomain" in u:
-        return "CC0-1.0", True
-    if "by-nc" in u:
-        return "CC-BY-NC-4.0", True
-    if "sampling" in u:
-        return "CC-Sampling+-1.0", True
-    if "/by/" in u or u.rstrip("/").endswith("/by"):
-        return "CC-BY-4.0", True
-    return "unknown", False
+#: The CC-URL → foley ``license_id`` mapper now lives in :mod:`foley.licensing`
+#: (it is license policy, shared with the Freesound API adapter). This alias keeps
+#: the historical FSD50K import path (and its tests) working unchanged.
+_license_id_from_url = license_id_from_cc_url
 
 
 def _load_clips_info(root: Path) -> "dict[str, dict]":
