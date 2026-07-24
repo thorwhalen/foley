@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.tools &mdash; foley 0.0.11 documentation</title>
+  <title>foley.agent.tools &mdash; foley 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -62,7 +62,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
@@ -288,7 +291,9 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_emit_step</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">event_index</span><span class="p">:</span> <span class="s2">&quot;Optional[int]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_emit_step</span><span class="p">(</span>
+    <span class="n">run</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">event_index</span><span class="p">:</span> <span class="s2">&quot;Optional[int]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Append a typed :class:`Step` (``seq`` auto-assigned; ``detail`` redacted at record time).&quot;&quot;&quot;</span>
     <span class="n">run</span><span class="o">.</span><span class="n">add_step</span><span class="p">(</span>
         <span class="n">Step</span><span class="p">(</span>
@@ -300,7 +305,9 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_verify_kept</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">kept</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">event_index</span><span class="p">,</span> <span class="n">max_level</span><span class="p">,</span> <span class="n">judge</span><span class="p">,</span> <span class="n">tau_clap</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_verify_kept</span><span class="p">(</span>
+    <span class="n">run</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">kept</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">event_index</span><span class="p">,</span> <span class="n">max_level</span><span class="p">,</span> <span class="n">judge</span><span class="p">,</span> <span class="n">tau_clap</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the verify ladder over each license-clean candidate; return the matches.</span>
 
 <span class="sd">    Opens ONE child span per candidate (``CLIENT`` on the LLM rungs so each judged clip</span>
@@ -318,7 +325,10 @@
             <span class="p">)</span>
         <span class="n">c</span><span class="o">.</span><span class="n">verdict</span> <span class="o">=</span> <span class="n">verdict</span>
         <span class="n">_emit_step</span><span class="p">(</span>
-            <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;verify&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">event_index</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
+            <span class="n">run</span><span class="p">,</span>
+            <span class="s2">&quot;verify&quot;</span><span class="p">,</span>
+            <span class="n">event_index</span><span class="o">=</span><span class="n">event_index</span><span class="p">,</span>
+            <span class="n">span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
             <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
                 <span class="s2">&quot;candidate_id&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
                 <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">verdict</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
@@ -348,7 +358,13 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_generate_and_reverify</span><span class="p">(</span>
-    <span class="n">event</span><span class="p">,</span> <span class="n">intended_use</span><span class="p">:</span> <span class="n">IntendedUse</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">judge</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">VerifyLevel</span><span class="p">,</span> <span class="n">library</span>
+    <span class="n">event</span><span class="p">,</span>
+    <span class="n">intended_use</span><span class="p">:</span> <span class="n">IntendedUse</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">judge</span><span class="p">,</span>
+    <span class="n">level</span><span class="p">:</span> <span class="n">VerifyLevel</span><span class="p">,</span>
+    <span class="n">library</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Optional[Candidate]&quot;</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a clip, then RE-GATE + RE-VERIFY it before acceptance (the flywheel admission gate).</span>
 
@@ -375,7 +391,10 @@
     <span class="c1"># verify=&#39;clap&#39; the injected judge is the ClapJudge (no use here), so resolve a</span>
     <span class="c1"># listen-capable one; higher rungs keep the caller&#39;s judge.</span>
     <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">:</span>
-        <span class="n">reverify_level</span><span class="p">,</span> <span class="n">reverify_judge</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">listen</span><span class="p">,</span> <span class="n">_default_judge</span><span class="p">(</span><span class="n">VerifyLevel</span><span class="o">.</span><span class="n">listen</span><span class="p">)</span>
+        <span class="n">reverify_level</span><span class="p">,</span> <span class="n">reverify_judge</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">listen</span><span class="p">,</span>
+            <span class="n">_default_judge</span><span class="p">(</span><span class="n">VerifyLevel</span><span class="o">.</span><span class="n">listen</span><span class="p">),</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">reverify_level</span><span class="p">,</span> <span class="n">reverify_judge</span> <span class="o">=</span> <span class="n">level</span><span class="p">,</span> <span class="n">judge</span>
     <span class="n">verdict</span> <span class="o">=</span> <span class="n">verify_match</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">gc</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">reverify_level</span><span class="p">,</span> <span class="n">judge</span><span class="o">=</span><span class="n">reverify_judge</span><span class="p">)</span>
@@ -503,7 +522,11 @@
     <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">run</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s2">&quot;decompose_context&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;CLIENT&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sp</span><span class="p">:</span>
             <span class="n">events</span> <span class="o">=</span> <span class="n">decompose_context</span><span class="p">(</span>
-                <span class="n">context</span><span class="p">,</span> <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span> <span class="n">decomposer</span><span class="o">=</span><span class="n">decomposer</span><span class="p">,</span> <span class="n">_span</span><span class="o">=</span><span class="n">sp</span>
+                <span class="n">context</span><span class="p">,</span>
+                <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span>
+                <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span>
+                <span class="n">decomposer</span><span class="o">=</span><span class="n">decomposer</span><span class="p">,</span>
+                <span class="n">_span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">_emit_step</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="s2">&quot;decompose&quot;</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n_events&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)})</span>
 
@@ -516,17 +539,26 @@
                 <span class="k">if</span> <span class="n">loop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">with</span> <span class="n">run</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s2">&quot;refine_query&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;CLIENT&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sp</span><span class="p">:</span>
                         <span class="n">queries</span> <span class="o">=</span> <span class="n">refine_query</span><span class="p">(</span>
-                            <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">hint</span><span class="o">=</span><span class="n">last_reason</span><span class="p">,</span> <span class="n">refiner</span><span class="o">=</span><span class="n">refiner</span><span class="p">,</span> <span class="n">_span</span><span class="o">=</span><span class="n">sp</span>
+                            <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+                            <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                            <span class="n">hint</span><span class="o">=</span><span class="n">last_reason</span><span class="p">,</span>
+                            <span class="n">refiner</span><span class="o">=</span><span class="n">refiner</span><span class="p">,</span>
+                            <span class="n">_span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
                         <span class="p">)</span>
                         <span class="n">_emit_step</span><span class="p">(</span>
-                            <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;refine&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
+                            <span class="n">run</span><span class="p">,</span>
+                            <span class="s2">&quot;refine&quot;</span><span class="p">,</span>
+                            <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                            <span class="n">span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span>
                             <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">queries</span><span class="p">)},</span>
                         <span class="p">)</span>
 
                 <span class="n">cands</span> <span class="o">=</span> <span class="n">search_sounds</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="n">prefilter</span><span class="p">)</span>
                 <span class="n">run</span><span class="o">.</span><span class="n">add_candidate_scores</span><span class="p">([</span><span class="n">_score_row</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cands</span><span class="p">])</span>
                 <span class="n">_emit_step</span><span class="p">(</span>
-                    <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                    <span class="n">run</span><span class="p">,</span>
+                    <span class="s2">&quot;search&quot;</span><span class="p">,</span>
+                    <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
                     <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
                         <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
                         <span class="s2">&quot;n_hits&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">cands</span><span class="p">),</span>
@@ -536,28 +568,47 @@
 
                 <span class="n">kept</span> <span class="o">=</span> <span class="n">gate_candidates</span><span class="p">(</span><span class="n">cands</span><span class="p">,</span> <span class="n">use</span><span class="p">)</span>
                 <span class="n">_emit_step</span><span class="p">(</span>
-                    <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;license_gate&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                    <span class="n">run</span><span class="p">,</span>
+                    <span class="s2">&quot;license_gate&quot;</span><span class="p">,</span>
+                    <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
                     <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
                         <span class="s2">&quot;n_in&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">cands</span><span class="p">),</span>
                         <span class="s2">&quot;n_kept&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">kept</span><span class="p">),</span>
-                        <span class="s2">&quot;rejected_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cands</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">license_ok</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">],</span>
+                        <span class="s2">&quot;rejected_ids&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cands</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">license_ok</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span>
+                        <span class="p">],</span>
                         <span class="s2">&quot;intended_use&quot;</span><span class="p">:</span> <span class="n">asdict</span><span class="p">(</span><span class="n">use</span><span class="p">),</span>
                     <span class="p">},</span>
                 <span class="p">)</span>
 
                 <span class="n">verified</span> <span class="o">=</span> <span class="n">_verify_kept</span><span class="p">(</span>
-                    <span class="n">run</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">kept</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">max_level</span><span class="o">=</span><span class="n">max_level</span><span class="p">,</span> <span class="n">judge</span><span class="o">=</span><span class="n">judge</span><span class="p">,</span> <span class="n">tau_clap</span><span class="o">=</span><span class="n">tau_clap</span>
+                    <span class="n">run</span><span class="p">,</span>
+                    <span class="n">event</span><span class="p">,</span>
+                    <span class="n">kept</span><span class="p">,</span>
+                    <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                    <span class="n">max_level</span><span class="o">=</span><span class="n">max_level</span><span class="p">,</span>
+                    <span class="n">judge</span><span class="o">=</span><span class="n">judge</span><span class="p">,</span>
+                    <span class="n">tau_clap</span><span class="o">=</span><span class="n">tau_clap</span><span class="p">,</span>
                 <span class="p">)</span>
 
                 <span class="n">decision</span> <span class="o">=</span> <span class="n">decide</span><span class="p">(</span>
-                    <span class="n">event</span><span class="p">,</span> <span class="n">kept</span><span class="p">,</span> <span class="n">verified</span><span class="p">,</span> <span class="n">tau_retrieve</span><span class="o">=</span><span class="n">tau_retrieve</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="n">loop</span>
+                    <span class="n">event</span><span class="p">,</span>
+                    <span class="n">kept</span><span class="p">,</span>
+                    <span class="n">verified</span><span class="p">,</span>
+                    <span class="n">tau_retrieve</span><span class="o">=</span><span class="n">tau_retrieve</span><span class="p">,</span>
+                    <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
+                    <span class="n">loop</span><span class="o">=</span><span class="n">loop</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">_emit_step</span><span class="p">(</span>
-                    <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;decide&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                    <span class="n">run</span><span class="p">,</span>
+                    <span class="s2">&quot;decide&quot;</span><span class="p">,</span>
+                    <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
                     <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
                         <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="n">decision</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
                         <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="n">decision</span><span class="o">.</span><span class="n">reason</span><span class="p">,</span>
-                        <span class="s2">&quot;chosen_id&quot;</span><span class="p">:</span> <span class="n">decision</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">decision</span><span class="o">.</span><span class="n">candidate</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s2">&quot;chosen_id&quot;</span><span class="p">:</span> <span class="n">decision</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span>
+                        <span class="k">if</span> <span class="n">decision</span><span class="o">.</span><span class="n">candidate</span>
+                        <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
                         <span class="s2">&quot;loop&quot;</span><span class="p">:</span> <span class="n">loop</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">)</span>
@@ -573,19 +624,32 @@
                 <span class="k">if</span> <span class="n">decision</span><span class="o">.</span><span class="n">action</span> <span class="ow">is</span> <span class="n">DecideAction</span><span class="o">.</span><span class="n">GENERATE</span> <span class="ow">and</span> <span class="n">budget</span><span class="o">.</span><span class="n">gen_ok</span><span class="p">():</span>
                     <span class="n">budget</span><span class="o">.</span><span class="n">spend_gen</span><span class="p">()</span>
                     <span class="n">chosen</span> <span class="o">=</span> <span class="n">_generate_and_reverify</span><span class="p">(</span>
-                        <span class="n">event</span><span class="p">,</span> <span class="n">use</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">judge</span><span class="o">=</span><span class="n">judge</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">max_level</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
+                        <span class="n">event</span><span class="p">,</span>
+                        <span class="n">use</span><span class="p">,</span>
+                        <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
+                        <span class="n">judge</span><span class="o">=</span><span class="n">judge</span><span class="p">,</span>
+                        <span class="n">level</span><span class="o">=</span><span class="n">max_level</span><span class="p">,</span>
+                        <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="n">_emit_step</span><span class="p">(</span>
-                        <span class="n">run</span><span class="p">,</span> <span class="s2">&quot;generate&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                        <span class="n">run</span><span class="p">,</span>
+                        <span class="s2">&quot;generate&quot;</span><span class="p">,</span>
+                        <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
                         <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="s2">&quot;accepted&quot;</span><span class="p">:</span> <span class="n">chosen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">},</span>
                     <span class="p">)</span>
                     <span class="k">break</span>
                 <span class="k">break</span>  <span class="c1"># DROP / exhausted → silence (a valid Foley choice)</span>
 
             <span class="k">if</span> <span class="n">chosen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">chosen</span><span class="o">.</span><span class="n">event</span> <span class="o">=</span> <span class="n">event</span>  <span class="c1"># attach provenance so plan() reads onset/layer/loop</span>
+                <span class="n">chosen</span><span class="o">.</span><span class="n">event</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">event</span>  <span class="c1"># attach provenance so plan() reads onset/layer/loop</span>
+                <span class="p">)</span>
                 <span class="n">item</span> <span class="o">=</span> <span class="n">place_in_timeline</span><span class="p">(</span>
-                    <span class="n">chosen</span><span class="p">,</span> <span class="n">onset</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">onset</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">loop</span>
+                    <span class="n">chosen</span><span class="p">,</span>
+                    <span class="n">onset</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">onset</span><span class="p">,</span>
+                    <span class="n">gain</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                    <span class="n">layer</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">layer</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                    <span class="n">loop</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">loop</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">_emit_step</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="s2">&quot;place&quot;</span><span class="p">,</span> <span class="n">event_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
                 <span class="k">yield</span> <span class="n">chosen</span>
@@ -595,7 +659,9 @@
 
 <div class="viewcode-block" id="plan">
 <a class="viewcode-back" href="../../../module_docs/foley/agent/tools.html#foley.plan">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">plan</span><span class="p">(</span><span class="n">candidates</span><span class="p">:</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">transcript</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plan</span><span class="p">(</span>
+    <span class="n">candidates</span><span class="p">:</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">transcript</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fold verified candidates into the SPARSE :class:`SoundDesignTimeline` (the SELECT→WEAVE bridge).</span>
 
 <span class="sd">    One :class:`TimelineItem` per candidate (``onset·gain·layer·loop`` only, from its</span>

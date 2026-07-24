@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.policy &mdash; foley 0.0.11 documentation</title>
+  <title>foley.agent.policy &mdash; foley 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -62,7 +62,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
@@ -205,7 +208,9 @@
 
     <span class="n">USE</span> <span class="o">=</span> <span class="s2">&quot;use&quot;</span>  <span class="c1"># a verified, confident, license-clean clip → accept it</span>
     <span class="n">REFINE</span> <span class="o">=</span> <span class="s2">&quot;refine&quot;</span>  <span class="c1"># low confidence + budget left → re-query and re-retrieve</span>
-    <span class="n">GENERATE</span> <span class="o">=</span> <span class="s2">&quot;generate&quot;</span>  <span class="c1"># non-diegetic, or diegetic gap after refine → generate a clip</span>
+    <span class="n">GENERATE</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;generate&quot;</span>  <span class="c1"># non-diegetic, or diegetic gap after refine → generate a clip</span>
+    <span class="p">)</span>
     <span class="n">DROP</span> <span class="o">=</span> <span class="s2">&quot;drop&quot;</span>  <span class="c1"># budget exhausted / no path → silence (a valid Foley choice)</span></div>
 
 
@@ -312,23 +317,31 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">diegetic</span> <span class="ow">and</span> <span class="n">budget</span><span class="o">.</span><span class="n">gen_ok</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">Decision</span><span class="p">(</span><span class="n">DecideAction</span><span class="o">.</span><span class="n">GENERATE</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;non-diegetic mood cue&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">verified</span><span class="p">:</span>
-        <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">verified</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">verdict</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">))</span>
+        <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">verified</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">verdict</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">best</span><span class="o">.</span><span class="n">verdict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">best</span><span class="o">.</span><span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span> <span class="o">&gt;=</span> <span class="n">tau_retrieve</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Decision</span><span class="p">(</span>
-                <span class="n">DecideAction</span><span class="o">.</span><span class="n">USE</span><span class="p">,</span> <span class="n">best</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;confident match (</span><span class="si">{</span><span class="n">best</span><span class="o">.</span><span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="n">DecideAction</span><span class="o">.</span><span class="n">USE</span><span class="p">,</span>
+                <span class="n">best</span><span class="p">,</span>
+                <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;confident match (</span><span class="si">{</span><span class="n">best</span><span class="o">.</span><span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
             <span class="p">)</span>
     <span class="c1"># No confident retrieval — refine first (bounded), then generate, then best-effort/drop.</span>
     <span class="k">if</span> <span class="n">budget</span><span class="o">.</span><span class="n">refine_ok</span><span class="p">():</span>
         <span class="n">why</span> <span class="o">=</span> <span class="s2">&quot;low-confidence match&quot;</span> <span class="k">if</span> <span class="n">verified</span> <span class="k">else</span> <span class="s2">&quot;no verified match&quot;</span>
-        <span class="k">return</span> <span class="n">Decision</span><span class="p">(</span><span class="n">DecideAction</span><span class="o">.</span><span class="n">REFINE</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">why</span><span class="si">}</span><span class="s2">; refine pass </span><span class="si">{</span><span class="n">loop</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Decision</span><span class="p">(</span>
+            <span class="n">DecideAction</span><span class="o">.</span><span class="n">REFINE</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">why</span><span class="si">}</span><span class="s2">; refine pass </span><span class="si">{</span><span class="n">loop</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="n">budget</span><span class="o">.</span><span class="n">gen_ok</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">Decision</span><span class="p">(</span><span class="n">DecideAction</span><span class="o">.</span><span class="n">GENERATE</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;diegetic gap after refine&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">verified</span><span class="p">:</span>  <span class="c1"># generation exhausted/off but a lower-confidence verified clip exists</span>
-        <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">verified</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">verdict</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">))</span>
+        <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">verified</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">verdict</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Decision</span><span class="p">(</span>
-            <span class="n">DecideAction</span><span class="o">.</span><span class="n">USE</span><span class="p">,</span> <span class="n">best</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;best-effort verified pick (budget exhausted)&quot;</span>
+            <span class="n">DecideAction</span><span class="o">.</span><span class="n">USE</span><span class="p">,</span>
+            <span class="n">best</span><span class="p">,</span>
+            <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;best-effort verified pick (budget exhausted)&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">return</span> <span class="n">Decision</span><span class="p">(</span><span class="n">DecideAction</span><span class="o">.</span><span class="n">DROP</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;no match; refine/generate budget exhausted&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Decision</span><span class="p">(</span>
+        <span class="n">DecideAction</span><span class="o">.</span><span class="n">DROP</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;no match; refine/generate budget exhausted&quot;</span>
+    <span class="p">)</span></div>
 
 </pre></div>
 

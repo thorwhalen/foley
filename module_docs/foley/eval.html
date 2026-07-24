@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.eval &mdash; foley 0.0.11 documentation</title>
+  <title>foley.eval &mdash; foley 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -63,6 +63,14 @@
 <li class="toctree-l1"><a class="reference internal" href="bootstrap.html">foley.bootstrap</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">foley.cli</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">foley.eval</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.AlphaResult"><code class="docutils literal notranslate"><span class="pre">AlphaResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.FidelityResult"><code class="docutils literal notranslate"><span class="pre">FidelityResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.FidelityStamp"><code class="docutils literal notranslate"><span class="pre">FidelityStamp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.FitReport"><code class="docutils literal notranslate"><span class="pre">FitReport</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.FitReport.format_regression_diff"><code class="docutils literal notranslate"><span class="pre">FitReport.format_regression_diff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.eval.FitReport.gate"><code class="docutils literal notranslate"><span class="pre">FitReport.gate()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.GoldenItem"><code class="docutils literal notranslate"><span class="pre">GoldenItem</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.eval.GoldenItem.id"><code class="docutils literal notranslate"><span class="pre">GoldenItem.id</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.eval.GoldenItem.context"><code class="docutils literal notranslate"><span class="pre">GoldenItem.context</span></code></a></li>
@@ -85,23 +93,38 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.average_precision_at_k"><code class="docutils literal notranslate"><span class="pre">average_precision_at_k()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.build_eval_library"><code class="docutils literal notranslate"><span class="pre">build_eval_library()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.build_run"><code class="docutils literal notranslate"><span class="pre">build_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.calibrate_judge_vs_human"><code class="docutils literal notranslate"><span class="pre">calibrate_judge_vs_human()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.evaluate_run"><code class="docutils literal notranslate"><span class="pre">evaluate_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.fit_f1"><code class="docutils literal notranslate"><span class="pre">fit_f1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.fit_precision"><code class="docutils literal notranslate"><span class="pre">fit_precision()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.fit_recall"><code class="docutils literal notranslate"><span class="pre">fit_recall()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.frechet_distance"><code class="docutils literal notranslate"><span class="pre">frechet_distance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.generation_fidelity"><code class="docutils literal notranslate"><span class="pre">generation_fidelity()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.is_stale"><code class="docutils literal notranslate"><span class="pre">is_stale()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.kernel_audio_distance"><code class="docutils literal notranslate"><span class="pre">kernel_audio_distance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.krippendorff_alpha"><code class="docutils literal notranslate"><span class="pre">krippendorff_alpha()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.load_baseline"><code class="docutils literal notranslate"><span class="pre">load_baseline()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.load_golden"><code class="docutils literal notranslate"><span class="pre">load_golden()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.mean_over_queries"><code class="docutils literal notranslate"><span class="pre">mean_over_queries()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.mrr_at_k"><code class="docutils literal notranslate"><span class="pre">mrr_at_k()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.ndcg_at_k"><code class="docutils literal notranslate"><span class="pre">ndcg_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.percent_agreement"><code class="docutils literal notranslate"><span class="pre">percent_agreement()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.precision_at_k"><code class="docutils literal notranslate"><span class="pre">precision_at_k()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.recall_at_k"><code class="docutils literal notranslate"><span class="pre">recall_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.reliability_band"><code class="docutils literal notranslate"><span class="pre">reliability_band()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.run_fit_eval"><code class="docutils literal notranslate"><span class="pre">run_fit_eval()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.run_ring0_retrieval_eval"><code class="docutils literal notranslate"><span class="pre">run_ring0_retrieval_eval()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.stratified_sample"><code class="docutils literal notranslate"><span class="pre">stratified_sample()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.to_qrels"><code class="docutils literal notranslate"><span class="pre">to_qrels()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.eval.write_baseline"><code class="docutils literal notranslate"><span class="pre">write_baseline()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="eval/baseline.html">foley.eval.baseline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eval/fit.html">foley.eval.fit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eval/reliability.html">foley.eval.reliability</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="index/embedders.html">foley.index.embedders</a></li>
@@ -183,9 +206,62 @@ frozen golden set, and ships the <strong>PR gate</strong>: a pytest check that b
 whose <code class="docutils literal notranslate"><span class="pre">nDCG&#64;10</span></code> regresses by more than <code class="docutils literal notranslate"><span class="pre">0.02</span></code> on the Ring-0 golden set. Every
 part is pure numpy/stdlib and deterministic — no <code class="docutils literal notranslate"><span class="pre">ranx</span></code>/<code class="docutils literal notranslate"><span class="pre">numba</span></code>, no CLAP, no
 downloads — so the gate runs on every index/embedder/prompt PR in foley’s CI.</p>
-<p>Tier-2 fit-judging (LLM/audio-LM “does this clip match the intent?”) is subtask
-#10b, added after the Select agent (#7). All numpy imports are function-local so
-<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code> stays dol-only.</p>
+<p>Tier-2 fit-judging (#10b) — “does this clip match the intent?” — lives alongside
+in <a class="reference internal" href="eval/fit.html#module-foley.eval.fit" title="foley.eval.fit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fit</span></code></a> (the judge-based fit harness), <a class="reference internal" href="eval/reliability.html#module-foley.eval.reliability" title="foley.eval.reliability"><code class="xref py py-mod docutils literal notranslate"><span class="pre">reliability</span></code></a>
+(Krippendorff’s α + judge-vs-human calibration), and <a class="reference internal" href="eval/fidelity.html#module-foley.eval.fidelity" title="foley.eval.fidelity"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fidelity</span></code></a>
+(set-level FAD/KAD generation fidelity). Tier-2 is nightly/pre-release + cost-gated —
+NOT a per-PR gate — and never touches the retrieval ranking. All numpy imports are
+function-local so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code> stays dol-only.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.eval.AlphaResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">AlphaResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_raters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent_agreement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">promoted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/eval/reliability.html#AlphaResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.AlphaResult" title="Link to this definition"></a></dt>
+<dd><p>A judge-vs-human calibration record (surfaced as <code class="docutils literal notranslate"><span class="pre">FitReport.calibration</span></code>).</p>
+<p>Codifies the promotion rule in one legible object: a model judge is <code class="docutils literal notranslate"><span class="pre">promoted</span></code> to
+unattended use only once its agreement with the human raters reaches the
+<code class="xref py py-data docutils literal notranslate"><span class="pre">ALPHA_RELIABLE</span></code> band.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.eval.FidelityResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">FidelityResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="eval/fidelity.html#foley.eval.fidelity.FidelityStamp" title="foley.eval.fidelity.FidelityStamp"><span class="pre">FidelityStamp</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/eval/fidelity.html#FidelityResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.FidelityResult" title="Link to this definition"></a></dt>
+<dd><p>A stamped set-level fidelity score (attached to <code class="docutils literal notranslate"><span class="pre">FitReport.fidelity</span></code>).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.eval.FidelityStamp">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">FidelityStamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toolkit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_gen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/eval/fidelity.html#FidelityStamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.FidelityStamp" title="Link to this definition"></a></dt>
+<dd><p>Mandatory provenance for a FAD/KAD score — it is meaningless without it.</p>
+<p>FAD/KAD are not comparable across embeddings/toolkits/versions, so a bare number is
+uninterpretable; this stamp makes the basis of comparison legible.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.eval.FitReport">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">FitReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">per_item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_recall</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_f1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_accept_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_accepted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_confirmed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fidelity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">judge_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder_model_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/eval/fit.html#FitReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.FitReport" title="Link to this definition"></a></dt>
+<dd><p>Tier-2 fit metrics over a stratified golden sample (JSON-friendly, mirrors <code class="docutils literal notranslate"><span class="pre">RetrievalReport</span></code>).</p>
+<p>The fit numbers are co-emitted with the judge-vs-human <code class="docutils literal notranslate"><span class="pre">calibration</span></code> (an
+<a class="reference internal" href="eval/reliability.html#foley.eval.reliability.AlphaResult" title="foley.eval.reliability.AlphaResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlphaResult</span></code></a> dict) so the §5 human-calibration
+guardrail is legible: a <code class="docutils literal notranslate"><span class="pre">fit_precision</span></code> is only trusted where α certifies the judge.
+<code class="docutils literal notranslate"><span class="pre">fidelity</span></code> holds stamped FAD/KAD results for release-level backend comparison. Both
+default empty on the pure-fake path (no human labels, no generated-set wavs).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.eval.FitReport.format_regression_diff">
+<span class="sig-name descname"><span class="pre">format_regression_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/foley/eval/fit.html#FitReport.format_regression_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.FitReport.format_regression_diff" title="Link to this definition"></a></dt>
+<dd><p>A human diff of <code class="docutils literal notranslate"><span class="pre">fit_precision</span></code> vs a committed baseline (trend reporting).</p>
+<p>The committed fit-baseline stamp is deferred until real judges produce stable
+numbers; this ships the trend path only.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.eval.FitReport.gate">
+<span class="sig-name descname"><span class="pre">gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_fit_precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/foley/eval/fit.html#FitReport.gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.FitReport.gate" title="Link to this definition"></a></dt>
+<dd><p>The Tier-2 gate — a NO-OP returning <code class="docutils literal notranslate"><span class="pre">True</span></code> unless a floor is supplied.</p>
+<p>Structural guarantee that Tier-2 is never a silent per-PR gate: CI passes no
+floor, so this is always <code class="docutils literal notranslate"><span class="pre">True</span></code>; only the nightly/pre-release runner sets one.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.eval.GoldenItem">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">GoldenItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_events</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">answer_clip_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grade</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negatives</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labeler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'llm+human'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/eval/golden.html#GoldenItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.GoldenItem" title="Link to this definition"></a></dt>
@@ -356,6 +432,28 @@ determinism the gate relies on. The doc id is <code class="docutils literal notr
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.calibrate_judge_vs_human">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">calibrate_judge_vs_human</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">human_grades</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">judge_grades</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ordinal'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="eval/reliability.html#foley.eval.reliability.AlphaResult" title="foley.eval.reliability.AlphaResult"><span class="pre">AlphaResult</span></a></span></span><a class="reference internal" href="../../_modules/foley/eval/reliability.html#calibrate_judge_vs_human"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.calibrate_judge_vs_human" title="Link to this definition"></a></dt>
+<dd><p>Compute judge-vs-human agreement and the promotion verdict (report 08 §2.3).</p>
+<p>Stacks the human rating row(s) and the model-judge row into one reliability matrix
+and returns an <a class="reference internal" href="#foley.eval.AlphaResult" title="foley.eval.AlphaResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlphaResult</span></code></a>; <code class="docutils literal notranslate"><span class="pre">promoted</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> iff α reaches the
+reliable band — the model judge may then be trusted unattended on that slice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>human_grades</strong> – A 1-D per-unit human grade sequence, or a 2-D <code class="docutils literal notranslate"><span class="pre">(humans</span> <span class="pre">×</span> <span class="pre">units)</span></code>
+matrix (<code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing).</p></li>
+<li><p><strong>judge_grades</strong> – The model judge’s 1-D per-unit grades (<code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing).</p></li>
+<li><p><strong>level</strong> – The measurement level (default <code class="docutils literal notranslate"><span class="pre">'ordinal'</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An <a class="reference internal" href="#foley.eval.AlphaResult" title="foley.eval.AlphaResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlphaResult</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.eval.evaluate_run">
 <span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">evaluate_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qrels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('ndcg&#64;10',</span> <span class="pre">'recall&#64;10',</span> <span class="pre">'map&#64;10',</span> <span class="pre">'mrr&#64;10')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="eval/retrieval.html#foley.eval.retrieval.RetrievalReport" title="foley.eval.retrieval.RetrievalReport"><span class="pre">RetrievalReport</span></a></span></span><a class="reference internal" href="../../_modules/foley/eval/retrieval.html#evaluate_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.evaluate_run" title="Link to this definition"></a></dt>
 <dd><p>Score a <code class="docutils literal notranslate"><span class="pre">run</span></code> against <code class="docutils literal notranslate"><span class="pre">qrels</span></code>, returning a <a class="reference internal" href="#foley.eval.RetrievalReport" title="foley.eval.RetrievalReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">RetrievalReport</span></code></a>.</p>
@@ -365,9 +463,132 @@ rank of the highest-graded answer (for the failure diff).</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.fit_f1">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">fit_f1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matches</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relevants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/eval/fit.html#fit_f1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.fit_f1" title="Link to this definition"></a></dt>
+<dd><p>The harmonic mean of <a class="reference internal" href="#foley.eval.fit_precision" title="foley.eval.fit_precision"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_precision()</span></code></a> and <a class="reference internal" href="#foley.eval.fit_recall" title="foley.eval.fit_recall"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_recall()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.fit_precision">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">fit_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matches</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relevants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/eval/fit.html#fit_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.fit_precision" title="Link to this definition"></a></dt>
+<dd><p>Fraction of judge-accepted candidates that are actually gold-relevant.</p>
+<p><code class="docutils literal notranslate"><span class="pre">TP</span> <span class="pre">/</span> <span class="pre">(TP</span> <span class="pre">+</span> <span class="pre">FP)</span></code> where a candidate is a positive iff the fit-judge said <code class="docutils literal notranslate"><span class="pre">match</span></code>
+and gold-relevant iff its golden grade ≥ 1. This measures the JUDGE’s auto-accept
+<em>purity</em> (a low value ⇒ the judge waves through wrong clips) — NOT the ranker. Pure,
+closed-form, and the decisive correctness oracle (the Ring-0 + fake-judge plumbing
+makes the end-to-end value tautological, so the metric math is tested in isolation).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matches</strong> – Per-candidate fit-judge <code class="docutils literal notranslate"><span class="pre">match</span></code> booleans.</p></li>
+<li><p><strong>relevants</strong> – Per-candidate gold-relevance booleans (grade ≥ 1).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fit precision in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> (<code class="docutils literal notranslate"><span class="pre">0.0</span></code> when nothing was accepted).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.fit_recall">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">fit_recall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matches</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relevants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/eval/fit.html#fit_recall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.fit_recall" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">TP</span> <span class="pre">/</span> <span class="pre">(TP</span> <span class="pre">+</span> <span class="pre">FN)</span></code> — of the gold-relevant candidates, how many the judge confirmed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.frechet_distance">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">frechet_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_gen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/eval/fidelity.html#frechet_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.frechet_distance" title="Link to this definition"></a></dt>
+<dd><p>Fréchet distance between two embedding sets (the FAD formula).</p>
+<p><code class="docutils literal notranslate"><span class="pre">‖μ_r</span> <span class="pre">−</span> <span class="pre">μ_g‖²</span> <span class="pre">+</span> <span class="pre">Tr(Σ_r</span> <span class="pre">+</span> <span class="pre">Σ_g</span> <span class="pre">−</span> <span class="pre">2(Σ_r</span> <span class="pre">Σ_g)^½)</span></code> — lower = the generated set’s
+embedding distribution is closer to the reference. Feed PANNs Wavegram-Logmel
+embeddings for “FAD-P”, or CLAP for a domain-matched FAD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_ref</strong> – Reference embeddings <code class="docutils literal notranslate"><span class="pre">(n_ref,</span> <span class="pre">d)</span></code>.</p></li>
+<li><p><strong>x_gen</strong> – Generated embeddings <code class="docutils literal notranslate"><span class="pre">(n_gen,</span> <span class="pre">d)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The FAD as a <code class="docutils literal notranslate"><span class="pre">float</span></code> (<code class="docutils literal notranslate"><span class="pre">≥</span> <span class="pre">0</span></code> up to numerical round-off; <code class="docutils literal notranslate"><span class="pre">~0</span></code> for identical
+distributions).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.generation_fidelity">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">generation_fidelity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_wavs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_wavs</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">48000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toolkit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley-numpy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="eval/fidelity.html#foley.eval.fidelity.FidelityResult" title="foley.eval.fidelity.FidelityResult"><span class="pre">FidelityResult</span></a></span></span><a class="reference internal" href="../../_modules/foley/eval/fidelity.html#generation_fidelity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.generation_fidelity" title="Link to this definition"></a></dt>
+<dd><p>Embed two wav sets through an injected embedder and compute FAD or KAD.</p>
+<p>The real fidelity path is a <strong>zero-call-site-change embedder swap</strong>: a fake /
+hashing embedder in CI, PANNs / CLAP (<code class="docutils literal notranslate"><span class="pre">foley[fit]</span></code>) in prod. The embedder’s
+<code class="docutils literal notranslate"><span class="pre">model_id</span></code> is stamped into the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ref_wavs</strong> – An iterable of reference waveforms (1-D arrays).</p></li>
+<li><p><strong>gen_wavs</strong> – An iterable of generated waveforms (1-D arrays).</p></li>
+<li><p><strong>embedder</strong> – An object with <code class="docutils literal notranslate"><span class="pre">embed_audio(wav,</span> <span class="pre">sr)</span> <span class="pre">-&gt;</span> <span class="pre">vector</span></code> and <code class="docutils literal notranslate"><span class="pre">model_id</span></code>.</p></li>
+<li><p><strong>sr</strong> – The sample rate passed to <code class="docutils literal notranslate"><span class="pre">embed_audio</span></code>.</p></li>
+<li><p><strong>metric</strong> – <code class="docutils literal notranslate"><span class="pre">'fad'</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">'kad'</span></code>.</p></li>
+<li><p><strong>toolkit</strong> – Provenance label for the stamp (default <code class="docutils literal notranslate"><span class="pre">'foley-numpy'</span></code>).</p></li>
+<li><p><strong>version</strong> – Provenance version for the stamp.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#foley.eval.FidelityResult" title="foley.eval.FidelityResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">FidelityResult</span></code></a> carrying the score and its <a class="reference internal" href="#foley.eval.FidelityStamp" title="foley.eval.FidelityStamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">FidelityStamp</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.eval.is_stale">
 <span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">is_stale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manifest_path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/foley/eval/baseline.html#is_stale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.is_stale" title="Link to this definition"></a></dt>
 <dd><p>True if the baseline’s fixture stamps no longer match the fixtures on disk.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.kernel_audio_distance">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">kernel_audio_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_gen</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/eval/fidelity.html#kernel_audio_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.kernel_audio_distance" title="Link to this definition"></a></dt>
+<dd><p>Kernel Audio Distance — the unbiased RBF-MMD² between two embedding sets.</p>
+<p>Distribution-free and small-sample-convergent; preferred over FAD for the small
+reference/generated sets of early-stage eval. The diagonal (same-sample) kernel terms
+are dropped (the unbiased estimator), so <code class="docutils literal notranslate"><span class="pre">KAD(X,</span> <span class="pre">X)</span> <span class="pre">≈</span> <span class="pre">0</span></code> and can be slightly
+negative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_ref</strong> – Reference embeddings <code class="docutils literal notranslate"><span class="pre">(n_ref,</span> <span class="pre">d)</span></code>.</p></li>
+<li><p><strong>x_gen</strong> – Generated embeddings <code class="docutils literal notranslate"><span class="pre">(n_gen,</span> <span class="pre">d)</span></code>.</p></li>
+<li><p><strong>bandwidth</strong> – RBF bandwidth σ (default: the median heuristic over the pooled set).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The unbiased MMD² as a <code class="docutils literal notranslate"><span class="pre">float</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.krippendorff_alpha">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">krippendorff_alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reliability_data</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ordinal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/eval/reliability.html#krippendorff_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.krippendorff_alpha" title="Link to this definition"></a></dt>
+<dd><p>Krippendorff’s α over <code class="docutils literal notranslate"><span class="pre">(raters</span> <span class="pre">×</span> <span class="pre">units)</span></code> ratings (<code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing).</p>
+<p><code class="docutils literal notranslate"><span class="pre">α</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">−</span> <span class="pre">D_o/D_e</span></code> — 1 is perfect agreement, ~0 is chance, negative is systematic
+disagreement. Ordinal is the default (foley’s 0–3 grades); missing ratings are
+tolerated (units with &lt; 2 ratings are dropped, no imputation). Pure numpy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reliability_data</strong> – A 2-D array-like <code class="docutils literal notranslate"><span class="pre">(raters</span> <span class="pre">×</span> <span class="pre">units)</span></code>; <code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing.</p></li>
+<li><p><strong>level</strong> – <code class="docutils literal notranslate"><span class="pre">'ordinal'</span></code> (default) | <code class="docutils literal notranslate"><span class="pre">'nominal'</span></code> | <code class="docutils literal notranslate"><span class="pre">'interval'</span></code>.</p></li>
+<li><p><strong>value_domain</strong> – Optional explicit value set (for a label unobserved by some rater).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>α as a bare <code class="docutils literal notranslate"><span class="pre">float</span></code> (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> when there is no expected disagreement, <code class="docutils literal notranslate"><span class="pre">D_e</span> <span class="pre">=</span> <span class="pre">0</span></code>).</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -401,6 +622,22 @@ rank of the highest-graded answer (for the failure diff).</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.percent_agreement">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">percent_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reliability_data</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/eval/reliability.html#percent_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.percent_agreement" title="Link to this definition"></a></dt>
+<dd><p>Raw pairwise percent agreement, reported ALONGSIDE α (report 08 §2.3).</p>
+<p>On foley’s skewed ‘most candidates irrelevant’ label distribution a chance-corrected
+α can look pessimistic, so the uncorrected agreement is co-reported for context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reliability_data</strong> – A 2-D array-like <code class="docutils literal notranslate"><span class="pre">(raters</span> <span class="pre">×</span> <span class="pre">units)</span></code>; <code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fraction of same-unit rater pairs that agree (<code class="docutils literal notranslate"><span class="pre">0.0</span></code> if no pairs).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.eval.precision_at_k">
 <span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">precision_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qrels_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/eval/retrieval.html#precision_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.precision_at_k" title="Link to this definition"></a></dt>
 <dd><p>Fraction of the top-<code class="docutils literal notranslate"><span class="pre">k</span></code> that is relevant (denominator is literal <code class="docutils literal notranslate"><span class="pre">k</span></code>).</p>
@@ -410,6 +647,56 @@ rank of the highest-graded answer (for the failure diff).</p>
 <dt class="sig sig-object py" id="foley.eval.recall_at_k">
 <span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">recall_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qrels_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/foley/eval/retrieval.html#recall_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.recall_at_k" title="Link to this definition"></a></dt>
 <dd><p>Fraction of ALL relevant docs (grade ≥ <code class="docutils literal notranslate"><span class="pre">rel_lvl</span></code>) retrieved in the top-<code class="docutils literal notranslate"><span class="pre">k</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.reliability_band">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">reliability_band</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/foley/eval/reliability.html#reliability_band"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.reliability_band" title="Link to this definition"></a></dt>
+<dd><p>Map an α (or κ) to Krippendorff’s benchmark band.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>alpha</strong> – A reliability coefficient in <code class="docutils literal notranslate"><span class="pre">(-∞,</span> <span class="pre">1]</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">'reliable'</span></code> (α ≥ 0.8), <code class="docutils literal notranslate"><span class="pre">'tentative'</span></code> (0.667 ≤ α &lt; 0.8), else
+<code class="docutils literal notranslate"><span class="pre">'revise-rubric'</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.run_fit_eval">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">run_fit_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">golden</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">golden_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strata_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('family',</span> <span class="pre">'diegetic')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_judge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#foley.base.VerifyLevel" title="foley.base.VerifyLevel"><span class="pre">VerifyLevel</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">VerifyLevel.judge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="eval/fit.html#foley.eval.fit.FitReport" title="foley.eval.fit.FitReport"><span class="pre">FitReport</span></a></span></span><a class="reference internal" href="../../_modules/foley/eval/fit.html#run_fit_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.run_fit_eval" title="Link to this definition"></a></dt>
+<dd><p>Run the Tier-2 fit eval over a stratified golden sample → a <a class="reference internal" href="#foley.eval.FitReport" title="foley.eval.FitReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">FitReport</span></code></a>.</p>
+<p>Composes the Tier-1 golden builders + the #7 SELECT loop, applies the authoritative
+fit-judge as an independent audit, and aggregates fit-precision/recall/F1 + fit-score
++ auto-accept-rate, with a per-stratum breakdown. Report-only unless
+<code class="docutils literal notranslate"><span class="pre">min_fit_precision</span></code> is supplied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>golden</strong> – A pre-loaded golden list (default: load <code class="docutils literal notranslate"><span class="pre">golden_path</span></code>).</p></li>
+<li><p><strong>golden_path</strong> – The golden JSON (default: the bundled Ring-0 seed set).</p></li>
+<li><p><strong>sample</strong> – The stratified sample cap (default: the whole set — the cost gate).</p></li>
+<li><p><strong>strata_keys</strong> – The stratification axes (default <code class="docutils literal notranslate"><span class="pre">('family',</span> <span class="pre">'diegetic')</span></code>).</p></li>
+<li><p><strong>fit_judge</strong> – The injected authoritative <a class="reference internal" href="agent/protocols.html#foley.agent.protocols.Judge" title="foley.agent.protocols.Judge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Judge</span></code></a>
+(default: <code class="xref py py-func docutils literal notranslate"><span class="pre">foley.agent.verify._default_fit_judge()</span></code> — the hermetic fake
+when no audio-LM / key is available).</p></li>
+<li><p><strong>embedder</strong> – The Ring-0 text/​audio embedder (default: <a class="reference internal" href="#foley.eval.HashingBowEmbedder" title="foley.eval.HashingBowEmbedder"><code class="xref py py-class docutils literal notranslate"><span class="pre">HashingBowEmbedder</span></code></a>).</p></li>
+<li><p><strong>level</strong> – The verify rung the fit-judge audits at — <code class="docutils literal notranslate"><span class="pre">'listen'</span></code> or <code class="docutils literal notranslate"><span class="pre">'judge'</span></code>
+(default <code class="docutils literal notranslate"><span class="pre">VerifyLevel.judge</span></code>). <code class="docutils literal notranslate"><span class="pre">'clap'</span></code> is rejected: it never invokes the
+fit-judge (it only re-runs the retrieval clap gate), so it cannot measure fit.</p></li>
+<li><p><strong>seed</strong> – The sampling RNG seed.</p></li>
+<li><p><strong>k</strong> – The retrieval shortlist depth per event.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#foley.eval.FitReport" title="foley.eval.FitReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">FitReport</span></code></a>. Gating is the caller’s job via <a class="reference internal" href="#foley.eval.FitReport.gate" title="foley.eval.FitReport.gate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FitReport.gate()</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">level</span></code> is <code class="docutils literal notranslate"><span class="pre">'clap'</span></code> (fit judging requires a listen/judge rung).</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -429,6 +716,25 @@ resulting runs against the golden qrels.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A <a class="reference internal" href="#foley.eval.RetrievalReport" title="foley.eval.RetrievalReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">RetrievalReport</span></code></a> (per-query + mean <a class="reference external" href="mailto:nDCG&#37;&#52;&#48;10">nDCG<span>&#64;</span>10</a> / recall / mAP / MRR).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.stratified_sample">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.</span></span><span class="sig-name descname"><span class="pre">stratified_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">strata_keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../_modules/foley/eval/fit.html#stratified_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.stratified_sample" title="Link to this definition"></a></dt>
+<dd><p>Deterministic seeded stratified draw over <code class="docutils literal notranslate"><span class="pre">units</span></code> — the cost gate.</p>
+<p>Round-robins across strata (so an easy family cannot dominate a capped sample);
+<code class="docutils literal notranslate"><span class="pre">sample=None</span></code> keeps the full set. Each unit is <code class="docutils literal notranslate"><span class="pre">(GoldenItem,</span> <span class="pre">event_index,</span>
+<span class="pre">event_dict)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>units</strong> – The full <code class="docutils literal notranslate"><span class="pre">(item,</span> <span class="pre">ev_idx,</span> <span class="pre">ev_dict)</span></code> unit list.</p></li>
+<li><p><strong>strata_keys</strong> – The stratification axes (e.g. <code class="docutils literal notranslate"><span class="pre">('family',</span> <span class="pre">'diegetic')</span></code>).</p></li>
+<li><p><strong>sample</strong> – The total draw size, or <code class="docutils literal notranslate"><span class="pre">None</span></code> for all.</p></li>
+<li><p><strong>seed</strong> – The RNG seed (reproducibility).</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

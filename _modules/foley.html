@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.11 documentation</title>
+  <title>foley &mdash; foley 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -62,7 +62,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/eval.html">foley.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
@@ -512,6 +515,8 @@
     <span class="c1"># --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------</span>
     <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
     <span class="s2">&quot;evaluate&quot;</span><span class="p">,</span>
+    <span class="c1"># --- eval: Tier-2 fit-judge + fidelity + reliability (#10b) ---------------</span>
+    <span class="s2">&quot;evaluate_fit&quot;</span><span class="p">,</span>
     <span class="c1"># --- provenance: TASL attribution / credits ------------------------------</span>
     <span class="s2">&quot;provenance&quot;</span><span class="p">,</span>
     <span class="s2">&quot;credits&quot;</span><span class="p">,</span>
@@ -545,6 +550,60 @@
     <span class="k">if</span> <span class="n">golden</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;golden_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">golden</span>
     <span class="k">return</span> <span class="n">run_ring0_retrieval_eval</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="evaluate_fit">
+<a class="viewcode-back" href="../module_docs/foley.html#foley.evaluate_fit">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate_fit</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">golden</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">level</span><span class="o">=</span><span class="n">VerifyLevel</span><span class="o">.</span><span class="n">judge</span><span class="p">,</span>
+    <span class="n">fit_judge</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">embedder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the Tier-2 **fit** eval over the golden set — &quot;does the accepted clip fit?&quot; (#10b).</span>
+
+<span class="sd">    The judge-based sibling of :func:`evaluate`: over a seeded stratified sample it runs</span>
+<span class="sd">    the SELECT pipeline and audits each license-clean candidate with the authoritative</span>
+<span class="sd">    fit-judge, returning a :class:`foley.eval.FitReport` (fit-precision / recall / F1 +</span>
+<span class="sd">    fit-score + auto-accept-rate + per-stratum breakdown). Works out of the box on the</span>
+<span class="sd">    Ring-0 fixture with the deterministic fake judge — no network, key, or heavy deps.</span>
+<span class="sd">    **Nightly / pre-release and cost-gated**: report-only — gating is the caller&#39;s job via</span>
+<span class="sd">    :meth:`FitReport.gate`. It never touches the retrieval ranking (the Tier-1 nDCG gate).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        golden: Optional golden-set JSON path (default: the frozen Ring-0 seed).</span>
+<span class="sd">        sample: Optional stratified sample cap (default: the whole set — the cost gate).</span>
+<span class="sd">        level: The verify rung the fit-judge audits at — ``&#39;listen&#39;`` or ``&#39;judge&#39;``</span>
+<span class="sd">            (default ``VerifyLevel.judge``); ``&#39;clap&#39;`` is rejected.</span>
+<span class="sd">        fit_judge: An injected authoritative judge (default: the auto-resolved fit-judge —</span>
+<span class="sd">            the LLM arbiter :class:`~foley.agent.AnthropicJudge` when a key is configured,</span>
+<span class="sd">            else the hermetic :class:`~foley.agent.StringOverlapJudge` fake; the audio-LM</span>
+<span class="sd">            :class:`~foley.agent.AudioLMJudge` is injection-only in this slice).</span>
+<span class="sd">        embedder: The Ring-0 embedder (default: the CLAP-free ``HashingBowEmbedder``).</span>
+<span class="sd">        seed: The sampling RNG seed.</span>
+<span class="sd">        k: Retrieval shortlist depth per event.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`foley.eval.FitReport`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.eval.fit</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_fit_eval</span>
+
+    <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">sample</span><span class="o">=</span><span class="n">sample</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
+        <span class="n">fit_judge</span><span class="o">=</span><span class="n">fit_judge</span><span class="p">,</span>
+        <span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">golden</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;golden_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">golden</span>
+    <span class="k">return</span> <span class="n">run_fit_eval</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
 
 
 

@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.eval.fidelity &mdash; foley 0.0.12 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.eval.fit" href="fit.html" />
+    <link rel="prev" title="foley.eval.embedder" href="embedder.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.eval.fidelity</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.fidelity.FidelityResult"><code class="docutils literal notranslate"><span class="pre">FidelityResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.fidelity.FidelityStamp"><code class="docutils literal notranslate"><span class="pre">FidelityStamp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.fidelity.frechet_distance"><code class="docutils literal notranslate"><span class="pre">frechet_distance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.fidelity.generation_fidelity"><code class="docutils literal notranslate"><span class="pre">generation_fidelity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.fidelity.kernel_audio_distance"><code class="docutils literal notranslate"><span class="pre">kernel_audio_distance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.eval.fidelity</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/eval/fidelity.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.eval.fidelity">
+<span id="foley-eval-fidelity"></span><h1>foley.eval.fidelity<a class="headerlink" href="#module-foley.eval.fidelity" title="Link to this heading"></a></h1>
+<p>Set-level generation-fidelity — Fréchet Audio Distance (FAD) + Kernel Audio Distance (KAD).</p>
+<p>The distribution-level question (report 08 §4.2): <em>is generator A’s output distribution
+closer to real SFX than generator B’s?</em> — a <strong>release-level backend comparison</strong> over
+hundreds of samples, never a per-clip gate. Both metrics take <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">d)</span></code> <strong>embedding
+arrays</strong>, so the hermetic-CI path and the real path differ only by which embedder
+produced them (a fake in CI, PANNs Wavegram-Logmel / CLAP behind <code class="docutils literal notranslate"><span class="pre">foley[fit]</span></code> in prod —
+“FAD-P” is just <a class="reference internal" href="#foley.eval.fidelity.frechet_distance" title="foley.eval.fidelity.frechet_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">frechet_distance()</span></code></a> fed PANNs embeddings). Every score carries a
+mandatory <a class="reference internal" href="#foley.eval.fidelity.FidelityStamp" title="foley.eval.fidelity.FidelityStamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">FidelityStamp</span></code></a>, because FAD/KAD numbers are <strong>not comparable across
+embeddings, toolkits, or versions</strong>.</p>
+<p>Pure numpy / stdlib — <code class="docutils literal notranslate"><span class="pre">numpy</span></code> is imported function-locally (<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code> stays
+dol-only), and the PSD matrix-square-root trace is computed via <code class="docutils literal notranslate"><span class="pre">numpy.linalg.eigvals</span></code>
+(there is <strong>no</strong> <code class="docutils literal notranslate"><span class="pre">scipy.linalg.sqrtm</span></code> in the numpy-only CI env). Reference toolkits
+(<code class="docutils literal notranslate"><span class="pre">fadtk</span></code> / <code class="docutils literal notranslate"><span class="pre">kadtk</span></code>) are optional externals for reproducing exact published numbers;
+the functions here cover the math.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.eval.fidelity.FidelityResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.fidelity.</span></span><span class="sig-name descname"><span class="pre">FidelityResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.eval.fidelity.FidelityStamp" title="foley.eval.fidelity.FidelityStamp"><span class="pre">FidelityStamp</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/eval/fidelity.html#FidelityResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.fidelity.FidelityResult" title="Link to this definition"></a></dt>
+<dd><p>A stamped set-level fidelity score (attached to <code class="docutils literal notranslate"><span class="pre">FitReport.fidelity</span></code>).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.eval.fidelity.FidelityStamp">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.fidelity.</span></span><span class="sig-name descname"><span class="pre">FidelityStamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toolkit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_gen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/eval/fidelity.html#FidelityStamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.fidelity.FidelityStamp" title="Link to this definition"></a></dt>
+<dd><p>Mandatory provenance for a FAD/KAD score — it is meaningless without it.</p>
+<p>FAD/KAD are not comparable across embeddings/toolkits/versions, so a bare number is
+uninterpretable; this stamp makes the basis of comparison legible.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.fidelity.frechet_distance">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.fidelity.</span></span><span class="sig-name descname"><span class="pre">frechet_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_gen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/fidelity.html#frechet_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.fidelity.frechet_distance" title="Link to this definition"></a></dt>
+<dd><p>Fréchet distance between two embedding sets (the FAD formula).</p>
+<p><code class="docutils literal notranslate"><span class="pre">‖μ_r</span> <span class="pre">−</span> <span class="pre">μ_g‖²</span> <span class="pre">+</span> <span class="pre">Tr(Σ_r</span> <span class="pre">+</span> <span class="pre">Σ_g</span> <span class="pre">−</span> <span class="pre">2(Σ_r</span> <span class="pre">Σ_g)^½)</span></code> — lower = the generated set’s
+embedding distribution is closer to the reference. Feed PANNs Wavegram-Logmel
+embeddings for “FAD-P”, or CLAP for a domain-matched FAD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_ref</strong> – Reference embeddings <code class="docutils literal notranslate"><span class="pre">(n_ref,</span> <span class="pre">d)</span></code>.</p></li>
+<li><p><strong>x_gen</strong> – Generated embeddings <code class="docutils literal notranslate"><span class="pre">(n_gen,</span> <span class="pre">d)</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The FAD as a <code class="docutils literal notranslate"><span class="pre">float</span></code> (<code class="docutils literal notranslate"><span class="pre">≥</span> <span class="pre">0</span></code> up to numerical round-off; <code class="docutils literal notranslate"><span class="pre">~0</span></code> for identical
+distributions).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.fidelity.generation_fidelity">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.fidelity.</span></span><span class="sig-name descname"><span class="pre">generation_fidelity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_wavs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_wavs</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">48000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fad'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toolkit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley-numpy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.eval.fidelity.FidelityResult" title="foley.eval.fidelity.FidelityResult"><span class="pre">FidelityResult</span></a></span></span><a class="reference internal" href="../../../_modules/foley/eval/fidelity.html#generation_fidelity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.fidelity.generation_fidelity" title="Link to this definition"></a></dt>
+<dd><p>Embed two wav sets through an injected embedder and compute FAD or KAD.</p>
+<p>The real fidelity path is a <strong>zero-call-site-change embedder swap</strong>: a fake /
+hashing embedder in CI, PANNs / CLAP (<code class="docutils literal notranslate"><span class="pre">foley[fit]</span></code>) in prod. The embedder’s
+<code class="docutils literal notranslate"><span class="pre">model_id</span></code> is stamped into the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ref_wavs</strong> – An iterable of reference waveforms (1-D arrays).</p></li>
+<li><p><strong>gen_wavs</strong> – An iterable of generated waveforms (1-D arrays).</p></li>
+<li><p><strong>embedder</strong> – An object with <code class="docutils literal notranslate"><span class="pre">embed_audio(wav,</span> <span class="pre">sr)</span> <span class="pre">-&gt;</span> <span class="pre">vector</span></code> and <code class="docutils literal notranslate"><span class="pre">model_id</span></code>.</p></li>
+<li><p><strong>sr</strong> – The sample rate passed to <code class="docutils literal notranslate"><span class="pre">embed_audio</span></code>.</p></li>
+<li><p><strong>metric</strong> – <code class="docutils literal notranslate"><span class="pre">'fad'</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">'kad'</span></code>.</p></li>
+<li><p><strong>toolkit</strong> – Provenance label for the stamp (default <code class="docutils literal notranslate"><span class="pre">'foley-numpy'</span></code>).</p></li>
+<li><p><strong>version</strong> – Provenance version for the stamp.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#foley.eval.fidelity.FidelityResult" title="foley.eval.fidelity.FidelityResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">FidelityResult</span></code></a> carrying the score and its <a class="reference internal" href="#foley.eval.fidelity.FidelityStamp" title="foley.eval.fidelity.FidelityStamp"><code class="xref py py-class docutils literal notranslate"><span class="pre">FidelityStamp</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.fidelity.kernel_audio_distance">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.fidelity.</span></span><span class="sig-name descname"><span class="pre">kernel_audio_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_gen</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/fidelity.html#kernel_audio_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.fidelity.kernel_audio_distance" title="Link to this definition"></a></dt>
+<dd><p>Kernel Audio Distance — the unbiased RBF-MMD² between two embedding sets.</p>
+<p>Distribution-free and small-sample-convergent; preferred over FAD for the small
+reference/generated sets of early-stage eval. The diagonal (same-sample) kernel terms
+are dropped (the unbiased estimator), so <code class="docutils literal notranslate"><span class="pre">KAD(X,</span> <span class="pre">X)</span> <span class="pre">≈</span> <span class="pre">0</span></code> and can be slightly
+negative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_ref</strong> – Reference embeddings <code class="docutils literal notranslate"><span class="pre">(n_ref,</span> <span class="pre">d)</span></code>.</p></li>
+<li><p><strong>x_gen</strong> – Generated embeddings <code class="docutils literal notranslate"><span class="pre">(n_gen,</span> <span class="pre">d)</span></code>.</p></li>
+<li><p><strong>bandwidth</strong> – RBF bandwidth σ (default: the median heuristic over the pooled set).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The unbiased MMD² as a <code class="docutils literal notranslate"><span class="pre">float</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="embedder.html" class="btn btn-neutral float-left" title="foley.eval.embedder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fit.html" class="btn btn-neutral float-right" title="foley.eval.fit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.verify &mdash; foley 0.0.11 documentation</title>
+  <title>foley.agent.verify &mdash; foley 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -62,7 +62,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
@@ -228,7 +231,9 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the token-overlap :class:`Verdict` at the requested ``level``.&quot;&quot;&quot;</span>
         <span class="n">want</span> <span class="o">=</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
         <span class="n">sound</span> <span class="o">=</span> <span class="n">candidate</span><span class="o">.</span><span class="n">sound</span>
-        <span class="n">have</span> <span class="o">=</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">sound</span><span class="o">.</span><span class="n">caption</span><span class="p">)</span> <span class="o">|</span> <span class="p">{</span><span class="n">t</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="n">sound</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">tag</span><span class="p">)}</span>
+        <span class="n">have</span> <span class="o">=</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">sound</span><span class="o">.</span><span class="n">caption</span><span class="p">)</span> <span class="o">|</span> <span class="p">{</span>
+            <span class="n">t</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="n">sound</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="p">}</span>
         <span class="n">union</span> <span class="o">=</span> <span class="n">want</span> <span class="o">|</span> <span class="n">have</span>
         <span class="n">overlap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">want</span> <span class="o">&amp;</span> <span class="n">have</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">union</span><span class="p">)</span> <span class="k">if</span> <span class="n">union</span> <span class="k">else</span> <span class="mf">0.0</span>
         <span class="k">return</span> <span class="n">Verdict</span><span class="p">(</span>
@@ -273,7 +278,9 @@
 <span class="sd">    ``self.last_response`` for the GenAI span.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_AGENT_MODEL</span><span class="p">,</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_AGENT_MODEL</span><span class="p">,</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span> <span class="o">=</span> <span class="n">max_tokens</span>
@@ -307,7 +314,9 @@
             <span class="n">thinking</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;adaptive&quot;</span><span class="p">},</span>
             <span class="n">system</span><span class="o">=</span><span class="n">_JUDGE_SYSTEM</span><span class="p">,</span>
             <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">}],</span>
-            <span class="n">output_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_schema&quot;</span><span class="p">,</span> <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">_JUDGE_JSON_SCHEMA</span><span class="p">}},</span>
+            <span class="n">output_config</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_schema&quot;</span><span class="p">,</span> <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="n">_JUDGE_JSON_SCHEMA</span><span class="p">}</span>
+            <span class="p">},</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_response</span> <span class="o">=</span> <span class="n">resp</span>
         <span class="n">text</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">)</span>
@@ -330,6 +339,122 @@
     <span class="kn">from</span><span class="w"> </span><span class="nn">.decompose</span><span class="w"> </span><span class="kn">import</span> <span class="n">_anthropic_available</span>
 
     <span class="k">return</span> <span class="n">AnthropicJudge</span><span class="p">()</span> <span class="k">if</span> <span class="n">_anthropic_available</span><span class="p">()</span> <span class="k">else</span> <span class="n">StringOverlapJudge</span><span class="p">()</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Tier-2 fit-judge (#10b) — the audio-LM &quot;listen-and-confirm&quot; rung</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># The one capability the #7 roster lacks: ingest the ACTUAL clip bytes and answer</span>
+<span class="c1"># &quot;does this audio contain {event}?&quot; (the AQAScore pattern, report 08 §2.1), catching</span>
+<span class="c1"># CLAP&#39;s right-vibe-wrong-object failure. transformers/torch/torchaudio (foley[fit]) are</span>
+<span class="c1"># imported lazily INSIDE the method only, so `import foley` stays dol-only; a fake</span>
+<span class="c1"># ``pipeline=`` is injected in tests so the whole path is hermetically unit-tested</span>
+<span class="c1"># without torch. The LLM arbiter (AnthropicJudge, level=judge) is left untouched.</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_audiolm_available</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;True iff the audio-LM stack (``foley[fit]``: transformers + torch) is importable.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;transformers&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_candidate_audio</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="n">Candidate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decode the candidate&#39;s clip to ``(wav, sr)`` (lazy ``foley.audio.load``).&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
+
+    <span class="k">return</span> <span class="n">load</span><span class="p">(</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_aqa_yes_probability</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">wav</span><span class="p">,</span> <span class="n">sr</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[float, object]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pose the AQAScore yes/no question to the audio-LM and read P(yes).</span>
+
+<span class="sd">    Returns ``(p_yes, raw)`` — the injected pipeline may return ``{&#39;p_yes&#39;: float}``</span>
+<span class="sd">    directly (the fake, and a real wrapper that reads the yes-token probability) or raw</span>
+<span class="sd">    text that is parsed to a hard 0/1 (a conservative fallback).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Does this audio contain </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">? Answer strictly yes or no.&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">wav</span><span class="p">,</span> <span class="n">sr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;p_yes&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;p_yes&quot;</span><span class="p">]),</span> <span class="n">out</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">out</span>
+
+
+<div class="viewcode-block" id="AudioLMJudge">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/verify.html#foley.AudioLMJudge">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AudioLMJudge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The audio-LM ``listen`` rung (``foley[fit]``): Qwen2-Audio &quot;does this contain {event}?&quot;.</span>
+
+<span class="sd">    ``transformers``/``torch`` are imported lazily inside :meth:`judge`; an injected</span>
+<span class="sd">    ``pipeline`` (the test seam, mirroring the Stable-Audio fake-pipeline seam) drives the</span>
+<span class="sd">    whole byte-decode → prompt → P(yes) → :class:`Verdict` path with no torch. Stashes</span>
+<span class="sd">    ``self.model`` + ``self.last_response`` so ``verify_match``&#39;s GenAI span stays</span>
+<span class="sd">    informative (same getattr contract :class:`AnthropicJudge` uses).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">pipeline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Qwen/Qwen2-Audio-7B-Instruct&quot;</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+        <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline</span> <span class="o">=</span> <span class="n">pipeline</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span> <span class="o">=</span> <span class="n">max_tokens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_response</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="AudioLMJudge.judge">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/verify.html#foley.AudioLMJudge.judge">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">judge</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">SoundEvent</span><span class="p">,</span> <span class="n">candidate</span><span class="p">:</span> <span class="n">Candidate</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">VerifyLevel</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">listen</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Verdict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Listen to the clip and return the AQAScore :class:`Verdict` (``P(yes) ≥ tau``).&quot;&quot;&quot;</span>
+        <span class="n">wav</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">_load_candidate_audio</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+        <span class="n">pipeline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_pipeline</span><span class="p">()</span>
+        <span class="n">p_yes</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">_aqa_yes_probability</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">wav</span><span class="p">,</span> <span class="n">sr</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_response</span> <span class="o">=</span> <span class="n">raw</span>
+        <span class="k">return</span> <span class="n">Verdict</span><span class="p">(</span>
+            <span class="n">match</span><span class="o">=</span><span class="n">p_yes</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">p_yes</span><span class="p">,</span>
+            <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;AQAScore P(yes)=</span><span class="si">{</span><span class="n">p_yes</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">VerifyLevel</span><span class="p">(</span><span class="n">level</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover - the real Qwen2-Audio path (foley[fit])</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Lazily build the real Qwen2-Audio pipeline wrapper (heavy; behind ``foley[fit]``).&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;AudioLMJudge needs an injected pipeline or foley[fit] (transformers+torch); &quot;</span>
+            <span class="s2">&quot;the real Qwen2-Audio wrapper is a deferred #10b follow-up.&quot;</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_fit_judge</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="s2">&quot;str | VerifyLevel&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Judge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The zero-config Tier-2 fit-judge: the LLM arbiter when a key is configured, else the fake.</span>
+
+<span class="sd">    Auto-upgrades to :class:`AnthropicJudge` when ``anthropic`` + a key are present (the</span>
+<span class="sd">    nightly/pre-release path); in CI (no key) it resolves to the deterministic</span>
+<span class="sd">    :class:`StringOverlapJudge`, so ``foley.evaluate_fit()`` is hermetic out of the box.</span>
+
+<span class="sd">    :class:`AudioLMJudge` (the audio-LM ``listen`` rung) is **injection-only** in this</span>
+<span class="sd">    slice: its real Qwen2-Audio pipeline is a deferred #10b follow-up, so the resolver</span>
+<span class="sd">    does not auto-select it (it would need ``foley[fit]`` *and* a built pipeline). Pass</span>
+<span class="sd">    ``fit_judge=AudioLMJudge(pipeline=...)`` explicitly to use it. Tests inject explicitly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.decompose</span><span class="w"> </span><span class="kn">import</span> <span class="n">_anthropic_available</span>
+
+    <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>  <span class="c1"># validate the rung</span>
+    <span class="k">if</span> <span class="n">_anthropic_available</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">AnthropicJudge</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">StringOverlapJudge</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="verify_match">
@@ -367,7 +492,9 @@
         <span class="s2">&quot;verify_match must run AFTER the license gate (candidate.license_ok is not True)&quot;</span>
     <span class="p">)</span>
     <span class="n">level</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
-    <span class="n">clap_verdict</span> <span class="o">=</span> <span class="n">ClapJudge</span><span class="p">()</span><span class="o">.</span><span class="n">judge</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">,</span> <span class="n">tau_clap</span><span class="o">=</span><span class="n">tau_clap</span><span class="p">)</span>
+    <span class="n">clap_verdict</span> <span class="o">=</span> <span class="n">ClapJudge</span><span class="p">()</span><span class="o">.</span><span class="n">judge</span><span class="p">(</span>
+        <span class="n">event</span><span class="p">,</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">,</span> <span class="n">tau_clap</span><span class="o">=</span><span class="n">tau_clap</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">clap_verdict</span>
     <span class="c1"># The clap GATE only blocks a *retrieved* clip whose score is present and failing; a</span>

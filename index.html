@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to foley’s documentation! &mdash; foley 0.0.11 documentation</title>
+  <title>Welcome to foley’s documentation! &mdash; foley 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=0c446633"></script>
+      <script src="_static/documentation_options.js?v=3bbcec59"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -64,7 +64,10 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval.html">foley.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
@@ -216,6 +219,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.ensure_channels"><code class="docutils literal notranslate"><span class="pre">ensure_channels()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.estimate_snr"><code class="docutils literal notranslate"><span class="pre">estimate_snr()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.evaluate_fit"><code class="docutils literal notranslate"><span class="pre">evaluate_fit()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.fade"><code class="docutils literal notranslate"><span class="pre">fade()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.find"><code class="docutils literal notranslate"><span class="pre">find()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.fuse_hits"><code class="docutils literal notranslate"><span class="pre">fuse_hits()</span></code></a></li>
@@ -264,6 +268,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent.html#foley.agent.AnthropicDecomposer"><code class="docutils literal notranslate"><span class="pre">AnthropicDecomposer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent.html#foley.agent.AnthropicJudge"><code class="docutils literal notranslate"><span class="pre">AnthropicJudge</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent.html#foley.agent.AnthropicRefiner"><code class="docutils literal notranslate"><span class="pre">AnthropicRefiner</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent.html#foley.agent.AudioLMJudge"><code class="docutils literal notranslate"><span class="pre">AudioLMJudge</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent.html#foley.agent.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent.html#foley.agent.ClapJudge"><code class="docutils literal notranslate"><span class="pre">ClapJudge</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent.html#foley.agent.DecideAction"><code class="docutils literal notranslate"><span class="pre">DecideAction</span></code></a></li>
@@ -327,6 +332,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/verify.html">foley.agent.verify</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/verify.html#foley.agent.verify.AnthropicJudge"><code class="docutils literal notranslate"><span class="pre">AnthropicJudge</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/verify.html#foley.agent.verify.AudioLMJudge"><code class="docutils literal notranslate"><span class="pre">AudioLMJudge</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/verify.html#foley.agent.verify.ClapJudge"><code class="docutils literal notranslate"><span class="pre">ClapJudge</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/verify.html#foley.agent.verify.StringOverlapJudge"><code class="docutils literal notranslate"><span class="pre">StringOverlapJudge</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/verify.html#foley.agent.verify.verify_match"><code class="docutils literal notranslate"><span class="pre">verify_match()</span></code></a></li>
@@ -381,22 +387,38 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval.html">foley.eval</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.AlphaResult"><code class="docutils literal notranslate"><span class="pre">AlphaResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.FidelityResult"><code class="docutils literal notranslate"><span class="pre">FidelityResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.FidelityStamp"><code class="docutils literal notranslate"><span class="pre">FidelityStamp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.FitReport"><code class="docutils literal notranslate"><span class="pre">FitReport</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.GoldenItem"><code class="docutils literal notranslate"><span class="pre">GoldenItem</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.HashingBowEmbedder"><code class="docutils literal notranslate"><span class="pre">HashingBowEmbedder</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.RetrievalReport"><code class="docutils literal notranslate"><span class="pre">RetrievalReport</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.average_precision_at_k"><code class="docutils literal notranslate"><span class="pre">average_precision_at_k()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.build_eval_library"><code class="docutils literal notranslate"><span class="pre">build_eval_library()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.build_run"><code class="docutils literal notranslate"><span class="pre">build_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.calibrate_judge_vs_human"><code class="docutils literal notranslate"><span class="pre">calibrate_judge_vs_human()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.evaluate_run"><code class="docutils literal notranslate"><span class="pre">evaluate_run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.fit_f1"><code class="docutils literal notranslate"><span class="pre">fit_f1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.fit_precision"><code class="docutils literal notranslate"><span class="pre">fit_precision()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.fit_recall"><code class="docutils literal notranslate"><span class="pre">fit_recall()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.frechet_distance"><code class="docutils literal notranslate"><span class="pre">frechet_distance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.generation_fidelity"><code class="docutils literal notranslate"><span class="pre">generation_fidelity()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.is_stale"><code class="docutils literal notranslate"><span class="pre">is_stale()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.kernel_audio_distance"><code class="docutils literal notranslate"><span class="pre">kernel_audio_distance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.krippendorff_alpha"><code class="docutils literal notranslate"><span class="pre">krippendorff_alpha()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.load_baseline"><code class="docutils literal notranslate"><span class="pre">load_baseline()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.load_golden"><code class="docutils literal notranslate"><span class="pre">load_golden()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.mean_over_queries"><code class="docutils literal notranslate"><span class="pre">mean_over_queries()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.mrr_at_k"><code class="docutils literal notranslate"><span class="pre">mrr_at_k()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.ndcg_at_k"><code class="docutils literal notranslate"><span class="pre">ndcg_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.percent_agreement"><code class="docutils literal notranslate"><span class="pre">percent_agreement()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.precision_at_k"><code class="docutils literal notranslate"><span class="pre">precision_at_k()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.recall_at_k"><code class="docutils literal notranslate"><span class="pre">recall_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.reliability_band"><code class="docutils literal notranslate"><span class="pre">reliability_band()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.run_fit_eval"><code class="docutils literal notranslate"><span class="pre">run_fit_eval()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.run_ring0_retrieval_eval"><code class="docutils literal notranslate"><span class="pre">run_ring0_retrieval_eval()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.stratified_sample"><code class="docutils literal notranslate"><span class="pre">stratified_sample()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.to_qrels"><code class="docutils literal notranslate"><span class="pre">to_qrels()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval.html#foley.eval.write_baseline"><code class="docutils literal notranslate"><span class="pre">write_baseline()</span></code></a></li>
 </ul>
@@ -414,12 +436,38 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/embedder.html#foley.eval.embedder.HashingBowEmbedder"><code class="docutils literal notranslate"><span class="pre">HashingBowEmbedder</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fidelity.html#foley.eval.fidelity.FidelityResult"><code class="docutils literal notranslate"><span class="pre">FidelityResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fidelity.html#foley.eval.fidelity.FidelityStamp"><code class="docutils literal notranslate"><span class="pre">FidelityStamp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fidelity.html#foley.eval.fidelity.frechet_distance"><code class="docutils literal notranslate"><span class="pre">frechet_distance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fidelity.html#foley.eval.fidelity.generation_fidelity"><code class="docutils literal notranslate"><span class="pre">generation_fidelity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fidelity.html#foley.eval.fidelity.kernel_audio_distance"><code class="docutils literal notranslate"><span class="pre">kernel_audio_distance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/fit.html">foley.eval.fit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fit.html#foley.eval.fit.FitReport"><code class="docutils literal notranslate"><span class="pre">FitReport</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fit.html#foley.eval.fit.fit_f1"><code class="docutils literal notranslate"><span class="pre">fit_f1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fit.html#foley.eval.fit.fit_precision"><code class="docutils literal notranslate"><span class="pre">fit_precision()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fit.html#foley.eval.fit.fit_recall"><code class="docutils literal notranslate"><span class="pre">fit_recall()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fit.html#foley.eval.fit.run_fit_eval"><code class="docutils literal notranslate"><span class="pre">run_fit_eval()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/fit.html#foley.eval.fit.stratified_sample"><code class="docutils literal notranslate"><span class="pre">stratified_sample()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/golden.html">foley.eval.golden</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/golden.html#foley.eval.golden.GoldenItem"><code class="docutils literal notranslate"><span class="pre">GoldenItem</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/golden.html#foley.eval.golden.build_eval_library"><code class="docutils literal notranslate"><span class="pre">build_eval_library()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/golden.html#foley.eval.golden.load_golden"><code class="docutils literal notranslate"><span class="pre">load_golden()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/golden.html#foley.eval.golden.run_ring0_retrieval_eval"><code class="docutils literal notranslate"><span class="pre">run_ring0_retrieval_eval()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/golden.html#foley.eval.golden.to_qrels"><code class="docutils literal notranslate"><span class="pre">to_qrels()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/reliability.html">foley.eval.reliability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/reliability.html#foley.eval.reliability.ALPHA_RELIABLE"><code class="docutils literal notranslate"><span class="pre">ALPHA_RELIABLE</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/reliability.html#foley.eval.reliability.AlphaResult"><code class="docutils literal notranslate"><span class="pre">AlphaResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/reliability.html#foley.eval.reliability.calibrate_judge_vs_human"><code class="docutils literal notranslate"><span class="pre">calibrate_judge_vs_human()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/reliability.html#foley.eval.reliability.krippendorff_alpha"><code class="docutils literal notranslate"><span class="pre">krippendorff_alpha()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/reliability.html#foley.eval.reliability.percent_agreement"><code class="docutils literal notranslate"><span class="pre">percent_agreement()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/eval/reliability.html#foley.eval.reliability.reliability_band"><code class="docutils literal notranslate"><span class="pre">reliability_band()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a><ul>
@@ -853,7 +901,7 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-<p>Release: 0.0.11</p>
+<p>Release: 0.0.12</p>
 <p>Last change: Jul 24, 2026</p>
 </section>
 

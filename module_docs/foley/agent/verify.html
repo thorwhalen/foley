@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.verify &mdash; foley 0.0.11 documentation</title>
+  <title>foley.agent.verify &mdash; foley 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -62,6 +62,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#foley.agent.verify.AnthropicJudge.judge"><code class="docutils literal notranslate"><span class="pre">AnthropicJudge.judge()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.verify.AudioLMJudge"><code class="docutils literal notranslate"><span class="pre">AudioLMJudge</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.agent.verify.AudioLMJudge.judge"><code class="docutils literal notranslate"><span class="pre">AudioLMJudge.judge()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.agent.verify.ClapJudge"><code class="docutils literal notranslate"><span class="pre">ClapJudge</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.agent.verify.ClapJudge.judge"><code class="docutils literal notranslate"><span class="pre">ClapJudge.judge()</span></code></a></li>
 </ul>
@@ -80,7 +84,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../eval/baseline.html">foley.eval.baseline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fit.html">foley.eval.fit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/reliability.html">foley.eval.reliability</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
@@ -181,6 +188,23 @@ own fit-precision metric; it does not touch retrieval ranking (the <a class="ref
 <dt class="sig sig-object py" id="foley.agent.verify.AnthropicJudge.judge">
 <span class="sig-name descname"><span class="pre">judge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.SoundEvent" title="foley.base.SoundEvent"><span class="pre">SoundEvent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.VerifyLevel" title="foley.base.VerifyLevel"><span class="pre">VerifyLevel</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">VerifyLevel.judge</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#foley.base.Verdict" title="foley.base.Verdict"><span class="pre">Verdict</span></a></span></span><a class="reference internal" href="../../../_modules/foley/agent/verify.html#AnthropicJudge.judge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.verify.AnthropicJudge.judge" title="Link to this definition"></a></dt>
 <dd><p>Call Claude to arbitrate the match; returns a <code class="xref py py-class docutils literal notranslate"><span class="pre">Verdict</span></code> at <code class="docutils literal notranslate"><span class="pre">level</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.agent.verify.AudioLMJudge">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.agent.verify.</span></span><span class="sig-name descname"><span class="pre">AudioLMJudge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">pipeline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Qwen/Qwen2-Audio-7B-Instruct'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/agent/verify.html#AudioLMJudge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.verify.AudioLMJudge" title="Link to this definition"></a></dt>
+<dd><p>The audio-LM <code class="docutils literal notranslate"><span class="pre">listen</span></code> rung (<code class="docutils literal notranslate"><span class="pre">foley[fit]</span></code>): Qwen2-Audio “does this contain {event}?”.</p>
+<p><code class="docutils literal notranslate"><span class="pre">transformers</span></code>/<code class="docutils literal notranslate"><span class="pre">torch</span></code> are imported lazily inside <a class="reference internal" href="#foley.agent.verify.AudioLMJudge.judge" title="foley.agent.verify.AudioLMJudge.judge"><code class="xref py py-meth docutils literal notranslate"><span class="pre">judge()</span></code></a>; an injected
+<code class="docutils literal notranslate"><span class="pre">pipeline</span></code> (the test seam, mirroring the Stable-Audio fake-pipeline seam) drives the
+whole byte-decode → prompt → P(yes) → <code class="xref py py-class docutils literal notranslate"><span class="pre">Verdict</span></code> path with no torch. Stashes
+<code class="docutils literal notranslate"><span class="pre">self.model</span></code> + <code class="docutils literal notranslate"><span class="pre">self.last_response</span></code> so <code class="docutils literal notranslate"><span class="pre">verify_match</span></code>’s GenAI span stays
+informative (same getattr contract <a class="reference internal" href="#foley.agent.verify.AnthropicJudge" title="foley.agent.verify.AnthropicJudge"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnthropicJudge</span></code></a> uses).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.verify.AudioLMJudge.judge">
+<span class="sig-name descname"><span class="pre">judge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.SoundEvent" title="foley.base.SoundEvent"><span class="pre">SoundEvent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.VerifyLevel" title="foley.base.VerifyLevel"><span class="pre">VerifyLevel</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">VerifyLevel.listen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#foley.base.Verdict" title="foley.base.Verdict"><span class="pre">Verdict</span></a></span></span><a class="reference internal" href="../../../_modules/foley/agent/verify.html#AudioLMJudge.judge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.verify.AudioLMJudge.judge" title="Link to this definition"></a></dt>
+<dd><p>Listen to the clip and return the AQAScore <code class="xref py py-class docutils literal notranslate"><span class="pre">Verdict</span></code> (<code class="docutils literal notranslate"><span class="pre">P(yes)</span> <span class="pre">≥</span> <span class="pre">tau</span></code>).</p>
 </dd></dl>
 
 </dd></dl>

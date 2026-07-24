@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.cli &mdash; foley 0.0.11 documentation</title>
+  <title>foley.cli &mdash; foley 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -62,7 +62,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval.html">foley.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
@@ -275,6 +278,38 @@
     <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">mean</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">floor</span> <span class="k">else</span> <span class="mi">1</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_cmd_eval_fit</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">evaluate_fit</span>
+
+    <span class="n">report</span> <span class="o">=</span> <span class="n">evaluate_fit</span><span class="p">(</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">golden</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">golden</span><span class="p">,</span>
+        <span class="n">sample</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">sample</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">level</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">asdict</span><span class="p">(</span><span class="n">report</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">gate</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">min_fit_precision</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;fit_precision=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">fit_precision</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> recall=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">fit_recall</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;f1=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">fit_f1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> fit_score=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">fit_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;auto_accept=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">auto_accept_rate</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;judge=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">judge_model</span><span class="si">}</span><span class="s2"> accepted=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">n_accepted</span><span class="si">}</span><span class="s2"> confirmed=</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">n_confirmed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">stratum</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">strata</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">stratum</span><span class="si">}</span><span class="s2">: fit_precision=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;fit_precision&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (n=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;n&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="c1"># Report-only unless a floor is supplied (Tier-2 is nightly/pre-release, not a PR gate).</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">min_fit_precision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">gate</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">min_fit_precision</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;floor=</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">min_fit_precision</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="s1">&#39;PASS&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;FAIL&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_cmd_search</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">search</span>
 
@@ -345,6 +380,27 @@
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ratchet the committed baseline to the current nDCG@10 (a reviewable diff)&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">p_eval</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">_cmd_eval</span><span class="p">)</span>
+
+    <span class="n">p_eval_fit</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;eval-fit&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Tier-2 fit eval (nightly/pre-release; report-only unless --min-fit-precision)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-k&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--golden&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;path to a golden-set JSON (default: the frozen seed)&quot;</span><span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sample&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;stratified sample cap (cost gate)&quot;</span><span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--level&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;judge&quot;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;listen&quot;</span><span class="p">,</span> <span class="s2">&quot;judge&quot;</span><span class="p">],</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;fit-judge rung&quot;</span>
+    <span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--seed&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--min-fit-precision&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;min_fit_precision&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;optional gate floor (nightly/pre-release only); omit for report-only&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--json&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;emit the full FitReport as JSON&quot;</span><span class="p">)</span>
+    <span class="n">p_eval_fit</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">_cmd_eval_fit</span><span class="p">)</span>
 
     <span class="n">p_search</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;hybrid search of the default library&quot;</span><span class="p">)</span>
     <span class="n">p_search</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">)</span>

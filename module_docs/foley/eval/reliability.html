@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.eval.reliability &mdash; foley 0.0.12 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.eval.retrieval" href="retrieval.html" />
+    <link rel="prev" title="foley.eval.golden" href="golden.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.eval.reliability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.reliability.ALPHA_RELIABLE"><code class="docutils literal notranslate"><span class="pre">ALPHA_RELIABLE</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.reliability.AlphaResult"><code class="docutils literal notranslate"><span class="pre">AlphaResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.reliability.calibrate_judge_vs_human"><code class="docutils literal notranslate"><span class="pre">calibrate_judge_vs_human()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.reliability.krippendorff_alpha"><code class="docutils literal notranslate"><span class="pre">krippendorff_alpha()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.reliability.percent_agreement"><code class="docutils literal notranslate"><span class="pre">percent_agreement()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.eval.reliability.reliability_band"><code class="docutils literal notranslate"><span class="pre">reliability_band()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.eval.reliability</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/eval/reliability.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.eval.reliability">
+<span id="foley-eval-reliability"></span><h1>foley.eval.reliability<a class="headerlink" href="#module-foley.eval.reliability" title="Link to this heading"></a></h1>
+<p>Inter-rater reliability — Krippendorff’s α + the judge-vs-human calibration guardrail.</p>
+<p>Whatever judges foley’s fit — humans or an LLM/audio-LM — you must <strong>quantify agreement
+before trusting the scores</strong> (report 08 §2.3). This module is the numbers side of that
+guardrail: one pure-numpy Krippendorff’s α (the most general reliability coefficient —
+any number of raters, ordinal/graded labels, missing-data tolerant), reused for BOTH
+human inter-rater reliability on the gold grades AND judge-vs-human calibration (the
+model judge is just one more rater row). A model judge is only promoted to unattended
+use once it reaches human-level agreement on a calibration slice.</p>
+<p>Pure numpy / stdlib, deterministic — <code class="docutils literal notranslate"><span class="pre">numpy</span></code> is imported function-locally so importing
+this module keeps <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code> dol-only (the same discipline as
+<a class="reference internal" href="retrieval.html#module-foley.eval.retrieval" title="foley.eval.retrieval"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.eval.retrieval</span></code></a>). No <code class="docutils literal notranslate"><span class="pre">scipy</span></code>, no external reliability toolkit (a PyPI
+<code class="docutils literal notranslate"><span class="pre">krippendorff</span></code> oracle cross-check lives behind an opt-in test only).</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.eval.reliability.ALPHA_RELIABLE">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.reliability.</span></span><span class="sig-name descname"><span class="pre">ALPHA_RELIABLE</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.8</span></span><a class="headerlink" href="#foley.eval.reliability.ALPHA_RELIABLE" title="Link to this definition"></a></dt>
+<dd><p>Krippendorff’s benchmark bands for a reliability coefficient (report 08 §2.3).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.eval.reliability.AlphaResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.eval.reliability.</span></span><span class="sig-name descname"><span class="pre">AlphaResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_raters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent_agreement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">promoted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/eval/reliability.html#AlphaResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.reliability.AlphaResult" title="Link to this definition"></a></dt>
+<dd><p>A judge-vs-human calibration record (surfaced as <code class="docutils literal notranslate"><span class="pre">FitReport.calibration</span></code>).</p>
+<p>Codifies the promotion rule in one legible object: a model judge is <code class="docutils literal notranslate"><span class="pre">promoted</span></code> to
+unattended use only once its agreement with the human raters reaches the
+<a class="reference internal" href="#foley.eval.reliability.ALPHA_RELIABLE" title="foley.eval.reliability.ALPHA_RELIABLE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALPHA_RELIABLE</span></code></a> band.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.reliability.calibrate_judge_vs_human">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.reliability.</span></span><span class="sig-name descname"><span class="pre">calibrate_judge_vs_human</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">human_grades</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">judge_grades</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ordinal'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.eval.reliability.AlphaResult" title="foley.eval.reliability.AlphaResult"><span class="pre">AlphaResult</span></a></span></span><a class="reference internal" href="../../../_modules/foley/eval/reliability.html#calibrate_judge_vs_human"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.reliability.calibrate_judge_vs_human" title="Link to this definition"></a></dt>
+<dd><p>Compute judge-vs-human agreement and the promotion verdict (report 08 §2.3).</p>
+<p>Stacks the human rating row(s) and the model-judge row into one reliability matrix
+and returns an <a class="reference internal" href="#foley.eval.reliability.AlphaResult" title="foley.eval.reliability.AlphaResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlphaResult</span></code></a>; <code class="docutils literal notranslate"><span class="pre">promoted</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> iff α reaches the
+reliable band — the model judge may then be trusted unattended on that slice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>human_grades</strong> – A 1-D per-unit human grade sequence, or a 2-D <code class="docutils literal notranslate"><span class="pre">(humans</span> <span class="pre">×</span> <span class="pre">units)</span></code>
+matrix (<code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing).</p></li>
+<li><p><strong>judge_grades</strong> – The model judge’s 1-D per-unit grades (<code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing).</p></li>
+<li><p><strong>level</strong> – The measurement level (default <code class="docutils literal notranslate"><span class="pre">'ordinal'</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An <a class="reference internal" href="#foley.eval.reliability.AlphaResult" title="foley.eval.reliability.AlphaResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlphaResult</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.reliability.krippendorff_alpha">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.reliability.</span></span><span class="sig-name descname"><span class="pre">krippendorff_alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reliability_data</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ordinal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/reliability.html#krippendorff_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.reliability.krippendorff_alpha" title="Link to this definition"></a></dt>
+<dd><p>Krippendorff’s α over <code class="docutils literal notranslate"><span class="pre">(raters</span> <span class="pre">×</span> <span class="pre">units)</span></code> ratings (<code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing).</p>
+<p><code class="docutils literal notranslate"><span class="pre">α</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">−</span> <span class="pre">D_o/D_e</span></code> — 1 is perfect agreement, ~0 is chance, negative is systematic
+disagreement. Ordinal is the default (foley’s 0–3 grades); missing ratings are
+tolerated (units with &lt; 2 ratings are dropped, no imputation). Pure numpy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reliability_data</strong> – A 2-D array-like <code class="docutils literal notranslate"><span class="pre">(raters</span> <span class="pre">×</span> <span class="pre">units)</span></code>; <code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing.</p></li>
+<li><p><strong>level</strong> – <code class="docutils literal notranslate"><span class="pre">'ordinal'</span></code> (default) | <code class="docutils literal notranslate"><span class="pre">'nominal'</span></code> | <code class="docutils literal notranslate"><span class="pre">'interval'</span></code>.</p></li>
+<li><p><strong>value_domain</strong> – Optional explicit value set (for a label unobserved by some rater).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>α as a bare <code class="docutils literal notranslate"><span class="pre">float</span></code> (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> when there is no expected disagreement, <code class="docutils literal notranslate"><span class="pre">D_e</span> <span class="pre">=</span> <span class="pre">0</span></code>).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.reliability.percent_agreement">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.reliability.</span></span><span class="sig-name descname"><span class="pre">percent_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reliability_data</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/reliability.html#percent_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.reliability.percent_agreement" title="Link to this definition"></a></dt>
+<dd><p>Raw pairwise percent agreement, reported ALONGSIDE α (report 08 §2.3).</p>
+<p>On foley’s skewed ‘most candidates irrelevant’ label distribution a chance-corrected
+α can look pessimistic, so the uncorrected agreement is co-reported for context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reliability_data</strong> – A 2-D array-like <code class="docutils literal notranslate"><span class="pre">(raters</span> <span class="pre">×</span> <span class="pre">units)</span></code>; <code class="docutils literal notranslate"><span class="pre">nan</span></code> = missing.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fraction of same-unit rater pairs that agree (<code class="docutils literal notranslate"><span class="pre">0.0</span></code> if no pairs).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.eval.reliability.reliability_band">
+<span class="sig-prename descclassname"><span class="pre">foley.eval.reliability.</span></span><span class="sig-name descname"><span class="pre">reliability_band</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/foley/eval/reliability.html#reliability_band"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.eval.reliability.reliability_band" title="Link to this definition"></a></dt>
+<dd><p>Map an α (or κ) to Krippendorff’s benchmark band.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>alpha</strong> – A reliability coefficient in <code class="docutils literal notranslate"><span class="pre">(-∞,</span> <span class="pre">1]</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">'reliable'</span></code> (α ≥ 0.8), <code class="docutils literal notranslate"><span class="pre">'tentative'</span></code> (0.667 ≤ α &lt; 0.8), else
+<code class="docutils literal notranslate"><span class="pre">'revise-rubric'</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="golden.html" class="btn btn-neutral float-left" title="foley.eval.golden" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="retrieval.html" class="btn btn-neutral float-right" title="foley.eval.retrieval" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
