@@ -1,0 +1,82 @@
+[
+  {
+    "id": "gld_0001",
+    "context": "She pressed her forehead to the cold glass and listened to the storm outside.",
+    "expected_events": [
+      {
+        "query": "steady rain on a window",
+        "ucs_catid": "RAINGnrl",
+        "audioset": ["Rain", "Rain on surface"],
+        "layer": "ambience",
+        "diegetic": true,
+        "salience": "high",
+        "onset_hint": "under the whole line"
+      }
+    ],
+    "negatives": ["applause", "engine idling"],
+    "answer_clip_ids": {"RAINGnrl": ["ring0:rain_on_window"]},
+    "grade": {"ring0:rain_on_window": 2},
+    "labeler": "llm+human",
+    "schema_version": 1
+  },
+  {
+    "id": "gld_0002",
+    "context": "He stormed out and the heavy oak door crashed shut behind him.",
+    "expected_events": [
+      {
+        "query": "heavy wooden door slam",
+        "ucs_catid": "DOORSlam",
+        "audioset": ["Door", "Slam"],
+        "layer": "sfx_fg",
+        "diegetic": true,
+        "salience": "high",
+        "onset_hint": "on 'crashed shut'"
+      }
+    ],
+    "negatives": ["birdsong", "typing"],
+    "answer_clip_ids": {"DOORSlam": ["ring0:door_slam"]},
+    "grade": {"ring0:door_slam": 2},
+    "labeler": "llm+human",
+    "schema_version": 1
+  },
+  {
+    "id": "gld_0003",
+    "context": "Footsteps echoed down the empty corridor as she approached the vault.",
+    "expected_events": [
+      {
+        "query": "footsteps on a hard floor",
+        "ucs_catid": "FOOTHard",
+        "audioset": ["Walk, footsteps"],
+        "layer": "sfx_fg",
+        "diegetic": true,
+        "salience": "medium",
+        "onset_hint": "on 'echoed'"
+      }
+    ],
+    "negatives": ["ocean waves", "laughter"],
+    "answer_clip_ids": {"FOOTHard": ["ring0:footsteps"]},
+    "grade": {"ring0:footsteps": 2},
+    "labeler": "llm+human",
+    "schema_version": 1
+  },
+  {
+    "id": "gld_0004",
+    "context": "They raised their glasses and toasted the new year with a bright clink.",
+    "expected_events": [
+      {
+        "query": "two glasses clink in a toast",
+        "ucs_catid": "GLASClink",
+        "audioset": ["Glass", "Chink, clink"],
+        "layer": "sfx_fg",
+        "diegetic": true,
+        "salience": "high",
+        "onset_hint": "on 'clink'"
+      }
+    ],
+    "negatives": ["thunder", "footsteps"],
+    "answer_clip_ids": {"GLASClink": ["ring0:glass_clink"]},
+    "grade": {"ring0:glass_clink": 2},
+    "labeler": "llm+human",
+    "schema_version": 1
+  }
+]

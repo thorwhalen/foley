@@ -66,8 +66,11 @@ class IngestResult(SerializableMixin):
     """The outcome of ingesting one clip.
 
     ``status``: ``'pass'``/``'warn'`` (ingested), ``'quarantined'`` (QC-rejected,
-    not added), ``'skipped_dup'`` (content already in the library), or
-    ``'error'``. ``record`` is present only when the clip was ingested.
+    not added), ``'skipped_dup'`` (content already in the library),
+    ``'rights_blocked'`` (license forbids AI training / embedding, refused before
+    embed — see :func:`ingest_one`), ``'skipped_license'`` (dropped by a
+    bootstrap commercial-use / fail-closed license filter), or ``'error'``.
+    ``record`` is present only when the clip was ingested.
     """
 
     id: str
@@ -112,6 +115,11 @@ class IngestReport(SerializableMixin):
         return self._by_status("skipped_dup")
 
     @property
+    def rights_blocked(self) -> "list[IngestResult]":
+        """Results refused by the fail-closed AI-training/license rights gate."""
+        return self._by_status("rights_blocked", "skipped_license")
+
+    @property
     def errored(self) -> "list[IngestResult]":
         """Results that raised during ingest."""
         return self._by_status("error")
@@ -123,6 +131,7 @@ class IngestReport(SerializableMixin):
             "ingested": len(self.ingested),
             "quarantined": len(self.quarantined),
             "skipped": len(self.skipped),
+            "rights_blocked": len(self.rights_blocked),
             "errored": len(self.errored),
         }
 
@@ -253,6 +262,8 @@ def ingest_one(
     do_caption: bool = True,
     thresholds: QCThresholds = DEFAULT_QC_THRESHOLDS,
     store: bool = True,
+    allow_ai_training_forbidden: bool = False,
+    seed_tags: Optional[list] = None,
 ) -> IngestResult:
     """Ingest one clip into ``library`` and return an :class:`IngestResult`.
 
@@ -278,10 +289,21 @@ def ingest_one(
         thresholds: QC thresholds.
         store: If ``False``, assemble the record but do not add it to the library
             (probe/QC/enrich only).
+        seed_tags: Optional caller-supplied tags (e.g. a corpus's folder-path
+            taxonomy) unioned into the record's ``tags`` alongside the
+            supervised/zero-shot tags — so they feed the BM25 keyword index.
+        allow_ai_training_forbidden: The universal fail-closed rights gate. A
+            sound whose license has ``ai_training_ok=False`` (e.g. Sonniss,
+            BBC RemArc) is refused with status ``'rights_blocked'`` *before* it is
+            embedded or stored — CLAP-embedding-and-persisting is itself a form of
+            AI training on the corpus. Pass ``True`` to record explicit operator
+            consent and admit it anyway (see :func:`foley.bootstrap.bootstrap`'s
+            ``accept_ai_restricted``). Protects every ingest path, not just
+            bootstrap.
 
     Returns:
-        An :class:`IngestResult`; its ``record`` is ``None`` when quarantined or a
-        duplicate.
+        An :class:`IngestResult`; its ``record`` is ``None`` when quarantined, a
+        duplicate, or rights-blocked.
     """
     from .library import default_library
 
@@ -312,6 +334,24 @@ def ingest_one(
         )
 
     notes: list = []
+
+    # Resolve rights BEFORE any embed/store. A by-reference sound names a
+    # fetchable uri (its local path when path-like). This is the universal,
+    # fail-closed AI-training gate: a license that forbids AI training is refused
+    # here — CLAP-embedding + persisting the corpus IS a form of training on it —
+    # unless the caller passes explicit consent. Guards every path into the
+    # library, not just bootstrap (report 07; invariant #3 of foley-dev-implement).
+    ref_uri = _reference_uri(src)
+    lic = license if license is not None else _default_user_license(ref_uri)
+    if not lic.ai_training_ok and not allow_ai_training_forbidden:
+        return IngestResult(
+            id=sound_id,
+            status="rights_blocked",
+            notes=[
+                f"license {lic.license_id!r} forbids AI training; embed + persist "
+                "refused (set allow_ai_training_forbidden=True to consent)"
+            ],
+        )
 
     # Stage 5a — embed once (the retrieval vector; reused for zero-shot tagging)
     audio_vec = lib.embedder.embed_audio(work, WORKING_SAMPLE_RATE)
@@ -346,10 +386,9 @@ def ingest_one(
         filename=_src_name(src),
     )
 
-    ref_uri = _reference_uri(src)
-    lic = license if license is not None else _default_user_license(ref_uri)
     # `format` is the DELIVERED format (what library.audio() serves): the FLAC
-    # archive when cached by-value, else the untouched source container.
+    # archive when cached by-value, else the untouched source container. (`lic`
+    # and `ref_uri` were resolved above, before the rights gate.)
     delivered_format = ARCHIVE_FORMAT if lic.cache_bytes_ok else probe.format
 
     record = SoundRecord(
@@ -357,7 +396,7 @@ def ingest_one(
         uri=ref_uri,  # a fetchable ref for by-reference; overwritten by the content
         license=lic,  #   key when store_sound caches by-value
         caption=caption,
-        tags=sorted(set(audioset_labels) | set(zeroshot_tags)),
+        tags=sorted(set(audioset_labels) | set(zeroshot_tags) | set(seed_tags or [])),
         audioset_labels=audioset_labels,
         ucs_category=resolution.catid,
         ucs_subcategory=resolution.subcategory,
@@ -423,9 +462,22 @@ def _run_zeroshot(
 # ---------------------------------------------------------------------------
 
 
-def _iter_audio_files(
-    path, *, recursive: bool, exts: tuple[str, ...]
+def iter_audio_files(
+    path, *, recursive: bool = True, exts: tuple[str, ...] = AUDIO_EXTS
 ) -> "Iterator[Path]":
+    """Yield the audio files under ``path`` (or ``path`` itself if it is a file).
+
+    The shared corpus/folder walk — reused by :func:`ingest_folder` and the
+    bulk-corpus adapters in :mod:`foley.sources` so the traversal is not forked.
+
+    Args:
+        path: A folder (walked) or a single audio file.
+        recursive: Recurse into sub-folders.
+        exts: Audio extensions to include (lowercased suffix match).
+
+    Yields:
+        Each matching file as a :class:`pathlib.Path`, in sorted order.
+    """
     p = Path(path).expanduser()
     if p.is_file():
         yield p
@@ -434,6 +486,11 @@ def _iter_audio_files(
     for fp in sorted(walker):
         if fp.is_file() and fp.suffix.lower() in exts:
             yield fp
+
+
+#: Backwards-compatible private alias (kept so nothing that imported the old
+#: underscore name breaks); prefer :func:`iter_audio_files`.
+_iter_audio_files = iter_audio_files
 
 
 def ingest_folder(
@@ -464,7 +521,7 @@ def ingest_folder(
 
     lib = library if library is not None else default_library()
     report = IngestReport(root=str(path))
-    for fp in _iter_audio_files(path, recursive=recursive, exts=exts):
+    for fp in iter_audio_files(path, recursive=recursive, exts=exts):
         try:
             report.record(ingest_one(str(fp), library=lib, **ingest_one_kw))
         except Exception as exc:

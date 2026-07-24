@@ -227,9 +227,13 @@ def test_ingest_by_reference_license_indexes_in_place(library, tmp_path):
     import soundfile as sf
 
     sf.write(fp, _tone(440), SR)
+    # Realistic by-reference case: Freesound CC0 whose TOS forbids caching
+    # (cache_bytes_ok=False override) yet still permits embedding (ai_training_ok
+    # stays True), so it passes the fail-closed ingest gate and indexes in place.
     by_ref = apply_license_flags(
-        LicenseRecord(source="ext", license_id="unknown")
-    )  # unknown => cache_bytes_ok False => by-reference
+        LicenseRecord(source="freesound", license_id="CC0-1.0"),
+        overrides={"cache_bytes_ok": False},
+    )
     result = ingest_one(
         str(fp), library=library, license=by_ref,
         do_supervised=False, do_zeroshot=False, do_caption=False,

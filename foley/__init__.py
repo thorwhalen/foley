@@ -156,6 +156,9 @@ from .index import (
     vector_search,
 )
 
+# --- source: bulk-corpus bootstrap (stdlib-only at import; numpy is lazy) ------
+from .bootstrap import bootstrap, demo
+
 __all__ = [
     # --- base: constants + enums ---------------------------------------------
     "SCHEMA_VERSION",
@@ -264,6 +267,9 @@ __all__ = [
     "ingest_folder",
     "IngestResult",
     "IngestReport",
+    # --- source: bulk-corpus bootstrap ---------------------------------------
+    "bootstrap",
+    "demo",
 ]
 
 
