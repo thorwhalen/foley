@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.licensing &mdash; foley 0.0.6 documentation</title>
+  <title>foley.licensing &mdash; foley 0.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1fd71caa"></script>
+      <script src="../../_static/documentation_options.js?v=bbaf98b3"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
@@ -251,6 +253,88 @@
     <span class="k">if</span> <span class="s2">&quot;/by/&quot;</span> <span class="ow">in</span> <span class="n">u</span> <span class="ow">or</span> <span class="n">u</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/by&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;attribution&quot;</span> <span class="ow">in</span> <span class="n">u</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;CC-BY-4.0&quot;</span><span class="p">,</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span> <span class="kc">False</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># License display metadata — the license_id -&gt; (human name, canonical URL) SSOT</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="LicenseMeta">
+<a class="viewcode-back" href="../../module_docs/foley/licensing.html#foley.LicenseMeta">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LicenseMeta</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Human-facing display metadata for one ``license_id`` (name + canonical URL).</span>
+
+<span class="sd">    The presentation sibling of :class:`LicenseFlags`: where ``LicenseFlags`` holds</span>
+<span class="sd">    the *permission* row consulted by :func:`keep`, ``LicenseMeta`` holds the</span>
+<span class="sd">    *display* row consulted by the credits/attribution layer</span>
+<span class="sd">    (:mod:`foley.provenance.credits`). Kept here so ``licensing`` stays the single</span>
+<span class="sd">    license authority; a record&#39;s own ``license_name`` / ``license_url`` (when a</span>
+<span class="sd">    source populated them) take precedence over this default.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<span class="c1">#: Fail-closed display fallback for unknown / ``Proprietary-*`` license ids.</span>
+<span class="n">UNKNOWN_LICENSE_META</span> <span class="o">=</span> <span class="n">LicenseMeta</span><span class="p">(</span><span class="s2">&quot;Unknown / unverified license&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1">#: SSOT: ``license_id`` -&gt; display name + canonical URL (one row per</span>
+<span class="c1">#: :data:`LICENSE_FLAGS` key). Used only for human-readable credits; never for</span>
+<span class="c1">#: permission decisions (those come from :data:`LICENSE_FLAGS`).</span>
+<span class="n">LICENSE_META</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">LicenseMeta</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;CC0-1.0&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">&quot;CC0 1.0 Universal (Public Domain Dedication)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;https://creativecommons.org/publicdomain/zero/1.0/&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;CC-BY-4.0&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">&quot;CC BY 4.0&quot;</span><span class="p">,</span> <span class="s2">&quot;https://creativecommons.org/licenses/by/4.0/&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;CC-BY-NC-4.0&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">&quot;CC BY-NC 4.0&quot;</span><span class="p">,</span> <span class="s2">&quot;https://creativecommons.org/licenses/by-nc/4.0/&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;CC-Sampling+-1.0&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">&quot;CC Sampling+ 1.0&quot;</span><span class="p">,</span> <span class="s2">&quot;https://creativecommons.org/licenses/sampling+/1.0/&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;RemArc&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">&quot;BBC RemArc Licence&quot;</span><span class="p">,</span> <span class="s2">&quot;https://sound-effects.bbcrewind.co.uk/licensing&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;Sonniss-GDC&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">&quot;Sonniss GDC Game Audio Bundle License&quot;</span><span class="p">,</span> <span class="s2">&quot;https://sonniss.com/gdc-bundle-license&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;Pixabay-Content&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">&quot;Pixabay Content License&quot;</span><span class="p">,</span> <span class="s2">&quot;https://pixabay.com/service/license-summary/&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ElevenLabs-SFX&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">&quot;ElevenLabs Sound Effects Terms&quot;</span><span class="p">,</span> <span class="s2">&quot;https://elevenlabs.io/terms-of-use&quot;</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;Stability-Community&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">&quot;Stability AI Community License&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;https://stability.ai/community-license-agreement&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;MIT&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span><span class="s2">&quot;MIT License&quot;</span><span class="p">,</span> <span class="s2">&quot;https://opensource.org/license/mit&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;user-owned&quot;</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span><span class="s2">&quot;User-owned / original work&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;unknown&quot;</span><span class="p">:</span> <span class="n">UNKNOWN_LICENSE_META</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="license_meta">
+<a class="viewcode-back" href="../../module_docs/foley/licensing.html#foley.license_meta">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">license_meta</span><span class="p">(</span><span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseMeta</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the display :class:`LicenseMeta` for ``license_id`` (fail-closed fallback).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        license_id: The normalized license id.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The mapped :class:`LicenseMeta`, or :data:`UNKNOWN_LICENSE_META` for an</span>
+<span class="sd">        unrecognized / ``Proprietary-*`` id.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">LICENSE_META</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">license_id</span><span class="p">,</span> <span class="n">UNKNOWN_LICENSE_META</span><span class="p">)</span></div>
 
 
 

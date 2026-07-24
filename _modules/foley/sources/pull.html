@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.pull &mdash; foley 0.0.6 documentation</title>
+  <title>foley.sources.pull &mdash; foley 0.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=1fd71caa"></script>
+      <script src="../../../_static/documentation_options.js?v=bbaf98b3"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
@@ -187,7 +189,9 @@
 <span class="sd">        stored records (each ``storage_mode == by_reference`` for Freesound) and</span>
 <span class="sd">        ``.summary()`` for counts, exactly like :func:`foley.ingest`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">..bootstrap</span><span class="w"> </span><span class="kn">import</span> <span class="n">MetadataCaptioner</span>  <span class="c1"># local: avoids a sources&lt;-&gt;bootstrap cycle</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..bootstrap</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+        <span class="n">MetadataCaptioner</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># local: avoids a sources&lt;-&gt;bootstrap cycle</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..index.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_library</span>
 
     <span class="n">lib</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
@@ -200,7 +204,9 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">candidates</span> <span class="o">=</span> <span class="n">src_adapter</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">license</span><span class="o">=</span><span class="n">license</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">:search&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">)))</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
+            <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">:search&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">report</span>
 
     <span class="k">for</span> <span class="n">cand</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
@@ -233,7 +239,9 @@
                 <span class="n">captioner</span><span class="o">=</span><span class="n">MetadataCaptioner</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">caption</span><span class="p">)</span> <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">caption</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">seed_tags</span><span class="o">=</span><span class="n">rec</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># transient fetch/decode failure never aborts the batch</span>
+        <span class="k">except</span> <span class="p">(</span>
+            <span class="ne">Exception</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># transient fetch/decode failure never aborts the batch</span>
             <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">rec</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">)))</span>
             <span class="k">continue</span>
         <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>

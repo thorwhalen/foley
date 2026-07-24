@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.6 documentation</title>
+  <title>foley &mdash; foley 0.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=1fd71caa"></script>
+      <script src="../_static/documentation_options.js?v=bbaf98b3"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/base.html">foley.sources.base</a></li>
@@ -199,12 +201,17 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.licensing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">LICENSE_FLAGS</span><span class="p">,</span>
+    <span class="n">LICENSE_META</span><span class="p">,</span>
     <span class="n">UNKNOWN_LICENSE_FLAGS</span><span class="p">,</span>
+    <span class="n">UNKNOWN_LICENSE_META</span><span class="p">,</span>
     <span class="n">LicenseFlags</span><span class="p">,</span>
+    <span class="n">LicenseMeta</span><span class="p">,</span>
     <span class="n">apply_license_flags</span><span class="p">,</span>
     <span class="n">derive_license_flags</span><span class="p">,</span>
     <span class="n">keep</span><span class="p">,</span>
     <span class="n">keep_sound</span><span class="p">,</span>
+    <span class="n">license_id_from_cc_url</span><span class="p">,</span>
+    <span class="n">license_meta</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.qc</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="p">,</span>
@@ -282,6 +289,16 @@
 <span class="c1"># --- eval: Tier-1 retrieval metrics + the nDCG PR gate (numpy lazy) -----------</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="nb">eval</span>  <span class="c1"># noqa: A004 - deliberate: foley.eval is the retrieval-eval subpackage</span>
 
+<span class="c1"># --- provenance: TASL attribution / credits (stdlib-only; #9b disclosure later) --</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">provenance</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.provenance</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CreditEntry</span><span class="p">,</span>
+    <span class="n">Credits</span><span class="p">,</span>
+    <span class="n">attribution_line</span><span class="p">,</span>
+    <span class="n">credit_entry</span><span class="p">,</span>
+    <span class="n">credits_for</span><span class="p">,</span>
+<span class="p">)</span>
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># --- base: constants + enums ---------------------------------------------</span>
     <span class="s2">&quot;SCHEMA_VERSION&quot;</span><span class="p">,</span>
@@ -307,6 +324,11 @@
     <span class="s2">&quot;LicenseFlags&quot;</span><span class="p">,</span>
     <span class="s2">&quot;LICENSE_FLAGS&quot;</span><span class="p">,</span>
     <span class="s2">&quot;UNKNOWN_LICENSE_FLAGS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LicenseMeta&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LICENSE_META&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;UNKNOWN_LICENSE_META&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;license_meta&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;license_id_from_cc_url&quot;</span><span class="p">,</span>
     <span class="s2">&quot;derive_license_flags&quot;</span><span class="p">,</span>
     <span class="s2">&quot;apply_license_flags&quot;</span><span class="p">,</span>
     <span class="s2">&quot;keep&quot;</span><span class="p">,</span>
@@ -400,6 +422,14 @@
     <span class="c1"># --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------</span>
     <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
     <span class="s2">&quot;evaluate&quot;</span><span class="p">,</span>
+    <span class="c1"># --- provenance: TASL attribution / credits ------------------------------</span>
+    <span class="s2">&quot;provenance&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;credits&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Credits&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CreditEntry&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;credits_for&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;attribution_line&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;credit_entry&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
 
@@ -425,6 +455,40 @@
     <span class="k">if</span> <span class="n">golden</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">kw</span><span class="p">[</span><span class="s2">&quot;golden_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">golden</span>
     <span class="k">return</span> <span class="n">run_ring0_retrieval_eval</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="credits">
+<a class="viewcode-back" href="../module_docs/foley.html#foley.credits">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">credits</span><span class="p">(</span><span class="n">sounds</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Credits&quot;</span><span class="p">,</span> <span class="n">only_required</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">write_to</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the TASL attribution :class:`~foley.provenance.Credits` for ``sounds``.</span>
+
+<span class="sd">    Works standalone today (given any iterable of sounds), and is what the WEAVE</span>
+<span class="sd">    stage will call at render time. Inspect ``.markdown`` (a ``CREDITS.md``</span>
+<span class="sd">    document) / ``.manifest`` (a JSON-serializable dict) on the result.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sounds: An iterable of :class:`SoundRecord` / :class:`Candidate` /</span>
+<span class="sd">            :class:`LicenseRecord` (e.g. the result of :func:`search`, or the</span>
+<span class="sd">            sounds placed in a timeline).</span>
+<span class="sd">        title: The credits heading.</span>
+<span class="sd">        only_required: Keep only legally-required attributions (drops CC0 /</span>
+<span class="sd">            user-owned courtesy credits). Default credits everything.</span>
+<span class="sd">        write_to: Optional directory; when given, writes ``CREDITS.md`` and</span>
+<span class="sd">            ``credits.json`` into it (created if missing).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`~foley.provenance.Credits`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">provenance</span><span class="o">.</span><span class="n">credits_for</span><span class="p">(</span><span class="n">sounds</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">only_required</span><span class="o">=</span><span class="n">only_required</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">write_to</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">write_to</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">out</span> <span class="o">/</span> <span class="s2">&quot;CREDITS.md&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">markdown</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">out</span> <span class="o">/</span> <span class="s2">&quot;credits.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
 
 
 

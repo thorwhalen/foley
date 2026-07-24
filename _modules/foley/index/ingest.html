@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.index.ingest &mdash; foley 0.0.6 documentation</title>
+  <title>foley.index.ingest &mdash; foley 0.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=1fd71caa"></script>
+      <script src="../../../_static/documentation_options.js?v=bbaf98b3"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -71,6 +71,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
@@ -466,7 +468,9 @@
     <span class="n">probe</span> <span class="o">=</span> <span class="n">_probe</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
     <span class="n">work</span> <span class="o">=</span> <span class="n">to_working</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">,</span> <span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">)</span>
     <span class="n">archive</span> <span class="o">=</span> <span class="n">encode</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">,</span> <span class="n">probe</span><span class="o">.</span><span class="n">native_sr</span><span class="p">)</span>  <span class="c1"># FLAC bytes</span>
-    <span class="n">content_id</span> <span class="o">=</span> <span class="n">_audio_identity</span><span class="p">(</span><span class="n">probe</span><span class="o">.</span><span class="n">wav</span><span class="p">)</span>  <span class="c1"># PCM content-hash: the default id/dedup key</span>
+    <span class="n">content_id</span> <span class="o">=</span> <span class="n">_audio_identity</span><span class="p">(</span>
+        <span class="n">probe</span><span class="o">.</span><span class="n">wav</span>
+    <span class="p">)</span>  <span class="c1"># PCM content-hash: the default id/dedup key</span>
     <span class="c1"># Canonical id: the PCM content-hash for a local ingest, or a caller-supplied</span>
     <span class="c1"># short, case-stable source id (e.g. &#39;freesound:12345&#39;) for a live adapter —</span>
     <span class="c1"># so dedup keys on the stable id, not on re-fetched (byte-varying) preview bytes.</span>
@@ -570,9 +574,7 @@
         <span class="n">lib</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">archive</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="n">audio_vec</span><span class="p">)</span>
 
     <span class="n">status</span> <span class="o">=</span> <span class="n">qc_report</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">qc_report</span> <span class="k">else</span> <span class="s2">&quot;pass&quot;</span>
-    <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span>
-        <span class="nb">id</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="n">record</span><span class="p">,</span> <span class="n">qc</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">qc</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="n">notes</span>
-    <span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="n">record</span><span class="p">,</span> <span class="n">qc</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">qc</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="n">notes</span><span class="p">)</span></div>
 
 
 

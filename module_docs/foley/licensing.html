@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.licensing &mdash; foley 0.0.6 documentation</title>
+  <title>foley.licensing &mdash; foley 0.0.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1fd71caa"></script>
+      <script src="../../_static/documentation_options.js?v=bbaf98b3"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -24,7 +24,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="foley.qc" href="qc.html" />
+    <link rel="next" title="foley.provenance" href="provenance.html" />
     <link rel="prev" title="foley.index.taxonomy.ucs" href="index/taxonomy/ucs.html" /> 
 </head>
 
@@ -75,15 +75,21 @@
 <li class="toctree-l1"><a class="reference internal" href="index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">foley.licensing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#foley.licensing.LICENSE_FLAGS"><code class="docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.LICENSE_META"><code class="docutils literal notranslate"><span class="pre">LICENSE_META</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.licensing.LicenseFlags"><code class="docutils literal notranslate"><span class="pre">LicenseFlags</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.LicenseMeta"><code class="docutils literal notranslate"><span class="pre">LicenseMeta</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.licensing.UNKNOWN_LICENSE_FLAGS"><code class="docutils literal notranslate"><span class="pre">UNKNOWN_LICENSE_FLAGS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.UNKNOWN_LICENSE_META"><code class="docutils literal notranslate"><span class="pre">UNKNOWN_LICENSE_META</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.licensing.apply_license_flags"><code class="docutils literal notranslate"><span class="pre">apply_license_flags()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.licensing.derive_license_flags"><code class="docutils literal notranslate"><span class="pre">derive_license_flags()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.licensing.keep"><code class="docutils literal notranslate"><span class="pre">keep()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.licensing.keep_sound"><code class="docutils literal notranslate"><span class="pre">keep_sound()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.licensing.license_id_from_cc_url"><code class="docutils literal notranslate"><span class="pre">license_id_from_cc_url()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.licensing.license_meta"><code class="docutils literal notranslate"><span class="pre">license_meta()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/base.html">foley.sources.base</a></li>
@@ -159,16 +165,47 @@ item is redistributable but stored by-reference.</p>
 </dl>
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.licensing.LICENSE_META">
+<span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">LICENSE_META</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#foley.licensing.LicenseMeta" title="foley.licensing.LicenseMeta"><span class="pre">LicenseMeta</span></a><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'CC-BY-4.0':</span> <span class="pre">LicenseMeta(display_name='CC</span> <span class="pre">BY</span> <span class="pre">4.0',</span> <span class="pre">url='https://creativecommons.org/licenses/by/4.0/'),</span> <span class="pre">'CC-BY-NC-4.0':</span> <span class="pre">LicenseMeta(display_name='CC</span> <span class="pre">BY-NC</span> <span class="pre">4.0',</span> <span class="pre">url='https://creativecommons.org/licenses/by-nc/4.0/'),</span> <span class="pre">'CC-Sampling+-1.0':</span> <span class="pre">LicenseMeta(display_name='CC</span> <span class="pre">Sampling+</span> <span class="pre">1.0',</span> <span class="pre">url='https://creativecommons.org/licenses/sampling+/1.0/'),</span> <span class="pre">'CC0-1.0':</span> <span class="pre">LicenseMeta(display_name='CC0</span> <span class="pre">1.0</span> <span class="pre">Universal</span> <span class="pre">(Public</span> <span class="pre">Domain</span> <span class="pre">Dedication)',</span> <span class="pre">url='https://creativecommons.org/publicdomain/zero/1.0/'),</span> <span class="pre">'ElevenLabs-SFX':</span> <span class="pre">LicenseMeta(display_name='ElevenLabs</span> <span class="pre">Sound</span> <span class="pre">Effects</span> <span class="pre">Terms',</span> <span class="pre">url='https://elevenlabs.io/terms-of-use'),</span> <span class="pre">'MIT':</span> <span class="pre">LicenseMeta(display_name='MIT</span> <span class="pre">License',</span> <span class="pre">url='https://opensource.org/license/mit'),</span> <span class="pre">'Pixabay-Content':</span> <span class="pre">LicenseMeta(display_name='Pixabay</span> <span class="pre">Content</span> <span class="pre">License',</span> <span class="pre">url='https://pixabay.com/service/license-summary/'),</span> <span class="pre">'RemArc':</span> <span class="pre">LicenseMeta(display_name='BBC</span> <span class="pre">RemArc</span> <span class="pre">Licence',</span> <span class="pre">url='https://sound-effects.bbcrewind.co.uk/licensing'),</span> <span class="pre">'Sonniss-GDC':</span> <span class="pre">LicenseMeta(display_name='Sonniss</span> <span class="pre">GDC</span> <span class="pre">Game</span> <span class="pre">Audio</span> <span class="pre">Bundle</span> <span class="pre">License',</span> <span class="pre">url='https://sonniss.com/gdc-bundle-license'),</span> <span class="pre">'Stability-Community':</span> <span class="pre">LicenseMeta(display_name='Stability</span> <span class="pre">AI</span> <span class="pre">Community</span> <span class="pre">License',</span> <span class="pre">url='https://stability.ai/community-license-agreement'),</span> <span class="pre">'unknown':</span> <span class="pre">LicenseMeta(display_name='Unknown</span> <span class="pre">/</span> <span class="pre">unverified</span> <span class="pre">license',</span> <span class="pre">url=None),</span> <span class="pre">'user-owned':</span> <span class="pre">LicenseMeta(display_name='User-owned</span> <span class="pre">/</span> <span class="pre">original</span> <span class="pre">work',</span> <span class="pre">url=None)}</span></span><a class="headerlink" href="#foley.licensing.LICENSE_META" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">license_id</span></code> -&gt; display name + canonical URL (one row per
+<a class="reference internal" href="#foley.licensing.LICENSE_FLAGS" title="foley.licensing.LICENSE_FLAGS"><code class="xref py py-data docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code></a> key). Used only for human-readable credits; never for
+permission decisions (those come from <a class="reference internal" href="#foley.licensing.LICENSE_FLAGS" title="foley.licensing.LICENSE_FLAGS"><code class="xref py py-data docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SSOT</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.licensing.LicenseFlags">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">LicenseFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commercial_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_in_derivative_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redistribute_standalone_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_bytes_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modification_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ai_training_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requires_attribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">revenue_cap_usd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/licensing.html#LicenseFlags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.licensing.LicenseFlags" title="Link to this definition"></a></dt>
 <dd><p>The eight derivable flags for one <code class="docutils literal notranslate"><span class="pre">license_id</span></code> (the table row type).</p>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.licensing.LicenseMeta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">LicenseMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/licensing.html#LicenseMeta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.licensing.LicenseMeta" title="Link to this definition"></a></dt>
+<dd><p>Human-facing display metadata for one <code class="docutils literal notranslate"><span class="pre">license_id</span></code> (name + canonical URL).</p>
+<p>The presentation sibling of <a class="reference internal" href="#foley.licensing.LicenseFlags" title="foley.licensing.LicenseFlags"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseFlags</span></code></a>: where <code class="docutils literal notranslate"><span class="pre">LicenseFlags</span></code> holds
+the <em>permission</em> row consulted by <a class="reference internal" href="#foley.licensing.keep" title="foley.licensing.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">keep()</span></code></a>, <code class="docutils literal notranslate"><span class="pre">LicenseMeta</span></code> holds the
+<em>display</em> row consulted by the credits/attribution layer
+(<a class="reference internal" href="provenance/credits.html#module-foley.provenance.credits" title="foley.provenance.credits"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.provenance.credits</span></code></a>). Kept here so <code class="docutils literal notranslate"><span class="pre">licensing</span></code> stays the single
+license authority; a record’s own <code class="docutils literal notranslate"><span class="pre">license_name</span></code> / <code class="docutils literal notranslate"><span class="pre">license_url</span></code> (when a
+source populated them) take precedence over this default.</p>
+</dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="foley.licensing.UNKNOWN_LICENSE_FLAGS">
 <span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">UNKNOWN_LICENSE_FLAGS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">LicenseFlags(commercial_ok=False,</span> <span class="pre">embed_in_derivative_ok=False,</span> <span class="pre">redistribute_standalone_ok=False,</span> <span class="pre">cache_bytes_ok=False,</span> <span class="pre">modification_ok=False,</span> <span class="pre">ai_training_ok=False,</span> <span class="pre">requires_attribution=False,</span> <span class="pre">revenue_cap_usd=None)</span></span><a class="headerlink" href="#foley.licensing.UNKNOWN_LICENSE_FLAGS" title="Link to this definition"></a></dt>
 <dd><p>Fail-closed fallback for unknown / <code class="docutils literal notranslate"><span class="pre">Proprietary-*</span></code> license ids (all False, cap None).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.licensing.UNKNOWN_LICENSE_META">
+<span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">UNKNOWN_LICENSE_META</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">LicenseMeta(display_name='Unknown</span> <span class="pre">/</span> <span class="pre">unverified</span> <span class="pre">license',</span> <span class="pre">url=None)</span></span><a class="headerlink" href="#foley.licensing.UNKNOWN_LICENSE_META" title="Link to this definition"></a></dt>
+<dd><p>Fail-closed display fallback for unknown / <code class="docutils literal notranslate"><span class="pre">Proprietary-*</span></code> license ids.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -287,6 +324,21 @@ unrecognized, missing, or a fail-closed ND/SA variant.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.licensing.license_meta">
+<span class="sig-prename descclassname"><span class="pre">foley.licensing.</span></span><span class="sig-name descname"><span class="pre">license_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">license_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.licensing.LicenseMeta" title="foley.licensing.LicenseMeta"><span class="pre">LicenseMeta</span></a></span></span><a class="reference internal" href="../../_modules/foley/licensing.html#license_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.licensing.license_meta" title="Link to this definition"></a></dt>
+<dd><p>Return the display <a class="reference internal" href="#foley.licensing.LicenseMeta" title="foley.licensing.LicenseMeta"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseMeta</span></code></a> for <code class="docutils literal notranslate"><span class="pre">license_id</span></code> (fail-closed fallback).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>license_id</strong> – The normalized license id.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mapped <a class="reference internal" href="#foley.licensing.LicenseMeta" title="foley.licensing.LicenseMeta"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseMeta</span></code></a>, or <a class="reference internal" href="#foley.licensing.UNKNOWN_LICENSE_META" title="foley.licensing.UNKNOWN_LICENSE_META"><code class="xref py py-data docutils literal notranslate"><span class="pre">UNKNOWN_LICENSE_META</span></code></a> for an
+unrecognized / <code class="docutils literal notranslate"><span class="pre">Proprietary-*</span></code> id.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -294,7 +346,7 @@ unrecognized, missing, or a fail-closed ND/SA variant.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index/taxonomy/ucs.html" class="btn btn-neutral float-left" title="foley.index.taxonomy.ucs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="qc.html" class="btn btn-neutral float-right" title="foley.qc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="provenance.html" class="btn btn-neutral float-right" title="foley.provenance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

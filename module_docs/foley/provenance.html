@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.provenance &mdash; foley 0.0.7 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=bbaf98b3"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="foley.provenance.credits" href="provenance/credits.html" />
+    <link rel="prev" title="foley.licensing" href="licensing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licensing.html">foley.licensing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.provenance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.CreditEntry"><code class="docutils literal notranslate"><span class="pre">CreditEntry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.Credits"><code class="docutils literal notranslate"><span class="pre">Credits</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.provenance.Credits.manifest"><code class="docutils literal notranslate"><span class="pre">Credits.manifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.provenance.Credits.markdown"><code class="docutils literal notranslate"><span class="pre">Credits.markdown</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.attribution_line"><code class="docutils literal notranslate"><span class="pre">attribution_line()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.credit_entry"><code class="docutils literal notranslate"><span class="pre">credit_entry()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.credits_for"><code class="docutils literal notranslate"><span class="pre">credits_for()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.credits_manifest"><code class="docutils literal notranslate"><span class="pre">credits_manifest()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.provenance.render_credits_md"><code class="docutils literal notranslate"><span class="pre">render_credits_md()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">foley.stores</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.provenance</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/foley/provenance.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.provenance">
+<span id="foley-provenance"></span><h1>foley.provenance<a class="headerlink" href="#module-foley.provenance" title="Link to this heading"></a></h1>
+<p>Provenance layer for foley — attribution/credits (and, later, disclosure).</p>
+<p>This subpackage keeps published output legal and traceable. Its first half (#9a)
+is <a class="reference internal" href="provenance/credits.html#module-foley.provenance.credits" title="foley.provenance.credits"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.provenance.credits</span></code></a> — the stdlib-only TASL attribution / credits
+generator (<code class="docutils literal notranslate"><span class="pre">CREDITS.md</span></code> + JSON manifest) that reads the <code class="docutils literal notranslate"><span class="pre">LicenseRecord</span></code> SSOT.</p>
+<p>The sibling <code class="docutils literal notranslate"><span class="pre">disclosure.py</span></code> (#9b, after generation lands) — AudioSeal
+watermarking, C2PA content-credential writers, and the EU AI Act Art. 50
+disclosure checklist — is intentionally NOT imported here so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code>
+stays dependency-light; it arrives with the <code class="docutils literal notranslate"><span class="pre">foley[provenance]</span></code> extra.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.provenance.CreditEntry">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.provenance.</span></span><span class="sig-name descname"><span class="pre">CreditEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'unknown'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modified</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requires_attribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribution_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notice_text_required</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_ai_generated</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disclosure_recommended</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watermark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c2pa_manifest_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/provenance/credits.html#CreditEntry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.CreditEntry" title="Link to this definition"></a></dt>
+<dd><p>One rendered TASL credit for a single sound (a flat, serializable row).</p>
+<p>Built by <a class="reference internal" href="#foley.provenance.credit_entry" title="foley.provenance.credit_entry"><code class="xref py py-func docutils literal notranslate"><span class="pre">credit_entry()</span></code></a> from a record’s rights fields; rendered to a
+single attribution line by <a class="reference internal" href="#foley.provenance.attribution_line" title="foley.provenance.attribution_line"><code class="xref py py-func docutils literal notranslate"><span class="pre">attribution_line()</span></code></a>. Carries the AI-disclosure
++ watermark / C2PA fields as pass-throughs so the JSON manifest becomes the
+content-credentials carrier once #6/#9b populate them (<code class="docutils literal notranslate"><span class="pre">None</span></code> today).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.provenance.Credits">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.provenance.</span></span><span class="sig-name descname"><span class="pre">Credits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="provenance/credits.html#foley.provenance.credits.CreditEntry" title="foley.provenance.credits.CreditEntry"><span class="pre">CreditEntry</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Credits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/provenance/credits.html#Credits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.Credits" title="Link to this definition"></a></dt>
+<dd><p>A deduplicated, ordered collection of <a class="reference internal" href="#foley.provenance.CreditEntry" title="foley.provenance.CreditEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">CreditEntry</span></code></a> for one run.</p>
+<p>Iterable and sized; renders to <code class="docutils literal notranslate"><span class="pre">CREDITS.md</span></code> via <a class="reference internal" href="#foley.provenance.Credits.markdown" title="foley.provenance.Credits.markdown"><code class="xref py py-attr docutils literal notranslate"><span class="pre">markdown</span></code></a> and to a
+JSON manifest via <a class="reference internal" href="#foley.provenance.Credits.manifest" title="foley.provenance.Credits.manifest"><code class="xref py py-attr docutils literal notranslate"><span class="pre">manifest</span></code></a> (== <code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code>). Both are deterministic
+(no timestamps) and diffable.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.provenance.Credits.manifest">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">manifest</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#foley.provenance.Credits.manifest" title="Link to this definition"></a></dt>
+<dd><p>The machine-readable JSON manifest (a plain dict).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.provenance.Credits.markdown">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">markdown</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#foley.provenance.Credits.markdown" title="Link to this definition"></a></dt>
+<dd><p>The rendered <code class="docutils literal notranslate"><span class="pre">CREDITS.md</span></code> document.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.attribution_line">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.</span></span><span class="sig-name descname"><span class="pre">attribution_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="provenance/credits.html#foley.provenance.credits.CreditEntry" title="foley.provenance.credits.CreditEntry"><span class="pre">CreditEntry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><span class="pre">SoundRecord</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><span class="pre">LicenseRecord</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'markdown'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/foley/provenance/credits.html#attribution_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.attribution_line" title="Link to this definition"></a></dt>
+<dd><p>Render one sound’s TASL attribution line.</p>
+<p>A source-supplied <code class="docutils literal notranslate"><span class="pre">attribution_text</span></code> (if non-empty) is returned <strong>verbatim</strong>;
+otherwise the line is synthesized from Title/Author/Source/License, with a
+<code class="docutils literal notranslate"><span class="pre">(modified)</span></code> notice and an AI-disclosure segment appended as applicable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – A <a class="reference internal" href="#foley.provenance.CreditEntry" title="foley.provenance.CreditEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">CreditEntry</span></code></a>, or any credit input (coerced first).</p></li>
+<li><p><strong>fmt</strong> – <code class="docutils literal notranslate"><span class="pre">'markdown'</span></code> (hyperlinked list-item body) or <code class="docutils literal notranslate"><span class="pre">'plain'</span></code> (text with
+URLs in parentheses).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The attribution line (no leading bullet / trailing newline).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.credit_entry">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.</span></span><span class="sig-name descname"><span class="pre">credit_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><span class="pre">SoundRecord</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><span class="pre">LicenseRecord</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="provenance/credits.html#foley.provenance.credits.CreditEntry" title="foley.provenance.credits.CreditEntry"><span class="pre">CreditEntry</span></a></span></span><a class="reference internal" href="../../_modules/foley/provenance/credits.html#credit_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.credit_entry" title="Link to this definition"></a></dt>
+<dd><p>Build a <a class="reference internal" href="#foley.provenance.CreditEntry" title="foley.provenance.CreditEntry"><code class="xref py py-class docutils literal notranslate"><span class="pre">CreditEntry</span></code></a> from a record (title override optional).</p>
+<p>Every field is read straight off the <a class="reference internal" href="base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a> (flags
+never re-derived); <code class="docutils literal notranslate"><span class="pre">modified</span></code> reflects a non-empty <code class="docutils literal notranslate"><span class="pre">transformations</span></code> list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>record</strong> – A <a class="reference internal" href="base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a>, <a class="reference internal" href="base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>,
+or <a class="reference internal" href="base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a>.</p></li>
+<li><p><strong>title</strong> – Explicit title override (else resolved from caption/tags/…).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.credits_for">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.</span></span><span class="sig-name descname"><span class="pre">credits_for</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><span class="pre">SoundRecord</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><span class="pre">LicenseRecord</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Credits'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_required</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'appearance'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="provenance/credits.html#foley.provenance.credits.Credits" title="foley.provenance.credits.Credits"><span class="pre">Credits</span></a></span></span><a class="reference internal" href="../../_modules/foley/provenance/credits.html#credits_for"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.credits_for" title="Link to this definition"></a></dt>
+<dd><p>Build the deduplicated <a class="reference internal" href="#foley.provenance.Credits" title="foley.provenance.Credits"><code class="xref py py-class docutils literal notranslate"><span class="pre">Credits</span></code></a> for the sounds used in a run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sounds</strong> – An iterable of records / candidates / license records.</p></li>
+<li><p><strong>title</strong> – The credits heading (also carried in the manifest).</p></li>
+<li><p><strong>only_required</strong> – Keep only entries whose license <em>requires</em> attribution
+(drops CC0 / user-owned courtesy credits). Default <code class="docutils literal notranslate"><span class="pre">False</span></code> credits
+everything (never-discard-provenance).</p></li>
+<li><p><strong>sort</strong> – <code class="docutils literal notranslate"><span class="pre">'appearance'</span></code> (default: first-seen order), <code class="docutils literal notranslate"><span class="pre">'author'</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">'title'</span></code> (case-insensitive alpha).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#foley.provenance.Credits" title="foley.provenance.Credits"><code class="xref py py-class docutils literal notranslate"><span class="pre">Credits</span></code></a>; identical sounds (same id) are credited once
+(first-writer-wins).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.credits_manifest">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.</span></span><span class="sig-name descname"><span class="pre">credits_manifest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">credits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="provenance/credits.html#foley.provenance.credits.Credits" title="foley.provenance.credits.Credits"><span class="pre">Credits</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/foley/provenance/credits.html#credits_manifest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.credits_manifest" title="Link to this definition"></a></dt>
+<dd><p>The machine-readable manifest for <code class="docutils literal notranslate"><span class="pre">credits</span></code> — a JSON-native dict.</p>
+<p><code class="docutils literal notranslate"><span class="pre">entries</span></code> is a plain <code class="docutils literal notranslate"><span class="pre">list</span></code> of per-credit dicts (not the <code class="docutils literal notranslate"><span class="pre">tuple</span></code> that
+<code class="docutils literal notranslate"><span class="pre">dataclasses.asdict</span></code> would preserve), so the manifest equals
+<code class="docutils literal notranslate"><span class="pre">json.loads(credits.to_json())</span></code> — the exact shape written to <code class="docutils literal notranslate"><span class="pre">credits.json</span></code>.
+It carries the full field set, including the <code class="docutils literal notranslate"><span class="pre">requires_attribution</span></code> mark and
+the <code class="docutils literal notranslate"><span class="pre">watermark</span></code> / <code class="docutils literal notranslate"><span class="pre">c2pa_manifest_ref</span></code> pass-throughs (<code class="docutils literal notranslate"><span class="pre">None</span></code> until #9b).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.provenance.render_credits_md">
+<span class="sig-prename descclassname"><span class="pre">foley.provenance.</span></span><span class="sig-name descname"><span class="pre">render_credits_md</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">credits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="provenance/credits.html#foley.provenance.credits.Credits" title="foley.provenance.credits.Credits"><span class="pre">Credits</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/foley/provenance/credits.html#render_credits_md"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.provenance.render_credits_md" title="Link to this definition"></a></dt>
+<dd><p>Render <code class="docutils literal notranslate"><span class="pre">credits</span></code> as a deterministic <code class="docutils literal notranslate"><span class="pre">CREDITS.md</span></code> document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>credits</strong> – The <a class="reference internal" href="#foley.provenance.Credits" title="foley.provenance.Credits"><code class="xref py py-class docutils literal notranslate"><span class="pre">Credits</span></code></a> to render.</p></li>
+<li><p><strong>title</strong> – Heading override (default: <code class="docutils literal notranslate"><span class="pre">credits.title</span></code>).</p></li>
+<li><p><strong>heading_level</strong> – Markdown heading level for the title (default <code class="docutils literal notranslate"><span class="pre">2</span></code> → <code class="docutils literal notranslate"><span class="pre">##</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Markdown document (bulleted attribution lines; a placeholder note when
+empty), ending in a single trailing newline.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="licensing.html" class="btn btn-neutral float-left" title="foley.licensing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="provenance/credits.html" class="btn btn-neutral float-right" title="foley.provenance.credits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
