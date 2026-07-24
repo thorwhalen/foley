@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.stores &mdash; foley 0.0.2 documentation</title>
+  <title>foley.stores &mdash; foley 0.0.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../_static/documentation_options.js?v=47de8214"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -124,6 +124,14 @@
 <span class="sd">       ``redistribute_standalone_ok`` (copyright): a Freesound CC0 item is</span>
 <span class="sd">       legally redistributable yet ``cache_bytes_ok=False``, so it is stored</span>
 <span class="sd">       by-reference (URI + provenance only, NO bytes cached).</span>
+<span class="sd">    #3 The meta store is safe by construction — ``sound_id`` values become</span>
+<span class="sd">       on-disk filenames, and once SOURCE adapters mint external-derived ids</span>
+<span class="sd">       (``freesound:123``, URLs, arbitrary strings) an unescaped id could carry</span>
+<span class="sd">       ``/`` / ``..`` / drive letters / NUL and escape the meta dir or collide.</span>
+<span class="sd">       :func:`make_meta_store` percent-encodes every id into a single, non-dot</span>
+<span class="sd">       filename component (reversibly, so listing still yields the original id),</span>
+<span class="sd">       and :func:`store_sound` rejects an empty id before any write. Hex content</span>
+<span class="sd">       ids are unaffected (percent-encoding is a no-op on them).</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
@@ -131,6 +139,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">MutableMapping</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">quote</span><span class="p">,</span> <span class="n">unquote</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">Files</span><span class="p">,</span> <span class="n">JsonFiles</span><span class="p">,</span> <span class="n">mk_dirs_if_missing</span><span class="p">,</span> <span class="n">wrap_kvs</span>
 
@@ -193,6 +202,43 @@
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_sound_id</span><span class="p">(</span><span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reject ids that cannot become a safe, round-trippable meta filename.</span>
+
+<span class="sd">    The path-*safety* is provided by :func:`_meta_filename`&#39;s percent-encoding;</span>
+<span class="sd">    this guard only rejects the degenerate cases encoding cannot rescue — a</span>
+<span class="sd">    non-``str`` or an empty id (which would map to the ambiguous hidden file</span>
+<span class="sd">    ``.json``). Fail-closed: a bad id is a programming error, not data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">sound_id</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sound_id must be a non-empty str, got </span><span class="si">{</span><span class="n">sound_id</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sound_id</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_meta_filename</span><span class="p">(</span><span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map a ``sound_id`` to its on-disk metadata filename, escape-proof.</span>
+
+<span class="sd">    Percent-encodes every character outside the URL-unreserved set (so ``/``,</span>
+<span class="sd">    ``\\``, ``:``, ``..`` separators, NUL, etc. can never form a path that</span>
+<span class="sd">    escapes the store root or spawns a subdirectory), then guarantees the result</span>
+<span class="sd">    is not a dotfile (``dol`` silently omits leading-dot files from iteration —</span>
+<span class="sd">    so an id like ``..`` or ``.foo`` would persist yet vanish from ``list()``).</span>
+<span class="sd">    The mapping is injective and reversed by :func:`_meta_key`, so listing still</span>
+<span class="sd">    yields the original ids. A no-op on hex content ids (all-unreserved).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="n">quote</span><span class="p">(</span><span class="n">_validate_sound_id</span><span class="p">(</span><span class="n">sound_id</span><span class="p">),</span> <span class="n">safe</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">encoded</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>  <span class="c1"># dol skips dotfiles on iteration</span>
+        <span class="n">encoded</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%2E</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">encoded</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">encoded</span><span class="si">}{</span><span class="n">META_FILE_SUFFIX</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_meta_key</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Invert :func:`_meta_filename`: on-disk filename -&gt; original ``sound_id``.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">META_FILE_SUFFIX</span><span class="p">):</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">META_FILE_SUFFIX</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">unquote</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="make_meta_store">
 <a class="viewcode-back" href="../../module_docs/foley/stores.html#foley.make_meta_store">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_meta_store</span><span class="p">(</span>
@@ -202,7 +248,9 @@
 
 <span class="sd">    ``SoundRecord`` values are (de)serialized transparently via the</span>
 <span class="sd">    ``SerializableMixin`` (``to_dict`` / ``from_dict``); each record is written as</span>
-<span class="sd">    a ``{sound_id}.json`` file while the store&#39;s keys stay the bare ``sound_id``.</span>
+<span class="sd">    a percent-encoded ``{sound_id}.json`` file while the store&#39;s keys stay the</span>
+<span class="sd">    bare ``sound_id`` (invariant #3 — the id is escaped at this boundary so an</span>
+<span class="sd">    externally-derived id can never escape ``rootdir`` or collide via ``/``/``..``).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        rootdir: Directory that holds the metadata JSON files (created if missing).</span>
@@ -216,12 +264,10 @@
         <span class="n">obj_of_data</span><span class="o">=</span><span class="n">SoundRecord</span><span class="o">.</span><span class="n">from_dict</span><span class="p">,</span>  <span class="c1"># dict -&gt; SoundRecord on read</span>
         <span class="n">data_of_obj</span><span class="o">=</span><span class="k">lambda</span> <span class="n">rec</span><span class="p">:</span> <span class="n">rec</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>  <span class="c1"># SoundRecord -&gt; dict on write</span>
         <span class="c1"># dol applies id_of_key to reach the underlying store and key_of_id when</span>
-        <span class="c1"># listing, so id_of_key adds the file suffix and key_of_id strips it —</span>
-        <span class="c1"># exposing bare sound_id keys over {sound_id}.json files on disk.</span>
-        <span class="n">id_of_key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}{</span><span class="n">META_FILE_SUFFIX</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># sound_id -&gt; filename</span>
-        <span class="n">key_of_id</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="p">(</span>
-            <span class="n">k</span><span class="p">[:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">META_FILE_SUFFIX</span><span class="p">)]</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">META_FILE_SUFFIX</span><span class="p">)</span> <span class="k">else</span> <span class="n">k</span>
-        <span class="p">),</span>  <span class="c1"># filename -&gt; sound_id</span>
+        <span class="c1"># listing, so id_of_key escapes the id + adds the suffix and key_of_id</span>
+        <span class="c1"># reverses it — exposing bare sound_id keys over safe {enc}.json files.</span>
+        <span class="n">id_of_key</span><span class="o">=</span><span class="n">_meta_filename</span><span class="p">,</span>  <span class="c1"># sound_id -&gt; escaped filename</span>
+        <span class="n">key_of_id</span><span class="o">=</span><span class="n">_meta_key</span><span class="p">,</span>  <span class="c1"># filename -&gt; sound_id</span>
     <span class="p">)</span></div>
 
 
@@ -262,13 +308,16 @@
 <span class="sd">        The same (mutated) ``record``, after it has been written into ``meta``.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        ValueError: If the sound resolves to by-reference storage but ``record.uri``</span>
-<span class="sd">            is empty (a by-reference sound must name a fetchable source URL).</span>
+<span class="sd">        ValueError: If ``record.id`` is empty/non-``str`` (checked first, so a bad</span>
+<span class="sd">            id never leaves an orphan blob), or if the sound resolves to</span>
+<span class="sd">            by-reference storage but ``record.uri`` is empty (a by-reference sound</span>
+<span class="sd">            must name a fetchable source URL).</span>
 
 <span class="sd">    Note:</span>
 <span class="sd">        The blob is written BEFORE the record so a crash can never leave a</span>
 <span class="sd">        metadata reference dangling against a missing blob.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_validate_sound_id</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># fail-closed before any store side effect</span>
     <span class="n">allow</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">cache_bytes_ok</span> <span class="k">if</span> <span class="n">cache_bytes_ok</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cache_bytes_ok</span>
     <span class="k">if</span> <span class="n">allow</span> <span class="ow">and</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">key</span> <span class="o">=</span> <span class="n">content_key</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>

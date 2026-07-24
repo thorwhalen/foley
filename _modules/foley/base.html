@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.base &mdash; foley 0.0.2 documentation</title>
+  <title>foley.base &mdash; foley 0.0.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../_static/documentation_options.js?v=47de8214"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -393,8 +393,11 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">LicenseRecord</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-sound rights + provenance. SSOT for BOTH ``keep()`` and storage mode.</span>
 
-<span class="sd">    The eight derived flags default fail-closed here (the bare-record baseline);</span>
-<span class="sd">    populate them from the ``license_id`` via</span>
+<span class="sd">    The derived permission flags default fail-closed here (the bare-record</span>
+<span class="sd">    baseline) — with one deliberate exception: ``embed_in_derivative_ok``</span>
+<span class="sd">    defaults ``True`` (the normal case for a licensed sound). That is not a live</span>
+<span class="sd">    bypass: ``keep()`` checks ``rights_verified`` first, so an unverified record</span>
+<span class="sd">    is rejected regardless. Populate the flags from the ``license_id`` via</span>
 <span class="sd">    ``foley.licensing.apply_license_flags`` (source overrides win). Never</span>
 <span class="sd">    hand-set the derived flags — always route through the policy layer.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

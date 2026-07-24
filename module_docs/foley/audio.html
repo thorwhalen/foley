@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.audio &mdash; foley 0.0.2 documentation</title>
+  <title>foley.audio &mdash; foley 0.0.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../_static/documentation_options.js?v=47de8214"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -251,13 +251,15 @@ out-ramps never overlap on tiny inputs.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="foley.audio.loudness_normalize">
-<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">loudness_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_lufs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-16.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_peak_dbtp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ndarray'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/audio.html#loudness_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.loudness_normalize" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">loudness_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_lufs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-16.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_ceiling_dbfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_block_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ndarray'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/audio.html#loudness_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.loudness_normalize" title="Link to this definition"></a></dt>
 <dd><p>Loudness-normalize to <code class="docutils literal notranslate"><span class="pre">target_lufs</span></code>, then keep it peak-safe.</p>
 <p>Integrated loudness is measured (ITU-R BS.1770-4 / EBU R128), the signal is
 scaled to <code class="docutils literal notranslate"><span class="pre">target_lufs</span></code>, and finally attenuated so its sample peak sits at
-or below <code class="docutils literal notranslate"><span class="pre">true_peak_dbtp</span></code>. Near-silent input (measured loudness at or below
-the <code class="docutils literal notranslate"><span class="pre">LUFS_GATE_FLOOR</span></code>) is returned <strong>unchanged</strong> — flag it, don’t amplify
-hiss.</p>
+or below <code class="docutils literal notranslate"><span class="pre">peak_ceiling_dbfs</span></code>. Two inputs are returned <strong>unchanged</strong> (flag
+them, don’t amplify): near-silent input (measured loudness at or below
+<code class="docutils literal notranslate"><span class="pre">LUFS_GATE_FLOOR</span></code>), and a clip shorter than one BS.1770 gating block
+(<code class="docutils literal notranslate"><span class="pre">min_block_s</span></code>) — which <code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> cannot measure and would otherwise
+raise <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> on (routine for one-shots: clicks, blips, gunshots).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -266,14 +268,19 @@ pyloudnorm expects).</p></li>
 <li><p><strong>sample_rate</strong> – Sample rate in Hz.</p></li>
 <li><p><strong>target_lufs</strong> – Desired integrated loudness (default = foley’s podcast
 target).</p></li>
-<li><p><strong>true_peak_dbtp</strong> – Ceiling (dBFS, sample-peak approximation) applied after
-loudness normalization.</p></li>
+<li><p><strong>peak_ceiling_dbfs</strong> – Sample-peak ceiling (dBFS) applied after loudness
+normalization. Note this is a <em>sample</em>-peak limit, not an inter-sample
+true-peak (dBTP) limit — see <a class="reference internal" href="qc.html#foley.qc.true_peak_dbtp" title="foley.qc.true_peak_dbtp"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.qc.true_peak_dbtp()</span></code></a> for the
+oversampled measurement.</p></li>
+<li><p><strong>min_block_s</strong> – Minimum clip length (seconds) that can be loudness-measured;
+shorter clips are returned unchanged with <code class="docutils literal notranslate"><span class="pre">measured</span> <span class="pre">=</span> <span class="pre">-inf</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(normalized,</span> <span class="pre">measured_input_lufs)</span></code>. When the input is near-silent,
-<code class="docutils literal notranslate"><span class="pre">normalized</span></code> is the unchanged input and <code class="docutils literal notranslate"><span class="pre">measured_input_lufs</span></code> is at
-or below <code class="docutils literal notranslate"><span class="pre">LUFS_GATE_FLOOR</span></code> (possibly <code class="docutils literal notranslate"><span class="pre">-inf</span></code>).</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">(normalized,</span> <span class="pre">measured_input_lufs)</span></code>. When the input is near-silent or
+too short to measure, <code class="docutils literal notranslate"><span class="pre">normalized</span></code> is the unchanged input and
+<code class="docutils literal notranslate"><span class="pre">measured_input_lufs</span></code> is at or below <code class="docutils literal notranslate"><span class="pre">LUFS_GATE_FLOOR</span></code> (<code class="docutils literal notranslate"><span class="pre">-inf</span></code> for
+the too-short case).</p>
 </dd>
 </dl>
 <p>Lazy dependencies: <code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> (+ <code class="docutils literal notranslate"><span class="pre">numpy</span></code>).</p>

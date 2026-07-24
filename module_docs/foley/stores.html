@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.stores &mdash; foley 0.0.2 documentation</title>
+  <title>foley.stores &mdash; foley 0.0.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
+      <script src="../../_static/documentation_options.js?v=47de8214"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -136,6 +136,14 @@ package.</p>
 legally redistributable yet <code class="docutils literal notranslate"><span class="pre">cache_bytes_ok=False</span></code>, so it is stored
 by-reference (URI + provenance only, NO bytes cached).</p>
 </dd>
+<dt>#3 The meta store is safe by construction — <code class="docutils literal notranslate"><span class="pre">sound_id</span></code> values become</dt><dd><p>on-disk filenames, and once SOURCE adapters mint external-derived ids
+(<code class="docutils literal notranslate"><span class="pre">freesound:123</span></code>, URLs, arbitrary strings) an unescaped id could carry
+<code class="docutils literal notranslate"><span class="pre">/</span></code> / <code class="docutils literal notranslate"><span class="pre">..</span></code> / drive letters / NUL and escape the meta dir or collide.
+<a class="reference internal" href="#foley.stores.make_meta_store" title="foley.stores.make_meta_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a> percent-encodes every id into a single, non-dot
+filename component (reversibly, so listing still yields the original id),
+and <a class="reference internal" href="#foley.stores.store_sound" title="foley.stores.store_sound"><code class="xref py py-func docutils literal notranslate"><span class="pre">store_sound()</span></code></a> rejects an empty id before any write. Hex content
+ids are unaffected (percent-encoding is a no-op on them).</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -213,7 +221,9 @@ it directly to <a class="reference internal" href="#foley.stores.store_sound" ti
 <dd><p>Build the metadata store: <code class="docutils literal notranslate"><span class="pre">Mapping[sound_id</span> <span class="pre">-&gt;</span> <span class="pre">SoundRecord]</span></code> (JSON files).</p>
 <p><code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code> values are (de)serialized transparently via the
 <code class="docutils literal notranslate"><span class="pre">SerializableMixin</span></code> (<code class="docutils literal notranslate"><span class="pre">to_dict</span></code> / <code class="docutils literal notranslate"><span class="pre">from_dict</span></code>); each record is written as
-a <code class="docutils literal notranslate"><span class="pre">{sound_id}.json</span></code> file while the store’s keys stay the bare <code class="docutils literal notranslate"><span class="pre">sound_id</span></code>.</p>
+a percent-encoded <code class="docutils literal notranslate"><span class="pre">{sound_id}.json</span></code> file while the store’s keys stay the
+bare <code class="docutils literal notranslate"><span class="pre">sound_id</span></code> (invariant #3 — the id is escaped at this boundary so an
+externally-derived id can never escape <code class="docutils literal notranslate"><span class="pre">rootdir</span></code> or collide via <code class="docutils literal notranslate"><span class="pre">/</span></code>/<code class="docutils literal notranslate"><span class="pre">..</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>rootdir</strong> – Directory that holds the metadata JSON files (created if missing).</p>
@@ -254,8 +264,10 @@ for by-reference it is optional — if given, its hash is recorded in
 <dd class="field-even"><p>The same (mutated) <code class="docutils literal notranslate"><span class="pre">record</span></code>, after it has been written into <code class="docutils literal notranslate"><span class="pre">meta</span></code>.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If the sound resolves to by-reference storage but <code class="docutils literal notranslate"><span class="pre">record.uri</span></code>
-    is empty (a by-reference sound must name a fetchable source URL).</p>
+<dd class="field-odd"><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">record.id</span></code> is empty/non-<code class="docutils literal notranslate"><span class="pre">str</span></code> (checked first, so a bad
+    id never leaves an orphan blob), or if the sound resolves to
+    by-reference storage but <code class="docutils literal notranslate"><span class="pre">record.uri</span></code> is empty (a by-reference sound
+    must name a fetchable source URL).</p>
 </dd>
 </dl>
 <div class="admonition note">
