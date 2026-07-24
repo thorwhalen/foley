@@ -157,7 +157,9 @@ def _cmd_eval_fit(args) -> int:
         f"f1={report.fit_f1:.4f} fit_score={report.fit_score:.4f} "
         f"auto_accept={report.auto_accept_rate:.4f}"
     )
-    print(f"judge={report.judge_model} accepted={report.n_accepted} confirmed={report.n_confirmed}")
+    print(
+        f"judge={report.judge_model} accepted={report.n_accepted} confirmed={report.n_confirmed}"
+    )
     for stratum, s in sorted(report.strata.items()):
         print(f"  {stratum}: fit_precision={s['fit_precision']:.4f} (n={s['n']})")
     # Report-only unless a floor is supplied (Tier-2 is nightly/pre-release, not a PR gate).
@@ -242,8 +244,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Tier-2 fit eval (nightly/pre-release; report-only unless --min-fit-precision)",
     )
     p_eval_fit.add_argument("-k", type=int, default=10)
-    p_eval_fit.add_argument("--golden", help="path to a golden-set JSON (default: the frozen seed)")
-    p_eval_fit.add_argument("--sample", type=int, default=None, help="stratified sample cap (cost gate)")
+    p_eval_fit.add_argument(
+        "--golden", help="path to a golden-set JSON (default: the frozen seed)"
+    )
+    p_eval_fit.add_argument(
+        "--sample", type=int, default=None, help="stratified sample cap (cost gate)"
+    )
     p_eval_fit.add_argument(
         "--level", default="judge", choices=["listen", "judge"], help="fit-judge rung"
     )
@@ -255,7 +261,9 @@ def build_parser() -> argparse.ArgumentParser:
         dest="min_fit_precision",
         help="optional gate floor (nightly/pre-release only); omit for report-only",
     )
-    p_eval_fit.add_argument("--json", action="store_true", help="emit the full FitReport as JSON")
+    p_eval_fit.add_argument(
+        "--json", action="store_true", help="emit the full FitReport as JSON"
+    )
     p_eval_fit.set_defaults(func=_cmd_eval_fit)
 
     p_search = sub.add_parser("search", help="hybrid search of the default library")

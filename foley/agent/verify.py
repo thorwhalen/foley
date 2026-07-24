@@ -249,11 +249,17 @@ class AudioLMJudge:
         self.last_response = None
 
     def judge(
-        self, event: SoundEvent, candidate: Candidate, *, level: VerifyLevel = VerifyLevel.listen
+        self,
+        event: SoundEvent,
+        candidate: Candidate,
+        *,
+        level: VerifyLevel = VerifyLevel.listen,
     ) -> Verdict:
         """Listen to the clip and return the AQAScore :class:`Verdict` (``P(yes) ≥ tau``)."""
         wav, sr = _load_candidate_audio(candidate)
-        pipeline = self._pipeline if self._pipeline is not None else self._build_pipeline()
+        pipeline = (
+            self._pipeline if self._pipeline is not None else self._build_pipeline()
+        )
         p_yes, raw = _aqa_yes_probability(pipeline, wav, sr, event.query)
         self.last_response = raw
         return Verdict(
@@ -263,7 +269,9 @@ class AudioLMJudge:
             level=VerifyLevel(level),
         )
 
-    def _build_pipeline(self):  # pragma: no cover - the real Qwen2-Audio path (foley[fit])
+    def _build_pipeline(
+        self,
+    ):  # pragma: no cover - the real Qwen2-Audio path (foley[fit])
         """Lazily build the real Qwen2-Audio pipeline wrapper (heavy; behind ``foley[fit]``)."""
         raise NotImplementedError(
             "AudioLMJudge needs an injected pipeline or foley[fit] (transformers+torch); "

@@ -56,13 +56,17 @@ def frechet_distance(x_ref, x_gen) -> float:
     xr = np.atleast_2d(np.asarray(x_ref, dtype=float))
     xg = np.atleast_2d(np.asarray(x_gen, dtype=float))
     if len(xr) < 2 or len(xg) < 2:
-        raise ValueError("FAD needs at least 2 samples in each set to estimate a covariance")
+        raise ValueError(
+            "FAD needs at least 2 samples in each set to estimate a covariance"
+        )
     mu_r, mu_g = xr.mean(axis=0), xg.mean(axis=0)
     sig_r = np.cov(xr, rowvar=False)
     sig_g = np.cov(xg, rowvar=False)
     diff = mu_r - mu_g
     return float(
-        diff @ diff + np.trace(np.atleast_2d(sig_r)) + np.trace(np.atleast_2d(sig_g))
+        diff @ diff
+        + np.trace(np.atleast_2d(sig_r))
+        + np.trace(np.atleast_2d(sig_g))
         - 2.0 * _psd_sqrt_trace(sig_r, sig_g)
     )
 
@@ -105,7 +109,7 @@ def kernel_audio_distance(x_ref, x_gen, *, bandwidth: Optional[float] = None) ->
 
     def _rbf(A, B):
         sq = ((A[:, None, :] - B[None, :, :]) ** 2).sum(-1)
-        return np.exp(-sq / (2.0 * bandwidth ** 2))
+        return np.exp(-sq / (2.0 * bandwidth**2))
 
     m, n = len(X), len(Y)
     if m < 2 or n < 2:
@@ -126,7 +130,9 @@ class FidelityStamp:
     uninterpretable; this stamp makes the basis of comparison legible.
     """
 
-    embedding: str  # the embedder model id (e.g. 'panns-wavegram-logmel', 'laion/larger_clap')
+    embedding: (
+        str  # the embedder model id (e.g. 'panns-wavegram-logmel', 'laion/larger_clap')
+    )
     toolkit: str  # 'foley-numpy' (pure-numpy) | 'fadtk' | 'kadtk'
     version: str
     n_ref: int
@@ -174,7 +180,10 @@ def generation_fidelity(
 
     def _embed(wavs):
         return np.stack(
-            [np.asarray(embedder.embed_audio(np.asarray(w, dtype=np.float32), sr)) for w in wavs]
+            [
+                np.asarray(embedder.embed_audio(np.asarray(w, dtype=np.float32), sr))
+                for w in wavs
+            ]
         )
 
     xr, xg = _embed(ref_wavs), _embed(gen_wavs)

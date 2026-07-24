@@ -34,7 +34,9 @@ from .retrieval import mean_over_queries
 # ---------------------------------------------------------------------------
 
 
-def _confusion(matches: "Sequence[bool]", relevants: "Sequence[bool]") -> "tuple[int, int, int]":
+def _confusion(
+    matches: "Sequence[bool]", relevants: "Sequence[bool]"
+) -> "tuple[int, int, int]":
     tp = sum(1 for m, r in zip(matches, relevants) if m and r)
     fp = sum(1 for m, r in zip(matches, relevants) if m and not r)
     fn = sum(1 for m, r in zip(matches, relevants) if (not m) and r)
@@ -89,7 +91,9 @@ class FitReport:
     default empty on the pure-fake path (no human labels, no generated-set wavs).
     """
 
-    per_item: dict = field(default_factory=dict)  # {query_id: {fit_precision, fit_score, ...}}
+    per_item: dict = field(
+        default_factory=dict
+    )  # {query_id: {fit_precision, fit_score, ...}}
     fit_precision: float = 0.0
     fit_recall: float = 0.0
     fit_f1: float = 0.0
@@ -97,8 +101,12 @@ class FitReport:
     auto_accept_rate: float = 0.0  # confirmed / accepted
     n_accepted: int = 0
     n_confirmed: int = 0
-    strata: dict = field(default_factory=dict)  # {stratum: {fit_precision, fit_score, n}}
-    calibration: Optional[dict] = None  # AlphaResult dict (judge-vs-human); None on the fake path
+    strata: dict = field(
+        default_factory=dict
+    )  # {stratum: {fit_precision, fit_score, n}}
+    calibration: Optional[dict] = (
+        None  # AlphaResult dict (judge-vs-human); None on the fake path
+    )
     fidelity: dict = field(default_factory=dict)  # {label: FidelityResult-ish dict}
     judge_model: str = ""
     embedder_model_id: str = ""
@@ -130,7 +138,9 @@ class FitReport:
             "per-stratum fit_precision:",
         ]
         for stratum, s in sorted(self.strata.items()):
-            lines.append(f"  {stratum}: {s.get('fit_precision', 0.0):.4f} (n={s.get('n', 0)})")
+            lines.append(
+                f"  {stratum}: {s.get('fit_precision', 0.0):.4f} (n={s.get('n', 0)})"
+            )
         return "\n".join(lines)
 
 
@@ -174,7 +184,9 @@ def _strata_key(event, strata_keys) -> tuple:
     return tuple(parts)
 
 
-def stratified_sample(units: list, *, strata_keys, sample: Optional[int], seed: int) -> list:
+def stratified_sample(
+    units: list, *, strata_keys, sample: Optional[int], seed: int
+) -> list:
     """Deterministic seeded stratified draw over ``units`` — the cost gate.
 
     Round-robins across strata (so an easy family cannot dominate a capped sample);
@@ -295,15 +307,21 @@ def run_fit_eval(
 
     level = VerifyLevel(level)
     if level == VerifyLevel.clap:
-        raise ValueError("fit eval requires a 'listen' or 'judge' rung, not 'clap' "
-                         "(the clap rung never invokes the fit-judge)")
+        raise ValueError(
+            "fit eval requires a 'listen' or 'judge' rung, not 'clap' "
+            "(the clap rung never invokes the fit-judge)"
+        )
     golden = golden if golden is not None else load_golden(golden_path)
     embedder = embedder if embedder is not None else HashingBowEmbedder()
     fit_judge = fit_judge if fit_judge is not None else _default_fit_judge(level)
 
-    units = [(item, i, ev) for item in golden for i, ev in enumerate(item.expected_events)]
+    units = [
+        (item, i, ev) for item in golden for i, ev in enumerate(item.expected_events)
+    ]
     units = stratified_sample(units, strata_keys=strata_keys, sample=sample, seed=seed)
-    records = _accepted_candidates(units, embedder=embedder, level=level, judge=fit_judge, k=k)
+    records = _accepted_candidates(
+        units, embedder=embedder, level=level, judge=fit_judge, k=k
+    )
 
     matches = [r["match"] for r in records]
     relevants = [r["relevant"] for r in records]
@@ -314,7 +332,9 @@ def run_fit_eval(
     for qid in {r["query_id"] for r in records}:
         rows = [r for r in records if r["query_id"] == qid]
         per_item[qid] = {
-            "fit_precision": fit_precision([r["match"] for r in rows], [r["relevant"] for r in rows]),
+            "fit_precision": fit_precision(
+                [r["match"] for r in rows], [r["relevant"] for r in rows]
+            ),
             "fit_score": mean_over_queries([r["confidence"] for r in rows]),
             "n": len(rows),
         }
@@ -323,9 +343,13 @@ def run_fit_eval(
     for stratum in {_strata_key(r["event"], strata_keys) for r in records}:
         rows = [r for r in records if _strata_key(r["event"], strata_keys) == stratum]
         strata["|".join(stratum)] = {
-            "fit_precision": fit_precision([r["match"] for r in rows], [r["relevant"] for r in rows]),
+            "fit_precision": fit_precision(
+                [r["match"] for r in rows], [r["relevant"] for r in rows]
+            ),
             "fit_score": mean_over_queries([r["confidence"] for r in rows]),
-            "auto_accept_rate": mean_over_queries([1.0 if r["match"] else 0.0 for r in rows]),
+            "auto_accept_rate": mean_over_queries(
+                [1.0 if r["match"] else 0.0 for r in rows]
+            ),
             "n": len(rows),
         }
 

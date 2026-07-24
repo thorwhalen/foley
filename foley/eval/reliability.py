@@ -102,7 +102,7 @@ def _delta_squared(values, marginals, *, level: str):
         return 1.0 - np.eye(V)
     if level == "interval":
         diff = vals[:, None] - vals[None, :]
-        return diff ** 2
+        return diff**2
     if level != "ordinal":
         raise ValueError(f"unknown level {level!r} (nominal|ordinal|interval)")
     d = np.zeros((V, V), dtype=float)
@@ -110,11 +110,13 @@ def _delta_squared(values, marginals, *, level: str):
         for k in range(V):
             lo, hi = (c, k) if c <= k else (k, c)
             s = n[lo : hi + 1].sum() - (n[c] + n[k]) / 2.0
-            d[c, k] = s ** 2
+            d[c, k] = s**2
     return d
 
 
-def krippendorff_alpha(reliability_data, *, level: str = "ordinal", value_domain=None) -> float:
+def krippendorff_alpha(
+    reliability_data, *, level: str = "ordinal", value_domain=None
+) -> float:
     """Krippendorff's α over ``(raters × units)`` ratings (``nan`` = missing).
 
     ``α = 1 − D_o/D_e`` — 1 is perfect agreement, ~0 is chance, negative is systematic
@@ -194,7 +196,9 @@ class AlphaResult:
     promoted: bool
 
 
-def calibrate_judge_vs_human(human_grades, judge_grades, *, level: str = "ordinal") -> AlphaResult:
+def calibrate_judge_vs_human(
+    human_grades, judge_grades, *, level: str = "ordinal"
+) -> AlphaResult:
     """Compute judge-vs-human agreement and the promotion verdict (report 08 §2.3).
 
     Stacks the human rating row(s) and the model-judge row into one reliability matrix
