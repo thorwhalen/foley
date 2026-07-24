@@ -82,6 +82,15 @@ index-sqlite = [
 tag = [
     "panns-inference",
 ]
+# Retrieval-eval oracle — for the OPT-IN metric cross-check test ONLY. The nDCG
+# PR gate + all metric code are pure numpy/stdlib and never import ranx. ranx
+# pulls the numba/llvmlite chain foley bans from CI (same reason librosa is
+# excluded from the "test" extra); it is deliberately NOT in
+# [tool.wads.ci.install]. (pytrec_eval is a numba-free alternative but needs a
+# compiler, so it is left out of the declared extra.)
+eval = [
+    "ranx>=0.3",
+]
 # Audio captioning on ingest (EnCLAP / Qwen2-Audio adapters plug in behind the
 # Captioner protocol; no default ships yet). transformers/torch already in [clap].
 caption = [

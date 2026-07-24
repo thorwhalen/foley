@@ -159,6 +159,9 @@ from .index import (
 # --- source: bulk-corpus bootstrap (stdlib-only at import; numpy is lazy) ------
 from .bootstrap import bootstrap, demo
 
+# --- eval: Tier-1 retrieval metrics + the nDCG PR gate (numpy lazy) -----------
+from . import eval  # noqa: A004 - deliberate: foley.eval is the retrieval-eval subpackage
+
 __all__ = [
     # --- base: constants + enums ---------------------------------------------
     "SCHEMA_VERSION",
@@ -270,7 +273,32 @@ __all__ = [
     # --- source: bulk-corpus bootstrap ---------------------------------------
     "bootstrap",
     "demo",
+    # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
+    "eval",
+    "evaluate",
 ]
+
+
+def evaluate(*, golden=None, k: int = 10):
+    """Run the Tier-1 retrieval eval over the golden set (nDCG@10 / recall / mAP / MRR).
+
+    Scores every golden query through the real :meth:`SoundLibrary.search` path
+    against a deterministic, CLAP-free Ring-0 library — the same computation the
+    PR gate asserts on. See :mod:`foley.eval`.
+
+    Args:
+        golden: Optional path to a golden-set JSON (default: the frozen seed).
+        k: Retrieval cutoff and metric ``@k``.
+
+    Returns:
+        A :class:`foley.eval.RetrievalReport`.
+    """
+    from .eval.golden import run_ring0_retrieval_eval
+
+    kw = {"k": k}
+    if golden is not None:
+        kw["golden_path"] = golden
+    return run_ring0_retrieval_eval(**kw)
 
 
 def search(
