@@ -374,6 +374,8 @@ __all__ = [
     # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
     "eval",
     "evaluate",
+    # --- eval: Tier-2 fit-judge + fidelity + reliability (#10b) ---------------
+    "evaluate_fit",
     # --- provenance: TASL attribution / credits ------------------------------
     "provenance",
     "credits",
@@ -405,6 +407,57 @@ def evaluate(*, golden=None, k: int = 10):
     if golden is not None:
         kw["golden_path"] = golden
     return run_ring0_retrieval_eval(**kw)
+
+
+def evaluate_fit(
+    *,
+    golden=None,
+    sample=None,
+    level=VerifyLevel.judge,
+    fit_judge=None,
+    embedder=None,
+    seed: int = 0,
+    k: int = 10,
+):
+    """Run the Tier-2 **fit** eval over the golden set — "does the accepted clip fit?" (#10b).
+
+    The judge-based sibling of :func:`evaluate`: over a seeded stratified sample it runs
+    the SELECT pipeline and audits each license-clean candidate with the authoritative
+    fit-judge, returning a :class:`foley.eval.FitReport` (fit-precision / recall / F1 +
+    fit-score + auto-accept-rate + per-stratum breakdown). Works out of the box on the
+    Ring-0 fixture with the deterministic fake judge — no network, key, or heavy deps.
+    **Nightly / pre-release and cost-gated**: report-only — gating is the caller's job via
+    :meth:`FitReport.gate`. It never touches the retrieval ranking (the Tier-1 nDCG gate).
+
+    Args:
+        golden: Optional golden-set JSON path (default: the frozen Ring-0 seed).
+        sample: Optional stratified sample cap (default: the whole set — the cost gate).
+        level: The verify rung the fit-judge audits at — ``'listen'`` or ``'judge'``
+            (default ``VerifyLevel.judge``); ``'clap'`` is rejected.
+        fit_judge: An injected authoritative judge (default: the auto-resolved fit-judge —
+            the LLM arbiter :class:`~foley.agent.AnthropicJudge` when a key is configured,
+            else the hermetic :class:`~foley.agent.StringOverlapJudge` fake; the audio-LM
+            :class:`~foley.agent.AudioLMJudge` is injection-only in this slice).
+        embedder: The Ring-0 embedder (default: the CLAP-free ``HashingBowEmbedder``).
+        seed: The sampling RNG seed.
+        k: Retrieval shortlist depth per event.
+
+    Returns:
+        A :class:`foley.eval.FitReport`.
+    """
+    from .eval.fit import run_fit_eval
+
+    kw = dict(
+        sample=sample,
+        level=level,
+        fit_judge=fit_judge,
+        embedder=embedder,
+        seed=seed,
+        k=k,
+    )
+    if golden is not None:
+        kw["golden_path"] = golden
+    return run_fit_eval(**kw)
 
 
 def credits(

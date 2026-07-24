@@ -162,6 +162,20 @@ obs = [
 agent = [
     "anthropic",
 ]
+# Tier-2 fit-evaluation heavy path (#10b): the audio-LM listen-check (Qwen2-Audio) for
+# AudioLMJudge + real PANNs/CLAP embedders for FAD-P/KAD generation fidelity. All of
+# transformers/torch/torchaudio are imported LAZILY inside AudioLMJudge.judge() /
+# _build_pipeline ONLY, so `import foley` + `import foley.eval` stay dol-only. The
+# Tier-2 pure-numpy metrics (fit_precision, krippendorff_alpha, frechet_distance,
+# kernel_audio_distance) need NONE of this — CI uses the deterministic StringOverlapJudge
+# fake + an injected fake embedder. Deliberately NOT in [tool.wads.ci.install] (stays
+# ['test']); the real Qwen2-Audio round-trip test is importorskip-guarded. Exact FAD/KAD
+# reference numbers (fadtk/kadtk) are optional externals, not pinned here.
+fit = [
+    "transformers>=4.40",
+    "torch",
+    "torchaudio",
+]
 test = [
     "pytest>=7.0",
     "pytest-cov>=4.0",

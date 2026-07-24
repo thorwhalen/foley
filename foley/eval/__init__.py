@@ -7,9 +7,12 @@ whose ``nDCG@10`` regresses by more than ``0.02`` on the Ring-0 golden set. Ever
 part is pure numpy/stdlib and deterministic — no ``ranx``/``numba``, no CLAP, no
 downloads — so the gate runs on every index/embedder/prompt PR in foley's CI.
 
-Tier-2 fit-judging (LLM/audio-LM "does this clip match the intent?") is subtask
-#10b, added after the Select agent (#7). All numpy imports are function-local so
-``import foley`` stays dol-only.
+Tier-2 fit-judging (#10b) — "does this clip match the intent?" — lives alongside
+in :mod:`~foley.eval.fit` (the judge-based fit harness), :mod:`~foley.eval.reliability`
+(Krippendorff's α + judge-vs-human calibration), and :mod:`~foley.eval.fidelity`
+(set-level FAD/KAD generation fidelity). Tier-2 is nightly/pre-release + cost-gated —
+NOT a per-PR gate — and never touches the retrieval ranking. All numpy imports are
+function-local so ``import foley`` stays dol-only.
 """
 
 from __future__ import annotations
@@ -19,6 +22,30 @@ from .baseline import (
     is_stale,
     load_baseline,
     write_baseline,
+)
+from .fidelity import (
+    FidelityResult,
+    FidelityStamp,
+    frechet_distance,
+    generation_fidelity,
+    kernel_audio_distance,
+)
+from .fit import (
+    FitReport,
+    fit_f1,
+    fit_precision,
+    fit_recall,
+    run_fit_eval,
+    stratified_sample,
+)
+from .reliability import (
+    ALPHA_RELIABLE,
+    ALPHA_TENTATIVE,
+    AlphaResult,
+    calibrate_judge_vs_human,
+    krippendorff_alpha,
+    percent_agreement,
+    reliability_band,
 )
 from .embedder import HashingBowEmbedder
 from .golden import (
@@ -63,4 +90,25 @@ __all__ = [
     "write_baseline",
     "is_stale",
     "DEFAULT_TOLERANCE",
+    # --- Tier-2 (#10b): fit harness ---
+    "FitReport",
+    "run_fit_eval",
+    "fit_precision",
+    "fit_recall",
+    "fit_f1",
+    "stratified_sample",
+    # --- Tier-2 (#10b): inter-rater reliability ---
+    "krippendorff_alpha",
+    "percent_agreement",
+    "reliability_band",
+    "calibrate_judge_vs_human",
+    "AlphaResult",
+    "ALPHA_RELIABLE",
+    "ALPHA_TENTATIVE",
+    # --- Tier-2 (#10b): generation fidelity ---
+    "frechet_distance",
+    "kernel_audio_distance",
+    "generation_fidelity",
+    "FidelityStamp",
+    "FidelityResult",
 ]

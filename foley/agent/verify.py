@@ -175,6 +175,116 @@ def _default_judge(level: "str | VerifyLevel") -> Judge:
     return AnthropicJudge() if _anthropic_available() else StringOverlapJudge()
 
 
+# ---------------------------------------------------------------------------
+# Tier-2 fit-judge (#10b) — the audio-LM "listen-and-confirm" rung
+# ---------------------------------------------------------------------------
+# The one capability the #7 roster lacks: ingest the ACTUAL clip bytes and answer
+# "does this audio contain {event}?" (the AQAScore pattern, report 08 §2.1), catching
+# CLAP's right-vibe-wrong-object failure. transformers/torch/torchaudio (foley[fit]) are
+# imported lazily INSIDE the method only, so `import foley` stays dol-only; a fake
+# ``pipeline=`` is injected in tests so the whole path is hermetically unit-tested
+# without torch. The LLM arbiter (AnthropicJudge, level=judge) is left untouched.
+
+
+def _audiolm_available() -> bool:
+    """True iff the audio-LM stack (``foley[fit]``: transformers + torch) is importable."""
+    import importlib.util
+
+    return (
+        importlib.util.find_spec("transformers") is not None
+        and importlib.util.find_spec("torch") is not None
+    )
+
+
+def _load_candidate_audio(candidate: Candidate):
+    """Decode the candidate's clip to ``(wav, sr)`` (lazy ``foley.audio.load``)."""
+    from ..audio import load
+
+    return load(candidate.sound.uri)
+
+
+def _aqa_yes_probability(pipeline, wav, sr, query: str) -> "tuple[float, object]":
+    """Pose the AQAScore yes/no question to the audio-LM and read P(yes).
+
+    Returns ``(p_yes, raw)`` — the injected pipeline may return ``{'p_yes': float}``
+    directly (the fake, and a real wrapper that reads the yes-token probability) or raw
+    text that is parsed to a hard 0/1 (a conservative fallback).
+    """
+    prompt = f"Does this audio contain {query}? Answer strictly yes or no."
+    out = pipeline(prompt, wav, sr)
+    if isinstance(out, dict) and "p_yes" in out:
+        return float(out["p_yes"]), out
+    text = str(out).strip().lower()
+    return (1.0 if text.startswith("yes") else 0.0), out
+
+
+class AudioLMJudge:
+    """The audio-LM ``listen`` rung (``foley[fit]``): Qwen2-Audio "does this contain {event}?".
+
+    ``transformers``/``torch`` are imported lazily inside :meth:`judge`; an injected
+    ``pipeline`` (the test seam, mirroring the Stable-Audio fake-pipeline seam) drives the
+    whole byte-decode → prompt → P(yes) → :class:`Verdict` path with no torch. Stashes
+    ``self.model`` + ``self.last_response`` so ``verify_match``'s GenAI span stays
+    informative (same getattr contract :class:`AnthropicJudge` uses).
+    """
+
+    def __init__(
+        self,
+        *,
+        pipeline=None,
+        model: str = "Qwen/Qwen2-Audio-7B-Instruct",
+        max_tokens: int = 300,
+        tau: float = 0.5,
+    ):
+        self._pipeline = pipeline
+        self.model = model
+        self.max_tokens = max_tokens
+        self.tau = tau
+        self.last_response = None
+
+    def judge(
+        self, event: SoundEvent, candidate: Candidate, *, level: VerifyLevel = VerifyLevel.listen
+    ) -> Verdict:
+        """Listen to the clip and return the AQAScore :class:`Verdict` (``P(yes) ≥ tau``)."""
+        wav, sr = _load_candidate_audio(candidate)
+        pipeline = self._pipeline if self._pipeline is not None else self._build_pipeline()
+        p_yes, raw = _aqa_yes_probability(pipeline, wav, sr, event.query)
+        self.last_response = raw
+        return Verdict(
+            match=p_yes >= self.tau,
+            confidence=p_yes,
+            reason=f"AQAScore P(yes)={p_yes:.2f}",
+            level=VerifyLevel(level),
+        )
+
+    def _build_pipeline(self):  # pragma: no cover - the real Qwen2-Audio path (foley[fit])
+        """Lazily build the real Qwen2-Audio pipeline wrapper (heavy; behind ``foley[fit]``)."""
+        raise NotImplementedError(
+            "AudioLMJudge needs an injected pipeline or foley[fit] (transformers+torch); "
+            "the real Qwen2-Audio wrapper is a deferred #10b follow-up."
+        )
+
+
+def _default_fit_judge(level: "str | VerifyLevel") -> Judge:
+    """The zero-config Tier-2 fit-judge: the LLM arbiter when a key is configured, else the fake.
+
+    Auto-upgrades to :class:`AnthropicJudge` when ``anthropic`` + a key are present (the
+    nightly/pre-release path); in CI (no key) it resolves to the deterministic
+    :class:`StringOverlapJudge`, so ``foley.evaluate_fit()`` is hermetic out of the box.
+
+    :class:`AudioLMJudge` (the audio-LM ``listen`` rung) is **injection-only** in this
+    slice: its real Qwen2-Audio pipeline is a deferred #10b follow-up, so the resolver
+    does not auto-select it (it would need ``foley[fit]`` *and* a built pipeline). Pass
+    ``fit_judge=AudioLMJudge(pipeline=...)`` explicitly to use it. Tests inject explicitly.
+    """
+    from .decompose import _anthropic_available
+
+    VerifyLevel(level)  # validate the rung
+    if _anthropic_available():
+        return AnthropicJudge()
+    return StringOverlapJudge()
+
+
 def verify_match(
     event: SoundEvent,
     candidate: Candidate,
