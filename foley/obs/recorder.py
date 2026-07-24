@@ -58,12 +58,18 @@ class ObsConfig:
 
 
 _CONFIG = ObsConfig()
-_CURRENT_RUN: "ContextVar[Optional[RunRecorder]]" = ContextVar("foley_run", default=None)
+_CURRENT_RUN: "ContextVar[Optional[RunRecorder]]" = ContextVar(
+    "foley_run", default=None
+)
 
 
 def is_enabled() -> bool:
     """Whether observability is on (via :func:`enable` or ``$FOLEY_OBS`` in {1,true,yes})."""
-    return _CONFIG.enabled or os.environ.get("FOLEY_OBS", "").lower() in ("1", "true", "yes")
+    return _CONFIG.enabled or os.environ.get("FOLEY_OBS", "").lower() in (
+        "1",
+        "true",
+        "yes",
+    )
 
 
 def enable(**overrides) -> None:
@@ -134,7 +140,12 @@ class _SpanHandle:
         """Set a (redacted) attribute on both the manifest span record and the OTel mirror."""
         redacted = self._redactor.redact_value(key, value)
         self._record.attributes[key] = redacted
-        self._mirror.set_attribute(key, redacted if isinstance(redacted, (str, bool, int, float)) else str(redacted))
+        self._mirror.set_attribute(
+            key,
+            redacted
+            if isinstance(redacted, (str, bool, int, float))
+            else str(redacted),
+        )
 
 
 class RunRecorder:
@@ -176,7 +187,9 @@ class RunRecorder:
             with self._tracer.start_as_current_span(
                 name, kind=kind, attributes=rec.attributes
             ) as mirror:
-                if self.manifest.trace_ref is None and getattr(mirror, "trace_id", None):
+                if self.manifest.trace_ref is None and getattr(
+                    mirror, "trace_id", None
+                ):
                     self.manifest.trace_ref = mirror.trace_id
                 try:
                     yield _SpanHandle(rec, mirror, self._redactor)
@@ -282,7 +295,11 @@ _NULL_RUN = _NullRun()
 
 def _new_recorder(op: str, *, inputs, params, config: ObsConfig) -> RunRecorder:
     redactor = Redactor(mode=config.redaction_mode, salt=config.salt)
-    tracer = config.tracer if config.tracer is not None else get_tracer(prefer_otel=config.prefer_otel)
+    tracer = (
+        config.tracer
+        if config.tracer is not None
+        else get_tracer(prefer_otel=config.prefer_otel)
+    )
     store = config.run_store if config.run_store is not None else _default_store()
     manifest = RunManifest(
         run_id=config.id_factory(),

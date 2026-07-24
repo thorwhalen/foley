@@ -333,7 +333,16 @@ def _generate(
 
 #: Non-affordance keyword params of :func:`_generate` (the rest are GENERATION_AFFORDANCES).
 _GENERATE_KNOWN = frozenset(
-    {"backend", "library", "store", "adapter", "watermark", "on_flagged", "watermarker", "provenance_store"}
+    {
+        "backend",
+        "library",
+        "store",
+        "adapter",
+        "watermark",
+        "on_flagged",
+        "watermarker",
+        "provenance_store",
+    }
 )
 
 

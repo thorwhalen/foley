@@ -582,7 +582,9 @@ def ingest_folder(
     lib = library if library is not None else default_library()
     report = IngestReport(root=str(path))
     # Root run-span for the ingest op; a no-op unless observability is enabled (#11).
-    with facade_run("ingest", inputs={"root": str(path), "recursive": recursive}) as run:
+    with facade_run(
+        "ingest", inputs={"root": str(path), "recursive": recursive}
+    ) as run:
         for fp in iter_audio_files(path, recursive=recursive, exts=exts):
             try:
                 report.record(ingest_one(str(fp), library=lib, **ingest_one_kw))

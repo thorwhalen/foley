@@ -52,7 +52,11 @@ class Tracer(Protocol):
     """Starts mirror spans; the DI seam (default no-op, OTel-backed when present)."""
 
     def start_as_current_span(
-        self, name: str, *, kind: Optional[str] = None, attributes: Optional[dict] = None
+        self,
+        name: str,
+        *,
+        kind: Optional[str] = None,
+        attributes: Optional[dict] = None,
     ) -> "ContextManager[Span]": ...
 
 
@@ -84,7 +88,11 @@ class NoOpTracer:
 
     @contextmanager
     def start_as_current_span(
-        self, name: str, *, kind: Optional[str] = None, attributes: Optional[dict] = None
+        self,
+        name: str,
+        *,
+        kind: Optional[str] = None,
+        attributes: Optional[dict] = None,
     ):
         """Yield the no-op span (context-manager protocol; nothing is recorded)."""
         yield _NOOP_SPAN
@@ -136,12 +144,18 @@ class OTelTracer:
 
     @contextmanager
     def start_as_current_span(
-        self, name: str, *, kind: Optional[str] = None, attributes: Optional[dict] = None
+        self,
+        name: str,
+        *,
+        kind: Optional[str] = None,
+        attributes: Optional[dict] = None,
     ):
         """Open a real OTel span, mapping ``kind`` to ``SpanKind`` and yielding a mirror."""
         from opentelemetry.trace import SpanKind
 
-        span_kind = getattr(SpanKind, kind, SpanKind.INTERNAL) if kind else SpanKind.INTERNAL
+        span_kind = (
+            getattr(SpanKind, kind, SpanKind.INTERNAL) if kind else SpanKind.INTERNAL
+        )
         # foley OWNS exception recording via the mirror (redacted), so disable OTel's
         # auto record_exception / set_status_on_exception to avoid a double event + a
         # raw-message leak on the auto-recorded exception.

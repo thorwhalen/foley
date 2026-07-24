@@ -41,7 +41,9 @@ class SpanRecord(SerializableMixin):
     duration_ms: Optional[float] = None
     status: str = "ok"  # 'ok' | 'error'
     attributes: dict = field(default_factory=dict)  # gen_ai.* + foley.* (REDACTED)
-    events: list = field(default_factory=list)  # redacted content events (reserved for #7)
+    events: list = field(
+        default_factory=list
+    )  # redacted content events (reserved for #7)
     error: Optional[str] = None
 
 
@@ -59,18 +61,34 @@ class RunManifest(SerializableMixin):
     op: str  # 'generate'|'add_from'|'ingest'|'search'|'similar' (+ 'find'/'run' when aggregated)
     created_at: Optional[str] = None  # ISO-8601; None in deterministic/test mode
     foley_version: Optional[str] = None
-    inputs: dict = field(default_factory=dict)  # REDACTED request (query/prompt via REDACT_FIELDS)
-    params: dict = field(default_factory=dict)  # resolved-effective kwargs (open-closed)
-    spans: "list[SpanRecord]" = field(default_factory=list)  # THE TRACE (rehydrated via _decode)
-    steps: list = field(default_factory=list)  # RESERVED for #7 decompose/verify/decide + branch
+    inputs: dict = field(
+        default_factory=dict
+    )  # REDACTED request (query/prompt via REDACT_FIELDS)
+    params: dict = field(
+        default_factory=dict
+    )  # resolved-effective kwargs (open-closed)
+    spans: "list[SpanRecord]" = field(
+        default_factory=list
+    )  # THE TRACE (rehydrated via _decode)
+    steps: list = field(
+        default_factory=list
+    )  # RESERVED for #7 decompose/verify/decide + branch
     ingest_report: Optional[dict] = None  # IngestReport.to_dict() — embeds, never forks
     result_ids: list = field(default_factory=list)  # produced/returned SoundRecord ids
     candidate_scores: list = field(default_factory=list)  # [{id,clap,bm25,rrf,rerank}]
-    credits_ref: Optional[dict] = None  # credits_for(records).manifest (TASL + disclosure)
-    disclosure_refs: dict = field(default_factory=dict)  # {id:{watermark,c2pa_manifest_ref,...}}
-    seeds: dict = field(default_factory=dict)  # {id:{backend,model,version,prompt(REDACTED),seed,...}}
+    credits_ref: Optional[dict] = (
+        None  # credits_for(records).manifest (TASL + disclosure)
+    )
+    disclosure_refs: dict = field(
+        default_factory=dict
+    )  # {id:{watermark,c2pa_manifest_ref,...}}
+    seeds: dict = field(
+        default_factory=dict
+    )  # {id:{backend,model,version,prompt(REDACTED),seed,...}}
     plan_ref: Optional[dict] = None  # RESERVED for #8 SoundDesignTimeline / OTIO plan
-    trace_ref: Optional[str] = None  # OTel trace id hex — ONLY when a recording SDK is configured
+    trace_ref: Optional[str] = (
+        None  # OTel trace id hex — ONLY when a recording SDK is configured
+    )
     status: str = "ok"
     error: Optional[str] = None
     schema_version: int = SCHEMA_VERSION
