@@ -20,7 +20,7 @@ Intended façade (design-stage — see ``misc/docs/design.md`` and
 
     foley.find("She pushed open the heavy oak door; rain hammered outside.")
     foley.search("distant thunder rumble", k=10)
-    foley.generate("a single wooden door creak", backend="stable_audio_open")
+    foley.generate("a single wooden door creak", backend="stable_audio")
     foley.ingest("~/my_sounds/")
 
 The design is grounded in the research reports under ``misc/docs/research/``.
@@ -169,6 +169,12 @@ from .bootstrap import bootstrap, demo
 # until first use — `import foley` stays dol-only.
 from .sources import add_from, list_sources, register_source
 
+# --- source: generation adapters (Stable Audio Open / ElevenLabs) — #6 ---------
+# The generate facade + its helpers. The generator adapter packages (and their
+# torch/requests deps) are auto-discovered lazily, so `import foley` stays dol-only.
+from .sources import GenerationError, candidate_of
+from .sources import generate as _generate_backend
+
 # --- eval: Tier-1 retrieval metrics + the nDCG PR gate (numpy lazy) -----------
 from . import eval  # noqa: A004 - deliberate: foley.eval is the retrieval-eval subpackage
 
@@ -302,6 +308,10 @@ __all__ = [
     "add_from",
     "list_sources",
     "register_source",
+    # --- source: generation adapters (Stable Audio Open / ElevenLabs) --------
+    "generate",
+    "candidate_of",
+    "GenerationError",
     # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
     "eval",
     "evaluate",
@@ -406,6 +416,78 @@ def similar(sound_id: str, *, k: int = 10):
     See :meth:`foley.index.SoundLibrary.similar`.
     """
     return default_library().similar(sound_id, k=k)
+
+
+def generate(
+    prompt: str,
+    *,
+    backend: str = "stable_audio",
+    library=None,
+    store: bool = True,
+    adapter=None,
+    **affordances,
+):
+    """Generate a sound effect for ``prompt`` and add it to the library (by-value).
+
+    Progressive disclosure: ``foley.generate("a single wooden door creak")`` works
+    out of the box (the local Stable Audio Open backend, into the process-wide
+    default library). The generated audio is stored **by-value** with a content-hash
+    id, so it becomes a first-class, re-searchable library entry — every generation
+    is a future free retrieval (the generation flywheel). It flows through the SAME
+    :func:`~foley.index.ingest.ingest_one` pipeline as every other source, with
+    operator consent for the generator license's AI-training restriction (the record
+    keeps ``ai_training_ok=False``, so :func:`keep` still refuses it for
+    training uses).
+
+    Args:
+        prompt: The natural-language sound description.
+        backend: A registered generate source — ``"stable_audio"`` (default, local;
+            needs ``foley[stable-audio]``) or ``"elevenlabs"`` (hosted;
+            ``foley[elevenlabs]`` + ``$ELEVENLABS_API_KEY``).
+        library: Target library (default: the process-wide default library).
+        store: If ``False``, synthesize + enrich a preview without adding it.
+        adapter: Optional pre-built adapter (the DI seam; production omits it and the
+            registry lazily builds one).
+        **affordances: Unified generation affordances (``duration``,
+            ``prompt_influence``, ``negative_prompt``, ``steps``, ``seed``, ``loop``,
+            ``output_format`` — see :data:`GENERATION_AFFORDANCES`); a backend
+            warns-and-drops the ones it does not support.
+
+    Returns:
+        The stored :class:`Candidate` (``origin=generated``) — its ``sound`` is the
+        canonical, by-value :class:`SoundRecord` (a content-hash id).
+
+    Raises:
+        GenerationError: If the backend yields no stored sound (QC-quarantined,
+            rights-blocked, or a synthesis/ingest error). The exception carries the
+            full ``report`` and terminal ``status`` so callers can react distinctly.
+    """
+    report = _generate_backend(
+        prompt,
+        backend=backend,
+        library=library,
+        store=store,
+        adapter=adapter,
+        **affordances,
+    )
+    results = report.results
+    res = results[0] if results else None
+    if res is None:
+        raise GenerationError(
+            f"generation via {backend!r} produced no result", report=report, status=None
+        )
+    if res.status in ("pass", "warn"):
+        return candidate_of(res)
+    if res.status == "skipped_dup":
+        # A byte-identical regeneration is already in the library — return it (the
+        # desirable flywheel behavior: never store byte-twins).
+        lib = library if library is not None else default_library()
+        return Candidate(sound=lib[res.id], origin=CandidateOrigin.generated)
+    raise GenerationError(
+        f"generation via {backend!r} yielded no stored sound ({res.status})",
+        report=report,
+        status=res.status,
+    )
 
 
 def ingest(

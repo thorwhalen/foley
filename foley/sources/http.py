@@ -12,11 +12,17 @@ tests).
 
 A :class:`Transport` is any callable with the shape::
 
-    transport(method, url, *, params=None, headers=None) -> Response
+    transport(method, url, *, params=None, headers=None, json=None) -> Response
 
 and a :class:`Response` is any object exposing ``status_code`` / ``content`` /
 ``json()`` — a structural subset of ``requests.Response`` (which therefore
 satisfies it with no wrapper).
+
+The keyword-only ``json`` body was added for the hosted **generate** adapters (#6:
+ElevenLabs Sound Effects POSTs a JSON body), where Freesound (#5) only ever did
+GET-with-params. It defaults to ``None`` and is passed straight through to
+``requests.request(..., json=...)``, so every existing GET caller (and the
+Freesound fake transport) is unaffected.
 """
 
 from __future__ import annotations
@@ -59,6 +65,7 @@ class Transport(Protocol):
         *,
         params: Optional[dict] = None,
         headers: Optional[dict] = None,
+        json: Optional[dict] = None,
     ) -> Response:
         """Perform the request and return the response."""
         ...
@@ -70,25 +77,32 @@ def requests_transport(
     *,
     params: Optional[dict] = None,
     headers: Optional[dict] = None,
+    json: Optional[dict] = None,
 ) -> "Response":
     """The default :class:`Transport` — a thin, lazy wrapper over ``requests``.
 
-    ``requests`` is imported HERE and only here (the ``foley[freesound]`` extra),
-    so the foley core stays dol-only and the fake-injection test path never needs
-    an HTTP library at all. The returned ``requests.Response`` structurally
-    satisfies :class:`Response`.
+    ``requests`` is imported HERE and only here (the ``foley[freesound]`` /
+    ``foley[elevenlabs]`` extras), so the foley core stays dol-only and the
+    fake-injection test path never needs an HTTP library at all. The returned
+    ``requests.Response`` structurally satisfies :class:`Response`.
 
     Args:
-        method: HTTP method (``'GET'`` …).
+        method: HTTP method (``'GET'`` / ``'POST'`` …).
         url: The full request URL.
         params: Optional query-string parameters.
-        headers: Optional request headers (e.g. the ``Authorization`` token).
+        headers: Optional request headers (e.g. the auth token).
+        json: Optional JSON request body (POST), serialized by ``requests``.
 
     Returns:
         The ``requests.Response`` (a :class:`Response`).
     """
-    import requests  # lazy: foley[freesound]; keeps `import foley` dol-only
+    import requests  # lazy: foley[freesound]/[elevenlabs]; keeps `import foley` dol-only
 
     return requests.request(
-        method, url, params=params, headers=headers, timeout=DEFAULT_TIMEOUT_S
+        method,
+        url,
+        params=params,
+        headers=headers,
+        json=json,
+        timeout=DEFAULT_TIMEOUT_S,
     )
