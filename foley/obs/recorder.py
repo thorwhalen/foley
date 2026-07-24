@@ -27,7 +27,7 @@ from typing import Callable, MutableMapping, Optional
 
 from .redact import RedactionMode, Redactor
 from .run_artifact import RunManifest, SpanRecord, emit_run_manifest
-from .trace import Tracer, get_tracer
+from .trace import GENAI, Tracer, get_tracer
 
 
 # ---------------------------------------------------------------------------
@@ -182,10 +182,18 @@ class RunRecorder:
                     yield _SpanHandle(rec, mirror, self._redactor)
                     mirror.set_status(True)
                 except BaseException as exc:
+                    # An exception message can echo the raw prompt/narration, so store
+                    # only a redacted form (the type name, unless mode='full') and set
+                    # the semconv-correct error.type (the class name) — never the raw
+                    # repr. record_exception (message + stacktrace) runs only in 'full'.
                     rec.status = "error"
-                    rec.error = repr(exc)
-                    mirror.record_exception(exc)
-                    mirror.set_status(False, repr(exc))
+                    rec.error = self._redactor.redact_error(exc)
+                    error_type = type(exc).__name__
+                    rec.attributes[GENAI["error_type"]] = error_type
+                    mirror.set_attribute(GENAI["error_type"], error_type)
+                    mirror.set_status(False, rec.error)
+                    if self._redactor.mode == RedactionMode.full:
+                        mirror.record_exception(exc)
                     raise
         finally:
             rec.duration_ms = self._clock() * 1000.0 - start_ms
@@ -302,7 +310,8 @@ def _open_run(op: str, *, inputs, params, config: ObsConfig):
         with recorder.span("foley." + op):
             yield recorder
     except BaseException as exc:
-        recorder.set_error(repr(exc))
+        # Redacted (type name unless mode='full') — a raw message can echo the prompt.
+        recorder.set_error(recorder._redactor.redact_error(exc))
         raise
     finally:
         _CURRENT_RUN.reset(token)

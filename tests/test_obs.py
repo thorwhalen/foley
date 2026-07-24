@@ -361,6 +361,104 @@ def test_make_run_store_roundtrip_and_id_escaping(tmp_path):
 
 
 # ---------------------------------------------------------------------------
+# (h2) error paths: redaction of exception text + emit-on-error + ContextVar reset
+# ---------------------------------------------------------------------------
+
+
+class _LeakyGenAdapter:
+    """A generate adapter that raises with the prompt embedded in the message."""
+
+    def generate(self, prompt, **kw):
+        raise RuntimeError(f"backend rejected prompt {prompt!r}")
+
+
+def test_backend_exception_does_not_leak_prompt(library):
+    from foley.sources.generate import generate as generate_backend
+
+    d = {}
+    obs.enable(prefer_otel=False, run_store=d)
+    # the workhorse swallows the synth error into an error IngestResult + emits a manifest
+    generate_backend(
+        "confidential secret narration", backend="stable_audio", library=library,
+        adapter=_LeakyGenAdapter(), provenance_store={},
+    )
+    (m,) = d.values()
+    assert "confidential secret narration" not in json.dumps(m)  # HIGH-leak regression
+    gen = [s for s in m["spans"] if s["name"] == "gen.generate"]
+    assert gen and gen[0]["status"] == "error"
+    assert gen[0]["error"] == "RuntimeError"  # redacted to the type name, not the repr
+    assert gen[0]["attributes"].get("gen_ai.operation.name") == "generate_content"
+
+
+def test_raising_facade_under_obs_emits_error_manifest_and_resets(fake_embedder):
+    class BoomEmbedder:
+        model_id = "boom"
+        dim = fake_embedder.dim
+
+        def embed_text(self, text):
+            raise RuntimeError("embed exploded")
+
+        def embed_audio(self, wav, sr):
+            return fake_embedder.embed_audio(wav, sr)
+
+    idx = MemoryIndex(dim=fake_embedder.dim)
+    badlib = SoundLibrary(sounds={}, meta={}, vindex=idx, kindex=idx, embedder=BoomEmbedder())
+    d = {}
+    obs.enable(prefer_otel=False, run_store=d)
+    with pytest.raises(RuntimeError):
+        badlib.search("x", k=3)
+    (m,) = d.values()
+    assert m["status"] == "error" and m["error"] == "RuntimeError"  # redacted + emitted
+    assert any(s["status"] == "error" for s in m["spans"])
+    assert _CURRENT_RUN.get() is None  # the ContextVar token was reset after the raise
+
+
+# ---------------------------------------------------------------------------
+# (h3) the OTel mirror is driven + trace_ref is copied when the SDK is recording
+# ---------------------------------------------------------------------------
+
+
+def test_mirror_driven_and_trace_ref_populated(library):
+    from contextlib import contextmanager
+
+    class FakeMirror:
+        trace_id = "deadbeef" * 4  # a valid 32-hex trace id (recording SDK present)
+
+        def __init__(self):
+            self.attrs = {}
+            self.statuses = []
+            self.exceptions = []
+
+        def set_attribute(self, k, v):
+            self.attrs[k] = v
+
+        def record_exception(self, exc):
+            self.exceptions.append(exc)
+
+        def set_status(self, ok, message=None):
+            self.statuses.append((ok, message))
+
+    class FakeTracer:
+        def __init__(self):
+            self.mirror = FakeMirror()
+            self.spans = []
+
+        @contextmanager
+        def start_as_current_span(self, name, *, kind=None, attributes=None):
+            self.spans.append((name, kind, attributes))
+            yield self.mirror
+
+    ft = FakeTracer()
+    d = {}
+    obs.enable(prefer_otel=False, run_store=d, tracer=ft)
+    library.search("creak", k=3)
+    (m,) = d.values()
+    assert m["trace_ref"] == "deadbeef" * 4  # copied from the mirror
+    assert [n for n, _, _ in ft.spans]  # the mirror was driven
+    assert any(ok for ok, _ in ft.mirror.statuses)  # set_status(True) on success
+
+
+# ---------------------------------------------------------------------------
 # (i) OTel-backed path (opt-in; skipped in CI)
 # ---------------------------------------------------------------------------
 

@@ -17,7 +17,6 @@ free ``ProxyTracer`` no-op, so instrumentation is safe and ~zero-cost by default
 
 from __future__ import annotations
 
-import functools
 import importlib.util
 from contextlib import contextmanager
 from typing import ContextManager, Optional, Protocol, runtime_checkable
@@ -120,12 +119,11 @@ class _OTelMirror:
     def set_status(self, ok: bool, message: Optional[str] = None) -> None:  # noqa: D102
         from opentelemetry.trace import Status, StatusCode
 
-        if ok:
-            self._span.set_status(Status(StatusCode.OK))
-        else:
-            self._span.set_status(Status(StatusCode.ERROR, message or ""))
-            if message:
-                self._span.set_attribute(GENAI["error_type"], message)
+        # The caller (RunRecorder) sets the semconv error.type (the exception class
+        # name) explicitly; the status description carries only the redacted message.
+        self._span.set_status(
+            Status(StatusCode.OK) if ok else Status(StatusCode.ERROR, message or "")
+        )
 
 
 class OTelTracer:
@@ -144,14 +142,23 @@ class OTelTracer:
         from opentelemetry.trace import SpanKind
 
         span_kind = getattr(SpanKind, kind, SpanKind.INTERNAL) if kind else SpanKind.INTERNAL
+        # foley OWNS exception recording via the mirror (redacted), so disable OTel's
+        # auto record_exception / set_status_on_exception to avoid a double event + a
+        # raw-message leak on the auto-recorded exception.
         with self._otel.start_as_current_span(
-            name, kind=span_kind, attributes=attributes or {}
+            name,
+            kind=span_kind,
+            attributes=attributes or {},
+            record_exception=False,
+            set_status_on_exception=False,
         ) as span:
             yield _OTelMirror(span)
 
 
-@functools.lru_cache(maxsize=1)
 def _otel_importable() -> bool:
+    # NOT cached: find_spec is cheap (called once per top-level run scope) and caching
+    # would freeze a bare-install process into the no-op path even after opentelemetry
+    # is installed mid-process (or, in tests, across an install/uninstall).
     return importlib.util.find_spec("opentelemetry") is not None
 
 

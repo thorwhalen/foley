@@ -111,6 +111,18 @@ class Redactor:
             return {}
         return {k: self.redact_value(k, v) for k, v in attrs.items()}
 
+    def redact_error(self, exc: BaseException) -> str:
+        """Redact an exception for storage/export.
+
+        An exception message can echo the raw prompt/query/narration (hosted
+        backends commonly do), so by default only the exception **type name** is
+        recorded (safe + still useful); the full ``repr`` is kept only in
+        ``full`` mode (opt-in local debug).
+        """
+        if self.mode == RedactionMode.full:
+            return repr(exc)
+        return type(exc).__name__
+
     def redact_manifest(self, payload):
         """Deep-walk ``payload`` (dict/list), redacting any sensitive key at any depth.
 
