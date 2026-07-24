@@ -29,7 +29,9 @@ class KeywordRefiner:
     query → identical paraphrase list.
     """
 
-    def refine(self, query: str, *, n: int = 3, hint: Optional[str] = None) -> "list[str]":
+    def refine(
+        self, query: str, *, n: int = 3, hint: Optional[str] = None
+    ) -> "list[str]":
         """Return up to ``n`` distinct paraphrases of ``query`` (the first is ``query``).
 
         Args:
@@ -85,13 +87,17 @@ class AnthropicRefiner:
     ``self.last_response`` for the GenAI span.
     """
 
-    def __init__(self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = 500):
+    def __init__(
+        self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = 500
+    ):
         self._client = client
         self.model = model
         self.max_tokens = max_tokens
         self.last_response = None
 
-    def refine(self, query: str, *, n: int = 3, hint: Optional[str] = None) -> "list[str]":
+    def refine(
+        self, query: str, *, n: int = 3, hint: Optional[str] = None
+    ) -> "list[str]":
         """Call Claude for ``n`` paraphrases; the original ``query`` is always first."""
         import json
 
@@ -109,7 +115,9 @@ class AnthropicRefiner:
             thinking={"type": "adaptive"},
             system=_REFINE_SYSTEM,
             messages=[{"role": "user", "content": user}],
-            output_config={"format": {"type": "json_schema", "schema": _REFINE_JSON_SCHEMA}},
+            output_config={
+                "format": {"type": "json_schema", "schema": _REFINE_JSON_SCHEMA}
+            },
         )
         self.last_response = resp
         text = next(b.text for b in resp.content if getattr(b, "type", None) == "text")

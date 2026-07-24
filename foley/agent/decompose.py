@@ -69,7 +69,11 @@ _CUE_LEXICON: "tuple[tuple[str, str, Layer, bool, bool], ...]" = (
 )
 
 #: Salience by first-appearance rank (report 05 §2.3: cap density, rank by prominence).
-_SALIENCE_BY_RANK: "tuple[Salience, ...]" = (Salience.high, Salience.medium, Salience.low)
+_SALIENCE_BY_RANK: "tuple[Salience, ...]" = (
+    Salience.high,
+    Salience.medium,
+    Salience.low,
+)
 
 
 class KeywordDecomposer:
@@ -101,9 +105,13 @@ class KeywordDecomposer:
                 continue
             seen_queries.add(query)
             matched.append((m.start(), query, layer, diegetic, loop))
-        matched.sort(key=lambda t: t[0])  # first-appearance order == descending salience
+        matched.sort(
+            key=lambda t: t[0]
+        )  # first-appearance order == descending salience
         events: "list[SoundEvent]" = []
-        for rank, (pos, query, layer, diegetic, loop) in enumerate(matched[:max_events]):
+        for rank, (pos, query, layer, diegetic, loop) in enumerate(
+            matched[:max_events]
+        ):
             salience = _SALIENCE_BY_RANK[min(rank, len(_SALIENCE_BY_RANK) - 1)]
             keyword = re.findall(r"[a-z0-9]+", text[pos:])[:1]
             onset = f"on '{keyword[0]}'" if keyword else None
@@ -178,7 +186,9 @@ class AnthropicDecomposer:
     conventions (``claude-opus-4-8``, adaptive thinking — never ``budget_tokens``).
     """
 
-    def __init__(self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = 2000):
+    def __init__(
+        self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = 2000
+    ):
         self._client = client
         self.model = model
         self.max_tokens = max_tokens
@@ -202,7 +212,9 @@ class AnthropicDecomposer:
             system=_DECOMPOSE_SYSTEM
             + f" Emit at most {max_events} events, most salient first.",
             messages=[{"role": "user", "content": context}],
-            output_config={"format": {"type": "json_schema", "schema": _EVENT_JSON_SCHEMA}},
+            output_config={
+                "format": {"type": "json_schema", "schema": _EVENT_JSON_SCHEMA}
+            },
         )
         self.last_response = resp
         text = next(b.text for b in resp.content if getattr(b, "type", None) == "text")
@@ -226,7 +238,9 @@ def _anthropic_available() -> bool:
 
     if importlib.util.find_spec("anthropic") is None:
         return False
-    return bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
+    return bool(
+        os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")
+    )
 
 
 def _default_decomposer() -> Decomposer:

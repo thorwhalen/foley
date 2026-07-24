@@ -475,7 +475,9 @@ class TimelineItem(SerializableMixin):
     """
 
     clip_ref: str  # SoundRecord id in the dol library (by reference, never bytes)
-    onset: Optional[str] = None  # SYMBOLIC anchor ("on 'pushed open'"); WEAVE resolves it
+    onset: Optional[str] = (
+        None  # SYMBOLIC anchor ("on 'pushed open'"); WEAVE resolves it
+    )
     gain: float = 0.0  # dB relative to the voice bus
     layer: Layer = Layer.sfx_fg
     loop: bool = False

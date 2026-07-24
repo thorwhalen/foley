@@ -61,7 +61,9 @@ class DecideAction(str, Enum):
 
     USE = "use"  # a verified, confident, license-clean clip → accept it
     REFINE = "refine"  # low confidence + budget left → re-query and re-retrieve
-    GENERATE = "generate"  # non-diegetic, or diegetic gap after refine → generate a clip
+    GENERATE = (
+        "generate"  # non-diegetic, or diegetic gap after refine → generate a clip
+    )
     DROP = "drop"  # budget exhausted / no path → silence (a valid Foley choice)
 
 
@@ -147,20 +149,28 @@ def decide(
     if not event.diegetic and budget.gen_ok():
         return Decision(DecideAction.GENERATE, None, reason="non-diegetic mood cue")
     if verified:
-        best = max(verified, key=lambda c: (c.verdict.confidence if c.verdict else 0.0))
+        best = max(verified, key=lambda c: c.verdict.confidence if c.verdict else 0.0)
         if best.verdict is not None and best.verdict.confidence >= tau_retrieve:
             return Decision(
-                DecideAction.USE, best, reason=f"confident match ({best.verdict.confidence:.2f})"
+                DecideAction.USE,
+                best,
+                reason=f"confident match ({best.verdict.confidence:.2f})",
             )
     # No confident retrieval — refine first (bounded), then generate, then best-effort/drop.
     if budget.refine_ok():
         why = "low-confidence match" if verified else "no verified match"
-        return Decision(DecideAction.REFINE, None, reason=f"{why}; refine pass {loop + 1}")
+        return Decision(
+            DecideAction.REFINE, None, reason=f"{why}; refine pass {loop + 1}"
+        )
     if budget.gen_ok():
         return Decision(DecideAction.GENERATE, None, reason="diegetic gap after refine")
     if verified:  # generation exhausted/off but a lower-confidence verified clip exists
-        best = max(verified, key=lambda c: (c.verdict.confidence if c.verdict else 0.0))
+        best = max(verified, key=lambda c: c.verdict.confidence if c.verdict else 0.0)
         return Decision(
-            DecideAction.USE, best, reason="best-effort verified pick (budget exhausted)"
+            DecideAction.USE,
+            best,
+            reason="best-effort verified pick (budget exhausted)",
         )
-    return Decision(DecideAction.DROP, None, reason="no match; refine/generate budget exhausted")
+    return Decision(
+        DecideAction.DROP, None, reason="no match; refine/generate budget exhausted"
+    )

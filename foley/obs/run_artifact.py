@@ -61,8 +61,12 @@ class Step(SerializableMixin):
     """
 
     kind: str  # decompose|refine|search|license_gate|verify|decide|generate|place
-    seq: Optional[int] = None  # position in RunManifest.steps (assigned by RunRecorder.add_step)
-    event_index: Optional[int] = None  # which SoundEvent (None for the run-level decompose)
+    seq: Optional[int] = (
+        None  # position in RunManifest.steps (assigned by RunRecorder.add_step)
+    )
+    event_index: Optional[int] = (
+        None  # which SoundEvent (None for the run-level decompose)
+    )
     span_id: Optional[str] = None  # join to the timing SpanRecord
     status: str = "ok"  # 'ok' | 'error'
     detail: dict = field(default_factory=dict)  # REDACTED at record time

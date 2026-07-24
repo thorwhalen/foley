@@ -79,7 +79,9 @@ class StringOverlapJudge:
         """Return the token-overlap :class:`Verdict` at the requested ``level``."""
         want = _tokens(event.query)
         sound = candidate.sound
-        have = _tokens(sound.caption) | {t for tag in (sound.tags or []) for t in _tokens(tag)}
+        have = _tokens(sound.caption) | {
+            t for tag in (sound.tags or []) for t in _tokens(tag)
+        }
         union = want | have
         overlap = len(want & have) / len(union) if union else 0.0
         return Verdict(
@@ -120,7 +122,9 @@ class AnthropicJudge:
     ``self.last_response`` for the GenAI span.
     """
 
-    def __init__(self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = 500):
+    def __init__(
+        self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = 500
+    ):
         self._client = client
         self.model = model
         self.max_tokens = max_tokens
@@ -152,7 +156,9 @@ class AnthropicJudge:
             thinking={"type": "adaptive"},
             system=_JUDGE_SYSTEM,
             messages=[{"role": "user", "content": user}],
-            output_config={"format": {"type": "json_schema", "schema": _JUDGE_JSON_SCHEMA}},
+            output_config={
+                "format": {"type": "json_schema", "schema": _JUDGE_JSON_SCHEMA}
+            },
         )
         self.last_response = resp
         text = next(b.text for b in resp.content if getattr(b, "type", None) == "text")
@@ -208,7 +214,9 @@ def verify_match(
         "verify_match must run AFTER the license gate (candidate.license_ok is not True)"
     )
     level = VerifyLevel(level)
-    clap_verdict = ClapJudge().judge(event, candidate, level=VerifyLevel.clap, tau_clap=tau_clap)
+    clap_verdict = ClapJudge().judge(
+        event, candidate, level=VerifyLevel.clap, tau_clap=tau_clap
+    )
     if level == VerifyLevel.clap:
         return clap_verdict
     # The clap GATE only blocks a *retrieved* clip whose score is present and failing; a

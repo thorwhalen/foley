@@ -140,7 +140,9 @@ def place_in_timeline(
 # ---------------------------------------------------------------------------
 
 
-def _emit_step(run, kind: str, *, event_index: "Optional[int]" = None, span=None, detail=None) -> None:
+def _emit_step(
+    run, kind: str, *, event_index: "Optional[int]" = None, span=None, detail=None
+) -> None:
     """Append a typed :class:`Step` (``seq`` auto-assigned; ``detail`` redacted at record time)."""
     run.add_step(
         Step(
@@ -152,7 +154,9 @@ def _emit_step(run, kind: str, *, event_index: "Optional[int]" = None, span=None
     )
 
 
-def _verify_kept(run, event, kept, *, event_index, max_level, judge, tau_clap) -> "list[Candidate]":
+def _verify_kept(
+    run, event, kept, *, event_index, max_level, judge, tau_clap
+) -> "list[Candidate]":
     """Run the verify ladder over each license-clean candidate; return the matches.
 
     Opens ONE child span per candidate (``CLIENT`` on the LLM rungs so each judged clip
@@ -170,7 +174,10 @@ def _verify_kept(run, event, kept, *, event_index, max_level, judge, tau_clap) -
             )
         c.verdict = verdict
         _emit_step(
-            run, "verify", event_index=event_index, span=sp,
+            run,
+            "verify",
+            event_index=event_index,
+            span=sp,
             detail={
                 "candidate_id": c.sound.id,
                 "level": verdict.level.value,
@@ -200,7 +207,13 @@ def _score_row(c: Candidate) -> dict:
 
 
 def _generate_and_reverify(
-    event, intended_use: IntendedUse, *, backend: str, judge, level: VerifyLevel, library
+    event,
+    intended_use: IntendedUse,
+    *,
+    backend: str,
+    judge,
+    level: VerifyLevel,
+    library,
 ) -> "Optional[Candidate]":
     """Generate a clip, then RE-GATE + RE-VERIFY it before acceptance (the flywheel admission gate).
 
@@ -227,7 +240,10 @@ def _generate_and_reverify(
     # verify='clap' the injected judge is the ClapJudge (no use here), so resolve a
     # listen-capable one; higher rungs keep the caller's judge.
     if level == VerifyLevel.clap:
-        reverify_level, reverify_judge = VerifyLevel.listen, _default_judge(VerifyLevel.listen)
+        reverify_level, reverify_judge = (
+            VerifyLevel.listen,
+            _default_judge(VerifyLevel.listen),
+        )
     else:
         reverify_level, reverify_judge = level, judge
     verdict = verify_match(event, gc, level=reverify_level, judge=reverify_judge)
@@ -352,7 +368,11 @@ def _find_stream(
     ) as run:
         with run.span("decompose_context", kind="CLIENT") as sp:
             events = decompose_context(
-                context, max_events=max_events, seconds=seconds, decomposer=decomposer, _span=sp
+                context,
+                max_events=max_events,
+                seconds=seconds,
+                decomposer=decomposer,
+                _span=sp,
             )
             _emit_step(run, "decompose", span=sp, detail={"n_events": len(events)})
 
@@ -365,17 +385,26 @@ def _find_stream(
                 if loop > 0:
                     with run.span("refine_query", kind="CLIENT") as sp:
                         queries = refine_query(
-                            event.query, n=3, hint=last_reason, refiner=refiner, _span=sp
+                            event.query,
+                            n=3,
+                            hint=last_reason,
+                            refiner=refiner,
+                            _span=sp,
                         )
                         _emit_step(
-                            run, "refine", event_index=i, span=sp,
+                            run,
+                            "refine",
+                            event_index=i,
+                            span=sp,
                             detail={"query": event.query, "n": len(queries)},
                         )
 
                 cands = search_sounds(queries, k=k, library=library, filters=prefilter)
                 run.add_candidate_scores([_score_row(c) for c in cands])
                 _emit_step(
-                    run, "search", event_index=i,
+                    run,
+                    "search",
+                    event_index=i,
                     detail={
                         "query": event.query,
                         "n_hits": len(cands),
@@ -385,28 +414,47 @@ def _find_stream(
 
                 kept = gate_candidates(cands, use)
                 _emit_step(
-                    run, "license_gate", event_index=i,
+                    run,
+                    "license_gate",
+                    event_index=i,
                     detail={
                         "n_in": len(cands),
                         "n_kept": len(kept),
-                        "rejected_ids": [c.sound.id for c in cands if c.license_ok is not True],
+                        "rejected_ids": [
+                            c.sound.id for c in cands if c.license_ok is not True
+                        ],
                         "intended_use": asdict(use),
                     },
                 )
 
                 verified = _verify_kept(
-                    run, event, kept, event_index=i, max_level=max_level, judge=judge, tau_clap=tau_clap
+                    run,
+                    event,
+                    kept,
+                    event_index=i,
+                    max_level=max_level,
+                    judge=judge,
+                    tau_clap=tau_clap,
                 )
 
                 decision = decide(
-                    event, kept, verified, tau_retrieve=tau_retrieve, budget=budget, loop=loop
+                    event,
+                    kept,
+                    verified,
+                    tau_retrieve=tau_retrieve,
+                    budget=budget,
+                    loop=loop,
                 )
                 _emit_step(
-                    run, "decide", event_index=i,
+                    run,
+                    "decide",
+                    event_index=i,
                     detail={
                         "action": decision.action.value,
                         "reason": decision.reason,
-                        "chosen_id": decision.candidate.sound.id if decision.candidate else None,
+                        "chosen_id": decision.candidate.sound.id
+                        if decision.candidate
+                        else None,
                         "loop": loop,
                     },
                 )
@@ -422,19 +470,32 @@ def _find_stream(
                 if decision.action is DecideAction.GENERATE and budget.gen_ok():
                     budget.spend_gen()
                     chosen = _generate_and_reverify(
-                        event, use, backend=backend, judge=judge, level=max_level, library=library,
+                        event,
+                        use,
+                        backend=backend,
+                        judge=judge,
+                        level=max_level,
+                        library=library,
                     )
                     _emit_step(
-                        run, "generate", event_index=i,
+                        run,
+                        "generate",
+                        event_index=i,
                         detail={"query": event.query, "accepted": chosen is not None},
                     )
                     break
                 break  # DROP / exhausted → silence (a valid Foley choice)
 
             if chosen is not None:
-                chosen.event = event  # attach provenance so plan() reads onset/layer/loop
+                chosen.event = (
+                    event  # attach provenance so plan() reads onset/layer/loop
+                )
                 item = place_in_timeline(
-                    chosen, onset=event.onset, gain=0.0, layer=event.layer.value, loop=event.loop
+                    chosen,
+                    onset=event.onset,
+                    gain=0.0,
+                    layer=event.layer.value,
+                    loop=event.loop,
                 )
                 _emit_step(run, "place", event_index=i, detail=item.to_dict())
                 yield chosen
@@ -442,7 +503,9 @@ def _find_stream(
         run.set_status("ok")
 
 
-def plan(candidates: "list[Candidate]", *, transcript: "Optional[str]" = None) -> SoundDesignTimeline:
+def plan(
+    candidates: "list[Candidate]", *, transcript: "Optional[str]" = None
+) -> SoundDesignTimeline:
     """Fold verified candidates into the SPARSE :class:`SoundDesignTimeline` (the SELECT→WEAVE bridge).
 
     One :class:`TimelineItem` per candidate (``onset·gain·layer·loop`` only, from its
