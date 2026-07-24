@@ -4,6 +4,24 @@ requires = [
 ]
 build-backend = "hatchling.build"
 
+# Ship the whole foley package incl. the tiny Ring-0 synthetic fixture
+# (foley/data/ring0/*) so `foley demo` needs no corpus download (it still needs
+# the foley[audio,clap] runtime extras; the CLAP model downloads on first use).
+[tool.hatch.build.targets.wheel]
+include = [
+    "foley",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "foley",
+    "tests",
+    "tools",
+    "misc",
+    "pyproject.toml",
+    "README.md",
+]
+
 [project]
 name = "foley"
 version = "0.0.3"
@@ -30,6 +48,9 @@ dependencies = [
 
 [project.license]
 text = "mit"
+
+[project.scripts]
+foley = "foley.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/thorwhalen/foley"
