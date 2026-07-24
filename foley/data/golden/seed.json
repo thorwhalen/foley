@@ -78,5 +78,45 @@
     "grade": {"ring0:glass_clink": 2},
     "labeler": "llm+human",
     "schema_version": 1
+  },
+  {
+    "id": "gld_0005",
+    "context": "A leaky faucet: water dripping steadily into the metal sink through the night.",
+    "expected_events": [
+      {
+        "query": "water drips dripping into a sink",
+        "ucs_catid": "WATRDrip",
+        "audioset": ["Water", "Drip"],
+        "layer": "sfx_fg",
+        "diegetic": true,
+        "salience": "medium",
+        "onset_hint": "on 'dripping'"
+      }
+    ],
+    "negatives": ["engine", "crowd chatter"],
+    "answer_clip_ids": {"WATRDrip": ["ring0:water_drip"]},
+    "grade": {"ring0:water_drip": 2},
+    "labeler": "llm+human",
+    "schema_version": 1
+  },
+  {
+    "id": "gld_0006",
+    "context": "Out on the ridge a sudden gust of wind blew past, buffeting the microphone.",
+    "expected_events": [
+      {
+        "query": "a gust of wind blowing past",
+        "ucs_catid": "WINDGust",
+        "audioset": ["Wind", "Gust"],
+        "layer": "ambience",
+        "diegetic": true,
+        "salience": "high",
+        "onset_hint": "on 'gust'"
+      }
+    ],
+    "negatives": ["music", "typing"],
+    "answer_clip_ids": {"WINDGust": ["ring0:wind_gust"]},
+    "grade": {"ring0:wind_gust": 2},
+    "labeler": "llm+human",
+    "schema_version": 1
   }
 ]

@@ -93,6 +93,50 @@ def _cmd_ingest(args) -> int:
     return 0
 
 
+def _cmd_eval(args) -> int:
+    from . import evaluate
+    from .eval.baseline import (
+        DEFAULT_BASELINE_PATH,
+        load_baseline,
+        write_baseline,
+    )
+    from .eval.golden import (
+        DEFAULT_GOLDEN_PATH,
+        RING0_MANIFEST_PATH,
+        load_golden,
+    )
+
+    report = evaluate(k=args.k, golden=args.golden)
+    metric = "ndcg@10"
+    print(f"mean {metric}: {report.mean[metric]:.4f}")
+    for qid, m in sorted(report.per_query.items()):
+        print(f"  {qid}: {m[metric]:.4f}  (rank={report.ranks.get(qid, '-')})")
+
+    if args.update_baseline:
+        import datetime
+
+        bl = write_baseline(
+            report,
+            path=DEFAULT_BASELINE_PATH,
+            seed_path=args.golden or DEFAULT_GOLDEN_PATH,
+            manifest_path=RING0_MANIFEST_PATH,
+            updated_at=datetime.date.today().isoformat(),
+            n_items=len(load_golden(args.golden or DEFAULT_GOLDEN_PATH)),
+        )
+        print(f"baseline updated -> {DEFAULT_BASELINE_PATH} (value={bl['value']})")
+        return 0
+
+    baseline = load_baseline()
+    delta = report.mean[metric] - baseline["value"]
+    floor = baseline["value"] - baseline["tolerance"]
+    status = "PASS" if report.mean[metric] >= floor else "FAIL"
+    print(
+        f"baseline={baseline['value']:.4f} floor={floor:.4f} "
+        f"Δ={delta:+.4f} -> {status}"
+    )
+    return 0 if report.mean[metric] >= floor else 1
+
+
 def _cmd_search(args) -> int:
     from . import search
 
@@ -137,6 +181,16 @@ def build_parser() -> argparse.ArgumentParser:
     p_ing.add_argument("--min-status", default="warn", choices=["fail", "warn", "pass"])
     p_ing.add_argument("--no-qc", action="store_true")
     p_ing.set_defaults(func=_cmd_ingest)
+
+    p_eval = sub.add_parser("eval", help="Tier-1 retrieval eval + the nDCG regression gate")
+    p_eval.add_argument("-k", type=int, default=10)
+    p_eval.add_argument("--golden", help="path to a golden-set JSON (default: the frozen seed)")
+    p_eval.add_argument(
+        "--update-baseline",
+        action="store_true",
+        help="ratchet the committed baseline to the current nDCG@10 (a reviewable diff)",
+    )
+    p_eval.set_defaults(func=_cmd_eval)
 
     p_search = sub.add_parser("search", help="hybrid search of the default library")
     p_search.add_argument("query")

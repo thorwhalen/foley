@@ -55,7 +55,13 @@ All are computed over the **ranked candidate list per query**, then averaged ove
 | **Precision@k** | (# relevant in top-k) / k | Purity of the top-k | Secondary; noisy with few relevants |
 | **MRR** (Mean Reciprocal Rank) | mean of 1/rank of the *first* relevant clip [4] | Getting *something* right fast | Known-item queries (context → the one ideal clip) |
 | **AP / mAP@k** | mean over queries of Average Precision (mean of Precision@rank at each relevant hit), truncated at k | Ranking *every* relevant clip early | **Primary offline metric** — it is the official DCASE Task 8 ranking metric [1] |
-| **nDCG@k** | DCG@k / IDCG@k, DCG = Σ (2^rel−1)/log₂(rank+1) [2,3] | *Graded* relevance — an "ideal" clip above a "merely related" one | Best when relevance is graded 0–3 (see §1.3) |
+| **nDCG@k** | DCG@k / IDCG@k, DCG = Σ **rel**/log₂(rank+1) [2,3] | *Graded* relevance — an "ideal" clip above a "merely related" one | Best when relevance is graded 0–3 (see §1.3) |
+
+> **Gain convention (corrected):** use the **linear** gain `rel/log₂(rank+1)`, not the
+> exponential `(2^rel−1)/log₂(rank+1)`. Verified: `ranx`'s `"ndcg@10"` and `pytrec_eval`'s
+> `ndcg_cut_10` — the tools this report recommends (§1.2) — both implement the linear form, so
+> foley's numpy metrics match them bit-for-bit (see `foley/eval/retrieval.py` + the opt-in
+> `tests/eval/test_metrics_vs_ranx.py` oracle). The earlier `2^rel−1` matched neither.
 
 Notes that matter for a sound library:
 

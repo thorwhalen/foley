@@ -1,18 +1,18 @@
-"""Validate the frozen golden-eval seed fixture (``tests/golden/seed.json``).
+"""Validate the frozen golden-eval seed fixture (``foley/data/golden/seed.json``).
 
-#4 ships the seed + schema (not the scorer — that is #10a). These tests pin the
-GoldenItem schema and, crucially, that every ``answer_clip_ids`` reference
-resolves to a real clip in the bundled Ring-0 fixture, so #10a's metrics harness
-can run end-to-end against a real (tiny) corpus with no download.
+The seed + schema ship as package data; these tests pin the GoldenItem schema
+and, crucially, that every ``answer_clip_ids`` reference resolves to a real clip
+in the bundled Ring-0 fixture, so the metrics harness runs end-to-end against a
+real (tiny) corpus with no download.
 """
 
 import json
 from pathlib import Path
 
-GOLDEN = Path(__file__).parent / "golden" / "seed.json"
-RING0_MANIFEST = (
-    Path(__file__).parent.parent / "foley" / "data" / "ring0" / "manifest.json"
-)
+from foley.eval.golden import DEFAULT_GOLDEN_PATH, RING0_MANIFEST_PATH
+
+GOLDEN = DEFAULT_GOLDEN_PATH
+RING0_MANIFEST = RING0_MANIFEST_PATH
 
 _REQUIRED_ITEM_KEYS = {
     "id",
@@ -42,6 +42,9 @@ def test_golden_seed_schema_is_well_formed():
         assert it["expected_events"], it["id"]
         for ev in it["expected_events"]:
             assert _REQUIRED_EVENT_KEYS <= set(ev), it["id"]
+        # grades are on the frozen 0..2 scale (0 wrong / 1 acceptable / 2 ideal)
+        for clip_id, g in it["grade"].items():
+            assert g in (0, 1, 2), f"{it['id']} grade {clip_id}={g} out of 0..2"
 
 
 def test_golden_answer_clips_reference_real_ring0_clips():
