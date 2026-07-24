@@ -150,6 +150,12 @@ def _upsample_fft(x: "np.ndarray", factor: int) -> "np.ndarray":
     spec_up = np.zeros(n_up // 2 + 1, dtype=complex)
     m = min(spec.shape[0], spec_up.shape[0])
     spec_up[:m] = spec[:m]
+    # For even n, bin n//2 is the original Nyquist (a real cosine at f_s/2). After
+    # zero-pad upsampling it is no longer the Nyquist of the longer signal, so its
+    # energy must be split in half — else the reconstruction (and the true-peak
+    # estimate riding on it) over-reports by up to +6 dB (cf. scipy.signal.resample).
+    if n % 2 == 0 and m == n // 2 + 1:
+        spec_up[n // 2] *= 0.5
     return np.fft.irfft(spec_up, n=n_up) * factor
 
 
@@ -384,7 +390,9 @@ def measure_lufs(
     import numpy as np
 
     x = np.asarray(samples, dtype=np.float64)
-    if x.shape[0] < int(round(min_block_s * sample_rate)):
+    # math.ceil mirrors pyloudnorm's float block threshold exactly (see
+    # audio.loudness_normalize); a no-op vs int(round) at standard (÷5) rates.
+    if x.shape[0] < math.ceil(min_block_s * sample_rate):
         return None
     if not np.isfinite(x).all():
         return None

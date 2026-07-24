@@ -33,6 +33,7 @@ a file-like object).
 from __future__ import annotations
 
 import io
+import math
 import os
 from typing import TYPE_CHECKING, BinaryIO, Optional, Union
 
@@ -62,6 +63,7 @@ LUFS_ATSC: float = -24.0  # ATSC A/85 broadcast target
 DEFAULT_LOUDNESS_TARGET_LUFS: float = LUFS_PODCAST
 TRUE_PEAK_MAX_DBTP: float = -1.0  # ceiling after loudness normalization
 LUFS_GATE_FLOOR: float = -70.0  # pyloudnorm near-silent gate; flag, don't amplify
+LUFS_MIN_BLOCK_S: float = 0.4  # BS.1770 gating block; shorter clips can't be measured
 
 #: A source ``load`` can decode: a filesystem path, raw encoded bytes, or an
 #: already-open binary file-like object (e.g. ``io.BytesIO``).
@@ -349,15 +351,18 @@ def loudness_normalize(
     sample_rate: int,
     *,
     target_lufs: float = DEFAULT_LOUDNESS_TARGET_LUFS,
-    true_peak_dbtp: float = TRUE_PEAK_MAX_DBTP,
+    peak_ceiling_dbfs: float = TRUE_PEAK_MAX_DBTP,
+    min_block_s: float = LUFS_MIN_BLOCK_S,
 ) -> tuple["ndarray", float]:
     """Loudness-normalize to ``target_lufs``, then keep it peak-safe.
 
     Integrated loudness is measured (ITU-R BS.1770-4 / EBU R128), the signal is
     scaled to ``target_lufs``, and finally attenuated so its sample peak sits at
-    or below ``true_peak_dbtp``. Near-silent input (measured loudness at or below
-    the ``LUFS_GATE_FLOOR``) is returned **unchanged** — flag it, don't amplify
-    hiss.
+    or below ``peak_ceiling_dbfs``. Two inputs are returned **unchanged** (flag
+    them, don't amplify): near-silent input (measured loudness at or below
+    ``LUFS_GATE_FLOOR``), and a clip shorter than one BS.1770 gating block
+    (``min_block_s``) — which ``pyloudnorm`` cannot measure and would otherwise
+    raise ``ValueError`` on (routine for one-shots: clicks, blips, gunshots).
 
     Args:
         samples: Working array (mono or multichannel, time on axis 0 — the layout
@@ -365,18 +370,29 @@ def loudness_normalize(
         sample_rate: Sample rate in Hz.
         target_lufs: Desired integrated loudness (default = foley's podcast
             target).
-        true_peak_dbtp: Ceiling (dBFS, sample-peak approximation) applied after
-            loudness normalization.
+        peak_ceiling_dbfs: Sample-peak ceiling (dBFS) applied after loudness
+            normalization. Note this is a *sample*-peak limit, not an inter-sample
+            true-peak (dBTP) limit — see :func:`foley.qc.true_peak_dbtp` for the
+            oversampled measurement.
+        min_block_s: Minimum clip length (seconds) that can be loudness-measured;
+            shorter clips are returned unchanged with ``measured = -inf``.
 
     Returns:
-        ``(normalized, measured_input_lufs)``. When the input is near-silent,
-        ``normalized`` is the unchanged input and ``measured_input_lufs`` is at
-        or below ``LUFS_GATE_FLOOR`` (possibly ``-inf``).
+        ``(normalized, measured_input_lufs)``. When the input is near-silent or
+        too short to measure, ``normalized`` is the unchanged input and
+        ``measured_input_lufs`` is at or below ``LUFS_GATE_FLOOR`` (``-inf`` for
+        the too-short case).
 
     Lazy dependencies: ``pyloudnorm`` (+ ``numpy``).
     """
     import numpy as np
     import pyloudnorm as pyln
+
+    # math.ceil (not int(round)) exactly mirrors pyloudnorm's float threshold
+    # n < block_size*rate at every sample rate, incl. rates where 0.4*sr is not
+    # integral; identical to int(round) at all standard (÷5) rates.
+    if samples.shape[0] < math.ceil(min_block_s * sample_rate):
+        return samples, float("-inf")  # too short to gate; flag, don't amplify
 
     meter = pyln.Meter(sample_rate)
     measured = float(meter.integrated_loudness(samples))
@@ -385,7 +401,7 @@ def loudness_normalize(
 
     normalized = pyln.normalize.loudness(samples, measured, target_lufs)
 
-    ceiling = 10.0 ** (true_peak_dbtp / 20.0)
+    ceiling = 10.0 ** (peak_ceiling_dbfs / 20.0)
     peak = float(np.max(np.abs(normalized)))
     if peak > ceiling:
         normalized = normalized * (ceiling / peak)

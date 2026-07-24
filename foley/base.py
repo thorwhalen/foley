@@ -259,8 +259,11 @@ class SerializableMixin:
 class LicenseRecord(SerializableMixin):
     """Per-sound rights + provenance. SSOT for BOTH ``keep()`` and storage mode.
 
-    The eight derived flags default fail-closed here (the bare-record baseline);
-    populate them from the ``license_id`` via
+    The derived permission flags default fail-closed here (the bare-record
+    baseline) — with one deliberate exception: ``embed_in_derivative_ok``
+    defaults ``True`` (the normal case for a licensed sound). That is not a live
+    bypass: ``keep()`` checks ``rights_verified`` first, so an unverified record
+    is rejected regardless. Populate the flags from the ``license_id`` via
     ``foley.licensing.apply_license_flags`` (source overrides win). Never
     hand-set the derived flags — always route through the policy layer.
     """

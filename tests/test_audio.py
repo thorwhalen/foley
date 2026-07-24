@@ -105,6 +105,19 @@ def test_ensure_channels_same_count_is_passthrough():
     assert audio.ensure_channels(stereo, channels=2) is stereo
 
 
+def test_ensure_channels_remaps_n_to_m():
+    # N -> M (N != M, both > 1): collapse to mono then tile up to M. Here 3ch->2ch.
+    mono = _sine(dur=0.1)
+    three = np.stack([mono, mono * 0.5, mono * 0.25], axis=1)
+    assert three.shape[1] == 3
+    two = audio.ensure_channels(three, channels=2)
+    assert two.shape == (mono.shape[0], 2)
+    # both output channels are the same mono down-mix (tiled), by construction
+    assert np.array_equal(two[:, 0], two[:, 1])
+    expected_mono = three.mean(axis=1)
+    assert np.allclose(two[:, 0], expected_mono)
+
+
 def test_ensure_channels_rejects_zero():
     with pytest.raises(ValueError):
         audio.ensure_channels(_sine(dur=0.1), channels=0)
@@ -222,9 +235,36 @@ def test_loudness_normalize_respects_true_peak_ceiling():
     pytest.importorskip("pyloudnorm")
     sr = 48_000
     y = _sine(sr=sr, dur=2.0, amp=0.05)
-    out, _ = audio.loudness_normalize(y, sr, true_peak_dbtp=audio.TRUE_PEAK_MAX_DBTP)
+    out, _ = audio.loudness_normalize(y, sr, peak_ceiling_dbfs=audio.TRUE_PEAK_MAX_DBTP)
     ceiling = 10.0 ** (audio.TRUE_PEAK_MAX_DBTP / 20.0)
     assert float(np.max(np.abs(out))) <= ceiling + 1e-6
+
+
+def test_loudness_normalize_short_clip_returns_unchanged():
+    # A clip shorter than one BS.1770 gating block (0.4 s) cannot be measured;
+    # pyloudnorm would raise. It must be returned unchanged, flagged -inf — this
+    # is routine for one-shots (clicks, blips, gunshots).
+    pytest.importorskip("pyloudnorm")
+    sr = 48_000
+    y = _sine(sr=sr, dur=0.1, amp=0.5)  # 0.1 s < 0.4 s
+    out, measured = audio.loudness_normalize(y, sr)
+    assert out is y  # unchanged (no scaling, no exception)
+    assert measured == float("-inf")
+
+
+def test_loudness_normalize_guard_mirrors_pyloudnorm_at_fractional_boundary():
+    # At a sample rate where 0.4*sr is NOT integral (0.4*10001 = 4000.4), a clip
+    # of exactly 4000 samples is one below pyloudnorm's block threshold and would
+    # raise ValueError. The math.ceil guard must catch it (int(round) would not).
+    pyln = pytest.importorskip("pyloudnorm")
+    sr = 10_001
+    y = np.zeros(4000, dtype=np.float32)  # 4000 < ceil(4000.4)=4001 => too short
+    # sanity: pyloudnorm really does raise on this clip (so the guard is load-bearing)
+    with pytest.raises(Exception):
+        pyln.Meter(sr).integrated_loudness(y.astype(np.float64))
+    out, measured = audio.loudness_normalize(y, sr)  # must NOT raise
+    assert out is y
+    assert measured == float("-inf")
 
 
 # ---------------------------------------------------------------------------

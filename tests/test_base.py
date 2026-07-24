@@ -379,6 +379,24 @@ def test_keep_enforces_attribution_requirement():
     assert keep(rec, IntendedUse(can_attribute=True)) is True
 
 
+def test_keep_publish_branch_is_the_deciding_factor():
+    # Isolate the publish / embed_in_derivative_ok gate: an "unknown" license is
+    # verified but NOT embeddable in a derivative. With non-commercial intent the
+    # commercial gate is bypassed, so ONLY the publish branch can reject — proving
+    # keep() actually enforces embed_in_derivative_ok (a legal gate previously
+    # untested in isolation).
+    rec = apply_license_flags(
+        LicenseRecord(source="user", license_id="unknown", rights_verified=True)
+    )
+    assert rec.embed_in_derivative_ok is False  # the flag under test
+    assert rec.commercial_ok is False
+    # publish=True is the sole unmet requirement => reject
+    assert keep(rec, IntendedUse(commercial=False, publish=True)) is False
+    # drop the publish intent and the SAME record passes => the publish branch
+    # was the deciding factor, nothing else.
+    assert keep(rec, IntendedUse(commercial=False, publish=False)) is True
+
+
 def test_keep_blocks_voice_or_trademark_unless_allowed():
     rec = _verified_cc0()
     rec.contains_recognizable_voice = True
