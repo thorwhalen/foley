@@ -76,9 +76,11 @@ from .base import (
     LicenseRecord,
     Salience,
     SerializableMixin,
+    SoundDesignTimeline,
     SoundEvent,
     SoundRecord,
     StorageMode,
+    TimelineItem,
     Verdict,
     VerifyLevel,
 )
@@ -203,6 +205,23 @@ from .provenance import (
 from . import obs
 from .obs import RunManifest, SpanRecord
 
+# --- agent: the SELECT stage — find() + the sparse plan (#7) --------------------
+# The agent package is dol-only at import (the LLM rungs sit behind DI-seam
+# protocols with deterministic fakes; anthropic — foley[agent] — is imported lazily
+# inside the real impls only), so this keeps `import foley` dol-only.
+from . import agent
+from .agent import (
+    Budget,
+    Decision,
+    Judge,
+    decide,
+    decompose_context,
+    find,
+    plan,
+    refine_query,
+    verify_match,
+)
+
 __all__ = [
     # --- base: constants + enums ---------------------------------------------
     "SCHEMA_VERSION",
@@ -224,6 +243,8 @@ __all__ = [
     "Verdict",
     "Candidate",
     "IntendedUse",
+    "TimelineItem",
+    "SoundDesignTimeline",
     # --- licensing: policy ---------------------------------------------------
     "LicenseFlags",
     "LICENSE_FLAGS",
@@ -339,6 +360,17 @@ __all__ = [
     "obs",
     "RunManifest",
     "SpanRecord",
+    # --- agent: the SELECT stage — find() + sparse plan (#7) ------------------
+    "agent",
+    "find",
+    "plan",
+    "decompose_context",
+    "refine_query",
+    "verify_match",
+    "decide",
+    "Judge",
+    "Budget",
+    "Decision",
     # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
     "eval",
     "evaluate",

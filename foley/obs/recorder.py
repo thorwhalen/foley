@@ -26,7 +26,7 @@ from contextvars import ContextVar
 from typing import Callable, MutableMapping, Optional
 
 from .redact import RedactionMode, Redactor
-from .run_artifact import RunManifest, SpanRecord, emit_run_manifest
+from .run_artifact import RunManifest, SpanRecord, Step, emit_run_manifest
 from .trace import GENAI, Tracer, get_tracer
 
 
@@ -136,6 +136,11 @@ class _SpanHandle:
         self._mirror = mirror
         self._redactor = redactor
 
+    @property
+    def span_id(self) -> str:
+        """The manifest ``SpanRecord.span_id`` (join target for a #7 :class:`Step`)."""
+        return self._record.span_id
+
     def set_attribute(self, key: str, value) -> None:
         """Set a (redacted) attribute on both the manifest span record and the OTel mirror."""
         redacted = self._redactor.redact_value(key, value)
@@ -238,6 +243,23 @@ class RunRecorder:
     def add_disclosure_ref(self, sound_id: str, ref: dict) -> None:
         self.manifest.disclosure_refs[sound_id] = ref
 
+    def add_step(self, step: Step) -> None:
+        """Append a SELECT-stage :class:`Step` (#7), deep-redacting ``detail`` at record time.
+
+        The record-time net (belt over the emit-time sweep): event text carried in
+        ``detail`` (under the ``query`` key) is hashed here so a manifest read straight
+        off ``self.manifest.steps`` — before any emit — never holds raw narration.
+        ``seq`` is assigned here (append position) when the caller left it ``None``.
+        """
+        if step.seq is None:
+            step.seq = len(self.manifest.steps)
+        step.detail = self._redactor.redact_manifest(step.detail)
+        self.manifest.steps.append(step)
+
+    def set_plan_ref(self, plan_ref: dict) -> None:
+        """Fill the reserved #8 ``plan_ref`` slot (a light join dict — no text)."""
+        self.manifest.plan_ref = plan_ref
+
     def set_status(self, status: str) -> None:
         self.manifest.status = status
 
@@ -259,6 +281,8 @@ class RunRecorder:
 
 
 class _NullSpanHandle:
+    span_id = None
+
     def set_attribute(self, key: str, value) -> None:  # noqa: D102
         pass
 
@@ -281,6 +305,8 @@ class _NullRun:
     def set_credits_ref(self, credits_manifest) -> None: ...
     def add_seed(self, sound_id: str, seed: dict) -> None: ...
     def add_disclosure_ref(self, sound_id: str, ref: dict) -> None: ...
+    def add_step(self, step: Step) -> None: ...
+    def set_plan_ref(self, plan_ref: dict) -> None: ...
     def set_status(self, status: str) -> None: ...
     def set_error(self, message: str) -> None: ...
 

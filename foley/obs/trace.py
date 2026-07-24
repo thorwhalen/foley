@@ -29,8 +29,9 @@ GENAI = {
     "provider": "gen_ai.provider.name",
     "request_model": "gen_ai.request.model",
     "response_model": "gen_ai.response.model",
-    "input_tokens": "gen_ai.usage.input_tokens",  # reserved for #7
-    "output_tokens": "gen_ai.usage.output_tokens",  # reserved for #7
+    "input_tokens": "gen_ai.usage.input_tokens",  # #7 decompose/refine/judge LLM spans
+    "output_tokens": "gen_ai.usage.output_tokens",  # #7 decompose/refine/judge LLM spans
+    "finish_reasons": "gen_ai.response.finish_reasons",  # #7 LLM stop_reason (STABLE)
     "data_source_id": "gen_ai.data_source.id",  # the index/library id (retrieval)
     "error_type": "error.type",  # STABLE
 }

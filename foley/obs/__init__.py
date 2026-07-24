@@ -36,6 +36,7 @@ from .redact import REDACT_FIELDS, RedactionMode, Redactor, redact_text
 from .run_artifact import (
     RunManifest,
     SpanRecord,
+    Step,
     emit_run_manifest,
     ingest_digest,
     load_run,
@@ -46,6 +47,7 @@ __all__ = [
     # run-artifact SSOT
     "RunManifest",
     "SpanRecord",
+    "Step",
     "emit_run_manifest",
     "ingest_digest",
     "load_run",
