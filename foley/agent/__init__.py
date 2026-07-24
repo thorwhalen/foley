@@ -37,6 +37,7 @@ from .tools import (
 )
 from .verify import (
     AnthropicJudge,
+    AudioLMJudge,
     ClapJudge,
     StringOverlapJudge,
     verify_match,
@@ -71,4 +72,5 @@ __all__ = [
     "ClapJudge",
     "StringOverlapJudge",
     "AnthropicJudge",
+    "AudioLMJudge",
 ]
