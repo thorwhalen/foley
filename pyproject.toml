@@ -51,6 +51,7 @@ text = "mit"
 
 [project.scripts]
 foley = "foley.cli:main"
+foley-mcp = "foley.agent.mcp:_cli"
 
 [project.urls]
 Homepage = "https://github.com/thorwhalen/foley"
@@ -204,6 +205,15 @@ weave = [
 # [tool.wads.ci.install]; the sidecar (build_content_credential) needs none of this.
 c2pa = [
     "c2pa-python",
+]
+# The MCP server (#12): serve foley's façade to agents/humans as JSON-safe tools via
+# py2mcp (which pulls fastmcp). `py2mcp` is imported LAZILY inside
+# foley.agent.mcp.build_mcp_server ONLY, so `import foley` + `import foley.agent` stay
+# dol-only; the whole tool surface is defined without it. Deliberately NOT in
+# [tool.wads.ci.install] — the MCP tests build/list tools with injected fakes and
+# assert JSON-safety with no py2mcp import (the real-server test is importorskip-guarded).
+mcp = [
+    "py2mcp",
 ]
 test = [
     "pytest>=7.0",

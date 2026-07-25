@@ -47,6 +47,9 @@ class ObsConfig:
     """Process-wide observability configuration (flipped by :func:`enable`/:func:`disable`)."""
 
     enabled: bool = False
+    force_disabled: bool = (
+        False  # hard off — dominates ``enabled`` AND the $FOLEY_OBS env var
+    )
     redaction_mode: RedactionMode = RedactionMode.hash
     salt: str = "foley-obs-v1"
     prefer_otel: bool = True
@@ -64,7 +67,14 @@ _CURRENT_RUN: "ContextVar[Optional[RunRecorder]]" = ContextVar(
 
 
 def is_enabled() -> bool:
-    """Whether observability is on (via :func:`enable` or ``$FOLEY_OBS`` in {1,true,yes})."""
+    """Whether observability is on (via :func:`enable` or ``$FOLEY_OBS`` in {1,true,yes}).
+
+    ``force_disabled`` (set by :func:`foley.runtime.offline_scope` for a telemetry-off
+    posture) hard-overrides both — so offline mode's "nothing leaves the device"
+    contract holds even when ``$FOLEY_OBS`` is exported.
+    """
+    if _CONFIG.force_disabled:
+        return False
     return _CONFIG.enabled or os.environ.get("FOLEY_OBS", "").lower() in (
         "1",
         "true",

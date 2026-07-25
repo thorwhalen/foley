@@ -238,6 +238,18 @@ from .agent import (
 from . import weave
 from .weave import WeaveResult
 
+# --- #12: MCP surface, preview UX, onboarding & offline mode ---------------------
+# All dol-only at import (py2mcp/fastmcp are imported lazily inside build_mcp_server;
+# numpy/soundfile only inside preview's encode path). ``mcp_server`` is the report-10
+# façade alias of the builder.
+from .agent.mcp import build_mcp_server
+from .agent.mcp import build_mcp_server as mcp_server
+from .agent.preview import preview, refine, similar_to
+from .agent.session import SessionStore
+from .requirements import capability_report, check_requirements, verify_and_setup
+from .runtime import RuntimeConfig, is_offline, offline
+from .stores import make_session_store
+
 __all__ = [
     # --- base: constants + enums ---------------------------------------------
     "SCHEMA_VERSION",
@@ -396,6 +408,20 @@ __all__ = [
     # --- weave: the WEAVE stage — weave() (#8) --------------------------------
     "weave",
     "WeaveResult",
+    # --- #12: MCP surface, preview UX, onboarding & offline mode ---------------
+    "mcp_server",
+    "build_mcp_server",
+    "preview",
+    "similar_to",
+    "refine",
+    "SessionStore",
+    "make_session_store",
+    "RuntimeConfig",
+    "offline",
+    "is_offline",
+    "check_requirements",
+    "verify_and_setup",
+    "capability_report",
     # --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------
     "eval",
     "evaluate",
