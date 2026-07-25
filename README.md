@@ -54,6 +54,39 @@ result = foley.weave("narration.wav", timeline)  # mastered mix + SDH captions +
 The selection tools publish as an **MCP server** (via `py2mcp`) so the same capabilities
 drive the agent, a CLI, and external hosts.
 
+## For AI agents
+
+foley is **AI-first**: most callers are agents (directly, and via downstream packages like
+`braidio` and `nw`). The headline is one call — hand it narration text and it chooses tasteful,
+license-clean sounds and (given the audio) weaves them in:
+
+```python
+import foley
+
+# Plan only — choose sounds, get an editable timeline + a rationale:
+result = foley.score("She pushed open the heavy oak door; rain hammered outside.")
+print(result.rationale)
+
+# Plan + render — weave under the actual narration audio:
+result = foley.score(segments, audio="narration.wav", commercial_ok=True)
+result.weave.audio          # mastered mix   result.weave.captions_vtt   # SDH captions
+result.weave.credits        # attribution    result.timeline             # still editable
+```
+
+`foley.score(...)` is the stable contract `braidio`/`nw` call. The same surface is available as
+**MCP tools** (`foley_score`, `foley_guide`, `foley_search`, `foley_preview`, `foley_weave`, …) —
+serve them over stdio (`foley-mcp`) or authenticated HTTP (`foley-mcp --http --token …`).
+
+Ship the **agent kit** into your agent host (a `foley-sound-design` skill, a `/foley-score`
+slash command, and a `sound-designer` subagent):
+
+```
+foley agent-install            # → ./.claude/{skills,commands,agents}/…
+```
+
+The **one rule** is restraint — most sentences need no sound. The design is grounded in the
+research reports below; taste heuristics (layering, ducking, onset, licensing) live in the skill.
+
 ## Design & research
 
 foley's design is grounded in five research reports (unified, cited):

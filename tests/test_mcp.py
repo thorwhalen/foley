@@ -35,7 +35,9 @@ class FakeLibrary:
                 duration_s=0.5,
                 storage_mode=StorageMode.by_value,
                 uri=f"secret://{sid}",
-                license=LicenseRecord(source="user", license_id="CC0-1.0", commercial_ok=True),
+                license=LicenseRecord(
+                    source="user", license_id="CC0-1.0", commercial_ok=True
+                ),
             )
             for sid, cap in [
                 ("door", "door creak"),
@@ -43,9 +45,13 @@ class FakeLibrary:
                 ("thunder", "thunder rumble"),
             ]
         }
-        tone = (0.3 * np.sin(2 * np.pi * 220 * np.arange(int(0.5 * SR)) / SR)).astype("float32")
+        tone = (0.3 * np.sin(2 * np.pi * 220 * np.arange(int(0.5 * SR)) / SR)).astype(
+            "float32"
+        )
         self.arrays = {sid: tone for sid in self.recs}
-        self.arrays["nar"] = (0.1 * np.random.default_rng(0).standard_normal(2 * SR)).astype("float32")
+        self.arrays["nar"] = (
+            0.1 * np.random.default_rng(0).standard_normal(2 * SR)
+        ).astype("float32")
 
     def __getitem__(self, k):
         return self.recs[k]
@@ -56,11 +62,18 @@ class FakeLibrary:
     def array(self, ref, *, sr=None, mono=True):
         from foley.audio import WORKING_SAMPLE_RATE, to_working
 
-        return to_working(self.arrays[ref], SR, mono=mono, target_sr=WORKING_SAMPLE_RATE if sr is None else sr)
+        return to_working(
+            self.arrays[ref],
+            SR,
+            mono=mono,
+            target_sr=WORKING_SAMPLE_RATE if sr is None else sr,
+        )
 
     def _cands(self, ids, k):
         return [
-            Candidate(sound=self.recs[i], clap_score=0.9 - 0.1 * n, rrf_score=0.8 - 0.1 * n)
+            Candidate(
+                sound=self.recs[i], clap_score=0.9 - 0.1 * n, rrf_score=0.8 - 0.1 * n
+            )
             for n, i in enumerate(ids[:k])
         ]
 
@@ -130,11 +143,18 @@ def test_mcp_extra_declared_but_not_in_ci_install():
 def test_candidate_row_is_compact_and_leak_free():
     c = Candidate(
         sound=SoundRecord(
-            id="door", caption="a creak", tags=["door"], duration_s=1.2,
-            storage_mode=StorageMode.by_value, uri="secret/path",
-            license=LicenseRecord(source="user", license_id="CC0-1.0", commercial_ok=True),
+            id="door",
+            caption="a creak",
+            tags=["door"],
+            duration_s=1.2,
+            storage_mode=StorageMode.by_value,
+            uri="secret/path",
+            license=LicenseRecord(
+                source="user", license_id="CC0-1.0", commercial_ok=True
+            ),
         ),
-        clap_score=0.8, rrf_score=0.5,
+        clap_score=0.8,
+        rrf_score=0.5,
     )
     row = mcp._candidate_row(c)
     assert json.dumps(row)  # JSON-safe
@@ -156,7 +176,10 @@ def test_session_cache_and_rehydrate_round_trip():
     assert sess.cache_candidates(cands) == 2
     rebuilt = sess.rehydrate([c.sound.id for c in cands])
     assert [c.sound.id for c in rebuilt] == [c.sound.id for c in cands]
-    assert isinstance(rebuilt[0], Candidate) and rebuilt[0].sound.license.license_id == "CC0-1.0"
+    assert (
+        isinstance(rebuilt[0], Candidate)
+        and rebuilt[0].sound.license.license_id == "CC0-1.0"
+    )
 
 
 # --- preview / similar_to / refine ----------------------------------------
@@ -164,7 +187,9 @@ def test_session_cache_and_rehydrate_round_trip():
 
 def test_preview_writes_uri_and_degrades_gracefully(wired):
     r = mcp.foley_preview("door", seconds=1)
-    assert r["sound_id"] == "door" and r["preview_uri"] is not None  # real audio -> a key
+    assert (
+        r["sound_id"] == "door" and r["preview_uri"] is not None
+    )  # real audio -> a key
     # no byte store -> graceful degrade (preview_uri None), never raises
     from foley.agent.preview import preview
 
@@ -199,7 +224,9 @@ def test_plan_from_picks_then_weave(wired):
     # weave the timeline (narration is a library ref); returns JSON with audio by key
     result = mcp.foley_weave("nar", tl)
     assert json.dumps(result)
-    assert result["audio_ref"] is not None  # ndarray written to the byte store, not returned
+    assert (
+        result["audio_ref"] is not None
+    )  # ndarray written to the byte store, not returned
     assert result["captions_vtt"].startswith("WEBVTT")
     assert isinstance(result["credits"], list)  # tuple normalized to list
 
@@ -210,7 +237,11 @@ def test_timeline_edit_tools(wired):
     tl = SoundDesignTimeline(
         items=[
             TimelineItem(
-                clip_ref="door", onset="on 'door'", gain=-6.0, layer=Layer.sfx_fg, id="c1",
+                clip_ref="door",
+                onset="on 'door'",
+                gain=-6.0,
+                layer=Layer.sfx_fg,
+                id="c1",
                 placement=Placement(anchor=Anchor.absolute, onset=0.5),
                 event={"query": "door creak"},
             )
@@ -247,8 +278,11 @@ def test_build_mcp_server_registers_the_full_tool_surface(wired):
     server = mcp.build_mcp_server()
     names = {getattr(t, "name", t) for t in asyncio.run(server.list_tools())}
     expected = {fn.__name__ for fn in mcp.TOOLS}
-    assert expected <= names and "foley_weave" in names and "foley_capabilities" in names
-    assert len(mcp._resolve_tools()) == 20
+    assert (
+        expected <= names and "foley_weave" in names and "foley_capabilities" in names
+    )
+    assert {"foley_score", "foley_guide"} <= names  # the AI-first agent tools
+    assert len(mcp._resolve_tools()) == 22
 
 
 def test_resolve_tools_subset():
@@ -275,8 +309,17 @@ def _mem_library():
     ]:
         lib.add(
             SoundRecord(
-                id=sid, caption=cap, tags=[sid], duration_s=2.0, uri=f"t://{sid}",
-                license=LicenseRecord(source="test", license_id="CC0-1.0", commercial_ok=True, rights_verified=True),
+                id=sid,
+                caption=cap,
+                tags=[sid],
+                duration_s=2.0,
+                uri=f"t://{sid}",
+                license=LicenseRecord(
+                    source="test",
+                    license_id="CC0-1.0",
+                    commercial_ok=True,
+                    rights_verified=True,
+                ),
             ),
             vector=emb.embed_text(cap)[0],
         )
@@ -288,7 +331,9 @@ def test_foley_find_returns_json_candidate_rows():
     try:
         mcp._configure(
             library=_mem_library(),
-            session_factory=lambda sid: SessionStore(sid, candidates={}, picks={}, rejects={}),
+            session_factory=lambda sid: SessionStore(
+                sid, candidates={}, picks={}, rejects={}
+            ),
         )
         rows = mcp.foley_find("The heavy oak door creaked as rain fell.", k=5)
         assert json.dumps(rows) and rows
