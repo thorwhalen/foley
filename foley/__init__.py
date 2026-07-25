@@ -13,8 +13,8 @@ Four stages::
     SOURCE  ->  INDEX  ->  SELECT  ->  WEAVE
     (get)      (find)      (choose)    (compose)
 
-Intended façade (design-stage — see ``misc/docs/design.md`` and
-``misc/docs/roadmap.md`` for what is implemented)::
+The façade (v1 — Epic #13 complete; the surface below is live — see
+``misc/docs/design.md`` / ``misc/docs/roadmap.md`` for the roadmap)::
 
     import foley
 
@@ -25,8 +25,11 @@ Intended façade (design-stage — see ``misc/docs/design.md`` and
 
 The design is grounded in the research reports under ``misc/docs/research/``.
 
-Foundation surface (implemented — the retrieval-agnostic base every later stage
-stands on). This top-level namespace re-exports it:
+The whole four-stage surface (source → index → select → weave) plus the MCP server and
+the licensing/provenance, evaluation, and observability layers is implemented and
+re-exported here (see ``__all__`` and the ``find`` / ``search`` / ``generate`` /
+``ingest`` / ``weave`` façade functions below). The retrieval-agnostic **foundation**
+every later stage stands on:
 
     * **Data models** (``foley.base``) — the SSOT dataclasses/enums shared across
       layers (:class:`SoundRecord`, :class:`LicenseRecord`, :class:`Candidate`,

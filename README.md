@@ -13,9 +13,10 @@ config-driven plugin adapters, a unified vocabulary translated per-backend, zero
 required core deps with lazy optional-deps — but centered on **search** rather than
 generation, with generation as just one of several sources.
 
-> **Status: design-stage.** The architecture is researched and specified; the code is
-> being built. The API below is the *intended* surface (see the roadmap for what's
-> live). Follow along in [`misc/docs/`](misc/docs/).
+> **Status: v1.** All four stages — source, index, select, weave — plus the MCP server
+> and the licensing/provenance, evaluation, and observability layers are implemented
+> (Epic #13 complete). The API below is live; see the [roadmap](misc/docs/roadmap.md)
+> for what's next. Follow along in [`misc/docs/`](misc/docs/).
 
 ## The idea
 
@@ -31,15 +32,16 @@ hits = foley.search("distant thunder rumble", k=10, commercial_ok=True)
 
 # Generate a sound when nothing fits (arioso-style; pluggable backends)
 clip = foley.generate(
-    "a single wooden door creak", backend="stable_audio_open", duration=3
+    "a single wooden door creak", backend="stable_audio", duration=3
 )
 
 # Grow the library — ingest auto-tags, captions, and embeds every file
 foley.ingest("~/my_sounds/")
 foley.add_from("freesound", query="ocean waves", license="cc0")
 
-# Compose (future): render the sound design onto a narration
-foley.weave(narration_audio, candidates)
+# Compose: place the sounds under the narration (find → plan → weave)
+timeline = foley.plan(candidates)                # the editable sound-design plan
+result = foley.weave("narration.wav", timeline)  # mastered mix + SDH captions + credits
 ```
 
 ## How it works — four stages
@@ -49,7 +51,7 @@ foley.weave(narration_audio, candidates)
 | **Source** | your own files · Freesound (CC0) · generate (Stable Audio Open / ElevenLabs) | config-driven adapters, per-sound license tracking |
 | **Index** | probe → tag → caption → embed every sound; hybrid keyword+semantic search | PANNs · CLAP · EnCLAP · LanceDB (local→cloud via `dol`) |
 | **Select** | decompose a narrative context → search → verify → generate-or-retrieve | CLAP retrieval + LLM decomposition + a verification ladder |
-| **Weave** | align to the voice, duck, place, master *(future)* | forced-alignment · LUFS/EBU-R128 |
+| **Weave** | align to the voice, duck, place, master → mastered mix + editable timeline + captions + credits | forced-alignment · LUFS/EBU-R128 |
 
 The selection tools publish as an **MCP server** (via `py2mcp`) so the same capabilities
 drive the agent, a CLI, and external hosts.

@@ -45,7 +45,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from numpy import ndarray
 
     from ..base import TimelineItem
-    from .protocols import ApplyStrategy
+    from .protocols import Aligner, ApplyStrategy
 
 #: The non-voice layers the render mixes, in sum order (voice is the 0 dB anchor).
 RENDER_LAYERS: "tuple[Layer, ...]" = (
@@ -202,7 +202,7 @@ def render(
     *,
     sr: int = 48_000,
     transcript: Optional[str] = None,
-    aligner: "Optional[ApplyStrategy]" = None,
+    aligner: "Optional[Aligner]" = None,
     apply_strategy: "Optional[ApplyStrategy]" = None,
     cache: Optional[RenderCache] = None,
 ) -> RenderResult:
@@ -332,9 +332,13 @@ def _opentimelineio_available() -> bool:
 def to_otio(timeline: SoundDesignTimeline, *, rate: int = EDL_FPS) -> str:
     """Export ``timeline`` as an OpenTimelineIO JSON string (lazy ``foley[weave]``).
 
-    One track per non-voice layer; each enabled, placed item is a clip with an
-    external media reference (by clip_ref) — non-destructive, minimal-viable
-    fidelity (tracks/clips/onsets; effects/markers are a later slice).
+    One or more **parallel** tracks per non-voice layer: each enabled, placed item is a
+    clip with an external media reference (by clip_ref), positioned at its resolved onset
+    via a leading gap. Because a single OTIO track is sequential, two same-layer clips that
+    overlap (or fall within a one-shot's nominal window) would otherwise be pushed late —
+    so overlapping clips spill onto sibling sub-tracks, keeping every clip at its true
+    onset. Non-destructive, minimal-viable fidelity (tracks/clips/onsets; effects/markers
+    are a later slice).
 
     Raises:
         RuntimeError: If ``opentimelineio`` is not installed.
@@ -346,6 +350,24 @@ def to_otio(timeline: SoundDesignTimeline, *, rate: int = EDL_FPS) -> str:
         )
     import opentimelineio as otio  # lazy: foley[weave]
 
+    def _gap(seconds: float):
+        return otio.schema.Gap(
+            source_range=otio.opentime.TimeRange(
+                otio.opentime.RationalTime(0, rate),
+                otio.opentime.RationalTime(round(seconds * rate), rate),
+            )
+        )
+
+    def _clip(it, dur: float):
+        return otio.schema.Clip(
+            name=it.clip_ref,
+            media_reference=otio.schema.ExternalReference(target_url=it.clip_ref),
+            source_range=otio.opentime.TimeRange(
+                otio.opentime.RationalTime(0, rate),
+                otio.opentime.RationalTime(round(dur * rate), rate),
+            ),
+        )
+
     tl = otio.schema.Timeline(name="foley SFX")
     by_layer: "dict[Layer, list[TimelineItem]]" = {layer: [] for layer in RENDER_LAYERS}
     for it in timeline.items:
@@ -355,36 +377,33 @@ def to_otio(timeline: SoundDesignTimeline, *, rate: int = EDL_FPS) -> str:
         items = sorted(by_layer[layer], key=lambda it: float(it.placement.onset))
         if not items:
             continue
-        track = otio.schema.Track(name=layer.value, kind=otio.schema.TrackKind.Audio)
-        playhead = 0.0
+        # Greedily pack clips into parallel sub-tracks so no two overlap on one track
+        # (a single OTIO Track is sequential — an overlapping clip would be pushed late).
+        # Each clip lands at its TRUE onset via a leading gap; a clip that would overlap
+        # every existing sub-track spills onto a new one.
+        subtracks: "list[list]" = []  # each entry: [track, playhead_seconds]
         for it in items:
             onset = float(it.placement.onset)
             dur = float(it.placement.duration or EDL_NOMINAL_CLIP_S)
+            slot = next((s for s in subtracks if onset >= s[1] - 1e-9), None)
+            if slot is None:
+                name = (
+                    layer.value
+                    if not subtracks
+                    else f"{layer.value} ({len(subtracks) + 1})"
+                )
+                slot = [
+                    otio.schema.Track(name=name, kind=otio.schema.TrackKind.Audio),
+                    0.0,
+                ]
+                subtracks.append(slot)
+            track, playhead = slot
             if onset > playhead:
-                track.append(
-                    otio.schema.Gap(
-                        source_range=otio.opentime.TimeRange(
-                            otio.opentime.RationalTime(0, rate),
-                            otio.opentime.RationalTime(
-                                round((onset - playhead) * rate), rate
-                            ),
-                        )
-                    )
-                )
-            track.append(
-                otio.schema.Clip(
-                    name=it.clip_ref,
-                    media_reference=otio.schema.ExternalReference(
-                        target_url=it.clip_ref
-                    ),
-                    source_range=otio.opentime.TimeRange(
-                        otio.opentime.RationalTime(0, rate),
-                        otio.opentime.RationalTime(round(dur * rate), rate),
-                    ),
-                )
-            )
-            playhead = onset + dur
-        tl.tracks.append(track)
+                track.append(_gap(onset - playhead))
+            track.append(_clip(it, dur))
+            slot[1] = onset + dur
+        for track, _ in subtracks:
+            tl.tracks.append(track)
     return otio.adapters.write_to_string(tl, "otio_json")
 
 

@@ -377,6 +377,7 @@ def _find_stream(
             _emit_step(run, "decompose", span=sp, detail={"n_events": len(events)})
 
         for i, event in enumerate(events):
+            budget.reset()  # per-event caps: a hard event never starves later ones
             chosen: "Optional[Candidate]" = None
             queries = [event.query]
             last_reason: "Optional[str]" = None
@@ -477,6 +478,16 @@ def _find_stream(
                         level=max_level,
                         library=library,
                     )
+                    if chosen is None and verified:
+                        # Generation yielded nothing (backend unavailable/offline,
+                        # QC-quarantined, or safety-refused): fall back to the best verified
+                        # retrieval rather than dropping a usable clip — the same best-effort
+                        # pick decide() makes when generation is off. Without this, per-event
+                        # budgets would make results WORSE wherever generation can't run.
+                        chosen = max(
+                            verified,
+                            key=lambda c: c.verdict.confidence if c.verdict else 0.0,
+                        )
                     _emit_step(
                         run,
                         "generate",

@@ -79,7 +79,12 @@ LICENSE_FLAGS: dict[str, LicenseFlags] = {
 #: Each entry is ``(needle, license_id)``; a match sets ``rights_verified=True``.
 _CC_URL_MARKERS: "tuple[tuple[tuple[str, ...], str], ...]" = (
     (("zero", "publicdomain", "creative commons 0", "cc0"), "CC0-1.0"),
-    (("by-nc", "attribution noncommercial"), "CC-BY-NC-4.0"),
+    # ``noncommercial`` subsumes the spaced label ("attribution noncommercial") AND the
+    # hyphenated/bare forms ("Attribution-NonCommercial", "noncommercial"), so no NC work
+    # slips through to the plain-CC-BY fallback below (which would fail OPEN by granting
+    # commercial rights). Checked AFTER the -nd/-sa guard, so by-nc-nd/by-nc-sa still fail
+    # closed. Mirrors the generic ND/SA needles.
+    (("by-nc", "noncommercial"), "CC-BY-NC-4.0"),
     (("sampling",), "CC-Sampling+-1.0"),
 )
 

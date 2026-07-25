@@ -23,6 +23,10 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 
+#: Seconds in a rolling rate-limit day (the ``per_day`` window length).
+SECONDS_PER_DAY: float = 86_400.0
+
+
 class SourceUnavailable(RuntimeError):
     """Raised when a source's circuit breaker is open or its retries are exhausted."""
 
@@ -55,6 +59,7 @@ class _TokenBucket:
     clock: Callable[[], float] = time.monotonic
     _last: Optional[float] = field(default=None, init=False)
     _day_count: int = field(default=0, init=False)
+    _window_start: Optional[float] = field(default=None, init=False)
 
     @property
     def min_interval(self) -> float:
@@ -62,12 +67,22 @@ class _TokenBucket:
 
     def take(self, sleep: Callable[[float], None]) -> None:
         """Block (via ``sleep``) until a token is available; raise on the daily cap."""
+        now = self.clock()
         if self.per_day is not None:
+            # Rolling 24h window: reset the counter once a full day has elapsed since the
+            # window opened, so ``per_day`` is a real *daily* cap (Freesound's 2000/day),
+            # not a per-process-lifetime one that stays "over cap" forever after a busy day.
+            if (
+                self._window_start is None
+                or now - self._window_start >= SECONDS_PER_DAY
+            ):
+                self._day_count = 0
+                self._window_start = now
             self._day_count += 1
             if self._day_count > self.per_day:
                 raise SourceUnavailable(f"daily rate cap exceeded ({self.per_day}/day)")
         if self.min_interval and self._last is not None:
-            wait = self.min_interval - (self.clock() - self._last)
+            wait = self.min_interval - (now - self._last)
             if wait > 0:
                 sleep(wait)
         self._last = self.clock()
@@ -75,6 +90,7 @@ class _TokenBucket:
     def reset(self) -> None:
         self._last = None
         self._day_count = 0
+        self._window_start = None
 
 
 @dataclass

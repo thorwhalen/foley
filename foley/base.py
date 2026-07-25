@@ -587,7 +587,10 @@ def resolve_master(master: "Union[str, MasterProfile, None]") -> MasterProfile:
     if isinstance(master, MasterProfile):
         return master
     try:
-        return MASTER_PROFILES[master]
+        # Return a fresh copy, never the shared global: MasterProfile is a mutable public
+        # dataclass and a timeline is deliberately editable, so aliasing the global would
+        # let an in-place edit corrupt the default target for every later resolve().
+        return dataclasses.replace(MASTER_PROFILES[master])
     except KeyError:
         raise ValueError(
             f"unknown master profile {master!r}; known: {sorted(MASTER_PROFILES)}"

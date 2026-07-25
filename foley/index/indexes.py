@@ -45,6 +45,20 @@ def _tokenize(text: str) -> list[str]:
     return _WORD_RE.findall(text.lower())
 
 
+def _fts5_or_match(query: str) -> "Optional[str]":
+    """Build a crash-safe FTS5 ``MATCH`` string from a raw user query.
+
+    Tokenizes with the shared analyzer (only ``[a-z0-9]+`` survives) and double-quotes
+    each token, so no FTS5 metacharacter — a colon, an unbalanced quote, a bare boolean
+    word, parentheses — can reach the FTS5 parser and raise ``sqlite3.OperationalError``.
+    Returns ``None`` when the query yields no usable token (the caller returns no hits).
+    """
+    tokens = _tokenize(query)
+    if not tokens:
+        return None
+    return " OR ".join(f'"{t}"' for t in tokens)
+
+
 def _sql_str(value: str) -> str:
     """Quote a Python string as a SQL string literal (single-quote escaped)."""
     return "'" + str(value).replace("'", "''") + "'"
@@ -539,12 +553,17 @@ class SqliteVecIndex:
         FTS5's ``rank`` is more-negative-is-better; it is negated so the returned
         score is larger-is-better (consistent with the other backends).
         """
-        if not query.strip():
+        # Build a crash-safe MATCH from the shared analyzer instead of the raw query: FTS5
+        # metacharacters (a colon, an unbalanced quote, a bare boolean word, parentheses)
+        # would otherwise raise sqlite3.OperationalError and abort the whole search(). This
+        # mirrors MemoryIndex's tolerant behavior (cross-backend parity).
+        match = _fts5_or_match(query)
+        if match is None:
             return []
         rows = self._con.execute(
             "SELECT id, rank FROM fts_items WHERE fts_items MATCH ? "
             "ORDER BY rank LIMIT ?",
-            (query, int(k)),
+            (match, int(k)),
         ).fetchall()
         return [(id_, -float(rank)) for id_, rank in rows]
 

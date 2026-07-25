@@ -244,7 +244,14 @@ def _accepted_candidates(units, *, embedder, level, judge, k):
     records = []
     for item, ev_idx, ev_dict in units:
         event = _event_from_golden(ev_dict)
-        grades = {cid: int(g) for cid, g in item.grade.items()}
+        # Grade against THIS event's own answer clips (keyed by its ucs_catid), not the
+        # whole item's grade map — so a multi-event item never credits a candidate for
+        # matching a sibling event. Byte-identical for single-event items.
+        catid = ev_dict.get("ucs_catid")
+        grades = {
+            cid: int(item.grade.get(cid, 0))
+            for cid in item.answer_clip_ids.get(catid, [])
+        }
         candidates = search_sounds(event.query, k=k, library=lib)
         kept = gate_candidates(candidates, use)
         for c in kept:

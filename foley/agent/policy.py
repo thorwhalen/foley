@@ -106,6 +106,16 @@ class Budget:
         """Charge one generation."""
         self._gens += 1
 
+    def reset(self) -> None:
+        """Zero the spend counters so the caps apply *per event*, not per passage.
+
+        The ``find`` loop calls this at the top of each event so one hard event's
+        refine/generate spend never starves later events (the documented per-event
+        semantics).
+        """
+        self._refines = 0
+        self._gens = 0
+
 
 def decide(
     event: SoundEvent,
