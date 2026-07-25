@@ -31,16 +31,14 @@ candidates = foley.find("She pushed open the heavy oak door; rain hammered outsi
 hits = foley.search("distant thunder rumble", k=10, commercial_ok=True)
 
 # Generate a sound when nothing fits (arioso-style; pluggable backends)
-clip = foley.generate(
-    "a single wooden door creak", backend="stable_audio", duration=3
-)
+clip = foley.generate("a single wooden door creak", backend="stable_audio", duration=3)
 
 # Grow the library — ingest auto-tags, captions, and embeds every file
 foley.ingest("~/my_sounds/")
 foley.add_from("freesound", query="ocean waves", license="cc0")
 
 # Compose: place the sounds under the narration (find → plan → weave)
-timeline = foley.plan(candidates)                # the editable sound-design plan
+timeline = foley.plan(candidates)  # the editable sound-design plan
 result = foley.weave("narration.wav", timeline)  # mastered mix + SDH captions + credits
 ```
 
