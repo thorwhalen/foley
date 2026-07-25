@@ -162,12 +162,40 @@ def _validate_egress() -> None:
         )
 
 
+def _resilient_transport(config: dict):
+    """A resilient HTTP transport for an external source, or ``None`` to keep the default.
+
+    Wraps :func:`~foley.sources.http.requests_transport` with the throttle / backoff /
+    circuit-breaker (driven by the source's declared ``rate``) so a flaky or rate-limited
+    remote source degrades predictably instead of hammering the API or crashing a run.
+    Applies **only** to ``data_egress == 'external'`` sources (local adapters make no HTTP
+    calls) and **only** when the active :class:`~foley.runtime.RuntimeConfig` has
+    ``http_resilience`` on (the default). Built lazily at adapter-load time, so
+    ``import foley`` stays dol-only and no ``requests`` import happens until a real call.
+
+    Returns:
+        A resilient :class:`~foley.sources.http.Transport`, or ``None`` (leave the
+        adapter's default transport in place).
+    """
+    from ..runtime import EXTERNAL, current_runtime
+
+    if config.get("data_egress") != EXTERNAL:
+        return None
+    if not current_runtime().http_resilience:
+        return None
+    from .resilience import make_resilient_transport_from_config
+
+    return make_resilient_transport_from_config(config)
+
+
 def _load_adapter(module: Optional[str], config: dict):
     """Import ``foley.sources.<module>.adapter`` and instantiate its ``Adapter``.
 
     The adapter module exposes an ``Adapter`` class taking the ``config`` dict
     (the arioso convention). Raises an informative error if the module or class is
-    absent — a source with no adapter cannot be pulled from.
+    absent — a source with no adapter cannot be pulled from. For external (HTTP) sources,
+    the adapter's transport is auto-wrapped with :func:`~foley.sources.resilience.resilient`
+    (throttle/backoff/circuit-break) unless the runtime disables ``http_resilience``.
     """
     adapter_module = importlib.import_module(f"foley.sources.{module}.adapter")
     adapter_class = getattr(adapter_module, "Adapter", None)
@@ -175,4 +203,7 @@ def _load_adapter(module: Optional[str], config: dict):
         raise TypeError(
             f"source {module!r} exposes no 'Adapter' class in its adapter module"
         )
+    transport = _resilient_transport(config)
+    if transport is not None:
+        return adapter_class(config, http=transport)
     return adapter_class(config)
