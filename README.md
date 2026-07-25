@@ -99,12 +99,28 @@ foley's design is grounded in five research reports (unified, cited):
 
 ## Install
 
-```
-pip install foley
+```bash
+pip install foley                         # core — dol-only, light; `import foley` stays minimal
+pip install "foley[audio,clap,index]"     # the usual retrieval stack (CLAP + hybrid index)
+foley demo                                # no-download smoke test on the bundled fixture
+foley agent-install                       # drop the agent kit into ./.claude (skill + command + subagent)
 ```
 
-(Optional per-capability extras — `foley[freesound]`, `foley[clap]`, `foley[stable-audio]`,
-`foley[index]`, … — are added as each subsystem lands.)
+foley is **zero-dep at its core** and grows by capability via optional extras — each imported
+lazily, so a bare install stays light. What each adds:
+
+| Extra | Adds |
+|-------|------|
+| `audio` | numpy/soundfile DSP + LUFS mastering |
+| `clap` | the CLAP text↔audio retrieval engine |
+| `index` / `index-sqlite` | the hybrid vector+keyword index (LanceDB / sqlite-vec) |
+| `freesound` · `stable-audio` · `elevenlabs` | live retrieve / generate sources |
+| `agent` · `local-llm` | the SELECT LLM rungs (Claude / a local OpenAI-compatible endpoint) |
+| `align` · `weave` · `provenance` · `c2pa` | forced alignment, OTIO/rubberband, watermarking, signed C2PA |
+| `mcp` · `obs` | the MCP server · OpenTelemetry export |
+
+`foley.check_requirements()` (and the `foley_capabilities` MCP tool) report what's installed and
+what's degraded. Full docs: **[thorwhalen.github.io/foley](https://thorwhalen.github.io/foley)**.
 
 ## License
 
