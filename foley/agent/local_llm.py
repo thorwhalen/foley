@@ -48,7 +48,9 @@ def _make_client(base_url: Optional[str] = None, api_key: Optional[str] = None):
     )
 
 
-def _chat_json(client, *, model: str, system: str, user: str, schema: dict, max_tokens: int) -> dict:
+def _chat_json(
+    client, *, model: str, system: str, user: str, schema: dict, max_tokens: int
+) -> dict:
     """One OpenAI-compatible chat call returning parsed JSON.
 
     Uses ``response_format={'type':'json_object'}`` (the broadly-supported local-model
@@ -58,10 +60,8 @@ def _chat_json(client, *, model: str, system: str, user: str, schema: dict, max_
     import json
 
     sys_prompt = (
-        system
-        + "\n\nReturn ONLY a single JSON object conforming to this JSON Schema "
-        "(no prose, no markdown fences):\n"
-        + json.dumps(schema)
+        system + "\n\nReturn ONLY a single JSON object conforming to this JSON Schema "
+        "(no prose, no markdown fences):\n" + json.dumps(schema)
     )
     resp = client.chat.completions.create(
         model=model,
@@ -79,11 +79,15 @@ def _chat_json(client, *, model: str, system: str, user: str, schema: dict, max_
 class LocalLLMDecomposer:
     """OpenAI-compatible :class:`~foley.agent.protocols.Decomposer` (local endpoint)."""
 
-    def __init__(self, *, client=None, model: Optional[str] = None, max_tokens: int = 2000):
+    def __init__(
+        self, *, client=None, model: Optional[str] = None, max_tokens: int = 2000
+    ):
         self._client = client
         self.model = model or _default_model()
         self.max_tokens = max_tokens
-        self.last_response = None  # obs stays truthful: no Anthropic-shaped usage to record
+        self.last_response = (
+            None  # obs stays truthful: no Anthropic-shaped usage to record
+        )
 
     def decompose(
         self, context: str, *, max_events: int = 6, seconds: Optional[float] = None
@@ -96,7 +100,8 @@ class LocalLLMDecomposer:
         data = _chat_json(
             client,
             model=self.model,
-            system=_DECOMPOSE_SYSTEM + f" Emit at most {max_events} events, most salient first.",
+            system=_DECOMPOSE_SYSTEM
+            + f" Emit at most {max_events} events, most salient first.",
             user=context,
             schema=_EVENT_JSON_SCHEMA,
             max_tokens=self.max_tokens,
@@ -107,13 +112,17 @@ class LocalLLMDecomposer:
 class LocalLLMJudge:
     """OpenAI-compatible :class:`~foley.agent.protocols.Judge` for the ``judge`` rung."""
 
-    def __init__(self, *, client=None, model: Optional[str] = None, max_tokens: int = 500):
+    def __init__(
+        self, *, client=None, model: Optional[str] = None, max_tokens: int = 500
+    ):
         self._client = client
         self.model = model or _default_model()
         self.max_tokens = max_tokens
         self.last_response = None
 
-    def judge(self, event: "SoundEvent", candidate: "Candidate", *, level=None) -> "Verdict":
+    def judge(
+        self, event: "SoundEvent", candidate: "Candidate", *, level=None
+    ) -> "Verdict":
         """Arbitrate the match via the local LLM; returns a :class:`Verdict` at ``level``."""
         from ..base import Verdict, VerifyLevel
         from .verify import _JUDGE_JSON_SCHEMA, _JUDGE_SYSTEM
@@ -142,13 +151,17 @@ class LocalLLMJudge:
 class LocalLLMRefiner:
     """OpenAI-compatible :class:`~foley.agent.protocols.Refiner` (local endpoint)."""
 
-    def __init__(self, *, client=None, model: Optional[str] = None, max_tokens: int = 500):
+    def __init__(
+        self, *, client=None, model: Optional[str] = None, max_tokens: int = 500
+    ):
         self._client = client
         self.model = model or _default_model()
         self.max_tokens = max_tokens
         self.last_response = None
 
-    def refine(self, query: str, *, n: int = 3, hint: Optional[str] = None) -> "list[str]":
+    def refine(
+        self, query: str, *, n: int = 3, hint: Optional[str] = None
+    ) -> "list[str]":
         """Return ``n`` paraphrases via the local LLM (the original ``query`` always first)."""
         from .refine import _REFINE_JSON_SCHEMA, _REFINE_SYSTEM
 
