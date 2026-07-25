@@ -127,9 +127,12 @@ class AnthropicRefiner:
 
 
 def _default_refiner() -> Refiner:
-    """The zero-config refiner: :class:`AnthropicRefiner` when usable, else the fake."""
+    """The zero-config refiner: local LLM if configured, else Anthropic, else the fake."""
     from .decompose import _anthropic_available
+    from .local_llm import LocalLLMRefiner, local_llm_configured
 
+    if local_llm_configured():
+        return LocalLLMRefiner()
     return AnthropicRefiner() if _anthropic_available() else KeywordRefiner()
 
 

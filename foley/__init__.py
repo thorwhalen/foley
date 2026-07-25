@@ -247,6 +247,7 @@ from .weave import WeaveResult
 # façade alias of the builder.
 from .agent.mcp import build_mcp_server
 from .agent.mcp import build_mcp_server as mcp_server
+from .agent.mcp import make_http_app, serve_http
 from .agent.preview import preview, refine, similar_to
 from .agent.session import SessionStore
 from .requirements import capability_report, check_requirements, verify_and_setup
@@ -414,6 +415,8 @@ __all__ = [
     # --- #12: MCP surface, preview UX, onboarding & offline mode ---------------
     "mcp_server",
     "build_mcp_server",
+    "make_http_app",
+    "serve_http",
     "preview",
     "similar_to",
     "refine",

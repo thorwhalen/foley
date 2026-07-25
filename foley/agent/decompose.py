@@ -244,7 +244,11 @@ def _anthropic_available() -> bool:
 
 
 def _default_decomposer() -> Decomposer:
-    """The zero-config decomposer: :class:`AnthropicDecomposer` when usable, else the fake."""
+    """The zero-config decomposer: local LLM if configured, else Anthropic, else the fake."""
+    from .local_llm import LocalLLMDecomposer, local_llm_configured
+
+    if local_llm_configured():
+        return LocalLLMDecomposer()
     return AnthropicDecomposer() if _anthropic_available() else KeywordDecomposer()
 
 
