@@ -69,8 +69,8 @@ print(result.rationale)
 
 # Plan + render — weave under the actual narration audio:
 result = foley.score(segments, audio="narration.wav", commercial_ok=True)
-result.weave.audio          # mastered mix   result.weave.captions_vtt   # SDH captions
-result.weave.credits        # attribution    result.timeline             # still editable
+result.weave.audio  # mastered mix   result.weave.captions_vtt   # SDH captions
+result.weave.credits  # attribution    result.timeline             # still editable
 ```
 
 `foley.score(...)` is the stable contract `braidio`/`nw` call. The same surface is available as

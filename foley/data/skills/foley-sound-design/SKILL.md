@@ -29,14 +29,14 @@ import foley
 
 # Plan only (choose sounds, build an editable timeline):
 result = foley.score("She pushed open the heavy oak door; rain hammered outside.")
-print(result.rationale)          # what was chosen and why
-result.timeline                  # an editable SoundDesignTimeline
+print(result.rationale)  # what was chosen and why
+result.timeline  # an editable SoundDesignTimeline
 
 # Plan + render (weave under the actual narration audio):
 result = foley.score(segments, audio="narration.wav", commercial_ok=True)
-result.weave.audio               # mastered stereo mix (numpy)
-result.weave.captions_vtt        # SDH captions (no speech text leaks)
-result.weave.credits             # attribution (CREDITS.md + JSON)
+result.weave.audio  # mastered stereo mix (numpy)
+result.weave.captions_vtt  # SDH captions (no speech text leaks)
+result.weave.credits  # attribution (CREDITS.md + JSON)
 ```
 
 `segments` is a string or a list of narration segments. `foley.score(...)` runs
