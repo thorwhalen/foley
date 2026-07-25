@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.eval.golden &mdash; foley 0.0.16 documentation</title>
+  <title>foley.eval.golden &mdash; foley 0.0.17 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=c7cdf6fe"></script>
+      <script src="../../../_static/documentation_options.js?v=63b572e7"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -190,7 +190,12 @@
 <span class="c1">#: they resolve identically from a source checkout and an installed wheel.</span>
 <span class="n">_DATA_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span>
 <span class="n">DEFAULT_GOLDEN_PATH</span> <span class="o">=</span> <span class="n">_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;golden&quot;</span> <span class="o">/</span> <span class="s2">&quot;seed.json&quot;</span>
+<span class="c1">#: The tiny wav-backed demo fixture (6 clips) — decoded by ``foley.bootstrap`` / ``demo``.</span>
 <span class="n">RING0_MANIFEST_PATH</span> <span class="o">=</span> <span class="n">_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;ring0&quot;</span> <span class="o">/</span> <span class="s2">&quot;manifest.json&quot;</span>
+<span class="c1">#: The larger caption-only **eval** corpus (the 6 demo clips + ~150 synthetic clips). The</span>
+<span class="c1">#: retrieval eval needs only captions/tags/vectors — never decoded PCM — so this corpus</span>
+<span class="c1">#: ships without wav files, decoupling the nDCG gate&#39;s scale from the demo fixture&#39;s size.</span>
+<span class="n">RING0_CORPUS_PATH</span> <span class="o">=</span> <span class="n">_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;golden&quot;</span> <span class="o">/</span> <span class="s2">&quot;corpus.json&quot;</span>
 
 
 <div class="viewcode-block" id="GoldenItem">
@@ -270,7 +275,7 @@
 
 <div class="viewcode-block" id="build_eval_library">
 <a class="viewcode-back" href="../../../module_docs/foley/eval/golden.html#foley.eval.build_eval_library">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">build_eval_library</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">manifest_path</span><span class="o">=</span><span class="n">RING0_MANIFEST_PATH</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_eval_library</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">embedder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">manifest_path</span><span class="o">=</span><span class="n">RING0_CORPUS_PATH</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the ephemeral Ring-0 eval library (stem ids + injected caption vectors).</span>
 
 <span class="sd">    Each manifest clip becomes a :class:`~foley.base.SoundRecord` with id</span>

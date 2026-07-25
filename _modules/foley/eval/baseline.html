@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.eval.baseline &mdash; foley 0.0.16 documentation</title>
+  <title>foley.eval.baseline &mdash; foley 0.0.17 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=c7cdf6fe"></script>
+      <script src="../../../_static/documentation_options.js?v=63b572e7"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -230,12 +230,14 @@
     <span class="n">rrf_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
     <span class="n">updated_at</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">n_items</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">revision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gld-v1&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write a fresh baseline from ``report`` (the ``--update-baseline`` action).</span>
 
 <span class="sd">    Records the mean metric value plus sha256 stamps of the seed + manifest so a</span>
 <span class="sd">    later fixture edit is detected. ``updated_at`` is passed in (not read from the</span>
-<span class="sd">    clock) so the caller controls reproducibility.</span>
+<span class="sd">    clock) so the caller controls reproducibility. ``revision`` labels the golden-set</span>
+<span class="sd">    generation (bumped when the frozen set is regrown).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The baseline dict that was written.</span>
@@ -255,7 +257,7 @@
             <span class="s2">&quot;manifest_sha256&quot;</span><span class="p">:</span> <span class="n">_sha256</span><span class="p">(</span><span class="n">manifest_path</span><span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">&quot;golden&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;revision&quot;</span><span class="p">:</span> <span class="s2">&quot;gld-v1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;revision&quot;</span><span class="p">:</span> <span class="n">revision</span><span class="p">,</span>
             <span class="s2">&quot;n_items&quot;</span><span class="p">:</span> <span class="n">n_items</span><span class="p">,</span>
             <span class="s2">&quot;seed_sha256&quot;</span><span class="p">:</span> <span class="n">_sha256</span><span class="p">(</span><span class="n">seed_path</span><span class="p">),</span>
         <span class="p">},</span>
