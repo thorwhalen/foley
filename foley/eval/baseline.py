@@ -65,12 +65,14 @@ def write_baseline(
     rrf_k: int = 60,
     updated_at: str,
     n_items: int,
+    revision: str = "gld-v1",
 ) -> dict:
     """Write a fresh baseline from ``report`` (the ``--update-baseline`` action).
 
     Records the mean metric value plus sha256 stamps of the seed + manifest so a
     later fixture edit is detected. ``updated_at`` is passed in (not read from the
-    clock) so the caller controls reproducibility.
+    clock) so the caller controls reproducibility. ``revision`` labels the golden-set
+    generation (bumped when the frozen set is regrown).
 
     Returns:
         The baseline dict that was written.
@@ -90,7 +92,7 @@ def write_baseline(
             "manifest_sha256": _sha256(manifest_path),
         },
         "golden": {
-            "revision": "gld-v1",
+            "revision": revision,
             "n_items": n_items,
             "seed_sha256": _sha256(seed_path),
         },

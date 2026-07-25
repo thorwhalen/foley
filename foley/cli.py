@@ -102,7 +102,7 @@ def _cmd_eval(args) -> int:
     )
     from .eval.golden import (
         DEFAULT_GOLDEN_PATH,
-        RING0_MANIFEST_PATH,
+        RING0_CORPUS_PATH,
         load_golden,
     )
 
@@ -115,13 +115,18 @@ def _cmd_eval(args) -> int:
     if args.update_baseline:
         import datetime
 
+        try:  # preserve the current golden-set revision label across re-baselines
+            revision = load_baseline(DEFAULT_BASELINE_PATH)["golden"]["revision"]
+        except (FileNotFoundError, KeyError):
+            revision = "gld-v1"
         bl = write_baseline(
             report,
             path=DEFAULT_BASELINE_PATH,
             seed_path=args.golden or DEFAULT_GOLDEN_PATH,
-            manifest_path=RING0_MANIFEST_PATH,
+            manifest_path=RING0_CORPUS_PATH,
             updated_at=datetime.date.today().isoformat(),
             n_items=len(load_golden(args.golden or DEFAULT_GOLDEN_PATH)),
+            revision=revision,
         )
         print(f"baseline updated -> {DEFAULT_BASELINE_PATH} (value={bl['value']})")
         return 0

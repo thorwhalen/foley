@@ -26,7 +26,7 @@ from foley.eval import (  # noqa: E402
 from foley.eval.baseline import is_stale  # noqa: E402
 from foley.eval.golden import (  # noqa: E402
     DEFAULT_GOLDEN_PATH,
-    RING0_MANIFEST_PATH,
+    RING0_CORPUS_PATH,
     build_eval_library,
     load_golden,
     run_ring0_retrieval_eval,
@@ -92,7 +92,9 @@ def test_average_precision_uses_total_relevant():
 
 
 def test_mrr_truncates_at_k():
-    assert mrr_at_k({"a": 1}, {"x": 3.0, "y": 2.0, "a": 1.0}, 10) == pytest.approx(1 / 3)
+    assert mrr_at_k({"a": 1}, {"x": 3.0, "y": 2.0, "a": 1.0}, 10) == pytest.approx(
+        1 / 3
+    )
     # first relevant past the cutoff -> 0.0 (truncated mrr@k, not uncapped)
     run = {f"d{i}": float(20 - i) for i in range(15)}
     run["a"] = 0.0
@@ -120,7 +122,7 @@ def test_build_run_yields_distinct_descending_scores():
 def test_build_eval_library_uses_stable_stem_ids():
     lib = build_eval_library()
     ids = set(lib)
-    assert len(ids) == 6
+    assert len(ids) == 156  # the 6 wav-backed demo clips + 150 caption-only eval clips
     assert all(i.startswith("ring0:") for i in ids)
     # qrels join 1:1 with the library (guards the content-hash id-keyspace trap)
     qrels = to_qrels(load_golden())
@@ -178,5 +180,5 @@ def test_baseline_stamps_match_committed_fixtures():
     # If this fails, the seed/manifest changed without re-baselining.
     baseline = load_baseline()
     assert not is_stale(
-        baseline, seed_path=DEFAULT_GOLDEN_PATH, manifest_path=RING0_MANIFEST_PATH
+        baseline, seed_path=DEFAULT_GOLDEN_PATH, manifest_path=RING0_CORPUS_PATH
     ), "baseline stale: run `foley eval --update-baseline` and commit the diff"

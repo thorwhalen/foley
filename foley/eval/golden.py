@@ -33,7 +33,12 @@ from .retrieval import RetrievalReport, build_run, evaluate_run
 #: they resolve identically from a source checkout and an installed wheel.
 _DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 DEFAULT_GOLDEN_PATH = _DATA_DIR / "golden" / "seed.json"
+#: The tiny wav-backed demo fixture (6 clips) — decoded by ``foley.bootstrap`` / ``demo``.
 RING0_MANIFEST_PATH = _DATA_DIR / "ring0" / "manifest.json"
+#: The larger caption-only **eval** corpus (the 6 demo clips + ~150 synthetic clips). The
+#: retrieval eval needs only captions/tags/vectors — never decoded PCM — so this corpus
+#: ships without wav files, decoupling the nDCG gate's scale from the demo fixture's size.
+RING0_CORPUS_PATH = _DATA_DIR / "golden" / "corpus.json"
 
 
 @dataclass(frozen=True)
@@ -102,7 +107,7 @@ def to_qrels(golden: "list[GoldenItem]") -> "dict[str, dict[str, int]]":
     return qrels
 
 
-def build_eval_library(*, embedder=None, manifest_path=RING0_MANIFEST_PATH):
+def build_eval_library(*, embedder=None, manifest_path=RING0_CORPUS_PATH):
     """Build the ephemeral Ring-0 eval library (stem ids + injected caption vectors).
 
     Each manifest clip becomes a :class:`~foley.base.SoundRecord` with id
