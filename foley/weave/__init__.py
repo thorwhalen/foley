@@ -276,6 +276,17 @@ def _c2pa_sign_wav(wav_bytes: bytes, manifest: dict, signer) -> bytes:
     Uses ``c2pa.Builder`` (lazy). ``signer`` is passed straight through to ``Builder.sign``
     — a ready-to-use ``c2pa`` signer the caller built for their signing identity + c2pa
     version (dependency-injected, so foley pins no version-fragile signer-construction API).
+
+    Build one for a C2PA-conformant signing identity, e.g.::
+
+        signer = c2pa.Signer.from_callback(sign_cb, c2pa.C2paSigningAlg.ES256, cert_chain_pem)
+        # or, with a local key: c2pa.Signer.from_info(c2pa.C2paSignerInfo(
+        #     alg=b"es256", sign_cert=<chain PEM>, private_key=<PKCS#8 PEM>, ta_url=<TSA URL>))
+
+    where ``cert_chain_pem`` is the end-entity cert **followed by** its issuer (the C2PA cert
+    profile: KeyUsage=digitalSignature, EKU=emailProtection, plus Subject/Authority Key
+    Identifiers) and the private key is PKCS#8 (``BEGIN PRIVATE KEY``). Verified end-to-end
+    (sign + embed + read back) against ``c2pa-python`` — see ``tests/test_weave_upgrades.py``.
     """
     import io
     import json
