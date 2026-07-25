@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.weave.mix &mdash; foley 0.0.17 documentation</title>
+  <title>foley.weave.mix &mdash; foley 0.0.18 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=63b572e7"></script>
+      <script src="../../../_static/documentation_options.js?v=8bafd125"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -380,6 +380,86 @@
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_fft_convolve</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linear convolution of 1-D ``x`` with kernel ``h`` via FFT (fast for long IRs).&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">length</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">h</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">nfft</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nfft</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">nfft</span><span class="p">),</span> <span class="n">nfft</span><span class="p">)[:</span><span class="n">length</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="convolution_reverb">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.convolution_reverb">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convolution_reverb</span><span class="p">(</span>
+    <span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ir</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convolution reverb with a real (recorded or synthesised) impulse response (report 06 §3.5).</span>
+
+<span class="sd">    The optional upgrade over :func:`reverb_send`&#39;s synthetic exponential tail: convolves</span>
+<span class="sd">    ``clip`` with a supplied IR (a recorded room/plate, or one generated by</span>
+<span class="sd">    ``pyroomacoustics``) via FFT — unity-gain-normalised, dry/wet-blended by ``amount``,</span>
+<span class="sd">    and truncated to the clip length so the placement onset is unchanged. Pure-numpy (no</span>
+<span class="sd">    heavy dependency): only *producing* an IR needs an external tool; applying one does not.</span>
+<span class="sd">    ``amount == 0`` or an empty IR is a no-op (fully dry).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        clip: Working array (mono or stereo).</span>
+<span class="sd">        sample_rate: Sample rate in Hz (kept for API symmetry).</span>
+<span class="sd">        ir: The impulse response (mono ``(n,)`` or stereo ``(n, 2)``).</span>
+<span class="sd">        amount: 0 (dry) .. 1 (fully wet).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The dry/wet-blended clip (a new float32 array; input not mutated).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">amount</span><span class="p">)))</span>
+    <span class="n">ir_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">ir_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">clip</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">clip</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">clip</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">ir2</span> <span class="o">=</span> <span class="n">ir_arr</span> <span class="k">if</span> <span class="n">ir_arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">ir_arr</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ir2</span><span class="p">)))</span> <span class="ow">or</span> <span class="mf">1.0</span>
+    <span class="n">ir2</span> <span class="o">=</span> <span class="n">ir2</span> <span class="o">/</span> <span class="n">norm</span>  <span class="c1"># unity-gain tail (preserve program loudness)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">wet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">wet</span><span class="p">[:,</span> <span class="n">ch</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fft_convolve</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">ch</span><span class="p">],</span> <span class="n">ir2</span><span class="p">[:,</span> <span class="n">ch</span> <span class="o">%</span> <span class="n">ir2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]])[:</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">wet</span> <span class="o">=</span> <span class="n">wet</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">wet</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">((</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">clip</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">wet</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="time_stretch">
+<a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.time_stretch">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">time_stretch</span><span class="p">(</span><span class="n">clip</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pitch-preserving time-stretch by ``rate`` via ``rubberband`` (report 06 §4, optional).</span>
+
+<span class="sd">    ``rate &gt; 1`` shortens (plays faster), ``&lt; 1`` lengthens — so fitting a clip of ``n``</span>
+<span class="sd">    samples to a ``target`` span uses ``rate = n / target``. Lazy: needs ``pyrubberband``</span>
+<span class="sd">    (which shells out to the ``rubberband`` binary, a WEAVE system requirement); raises</span>
+<span class="sd">    :class:`RuntimeError` when unavailable so callers (e.g. :func:`fit_duration`) fall back</span>
+<span class="sd">    to loop/trim. Preserves the channel layout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+
+    <span class="k">if</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;pyrubberband&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;time_stretch needs pyrubberband (+ the rubberband binary)&quot;</span><span class="p">)</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pyrubberband</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pyrb</span>
+
+    <span class="k">if</span> <span class="n">rate</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;rate must be positive&quot;</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">clip</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">clip</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">pyrb</span><span class="o">.</span><span class="n">time_stretch</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="n">ch</span><span class="p">],</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">c</span><span class="p">[:</span><span class="n">width</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span> <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">out</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span></div>
+
+
+
 <div class="viewcode-block" id="equal_power_crossfade">
 <a class="viewcode-back" href="../../../module_docs/foley/weave/mix.html#foley.weave.mix.equal_power_crossfade">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">equal_power_crossfade</span><span class="p">(</span>
@@ -452,13 +532,16 @@
     <span class="n">duration</span><span class="p">:</span> <span class="s2">&quot;float | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">crossfade_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">stretch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fit ``clip`` to ``duration`` seconds — seamless loop (beds) or trim/pass-through (report 06 §4).</span>
 
 <span class="sd">    ``duration is None`` returns the clip unchanged (a one-shot plays once). When</span>
 <span class="sd">    ``loop`` and the clip is shorter than ``duration``, it is tiled and equal-power</span>
 <span class="sd">    crossfaded at the seam to fill the span; anything longer than ``duration`` is</span>
-<span class="sd">    trimmed. A non-looping short clip is returned as-is (it plays once).</span>
+<span class="sd">    trimmed. A non-looping short clip is returned as-is (it plays once). When ``stretch``,</span>
+<span class="sd">    the clip is pitch-preservingly time-stretched to exactly fill ``duration`` (via</span>
+<span class="sd">    :func:`time_stretch`), falling back to loop/trim if ``rubberband`` is unavailable.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        clip: Working array (mono or stereo).</span>
@@ -466,6 +549,7 @@
 <span class="sd">        duration: Target duration in seconds (``None`` = full clip length).</span>
 <span class="sd">        loop: Seamless-loop to fill ``duration`` when shorter.</span>
 <span class="sd">        crossfade_s: Equal-power crossfade length at each loop seam.</span>
+<span class="sd">        stretch: Pitch-preserving time-stretch to fill ``duration`` (needs ``rubberband``).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The duration-fitted clip.</span>
@@ -478,6 +562,11 @@
     <span class="n">n</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">target</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">clip</span><span class="p">[:</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">stretch</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">time_stretch</span><span class="p">(</span><span class="n">clip</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">n</span> <span class="o">/</span> <span class="n">target</span><span class="p">)[:</span><span class="n">target</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">pass</span>  <span class="c1"># rubberband unavailable → fall back to loop/trim below</span>
     <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">clip</span><span class="p">[:</span><span class="n">target</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">loop</span><span class="p">:</span>

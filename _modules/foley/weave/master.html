@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.weave.master &mdash; foley 0.0.17 documentation</title>
+  <title>foley.weave.master &mdash; foley 0.0.18 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=63b572e7"></script>
+      <script src="../../../_static/documentation_options.js?v=8bafd125"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -166,10 +166,12 @@
 <span class="sd">extra (no redundant dependency) and is imported function-locally, keeping ``import</span>
 <span class="sd">foley.weave`` dol-only.</span>
 
-<span class="sd">The default ``engine=&#39;auto&#39;`` masters fully in-process (portable, testable). A</span>
-<span class="sd">two-pass ``ffmpeg loudnorm`` path (the &quot;guarantee the numbers&quot; master, report 06</span>
-<span class="sd">§5.4) is a reserved upgrade behind :func:`foley.weave.requirements.check_requirements`;</span>
-<span class="sd">until it lands, ``engine=&#39;ffmpeg&#39;`` / ``&#39;auto&#39;`` degrade to the in-process path.</span>
+<span class="sd">The default ``engine=&#39;auto&#39;`` masters fully in-process (portable, testable).</span>
+<span class="sd">``engine=&#39;ffmpeg&#39;`` runs the two-pass ``ffmpeg loudnorm`` &quot;guarantee the numbers&quot; master</span>
+<span class="sd">(report 06 §5.4) — measure, then apply a linear loudnorm to the measured values — and</span>
+<span class="sd">**fails safe** back to the in-process path when the ``ffmpeg`` binary is unavailable or</span>
+<span class="sd">errors, so weaving never depends on it. ``ffmpeg`` is a WEAVE system requirement (see</span>
+<span class="sd">:mod:`foley.weave.requirements`); everything is lazy so ``import foley.weave`` stays dol-only.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
@@ -218,6 +220,13 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">pyln</span><span class="o">.</span><span class="n">Meter</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">)</span><span class="o">.</span><span class="n">integrated_loudness</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_tp</span><span class="p">(</span><span class="n">mix</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inter-sample true-peak (dBTP) of ``mix`` (the oversampled Tier-0 QC meter).&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..qc</span><span class="w"> </span><span class="kn">import</span> <span class="n">true_peak_dbtp</span>
+
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">true_peak_dbtp</span><span class="p">(</span><span class="n">mix</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">))</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_true_peak_limit</span><span class="p">(</span>
     <span class="n">mix</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ceiling_db</span><span class="p">:</span> <span class="nb">float</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[ndarray, float, bool]&quot;</span><span class="p">:</span>
@@ -237,6 +246,92 @@
     <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">true_peak_dbtp</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">),</span> <span class="kc">True</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_loudnorm_json</span><span class="p">(</span><span class="n">stderr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract ffmpeg ``loudnorm=print_format=json`` measurements from a pass-1 stderr.</span>
+
+<span class="sd">    ffmpeg prints the JSON block last on stderr; parse the final ``{...}`` object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">stderr</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">stderr</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="n">start</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;no loudnorm JSON found in ffmpeg output&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">stderr</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_master_ffmpeg</span><span class="p">(</span>
+    <span class="n">mix</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">profile</span><span class="p">:</span> <span class="n">MasterProfile</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Two-pass ``ffmpeg loudnorm`` master (report 06 §5.4) — &quot;guarantee the numbers&quot;.</span>
+
+<span class="sd">    Pass 1 measures the program (I/TP/LRA/thresh/offset); pass 2 applies a linear</span>
+<span class="sd">    loudnorm to the measured values so the output hits the profile&#39;s integrated-loudness</span>
+<span class="sd">    and true-peak targets to broadcast tolerance. Needs the ``ffmpeg`` binary (a WEAVE</span>
+<span class="sd">    system requirement); everything is lazy so ``import foley.weave`` stays dol-only.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+
+    <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;ffmpeg&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;ffmpeg not found on PATH&quot;</span><span class="p">)</span>
+    <span class="n">target_i</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">target_lufs</span>
+    <span class="n">target_tp</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">true_peak_db</span>
+    <span class="n">lra</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span> <span class="s2">&quot;lra&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="mf">11.0</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+        <span class="n">src</span><span class="p">,</span> <span class="n">dst</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;in.wav&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;out.wav&quot;</span>
+        <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mix</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">sample_rate</span><span class="p">)</span>
+        <span class="n">measure</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;loudnorm=I=</span><span class="si">{</span><span class="n">target_i</span><span class="si">}</span><span class="s2">:TP=</span><span class="si">{</span><span class="n">target_tp</span><span class="si">}</span><span class="s2">:LRA=</span><span class="si">{</span><span class="n">lra</span><span class="si">}</span><span class="s2">:print_format=json&quot;</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;ffmpeg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-hide_banner&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-nostats&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-i&quot;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">),</span>
+                <span class="s2">&quot;-af&quot;</span><span class="p">,</span>
+                <span class="n">measure</span><span class="p">,</span>
+                <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;null&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">_parse_loudnorm_json</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="n">apply_</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;loudnorm=I=</span><span class="si">{</span><span class="n">target_i</span><span class="si">}</span><span class="s2">:TP=</span><span class="si">{</span><span class="n">target_tp</span><span class="si">}</span><span class="s2">:LRA=</span><span class="si">{</span><span class="n">lra</span><span class="si">}</span><span class="s2">:linear=true:&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;measured_I=</span><span class="si">{</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;input_i&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:measured_TP=</span><span class="si">{</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;input_tp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;measured_LRA=</span><span class="si">{</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;input_lra&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:measured_thresh=</span><span class="si">{</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;input_thresh&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;offset=</span><span class="si">{</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;target_offset&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:print_format=summary&quot;</span>
+        <span class="p">)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;ffmpeg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-hide_banner&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-nostats&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-y&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;-i&quot;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">src</span><span class="p">),</span>
+                <span class="s2">&quot;-af&quot;</span><span class="p">,</span>
+                <span class="n">apply_</span><span class="p">,</span>
+                <span class="s2">&quot;-ar&quot;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">),</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dst</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">always_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
 <div class="viewcode-block" id="master">
 <a class="viewcode-back" href="../../../module_docs/foley/weave/master.html#foley.weave.master">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">master</span><span class="p">(</span>
@@ -252,14 +347,35 @@
 <span class="sd">        mix: The summed working mix (stereo ``(frames, 2)`` float32).</span>
 <span class="sd">        sample_rate: Sample rate in Hz.</span>
 <span class="sd">        profile: The :class:`~foley.base.MasterProfile` (target LUFS / true-peak / LRA).</span>
-<span class="sd">        engine: ``&#39;auto&#39;``/``&#39;inprocess&#39;`` master in-process (default). ``&#39;ffmpeg&#39;``</span>
-<span class="sd">            is reserved (report 06 §5.4) and currently degrades to in-process.</span>
+<span class="sd">        engine: ``&#39;auto&#39;``/``&#39;inprocess&#39;`` master in-process (default, portable). ``&#39;ffmpeg&#39;``</span>
+<span class="sd">            uses the two-pass ``ffmpeg loudnorm`` &quot;guarantee the numbers&quot; master (report 06</span>
+<span class="sd">            §5.4) and **fails safe** back to in-process if ffmpeg is unavailable or errors.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        ``(mastered_mix, MasterReport)``. Loudness is measured before and after so the</span>
 <span class="sd">        report is a faithful audit; when a true-peak limit engages, output LUFS may</span>
 <span class="sd">        sit slightly below target (peak-safety wins over exact loudness).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;ffmpeg&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mastered</span> <span class="o">=</span> <span class="n">_master_ffmpeg</span><span class="p">(</span><span class="n">mix</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
+            <span class="n">out_lufs</span> <span class="o">=</span> <span class="n">_measure_lufs</span><span class="p">(</span><span class="n">mastered</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">)</span>
+            <span class="n">in_lufs</span> <span class="o">=</span> <span class="n">_measure_lufs</span><span class="p">(</span><span class="n">mix</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mastered</span><span class="p">,</span> <span class="n">MasterReport</span><span class="p">(</span>
+                <span class="n">target_lufs</span><span class="o">=</span><span class="n">profile</span><span class="o">.</span><span class="n">target_lufs</span><span class="p">,</span>
+                <span class="n">input_lufs</span><span class="o">=</span><span class="n">in_lufs</span><span class="p">,</span>
+                <span class="n">output_lufs</span><span class="o">=</span><span class="n">out_lufs</span><span class="p">,</span>
+                <span class="n">true_peak_dbtp</span><span class="o">=</span><span class="n">_tp</span><span class="p">(</span><span class="n">mastered</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">),</span>
+                <span class="n">true_peak_ceiling_db</span><span class="o">=</span><span class="n">profile</span><span class="o">.</span><span class="n">true_peak_db</span><span class="p">,</span>
+                <span class="n">gain_db</span><span class="o">=</span><span class="p">(</span><span class="n">out_lufs</span> <span class="o">-</span> <span class="n">in_lufs</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">out_lufs</span><span class="p">)</span> <span class="ow">and</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">in_lufs</span><span class="p">)</span>
+                <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">limited</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;ffmpeg&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># fail-safe: degrade to the portable in-process master below</span>
+
     <span class="kn">from</span><span class="w"> </span><span class="nn">..audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">loudness_normalize</span>
 
     <span class="n">normalized</span><span class="p">,</span> <span class="n">input_lufs</span> <span class="o">=</span> <span class="n">loudness_normalize</span><span class="p">(</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.weave.master &mdash; foley 0.0.17 documentation</title>
+  <title>foley.weave.master &mdash; foley 0.0.18 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=63b572e7"></script>
+      <script src="../../../_static/documentation_options.js?v=8bafd125"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -173,10 +173,12 @@ BS.1770 meter Tier-0 QC uses) for the LUFS stage and <a class="reference interna
 (oversampled) for the ceiling — so <code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> comes from the existing <code class="docutils literal notranslate"><span class="pre">audio</span></code>
 extra (no redundant dependency) and is imported function-locally, keeping <code class="docutils literal notranslate"><span class="pre">import</span>
 <span class="pre">foley.weave</span></code> dol-only.</p>
-<p>The default <code class="docutils literal notranslate"><span class="pre">engine='auto'</span></code> masters fully in-process (portable, testable). A
-two-pass <code class="docutils literal notranslate"><span class="pre">ffmpeg</span> <span class="pre">loudnorm</span></code> path (the “guarantee the numbers” master, report 06
-§5.4) is a reserved upgrade behind <a class="reference internal" href="requirements.html#foley.weave.requirements.check_requirements" title="foley.weave.requirements.check_requirements"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.weave.requirements.check_requirements()</span></code></a>;
-until it lands, <code class="docutils literal notranslate"><span class="pre">engine='ffmpeg'</span></code> / <code class="docutils literal notranslate"><span class="pre">'auto'</span></code> degrade to the in-process path.</p>
+<p>The default <code class="docutils literal notranslate"><span class="pre">engine='auto'</span></code> masters fully in-process (portable, testable).
+<code class="docutils literal notranslate"><span class="pre">engine='ffmpeg'</span></code> runs the two-pass <code class="docutils literal notranslate"><span class="pre">ffmpeg</span> <span class="pre">loudnorm</span></code> “guarantee the numbers” master
+(report 06 §5.4) — measure, then apply a linear loudnorm to the measured values — and
+<strong>fails safe</strong> back to the in-process path when the <code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code> binary is unavailable or
+errors, so weaving never depends on it. <code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code> is a WEAVE system requirement (see
+<a class="reference internal" href="requirements.html#module-foley.weave.requirements" title="foley.weave.requirements"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.weave.requirements</span></code></a>); everything is lazy so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley.weave</span></code> stays dol-only.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.weave.master.MasterReport">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.weave.master.</span></span><span class="sig-name descname"><span class="pre">MasterReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_lufs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_lufs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_lufs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_peak_dbtp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_peak_ceiling_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limited</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/weave/master.html#MasterReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.master.MasterReport" title="Link to this definition"></a></dt>
@@ -199,8 +201,9 @@ until it lands, <code class="docutils literal notranslate"><span class="pre">eng
 <li><p><strong>mix</strong> – The summed working mix (stereo <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">2)</span></code> float32).</p></li>
 <li><p><strong>sample_rate</strong> – Sample rate in Hz.</p></li>
 <li><p><strong>profile</strong> – The <a class="reference internal" href="../base.html#foley.base.MasterProfile" title="foley.base.MasterProfile"><code class="xref py py-class docutils literal notranslate"><span class="pre">MasterProfile</span></code></a> (target LUFS / true-peak / LRA).</p></li>
-<li><p><strong>engine</strong> – <code class="docutils literal notranslate"><span class="pre">'auto'</span></code>/<code class="docutils literal notranslate"><span class="pre">'inprocess'</span></code> master in-process (default). <code class="docutils literal notranslate"><span class="pre">'ffmpeg'</span></code>
-is reserved (report 06 §5.4) and currently degrades to in-process.</p></li>
+<li><p><strong>engine</strong> – <code class="docutils literal notranslate"><span class="pre">'auto'</span></code>/<code class="docutils literal notranslate"><span class="pre">'inprocess'</span></code> master in-process (default, portable). <code class="docutils literal notranslate"><span class="pre">'ffmpeg'</span></code>
+uses the two-pass <code class="docutils literal notranslate"><span class="pre">ffmpeg</span> <span class="pre">loudnorm</span></code> “guarantee the numbers” master (report 06
+§5.4) and <strong>fails safe</strong> back to in-process if ffmpeg is unavailable or errors.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
