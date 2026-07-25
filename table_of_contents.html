@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; foley 0.0.18 documentation</title>
+  <title>&lt;no title&gt; &mdash; foley 0.0.19 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=8bafd125"></script>
+      <script src="_static/documentation_options.js?v=2fd7553c"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/local_llm.html">foley.agent.local_llm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
@@ -262,6 +263,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.loudness_normalize"><code class="docutils literal notranslate"><span class="pre">loudness_normalize()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.make_byte_store"><code class="docutils literal notranslate"><span class="pre">make_byte_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.make_http_app"><code class="docutils literal notranslate"><span class="pre">make_http_app()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.make_meta_store"><code class="docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.make_run_store"><code class="docutils literal notranslate"><span class="pre">make_run_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.make_session_store"><code class="docutils literal notranslate"><span class="pre">make_session_store()</span></code></a></li>
@@ -282,6 +284,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.run_qc"><code class="docutils literal notranslate"><span class="pre">run_qc()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.search"><code class="docutils literal notranslate"><span class="pre">search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.serve_http"><code class="docutils literal notranslate"><span class="pre">serve_http()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.similar"><code class="docutils literal notranslate"><span class="pre">similar()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.similar_to"><code class="docutils literal notranslate"><span class="pre">similar_to()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley.html#foley.sqlite_vec_loadable"><code class="docutils literal notranslate"><span class="pre">sqlite_vec_loadable()</span></code></a></li>
@@ -333,6 +336,14 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/decompose.html#foley.agent.decompose.decompose_context"><code class="docutils literal notranslate"><span class="pre">decompose_context()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/local_llm.html">foley.agent.local_llm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/local_llm.html#foley.agent.local_llm.DEFAULT_LOCAL_MODEL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LOCAL_MODEL</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/local_llm.html#foley.agent.local_llm.LocalLLMDecomposer"><code class="docutils literal notranslate"><span class="pre">LocalLLMDecomposer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/local_llm.html#foley.agent.local_llm.LocalLLMJudge"><code class="docutils literal notranslate"><span class="pre">LocalLLMJudge</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/local_llm.html#foley.agent.local_llm.LocalLLMRefiner"><code class="docutils literal notranslate"><span class="pre">LocalLLMRefiner</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/local_llm.html#foley.agent.local_llm.local_llm_configured"><code class="docutils literal notranslate"><span class="pre">local_llm_configured()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/mcp.html">foley.agent.mcp</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/mcp.html#foley.agent.mcp.TOOLS"><code class="docutils literal notranslate"><span class="pre">TOOLS</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/mcp.html#foley.agent.mcp.build_mcp_server"><code class="docutils literal notranslate"><span class="pre">build_mcp_server()</span></code></a></li>
@@ -356,7 +367,9 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/mcp.html#foley.agent.mcp.foley_timeline_captions"><code class="docutils literal notranslate"><span class="pre">foley_timeline_captions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/mcp.html#foley.agent.mcp.foley_toggle"><code class="docutils literal notranslate"><span class="pre">foley_toggle()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/mcp.html#foley.agent.mcp.foley_weave"><code class="docutils literal notranslate"><span class="pre">foley_weave()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/mcp.html#foley.agent.mcp.make_http_app"><code class="docutils literal notranslate"><span class="pre">make_http_app()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/mcp.html#foley.agent.mcp.serve"><code class="docutils literal notranslate"><span class="pre">serve()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/foley/agent/mcp.html#foley.agent.mcp.serve_http"><code class="docutils literal notranslate"><span class="pre">serve_http()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/foley/agent/policy.html">foley.agent.policy</a><ul>

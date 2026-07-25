@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.mcp &mdash; foley 0.0.18 documentation</title>
+  <title>foley.agent.mcp &mdash; foley 0.0.19 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8bafd125"></script>
+      <script src="../../../_static/documentation_options.js?v=2fd7553c"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/local_llm.html">foley.agent.local_llm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
@@ -778,12 +779,127 @@
 
 
 
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># authenticated HTTP transport (remote MCP deployment)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_BearerAuthASGI</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimal ASGI middleware gating HTTP requests behind a bearer token (fail-closed).</span>
+
+<span class="sd">    Non-HTTP scopes (``lifespan`` / ``websocket``) pass through untouched so the wrapped</span>
+<span class="sd">    Starlette app&#39;s startup/shutdown still runs; an HTTP request without a valid</span>
+<span class="sd">    ``Authorization: Bearer &lt;token&gt;`` header gets a ``401``. Transport-agnostic and</span>
+<span class="sd">    independent of any fastmcp auth-provider API, so it stays robust across versions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">tokens</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">app</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tokens</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scope</span><span class="p">,</span> <span class="n">receive</span><span class="p">,</span> <span class="n">send</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">scope</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;http&quot;</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">receive</span><span class="p">,</span> <span class="n">send</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">scope</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;headers&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;authorization&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;latin-1&quot;</span><span class="p">)</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">raw</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;bearer &quot;</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokens</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">send</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;http.response.start&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="mi">401</span><span class="p">,</span>
+                    <span class="s2">&quot;headers&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">(</span><span class="sa">b</span><span class="s2">&quot;content-type&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;application/json&quot;</span><span class="p">),</span>
+                        <span class="p">(</span><span class="sa">b</span><span class="s2">&quot;www-authenticate&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;Bearer&quot;</span><span class="p">),</span>
+                    <span class="p">],</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+            <span class="k">await</span> <span class="n">send</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;http.response.body&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="sa">b</span><span class="s1">&#39;{&quot;error&quot;:&quot;unauthorized&quot;}&#39;</span><span class="p">}</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">receive</span><span class="p">,</span> <span class="n">send</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="make_http_app">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.make_http_app">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_http_app</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">auth</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/mcp&quot;</span><span class="p">,</span>
+    <span class="n">json_response</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">runtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">byte_store</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">include</span><span class="p">:</span> <span class="s2">&quot;Optional[list[str]]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foley&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a bearer-auth-gated ASGI app serving the foley MCP tools over streamable HTTP.</span>
+
+<span class="sd">    HTTP exposes the tool surface to the network, so ``auth`` is **required and</span>
+<span class="sd">    fail-closed**: pass ``auth={&#39;bearer_tokens&#39;: [...]}`` (a non-empty iterable of accepted</span>
+<span class="sd">    tokens) — a request without a matching ``Authorization: Bearer &lt;token&gt;`` header gets a</span>
+<span class="sd">    ``401``. The returned app (a Starlette/ASGI callable) mounts in any ASGI host (uvicorn,</span>
+<span class="sd">    gunicorn, a parent FastAPI). ``py2mcp`` / ``fastmcp`` are imported lazily inside</span>
+<span class="sd">    :func:`build_mcp_server`, so ``import foley`` stays dol-only.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        auth: ``{&#39;bearer_tokens&#39;: [...]}`` — required; empty/missing raises (fail-closed).</span>
+<span class="sd">        path: The MCP HTTP mount path.</span>
+<span class="sd">        json_response: Return a single JSON response instead of an SSE stream (simple clients).</span>
+<span class="sd">        library / runtime / byte_store / include / name: As :func:`build_mcp_server`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An ASGI application (the bearer-gated MCP HTTP app).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If ``auth`` carries no bearer tokens (no anonymous HTTP access).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="n">auth</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bearer_tokens&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;make_http_app/serve_http requires auth={&#39;bearer_tokens&#39;: [...]} — HTTP exposes &quot;</span>
+            <span class="s2">&quot;the tools to the network, so it is fail-closed (no anonymous access).&quot;</span>
+        <span class="p">)</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">build_mcp_server</span><span class="p">(</span>
+        <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
+        <span class="n">runtime</span><span class="o">=</span><span class="n">runtime</span><span class="p">,</span>
+        <span class="n">byte_store</span><span class="o">=</span><span class="n">byte_store</span><span class="p">,</span>
+        <span class="n">include</span><span class="o">=</span><span class="n">include</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">http_app</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">transport</span><span class="o">=</span><span class="s2">&quot;http&quot;</span><span class="p">,</span> <span class="n">json_response</span><span class="o">=</span><span class="n">json_response</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_BearerAuthASGI</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">tokens</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="serve_http">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.serve_http">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">serve_http</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8000</span><span class="p">,</span>
+    <span class="n">auth</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/mcp&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover - blocking I/O</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build and serve the foley MCP tools over authenticated streamable HTTP (blocks).</span>
+
+<span class="sd">    Wraps :func:`make_http_app` and runs it with uvicorn. ``auth`` is required (fail-closed).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">make_http_app</span><span class="p">(</span><span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span></div>
+
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_cli</span><span class="p">(</span><span class="n">argv</span><span class="p">:</span> <span class="s2">&quot;Optional[list[str]]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>  <span class="c1"># pragma: no cover - entry point</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;``foley-mcp`` console entry: serve foley over MCP (stdio).&quot;&quot;&quot;</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
 
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;foley-mcp&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Serve foley to agents over MCP (stdio).&quot;</span>
+        <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;foley-mcp&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Serve foley to agents over MCP (stdio or HTTP).&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--name&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;foley&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--session&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
@@ -792,12 +908,48 @@
         <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;local-first: no external sources / telemetry&quot;</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--http&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;serve over authenticated streamable HTTP instead of stdio&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--host&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;HTTP bind host&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--port&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;HTTP bind port&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--token&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;accepted bearer token (repeatable); required with --http. Falls back to &quot;</span>
+        <span class="s2">&quot;$FOLEY_MCP_TOKEN.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--path&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;/mcp&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;HTTP mount path&quot;</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
     <span class="n">runtime</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">offline</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">RuntimeConfig</span>
 
         <span class="n">runtime</span> <span class="o">=</span> <span class="n">RuntimeConfig</span><span class="o">.</span><span class="n">offline_local</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">http</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+        <span class="n">tokens</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">token</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="n">env_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FOLEY_MCP_TOKEN&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">env_token</span><span class="p">:</span>
+            <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env_token</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens</span><span class="p">:</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;--http requires --token TOKEN (or $FOLEY_MCP_TOKEN) — fail-closed&quot;</span>
+            <span class="p">)</span>
+        <span class="n">serve_http</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+            <span class="n">auth</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;bearer_tokens&quot;</span><span class="p">:</span> <span class="n">tokens</span><span class="p">},</span>
+            <span class="n">path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+            <span class="n">session</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">runtime</span><span class="o">=</span><span class="n">runtime</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
     <span class="n">serve</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">runtime</span><span class="o">=</span><span class="n">runtime</span><span class="p">)</span>
     <span class="k">return</span> <span class="mi">0</span>
 </pre></div>

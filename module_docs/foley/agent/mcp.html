@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.mcp &mdash; foley 0.0.18 documentation</title>
+  <title>foley.agent.mcp &mdash; foley 0.0.19 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8bafd125"></script>
+      <script src="../../../_static/documentation_options.js?v=2fd7553c"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="foley.agent.policy" href="policy.html" />
-    <link rel="prev" title="foley.agent.decompose" href="decompose.html" /> 
+    <link rel="prev" title="foley.agent.local_llm" href="local_llm.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_llm.html">foley.agent.local_llm</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">foley.agent.mcp</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.TOOLS"><code class="docutils literal notranslate"><span class="pre">TOOLS</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.build_mcp_server"><code class="docutils literal notranslate"><span class="pre">build_mcp_server()</span></code></a></li>
@@ -76,7 +77,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_timeline_captions"><code class="docutils literal notranslate"><span class="pre">foley_timeline_captions()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_toggle"><code class="docutils literal notranslate"><span class="pre">foley_toggle()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_weave"><code class="docutils literal notranslate"><span class="pre">foley_weave()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.make_http_app"><code class="docutils literal notranslate"><span class="pre">make_http_app()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.serve"><code class="docutils literal notranslate"><span class="pre">serve()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.serve_http"><code class="docutils literal notranslate"><span class="pre">serve_http()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="policy.html">foley.agent.policy</a></li>
@@ -353,9 +356,44 @@ that field (so <code class="docutils literal notranslate"><span class="pre">peak
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.make_http_app">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">make_http_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'/mcp'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#make_http_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.make_http_app" title="Link to this definition"></a></dt>
+<dd><p>Build a bearer-auth-gated ASGI app serving the foley MCP tools over streamable HTTP.</p>
+<p>HTTP exposes the tool surface to the network, so <code class="docutils literal notranslate"><span class="pre">auth</span></code> is <strong>required and
+fail-closed</strong>: pass <code class="docutils literal notranslate"><span class="pre">auth={'bearer_tokens':</span> <span class="pre">[...]}</span></code> (a non-empty iterable of accepted
+tokens) — a request without a matching <code class="docutils literal notranslate"><span class="pre">Authorization:</span> <span class="pre">Bearer</span> <span class="pre">&lt;token&gt;</span></code> header gets a
+<code class="docutils literal notranslate"><span class="pre">401</span></code>. The returned app (a Starlette/ASGI callable) mounts in any ASGI host (uvicorn,
+gunicorn, a parent FastAPI). <code class="docutils literal notranslate"><span class="pre">py2mcp</span></code> / <code class="docutils literal notranslate"><span class="pre">fastmcp</span></code> are imported lazily inside
+<a class="reference internal" href="#foley.agent.mcp.build_mcp_server" title="foley.agent.mcp.build_mcp_server"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_mcp_server()</span></code></a>, so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code> stays dol-only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>auth</strong> – <code class="docutils literal notranslate"><span class="pre">{'bearer_tokens':</span> <span class="pre">[...]}</span></code> — required; empty/missing raises (fail-closed).</p></li>
+<li><p><strong>path</strong> – The MCP HTTP mount path.</p></li>
+<li><p><strong>json_response</strong> – Return a single JSON response instead of an SSE stream (simple clients).</p></li>
+<li><p><strong>name</strong> (<em>library / runtime / byte_store / include /</em>) – As <a class="reference internal" href="#foley.agent.mcp.build_mcp_server" title="foley.agent.mcp.build_mcp_server"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_mcp_server()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An ASGI application (the bearer-gated MCP HTTP app).</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">auth</span></code> carries no bearer tokens (no anonymous HTTP access).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.agent.mcp.serve">
 <span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#serve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.serve" title="Link to this definition"></a></dt>
 <dd><p>Build and run the foley MCP server over stdio (blocks); enforces an offline posture.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.serve_http">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">serve_http</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'/mcp'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#serve_http"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.serve_http" title="Link to this definition"></a></dt>
+<dd><p>Build and serve the foley MCP tools over authenticated streamable HTTP (blocks).</p>
+<p>Wraps <a class="reference internal" href="#foley.agent.mcp.make_http_app" title="foley.agent.mcp.make_http_app"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_http_app()</span></code></a> and runs it with uvicorn. <code class="docutils literal notranslate"><span class="pre">auth</span></code> is required (fail-closed).</p>
 </dd></dl>
 
 </section>
@@ -364,7 +402,7 @@ that field (so <code class="docutils literal notranslate"><span class="pre">peak
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="decompose.html" class="btn btn-neutral float-left" title="foley.agent.decompose" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="local_llm.html" class="btn btn-neutral float-left" title="foley.agent.local_llm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="policy.html" class="btn btn-neutral float-right" title="foley.agent.policy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

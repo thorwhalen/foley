@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.18 documentation</title>
+  <title>foley &mdash; foley 0.0.19 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=8bafd125"></script>
+      <script src="../_static/documentation_options.js?v=2fd7553c"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -298,6 +298,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.loudness_normalize"><code class="docutils literal notranslate"><span class="pre">loudness_normalize()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.make_byte_store"><code class="docutils literal notranslate"><span class="pre">make_byte_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.make_http_app"><code class="docutils literal notranslate"><span class="pre">make_http_app()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.make_meta_store"><code class="docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.make_run_store"><code class="docutils literal notranslate"><span class="pre">make_run_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.make_session_store"><code class="docutils literal notranslate"><span class="pre">make_session_store()</span></code></a></li>
@@ -318,6 +319,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.run_qc"><code class="docutils literal notranslate"><span class="pre">run_qc()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.search"><code class="docutils literal notranslate"><span class="pre">search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.serve_http"><code class="docutils literal notranslate"><span class="pre">serve_http()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.similar"><code class="docutils literal notranslate"><span class="pre">similar()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.similar_to"><code class="docutils literal notranslate"><span class="pre">similar_to()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sqlite_vec_loadable"><code class="docutils literal notranslate"><span class="pre">sqlite_vec_loadable()</span></code></a></li>
@@ -334,6 +336,7 @@
 <li class="toctree-l1"><a class="reference internal" href="foley/agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/agent/local_llm.html">foley.agent.local_llm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/policy.html">foley.agent.policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/preview.html">foley.agent.preview</a></li>
@@ -2919,6 +2922,34 @@ it directly to <a class="reference internal" href="#foley.store_sound" title="fo
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.make_http_app">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">make_http_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'/mcp'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/mcp.html#make_http_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.make_http_app" title="Link to this definition"></a></dt>
+<dd><p>Build a bearer-auth-gated ASGI app serving the foley MCP tools over streamable HTTP.</p>
+<p>HTTP exposes the tool surface to the network, so <code class="docutils literal notranslate"><span class="pre">auth</span></code> is <strong>required and
+fail-closed</strong>: pass <code class="docutils literal notranslate"><span class="pre">auth={'bearer_tokens':</span> <span class="pre">[...]}</span></code> (a non-empty iterable of accepted
+tokens) — a request without a matching <code class="docutils literal notranslate"><span class="pre">Authorization:</span> <span class="pre">Bearer</span> <span class="pre">&lt;token&gt;</span></code> header gets a
+<code class="docutils literal notranslate"><span class="pre">401</span></code>. The returned app (a Starlette/ASGI callable) mounts in any ASGI host (uvicorn,
+gunicorn, a parent FastAPI). <code class="docutils literal notranslate"><span class="pre">py2mcp</span></code> / <code class="docutils literal notranslate"><span class="pre">fastmcp</span></code> are imported lazily inside
+<a class="reference internal" href="#foley.build_mcp_server" title="foley.build_mcp_server"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_mcp_server()</span></code></a>, so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code> stays dol-only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>auth</strong> – <code class="docutils literal notranslate"><span class="pre">{'bearer_tokens':</span> <span class="pre">[...]}</span></code> — required; empty/missing raises (fail-closed).</p></li>
+<li><p><strong>path</strong> – The MCP HTTP mount path.</p></li>
+<li><p><strong>json_response</strong> – Return a single JSON response instead of an SSE stream (simple clients).</p></li>
+<li><p><strong>name</strong> (<em>library / runtime / byte_store / include /</em>) – As <a class="reference internal" href="#foley.build_mcp_server" title="foley.build_mcp_server"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_mcp_server()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An ASGI application (the bearer-gated MCP HTTP app).</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">auth</span></code> carries no bearer tokens (no anonymous HTTP access).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.make_meta_store">
 <span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">make_meta_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/home/runner/.local/share/foley/meta')</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MutableMapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="foley/base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><span class="pre">SoundRecord</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/stores.html#make_meta_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.make_meta_store" title="Link to this definition"></a></dt>
 <dd><p>Build the metadata store: <code class="docutils literal notranslate"><span class="pre">Mapping[sound_id</span> <span class="pre">-&gt;</span> <span class="pre">SoundRecord]</span></code> (JSON files).</p>
@@ -3295,6 +3326,13 @@ stage).</p>
 <p>Convenience wrapper over <code class="docutils literal notranslate"><span class="pre">foley.library.search(...)</span></code> — see
 <a class="reference internal" href="foley/index.html#foley.index.SoundLibrary.search" title="foley.index.SoundLibrary.search"><code class="xref py py-meth docutils literal notranslate"><span class="pre">foley.index.SoundLibrary.search()</span></code></a>. Constructs the process-wide default
 library (local stores + CLAP + best available index) on first use.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.serve_http">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">serve_http</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'/mcp'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/foley/agent/mcp.html#serve_http"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.serve_http" title="Link to this definition"></a></dt>
+<dd><p>Build and serve the foley MCP tools over authenticated streamable HTTP (blocks).</p>
+<p>Wraps <a class="reference internal" href="#foley.make_http_app" title="foley.make_http_app"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_http_app()</span></code></a> and runs it with uvicorn. <code class="docutils literal notranslate"><span class="pre">auth</span></code> is required (fail-closed).</p>
 </dd></dl>
 
 <dl class="py function">
