@@ -241,6 +241,13 @@ from .agent import (
 from . import weave
 from .weave import WeaveResult
 
+# --- score: the one-call AI-first entry — narration text → tasteful woven sound design ---
+# (composes find → plan → weave; numpy/torch stay lazy inside them, so this stays dol-only.)
+from .score import ScoreResult, ScoredEvent, score
+
+# --- the shipped agent kit installer (skill + slash command + subagent) ----------
+from .agent_kit import install_agent_kit
+
 # --- #12: MCP surface, preview UX, onboarding & offline mode ---------------------
 # All dol-only at import (py2mcp/fastmcp are imported lazily inside build_mcp_server;
 # numpy/soundfile only inside preview's encode path). ``mcp_server`` is the report-10
@@ -412,6 +419,11 @@ __all__ = [
     # --- weave: the WEAVE stage — weave() (#8) --------------------------------
     "weave",
     "WeaveResult",
+    # --- score: the one-call AI-first entry (narration → woven sound design) --
+    "score",
+    "ScoreResult",
+    "ScoredEvent",
+    "install_agent_kit",
     # --- #12: MCP surface, preview UX, onboarding & offline mode ---------------
     "mcp_server",
     "build_mcp_server",

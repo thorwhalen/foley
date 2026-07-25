@@ -281,7 +281,36 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_search.set_defaults(func=_cmd_search)
 
+    p_kit = sub.add_parser(
+        "agent-install",
+        help="install the shipped agent kit (skill + /foley-score command + subagent) into .claude",
+    )
+    p_kit.add_argument(
+        "--dest",
+        default="./.claude",
+        help="target agent-config dir (default ./.claude; use ~/.claude for all projects)",
+    )
+    p_kit.add_argument(
+        "--overwrite", action="store_true", help="replace existing files/dirs"
+    )
+    p_kit.set_defaults(func=_cmd_agent_install)
+
     return parser
+
+
+def _cmd_agent_install(args) -> int:
+    from .agent_kit import install_agent_kit
+
+    installed = install_agent_kit(dest=args.dest, overwrite=args.overwrite)
+    if installed:
+        print(f"installed foley's agent kit into {args.dest}:")
+        for p in installed:
+            print(f"  {p}")
+    else:
+        print(
+            f"nothing installed (already present in {args.dest}); pass --overwrite to replace."
+        )
+    return 0
 
 
 #: Map an optional dependency's import name to the ``foley[extra]`` that ships it.

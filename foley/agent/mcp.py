@@ -433,6 +433,83 @@ def foley_timeline_captions(timeline: dict, fmt: str = "vtt") -> dict:
     return {"vtt": to_webvtt(tl)} if fmt == "vtt" else {"srt": to_srt(tl)}
 
 
+def foley_score(
+    context: str,
+    commercial_ok: bool = False,
+    verify: str = "listen",
+    max_events: int = 6,
+    session: str = "default",
+) -> dict:
+    """Score a narration passage → an editable sound-design timeline + a per-event rationale.
+
+    The one-call SELECT→plan entry for an agent: pass the narration text and get back a JSON
+    timeline plus a rationale for each chosen sound. Weaving (rendering the mastered mix) is a
+    **separate** step (``foley_weave``) so you can review / edit the timeline first — swap a
+    clip, nudge an onset, drop a cue — before committing to a render.
+    """
+    from .. import score
+
+    res = score(
+        context,
+        library=_lib(),
+        commercial_ok=commercial_ok,
+        verify=verify,
+        max_events=max_events,
+        weave=False,
+    )
+    return {
+        "timeline": res.timeline.to_dict(),
+        "events": [e.to_dict() for e in res.events],
+        "n_sounds": res.n_sounds,
+        "rationale": res.rationale,
+    }
+
+
+#: The operating playbook returned by :func:`foley_guide` (agent runtime guidance).
+_GUIDE = """\
+foley — sound-designing a narration (operating guide)
+
+GOAL: choose the RIGHT sounds for a narration and weave them in TASTEFULLY. Restraint is the
+craft: most sentences need NO sound. Prefer a few well-placed, license-clean cues over "sound
+soup".
+
+THE LOOP (each tool is JSON-in/JSON-out; audio is referenced by store key, never inlined):
+  1. foley_score(context)      → a sound-design timeline + a rationale (SELECT does the tasteful
+                                  decompose→search→verify→decide; it already exercises restraint,
+                                  the fail-closed license gate, and the verify ladder).
+     OR, interactively:
+       foley_search / foley_find → candidate rows; foley_preview(id) to audition;
+       foley_similar_to(id) for "more like this"; foley_refine(picks, rejects, hint) to steer;
+       foley_pick(id, layer, onset) / foley_reject(id); foley_plan() to fold picks into a timeline.
+  2. REVIEW + EDIT the timeline (all return a new timeline; nothing is destructive):
+       foley_swap_clip / foley_set_gain / foley_nudge / foley_toggle / foley_set_master.
+  3. foley_weave(narration, timeline) → the mastered mix (by store key) + SDH captions + credits.
+  4. foley_generate(prompt) ONLY when nothing fits — it adds the clip to the library (re-searchable).
+
+TASTE HEURISTICS:
+  - Layers: `sfx_fg` = spot effects on a word; `ambience` = a bed under a sentence/scene (loops);
+    `stinger` = a sharp accent on a boundary; keep beds low and duck them under the voice.
+  - Salience: score a moment only if the sound adds meaning; leave quiet moments quiet.
+  - Onset: place a spot effect ON its trigger word; a bed spans its sentence.
+  - Licensing is load-bearing: only `license_ok` candidates are placed; set commercial_ok when the
+    output is published; check each row's `license` summary (attribution, redistribution).
+  - Loudness: the master profile ('podcast'/'streaming'/'broadcast_ebu') sets the delivery target.
+
+OFFLINE / SENSITIVE narration: run with the offline posture (foley_status shows it) — external
+sources + telemetry are disabled; generation stays on local backends.
+Call foley_capabilities() to see what's installed/degraded here.
+"""
+
+
+def foley_guide() -> dict:
+    """How to sound-design a narration with foley — the operating playbook for an agent.
+
+    Call this first if you are unsure of the workflow: it returns the tool order, the taste
+    heuristics (restraint, layering, ducking, licensing), and the offline posture.
+    """
+    return {"guide": _GUIDE}
+
+
 def foley_capabilities() -> dict:
     """What foley can do here — keys / extras / system deps / offline / sources / degraded."""
     from ..requirements import capability_report
@@ -480,6 +557,8 @@ TOOLS = [
     foley_toggle,
     foley_set_master,
     foley_timeline_captions,
+    foley_score,
+    foley_guide,
     foley_capabilities,
     foley_status,
 ]
