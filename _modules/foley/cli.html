@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.cli &mdash; foley 0.0.19 documentation</title>
+  <title>foley.cli &mdash; foley 0.0.20 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=2fd7553c"></script>
+      <script src="../../_static/documentation_options.js?v=056c92e6"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -59,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent_kit.html">foley.agent_kit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
@@ -97,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/requirements.html">foley.requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/runtime.html">foley.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/score.html">foley.score</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
@@ -441,8 +443,37 @@
     <span class="p">)</span>
     <span class="n">p_search</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">_cmd_search</span><span class="p">)</span>
 
+    <span class="n">p_kit</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="s2">&quot;agent-install&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;install the shipped agent kit (skill + /foley-score command + subagent) into .claude&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">p_kit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--dest&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;./.claude&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;target agent-config dir (default ./.claude; use ~/.claude for all projects)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">p_kit</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--overwrite&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;replace existing files/dirs&quot;</span>
+    <span class="p">)</span>
+    <span class="n">p_kit</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">_cmd_agent_install</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">parser</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cmd_agent_install</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.agent_kit</span><span class="w"> </span><span class="kn">import</span> <span class="n">install_agent_kit</span>
+
+    <span class="n">installed</span> <span class="o">=</span> <span class="n">install_agent_kit</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">overwrite</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">installed</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;installed foley&#39;s agent kit into </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">dest</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">installed</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;nothing installed (already present in </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">dest</span><span class="si">}</span><span class="s2">); pass --overwrite to replace.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span>
 
 
 <span class="c1">#: Map an optional dependency&#39;s import name to the ``foley[extra]`` that ships it.</span>

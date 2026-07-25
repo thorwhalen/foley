@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.mcp &mdash; foley 0.0.19 documentation</title>
+  <title>foley.agent.mcp &mdash; foley 0.0.20 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=2fd7553c"></script>
+      <script src="../../../_static/documentation_options.js?v=056c92e6"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -59,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent_kit.html">foley.agent_kit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
@@ -97,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/requirements.html">foley.requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/runtime.html">foley.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/score.html">foley.score</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
@@ -645,6 +647,89 @@
 
 
 
+<div class="viewcode-block" id="foley_score">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_score">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_score</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">verify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;listen&quot;</span><span class="p">,</span>
+    <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Score a narration passage → an editable sound-design timeline + a per-event rationale.</span>
+
+<span class="sd">    The one-call SELECT→plan entry for an agent: pass the narration text and get back a JSON</span>
+<span class="sd">    timeline plus a rationale for each chosen sound. Weaving (rendering the mastered mix) is a</span>
+<span class="sd">    **separate** step (``foley_weave``) so you can review / edit the timeline first — swap a</span>
+<span class="sd">    clip, nudge an onset, drop a cue — before committing to a render.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">score</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span>
+        <span class="n">context</span><span class="p">,</span>
+        <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">(),</span>
+        <span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">,</span>
+        <span class="n">verify</span><span class="o">=</span><span class="n">verify</span><span class="p">,</span>
+        <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span>
+        <span class="n">weave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;timeline&quot;</span><span class="p">:</span> <span class="n">res</span><span class="o">.</span><span class="n">timeline</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+        <span class="s2">&quot;events&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">events</span><span class="p">],</span>
+        <span class="s2">&quot;n_sounds&quot;</span><span class="p">:</span> <span class="n">res</span><span class="o">.</span><span class="n">n_sounds</span><span class="p">,</span>
+        <span class="s2">&quot;rationale&quot;</span><span class="p">:</span> <span class="n">res</span><span class="o">.</span><span class="n">rationale</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<span class="c1">#: The operating playbook returned by :func:`foley_guide` (agent runtime guidance).</span>
+<span class="n">_GUIDE</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">foley — sound-designing a narration (operating guide)</span>
+
+<span class="s2">GOAL: choose the RIGHT sounds for a narration and weave them in TASTEFULLY. Restraint is the</span>
+<span class="s2">craft: most sentences need NO sound. Prefer a few well-placed, license-clean cues over &quot;sound</span>
+<span class="s2">soup&quot;.</span>
+
+<span class="s2">THE LOOP (each tool is JSON-in/JSON-out; audio is referenced by store key, never inlined):</span>
+<span class="s2">  1. foley_score(context)      → a sound-design timeline + a rationale (SELECT does the tasteful</span>
+<span class="s2">                                  decompose→search→verify→decide; it already exercises restraint,</span>
+<span class="s2">                                  the fail-closed license gate, and the verify ladder).</span>
+<span class="s2">     OR, interactively:</span>
+<span class="s2">       foley_search / foley_find → candidate rows; foley_preview(id) to audition;</span>
+<span class="s2">       foley_similar_to(id) for &quot;more like this&quot;; foley_refine(picks, rejects, hint) to steer;</span>
+<span class="s2">       foley_pick(id, layer, onset) / foley_reject(id); foley_plan() to fold picks into a timeline.</span>
+<span class="s2">  2. REVIEW + EDIT the timeline (all return a new timeline; nothing is destructive):</span>
+<span class="s2">       foley_swap_clip / foley_set_gain / foley_nudge / foley_toggle / foley_set_master.</span>
+<span class="s2">  3. foley_weave(narration, timeline) → the mastered mix (by store key) + SDH captions + credits.</span>
+<span class="s2">  4. foley_generate(prompt) ONLY when nothing fits — it adds the clip to the library (re-searchable).</span>
+
+<span class="s2">TASTE HEURISTICS:</span>
+<span class="s2">  - Layers: `sfx_fg` = spot effects on a word; `ambience` = a bed under a sentence/scene (loops);</span>
+<span class="s2">    `stinger` = a sharp accent on a boundary; keep beds low and duck them under the voice.</span>
+<span class="s2">  - Salience: score a moment only if the sound adds meaning; leave quiet moments quiet.</span>
+<span class="s2">  - Onset: place a spot effect ON its trigger word; a bed spans its sentence.</span>
+<span class="s2">  - Licensing is load-bearing: only `license_ok` candidates are placed; set commercial_ok when the</span>
+<span class="s2">    output is published; check each row&#39;s `license` summary (attribution, redistribution).</span>
+<span class="s2">  - Loudness: the master profile (&#39;podcast&#39;/&#39;streaming&#39;/&#39;broadcast_ebu&#39;) sets the delivery target.</span>
+
+<span class="s2">OFFLINE / SENSITIVE narration: run with the offline posture (foley_status shows it) — external</span>
+<span class="s2">sources + telemetry are disabled; generation stays on local backends.</span>
+<span class="s2">Call foley_capabilities() to see what&#39;s installed/degraded here.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="foley_guide">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_guide">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_guide</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How to sound-design a narration with foley — the operating playbook for an agent.</span>
+
+<span class="sd">    Call this first if you are unsure of the workflow: it returns the tool order, the taste</span>
+<span class="sd">    heuristics (restraint, layering, ducking, licensing), and the offline posture.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;guide&quot;</span><span class="p">:</span> <span class="n">_GUIDE</span><span class="p">}</span></div>
+
+
+
 <div class="viewcode-block" id="foley_capabilities">
 <a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_capabilities">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">foley_capabilities</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -698,6 +783,8 @@
     <span class="n">foley_toggle</span><span class="p">,</span>
     <span class="n">foley_set_master</span><span class="p">,</span>
     <span class="n">foley_timeline_captions</span><span class="p">,</span>
+    <span class="n">foley_score</span><span class="p">,</span>
+    <span class="n">foley_guide</span><span class="p">,</span>
     <span class="n">foley_capabilities</span><span class="p">,</span>
     <span class="n">foley_status</span><span class="p">,</span>
 <span class="p">]</span>

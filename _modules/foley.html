@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.19 documentation</title>
+  <title>foley &mdash; foley 0.0.20 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=2fd7553c"></script>
+      <script src="../_static/documentation_options.js?v=056c92e6"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -59,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent_kit.html">foley.agent_kit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
@@ -97,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/qc.html">foley.qc</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/requirements.html">foley.requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/runtime.html">foley.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/score.html">foley.score</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
@@ -398,6 +400,13 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">weave</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.weave</span><span class="w"> </span><span class="kn">import</span> <span class="n">WeaveResult</span>
 
+<span class="c1"># --- score: the one-call AI-first entry — narration text → tasteful woven sound design ---</span>
+<span class="c1"># (composes find → plan → weave; numpy/torch stay lazy inside them, so this stays dol-only.)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.score</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScoreResult</span><span class="p">,</span> <span class="n">ScoredEvent</span><span class="p">,</span> <span class="n">score</span>
+
+<span class="c1"># --- the shipped agent kit installer (skill + slash command + subagent) ----------</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.agent_kit</span><span class="w"> </span><span class="kn">import</span> <span class="n">install_agent_kit</span>
+
 <span class="c1"># --- #12: MCP surface, preview UX, onboarding &amp; offline mode ---------------------</span>
 <span class="c1"># All dol-only at import (py2mcp/fastmcp are imported lazily inside build_mcp_server;</span>
 <span class="c1"># numpy/soundfile only inside preview&#39;s encode path). ``mcp_server`` is the report-10</span>
@@ -569,6 +578,11 @@
     <span class="c1"># --- weave: the WEAVE stage — weave() (#8) --------------------------------</span>
     <span class="s2">&quot;weave&quot;</span><span class="p">,</span>
     <span class="s2">&quot;WeaveResult&quot;</span><span class="p">,</span>
+    <span class="c1"># --- score: the one-call AI-first entry (narration → woven sound design) --</span>
+    <span class="s2">&quot;score&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ScoreResult&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ScoredEvent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;install_agent_kit&quot;</span><span class="p">,</span>
     <span class="c1"># --- #12: MCP surface, preview UX, onboarding &amp; offline mode ---------------</span>
     <span class="s2">&quot;mcp_server&quot;</span><span class="p">,</span>
     <span class="s2">&quot;build_mcp_server&quot;</span><span class="p">,</span>

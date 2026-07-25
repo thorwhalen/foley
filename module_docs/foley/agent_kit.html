@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.cli &mdash; foley 0.0.20 documentation</title>
+  <title>foley.agent_kit &mdash; foley 0.0.20 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -24,8 +24,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="foley.eval" href="eval.html" />
-    <link rel="prev" title="foley.bootstrap" href="bootstrap.html" /> 
+    <link rel="next" title="foley.audio" href="audio.html" />
+    <link rel="prev" title="foley.agent.verify" href="agent/verify.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -62,15 +62,14 @@
 <li class="toctree-l1"><a class="reference internal" href="agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent/verify.html">foley.agent.verify</a></li>
-<li class="toctree-l1"><a class="reference internal" href="agent_kit.html">foley.agent_kit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.agent_kit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent_kit.install_agent_kit"><code class="docutils literal notranslate"><span class="pre">install_agent_kit()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="audio.html">foley.audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="base.html">foley.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bootstrap.html">foley.bootstrap</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.cli</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#foley.cli.build_parser"><code class="docutils literal notranslate"><span class="pre">build_parser()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#foley.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">foley.cli</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eval.html">foley.eval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eval/baseline.html">foley.eval.baseline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eval/embedder.html">foley.eval.embedder</a></li>
@@ -153,9 +152,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">foley.cli</li>
+      <li class="breadcrumb-item active">foley.agent_kit</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/module_docs/foley/cli.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/module_docs/foley/agent_kit.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -163,30 +162,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-foley.cli">
-<span id="foley-cli"></span><h1>foley.cli<a class="headerlink" href="#module-foley.cli" title="Link to this heading"></a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">foley</span></code> command-line interface (stdlib <code class="docutils literal notranslate"><span class="pre">argparse</span></code>, zero new deps).</p>
-<p>Subcommands:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">foley</span> <span class="n">demo</span>                       <span class="c1"># offline ingest-&gt;search over the bundled fixture</span>
-<span class="n">foley</span> <span class="n">bootstrap</span> <span class="p">[</span><span class="o">--</span><span class="n">rings</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">corpora</span> <span class="n">fsd50k</span><span class="p">,</span><span class="n">foleyset</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span>
-                <span class="p">[</span><span class="o">--</span><span class="n">accept</span><span class="o">-</span><span class="n">ai</span><span class="o">-</span><span class="n">restricted</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">commercial</span><span class="o">-</span><span class="nb">filter</span><span class="p">]</span>
-<span class="n">foley</span> <span class="n">ingest</span> <span class="n">PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">license</span> <span class="n">ID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">min</span><span class="o">-</span><span class="n">status</span> <span class="n">warn</span><span class="o">|</span><span class="k">pass</span><span class="o">|</span><span class="n">fail</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">qc</span><span class="p">]</span>
-<span class="n">foley</span> <span class="n">search</span> <span class="n">QUERY</span> <span class="p">[</span><span class="o">-</span><span class="n">k</span> <span class="n">N</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">commercial</span><span class="o">-</span><span class="n">ok</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>Wired as the <code class="docutils literal notranslate"><span class="pre">foley</span></code> console entry point (<code class="docutils literal notranslate"><span class="pre">[project.scripts]</span></code>). Every command
-is a thin call into the library facade (<a class="reference internal" href="bootstrap.html#module-foley.bootstrap" title="foley.bootstrap"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.bootstrap()</span></code></a>, <a class="reference internal" href="../foley.html#foley.demo" title="foley.demo"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.demo()</span></code></a>,
-<a class="reference internal" href="../foley.html#foley.ingest" title="foley.ingest"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.ingest()</span></code></a>, <a class="reference internal" href="../foley.html#foley.search" title="foley.search"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.search()</span></code></a>); the CLI only parses args and prints.</p>
+  <section id="module-foley.agent_kit">
+<span id="foley-agent-kit"></span><h1>foley.agent_kit<a class="headerlink" href="#module-foley.agent_kit" title="Link to this heading"></a></h1>
+<p>Install foley’s shipped agent kit — the consumer skill + Claude slash command + subagent.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">foley</span></code> ships an agent-facing kit under <code class="docutils literal notranslate"><span class="pre">foley/data/</span></code>: the
+<code class="docutils literal notranslate"><span class="pre">foley-sound-design</span></code> skill (<code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">skill</span></code>-installable), a <code class="docutils literal notranslate"><span class="pre">/foley-score</span></code> slash command, and a
+<code class="docutils literal notranslate"><span class="pre">sound-designer</span></code> subagent. <a class="reference internal" href="#foley.agent_kit.install_agent_kit" title="foley.agent_kit.install_agent_kit"><code class="xref py py-func docutils literal notranslate"><span class="pre">install_agent_kit()</span></code></a> copies them into a target <code class="docutils literal notranslate"><span class="pre">.claude/</span></code>
+directory so an agent host (Claude Code) discovers them — the “ready to use out of the box” step
+for the AI-first surface. Stdlib-only, so importing this keeps <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code> dol-only.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="foley.cli.build_parser">
-<span class="sig-prename descclassname"><span class="pre">foley.cli.</span></span><span class="sig-name descname"><span class="pre">build_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ArgumentParser</span></span></span><a class="reference internal" href="../../_modules/foley/cli.html#build_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.cli.build_parser" title="Link to this definition"></a></dt>
-<dd><p>Build the <code class="docutils literal notranslate"><span class="pre">foley</span></code> argument parser.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="foley.cli.main">
-<span class="sig-prename descclassname"><span class="pre">foley.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/foley/cli.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.cli.main" title="Link to this definition"></a></dt>
-<dd><p>Entry point for the <code class="docutils literal notranslate"><span class="pre">foley</span></code> console script.</p>
+<dt class="sig sig-object py" id="foley.agent_kit.install_agent_kit">
+<span class="sig-prename descclassname"><span class="pre">foley.agent_kit.</span></span><span class="sig-name descname"><span class="pre">install_agent_kit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./.claude'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/agent_kit.html#install_agent_kit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent_kit.install_agent_kit" title="Link to this definition"></a></dt>
+<dd><p>Copy the shipped skill + slash command + subagent into <code class="docutils literal notranslate"><span class="pre">dest</span></code> (a <code class="docutils literal notranslate"><span class="pre">.claude</span></code> dir).</p>
+<p>Installs:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dest/skills/foley-sound-design/</span></code> — the consumer skill (the sound-design playbook),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dest/commands/foley-score.md</span></code> — the <code class="docutils literal notranslate"><span class="pre">/foley-score</span></code> slash command,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dest/agents/sound-designer.md</span></code> — the <code class="docutils literal notranslate"><span class="pre">sound-designer</span></code> subagent.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dest</strong> – The target agent-config dir (default <code class="docutils literal notranslate"><span class="pre">./.claude</span></code> in the cwd; pass <code class="docutils literal notranslate"><span class="pre">~/.claude</span></code>
+to install globally for every project).</p></li>
+<li><p><strong>overwrite</strong> – Replace existing files/dirs (default: skip what already exists).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of installed paths (as strings) — empty entries that already existed are skipped.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -195,8 +200,8 @@ is a thin call into the library facade (<a class="reference internal" href="boot
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="bootstrap.html" class="btn btn-neutral float-left" title="foley.bootstrap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="eval.html" class="btn btn-neutral float-right" title="foley.eval" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="agent/verify.html" class="btn btn-neutral float-left" title="foley.agent.verify" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="audio.html" class="btn btn-neutral float-right" title="foley.audio" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
