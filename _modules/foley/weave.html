@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.weave &mdash; foley 0.0.20 documentation</title>
+  <title>foley.weave &mdash; foley 0.0.21 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=056c92e6"></script>
+      <script src="../../_static/documentation_options.js?v=a11416ff"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -439,6 +439,17 @@
 <span class="sd">    Uses ``c2pa.Builder`` (lazy). ``signer`` is passed straight through to ``Builder.sign``</span>
 <span class="sd">    — a ready-to-use ``c2pa`` signer the caller built for their signing identity + c2pa</span>
 <span class="sd">    version (dependency-injected, so foley pins no version-fragile signer-construction API).</span>
+
+<span class="sd">    Build one for a C2PA-conformant signing identity, e.g.::</span>
+
+<span class="sd">        signer = c2pa.Signer.from_callback(sign_cb, c2pa.C2paSigningAlg.ES256, cert_chain_pem)</span>
+<span class="sd">        # or, with a local key: c2pa.Signer.from_info(c2pa.C2paSignerInfo(</span>
+<span class="sd">        #     alg=b&quot;es256&quot;, sign_cert=&lt;chain PEM&gt;, private_key=&lt;PKCS#8 PEM&gt;, ta_url=&lt;TSA URL&gt;))</span>
+
+<span class="sd">    where ``cert_chain_pem`` is the end-entity cert **followed by** its issuer (the C2PA cert</span>
+<span class="sd">    profile: KeyUsage=digitalSignature, EKU=emailProtection, plus Subject/Authority Key</span>
+<span class="sd">    Identifiers) and the private key is PKCS#8 (``BEGIN PRIVATE KEY``). Verified end-to-end</span>
+<span class="sd">    (sign + embed + read back) against ``c2pa-python`` — see ``tests/test_weave_upgrades.py``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
