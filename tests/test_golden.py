@@ -9,10 +9,12 @@ real (tiny) corpus with no download.
 import json
 from pathlib import Path
 
-from foley.eval.golden import DEFAULT_GOLDEN_PATH, RING0_MANIFEST_PATH
+from foley.eval.golden import DEFAULT_GOLDEN_PATH, RING0_CORPUS_PATH
 
 GOLDEN = DEFAULT_GOLDEN_PATH
-RING0_MANIFEST = RING0_MANIFEST_PATH
+RING0_MANIFEST = (
+    RING0_CORPUS_PATH  # answer clips resolve against the (larger) eval corpus
+)
 
 _REQUIRED_ITEM_KEYS = {
     "id",
@@ -63,3 +65,24 @@ def test_golden_answer_clips_reference_real_ring0_clips():
             assert stem in ring0_stems, f"{ref} not in Ring-0 fixture"
         # every graded clip is also an answer clip
         assert set(it["grade"]) <= referenced, it["id"]
+
+
+def test_eval_corpus_and_seed_are_scaled_up():
+    """Post-v1 scale-up: the eval corpus + golden set are ~150+ items, every query usable."""
+    from foley.eval.golden import RING0_CORPUS_PATH
+
+    corpus = _load(RING0_CORPUS_PATH)
+    items = _load(GOLDEN)
+    assert len(corpus) >= 150 and len(items) >= 150
+    # every item's single query is a non-empty keyword string that shares vocabulary
+    # with its answer clip's caption (so the deterministic BoW eval can retrieve it)
+    cap_by_id = {f"ring0:{Path(e['file']).stem}": e["caption"] for e in corpus}
+    for it in items:
+        for ev in it["expected_events"]:
+            assert ev["query"].strip(), it["id"]
+        answer = next(iter(it["grade"]))
+        q_words = set(it["expected_events"][0]["query"].lower().split())
+        cap_words = set(cap_by_id[answer].lower().split())
+        assert q_words & cap_words, (
+            f"{it['id']}: query shares no words with the answer caption"
+        )
