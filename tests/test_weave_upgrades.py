@@ -25,14 +25,18 @@ SR = 48_000
 
 def _noise(seconds=2.0, level=0.05, seed=0):
     n = int(seconds * SR)
-    return (level * np.random.default_rng(seed).standard_normal((n, 2))).astype("float32")
+    return (level * np.random.default_rng(seed).standard_normal((n, 2))).astype(
+        "float32"
+    )
 
 
 # --- ffmpeg two-pass master (skip when the binary is absent) ----------------
 
 
 def test_auto_engine_masters_in_process():
-    _out, rep = master(_noise(), SR, MasterProfile(target_lufs=-16.0, true_peak_db=-1.0))
+    _out, rep = master(
+        _noise(), SR, MasterProfile(target_lufs=-16.0, true_peak_db=-1.0)
+    )
     assert rep.engine == "inprocess"
 
 
@@ -52,7 +56,9 @@ def test_ffmpeg_two_pass_master_hits_targets():
 
 def _ir(n=2400, seed=1):
     t = np.arange(n)
-    return (np.exp(-t / 600.0) * np.random.default_rng(seed).standard_normal(n)).astype("float32")
+    return (np.exp(-t / 600.0) * np.random.default_rng(seed).standard_normal(n)).astype(
+        "float32"
+    )
 
 
 def test_convolution_reverb_dry_is_identity_and_wet_adds_a_tail():
@@ -70,7 +76,9 @@ def test_convolution_reverb_stereo_and_empty_ir():
     out = convolution_reverb(clip, SR, _ir(), amount=0.3)
     assert out.shape == clip.shape
     # empty IR is a no-op (fully dry)
-    assert np.array_equal(convolution_reverb(clip, SR, np.zeros(0, "float32"), amount=1.0), clip)
+    assert np.array_equal(
+        convolution_reverb(clip, SR, np.zeros(0, "float32"), amount=1.0), clip
+    )
 
 
 # --- rubberband time-stretch (fail-safe fallback + real path) ---------------
@@ -79,11 +87,14 @@ def test_convolution_reverb_stereo_and_empty_ir():
 def test_fit_duration_stretch_falls_back_to_trim_without_rubberband():
     clip = np.ones(9600, dtype="float32")  # 0.2s
     out = fit_duration(clip, SR, duration=0.05, stretch=True)  # target 2400
-    assert out.shape[0] == 2400  # fell back to trim (no rubberband) — exact target, no crash
+    assert (
+        out.shape[0] == 2400
+    )  # fell back to trim (no rubberband) — exact target, no crash
 
 
 @pytest.mark.skipif(
-    importlib.util.find_spec("pyrubberband") is None, reason="pyrubberband not installed"
+    importlib.util.find_spec("pyrubberband") is None,
+    reason="pyrubberband not installed",
 )
 def test_time_stretch_changes_length():
     clip = _noise(1.0)[:, 0]  # mono
@@ -125,7 +136,9 @@ def test_c2pa_sign_sets_flags_and_stores_signed_asset(monkeypatch):
         "find_spec",
         lambda name, *a, **k: object() if name == "c2pa" else real(name, *a, **k),
     )
-    monkeypatch.setattr(weave, "_c2pa_sign_wav", lambda wav, manifest, signer: b"SIGNED-C2PA")
+    monkeypatch.setattr(
+        weave, "_c2pa_sign_wav", lambda wav, manifest, signer: b"SIGNED-C2PA"
+    )
     cred = {"manifest": {"title": "mix"}, "signed": False, "embedded": False}
     store: dict = {}
     ok = weave._sign_and_embed(
@@ -134,3 +147,109 @@ def test_c2pa_sign_sets_flags_and_stores_signed_asset(monkeypatch):
     assert ok is True and cred["signed"] is True and cred["embedded"] is True
     assert cred["signed_asset_ref"] == "mix1.c2pa.wav"
     assert store["mix1.c2pa.wav"] == b"SIGNED-C2PA"
+
+
+def _c2pa_es256_signer():
+    """A C2PA-conformant self-signed ES256 signer (end-entity + CA chain) via from_callback."""
+    import datetime
+
+    c2pa = pytest.importorskip("c2pa")
+    pytest.importorskip("cryptography")
+    from cryptography import x509
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import ec
+    from cryptography.hazmat.primitives.asymmetric.utils import decode_dss_signature
+    from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
+
+    t0, t1 = datetime.datetime(2020, 1, 1), datetime.datetime(2035, 1, 1)
+    ca_key = ec.generate_private_key(ec.SECP256R1())
+    ca_name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "foley-test-ca")])
+    ca = (
+        x509.CertificateBuilder()
+        .subject_name(ca_name)
+        .issuer_name(ca_name)
+        .public_key(ca_key.public_key())
+        .serial_number(1)
+        .not_valid_before(t0)
+        .not_valid_after(t1)
+        .add_extension(x509.BasicConstraints(ca=True, path_length=None), critical=True)
+        .add_extension(
+            x509.KeyUsage(False, False, False, False, False, True, True, False, False),
+            critical=True,
+        )
+        .add_extension(
+            x509.SubjectKeyIdentifier.from_public_key(ca_key.public_key()),
+            critical=False,
+        )
+        .sign(ca_key, hashes.SHA256())
+    )
+    ee_key = ec.generate_private_key(ec.SECP256R1())
+    ee_name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "foley-test-signer")])
+    ee = (
+        x509.CertificateBuilder()
+        .subject_name(ee_name)
+        .issuer_name(ca_name)
+        .public_key(ee_key.public_key())
+        .serial_number(2)
+        .not_valid_before(t0)
+        .not_valid_after(t1)
+        .add_extension(x509.BasicConstraints(ca=False, path_length=None), critical=True)
+        .add_extension(
+            x509.KeyUsage(True, False, False, False, False, False, False, False, False),
+            critical=True,
+        )
+        .add_extension(
+            x509.ExtendedKeyUsage([ExtendedKeyUsageOID.EMAIL_PROTECTION]), critical=True
+        )
+        .add_extension(
+            x509.SubjectKeyIdentifier.from_public_key(ee_key.public_key()),
+            critical=False,
+        )
+        .add_extension(
+            x509.AuthorityKeyIdentifier.from_issuer_public_key(ca_key.public_key()),
+            critical=False,
+        )
+        .sign(ca_key, hashes.SHA256())
+    )
+    chain = ee.public_bytes(serialization.Encoding.PEM) + ca.public_bytes(
+        serialization.Encoding.PEM
+    )
+
+    def sign_cb(data: bytes) -> bytes:
+        r, s = decode_dss_signature(ee_key.sign(data, ec.ECDSA(hashes.SHA256())))
+        return r.to_bytes(32, "big") + s.to_bytes(32, "big")
+
+    return c2pa.Signer.from_callback(
+        sign_cb, c2pa.C2paSigningAlg.ES256, chain.decode("ascii"), None
+    )
+
+
+def test_c2pa_real_sign_embed_and_readback():
+    """End-to-end: foley signs+embeds a real C2PA manifest over the mix and c2pa reads it back."""
+    c2pa = pytest.importorskip("c2pa")
+    import io
+    import json
+
+    from foley import weave
+    from foley.base import LicenseRecord, SoundRecord
+
+    signer = _c2pa_es256_signer()
+    rec = SoundRecord(
+        id="s1",
+        caption="rain",
+        tags=["rain"],
+        license=LicenseRecord(source="user", license_id="CC0-1.0", commercial_ok=True),
+    )
+    cred = weave._build_mix_credential(
+        [rec], asset_id="mix1", ai_disclosed=False, watermark_meta=None
+    )
+    store: dict = {}
+    ok = weave._sign_and_embed(
+        _noise(0.5), SR, cred, cert=signer, provenance_store=store, asset_id="mix1"
+    )
+    assert ok is True and cred["signed"] is True and cred["embedded"] is True
+    signed = store["mix1.c2pa.wav"]
+    assert len(signed) > 0
+    # c2pa can read the embedded manifest back out of the signed asset
+    manifest = json.loads(c2pa.Reader("audio/wav", io.BytesIO(signed)).json())
+    assert manifest.get("active_manifest")
