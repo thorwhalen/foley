@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.sources.resilience &mdash; foley 0.0.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/runtime.html">foley.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.sources.resilience</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.sources.resilience</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Graceful degradation for HTTP source adapters — throttle · backoff · circuit-break (#12).</span>
+
+<span class="sd">:func:`resilient` wraps the injectable :class:`~foley.sources.http.Transport` DI seam</span>
+<span class="sd">with three composed policies so a flaky or rate-limited remote source degrades</span>
+<span class="sd">predictably instead of hammering the API or crashing a run:</span>
+
+<span class="sd">* **throttle** — a token bucket honouring the source config&#39;s declared ``rate``</span>
+<span class="sd">  (``per_min`` / ``per_day``) so foley never exceeds the published limits;</span>
+<span class="sd">* **backoff** — exponential retry on ``429`` / ``5xx`` (and transport exceptions),</span>
+<span class="sd">  honouring a ``Retry-After`` header when present;</span>
+<span class="sd">* **circuit-break** — after N consecutive failures the breaker opens and fast-fails</span>
+<span class="sd">  with :class:`SourceUnavailable` for a cool-down window (no thundering herd).</span>
+
+<span class="sd">All timing goes through injected ``clock`` / ``sleep`` callables (default</span>
+<span class="sd">``time.monotonic`` / ``time.sleep``) so the whole thing is deterministically testable</span>
+<span class="sd">with a fake clock and a no-op sleep — no real network, no real waiting. Stdlib-only.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+
+
+<div class="viewcode-block" id="SourceUnavailable">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/resilience.html#foley.sources.resilience.SourceUnavailable">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SourceUnavailable</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a source&#39;s circuit breaker is open or its retries are exhausted.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="RetryPolicy">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/resilience.html#foley.sources.resilience.RetryPolicy">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RetryPolicy</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exponential-backoff retry policy for transient HTTP failures.&quot;&quot;&quot;</span>
+
+    <span class="n">max_attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">retry_on</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">429</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">502</span><span class="p">,</span> <span class="mi">503</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span>
+    <span class="n">base_delay_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">max_delay_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30.0</span>
+    <span class="n">respect_retry_after</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="BreakerPolicy">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/resilience.html#foley.sources.resilience.BreakerPolicy">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BreakerPolicy</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Circuit-breaker thresholds.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># consecutive failures before the breaker opens</span>
+    <span class="n">reset_timeout_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30.0</span>  <span class="c1"># cool-down before a half-open retry is allowed</span></div>
+
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_TokenBucket</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A minimal rate limiter: a min-interval throttle + an optional daily cap.&quot;&quot;&quot;</span>
+
+    <span class="n">per_min</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">per_day</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">clock</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span>
+    <span class="n">_last</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">_day_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">min_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">60.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">per_min</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">per_min</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sleep</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Block (via ``sleep``) until a token is available; raise on the daily cap.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">per_day</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_day_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_day_count</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">per_day</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SourceUnavailable</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;daily rate cap exceeded (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">per_day</span><span class="si">}</span><span class="s2">/day)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interval</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">wait</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interval</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">wait</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">sleep</span><span class="p">(</span><span class="n">wait</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_day_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_CircuitBreaker</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A consecutive-failure circuit breaker with a timed half-open reset.&quot;&quot;&quot;</span>
+
+    <span class="n">policy</span><span class="p">:</span> <span class="n">BreakerPolicy</span>
+    <span class="n">clock</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span>
+    <span class="n">_fails</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">_opened_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">before</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fast-fail if the breaker is open and still cooling down.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">reset_timeout_s</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SourceUnavailable</span><span class="p">(</span>
+                <span class="s2">&quot;source circuit breaker is open (cooling down); retry later&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># half-open: allow one trial</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fails</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_success</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fails</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fails</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fails</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">fail_threshold</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fails</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_opened_at</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_backoff_delay</span><span class="p">(</span><span class="n">attempt</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">retry</span><span class="p">:</span> <span class="n">RetryPolicy</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deterministic exponential backoff (no jitter, for testability).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">retry</span><span class="o">.</span><span class="n">base_delay_s</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">attempt</span><span class="p">),</span> <span class="n">retry</span><span class="o">.</span><span class="n">max_delay_s</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_retry_delay</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">attempt</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">retry</span><span class="p">:</span> <span class="n">RetryPolicy</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Backoff delay for a retryable response, honouring ``Retry-After`` when present.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">retry</span><span class="o">.</span><span class="n">respect_retry_after</span><span class="p">:</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s2">&quot;headers&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;retry-after&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">raw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">raw</span><span class="p">),</span> <span class="n">retry</span><span class="o">.</span><span class="n">max_delay_s</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">_backoff_delay</span><span class="p">(</span><span class="n">attempt</span><span class="p">,</span> <span class="n">retry</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="resilient">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/resilience.html#foley.sources.resilience.resilient">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resilient</span><span class="p">(</span>
+    <span class="n">transport</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">retry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RetryPolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">breaker</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BreakerPolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">clock</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">,</span>
+    <span class="n">sleep</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap a :class:`~foley.sources.http.Transport` with throttle + backoff + circuit-break.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        transport: The base transport callable ``(method, url, *, params, headers, json)``.</span>
+<span class="sd">        rate: The source config&#39;s ``rate`` dict (``{&#39;per_min&#39;:…, &#39;per_day&#39;:…}``).</span>
+<span class="sd">        retry: The :class:`RetryPolicy` (default: 4 attempts on 429/5xx).</span>
+<span class="sd">        breaker: The :class:`BreakerPolicy` (default: open after 5 consecutive fails).</span>
+<span class="sd">        clock: Monotonic time source (injected for tests).</span>
+<span class="sd">        sleep: Blocking sleep (injected for tests).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A transport with the same signature, plus a ``.reset()`` method. Raises</span>
+<span class="sd">        :class:`SourceUnavailable` when the breaker is open or retries are exhausted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">retry</span> <span class="o">=</span> <span class="n">retry</span> <span class="ow">or</span> <span class="n">RetryPolicy</span><span class="p">()</span>
+    <span class="n">_breaker</span> <span class="o">=</span> <span class="n">_CircuitBreaker</span><span class="p">(</span><span class="n">breaker</span> <span class="ow">or</span> <span class="n">BreakerPolicy</span><span class="p">(),</span> <span class="n">clock</span><span class="o">=</span><span class="n">clock</span><span class="p">)</span>
+    <span class="n">_bucket</span> <span class="o">=</span> <span class="n">_TokenBucket</span><span class="p">(</span>
+        <span class="n">per_min</span><span class="o">=</span><span class="p">(</span><span class="n">rate</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;per_min&quot;</span><span class="p">),</span>
+        <span class="n">per_day</span><span class="o">=</span><span class="p">(</span><span class="n">rate</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;per_day&quot;</span><span class="p">),</span>
+        <span class="n">clock</span><span class="o">=</span><span class="n">clock</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">_breaker</span><span class="o">.</span><span class="n">before</span><span class="p">()</span>
+        <span class="n">last_exc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">retry</span><span class="o">.</span><span class="n">max_attempts</span><span class="p">):</span>
+            <span class="n">_bucket</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">resp</span> <span class="o">=</span> <span class="n">transport</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># transport-level failure (timeout, conn reset)</span>
+                <span class="n">last_exc</span> <span class="o">=</span> <span class="n">exc</span>
+                <span class="n">_breaker</span><span class="o">.</span><span class="n">on_failure</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">attempt</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">retry</span><span class="o">.</span><span class="n">max_attempts</span><span class="p">:</span>
+                    <span class="n">sleep</span><span class="p">(</span><span class="n">_backoff_delay</span><span class="p">(</span><span class="n">attempt</span><span class="p">,</span> <span class="n">retry</span><span class="p">))</span>
+                    <span class="k">continue</span>
+                <span class="k">raise</span> <span class="n">SourceUnavailable</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> failed after retries&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+            <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="n">retry</span><span class="o">.</span><span class="n">retry_on</span><span class="p">:</span>
+                <span class="n">_breaker</span><span class="o">.</span><span class="n">on_failure</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">attempt</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">retry</span><span class="o">.</span><span class="n">max_attempts</span><span class="p">:</span>
+                    <span class="n">sleep</span><span class="p">(</span><span class="n">_retry_delay</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">attempt</span><span class="p">,</span> <span class="n">retry</span><span class="p">))</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">_breaker</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">SourceUnavailable</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> returned </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">; breaker open&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">return</span> <span class="n">resp</span>  <span class="c1"># exhausted retries but breaker still closed: hand it back</span>
+            <span class="n">_breaker</span><span class="o">.</span><span class="n">on_success</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">resp</span>
+        <span class="k">if</span> <span class="n">last_exc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover - loop always returns/raises above</span>
+            <span class="k">raise</span> <span class="n">SourceUnavailable</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> failed&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">last_exc</span>
+        <span class="k">return</span> <span class="n">resp</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">():</span>
+        <span class="n">_breaker</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">_bucket</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="n">wrapped</span><span class="o">.</span><span class="n">reset</span> <span class="o">=</span> <span class="n">reset</span>
+    <span class="k">return</span> <span class="n">wrapped</span></div>
+
+
+
+<div class="viewcode-block" id="make_resilient_transport_from_config">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/resilience.html#foley.sources.resilience.make_resilient_transport_from_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_resilient_transport_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">inject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a resilient transport from a source ``config`` (its ``rate`` drives the throttle).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: A ``SOURCE_CONFIG`` dict (reads ``config[&#39;rate&#39;]``).</span>
+<span class="sd">        base: The base transport (default: :func:`foley.sources.http.requests_transport`).</span>
+<span class="sd">        **inject: ``retry`` / ``breaker`` / ``clock`` / ``sleep`` overrides.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A resilient transport wrapping ``base``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">base</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">requests_transport</span>
+
+        <span class="n">base</span> <span class="o">=</span> <span class="n">requests_transport</span>
+    <span class="k">return</span> <span class="n">resilient</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rate&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">inject</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

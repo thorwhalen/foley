@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.13 documentation</title>
+  <title>foley &mdash; foley 0.0.14 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../_static/documentation_options.js?v=544df88d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,9 +50,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/audio.html">foley.audio</a></li>
@@ -91,6 +94,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/runtime.html">foley.runtime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
@@ -107,6 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/http.html">foley.sources.http</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
@@ -388,6 +394,18 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">weave</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.weave</span><span class="w"> </span><span class="kn">import</span> <span class="n">WeaveResult</span>
 
+<span class="c1"># --- #12: MCP surface, preview UX, onboarding &amp; offline mode ---------------------</span>
+<span class="c1"># All dol-only at import (py2mcp/fastmcp are imported lazily inside build_mcp_server;</span>
+<span class="c1"># numpy/soundfile only inside preview&#39;s encode path). ``mcp_server`` is the report-10</span>
+<span class="c1"># façade alias of the builder.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.agent.mcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_mcp_server</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.agent.mcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_mcp_server</span> <span class="k">as</span> <span class="n">mcp_server</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.agent.preview</span><span class="w"> </span><span class="kn">import</span> <span class="n">preview</span><span class="p">,</span> <span class="n">refine</span><span class="p">,</span> <span class="n">similar_to</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.agent.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">SessionStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.requirements</span><span class="w"> </span><span class="kn">import</span> <span class="n">capability_report</span><span class="p">,</span> <span class="n">check_requirements</span><span class="p">,</span> <span class="n">verify_and_setup</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">RuntimeConfig</span><span class="p">,</span> <span class="n">is_offline</span><span class="p">,</span> <span class="n">offline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_session_store</span>
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># --- base: constants + enums ---------------------------------------------</span>
     <span class="s2">&quot;SCHEMA_VERSION&quot;</span><span class="p">,</span>
@@ -546,6 +564,20 @@
     <span class="c1"># --- weave: the WEAVE stage — weave() (#8) --------------------------------</span>
     <span class="s2">&quot;weave&quot;</span><span class="p">,</span>
     <span class="s2">&quot;WeaveResult&quot;</span><span class="p">,</span>
+    <span class="c1"># --- #12: MCP surface, preview UX, onboarding &amp; offline mode ---------------</span>
+    <span class="s2">&quot;mcp_server&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;build_mcp_server&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;preview&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;similar_to&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;refine&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SessionStore&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;make_session_store&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RuntimeConfig&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;offline&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;is_offline&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;check_requirements&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;verify_and_setup&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;capability_report&quot;</span><span class="p">,</span>
     <span class="c1"># --- eval: Tier-1 retrieval metrics + nDCG gate --------------------------</span>
     <span class="s2">&quot;eval&quot;</span><span class="p">,</span>
     <span class="s2">&quot;evaluate&quot;</span><span class="p">,</span>

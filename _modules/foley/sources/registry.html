@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.registry &mdash; foley 0.0.13 documentation</title>
+  <title>foley.sources.registry &mdash; foley 0.0.14 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,9 +50,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
@@ -91,6 +94,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/runtime.html">foley.runtime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
@@ -107,6 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
@@ -271,11 +277,64 @@
 
 <div class="viewcode-block" id="list_sources">
 <a class="viewcode-back" href="../../../module_docs/foley/sources/registry.html#foley.list_sources">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">list_sources</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[str]&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the names of all registered live sources (runs discovery first).&quot;&quot;&quot;</span>
-    <span class="n">discover_sources</span><span class="p">()</span>
-    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">_SOURCE_REGISTRY</span><span class="p">)</span></div>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_sources</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">egress_allow</span><span class="p">:</span> <span class="s2">&quot;Optional[frozenset]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[str]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the names of registered live sources (runs discovery first).</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        egress_allow: If given, keep only sources whose declared</span>
+<span class="sd">            ``config[&#39;data_egress&#39;]`` is in this set (the local-first / offline</span>
+<span class="sd">            filter — see :class:`foley.runtime.RuntimeConfig`). A source that does</span>
+<span class="sd">            not declare ``data_egress`` is **excluded** (fail-closed).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">discover_sources</span><span class="p">()</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">_SOURCE_REGISTRY</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">egress_allow</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">names</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">n</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span>
+        <span class="k">if</span> <span class="n">_SOURCE_REGISTRY</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data_egress&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">egress_allow</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="local_sources">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/registry.html#foley.local_sources">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">local_sources</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[str]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The names of sources that run entirely on-device (``data_egress == &#39;local&#39;``).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">list_sources</span><span class="p">(</span><span class="n">egress_allow</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;local&quot;</span><span class="p">}))</span></div>
+
+
+
+<div class="viewcode-block" id="source_egress">
+<a class="viewcode-back" href="../../../module_docs/foley/sources/registry.html#foley.source_egress">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">source_egress</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Optional[str]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The declared ``data_egress`` class of source ``name`` (``None`` if undeclared).&quot;&quot;&quot;</span>
+    <span class="n">discover_sources</span><span class="p">()</span>
+    <span class="n">entry</span> <span class="o">=</span> <span class="n">_SOURCE_REGISTRY</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data_egress&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">entry</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_egress</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Assert every registered source declares a valid ``data_egress`` (fail-closed guard).</span>
+
+<span class="sd">    A missing or unrecognised declaration would silently drop a source offline (or,</span>
+<span class="sd">    worse, leak one), so it is a configuration error.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If any source&#39;s ``data_egress`` is not ``&#39;local&#39;`` / ``&#39;external&#39;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">discover_sources</span><span class="p">()</span>
+    <span class="n">bad</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">n</span><span class="p">:</span> <span class="n">_SOURCE_REGISTRY</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data_egress&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">_SOURCE_REGISTRY</span>
+        <span class="k">if</span> <span class="n">_SOURCE_REGISTRY</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data_egress&quot;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;external&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">bad</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;sources with missing/invalid data_egress (must be &#39;local&#39;|&#39;external&#39;): </span><span class="si">{</span><span class="n">bad</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_load_adapter</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>

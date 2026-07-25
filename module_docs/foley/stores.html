@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.stores &mdash; foley 0.0.13 documentation</title>
+  <title>foley.stores &mdash; foley 0.0.14 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../_static/documentation_options.js?v=544df88d"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -53,9 +53,12 @@
 <li class="toctree-l1"><a class="reference internal" href="agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent/_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agent/mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agent/preview.html">foley.agent.preview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent/protocols.html">foley.agent.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="audio.html">foley.audio</a></li>
@@ -94,6 +97,8 @@
 <li class="toctree-l1"><a class="reference internal" href="provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime.html">foley.runtime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
@@ -110,6 +115,7 @@
 <li class="toctree-l1"><a class="reference internal" href="sources/http.html">foley.sources.http</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/pull.html">foley.sources.pull</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/resilience.html">foley.sources.resilience</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/stable_audio.html">foley.sources.stable_audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
@@ -117,6 +123,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">foley.stores</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.DEFAULT_PROVENANCE_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_PROVENANCE_DIR</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.DEFAULT_RUN_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_RUN_DIR</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.stores.DEFAULT_SESSION_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_SESSION_DIR</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.FOLEY_DATA_DIR"><code class="docutils literal notranslate"><span class="pre">FOLEY_DATA_DIR</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.HASH_ALGO"><code class="docutils literal notranslate"><span class="pre">HASH_ALGO</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.META_FILE_SUFFIX"><code class="docutils literal notranslate"><span class="pre">META_FILE_SUFFIX</span></code></a></li>
@@ -126,6 +133,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.make_meta_store"><code class="docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.make_provenance_store"><code class="docutils literal notranslate"><span class="pre">make_provenance_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.make_run_store"><code class="docutils literal notranslate"><span class="pre">make_run_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.stores.make_session_store"><code class="docutils literal notranslate"><span class="pre">make_session_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.stores.store_sound"><code class="docutils literal notranslate"><span class="pre">store_sound()</span></code></a></li>
 </ul>
 </li>
@@ -225,6 +233,17 @@ ids are unaffected (percent-encoding is a no-op on them).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Reproducible run-manifests (#11)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.stores.DEFAULT_SESSION_DIR">
+<span class="sig-prename descclassname"><span class="pre">foley.stores.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_SESSION_DIR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/.local/share/foley/sessions')</span></span><a class="headerlink" href="#foley.stores.DEFAULT_SESSION_DIR" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">sessions/{id}/{candidates,picks,rejects}/</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Per-session audition state (#12)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -352,6 +371,30 @@ exposing bare <code class="docutils literal notranslate"><span class="pre">run_i
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">dict]</span></code> keyed by <code class="docutils literal notranslate"><span class="pre">run_id</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.stores.make_session_store">
+<span class="sig-prename descclassname"><span class="pre">foley.stores.</span></span><span class="sig-name descname"><span class="pre">make_session_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'picks'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MutableMapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/foley/stores.html#make_session_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.stores.make_session_store" title="Link to this definition"></a></dt>
+<dd><p>Build a per-session JSON store: <code class="docutils literal notranslate"><span class="pre">Mapping[key</span> <span class="pre">-&gt;</span> <span class="pre">dict]</span></code> under <code class="docutils literal notranslate"><span class="pre">sessions/{id}/{name}/</span></code>.</p>
+<p>The by-value carrier for #12’s audition state — one store per namespace
+(<code class="docutils literal notranslate"><span class="pre">candidates</span></code> / <code class="docutils literal notranslate"><span class="pre">picks</span></code> / <code class="docutils literal notranslate"><span class="pre">rejects</span></code>). A sibling of <a class="reference internal" href="#foley.stores.make_run_store" title="foley.stores.make_run_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_run_store()</span></code></a>:
+percent-encodes each key to a safe <code class="docutils literal notranslate"><span class="pre">{enc}.json</span></code> filename (invariant #3) while
+exposing bare keys; values are plain dicts. Local by default; swap in any <code class="docutils literal notranslate"><span class="pre">dol</span></code>
+Mapping for the cloud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session_id</strong> – The session namespace (default <code class="docutils literal notranslate"><span class="pre">'default'</span></code>).</p></li>
+<li><p><strong>name</strong> – The store namespace within the session (<code class="docutils literal notranslate"><span class="pre">candidates</span></code> / <code class="docutils literal notranslate"><span class="pre">picks</span></code> /
+<code class="docutils literal notranslate"><span class="pre">rejects</span></code>).</p></li>
+<li><p><strong>rootdir</strong> – Root sessions directory (default: <a class="reference internal" href="#foley.stores.DEFAULT_SESSION_DIR" title="foley.stores.DEFAULT_SESSION_DIR"><code class="xref py py-data docutils literal notranslate"><span class="pre">DEFAULT_SESSION_DIR</span></code></a>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">dict]</span></code> keyed by the bare key.</p>
 </dd>
 </dl>
 </dd></dl>

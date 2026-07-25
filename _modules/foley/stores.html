@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.stores &mdash; foley 0.0.13 documentation</title>
+  <title>foley.stores &mdash; foley 0.0.14 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../_static/documentation_options.js?v=544df88d"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,9 +50,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/audio.html">foley.audio</a></li>
@@ -91,6 +94,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/runtime.html">foley.runtime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
@@ -107,6 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
@@ -217,6 +223,8 @@
 <span class="n">DEFAULT_PROVENANCE_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;provenance&quot;</span>
 <span class="c1">#: Reproducible run-manifests (#11): ``Mapping[run_id -&gt; RunManifest dict]``.</span>
 <span class="n">DEFAULT_RUN_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;runs&quot;</span>
+<span class="c1">#: Per-session audition state (#12): ``sessions/{id}/{candidates,picks,rejects}/``.</span>
+<span class="n">DEFAULT_SESSION_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">&quot;sessions&quot;</span>
 
 <span class="c1">#: A filesystem location (path or path-like string) for a local store root.</span>
 <span class="n">Rootdir</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;os.PathLike[str]&quot;</span><span class="p">]</span>
@@ -375,6 +383,37 @@
 <span class="sd">        A ``MutableMapping[str, dict]`` keyed by ``run_id``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">json_store</span> <span class="o">=</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">JsonFiles</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">wrap_kvs</span><span class="p">(</span><span class="n">json_store</span><span class="p">,</span> <span class="n">id_of_key</span><span class="o">=</span><span class="n">_meta_filename</span><span class="p">,</span> <span class="n">key_of_id</span><span class="o">=</span><span class="n">_meta_key</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="make_session_store">
+<a class="viewcode-back" href="../../module_docs/foley/stores.html#foley.make_session_store">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_session_store</span><span class="p">(</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;picks&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">rootdir</span><span class="p">:</span> <span class="s2">&quot;Optional[Rootdir]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a per-session JSON store: ``Mapping[key -&gt; dict]`` under ``sessions/{id}/{name}/``.</span>
+
+<span class="sd">    The by-value carrier for #12&#39;s audition state — one store per namespace</span>
+<span class="sd">    (``candidates`` / ``picks`` / ``rejects``). A sibling of :func:`make_run_store`:</span>
+<span class="sd">    percent-encodes each key to a safe ``{enc}.json`` filename (invariant #3) while</span>
+<span class="sd">    exposing bare keys; values are plain dicts. Local by default; swap in any ``dol``</span>
+<span class="sd">    Mapping for the cloud.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        session_id: The session namespace (default ``&#39;default&#39;``).</span>
+<span class="sd">        name: The store namespace within the session (``candidates`` / ``picks`` /</span>
+<span class="sd">            ``rejects``).</span>
+<span class="sd">        rootdir: Root sessions directory (default: :data:`DEFAULT_SESSION_DIR`).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``MutableMapping[str, dict]`` keyed by the bare key.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span> <span class="k">if</span> <span class="n">rootdir</span> <span class="k">else</span> <span class="n">DEFAULT_SESSION_DIR</span><span class="p">)</span> <span class="o">/</span> <span class="n">session_id</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="n">json_store</span> <span class="o">=</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">JsonFiles</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">root</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">wrap_kvs</span><span class="p">(</span><span class="n">json_store</span><span class="p">,</span> <span class="n">id_of_key</span><span class="o">=</span><span class="n">_meta_filename</span><span class="p">,</span> <span class="n">key_of_id</span><span class="o">=</span><span class="n">_meta_key</span><span class="p">)</span></div>
 
 

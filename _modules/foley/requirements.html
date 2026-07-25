@@ -1,0 +1,373 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.requirements &mdash; foley 0.0.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/runtime.html">foley.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.requirements</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.requirements</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Onboarding — check what foley needs, tell the user how to get it (accompy-style, #12).</span>
+
+<span class="sd">Generalizes WEAVE&#39;s binary-only :mod:`foley.weave.requirements` into a single</span>
+<span class="sd">capability audit across everything foley can optionally use: **system binaries**</span>
+<span class="sd">(``ffmpeg`` / ``rubberband`` — reused verbatim from the WEAVE SSOT), **API keys**</span>
+<span class="sd">(derived from each source adapter&#39;s declared ``config[&#39;auth&#39;]`` — one SSOT for the env</span>
+<span class="sd">var + sign-up URL), and **importable extras** (``py2mcp`` for the MCP server, the CLAP /</span>
+<span class="sd">index / provenance stacks). A :class:`~foley.weave.requirements.Requirement` carries a</span>
+<span class="sd">``probe`` discriminator (``binary`` / ``env`` / ``importable``) so one dispatch handles</span>
+<span class="sd">all three. Nothing here runs an installer — it surfaces the exact per-platform command</span>
+<span class="sd">or sign-up URL so the user (or agent) can opt in. Stdlib-only; keeps ``import foley``</span>
+<span class="sd">dol-only.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.weave.requirements</span><span class="w"> </span><span class="kn">import</span> <span class="n">REQUIREMENTS</span> <span class="k">as</span> <span class="n">_WEAVE_REQUIREMENTS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.weave.requirements</span><span class="w"> </span><span class="kn">import</span> <span class="n">Requirement</span><span class="p">,</span> <span class="n">_install_hint</span>
+
+<span class="c1">#: Extra LLM/agent API key not tied to a source adapter (the SELECT agent&#39;s real path).</span>
+<span class="n">_ANTHROPIC_KEY</span> <span class="o">=</span> <span class="n">Requirement</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ANTHROPIC_API_KEY&quot;</span><span class="p">,</span>
+    <span class="n">purpose</span><span class="o">=</span><span class="s2">&quot;the LLM-backed SELECT agent (foley[agent]); the deterministic fakes need no key&quot;</span><span class="p">,</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://console.anthropic.com/settings/keys&quot;</span><span class="p">,</span>
+    <span class="n">install</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">probe</span><span class="o">=</span><span class="s2">&quot;env&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1">#: Importable extras that unlock a capability when installed.</span>
+<span class="n">_IMPORTABLE_REQUIREMENTS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;py2mcp&quot;</span><span class="p">:</span> <span class="n">Requirement</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;py2mcp&quot;</span><span class="p">,</span>
+        <span class="n">purpose</span><span class="o">=</span><span class="s2">&quot;serve foley to agents over MCP (foley[mcp])&quot;</span><span class="p">,</span>
+        <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://pypi.org/project/py2mcp/&quot;</span><span class="p">,</span>
+        <span class="n">install</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;any&quot;</span><span class="p">:</span> <span class="s2">&quot;pip install &#39;foley[mcp]&#39;&quot;</span><span class="p">},</span>
+        <span class="n">probe</span><span class="o">=</span><span class="s2">&quot;importable&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+
+<span class="c1">#: How each ``probe`` kind checks availability.</span>
+<span class="n">_PROBES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;binary&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">name</span><span class="p">:</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;env&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">name</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span>
+    <span class="s2">&quot;importable&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">name</span><span class="p">:</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_derive_key_requirements</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;dict[str, Requirement]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Derive the per-source API-key requirements from each ``SOURCE_CONFIG[&#39;auth&#39;]``.</span>
+
+<span class="sd">    The env-var name and sign-up URL live in the source config (SSOT), so this never</span>
+<span class="sd">    hard-codes them. Sources with no ``auth`` (e.g. local stable-audio) contribute none.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOURCE_REGISTRY</span><span class="p">,</span> <span class="n">discover_sources</span>
+
+    <span class="n">discover_sources</span><span class="p">()</span>
+    <span class="n">reqs</span><span class="p">:</span> <span class="s2">&quot;dict[str, Requirement]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">SOURCE_REGISTRY</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">auth</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;auth&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">env_var</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;env_var&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">env_var</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">reqs</span><span class="p">[</span><span class="n">env_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">Requirement</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">env_var</span><span class="p">,</span>
+            <span class="n">purpose</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;the </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> source adapter (foley[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">])&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">auth</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;apply_url&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="n">install</span><span class="o">=</span><span class="p">{},</span>
+            <span class="n">probe</span><span class="o">=</span><span class="s2">&quot;env&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">reqs</span>
+
+
+<div class="viewcode-block" id="build_requirements">
+<a class="viewcode-back" href="../../module_docs/foley/requirements.html#foley.build_requirements">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_requirements</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;dict[str, Requirement]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Assemble the full requirement set: system binaries + API keys + importable extras.&quot;&quot;&quot;</span>
+    <span class="n">reqs</span><span class="p">:</span> <span class="s2">&quot;dict[str, Requirement]&quot;</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">_WEAVE_REQUIREMENTS</span><span class="p">)</span>  <span class="c1"># ffmpeg / rubberband</span>
+    <span class="n">reqs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">_derive_key_requirements</span><span class="p">()</span>
+    <span class="p">)</span>  <span class="c1"># FREESOUND_API_KEY / ELEVENLABS_API_KEY / …</span>
+    <span class="n">reqs</span><span class="p">[</span><span class="n">_ANTHROPIC_KEY</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ANTHROPIC_KEY</span>
+    <span class="n">reqs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_IMPORTABLE_REQUIREMENTS</span><span class="p">)</span>  <span class="c1"># py2mcp</span>
+    <span class="k">return</span> <span class="n">reqs</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_available</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">Requirement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether ``req`` is satisfied, dispatching on its ``probe``.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_PROBES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">probe</span><span class="p">,</span> <span class="n">_PROBES</span><span class="p">[</span><span class="s2">&quot;binary&quot;</span><span class="p">])(</span><span class="n">req</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="check_requirements">
+<a class="viewcode-back" href="../../module_docs/foley/requirements.html#foley.check_requirements">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_requirements</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span> <span class="n">names</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...] | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;dict[str, bool]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Report which optional foley capabilities are available (``{name: is_available}``).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        names: Which requirements to check (default: the full assembled set).</span>
+<span class="sd">        verbose: If ``True``, print an actionable hint for each missing requirement.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``{requirement_name: available}``. Everything-absent is fine — foley degrades</span>
+<span class="sd">        (deterministic fakes, offline mode, in-process DSP); the report just shows what</span>
+<span class="sd">        each capability would unlock.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reqs</span> <span class="o">=</span> <span class="n">build_requirements</span><span class="p">()</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="n">names</span> <span class="ow">or</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">reqs</span><span class="p">)</span>
+    <span class="n">status</span><span class="p">:</span> <span class="s2">&quot;dict[str, bool]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">reqs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="n">_available</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">status</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ok</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+            <span class="n">hint</span> <span class="o">=</span> <span class="n">_install_hint</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">install</span> <span class="k">else</span> <span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span> <span class="ow">or</span> <span class="s2">&quot;(set it)&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[foley] optional: </span><span class="si">{</span><span class="n">req</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">req</span><span class="o">.</span><span class="n">purpose</span><span class="si">}</span><span class="se">\n</span><span class="s2">    get it: </span><span class="si">{</span><span class="n">hint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">status</span></div>
+
+
+
+<div class="viewcode-block" id="verify_and_setup">
+<a class="viewcode-back" href="../../module_docs/foley/requirements.html#foley.verify_and_setup">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">verify_and_setup</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">names</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...] | None&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;dict[str, dict]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a per-requirement status + guidance report (never runs an installer).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``{name: {&#39;available&#39;, &#39;purpose&#39;, &#39;install&#39;, &#39;url&#39;, &#39;probe&#39;}}``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reqs</span> <span class="o">=</span> <span class="n">build_requirements</span><span class="p">()</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="n">names</span> <span class="ow">or</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">reqs</span><span class="p">)</span>
+    <span class="n">report</span><span class="p">:</span> <span class="s2">&quot;dict[str, dict]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">reqs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">report</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;available&quot;</span><span class="p">:</span> <span class="n">_available</span><span class="p">(</span><span class="n">req</span><span class="p">),</span>
+            <span class="s2">&quot;purpose&quot;</span><span class="p">:</span> <span class="n">req</span><span class="o">.</span><span class="n">purpose</span><span class="p">,</span>
+            <span class="s2">&quot;install&quot;</span><span class="p">:</span> <span class="n">_install_hint</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">install</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+            <span class="s2">&quot;probe&quot;</span><span class="p">:</span> <span class="n">req</span><span class="o">.</span><span class="n">probe</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="n">report</span></div>
+
+
+
+<div class="viewcode-block" id="capability_report">
+<a class="viewcode-back" href="../../module_docs/foley/requirements.html#foley.capability_report">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">capability_report</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">runtime</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A JSON-safe capability + posture snapshot for the CLI, docs, and the MCP tool.</span>
+
+<span class="sd">    Groups requirements into ``keys`` (env), ``extras`` (importable), ``system``</span>
+<span class="sd">    (binary), adds the current offline posture and the available source list, and</span>
+<span class="sd">    lists ``degraded_tools`` — capabilities whose requirement is unmet.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        runtime: A :class:`foley.runtime.RuntimeConfig` (default: the active one).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``{keys, extras, system, offline, sources, degraded_tools}`` — all JSON-safe.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_runtime</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_sources</span>
+
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">runtime</span> <span class="ow">or</span> <span class="n">current_runtime</span><span class="p">()</span>
+    <span class="n">reqs</span> <span class="o">=</span> <span class="n">build_requirements</span><span class="p">()</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;env&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;importable&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;binary&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+    <span class="n">degraded</span><span class="p">:</span> <span class="s2">&quot;list[str]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">reqs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="n">_available</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="n">groups</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">probe</span><span class="p">,</span> <span class="n">groups</span><span class="p">[</span><span class="s2">&quot;binary&quot;</span><span class="p">])[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ok</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+            <span class="n">degraded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;keys&quot;</span><span class="p">:</span> <span class="n">groups</span><span class="p">[</span><span class="s2">&quot;env&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;extras&quot;</span><span class="p">:</span> <span class="n">groups</span><span class="p">[</span><span class="s2">&quot;importable&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;system&quot;</span><span class="p">:</span> <span class="n">groups</span><span class="p">[</span><span class="s2">&quot;binary&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;offline&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">offline</span><span class="p">,</span>
+        <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="n">list_sources</span><span class="p">(</span><span class="n">egress_allow</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">data_egress_allow</span><span class="p">),</span>
+        <span class="s2">&quot;degraded_tools&quot;</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">degraded</span><span class="p">),</span>
+    <span class="p">}</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

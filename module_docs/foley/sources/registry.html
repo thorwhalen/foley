@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.registry &mdash; foley 0.0.13 documentation</title>
+  <title>foley.sources.registry &mdash; foley 0.0.14 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -24,7 +24,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="foley.sources.sonniss" href="sonniss.html" />
+    <link rel="next" title="foley.sources.resilience" href="resilience.html" />
     <link rel="prev" title="foley.sources.pull" href="pull.html" /> 
 </head>
 
@@ -53,9 +53,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../agent/_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/preview.html">foley.agent.preview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../agent/protocols.html">foley.agent.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
@@ -94,6 +97,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime.html">foley.runtime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bbc_remarc.html">foley.sources.bbc_remarc</a></li>
@@ -114,9 +119,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.registry.discover_sources"><code class="docutils literal notranslate"><span class="pre">discover_sources()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.registry.get_source"><code class="docutils literal notranslate"><span class="pre">get_source()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.registry.list_sources"><code class="docutils literal notranslate"><span class="pre">list_sources()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.sources.registry.local_sources"><code class="docutils literal notranslate"><span class="pre">local_sources()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.registry.register_source"><code class="docutils literal notranslate"><span class="pre">register_source()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.sources.registry.source_egress"><code class="docutils literal notranslate"><span class="pre">source_egress()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="resilience.html">foley.sources.resilience</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stable_audio.html">foley.sources.stable_audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
@@ -219,8 +227,22 @@ adapter on first use (cached in the entry).</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="foley.sources.registry.list_sources">
-<span class="sig-prename descclassname"><span class="pre">foley.sources.registry.</span></span><span class="sig-name descname"><span class="pre">list_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/sources/registry.html#list_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.registry.list_sources" title="Link to this definition"></a></dt>
-<dd><p>Return the names of all registered live sources (runs discovery first).</p>
+<span class="sig-prename descclassname"><span class="pre">foley.sources.registry.</span></span><span class="sig-name descname"><span class="pre">list_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">egress_allow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">frozenset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/sources/registry.html#list_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.registry.list_sources" title="Link to this definition"></a></dt>
+<dd><p>Return the names of registered live sources (runs discovery first).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>egress_allow</strong> – If given, keep only sources whose declared
+<code class="docutils literal notranslate"><span class="pre">config['data_egress']</span></code> is in this set (the local-first / offline
+filter — see <a class="reference internal" href="../runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.runtime.RuntimeConfig</span></code></a>). A source that does
+not declare <code class="docutils literal notranslate"><span class="pre">data_egress</span></code> is <strong>excluded</strong> (fail-closed).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.sources.registry.local_sources">
+<span class="sig-prename descclassname"><span class="pre">foley.sources.registry.</span></span><span class="sig-name descname"><span class="pre">local_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/foley/sources/registry.html#local_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.registry.local_sources" title="Link to this definition"></a></dt>
+<dd><p>The names of sources that run entirely on-device (<code class="docutils literal notranslate"><span class="pre">data_egress</span> <span class="pre">==</span> <span class="pre">'local'</span></code>).</p>
 </dd></dl>
 
 <dl class="py function">
@@ -242,6 +264,12 @@ importable <code class="docutils literal notranslate"><span class="pre">foley.so
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.sources.registry.source_egress">
+<span class="sig-prename descclassname"><span class="pre">foley.sources.registry.</span></span><span class="sig-name descname"><span class="pre">source_egress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/sources/registry.html#source_egress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.registry.source_egress" title="Link to this definition"></a></dt>
+<dd><p>The declared <code class="docutils literal notranslate"><span class="pre">data_egress</span></code> class of source <code class="docutils literal notranslate"><span class="pre">name</span></code> (<code class="docutils literal notranslate"><span class="pre">None</span></code> if undeclared).</p>
+</dd></dl>
+
 </section>
 
 
@@ -249,7 +277,7 @@ importable <code class="docutils literal notranslate"><span class="pre">foley.so
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="pull.html" class="btn btn-neutral float-left" title="foley.sources.pull" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="sonniss.html" class="btn btn-neutral float-right" title="foley.sources.sonniss" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="resilience.html" class="btn btn-neutral float-right" title="foley.sources.resilience" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.13 documentation</title>
+  <title>foley &mdash; foley 0.0.14 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=9fc46840"></script>
+      <script src="../_static/documentation_options.js?v=544df88d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -174,6 +174,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.QCThresholds"><code class="docutils literal notranslate"><span class="pre">QCThresholds</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.RecognizableVoiceRefusal"><code class="docutils literal notranslate"><span class="pre">RecognizableVoiceRefusal</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.RunManifest"><code class="docutils literal notranslate"><span class="pre">RunManifest</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.RuntimeConfig"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.RuntimeConfig.allows"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig.allows()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.RuntimeConfig.default"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig.default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.RuntimeConfig.from_env"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig.from_env()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.RuntimeConfig.offline_local"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig.offline_local()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.SafetyRefusal"><code class="docutils literal notranslate"><span class="pre">SafetyRefusal</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.Salience"><code class="docutils literal notranslate"><span class="pre">Salience</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.SerializableMixin"><code class="docutils literal notranslate"><span class="pre">SerializableMixin</span></code></a><ul>
@@ -181,6 +188,18 @@
 <li class="toctree-l3"><a class="reference internal" href="#foley.SerializableMixin.from_json"><code class="docutils literal notranslate"><span class="pre">SerializableMixin.from_json()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.SerializableMixin.to_dict"><code class="docutils literal notranslate"><span class="pre">SerializableMixin.to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.SerializableMixin.to_json"><code class="docutils literal notranslate"><span class="pre">SerializableMixin.to_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.SessionStore"><code class="docutils literal notranslate"><span class="pre">SessionStore</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#foley.SessionStore.add_pick"><code class="docutils literal notranslate"><span class="pre">SessionStore.add_pick()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.SessionStore.add_reject"><code class="docutils literal notranslate"><span class="pre">SessionStore.add_reject()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.SessionStore.cache_candidates"><code class="docutils literal notranslate"><span class="pre">SessionStore.cache_candidates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.SessionStore.drop_pick"><code class="docutils literal notranslate"><span class="pre">SessionStore.drop_pick()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.SessionStore.list_picks"><code class="docutils literal notranslate"><span class="pre">SessionStore.list_picks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.SessionStore.list_rejects"><code class="docutils literal notranslate"><span class="pre">SessionStore.list_rejects()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.SessionStore.picked_ids"><code class="docutils literal notranslate"><span class="pre">SessionStore.picked_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.SessionStore.rehydrate"><code class="docutils literal notranslate"><span class="pre">SessionStore.rehydrate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.SessionStore.rejected_ids"><code class="docutils literal notranslate"><span class="pre">SessionStore.rejected_ids()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.SoundDesignTimeline"><code class="docutils literal notranslate"><span class="pre">SoundDesignTimeline</span></code></a></li>
@@ -233,7 +252,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.apply_license_flags"><code class="docutils literal notranslate"><span class="pre">apply_license_flags()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.attribution_line"><code class="docutils literal notranslate"><span class="pre">attribution_line()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.bootstrap"><code class="docutils literal notranslate"><span class="pre">bootstrap()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.build_mcp_server"><code class="docutils literal notranslate"><span class="pre">build_mcp_server()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.candidate_of"><code class="docutils literal notranslate"><span class="pre">candidate_of()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.capability_report"><code class="docutils literal notranslate"><span class="pre">capability_report()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.check_requirements"><code class="docutils literal notranslate"><span class="pre">check_requirements()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.content_key"><code class="docutils literal notranslate"><span class="pre">content_key()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.credit_entry"><code class="docutils literal notranslate"><span class="pre">credit_entry()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.credits"><code class="docutils literal notranslate"><span class="pre">credits()</span></code></a></li>
@@ -264,6 +286,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.ingest"><code class="docutils literal notranslate"><span class="pre">ingest()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.ingest_folder"><code class="docutils literal notranslate"><span class="pre">ingest_folder()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.ingest_one"><code class="docutils literal notranslate"><span class="pre">ingest_one()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.is_offline"><code class="docutils literal notranslate"><span class="pre">is_offline()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.is_silent"><code class="docutils literal notranslate"><span class="pre">is_silent()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.keep"><code class="docutils literal notranslate"><span class="pre">keep()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.keep_sound"><code class="docutils literal notranslate"><span class="pre">keep_sound()</span></code></a></li>
@@ -276,11 +299,16 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.make_byte_store"><code class="docutils literal notranslate"><span class="pre">make_byte_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.make_meta_store"><code class="docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.make_run_store"><code class="docutils literal notranslate"><span class="pre">make_run_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.make_session_store"><code class="docutils literal notranslate"><span class="pre">make_session_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.mcp_server"><code class="docutils literal notranslate"><span class="pre">mcp_server()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.measure_lufs"><code class="docutils literal notranslate"><span class="pre">measure_lufs()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.needs_edge_fade"><code class="docutils literal notranslate"><span class="pre">needs_edge_fade()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.offline"><code class="docutils literal notranslate"><span class="pre">offline()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.parse_ucs_filename"><code class="docutils literal notranslate"><span class="pre">parse_ucs_filename()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.plan"><code class="docutils literal notranslate"><span class="pre">plan()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.preview"><code class="docutils literal notranslate"><span class="pre">preview()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.reciprocal_rank_fusion"><code class="docutils literal notranslate"><span class="pre">reciprocal_rank_fusion()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.refine"><code class="docutils literal notranslate"><span class="pre">refine()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.refine_query"><code class="docutils literal notranslate"><span class="pre">refine_query()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.register_source"><code class="docutils literal notranslate"><span class="pre">register_source()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.resample"><code class="docutils literal notranslate"><span class="pre">resample()</span></code></a></li>
@@ -290,6 +318,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.search"><code class="docutils literal notranslate"><span class="pre">search()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.similar"><code class="docutils literal notranslate"><span class="pre">similar()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.similar_to"><code class="docutils literal notranslate"><span class="pre">similar_to()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sqlite_vec_loadable"><code class="docutils literal notranslate"><span class="pre">sqlite_vec_loadable()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.store_sound"><code class="docutils literal notranslate"><span class="pre">store_sound()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.to_mono"><code class="docutils literal notranslate"><span class="pre">to_mono()</span></code></a></li>
@@ -297,15 +326,19 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.trim_silence"><code class="docutils literal notranslate"><span class="pre">trim_silence()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.true_peak_dbtp"><code class="docutils literal notranslate"><span class="pre">true_peak_dbtp()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.vector_search"><code class="docutils literal notranslate"><span class="pre">vector_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.verify_and_setup"><code class="docutils literal notranslate"><span class="pre">verify_and_setup()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.verify_match"><code class="docutils literal notranslate"><span class="pre">verify_match()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent.html">foley.agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/_genai.html">foley.agent._genai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/agent/mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/agent/preview.html">foley.agent.preview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/protocols.html">foley.agent.protocols</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/agent/session.html">foley.agent.session</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/tools.html">foley.agent.tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/agent/verify.html">foley.agent.verify</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/audio.html">foley.audio</a></li>
@@ -344,6 +377,8 @@
 <li class="toctree-l1"><a class="reference internal" href="foley/provenance/credits.html">foley.provenance.credits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/runtime.html">foley.runtime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources.html">foley.sources</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources/base.html">foley.sources.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
@@ -360,6 +395,7 @@
 <li class="toctree-l1"><a class="reference internal" href="foley/sources/http.html">foley.sources.http</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources/pull.html">foley.sources.pull</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foley/sources/resilience.html">foley.sources.resilience</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources/sonniss.html">foley.sources.sonniss</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
@@ -1246,6 +1282,52 @@ clips are held by reference (<code class="docutils literal notranslate"><span cl
 trace can be replayed against a fresh index.</p>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.RuntimeConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">RuntimeConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_egress_allow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">frozenset</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">telemetry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redaction_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'hash'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">http_resilience</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/runtime.html#RuntimeConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.RuntimeConfig" title="Link to this definition"></a></dt>
+<dd><p>A frozen runtime posture — the local-first / offline contract as data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offline</strong> – Whether this posture is offline/local-first.</p></li>
+<li><p><strong>data_egress_allow</strong> – The egress classes a source may use to be available
+(<code class="docutils literal notranslate"><span class="pre">{'local'}</span></code> offline; <code class="docutils literal notranslate"><span class="pre">{'local','external'}</span></code> online).</p></li>
+<li><p><strong>telemetry</strong> – Whether the obs run-artifact export is on.</p></li>
+<li><p><strong>redaction_mode</strong> – <code class="docutils literal notranslate"><span class="pre">'hash'</span></code> (default, salted), <code class="docutils literal notranslate"><span class="pre">'off'</span></code> (drop), or <code class="docutils literal notranslate"><span class="pre">'full'</span></code>
+(raw — local-debug only).</p></li>
+<li><p><strong>http_resilience</strong> – Whether HTTP source adapters are wrapped with the
+throttle/backoff/circuit-breaker (<a class="reference internal" href="foley/sources/resilience.html#module-foley.sources.resilience" title="foley.sources.resilience"><code class="xref py py-mod docutils literal notranslate"><span class="pre">foley.sources.resilience</span></code></a>).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.RuntimeConfig.allows">
+<span class="sig-name descname"><span class="pre">allows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_egress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/foley/runtime.html#RuntimeConfig.allows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.RuntimeConfig.allows" title="Link to this definition"></a></dt>
+<dd><p>Whether a source declaring <code class="docutils literal notranslate"><span class="pre">data_egress</span></code> is available under this posture.</p>
+<p>An unknown/absent declaration is <strong>rejected</strong> (fail-closed): a source that does
+not say where its data goes is never used offline.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.RuntimeConfig.default">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">default</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="foley/runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><span class="pre">RuntimeConfig</span></a></span></span><a class="reference internal" href="../_modules/foley/runtime.html#RuntimeConfig.default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.RuntimeConfig.default" title="Link to this definition"></a></dt>
+<dd><p>The online default: all egress allowed, telemetry on, hashed redaction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.RuntimeConfig.from_env">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_env</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="foley/runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><span class="pre">RuntimeConfig</span></a></span></span><a class="reference internal" href="../_modules/foley/runtime.html#RuntimeConfig.from_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.RuntimeConfig.from_env" title="Link to this definition"></a></dt>
+<dd><p>Build from the environment: <code class="docutils literal notranslate"><span class="pre">FOLEY_OFFLINE</span></code> in {1,true,yes} → offline-local.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.RuntimeConfig.offline_local">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">offline_local</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="foley/runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><span class="pre">RuntimeConfig</span></a></span></span><a class="reference internal" href="../_modules/foley/runtime.html#RuntimeConfig.offline_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.RuntimeConfig.offline_local" title="Link to this definition"></a></dt>
+<dd><p>The local-first offline posture: local-only egress, telemetry off, hashed redaction.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py exception">
 <dt class="sig sig-object py" id="foley.SafetyRefusal">
 <span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">SafetyRefusal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">hits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="foley/index/ingest.html#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><span class="pre">IngestReport</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/generate.html#SafetyRefusal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SafetyRefusal" title="Link to this definition"></a></dt>
@@ -1314,6 +1396,78 @@ subclasses <code class="docutils literal notranslate"><span class="pre">str</spa
 <dd class="field-odd"><p><strong>indent</strong> – Optional pretty-print indent passed to <code class="docutils literal notranslate"><span class="pre">json.dumps</span></code>.</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.SessionStore">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">SessionStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">picks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rejects</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore" title="Link to this definition"></a></dt>
+<dd><p>Three namespaced stores for one audition session (candidates / picks / rejects).</p>
+<p>Each store defaults to a <a class="reference internal" href="foley/stores.html#foley.stores.make_session_store" title="foley.stores.make_session_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.stores.make_session_store()</span></code></a> JSON store; tests
+inject plain dicts. All values are JSON-safe dicts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session_id</strong> – The session namespace.</p></li>
+<li><p><strong>rejects</strong> (<em>candidates / picks /</em>) – Optional injected <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> stores.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.SessionStore.add_pick">
+<span class="sig-name descname"><span class="pre">add_pick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore.add_pick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore.add_pick" title="Link to this definition"></a></dt>
+<dd><p>Persist an accepted pick (+ optional layer/onset); return the pick count.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.SessionStore.add_reject">
+<span class="sig-name descname"><span class="pre">add_reject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">reason</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore.add_reject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore.add_reject" title="Link to this definition"></a></dt>
+<dd><p>Record a rejected sound (feeds <code class="docutils literal notranslate"><span class="pre">refine</span></code> relevance feedback); return the count.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.SessionStore.cache_candidates">
+<span class="sig-name descname"><span class="pre">cache_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.Candidate" title="foley.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore.cache_candidates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore.cache_candidates" title="Link to this definition"></a></dt>
+<dd><p>Cache each candidate’s full <code class="docutils literal notranslate"><span class="pre">to_dict()</span></code> keyed by sound id; return the count cached.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.SessionStore.drop_pick">
+<span class="sig-name descname"><span class="pre">drop_pick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore.drop_pick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore.drop_pick" title="Link to this definition"></a></dt>
+<dd><p>Remove a pick (idempotent); return the remaining pick count.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.SessionStore.list_picks">
+<span class="sig-name descname"><span class="pre">list_picks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore.list_picks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore.list_picks" title="Link to this definition"></a></dt>
+<dd><p>All persisted picks.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.SessionStore.list_rejects">
+<span class="sig-name descname"><span class="pre">list_rejects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore.list_rejects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore.list_rejects" title="Link to this definition"></a></dt>
+<dd><p>All recorded rejects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.SessionStore.picked_ids">
+<span class="sig-name descname"><span class="pre">picked_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore.picked_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore.picked_ids" title="Link to this definition"></a></dt>
+<dd><p>The picked sound ids.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.SessionStore.rehydrate">
+<span class="sig-name descname"><span class="pre">rehydrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.Candidate" title="foley.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore.rehydrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore.rehydrate" title="Link to this definition"></a></dt>
+<dd><p>Rebuild <a class="reference internal" href="foley/base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a> objects for <code class="docutils literal notranslate"><span class="pre">ids</span></code> from the cache.</p>
+<p>Missing ids are skipped. Uses <code class="docutils literal notranslate"><span class="pre">Candidate.from_dict</span></code> (rebuilds the nested
+<code class="docutils literal notranslate"><span class="pre">SoundRecord</span></code> / <code class="docutils literal notranslate"><span class="pre">LicenseRecord</span></code> / <code class="docutils literal notranslate"><span class="pre">Verdict</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.SessionStore.rejected_ids">
+<span class="sig-name descname"><span class="pre">rejected_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/agent/session.html#SessionStore.rejected_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.SessionStore.rejected_ids" title="Link to this definition"></a></dt>
+<dd><p>The rejected sound ids.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1800,6 +1954,30 @@ operator consent and admits them.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.build_mcp_server">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">build_mcp_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/mcp.html#build_mcp_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.build_mcp_server" title="Link to this definition"></a></dt>
+<dd><p>Build the foley MCP server (lazy <code class="docutils literal notranslate"><span class="pre">py2mcp</span></code>); registers the JSON-safe tool surface.</p>
+<p>Validates that every source declares a <code class="docutils literal notranslate"><span class="pre">data_egress</span></code> (fail-closed), binds the
+injectable library / runtime / byte-store, and hands the resolved tool functions to
+<code class="docutils literal notranslate"><span class="pre">py2mcp.mk_mcp_server</span></code>. Never starts a server or touches the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>library</strong> – The <a class="reference internal" href="foley/index.html#foley.index.SoundLibrary" title="foley.index.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.index.SoundLibrary</span></code></a> (default: the shared one).</p></li>
+<li><p><strong>session</strong> – The default session id.</p></li>
+<li><p><strong>runtime</strong> – A <a class="reference internal" href="foley/runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.runtime.RuntimeConfig</span></code></a> (default: the active one).</p></li>
+<li><p><strong>byte_store</strong> – A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">bytes]</span></code> for previews / rendered mixes.</p></li>
+<li><p><strong>include</strong> – Optional subset of tool names to expose.</p></li>
+<li><p><strong>name</strong> – The MCP server name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">fastmcp.FastMCP</span></code> server.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.candidate_of">
 <span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">candidate_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="foley/index/ingest.html#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="foley/base.html#foley.base.Candidate" title="foley.base.Candidate"><span class="pre">Candidate</span></a></span></span><a class="reference internal" href="../_modules/foley/sources/generate.html#candidate_of"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.candidate_of" title="Link to this definition"></a></dt>
 <dd><p>Wrap a stored <a class="reference internal" href="foley/index/ingest.html#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestResult</span></code></a> as a generated candidate.</p>
@@ -1813,6 +1991,42 @@ operator consent and admits them.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A <a class="reference internal" href="foley/base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a> with <code class="docutils literal notranslate"><span class="pre">origin=CandidateOrigin.generated</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.capability_report">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">capability_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/foley/requirements.html#capability_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.capability_report" title="Link to this definition"></a></dt>
+<dd><p>A JSON-safe capability + posture snapshot for the CLI, docs, and the MCP tool.</p>
+<p>Groups requirements into <code class="docutils literal notranslate"><span class="pre">keys</span></code> (env), <code class="docutils literal notranslate"><span class="pre">extras</span></code> (importable), <code class="docutils literal notranslate"><span class="pre">system</span></code>
+(binary), adds the current offline posture and the available source list, and
+lists <code class="docutils literal notranslate"><span class="pre">degraded_tools</span></code> — capabilities whose requirement is unmet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>runtime</strong> – A <a class="reference internal" href="foley/runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.runtime.RuntimeConfig</span></code></a> (default: the active one).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">{keys,</span> <span class="pre">extras,</span> <span class="pre">system,</span> <span class="pre">offline,</span> <span class="pre">sources,</span> <span class="pre">degraded_tools}</span></code> — all JSON-safe.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.check_requirements">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">check_requirements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/requirements.html#check_requirements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.check_requirements" title="Link to this definition"></a></dt>
+<dd><p>Report which optional foley capabilities are available (<code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">is_available}</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>names</strong> – Which requirements to check (default: the full assembled set).</p></li>
+<li><p><strong>verbose</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, print an actionable hint for each missing requirement.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">{requirement_name:</span> <span class="pre">available}</span></code>. Everything-absent is fine — foley degrades
+(deterministic fakes, offline mode, in-process DSP); the report just shows what
+each capability would unlock.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2493,6 +2707,12 @@ duplicate, or rights-blocked.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.is_offline">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">is_offline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/foley/runtime.html#is_offline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.is_offline" title="Link to this definition"></a></dt>
+<dd><p>Whether an offline runtime scope is currently active.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.is_silent">
 <span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">is_silent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rms_floor_dbfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-60.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/foley/qc.html#is_silent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.is_silent" title="Link to this definition"></a></dt>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> when whole-clip RMS falls below <code class="docutils literal notranslate"><span class="pre">rms_floor_dbfs</span></code>.</p>
@@ -2594,8 +2814,16 @@ unrecognized / <code class="docutils literal notranslate"><span class="pre">Prop
 
 <dl class="py function">
 <dt class="sig sig-object py" id="foley.list_sources">
-<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">list_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/sources/registry.html#list_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.list_sources" title="Link to this definition"></a></dt>
-<dd><p>Return the names of all registered live sources (runs discovery first).</p>
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">list_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">egress_allow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">frozenset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/sources/registry.html#list_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.list_sources" title="Link to this definition"></a></dt>
+<dd><p>Return the names of registered live sources (runs discovery first).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>egress_allow</strong> – If given, keep only sources whose declared
+<code class="docutils literal notranslate"><span class="pre">config['data_egress']</span></code> is in this set (the local-first / offline
+filter — see <a class="reference internal" href="foley/runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.runtime.RuntimeConfig</span></code></a>). A source that does
+not declare <code class="docutils literal notranslate"><span class="pre">data_egress</span></code> is <strong>excluded</strong> (fail-closed).</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -2716,6 +2944,54 @@ exposing bare <code class="docutils literal notranslate"><span class="pre">run_i
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.make_session_store">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">make_session_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'picks'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MutableMapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/stores.html#make_session_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.make_session_store" title="Link to this definition"></a></dt>
+<dd><p>Build a per-session JSON store: <code class="docutils literal notranslate"><span class="pre">Mapping[key</span> <span class="pre">-&gt;</span> <span class="pre">dict]</span></code> under <code class="docutils literal notranslate"><span class="pre">sessions/{id}/{name}/</span></code>.</p>
+<p>The by-value carrier for #12’s audition state — one store per namespace
+(<code class="docutils literal notranslate"><span class="pre">candidates</span></code> / <code class="docutils literal notranslate"><span class="pre">picks</span></code> / <code class="docutils literal notranslate"><span class="pre">rejects</span></code>). A sibling of <a class="reference internal" href="#foley.make_run_store" title="foley.make_run_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_run_store()</span></code></a>:
+percent-encodes each key to a safe <code class="docutils literal notranslate"><span class="pre">{enc}.json</span></code> filename (invariant #3) while
+exposing bare keys; values are plain dicts. Local by default; swap in any <code class="docutils literal notranslate"><span class="pre">dol</span></code>
+Mapping for the cloud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session_id</strong> – The session namespace (default <code class="docutils literal notranslate"><span class="pre">'default'</span></code>).</p></li>
+<li><p><strong>name</strong> – The store namespace within the session (<code class="docutils literal notranslate"><span class="pre">candidates</span></code> / <code class="docutils literal notranslate"><span class="pre">picks</span></code> /
+<code class="docutils literal notranslate"><span class="pre">rejects</span></code>).</p></li>
+<li><p><strong>rootdir</strong> – Root sessions directory (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">DEFAULT_SESSION_DIR</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">dict]</span></code> keyed by the bare key.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.mcp_server">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">mcp_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#foley.mcp_server" title="Link to this definition"></a></dt>
+<dd><p>Build the foley MCP server (lazy <code class="docutils literal notranslate"><span class="pre">py2mcp</span></code>); registers the JSON-safe tool surface.</p>
+<p>Validates that every source declares a <code class="docutils literal notranslate"><span class="pre">data_egress</span></code> (fail-closed), binds the
+injectable library / runtime / byte-store, and hands the resolved tool functions to
+<code class="docutils literal notranslate"><span class="pre">py2mcp.mk_mcp_server</span></code>. Never starts a server or touches the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>library</strong> – The <a class="reference internal" href="foley/index.html#foley.index.SoundLibrary" title="foley.index.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.index.SoundLibrary</span></code></a> (default: the shared one).</p></li>
+<li><p><strong>session</strong> – The default session id.</p></li>
+<li><p><strong>runtime</strong> – A <a class="reference internal" href="foley/runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.runtime.RuntimeConfig</span></code></a> (default: the active one).</p></li>
+<li><p><strong>byte_store</strong> – A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">bytes]</span></code> for previews / rendered mixes.</p></li>
+<li><p><strong>include</strong> – Optional subset of tool names to expose.</p></li>
+<li><p><strong>name</strong> – The MCP server name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">fastmcp.FastMCP</span></code> server.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.measure_lufs">
 <span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">measure_lufs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_floor_lufs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-70.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_block_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/foley/qc.html#measure_lufs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.measure_lufs" title="Link to this definition"></a></dt>
 <dd><p>Integrated loudness (LUFS, ITU-R BS.1770-4) via <code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> (lazy).</p>
@@ -2731,6 +3007,12 @@ not amplify, just flag).</p>
 <dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> when the first or last sample sits above <code class="docutils literal notranslate"><span class="pre">rel_peak_dbfs</span></code>
 relative to the clip peak — i.e. a nonzero boundary that clicks under
 narration and needs a short fade.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.offline">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">offline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="foley/runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><span class="pre">RuntimeConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/runtime.html#offline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.offline" title="Link to this definition"></a></dt>
+<dd><p>Alias of <code class="xref py py-func docutils literal notranslate"><span class="pre">offline_scope()</span></code> — <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">foley.offline():</span> <span class="pre">...</span></code> for local-first runs.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2769,6 +3051,32 @@ run scope (<code class="docutils literal notranslate"><span class="pre">None</sp
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.preview">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">preview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_or_id</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.SessionStore" title="foley.SessionStore"><span class="pre">SessionStore</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#foley.Candidate" title="foley.Candidate"><span class="pre">Candidate</span></a></span></span><a class="reference internal" href="../_modules/foley/agent/preview.html#preview"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.preview" title="Link to this definition"></a></dt>
+<dd><p>Produce a short audition of a sound; set its <code class="docutils literal notranslate"><span class="pre">preview_uri</span></code> to a store key.</p>
+<p>Writes the first <code class="docutils literal notranslate"><span class="pre">seconds</span></code> of the clip (FLAC) into <code class="docutils literal notranslate"><span class="pre">byte_store</span></code> under its
+content key and points <code class="xref py py-attr docutils literal notranslate"><span class="pre">Candidate.preview_uri</span></code> at that key — referencing the
+audio, never returning bytes. Fail-safe: if the audio codec extra (<code class="docutils literal notranslate"><span class="pre">foley[audio]</span></code>)
+or the clip is unavailable, <code class="docutils literal notranslate"><span class="pre">preview_uri</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> (the sound id + duration
+still let a client fetch it).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>candidate_or_id</strong> – A <a class="reference internal" href="foley/base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a> or a sound id.</p></li>
+<li><p><strong>seconds</strong> – Audition length.</p></li>
+<li><p><strong>library</strong> – The <a class="reference internal" href="foley/index.html#foley.index.SoundLibrary" title="foley.index.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.index.SoundLibrary</span></code></a> (default: the shared one).</p></li>
+<li><p><strong>byte_store</strong> – A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">bytes]</span></code> to hold the preview (default: none —
+then <code class="docutils literal notranslate"><span class="pre">preview_uri</span></code> stays <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
+<li><p><strong>session</strong> – Optional session (unused here; accepted for a uniform signature).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The candidate with <code class="docutils literal notranslate"><span class="pre">preview_uri</span></code> set (or <code class="docutils literal notranslate"><span class="pre">None</span></code> on graceful degradation).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.reciprocal_rank_fusion">
 <span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">reciprocal_rank_fusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ranked_id_lists</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/index/search.html#reciprocal_rank_fusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.reciprocal_rank_fusion" title="Link to this definition"></a></dt>
 <dd><p>Fuse several ranked id lists into one, by reciprocal rank.</p>
@@ -2783,6 +3091,33 @@ order (best first). Lists may overlap and may differ in length.</p></li>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">[(id,</span> <span class="pre">fused_score),</span> <span class="pre">...]</span></code> sorted by fused score descending, ties
 broken by <code class="docutils literal notranslate"><span class="pre">id</span></code> ascending (so the fusion is fully deterministic).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.refine">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">refine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#foley.SessionStore" title="foley.SessionStore"><span class="pre">SessionStore</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">picked_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rejected_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refiner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="foley/agent/preview.html#foley.agent.preview.RefineResult" title="foley.agent.preview.RefineResult"><span class="pre">RefineResult</span></a></span></span><a class="reference internal" href="../_modules/foley/agent/preview.html#refine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.refine" title="Link to this definition"></a></dt>
+<dd><p>Relevance-feedback refinement: expand for recall, boost picks, drop rejects, re-rank.</p>
+<p>Distinct from <a class="reference internal" href="#foley.refine_query" title="foley.refine_query"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.refine_query()</span></code></a> (which only paraphrases a query): this reads
+the session’s picks/rejects (or the explicit <code class="docutils literal notranslate"><span class="pre">picked_ids</span></code> / <code class="docutils literal notranslate"><span class="pre">rejected_ids</span></code>),
+expands the query into paraphrases for recall, gathers neighbours of every pick, drops
+the rejects, and re-ranks by score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – The audition session (source of picks/rejects when not passed explicitly).</p></li>
+<li><p><strong>query</strong> – The base text query to expand (optional).</p></li>
+<li><p><strong>rejected_ids</strong> (<em>picked_ids /</em>) – Explicit feedback (override the session’s).</p></li>
+<li><p><strong>hint</strong> – A steer for the query expansion.</p></li>
+<li><p><strong>n</strong> – Paraphrases to request.</p></li>
+<li><p><strong>k</strong> – Result depth.</p></li>
+<li><p><strong>library</strong> – The <a class="reference internal" href="foley/index.html#foley.index.SoundLibrary" title="foley.index.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.index.SoundLibrary</span></code></a> (default: the shared one).</p></li>
+<li><p><strong>refiner</strong> – The query-expansion seam (default: the deterministic fake).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">RefineResult</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2957,6 +3292,27 @@ library (local stores + CLAP + best available index) on first use.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.similar_to">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">similar_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip_or_candidate</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.Candidate" title="foley.Candidate"><span class="pre">Candidate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/agent/preview.html#similar_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.similar_to" title="Link to this definition"></a></dt>
+<dd><p>“More like this” — neighbours of a sound id / candidate, or of a raw clip.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">str</span></code> id or a <a class="reference internal" href="foley/base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a> uses by-id neighbours
+(<code class="docutils literal notranslate"><span class="pre">SoundLibrary.similar</span></code>, self excluded); a raw working-array / bytes clip uses
+audio-to-audio search (<code class="docutils literal notranslate"><span class="pre">SoundLibrary.search_clip</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clip_or_candidate</strong> – A sound id, a <a class="reference internal" href="foley/base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>, or a clip.</p></li>
+<li><p><strong>k</strong> – How many neighbours to return.</p></li>
+<li><p><strong>library</strong> – The <a class="reference internal" href="foley/index.html#foley.index.SoundLibrary" title="foley.index.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.index.SoundLibrary</span></code></a> (default: the shared one).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of <a class="reference internal" href="foley/base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.sqlite_vec_loadable">
 <span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">sqlite_vec_loadable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/foley/index/indexes.html#sqlite_vec_loadable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sqlite_vec_loadable" title="Link to this definition"></a></dt>
 <dd><p>True if <code class="docutils literal notranslate"><span class="pre">sqlite_vec</span></code> is installed AND this interpreter can load it.</p>
@@ -3102,6 +3458,17 @@ fusion).</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Up to <code class="docutils literal notranslate"><span class="pre">k</span></code> :class:<a href="#id11"><span class="problematic" id="id12">`</span></a>FusedHit`s in descending-similarity order.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.verify_and_setup">
+<span class="sig-prename descclassname"><span class="pre">foley.</span></span><span class="sig-name descname"><span class="pre">verify_and_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/foley/requirements.html#verify_and_setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.verify_and_setup" title="Link to this definition"></a></dt>
+<dd><p>Return a per-requirement status + guidance report (never runs an installer).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">{'available',</span> <span class="pre">'purpose',</span> <span class="pre">'install',</span> <span class="pre">'url',</span> <span class="pre">'probe'}}</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>

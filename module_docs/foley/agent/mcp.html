@@ -1,0 +1,390 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.agent.mcp &mdash; foley 0.0.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="foley.agent.policy" href="policy.html" />
+    <link rel="prev" title="foley.agent.decompose" href="decompose.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">foley.agent.mcp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.TOOLS"><code class="docutils literal notranslate"><span class="pre">TOOLS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.build_mcp_server"><code class="docutils literal notranslate"><span class="pre">build_mcp_server()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_capabilities"><code class="docutils literal notranslate"><span class="pre">foley_capabilities()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_drop_pick"><code class="docutils literal notranslate"><span class="pre">foley_drop_pick()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_find"><code class="docutils literal notranslate"><span class="pre">foley_find()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_generate"><code class="docutils literal notranslate"><span class="pre">foley_generate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_list_picks"><code class="docutils literal notranslate"><span class="pre">foley_list_picks()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_nudge"><code class="docutils literal notranslate"><span class="pre">foley_nudge()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_pick"><code class="docutils literal notranslate"><span class="pre">foley_pick()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_plan"><code class="docutils literal notranslate"><span class="pre">foley_plan()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_preview"><code class="docutils literal notranslate"><span class="pre">foley_preview()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_refine"><code class="docutils literal notranslate"><span class="pre">foley_refine()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_reject"><code class="docutils literal notranslate"><span class="pre">foley_reject()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_search"><code class="docutils literal notranslate"><span class="pre">foley_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_set_gain"><code class="docutils literal notranslate"><span class="pre">foley_set_gain()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_set_master"><code class="docutils literal notranslate"><span class="pre">foley_set_master()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_similar_to"><code class="docutils literal notranslate"><span class="pre">foley_similar_to()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_status"><code class="docutils literal notranslate"><span class="pre">foley_status()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_swap_clip"><code class="docutils literal notranslate"><span class="pre">foley_swap_clip()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_timeline_captions"><code class="docutils literal notranslate"><span class="pre">foley_timeline_captions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_toggle"><code class="docutils literal notranslate"><span class="pre">foley_toggle()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.foley_weave"><code class="docutils literal notranslate"><span class="pre">foley_weave()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.agent.mcp.serve"><code class="docutils literal notranslate"><span class="pre">serve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preview.html">foley.agent.preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="session.html">foley.agent.session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime.html">foley.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/resilience.html">foley.sources.resilience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave/align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave/anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave/master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave/mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave/protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave/render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave/requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../weave/timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">foley.agent.mcp</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/foley/agent/mcp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-foley.agent.mcp">
+<span id="foley-agent-mcp"></span><h1>foley.agent.mcp<a class="headerlink" href="#module-foley.agent.mcp" title="Link to this heading"></a></h1>
+<p>The MCP surface — foley’s façade as agent-callable tools (py2mcp, #12, report 05/10).</p>
+<p>Exposes the SELECT→preview→WEAVE loop to an LLM agent (or any MCP client) as a set of
+<strong>JSON-safe</strong> tools built with <code class="docutils literal notranslate"><span class="pre">py2mcp</span></code> (<code class="docutils literal notranslate"><span class="pre">mk_mcp_server</span></code> over stdio). The single rule:
+tools take/return only JSON (ids, scores, license summaries, timeline dicts, store keys) —
+<strong>never</strong> a <a class="reference internal" href="../base.html#foley.base.Candidate" title="foley.base.Candidate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Candidate</span></code></a>, a <a class="reference internal" href="../weave.html#foley.weave.WeaveResult" title="foley.weave.WeaveResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">WeaveResult</span></code></a>, or numpy
+audio. Heavy objects stay server-side; audio is referenced by a byte-store key.</p>
+<p>The tool functions are thin wrappers over the existing façade (a single seam, three
+surfaces: Python / CLI / MCP): they resolve the shared <a class="reference internal" href="../index.html#foley.index.SoundLibrary" title="foley.index.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.index.SoundLibrary</span></code></a>
+and per-session <a class="reference internal" href="session.html#foley.agent.session.SessionStore" title="foley.agent.session.SessionStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.agent.session.SessionStore</span></code></a> (both injectable for tests).
+<code class="docutils literal notranslate"><span class="pre">py2mcp</span></code> / <code class="docutils literal notranslate"><span class="pre">fastmcp</span></code> are imported LAZILY inside <a class="reference internal" href="#foley.agent.mcp.build_mcp_server" title="foley.agent.mcp.build_mcp_server"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_mcp_server()</span></code></a> only, so
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley</span></code> and <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley.agent</span></code> stay dol-only.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.agent.mcp.TOOLS">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">TOOLS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;function</span> <span class="pre">foley_find&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_search&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_similar_to&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_preview&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_refine&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_pick&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_drop_pick&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_reject&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_list_picks&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_generate&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_plan&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_weave&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_swap_clip&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_set_gain&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_nudge&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_toggle&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_set_master&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_timeline_captions&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_capabilities&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">foley_status&gt;]</span></span><a class="headerlink" href="#foley.agent.mcp.TOOLS" title="Link to this definition"></a></dt>
+<dd><p>The full JSON-safe tool surface (SSOT), in a stable order.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.build_mcp_server">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">build_mcp_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">byte_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#build_mcp_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.build_mcp_server" title="Link to this definition"></a></dt>
+<dd><p>Build the foley MCP server (lazy <code class="docutils literal notranslate"><span class="pre">py2mcp</span></code>); registers the JSON-safe tool surface.</p>
+<p>Validates that every source declares a <code class="docutils literal notranslate"><span class="pre">data_egress</span></code> (fail-closed), binds the
+injectable library / runtime / byte-store, and hands the resolved tool functions to
+<code class="docutils literal notranslate"><span class="pre">py2mcp.mk_mcp_server</span></code>. Never starts a server or touches the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>library</strong> – The <a class="reference internal" href="../index.html#foley.index.SoundLibrary" title="foley.index.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.index.SoundLibrary</span></code></a> (default: the shared one).</p></li>
+<li><p><strong>session</strong> – The default session id.</p></li>
+<li><p><strong>runtime</strong> – A <a class="reference internal" href="../runtime.html#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">foley.runtime.RuntimeConfig</span></code></a> (default: the active one).</p></li>
+<li><p><strong>byte_store</strong> – A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">bytes]</span></code> for previews / rendered mixes.</p></li>
+<li><p><strong>include</strong> – Optional subset of tool names to expose.</p></li>
+<li><p><strong>name</strong> – The MCP server name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">fastmcp.FastMCP</span></code> server.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_capabilities">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_capabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_capabilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_capabilities" title="Link to this definition"></a></dt>
+<dd><p>What foley can do here — keys / extras / system deps / offline / sources / degraded.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_drop_pick">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_drop_pick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_drop_pick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_drop_pick" title="Link to this definition"></a></dt>
+<dd><p>Remove a previously-picked sound from the session.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_find">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_events</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'listen'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commercial_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_find" title="Link to this definition"></a></dt>
+<dd><p>Find verified, license-clean sound candidates for a narrative passage.</p>
+<p>Caches the full candidates in the session so <code class="docutils literal notranslate"><span class="pre">foley_plan</span></code> / <code class="docutils literal notranslate"><span class="pre">foley_weave</span></code> can
+rehydrate them by id. Returns compact candidate rows.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_generate">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'stable_audio'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commercial_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_generate" title="Link to this definition"></a></dt>
+<dd><p>Generate a sound from a text prompt (local backends only when offline).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_list_picks">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_list_picks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_list_picks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_list_picks" title="Link to this definition"></a></dt>
+<dd><p>The sounds picked in this session (the ‘persist picks’ read side).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_nudge">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_nudge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_nudge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_nudge" title="Link to this definition"></a></dt>
+<dd><p>Shift a timeline item’s onset by <code class="docutils literal notranslate"><span class="pre">delta_s</span></code> seconds; returns the new timeline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_pick">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_pick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_pick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_pick" title="Link to this definition"></a></dt>
+<dd><p>Accept a sound into the session (persisted); <code class="docutils literal notranslate"><span class="pre">foley_plan</span></code> folds picks into a timeline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_plan">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transcript</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_plan" title="Link to this definition"></a></dt>
+<dd><p>Fold picks (or explicit candidate ids) into a JSON sound-design timeline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_preview">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_preview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_preview"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_preview" title="Link to this definition"></a></dt>
+<dd><p>Produce a short audition of a sound; returns its store key (never audio bytes).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_refine">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_refine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">picked_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rejected_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_refine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_refine" title="Link to this definition"></a></dt>
+<dd><p>Relevance-feedback refinement: expand the query, boost picks, drop rejects, re-rank.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_reject">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_reject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reason</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_reject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_reject" title="Link to this definition"></a></dt>
+<dd><p>Reject a sound (feeds <code class="docutils literal notranslate"><span class="pre">foley_refine</span></code> relevance feedback).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_search">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commercial_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ucs_category</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rerank</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_search" title="Link to this definition"></a></dt>
+<dd><p>Hybrid (CLAP + keyword) search of the library for a text query; returns candidate rows.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_set_gain">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_set_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gain_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_set_gain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_set_gain" title="Link to this definition"></a></dt>
+<dd><p>Set a timeline item’s gain (dB); returns the new timeline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_set_master">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_set_master</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_lufs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_dbfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_set_master"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_set_master" title="Link to this definition"></a></dt>
+<dd><p>Set the timeline’s master target (LUFS / true-peak); returns the new timeline.</p>
+<p>Either field may be set independently — omitting one keeps the podcast default for
+that field (so <code class="docutils literal notranslate"><span class="pre">peak_dbfs=-2.0</span></code> alone tightens only the true-peak ceiling).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_similar_to">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_similar_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_similar_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_similar_to" title="Link to this definition"></a></dt>
+<dd><p>“More like this” — the library neighbours of a sound (by id); returns candidate rows.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_status">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_status" title="Link to this definition"></a></dt>
+<dd><p>The current runtime posture + this session’s pick/reject counts.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_swap_clip">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_swap_clip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_swap_clip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_swap_clip" title="Link to this definition"></a></dt>
+<dd><p>Swap a timeline item’s clip; returns the new timeline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_timeline_captions">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_timeline_captions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'vtt'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_timeline_captions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_timeline_captions" title="Link to this definition"></a></dt>
+<dd><p>Export SDH captions for a timeline (<code class="docutils literal notranslate"><span class="pre">fmt='vtt'</span></code> | <code class="docutils literal notranslate"><span class="pre">'srt'</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_toggle">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_toggle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_toggle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_toggle" title="Link to this definition"></a></dt>
+<dd><p>Mute/unmute a timeline item; returns the new timeline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.foley_weave">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_weave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">narration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_weave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_weave" title="Link to this definition"></a></dt>
+<dd><p>Render a timeline under the narration; returns the mix by store key + captions + credits.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.mcp.serve">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#serve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.serve" title="Link to this definition"></a></dt>
+<dd><p>Build and run the foley MCP server over stdio (blocks).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="decompose.html" class="btn btn-neutral float-left" title="foley.agent.decompose" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="policy.html" class="btn btn-neutral float-right" title="foley.agent.policy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,781 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>foley.agent.mcp &mdash; foley 0.0.14 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            foley
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/requirements.html">foley.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/runtime.html">foley.runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave.html">foley.weave</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">foley</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
+      <li class="breadcrumb-item active">foley.agent.mcp</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for foley.agent.mcp</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The MCP surface — foley&#39;s façade as agent-callable tools (py2mcp, #12, report 05/10).</span>
+
+<span class="sd">Exposes the SELECT→preview→WEAVE loop to an LLM agent (or any MCP client) as a set of</span>
+<span class="sd">**JSON-safe** tools built with ``py2mcp`` (``mk_mcp_server`` over stdio). The single rule:</span>
+<span class="sd">tools take/return only JSON (ids, scores, license summaries, timeline dicts, store keys) —</span>
+<span class="sd">**never** a :class:`~foley.base.Candidate`, a :class:`~foley.weave.WeaveResult`, or numpy</span>
+<span class="sd">audio. Heavy objects stay server-side; audio is referenced by a byte-store key.</span>
+
+<span class="sd">The tool functions are thin wrappers over the existing façade (a single seam, three</span>
+<span class="sd">surfaces: Python / CLI / MCP): they resolve the shared :class:`foley.index.SoundLibrary`</span>
+<span class="sd">and per-session :class:`foley.agent.session.SessionStore` (both injectable for tests).</span>
+<span class="sd">``py2mcp`` / ``fastmcp`` are imported LAZILY inside :func:`build_mcp_server` only, so</span>
+<span class="sd">``import foley`` and ``import foley.agent`` stay dol-only.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># injectable shared state (a default library + session factory; overridden in tests)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">_STATE</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;library&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;session_factory&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;byte_store&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">&quot;runtime&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_configure</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session_factory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">byte_store</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">runtime</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the shared library / session-factory / byte-store / runtime (test + server seam).&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="p">(</span><span class="s2">&quot;library&quot;</span><span class="p">,</span> <span class="n">library</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;session_factory&quot;</span><span class="p">,</span> <span class="n">session_factory</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;byte_store&quot;</span><span class="p">,</span> <span class="n">byte_store</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;runtime&quot;</span><span class="p">,</span> <span class="n">runtime</span><span class="p">),</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_STATE</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_lib</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;library&quot;</span><span class="p">]</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..index.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_library</span>
+
+    <span class="k">return</span> <span class="n">default_library</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_session</span><span class="p">(</span><span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;session_factory&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;session_factory&quot;</span><span class="p">](</span><span class="n">session_id</span><span class="p">)</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.session</span><span class="w"> </span><span class="kn">import</span> <span class="n">SessionStore</span>
+
+    <span class="k">return</span> <span class="n">SessionStore</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_byte_store</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;byte_store&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;byte_store&quot;</span><span class="p">]</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_byte_store</span>
+
+    <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;byte_store&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_byte_store</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;byte_store&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_runtime</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;runtime&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;runtime&quot;</span><span class="p">]</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_runtime</span>
+
+    <span class="k">return</span> <span class="n">current_runtime</span><span class="p">()</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># JSON-safe projections (compact — never the leaky full to_dict())</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_enum</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_license_summary</span><span class="p">(</span><span class="n">lic</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A compact, JSON-safe license summary (the fields an agent needs to decide).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;license_id&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">&quot;license_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;commercial_ok&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">&quot;commercial_ok&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;requires_attribution&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">&quot;requires_attribution&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;attribution_text&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">&quot;attribution_text&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;redistribute_standalone_ok&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">&quot;redistribute_standalone_ok&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;is_ai_generated&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">&quot;is_ai_generated&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_candidate_row</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Project a :class:`~foley.base.Candidate` to a compact JSON row.</span>
+
+<span class="sd">    Deliberately omits the leaky internals (``storage_mode`` / ``uri`` / QC block /</span>
+<span class="sd">    embeddings) — only what an agent needs to audition and decide.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span>
+    <span class="n">verdict</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">verdict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">verdict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;match&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">verdict</span><span class="p">,</span> <span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">verdict</span><span class="p">,</span> <span class="s2">&quot;confidence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">_enum</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">verdict</span><span class="p">,</span> <span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s2">&quot;caption&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">caption</span><span class="p">,</span>
+        <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[]),</span>
+        <span class="s2">&quot;duration_s&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">duration_s</span><span class="p">,</span>
+        <span class="s2">&quot;ucs_category&quot;</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">ucs_category</span><span class="p">,</span>
+        <span class="s2">&quot;origin&quot;</span><span class="p">:</span> <span class="n">_enum</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">origin</span><span class="p">),</span>
+        <span class="s2">&quot;scores&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;clap&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">clap_score</span><span class="p">,</span>
+            <span class="s2">&quot;bm25&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">bm25_score</span><span class="p">,</span>
+            <span class="s2">&quot;rrf&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">rrf_score</span><span class="p">,</span>
+            <span class="s2">&quot;rerank&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">rerank_score</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;verdict&quot;</span><span class="p">:</span> <span class="n">verdict</span><span class="p">,</span>
+        <span class="s2">&quot;license&quot;</span><span class="p">:</span> <span class="n">_license_summary</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">license</span><span class="p">),</span>
+        <span class="s2">&quot;license_ok&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">license_ok</span><span class="p">,</span>
+        <span class="s2">&quot;preview_uri&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">preview_uri</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_weave_result_row</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Project a :class:`~foley.weave.WeaveResult` to JSON: audio by store key, no ndarray.&quot;&quot;&quot;</span>
+    <span class="n">audio_ref</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">encode</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">content_key</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">encode</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">audio</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">sr</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;flac&quot;</span><span class="p">)</span>
+        <span class="n">audio_ref</span> <span class="o">=</span> <span class="n">content_key</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">_byte_store</span><span class="p">()[</span><span class="n">audio_ref</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">audio_ref</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">credits</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">credits</span><span class="p">,</span> <span class="s2">&quot;entries&quot;</span><span class="p">,</span> <span class="p">())</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;audio_ref&quot;</span><span class="p">:</span> <span class="n">audio_ref</span><span class="p">,</span>
+        <span class="s2">&quot;sr&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">sr</span><span class="p">,</span>
+        <span class="s2">&quot;timeline&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">timeline</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+        <span class="s2">&quot;credits&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s2">&quot;to_dict&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">credits</span><span class="p">)],</span>
+        <span class="s2">&quot;captions_vtt&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">captions_vtt</span><span class="p">,</span>
+        <span class="s2">&quot;captions_srt&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">captions_srt</span><span class="p">,</span>
+        <span class="s2">&quot;master_report&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">master_report</span><span class="p">,</span>
+        <span class="s2">&quot;watermark&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">watermark</span><span class="p">,</span>
+        <span class="s2">&quot;content_credential&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">content_credential</span><span class="p">,</span>
+        <span class="s2">&quot;run_manifest_ref&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">run_manifest_ref</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># the tools (module-level, JSON in/out) — the MCP surface</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="foley_find">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_find">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_find</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">verify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;listen&quot;</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find verified, license-clean sound candidates for a narrative passage.</span>
+
+<span class="sd">    Caches the full candidates in the session so ``foley_plan`` / ``foley_weave`` can</span>
+<span class="sd">    rehydrate them by id. Returns compact candidate rows.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">find</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntendedUse</span>
+
+    <span class="n">cands</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="n">find</span><span class="p">(</span>
+            <span class="n">context</span><span class="p">,</span>
+            <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span>
+            <span class="n">verify</span><span class="o">=</span><span class="n">verify</span><span class="p">,</span>
+            <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+            <span class="n">intended_use</span><span class="o">=</span><span class="n">IntendedUse</span><span class="p">(</span><span class="n">commercial</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">),</span>
+            <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">(),</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">cache_candidates</span><span class="p">(</span><span class="n">cands</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_candidate_row</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cands</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="foley_search">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_search">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_search</span><span class="p">(</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">ucs_category</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rerank</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hybrid (CLAP + keyword) search of the library for a text query; returns candidate rows.&quot;&quot;&quot;</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="n">_lib</span><span class="p">()</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+        <span class="n">query</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ucs_category</span><span class="o">=</span><span class="n">ucs_category</span><span class="p">,</span>
+        <span class="n">rerank</span><span class="o">=</span><span class="n">rerank</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">cache_candidates</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_candidate_row</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="foley_similar_to">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_similar_to">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_similar_to</span><span class="p">(</span><span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; &quot;More like this&quot; — the library neighbours of a sound (by id); returns candidate rows.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.preview</span><span class="w"> </span><span class="kn">import</span> <span class="n">similar_to</span>
+
+    <span class="n">hits</span> <span class="o">=</span> <span class="n">similar_to</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">())</span>
+    <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">cache_candidates</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_candidate_row</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="foley_preview">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_preview">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_preview</span><span class="p">(</span><span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Produce a short audition of a sound; returns its store key (never audio bytes).&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.preview</span><span class="w"> </span><span class="kn">import</span> <span class="n">preview</span>
+
+    <span class="n">cand</span> <span class="o">=</span> <span class="n">preview</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">(),</span> <span class="n">byte_store</span><span class="o">=</span><span class="n">_byte_store</span><span class="p">())</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;sound_id&quot;</span><span class="p">:</span> <span class="n">sound_id</span><span class="p">,</span>
+        <span class="s2">&quot;preview_uri&quot;</span><span class="p">:</span> <span class="n">cand</span><span class="o">.</span><span class="n">preview_uri</span><span class="p">,</span>
+        <span class="s2">&quot;duration_s&quot;</span><span class="p">:</span> <span class="n">cand</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">duration_s</span><span class="p">,</span>
+        <span class="s2">&quot;caption&quot;</span><span class="p">:</span> <span class="n">cand</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">caption</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="foley_refine">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_refine">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_refine</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">query</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">picked_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rejected_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">hint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Relevance-feedback refinement: expand the query, boost picks, drop rejects, re-rank.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.preview</span><span class="w"> </span><span class="kn">import</span> <span class="n">refine</span>
+
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">refine</span><span class="p">(</span>
+        <span class="n">sess</span><span class="p">,</span>
+        <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+        <span class="n">picked_ids</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">picked_ids</span> <span class="ow">or</span> <span class="p">()),</span>
+        <span class="n">rejected_ids</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">rejected_ids</span> <span class="ow">or</span> <span class="p">()),</span>
+        <span class="n">hint</span><span class="o">=</span><span class="n">hint</span><span class="p">,</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">cache_candidates</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">results</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;queries&quot;</span><span class="p">:</span> <span class="n">res</span><span class="o">.</span><span class="n">queries</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">_candidate_row</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">results</span><span class="p">]}</span></div>
+
+
+
+<div class="viewcode-block" id="foley_pick">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_pick">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_pick</span><span class="p">(</span>
+    <span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">onset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accept a sound into the session (persisted); ``foley_plan`` folds picks into a timeline.&quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">add_pick</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span> <span class="n">onset</span><span class="o">=</span><span class="n">onset</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;sound_id&quot;</span><span class="p">:</span> <span class="n">sound_id</span><span class="p">,</span> <span class="s2">&quot;n_picks&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="foley_drop_pick">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_drop_pick">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_drop_pick</span><span class="p">(</span><span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove a previously-picked sound from the session.&quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">drop_pick</span><span class="p">(</span><span class="n">sound_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;sound_id&quot;</span><span class="p">:</span> <span class="n">sound_id</span><span class="p">,</span> <span class="s2">&quot;n_picks&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="foley_reject">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_reject">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_reject</span><span class="p">(</span>
+    <span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reject a sound (feeds ``foley_refine`` relevance feedback).&quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">add_reject</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="n">reason</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;sound_id&quot;</span><span class="p">:</span> <span class="n">sound_id</span><span class="p">,</span> <span class="s2">&quot;n_rejects&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="foley_list_picks">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_list_picks">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_list_picks</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The sounds picked in this session (the &#39;persist picks&#39; read side).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">list_picks</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="foley_generate">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_generate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_generate</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stable_audio&quot;</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a sound from a text prompt (local backends only when offline).&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">EXTERNAL</span><span class="p">,</span> <span class="n">LOCAL</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">source_egress</span>
+
+    <span class="n">egress</span> <span class="o">=</span> <span class="n">source_egress</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span> <span class="ow">or</span> <span class="n">LOCAL</span>
+    <span class="k">if</span> <span class="n">_runtime</span><span class="p">()</span><span class="o">.</span><span class="n">offline</span> <span class="ow">and</span> <span class="n">egress</span> <span class="o">==</span> <span class="n">EXTERNAL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;backend </span><span class="si">{</span><span class="n">backend</span><span class="si">!r}</span><span class="s2"> is external and disallowed in offline mode&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate</span>
+
+    <span class="n">report</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">())</span>
+    <span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="n">sid</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;sound_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;record&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sid</span><span class="p">:</span>
+            <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;sound_ids&quot;</span><span class="p">:</span> <span class="n">ids</span><span class="p">,</span> <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="foley_plan">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_plan">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_plan</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">transcript</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">candidate_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fold picks (or explicit candidate ids) into a JSON sound-design timeline.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">plan</span>
+
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+    <span class="n">ids</span> <span class="o">=</span> <span class="n">candidate_ids</span> <span class="k">if</span> <span class="n">candidate_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">sess</span><span class="o">.</span><span class="n">picked_ids</span><span class="p">()</span>
+    <span class="n">cands</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">rehydrate</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plan</span><span class="p">(</span><span class="n">cands</span><span class="p">,</span> <span class="n">transcript</span><span class="o">=</span><span class="n">transcript</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="foley_weave">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_weave">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_weave</span><span class="p">(</span><span class="n">narration</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeline</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render a timeline under the narration; returns the mix by store key + captions + credits.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">weave</span> <span class="k">as</span> <span class="n">_weave</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoundDesignTimeline</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_weave</span><span class="p">(</span><span class="n">narration</span><span class="p">,</span> <span class="n">SoundDesignTimeline</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">timeline</span><span class="p">),</span> <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">_weave_result_row</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tl_op</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">timeline</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoundDesignTimeline</span>
+
+    <span class="k">return</span> <span class="n">op</span><span class="p">(</span><span class="n">SoundDesignTimeline</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">timeline</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="foley_swap_clip">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_swap_clip">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_swap_clip</span><span class="p">(</span><span class="n">timeline</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Swap a timeline item&#39;s clip; returns the new timeline.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..weave.timeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">swap_clip</span>
+
+    <span class="k">return</span> <span class="n">_tl_op</span><span class="p">(</span><span class="n">swap_clip</span><span class="p">,</span> <span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">,</span> <span class="n">sound_id</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="foley_set_gain">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_set_gain">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_set_gain</span><span class="p">(</span><span class="n">timeline</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">gain_db</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set a timeline item&#39;s gain (dB); returns the new timeline.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..weave.timeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_gain</span>
+
+    <span class="k">return</span> <span class="n">_tl_op</span><span class="p">(</span><span class="n">set_gain</span><span class="p">,</span> <span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">,</span> <span class="n">gain_db</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="foley_nudge">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_nudge">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_nudge</span><span class="p">(</span><span class="n">timeline</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">delta_s</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift a timeline item&#39;s onset by ``delta_s`` seconds; returns the new timeline.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..weave.timeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">nudge</span>
+
+    <span class="k">return</span> <span class="n">_tl_op</span><span class="p">(</span><span class="n">nudge</span><span class="p">,</span> <span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">,</span> <span class="n">delta_s</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="foley_toggle">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_toggle">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_toggle</span><span class="p">(</span><span class="n">timeline</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mute/unmute a timeline item; returns the new timeline.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..weave.timeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">toggle</span>
+
+    <span class="k">return</span> <span class="n">_tl_op</span><span class="p">(</span><span class="n">toggle</span><span class="p">,</span> <span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">,</span> <span class="n">enabled</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="foley_set_master">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_set_master">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_set_master</span><span class="p">(</span>
+    <span class="n">timeline</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">target_lufs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">peak_dbfs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the timeline&#39;s master target (LUFS / true-peak); returns the new timeline.</span>
+
+<span class="sd">    Either field may be set independently — omitting one keeps the podcast default for</span>
+<span class="sd">    that field (so ``peak_dbfs=-2.0`` alone tightens only the true-peak ceiling).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">MasterProfile</span><span class="p">,</span> <span class="n">SoundDesignTimeline</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..weave.timeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_master</span>
+
+    <span class="k">if</span> <span class="n">target_lufs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">peak_dbfs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="s2">&quot;podcast&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="n">MasterProfile</span><span class="p">(</span>
+            <span class="n">target_lufs</span><span class="o">=</span><span class="n">target_lufs</span> <span class="k">if</span> <span class="n">target_lufs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="o">-</span><span class="mf">16.0</span><span class="p">,</span>
+            <span class="n">true_peak_db</span><span class="o">=</span><span class="n">peak_dbfs</span> <span class="k">if</span> <span class="n">peak_dbfs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">set_master</span><span class="p">(</span><span class="n">SoundDesignTimeline</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">timeline</span><span class="p">),</span> <span class="n">profile</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="foley_timeline_captions">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_timeline_captions">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_timeline_captions</span><span class="p">(</span><span class="n">timeline</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;vtt&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Export SDH captions for a timeline (``fmt=&#39;vtt&#39;`` | ``&#39;srt&#39;``).&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoundDesignTimeline</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..weave.timeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_srt</span><span class="p">,</span> <span class="n">to_webvtt</span>
+
+    <span class="n">tl</span> <span class="o">=</span> <span class="n">SoundDesignTimeline</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">timeline</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;vtt&quot;</span><span class="p">:</span> <span class="n">to_webvtt</span><span class="p">(</span><span class="n">tl</span><span class="p">)}</span> <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">&quot;vtt&quot;</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;srt&quot;</span><span class="p">:</span> <span class="n">to_srt</span><span class="p">(</span><span class="n">tl</span><span class="p">)}</span></div>
+
+
+
+<div class="viewcode-block" id="foley_capabilities">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_capabilities">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_capabilities</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;What foley can do here — keys / extras / system deps / offline / sources / degraded.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..requirements</span><span class="w"> </span><span class="kn">import</span> <span class="n">capability_report</span>
+
+    <span class="k">return</span> <span class="n">capability_report</span><span class="p">(</span><span class="n">runtime</span><span class="o">=</span><span class="n">_runtime</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="foley_status">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.foley_status">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_status</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The current runtime posture + this session&#39;s pick/reject counts.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..obs</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_enabled</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_sources</span>
+
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">_runtime</span><span class="p">()</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;offline&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">offline</span><span class="p">,</span>
+        <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="n">list_sources</span><span class="p">(</span><span class="n">egress_allow</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">data_egress_allow</span><span class="p">),</span>
+        <span class="s2">&quot;telemetry_enabled&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">is_enabled</span><span class="p">()),</span>
+        <span class="s2">&quot;redaction_mode&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">redaction_mode</span><span class="p">,</span>
+        <span class="s2">&quot;n_picks&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">list_picks</span><span class="p">()),</span>
+        <span class="s2">&quot;n_rejects&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">list_rejects</span><span class="p">()),</span>
+    <span class="p">}</span></div>
+
+
+
+<span class="c1">#: The full JSON-safe tool surface (SSOT), in a stable order.</span>
+<span class="n">TOOLS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">foley_find</span><span class="p">,</span>
+    <span class="n">foley_search</span><span class="p">,</span>
+    <span class="n">foley_similar_to</span><span class="p">,</span>
+    <span class="n">foley_preview</span><span class="p">,</span>
+    <span class="n">foley_refine</span><span class="p">,</span>
+    <span class="n">foley_pick</span><span class="p">,</span>
+    <span class="n">foley_drop_pick</span><span class="p">,</span>
+    <span class="n">foley_reject</span><span class="p">,</span>
+    <span class="n">foley_list_picks</span><span class="p">,</span>
+    <span class="n">foley_generate</span><span class="p">,</span>
+    <span class="n">foley_plan</span><span class="p">,</span>
+    <span class="n">foley_weave</span><span class="p">,</span>
+    <span class="n">foley_swap_clip</span><span class="p">,</span>
+    <span class="n">foley_set_gain</span><span class="p">,</span>
+    <span class="n">foley_nudge</span><span class="p">,</span>
+    <span class="n">foley_toggle</span><span class="p">,</span>
+    <span class="n">foley_set_master</span><span class="p">,</span>
+    <span class="n">foley_timeline_captions</span><span class="p">,</span>
+    <span class="n">foley_capabilities</span><span class="p">,</span>
+    <span class="n">foley_status</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolve_tools</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">include</span><span class="p">:</span> <span class="s2">&quot;Optional[list[str]]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The tool list, optionally subset by name (``include``).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">include</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">TOOLS</span><span class="p">)</span>
+    <span class="n">by_name</span> <span class="o">=</span> <span class="p">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">fn</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">TOOLS</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">by_name</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">include</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">by_name</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="build_mcp_server">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.build_mcp_server">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_mcp_server</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">runtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">byte_store</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">include</span><span class="p">:</span> <span class="s2">&quot;Optional[list[str]]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foley&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the foley MCP server (lazy ``py2mcp``); registers the JSON-safe tool surface.</span>
+
+<span class="sd">    Validates that every source declares a ``data_egress`` (fail-closed), binds the</span>
+<span class="sd">    injectable library / runtime / byte-store, and hands the resolved tool functions to</span>
+<span class="sd">    ``py2mcp.mk_mcp_server``. Never starts a server or touches the network.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        library: The :class:`foley.index.SoundLibrary` (default: the shared one).</span>
+<span class="sd">        session: The default session id.</span>
+<span class="sd">        runtime: A :class:`foley.runtime.RuntimeConfig` (default: the active one).</span>
+<span class="sd">        byte_store: A ``MutableMapping[str, bytes]`` for previews / rendered mixes.</span>
+<span class="sd">        include: Optional subset of tool names to expose.</span>
+<span class="sd">        name: The MCP server name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``fastmcp.FastMCP`` server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_egress</span>
+
+    <span class="n">_validate_egress</span><span class="p">()</span>
+    <span class="n">_configure</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span> <span class="n">runtime</span><span class="o">=</span><span class="n">runtime</span><span class="p">,</span> <span class="n">byte_store</span><span class="o">=</span><span class="n">byte_store</span><span class="p">)</span>
+    <span class="n">_STATE</span><span class="p">[</span><span class="s2">&quot;default_session&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">session</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">py2mcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">mk_mcp_server</span>  <span class="c1"># lazy: foley[mcp]</span>
+
+    <span class="k">return</span> <span class="n">mk_mcp_server</span><span class="p">(</span><span class="n">_resolve_tools</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="n">include</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="serve">
+<a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.serve">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">serve</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foley&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover - blocking I/O</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build and run the foley MCP server over stdio (blocks).&quot;&quot;&quot;</span>
+    <span class="n">build_mcp_server</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cli</span><span class="p">(</span><span class="n">argv</span><span class="p">:</span> <span class="s2">&quot;Optional[list[str]]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>  <span class="c1"># pragma: no cover - entry point</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;``foley-mcp`` console entry: serve foley over MCP (stdio).&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">prog</span><span class="o">=</span><span class="s2">&quot;foley-mcp&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Serve foley to agents over MCP (stdio).&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--name&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;foley&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--session&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--offline&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;local-first: no external sources / telemetry&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">runtime</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">offline</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">RuntimeConfig</span>
+
+        <span class="n">runtime</span> <span class="o">=</span> <span class="n">RuntimeConfig</span><span class="o">.</span><span class="n">offline_local</span><span class="p">()</span>
+    <span class="n">serve</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">runtime</span><span class="o">=</span><span class="n">runtime</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
