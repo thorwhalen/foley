@@ -400,9 +400,13 @@ def current_run():
 def run(op: str = "run", *, inputs=None, params=None, **overrides):
     """Open an explicit run scope that aggregates nested façade calls into ONE manifest.
 
-    Forces observability on for the scope (even if globally disabled) — the #7
-    ``find()`` aggregation entrypoint, shipped now as skeleton. Get-or-create: a nested
-    :func:`run` reuses the active recorder. ``overrides`` are per-scope
+    Forces observability on for the scope even when it is merely *disabled* (the #7
+    ``find()`` aggregation entrypoint). The one thing it does **not** override is the
+    hard-off ``force_disabled`` flag: :func:`foley.runtime.offline_scope` sets it for a
+    telemetry-off posture, so an explicit ``run()`` inside offline mode records and
+    exports **nothing** — the "nothing leaves the device" contract holds on the
+    ``find()``/``weave()`` paths too, not just the ``facade_run`` ones. Get-or-create: a
+    nested :func:`run` reuses the active recorder. ``overrides`` are per-scope
     :class:`ObsConfig` fields (e.g. ``run_store``, ``prefer_otel``, ``clock``).
     """
     active = _CURRENT_RUN.get()
@@ -411,5 +415,10 @@ def run(op: str = "run", *, inputs=None, params=None, **overrides):
             yield active
         return
     config = replace(_CONFIG, **overrides) if overrides else _CONFIG
+    if config.force_disabled:
+        # Hard-off (offline posture) dominates run()'s force-on: no recorder, no OTel
+        # tracer, no manifest — so `with foley.offline(): foley.find(...)` leaks nothing.
+        yield _NULL_RUN
+        return
     with _open_run(op, inputs=inputs, params=params, config=config) as rec:
         yield rec

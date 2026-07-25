@@ -304,17 +304,23 @@ def foley_generate(
             "ok": False,
             "error": f"backend {backend!r} is external and disallowed in offline mode",
         }
-    from .. import generate
+    from .. import GenerationError, generate
 
-    report = generate(prompt, backend=backend, library=_lib())
-    ids = []
-    for r in getattr(report, "results", []) or []:
-        sid = getattr(r, "sound_id", None) or getattr(
-            getattr(r, "record", None), "id", None
-        )
-        if sid:
-            ids.append(sid)
-    return {"ok": True, "sound_ids": ids, "backend": backend}
+    # The public façade returns the stored Candidate (a re-searchable, by-value
+    # SoundRecord) and RAISES GenerationError on any non-success outcome (QC-quarantined,
+    # rights-blocked, safety-refused, or an empty result). Surface both as JSON so the
+    # agent gets the real generated id on success — and a structured error, never an
+    # escaping exception, on failure — honoring the module's JSON-in/JSON-out contract.
+    try:
+        cand = generate(prompt, backend=backend, library=_lib())
+    except GenerationError as exc:
+        return {
+            "ok": False,
+            "status": getattr(exc, "status", None),
+            "error": str(exc),
+            "backend": backend,
+        }
+    return {"ok": True, "sound_ids": [cand.sound.id], "backend": backend}
 
 
 def foley_plan(
@@ -322,12 +328,33 @@ def foley_plan(
     transcript: Optional[str] = None,
     candidate_ids: Optional[list] = None,
 ) -> dict:
-    """Fold picks (or explicit candidate ids) into a JSON sound-design timeline."""
+    """Fold picks (or explicit candidate ids) into a JSON sound-design timeline.
+
+    Each pick's explicit ``layer`` / ``onset`` (set via :func:`foley_pick`) is overlaid
+    onto its candidate's :class:`~foley.base.SoundEvent` so ``plan`` honors the agent's
+    placement choices — a numeric ``onset`` becomes an absolute-seconds anchor (see
+    :func:`foley.weave.anchor.parse_symbolic_anchor`).
+    """
     from .. import plan
+    from ..base import Layer, SoundEvent
 
     sess = _session(session)
     ids = candidate_ids if candidate_ids is not None else sess.picked_ids()
     cands = sess.rehydrate(ids)
+    for c in cands:
+        sid = getattr(getattr(c, "sound", None), "id", None)
+        pick = sess.picks.get(sid) if sid is not None else None
+        if not pick:
+            continue
+        layer, onset = pick.get("layer"), pick.get("onset")
+        if layer is None and onset is None:
+            continue
+        if c.event is None:
+            c.event = SoundEvent(query=c.sound.caption or "", audioset=[])
+        if layer is not None:
+            c.event.layer = Layer(layer)
+        if onset is not None:
+            c.event.onset = str(onset)  # numeric → absolute-seconds anchor in WEAVE
     return plan(cands, transcript=transcript).to_dict()
 
 
@@ -416,6 +443,7 @@ def foley_capabilities() -> dict:
 def foley_status(session: str = "default") -> dict:
     """The current runtime posture + this session's pick/reject counts."""
     from ..obs import is_enabled
+    from ..obs import recorder as _obs_recorder
     from ..sources.registry import list_sources
 
     cfg = _runtime()
@@ -424,7 +452,9 @@ def foley_status(session: str = "default") -> dict:
         "offline": cfg.offline,
         "sources": list_sources(egress_allow=cfg.data_egress_allow),
         "telemetry_enabled": bool(is_enabled()),
-        "redaction_mode": cfg.redaction_mode,
+        # The *effective* recorder redaction mode (not the aspirational RuntimeConfig
+        # value), so status can never affirmatively misstate the real posture.
+        "redaction_mode": _enum(_obs_recorder._CONFIG.redaction_mode),
         "n_picks": len(sess.list_picks()),
         "n_rejects": len(sess.list_rejects()),
     }
@@ -499,9 +529,30 @@ def build_mcp_server(
     return mk_mcp_server(_resolve_tools(include=include), name=name)
 
 
-def serve(*, name: str = "foley", **kwargs) -> None:  # pragma: no cover - blocking I/O
-    """Build and run the foley MCP server over stdio (blocks)."""
-    build_mcp_server(name=name, **kwargs).run()
+def _run_server(server, runtime) -> None:
+    """Run ``server`` under the runtime's obs posture (offline → telemetry hard-off).
+
+    Factored out of :func:`serve` so the offline-posture enforcement is unit-testable
+    without a blocking stdio loop: when ``runtime`` is a telemetry-off (offline) posture,
+    the whole serve loop runs inside :func:`foley.runtime.offline_scope`, so the
+    ``--offline`` promise of "no telemetry" is actually enforced for the server's
+    lifetime (with :func:`foley.obs.recorder.run` now honoring ``force_disabled``, this
+    silences the ``find`` / ``weave`` paths too, not only the ``facade_run`` ones).
+    """
+    if runtime is not None and not runtime.telemetry:
+        from ..runtime import offline_scope
+
+        with offline_scope(runtime):
+            server.run()
+    else:
+        server.run()
+
+
+def serve(
+    *, name: str = "foley", runtime=None, **kwargs
+) -> None:  # pragma: no cover - blocking I/O
+    """Build and run the foley MCP server over stdio (blocks); enforces an offline posture."""
+    _run_server(build_mcp_server(name=name, runtime=runtime, **kwargs), runtime)
 
 
 def _cli(argv: "Optional[list[str]]" = None) -> int:  # pragma: no cover - entry point

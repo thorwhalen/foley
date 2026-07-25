@@ -89,14 +89,16 @@ def to_qrels(golden: "list[GoldenItem]") -> "dict[str, dict[str, int]]":
     """
     qrels: "dict[str, dict[str, int]]" = {}
     for item in golden:
-        clips = {
-            clip_id
-            for clip_list in item.answer_clip_ids.values()
-            for clip_id in clip_list
-        }
-        judgments = {clip_id: int(item.grade.get(clip_id, 0)) for clip_id in clips}
-        for ev_idx in range(len(item.expected_events)):
-            qrels[f"{item.id}::{ev_idx}"] = dict(judgments)
+        for ev_idx, event in enumerate(item.expected_events):
+            # Score each event against ITS OWN answer clips (keyed by the event's
+            # ucs_catid), not the union of every event's clips — otherwise a multi-event
+            # item scores each event as if the other events' answers were also relevant,
+            # silently deflating nDCG. Byte-identical for single-event items.
+            catid = event.get("ucs_catid")
+            clip_ids = item.answer_clip_ids.get(catid, [])
+            qrels[f"{item.id}::{ev_idx}"] = {
+                cid: int(item.grade.get(cid, 0)) for cid in clip_ids
+            }
     return qrels
 
 

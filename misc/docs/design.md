@@ -131,7 +131,7 @@ hits = foley.search("distant thunder rumble", k=10, commercial_ok=True)
 
 # Generate when nothing fits (arioso-style; backend + unified params)
 clip = foley.generate(
-    "a single wooden door creak", backend="stable_audio_open", duration=3
+    "a single wooden door creak", backend="stable_audio", duration=3
 )
 
 # Grow the library: ingest auto-tags, captions, and embeds

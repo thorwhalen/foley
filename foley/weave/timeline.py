@@ -127,8 +127,12 @@ def nudge(
 ) -> SoundDesignTimeline:
     """Shift an item's resolved onset by ``delta_s`` seconds — a NEW timeline.
 
-    Nudges the resolved :class:`~foley.base.Placement.onset` and pins the anchor to
-    ``absolute`` so the manual offset survives a re-hydrate.
+    Resolves the item's anchor against the timeline's ``word_timeline`` first, then shifts
+    the resolved onset and pins the anchor to ``absolute`` so the manual offset survives a
+    re-hydrate. This means nudging a still-symbolic (not-yet-hydrated) item on a timeline
+    that carries alignment shifts from the item's *true* resolved onset, not from 0. On a
+    pre-alignment timeline with no ``word_timeline`` a word/sentence anchor is genuinely
+    unresolvable, so there the shift is relative to 0 — hydrate/weave first for such items.
     """
     idx = _find(timeline, item_id)
     if idx < 0:
@@ -137,7 +141,15 @@ def nudge(
     from ..base import Anchor
 
     base = it.placement or parse_symbolic_anchor(it.onset, layer=it.layer, loop=it.loop)
-    moved = replace(base, anchor=Anchor.absolute, onset=max(0.0, base.onset + delta_s))
+    onset0, _ = resolve_anchor(base, list(timeline.word_timeline or ()))
+    moved = replace(
+        base,
+        anchor=Anchor.absolute,
+        onset=max(0.0, onset0 + delta_s),
+        # onset0 already folds in any pre_roll; zero it so a re-hydrate (absolute branch)
+        # doesn't subtract the pre_roll a second time.
+        pre_roll=0.0,
+    )
     items = list(timeline.items)
     items[idx] = replace(it, placement=moved)
     return replace(timeline, items=items)

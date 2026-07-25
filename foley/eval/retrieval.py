@@ -76,6 +76,9 @@ def precision_at_k(
     rel_lvl: int = 1,
 ) -> float:
     """Fraction of the top-``k`` that is relevant (denominator is literal ``k``)."""
+    # Degenerate denominator: return 0.0 (parity with recall/map/mrr/ndcg), never crash.
+    if k <= 0:
+        return 0.0
     rel = _relevant(qrels_q, rel_lvl)
     hits = sum(1 for i in _ranked_ids(run_q)[:k] if i in rel)
     return hits / k
