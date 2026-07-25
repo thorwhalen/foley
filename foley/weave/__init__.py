@@ -270,13 +270,36 @@ def _build_mix_credential(
     }
 
 
-def _sign_and_embed(audio, sample_rate, credential, *, cert=None) -> bool:
-    """Deferred signed + embedded C2PA over the final mix — a fail-safe no-op for now.
+def _c2pa_sign_wav(wav_bytes: bytes, manifest: dict, signer) -> bytes:
+    """Promote ``manifest`` into a signed, EMBEDDED C2PA manifest over ``wav_bytes``.
 
-    Reserved (report 06 §6 / PR #25): a real ``c2pa.Builder`` would promote
-    ``credential['manifest']`` VERBATIM into a signed, embedded manifest. Returns
-    ``False`` (sidecar-only) whenever ``c2pa-python`` or a signing ``cert`` is absent,
-    and never raises — the fail-safe posture.
+    Uses ``c2pa.Builder`` (lazy). ``signer`` is passed straight through to ``Builder.sign``
+    — a ready-to-use ``c2pa`` signer the caller built for their signing identity + c2pa
+    version (dependency-injected, so foley pins no version-fragile signer-construction API).
+    """
+    import io
+    import json
+
+    import c2pa  # lazy: foley[c2pa]
+
+    builder = c2pa.Builder(json.dumps(manifest))
+    dest = io.BytesIO()
+    builder.sign(signer, "audio/wav", io.BytesIO(wav_bytes), dest)
+    return dest.getvalue()
+
+
+def _sign_and_embed(
+    audio, sample_rate, credential, *, cert=None, provenance_store=None, asset_id=None
+) -> bool:
+    """Signed + embedded C2PA over the final mix (report 06 §6) — fail-safe.
+
+    When both ``c2pa-python`` and a signing ``cert`` (a ready-to-use ``c2pa`` signer) are
+    present, promotes ``credential['manifest']`` VERBATIM into a signed, EMBEDDED C2PA
+    manifest over the mastered mix (rendered to WAV), stores the signed asset in
+    ``provenance_store`` under ``{asset_id}.c2pa.wav``, and marks the credential
+    ``signed``+``embedded`` (with a ``signed_asset_ref``). Returns ``False`` (sidecar-only,
+    the unchanged posture) whenever the lib or a cert is absent, or on ANY error — so
+    weaving never depends on it and a mis-versioned signer degrades gracefully.
     """
     if cert is None:
         return False
@@ -284,7 +307,23 @@ def _sign_and_embed(audio, sample_rate, credential, *, cert=None) -> bool:
 
     if importlib.util.find_spec("c2pa") is None:
         return False
-    return False  # signed-embed end-to-end deferred; sidecar remains the SSOT
+    try:
+        from ..audio import encode
+
+        wav = encode(audio, sample_rate, fmt="wav", subtype="FLOAT")
+        signed = _c2pa_sign_wav(wav, credential["manifest"], cert)
+    except Exception:
+        return False  # fail-safe: sidecar remains the SSOT
+    credential["signed"] = True
+    credential["embedded"] = True
+    if provenance_store is not None and asset_id is not None:
+        try:
+            key = f"{asset_id}.c2pa.wav"
+            provenance_store[key] = signed
+            credential["signed_asset_ref"] = key
+        except Exception:
+            pass  # the in-memory credential flags still reflect the signed manifest
+    return True
 
 
 def reassert_provenance(
@@ -344,7 +383,14 @@ def reassert_provenance(
             from ..provenance import disclosure
 
             disclosure.write_content_credential(provenance_store, asset_id, cred)
-        _sign_and_embed(out["audio"], sample_rate, cred, cert=sign_cert)
+        _sign_and_embed(
+            out["audio"],
+            sample_rate,
+            cred,
+            cert=sign_cert,
+            provenance_store=provenance_store,
+            asset_id=asset_id,
+        )
     except Exception:
         pass  # fail-safe: never block the render on provenance
     return out
