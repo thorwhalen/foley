@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.weave.timeline &mdash; foley 0.0.14 documentation</title>
+  <title>foley.weave.timeline &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -293,8 +293,12 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundDesignTimeline</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Shift an item&#39;s resolved onset by ``delta_s`` seconds — a NEW timeline.</span>
 
-<span class="sd">    Nudges the resolved :class:`~foley.base.Placement.onset` and pins the anchor to</span>
-<span class="sd">    ``absolute`` so the manual offset survives a re-hydrate.</span>
+<span class="sd">    Resolves the item&#39;s anchor against the timeline&#39;s ``word_timeline`` first, then shifts</span>
+<span class="sd">    the resolved onset and pins the anchor to ``absolute`` so the manual offset survives a</span>
+<span class="sd">    re-hydrate. This means nudging a still-symbolic (not-yet-hydrated) item on a timeline</span>
+<span class="sd">    that carries alignment shifts from the item&#39;s *true* resolved onset, not from 0. On a</span>
+<span class="sd">    pre-alignment timeline with no ``word_timeline`` a word/sentence anchor is genuinely</span>
+<span class="sd">    unresolvable, so there the shift is relative to 0 — hydrate/weave first for such items.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">_find</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">item_id</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -303,7 +307,15 @@
     <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Anchor</span>
 
     <span class="n">base</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">placement</span> <span class="ow">or</span> <span class="n">parse_symbolic_anchor</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">onset</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">layer</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">loop</span><span class="p">)</span>
-    <span class="n">moved</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="n">Anchor</span><span class="o">.</span><span class="n">absolute</span><span class="p">,</span> <span class="n">onset</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">onset</span> <span class="o">+</span> <span class="n">delta_s</span><span class="p">))</span>
+    <span class="n">onset0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">resolve_anchor</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">timeline</span><span class="o">.</span><span class="n">word_timeline</span> <span class="ow">or</span> <span class="p">()))</span>
+    <span class="n">moved</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span>
+        <span class="n">base</span><span class="p">,</span>
+        <span class="n">anchor</span><span class="o">=</span><span class="n">Anchor</span><span class="o">.</span><span class="n">absolute</span><span class="p">,</span>
+        <span class="n">onset</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">onset0</span> <span class="o">+</span> <span class="n">delta_s</span><span class="p">),</span>
+        <span class="c1"># onset0 already folds in any pre_roll; zero it so a re-hydrate (absolute branch)</span>
+        <span class="c1"># doesn&#39;t subtract the pre_roll a second time.</span>
+        <span class="n">pre_roll</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
     <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">placement</span><span class="o">=</span><span class="n">moved</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">timeline</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">)</span></div>

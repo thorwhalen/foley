@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.obs &mdash; foley 0.0.14 documentation</title>
+  <title>foley.obs &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -490,9 +490,13 @@ preview. Default 0 → <strong>zero content leak</strong>.</p></li>
 <dt class="sig sig-object py" id="foley.obs.run">
 <span class="sig-prename descclassname"><span class="pre">foley.obs.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'run'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">overrides</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/foley/obs/recorder.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.run" title="Link to this definition"></a></dt>
 <dd><p>Open an explicit run scope that aggregates nested façade calls into ONE manifest.</p>
-<p>Forces observability on for the scope (even if globally disabled) — the #7
-<code class="docutils literal notranslate"><span class="pre">find()</span></code> aggregation entrypoint, shipped now as skeleton. Get-or-create: a nested
-<a class="reference internal" href="#foley.obs.run" title="foley.obs.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> reuses the active recorder. <code class="docutils literal notranslate"><span class="pre">overrides</span></code> are per-scope
+<p>Forces observability on for the scope even when it is merely <em>disabled</em> (the #7
+<code class="docutils literal notranslate"><span class="pre">find()</span></code> aggregation entrypoint). The one thing it does <strong>not</strong> override is the
+hard-off <code class="docutils literal notranslate"><span class="pre">force_disabled</span></code> flag: <a class="reference internal" href="runtime.html#foley.runtime.offline_scope" title="foley.runtime.offline_scope"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.runtime.offline_scope()</span></code></a> sets it for a
+telemetry-off posture, so an explicit <code class="docutils literal notranslate"><span class="pre">run()</span></code> inside offline mode records and
+exports <strong>nothing</strong> — the “nothing leaves the device” contract holds on the
+<code class="docutils literal notranslate"><span class="pre">find()</span></code>/<code class="docutils literal notranslate"><span class="pre">weave()</span></code> paths too, not just the <code class="docutils literal notranslate"><span class="pre">facade_run</span></code> ones. Get-or-create: a
+nested <a class="reference internal" href="#foley.obs.run" title="foley.obs.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> reuses the active recorder. <code class="docutils literal notranslate"><span class="pre">overrides</span></code> are per-scope
 <a class="reference internal" href="#foley.obs.ObsConfig" title="foley.obs.ObsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObsConfig</span></code></a> fields (e.g. <code class="docutils literal notranslate"><span class="pre">run_store</span></code>, <code class="docutils literal notranslate"><span class="pre">prefer_otel</span></code>, <code class="docutils literal notranslate"><span class="pre">clock</span></code>).</p>
 </dd></dl>
 

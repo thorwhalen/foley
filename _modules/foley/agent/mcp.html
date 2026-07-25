@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.mcp &mdash; foley 0.0.14 documentation</title>
+  <title>foley.agent.mcp &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -490,17 +490,23 @@
             <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;backend </span><span class="si">{</span><span class="n">backend</span><span class="si">!r}</span><span class="s2"> is external and disallowed in offline mode&quot;</span><span class="p">,</span>
         <span class="p">}</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenerationError</span><span class="p">,</span> <span class="n">generate</span>
 
-    <span class="n">report</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">())</span>
-    <span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]:</span>
-        <span class="n">sid</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;sound_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span>
-            <span class="nb">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;record&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="n">sid</span><span class="p">:</span>
-            <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;sound_ids&quot;</span><span class="p">:</span> <span class="n">ids</span><span class="p">,</span> <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">}</span></div>
+    <span class="c1"># The public façade returns the stored Candidate (a re-searchable, by-value</span>
+    <span class="c1"># SoundRecord) and RAISES GenerationError on any non-success outcome (QC-quarantined,</span>
+    <span class="c1"># rights-blocked, safety-refused, or an empty result). Surface both as JSON so the</span>
+    <span class="c1"># agent gets the real generated id on success — and a structured error, never an</span>
+    <span class="c1"># escaping exception, on failure — honoring the module&#39;s JSON-in/JSON-out contract.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cand</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">())</span>
+    <span class="k">except</span> <span class="n">GenerationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">),</span>
+            <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;sound_ids&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">cand</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">}</span></div>
 
 
 
@@ -511,12 +517,33 @@
     <span class="n">transcript</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">candidate_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fold picks (or explicit candidate ids) into a JSON sound-design timeline.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fold picks (or explicit candidate ids) into a JSON sound-design timeline.</span>
+
+<span class="sd">    Each pick&#39;s explicit ``layer`` / ``onset`` (set via :func:`foley_pick`) is overlaid</span>
+<span class="sd">    onto its candidate&#39;s :class:`~foley.base.SoundEvent` so ``plan`` honors the agent&#39;s</span>
+<span class="sd">    placement choices — a numeric ``onset`` becomes an absolute-seconds anchor (see</span>
+<span class="sd">    :func:`foley.weave.anchor.parse_symbolic_anchor`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">plan</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Layer</span><span class="p">,</span> <span class="n">SoundEvent</span>
 
     <span class="n">sess</span> <span class="o">=</span> <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
     <span class="n">ids</span> <span class="o">=</span> <span class="n">candidate_ids</span> <span class="k">if</span> <span class="n">candidate_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">sess</span><span class="o">.</span><span class="n">picked_ids</span><span class="p">()</span>
     <span class="n">cands</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">rehydrate</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cands</span><span class="p">:</span>
+        <span class="n">sid</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s2">&quot;sound&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">pick</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">picks</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span> <span class="k">if</span> <span class="n">sid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pick</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">layer</span><span class="p">,</span> <span class="n">onset</span> <span class="o">=</span> <span class="n">pick</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;layer&quot;</span><span class="p">),</span> <span class="n">pick</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;onset&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">onset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">event</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">event</span> <span class="o">=</span> <span class="n">SoundEvent</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">caption</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">audioset</span><span class="o">=</span><span class="p">[])</span>
+        <span class="k">if</span> <span class="n">layer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">Layer</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">onset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">onset</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">onset</span><span class="p">)</span>  <span class="c1"># numeric → absolute-seconds anchor in WEAVE</span>
     <span class="k">return</span> <span class="n">plan</span><span class="p">(</span><span class="n">cands</span><span class="p">,</span> <span class="n">transcript</span><span class="o">=</span><span class="n">transcript</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></div>
 
 
@@ -632,6 +659,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">foley_status</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The current runtime posture + this session&#39;s pick/reject counts.&quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..obs</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_enabled</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..obs</span><span class="w"> </span><span class="kn">import</span> <span class="n">recorder</span> <span class="k">as</span> <span class="n">_obs_recorder</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_sources</span>
 
     <span class="n">cfg</span> <span class="o">=</span> <span class="n">_runtime</span><span class="p">()</span>
@@ -640,7 +668,9 @@
         <span class="s2">&quot;offline&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">offline</span><span class="p">,</span>
         <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="n">list_sources</span><span class="p">(</span><span class="n">egress_allow</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">data_egress_allow</span><span class="p">),</span>
         <span class="s2">&quot;telemetry_enabled&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">is_enabled</span><span class="p">()),</span>
-        <span class="s2">&quot;redaction_mode&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">redaction_mode</span><span class="p">,</span>
+        <span class="c1"># The *effective* recorder redaction mode (not the aspirational RuntimeConfig</span>
+        <span class="c1"># value), so status can never affirmatively misstate the real posture.</span>
+        <span class="s2">&quot;redaction_mode&quot;</span><span class="p">:</span> <span class="n">_enum</span><span class="p">(</span><span class="n">_obs_recorder</span><span class="o">.</span><span class="n">_CONFIG</span><span class="o">.</span><span class="n">redaction_mode</span><span class="p">),</span>
         <span class="s2">&quot;n_picks&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">list_picks</span><span class="p">()),</span>
         <span class="s2">&quot;n_rejects&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">sess</span><span class="o">.</span><span class="n">list_rejects</span><span class="p">()),</span>
     <span class="p">}</span></div>
@@ -719,11 +749,32 @@
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_server</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">runtime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run ``server`` under the runtime&#39;s obs posture (offline → telemetry hard-off).</span>
+
+<span class="sd">    Factored out of :func:`serve` so the offline-posture enforcement is unit-testable</span>
+<span class="sd">    without a blocking stdio loop: when ``runtime`` is a telemetry-off (offline) posture,</span>
+<span class="sd">    the whole serve loop runs inside :func:`foley.runtime.offline_scope`, so the</span>
+<span class="sd">    ``--offline`` promise of &quot;no telemetry&quot; is actually enforced for the server&#39;s</span>
+<span class="sd">    lifetime (with :func:`foley.obs.recorder.run` now honoring ``force_disabled``, this</span>
+<span class="sd">    silences the ``find`` / ``weave`` paths too, not only the ``facade_run`` ones).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">runtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">runtime</span><span class="o">.</span><span class="n">telemetry</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">offline_scope</span>
+
+        <span class="k">with</span> <span class="n">offline_scope</span><span class="p">(</span><span class="n">runtime</span><span class="p">):</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+
 <div class="viewcode-block" id="serve">
 <a class="viewcode-back" href="../../../module_docs/foley/agent/mcp.html#foley.serve">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">serve</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foley&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover - blocking I/O</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build and run the foley MCP server over stdio (blocks).&quot;&quot;&quot;</span>
-    <span class="n">build_mcp_server</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+<span class="k">def</span><span class="w"> </span><span class="nf">serve</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foley&quot;</span><span class="p">,</span> <span class="n">runtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover - blocking I/O</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build and run the foley MCP server over stdio (blocks); enforces an offline posture.&quot;&quot;&quot;</span>
+    <span class="n">_run_server</span><span class="p">(</span><span class="n">build_mcp_server</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">runtime</span><span class="o">=</span><span class="n">runtime</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">runtime</span><span class="p">)</span></div>
 
 
 

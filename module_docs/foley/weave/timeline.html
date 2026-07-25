@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.weave.timeline &mdash; foley 0.0.14 documentation</title>
+  <title>foley.weave.timeline &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -217,8 +217,12 @@ timeline (the reproducible seed).</p>
 <dt class="sig sig-object py" id="foley.weave.timeline.nudge">
 <span class="sig-prename descclassname"><span class="pre">foley.weave.timeline.</span></span><span class="sig-name descname"><span class="pre">nudge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#foley.base.SoundDesignTimeline" title="foley.base.SoundDesignTimeline"><span class="pre">SoundDesignTimeline</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#foley.base.SoundDesignTimeline" title="foley.base.SoundDesignTimeline"><span class="pre">SoundDesignTimeline</span></a></span></span><a class="reference internal" href="../../../_modules/foley/weave/timeline.html#nudge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.timeline.nudge" title="Link to this definition"></a></dt>
 <dd><p>Shift an item’s resolved onset by <code class="docutils literal notranslate"><span class="pre">delta_s</span></code> seconds — a NEW timeline.</p>
-<p>Nudges the resolved <code class="xref py py-class docutils literal notranslate"><span class="pre">onset</span></code> and pins the anchor to
-<code class="docutils literal notranslate"><span class="pre">absolute</span></code> so the manual offset survives a re-hydrate.</p>
+<p>Resolves the item’s anchor against the timeline’s <code class="docutils literal notranslate"><span class="pre">word_timeline</span></code> first, then shifts
+the resolved onset and pins the anchor to <code class="docutils literal notranslate"><span class="pre">absolute</span></code> so the manual offset survives a
+re-hydrate. This means nudging a still-symbolic (not-yet-hydrated) item on a timeline
+that carries alignment shifts from the item’s <em>true</em> resolved onset, not from 0. On a
+pre-alignment timeline with no <code class="docutils literal notranslate"><span class="pre">word_timeline</span></code> a word/sentence anchor is genuinely
+unresolvable, so there the shift is relative to 0 — hydrate/weave first for such items.</p>
 </dd></dl>
 
 <dl class="py function">

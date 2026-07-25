@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.resilience &mdash; foley 0.0.14 documentation</title>
+  <title>foley.sources.resilience &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -118,6 +118,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">foley.sources.resilience</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.resilience.BreakerPolicy"><code class="docutils literal notranslate"><span class="pre">BreakerPolicy</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.resilience.RetryPolicy"><code class="docutils literal notranslate"><span class="pre">RetryPolicy</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#foley.sources.resilience.SECONDS_PER_DAY"><code class="docutils literal notranslate"><span class="pre">SECONDS_PER_DAY</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.resilience.SourceUnavailable"><code class="docutils literal notranslate"><span class="pre">SourceUnavailable</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.resilience.make_resilient_transport_from_config"><code class="docutils literal notranslate"><span class="pre">make_resilient_transport_from_config()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#foley.sources.resilience.resilient"><code class="docutils literal notranslate"><span class="pre">resilient()</span></code></a></li>
@@ -190,6 +191,12 @@ with a fake clock and a no-op sleep — no real network, no real waiting. Stdlib
 <dt class="sig sig-object py" id="foley.sources.resilience.RetryPolicy">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.sources.resilience.</span></span><span class="sig-name descname"><span class="pre">RetryPolicy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_attempts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_on</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(429,</span> <span class="pre">500,</span> <span class="pre">502,</span> <span class="pre">503,</span> <span class="pre">504)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_delay_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_delay_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">respect_retry_after</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/foley/sources/resilience.html#RetryPolicy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.resilience.RetryPolicy" title="Link to this definition"></a></dt>
 <dd><p>Exponential-backoff retry policy for transient HTTP failures.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.sources.resilience.SECONDS_PER_DAY">
+<span class="sig-prename descclassname"><span class="pre">foley.sources.resilience.</span></span><span class="sig-name descname"><span class="pre">SECONDS_PER_DAY</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">86400.0</span></span><a class="headerlink" href="#foley.sources.resilience.SECONDS_PER_DAY" title="Link to this definition"></a></dt>
+<dd><p>Seconds in a rolling rate-limit day (the <code class="docutils literal notranslate"><span class="pre">per_day</span></code> window length).</p>
 </dd></dl>
 
 <dl class="py exception">

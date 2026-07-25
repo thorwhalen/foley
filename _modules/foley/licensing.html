@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.licensing &mdash; foley 0.0.14 documentation</title>
+  <title>foley.licensing &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -239,7 +239,12 @@
 <span class="c1">#: Each entry is ``(needle, license_id)``; a match sets ``rights_verified=True``.</span>
 <span class="n">_CC_URL_MARKERS</span><span class="p">:</span> <span class="s2">&quot;tuple[tuple[tuple[str, ...], str], ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
     <span class="p">((</span><span class="s2">&quot;zero&quot;</span><span class="p">,</span> <span class="s2">&quot;publicdomain&quot;</span><span class="p">,</span> <span class="s2">&quot;creative commons 0&quot;</span><span class="p">,</span> <span class="s2">&quot;cc0&quot;</span><span class="p">),</span> <span class="s2">&quot;CC0-1.0&quot;</span><span class="p">),</span>
-    <span class="p">((</span><span class="s2">&quot;by-nc&quot;</span><span class="p">,</span> <span class="s2">&quot;attribution noncommercial&quot;</span><span class="p">),</span> <span class="s2">&quot;CC-BY-NC-4.0&quot;</span><span class="p">),</span>
+    <span class="c1"># ``noncommercial`` subsumes the spaced label (&quot;attribution noncommercial&quot;) AND the</span>
+    <span class="c1"># hyphenated/bare forms (&quot;Attribution-NonCommercial&quot;, &quot;noncommercial&quot;), so no NC work</span>
+    <span class="c1"># slips through to the plain-CC-BY fallback below (which would fail OPEN by granting</span>
+    <span class="c1"># commercial rights). Checked AFTER the -nd/-sa guard, so by-nc-nd/by-nc-sa still fail</span>
+    <span class="c1"># closed. Mirrors the generic ND/SA needles.</span>
+    <span class="p">((</span><span class="s2">&quot;by-nc&quot;</span><span class="p">,</span> <span class="s2">&quot;noncommercial&quot;</span><span class="p">),</span> <span class="s2">&quot;CC-BY-NC-4.0&quot;</span><span class="p">),</span>
     <span class="p">((</span><span class="s2">&quot;sampling&quot;</span><span class="p">,),</span> <span class="s2">&quot;CC-Sampling+-1.0&quot;</span><span class="p">),</span>
 <span class="p">)</span>
 

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.mcp &mdash; foley 0.0.14 documentation</title>
+  <title>foley.agent.mcp &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -272,6 +272,10 @@ rehydrate them by id. Returns compact candidate rows.</p>
 <dt class="sig sig-object py" id="foley.agent.mcp.foley_plan">
 <span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">foley_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transcript</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#foley_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.foley_plan" title="Link to this definition"></a></dt>
 <dd><p>Fold picks (or explicit candidate ids) into a JSON sound-design timeline.</p>
+<p>Each pick’s explicit <code class="docutils literal notranslate"><span class="pre">layer</span></code> / <code class="docutils literal notranslate"><span class="pre">onset</span></code> (set via <a class="reference internal" href="#foley.agent.mcp.foley_pick" title="foley.agent.mcp.foley_pick"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley_pick()</span></code></a>) is overlaid
+onto its candidate’s <a class="reference internal" href="../base.html#foley.base.SoundEvent" title="foley.base.SoundEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundEvent</span></code></a> so <code class="docutils literal notranslate"><span class="pre">plan</span></code> honors the agent’s
+placement choices — a numeric <code class="docutils literal notranslate"><span class="pre">onset</span></code> becomes an absolute-seconds anchor (see
+<a class="reference internal" href="../weave/anchor.html#foley.weave.anchor.parse_symbolic_anchor" title="foley.weave.anchor.parse_symbolic_anchor"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.weave.anchor.parse_symbolic_anchor()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="py function">
@@ -350,8 +354,8 @@ that field (so <code class="docutils literal notranslate"><span class="pre">peak
 
 <dl class="py function">
 <dt class="sig sig-object py" id="foley.agent.mcp.serve">
-<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#serve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.serve" title="Link to this definition"></a></dt>
-<dd><p>Build and run the foley MCP server over stdio (blocks).</p>
+<span class="sig-prename descclassname"><span class="pre">foley.agent.mcp.</span></span><span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'foley'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/foley/agent/mcp.html#serve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.mcp.serve" title="Link to this definition"></a></dt>
+<dd><p>Build and run the foley MCP server over stdio (blocks); enforces an offline posture.</p>
 </dd></dl>
 
 </section>

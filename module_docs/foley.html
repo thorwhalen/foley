@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.14 documentation</title>
+  <title>foley &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -63,6 +63,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#foley.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#foley.Budget.gen_ok"><code class="docutils literal notranslate"><span class="pre">Budget.gen_ok()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.Budget.refine_ok"><code class="docutils literal notranslate"><span class="pre">Budget.refine_ok()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#foley.Budget.reset"><code class="docutils literal notranslate"><span class="pre">Budget.reset()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.Budget.spend_gen"><code class="docutils literal notranslate"><span class="pre">Budget.spend_gen()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#foley.Budget.spend_refine"><code class="docutils literal notranslate"><span class="pre">Budget.spend_refine()</span></code></a></li>
 </ul>
@@ -451,8 +452,8 @@ narrative context, and a <em>compositor</em> that places it under the voice.</p>
 <span class="p">(</span><span class="n">get</span><span class="p">)</span>      <span class="p">(</span><span class="n">find</span><span class="p">)</span>      <span class="p">(</span><span class="n">choose</span><span class="p">)</span>    <span class="p">(</span><span class="n">compose</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Intended façade (design-stage — see <code class="docutils literal notranslate"><span class="pre">misc/docs/design.md</span></code> and
-<code class="docutils literal notranslate"><span class="pre">misc/docs/roadmap.md</span></code> for what is implemented):</p>
+<p>The façade (v1 — Epic #13 complete; the surface below is live — see
+<code class="docutils literal notranslate"><span class="pre">misc/docs/design.md</span></code> / <code class="docutils literal notranslate"><span class="pre">misc/docs/roadmap.md</span></code> for the roadmap):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">foley</span>
 
 <span class="n">foley</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;She pushed open the heavy oak door; rain hammered outside.&quot;</span><span class="p">)</span>
@@ -462,8 +463,11 @@ narrative context, and a <em>compositor</em> that places it under the voice.</p>
 </pre></div>
 </div>
 <p>The design is grounded in the research reports under <code class="docutils literal notranslate"><span class="pre">misc/docs/research/</span></code>.</p>
-<p>Foundation surface (implemented — the retrieval-agnostic base every later stage
-stands on). This top-level namespace re-exports it:</p>
+<p>The whole four-stage surface (source → index → select → weave) plus the MCP server and
+the licensing/provenance, evaluation, and observability layers is implemented and
+re-exported here (see <code class="docutils literal notranslate"><span class="pre">__all__</span></code> and the <code class="docutils literal notranslate"><span class="pre">find</span></code> / <code class="docutils literal notranslate"><span class="pre">search</span></code> / <code class="docutils literal notranslate"><span class="pre">generate</span></code> /
+<code class="docutils literal notranslate"><span class="pre">ingest</span></code> / <code class="docutils literal notranslate"><span class="pre">weave</span></code> façade functions below). The retrieval-agnostic <strong>foundation</strong>
+every later stage stands on:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><strong>Data models</strong> (<code class="docutils literal notranslate"><span class="pre">foley.base</span></code>) — the SSOT dataclasses/enums shared across
@@ -578,6 +582,15 @@ sentence span, <code class="docutils literal notranslate"><span class="pre">scen
 <dt class="sig sig-object py" id="foley.Budget.refine_ok">
 <span class="sig-name descname"><span class="pre">refine_ok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget.refine_ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.Budget.refine_ok" title="Link to this definition"></a></dt>
 <dd><p>Whether another refine→re-retrieve pass is within budget.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.Budget.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.Budget.reset" title="Link to this definition"></a></dt>
+<dd><p>Zero the spend counters so the caps apply <em>per event</em>, not per passage.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">find</span></code> loop calls this at the top of each event so one hard event’s
+refine/generate spend never starves later events (the documented per-event
+semantics).</p>
 </dd></dl>
 
 <dl class="py method">

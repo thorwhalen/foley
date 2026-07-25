@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley &mdash; foley 0.0.14 documentation</title>
+  <title>foley &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -169,8 +169,8 @@
 <span class="sd">    SOURCE  -&gt;  INDEX  -&gt;  SELECT  -&gt;  WEAVE</span>
 <span class="sd">    (get)      (find)      (choose)    (compose)</span>
 
-<span class="sd">Intended façade (design-stage — see ``misc/docs/design.md`` and</span>
-<span class="sd">``misc/docs/roadmap.md`` for what is implemented)::</span>
+<span class="sd">The façade (v1 — Epic #13 complete; the surface below is live — see</span>
+<span class="sd">``misc/docs/design.md`` / ``misc/docs/roadmap.md`` for the roadmap)::</span>
 
 <span class="sd">    import foley</span>
 
@@ -181,8 +181,11 @@
 
 <span class="sd">The design is grounded in the research reports under ``misc/docs/research/``.</span>
 
-<span class="sd">Foundation surface (implemented — the retrieval-agnostic base every later stage</span>
-<span class="sd">stands on). This top-level namespace re-exports it:</span>
+<span class="sd">The whole four-stage surface (source → index → select → weave) plus the MCP server and</span>
+<span class="sd">the licensing/provenance, evaluation, and observability layers is implemented and</span>
+<span class="sd">re-exported here (see ``__all__`` and the ``find`` / ``search`` / ``generate`` /</span>
+<span class="sd">``ingest`` / ``weave`` façade functions below). The retrieval-agnostic **foundation**</span>
+<span class="sd">every later stage stands on:</span>
 
 <span class="sd">    * **Data models** (``foley.base``) — the SSOT dataclasses/enums shared across</span>
 <span class="sd">      layers (:class:`SoundRecord`, :class:`LicenseRecord`, :class:`Candidate`,</span>

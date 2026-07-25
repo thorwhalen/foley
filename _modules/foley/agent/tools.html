@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.agent.tools &mdash; foley 0.0.14 documentation</title>
+  <title>foley.agent.tools &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -546,6 +546,7 @@
             <span class="n">_emit_step</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="s2">&quot;decompose&quot;</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="n">sp</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;n_events&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">events</span><span class="p">)})</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">events</span><span class="p">):</span>
+            <span class="n">budget</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># per-event caps: a hard event never starves later ones</span>
             <span class="n">chosen</span><span class="p">:</span> <span class="s2">&quot;Optional[Candidate]&quot;</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">queries</span> <span class="o">=</span> <span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">]</span>
             <span class="n">last_reason</span><span class="p">:</span> <span class="s2">&quot;Optional[str]&quot;</span> <span class="o">=</span> <span class="kc">None</span>
@@ -646,6 +647,16 @@
                         <span class="n">level</span><span class="o">=</span><span class="n">max_level</span><span class="p">,</span>
                         <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
                     <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">chosen</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">verified</span><span class="p">:</span>
+                        <span class="c1"># Generation yielded nothing (backend unavailable/offline,</span>
+                        <span class="c1"># QC-quarantined, or safety-refused): fall back to the best verified</span>
+                        <span class="c1"># retrieval rather than dropping a usable clip — the same best-effort</span>
+                        <span class="c1"># pick decide() makes when generation is off. Without this, per-event</span>
+                        <span class="c1"># budgets would make results WORSE wherever generation can&#39;t run.</span>
+                        <span class="n">chosen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                            <span class="n">verified</span><span class="p">,</span>
+                            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">verdict</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="p">)</span>
                     <span class="n">_emit_step</span><span class="p">(</span>
                         <span class="n">run</span><span class="p">,</span>
                         <span class="s2">&quot;generate&quot;</span><span class="p">,</span>

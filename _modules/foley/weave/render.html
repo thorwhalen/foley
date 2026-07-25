@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.weave.render &mdash; foley 0.0.14 documentation</title>
+  <title>foley.weave.render &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -203,7 +203,7 @@
     <span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndarray</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimelineItem</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">ApplyStrategy</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.protocols</span><span class="w"> </span><span class="kn">import</span> <span class="n">Aligner</span><span class="p">,</span> <span class="n">ApplyStrategy</span>
 
 <span class="c1">#: The non-voice layers the render mixes, in sum order (voice is the 0 dB anchor).</span>
 <span class="n">RENDER_LAYERS</span><span class="p">:</span> <span class="s2">&quot;tuple[Layer, ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
@@ -377,7 +377,7 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">sr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">48_000</span><span class="p">,</span>
     <span class="n">transcript</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">aligner</span><span class="p">:</span> <span class="s2">&quot;Optional[ApplyStrategy]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">aligner</span><span class="p">:</span> <span class="s2">&quot;Optional[Aligner]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">apply_strategy</span><span class="p">:</span> <span class="s2">&quot;Optional[ApplyStrategy]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RenderCache</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RenderResult</span><span class="p">:</span>
@@ -513,9 +513,13 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">to_otio</span><span class="p">(</span><span class="n">timeline</span><span class="p">:</span> <span class="n">SoundDesignTimeline</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">EDL_FPS</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Export ``timeline`` as an OpenTimelineIO JSON string (lazy ``foley[weave]``).</span>
 
-<span class="sd">    One track per non-voice layer; each enabled, placed item is a clip with an</span>
-<span class="sd">    external media reference (by clip_ref) — non-destructive, minimal-viable</span>
-<span class="sd">    fidelity (tracks/clips/onsets; effects/markers are a later slice).</span>
+<span class="sd">    One or more **parallel** tracks per non-voice layer: each enabled, placed item is a</span>
+<span class="sd">    clip with an external media reference (by clip_ref), positioned at its resolved onset</span>
+<span class="sd">    via a leading gap. Because a single OTIO track is sequential, two same-layer clips that</span>
+<span class="sd">    overlap (or fall within a one-shot&#39;s nominal window) would otherwise be pushed late —</span>
+<span class="sd">    so overlapping clips spill onto sibling sub-tracks, keeping every clip at its true</span>
+<span class="sd">    onset. Non-destructive, minimal-viable fidelity (tracks/clips/onsets; effects/markers</span>
+<span class="sd">    are a later slice).</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        RuntimeError: If ``opentimelineio`` is not installed.</span>
@@ -527,6 +531,24 @@
         <span class="p">)</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">opentimelineio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">otio</span>  <span class="c1"># lazy: foley[weave]</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_gap</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">Gap</span><span class="p">(</span>
+            <span class="n">source_range</span><span class="o">=</span><span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">TimeRange</span><span class="p">(</span>
+                <span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">RationalTime</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rate</span><span class="p">),</span>
+                <span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">RationalTime</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">seconds</span> <span class="o">*</span> <span class="n">rate</span><span class="p">),</span> <span class="n">rate</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_clip</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">dur</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">Clip</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">clip_ref</span><span class="p">,</span>
+            <span class="n">media_reference</span><span class="o">=</span><span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">ExternalReference</span><span class="p">(</span><span class="n">target_url</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">clip_ref</span><span class="p">),</span>
+            <span class="n">source_range</span><span class="o">=</span><span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">TimeRange</span><span class="p">(</span>
+                <span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">RationalTime</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rate</span><span class="p">),</span>
+                <span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">RationalTime</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">dur</span> <span class="o">*</span> <span class="n">rate</span><span class="p">),</span> <span class="n">rate</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
     <span class="n">tl</span> <span class="o">=</span> <span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">Timeline</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;foley SFX&quot;</span><span class="p">)</span>
     <span class="n">by_layer</span><span class="p">:</span> <span class="s2">&quot;dict[Layer, list[TimelineItem]]&quot;</span> <span class="o">=</span> <span class="p">{</span><span class="n">layer</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">RENDER_LAYERS</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">timeline</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
@@ -536,36 +558,33 @@
         <span class="n">items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">by_layer</span><span class="p">[</span><span class="n">layer</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">it</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">placement</span><span class="o">.</span><span class="n">onset</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
             <span class="k">continue</span>
-        <span class="n">track</span> <span class="o">=</span> <span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">Track</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">TrackKind</span><span class="o">.</span><span class="n">Audio</span><span class="p">)</span>
-        <span class="n">playhead</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="c1"># Greedily pack clips into parallel sub-tracks so no two overlap on one track</span>
+        <span class="c1"># (a single OTIO Track is sequential — an overlapping clip would be pushed late).</span>
+        <span class="c1"># Each clip lands at its TRUE onset via a leading gap; a clip that would overlap</span>
+        <span class="c1"># every existing sub-track spills onto a new one.</span>
+        <span class="n">subtracks</span><span class="p">:</span> <span class="s2">&quot;list[list]&quot;</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># each entry: [track, playhead_seconds]</span>
         <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
             <span class="n">onset</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">placement</span><span class="o">.</span><span class="n">onset</span><span class="p">)</span>
             <span class="n">dur</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">placement</span><span class="o">.</span><span class="n">duration</span> <span class="ow">or</span> <span class="n">EDL_NOMINAL_CLIP_S</span><span class="p">)</span>
+            <span class="n">slot</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">subtracks</span> <span class="k">if</span> <span class="n">onset</span> <span class="o">&gt;=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1e-9</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">slot</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">layer</span><span class="o">.</span><span class="n">value</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">subtracks</span>
+                    <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">layer</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">subtracks</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+                <span class="n">slot</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">Track</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">TrackKind</span><span class="o">.</span><span class="n">Audio</span><span class="p">),</span>
+                    <span class="mf">0.0</span><span class="p">,</span>
+                <span class="p">]</span>
+                <span class="n">subtracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span>
+            <span class="n">track</span><span class="p">,</span> <span class="n">playhead</span> <span class="o">=</span> <span class="n">slot</span>
             <span class="k">if</span> <span class="n">onset</span> <span class="o">&gt;</span> <span class="n">playhead</span><span class="p">:</span>
-                <span class="n">track</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">Gap</span><span class="p">(</span>
-                        <span class="n">source_range</span><span class="o">=</span><span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">TimeRange</span><span class="p">(</span>
-                            <span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">RationalTime</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rate</span><span class="p">),</span>
-                            <span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">RationalTime</span><span class="p">(</span>
-                                <span class="nb">round</span><span class="p">((</span><span class="n">onset</span> <span class="o">-</span> <span class="n">playhead</span><span class="p">)</span> <span class="o">*</span> <span class="n">rate</span><span class="p">),</span> <span class="n">rate</span>
-                            <span class="p">),</span>
-                        <span class="p">)</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-            <span class="n">track</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">Clip</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">clip_ref</span><span class="p">,</span>
-                    <span class="n">media_reference</span><span class="o">=</span><span class="n">otio</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">ExternalReference</span><span class="p">(</span>
-                        <span class="n">target_url</span><span class="o">=</span><span class="n">it</span><span class="o">.</span><span class="n">clip_ref</span>
-                    <span class="p">),</span>
-                    <span class="n">source_range</span><span class="o">=</span><span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">TimeRange</span><span class="p">(</span>
-                        <span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">RationalTime</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rate</span><span class="p">),</span>
-                        <span class="n">otio</span><span class="o">.</span><span class="n">opentime</span><span class="o">.</span><span class="n">RationalTime</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">dur</span> <span class="o">*</span> <span class="n">rate</span><span class="p">),</span> <span class="n">rate</span><span class="p">),</span>
-                    <span class="p">),</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-            <span class="n">playhead</span> <span class="o">=</span> <span class="n">onset</span> <span class="o">+</span> <span class="n">dur</span>
-        <span class="n">tl</span><span class="o">.</span><span class="n">tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">track</span><span class="p">)</span>
+                <span class="n">track</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_gap</span><span class="p">(</span><span class="n">onset</span> <span class="o">-</span> <span class="n">playhead</span><span class="p">))</span>
+            <span class="n">track</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_clip</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">dur</span><span class="p">))</span>
+            <span class="n">slot</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">onset</span> <span class="o">+</span> <span class="n">dur</span>
+        <span class="k">for</span> <span class="n">track</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">subtracks</span><span class="p">:</span>
+            <span class="n">tl</span><span class="o">.</span><span class="n">tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">track</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">otio</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">write_to_string</span><span class="p">(</span><span class="n">tl</span><span class="p">,</span> <span class="s2">&quot;otio_json&quot;</span><span class="p">)</span></div>
 
 

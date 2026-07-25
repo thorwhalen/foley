@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.eval.fit &mdash; foley 0.0.14 documentation</title>
+  <title>foley.eval.fit &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -422,7 +422,14 @@
     <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">item</span><span class="p">,</span> <span class="n">ev_idx</span><span class="p">,</span> <span class="n">ev_dict</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
         <span class="n">event</span> <span class="o">=</span> <span class="n">_event_from_golden</span><span class="p">(</span><span class="n">ev_dict</span><span class="p">)</span>
-        <span class="n">grades</span> <span class="o">=</span> <span class="p">{</span><span class="n">cid</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">cid</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">grade</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="c1"># Grade against THIS event&#39;s own answer clips (keyed by its ucs_catid), not the</span>
+        <span class="c1"># whole item&#39;s grade map — so a multi-event item never credits a candidate for</span>
+        <span class="c1"># matching a sibling event. Byte-identical for single-event items.</span>
+        <span class="n">catid</span> <span class="o">=</span> <span class="n">ev_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ucs_catid&quot;</span><span class="p">)</span>
+        <span class="n">grades</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">cid</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">grade</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cid</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">cid</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">answer_clip_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">catid</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="p">}</span>
         <span class="n">candidates</span> <span class="o">=</span> <span class="n">search_sounds</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">lib</span><span class="p">)</span>
         <span class="n">kept</span> <span class="o">=</span> <span class="n">gate_candidates</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">use</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">kept</span><span class="p">:</span>

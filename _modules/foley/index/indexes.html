@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.index.indexes &mdash; foley 0.0.14 documentation</title>
+  <title>foley.index.indexes &mdash; foley 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -200,6 +200,20 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Lowercase word/number tokens (the shared analyzer for the stdlib BM25).&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">_WORD_RE</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fts5_or_match</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Optional[str]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a crash-safe FTS5 ``MATCH`` string from a raw user query.</span>
+
+<span class="sd">    Tokenizes with the shared analyzer (only ``[a-z0-9]+`` survives) and double-quotes</span>
+<span class="sd">    each token, so no FTS5 metacharacter — a colon, an unbalanced quote, a bare boolean</span>
+<span class="sd">    word, parentheses — can reach the FTS5 parser and raise ``sqlite3.OperationalError``.</span>
+<span class="sd">    Returns ``None`` when the query yields no usable token (the caller returns no hits).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">_tokenize</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="s2">&quot; OR &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s1">&quot;&#39;</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_sql_str</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -760,12 +774,17 @@
 <span class="sd">        FTS5&#39;s ``rank`` is more-negative-is-better; it is negated so the returned</span>
 <span class="sd">        score is larger-is-better (consistent with the other backends).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">query</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="c1"># Build a crash-safe MATCH from the shared analyzer instead of the raw query: FTS5</span>
+        <span class="c1"># metacharacters (a colon, an unbalanced quote, a bare boolean word, parentheses)</span>
+        <span class="c1"># would otherwise raise sqlite3.OperationalError and abort the whole search(). This</span>
+        <span class="c1"># mirrors MemoryIndex&#39;s tolerant behavior (cross-backend parity).</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">_fts5_or_match</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
             <span class="s2">&quot;SELECT id, rank FROM fts_items WHERE fts_items MATCH ? &quot;</span>
             <span class="s2">&quot;ORDER BY rank LIMIT ?&quot;</span><span class="p">,</span>
-            <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">match</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span>
         <span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">[(</span><span class="n">id_</span><span class="p">,</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="n">rank</span><span class="p">))</span> <span class="k">for</span> <span class="n">id_</span><span class="p">,</span> <span class="n">rank</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span></div>
 
