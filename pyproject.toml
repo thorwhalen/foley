@@ -163,6 +163,14 @@ obs = [
 agent = [
     "anthropic",
 ]
+# Offline / local-LLM SELECT rungs: the OpenAI-compatible client for an on-device endpoint
+# (Ollama / llama.cpp / vLLM), so decompose/judge/refine run with nothing leaving the device.
+# `openai` is imported LAZILY inside foley.agent.local_llm call paths ONLY, so `import foley`
+# + `import foley.agent` stay dol-only; the fakes remain the resolved defaults (tests inject a
+# fake client). Deliberately NOT in [tool.wads.ci.install].
+local-llm = [
+    "openai",
+]
 # Tier-2 fit-evaluation heavy path (#10b): the audio-LM listen-check (Qwen2-Audio) for
 # AudioLMJudge + real PANNs/CLAP embedders for FAD-P/KAD generation fidelity. All of
 # transformers/torch/torchaudio are imported LAZILY inside AudioLMJudge.judge() /

@@ -177,7 +177,10 @@ def _default_judge(level: "str | VerifyLevel") -> Judge:
     if level == VerifyLevel.clap:
         return ClapJudge()
     from .decompose import _anthropic_available
+    from .local_llm import LocalLLMJudge, local_llm_configured
 
+    if local_llm_configured():
+        return LocalLLMJudge()
     return AnthropicJudge() if _anthropic_available() else StringOverlapJudge()
 
 
