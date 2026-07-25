@@ -123,7 +123,9 @@ def test_breaker_half_open_after_reset_timeout():
     )
     with pytest.raises(SourceUnavailable):
         w("GET", "u")  # opens the breaker
-    t["now"] = 200  # past the reset window -> half-open trial allowed, transport now 200
+    t["now"] = (
+        200  # past the reset window -> half-open trial allowed, transport now 200
+    )
     assert w("GET", "u").status_code == 200
 
 
@@ -134,3 +136,30 @@ def test_daily_cap_raises():
     w("GET", "u")
     with pytest.raises(SourceUnavailable):
         w("GET", "u")
+
+
+# --- #3 auto-wiring into the registry (post-v1) ----------------------------
+
+
+def test_resilient_transport_wraps_external_only(monkeypatch):
+    from foley.runtime import RuntimeConfig
+    from foley.sources.registry import _resilient_transport
+
+    ext = {"data_egress": "external", "rate": {"per_min": 60}}
+    wrapped = _resilient_transport(ext)
+    assert wrapped is not None and hasattr(wrapped, "reset")  # resilient wrapper
+    assert _resilient_transport({"data_egress": "local"}) is None  # local -> untouched
+    # http_resilience off -> not wrapped even for an external source
+    monkeypatch.setattr(
+        "foley.runtime.current_runtime", lambda: RuntimeConfig(http_resilience=False)
+    )
+    assert _resilient_transport(ext) is None
+
+
+def test_load_adapter_auto_wraps_external_source_transport():
+    from foley.sources.freesound.config import SOURCE_CONFIG
+    from foley.sources.registry import _load_adapter
+
+    adapter = _load_adapter("freesound", SOURCE_CONFIG)  # external live source
+    # the adapter's transport is the throttle/backoff/breaker wrapper, not the bare default
+    assert hasattr(adapter._http, "reset")
