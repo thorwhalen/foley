@@ -18,12 +18,19 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Requirement:
-    """A single optional system dependency: what it is, how to get it, why WEAVE wants it."""
+    """A single optional dependency: what it is, how to get it, why foley wants it.
 
-    name: str  # the executable name probed with shutil.which
+    ``probe`` selects how availability is checked (default ``'binary'`` via
+    ``shutil.which`` — WEAVE's system binaries): ``'binary'`` | ``'env'`` (an
+    environment variable is set) | ``'importable'`` (a module is importable). The
+    generalized :mod:`foley.requirements` onboarding dispatches on it.
+    """
+
+    name: str  # the probed name (executable / env-var / module, per ``probe``)
     purpose: str  # what capability it unlocks
     url: str
     install: "dict[str, str]"  # platform (sys.platform prefix) -> install command
+    probe: str = "binary"  # 'binary' | 'env' | 'importable'
 
 
 #: The SSOT of WEAVE's optional system dependencies. Both are opt-in upgrades; the

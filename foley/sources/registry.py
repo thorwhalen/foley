@@ -109,10 +109,57 @@ def get_source(name: str) -> dict:
     return entry
 
 
-def list_sources() -> "list[str]":
-    """Return the names of all registered live sources (runs discovery first)."""
+def list_sources(*, egress_allow: "Optional[frozenset]" = None) -> "list[str]":
+    """Return the names of registered live sources (runs discovery first).
+
+    Args:
+        egress_allow: If given, keep only sources whose declared
+            ``config['data_egress']`` is in this set (the local-first / offline
+            filter — see :class:`foley.runtime.RuntimeConfig`). A source that does
+            not declare ``data_egress`` is **excluded** (fail-closed).
+    """
     discover_sources()
-    return sorted(_SOURCE_REGISTRY)
+    names = sorted(_SOURCE_REGISTRY)
+    if egress_allow is None:
+        return names
+    return [
+        n
+        for n in names
+        if _SOURCE_REGISTRY[n]["config"].get("data_egress") in egress_allow
+    ]
+
+
+def local_sources() -> "list[str]":
+    """The names of sources that run entirely on-device (``data_egress == 'local'``)."""
+    return list_sources(egress_allow=frozenset({"local"}))
+
+
+def source_egress(name: str) -> "Optional[str]":
+    """The declared ``data_egress`` class of source ``name`` (``None`` if undeclared)."""
+    discover_sources()
+    entry = _SOURCE_REGISTRY.get(name)
+    return entry["config"].get("data_egress") if entry else None
+
+
+def _validate_egress() -> None:
+    """Assert every registered source declares a valid ``data_egress`` (fail-closed guard).
+
+    A missing or unrecognised declaration would silently drop a source offline (or,
+    worse, leak one), so it is a configuration error.
+
+    Raises:
+        ValueError: If any source's ``data_egress`` is not ``'local'`` / ``'external'``.
+    """
+    discover_sources()
+    bad = {
+        n: _SOURCE_REGISTRY[n]["config"].get("data_egress")
+        for n in _SOURCE_REGISTRY
+        if _SOURCE_REGISTRY[n]["config"].get("data_egress") not in ("local", "external")
+    }
+    if bad:
+        raise ValueError(
+            f"sources with missing/invalid data_egress (must be 'local'|'external'): {bad}"
+        )
 
 
 def _load_adapter(module: Optional[str], config: dict):

@@ -66,6 +66,8 @@ DEFAULT_META_DIR = FOLEY_DATA_DIR / "meta"
 DEFAULT_PROVENANCE_DIR = FOLEY_DATA_DIR / "provenance"
 #: Reproducible run-manifests (#11): ``Mapping[run_id -> RunManifest dict]``.
 DEFAULT_RUN_DIR = FOLEY_DATA_DIR / "runs"
+#: Per-session audition state (#12): ``sessions/{id}/{candidates,picks,rejects}/``.
+DEFAULT_SESSION_DIR = FOLEY_DATA_DIR / "sessions"
 
 #: A filesystem location (path or path-like string) for a local store root.
 Rootdir = Union[str, "os.PathLike[str]"]
@@ -210,6 +212,34 @@ def make_run_store(rootdir: Rootdir = DEFAULT_RUN_DIR) -> MutableMapping[str, di
         A ``MutableMapping[str, dict]`` keyed by ``run_id``.
     """
     json_store = mk_dirs_if_missing(JsonFiles(str(rootdir)))
+    return wrap_kvs(json_store, id_of_key=_meta_filename, key_of_id=_meta_key)
+
+
+def make_session_store(
+    session_id: str = "default",
+    name: str = "picks",
+    *,
+    rootdir: "Optional[Rootdir]" = None,
+) -> MutableMapping[str, dict]:
+    """Build a per-session JSON store: ``Mapping[key -> dict]`` under ``sessions/{id}/{name}/``.
+
+    The by-value carrier for #12's audition state — one store per namespace
+    (``candidates`` / ``picks`` / ``rejects``). A sibling of :func:`make_run_store`:
+    percent-encodes each key to a safe ``{enc}.json`` filename (invariant #3) while
+    exposing bare keys; values are plain dicts. Local by default; swap in any ``dol``
+    Mapping for the cloud.
+
+    Args:
+        session_id: The session namespace (default ``'default'``).
+        name: The store namespace within the session (``candidates`` / ``picks`` /
+            ``rejects``).
+        rootdir: Root sessions directory (default: :data:`DEFAULT_SESSION_DIR`).
+
+    Returns:
+        A ``MutableMapping[str, dict]`` keyed by the bare key.
+    """
+    root = (Path(rootdir) if rootdir else DEFAULT_SESSION_DIR) / session_id / name
+    json_store = mk_dirs_if_missing(JsonFiles(str(root)))
     return wrap_kvs(json_store, id_of_key=_meta_filename, key_of_id=_meta_key)
 
 
