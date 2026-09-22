@@ -1,0 +1,98 @@
+# foley
+
+> Unified facade for sourcing, indexing, and searching sound effects to weave into narration
+
+
+## Pages
+
+- [foley](index.html.md): Find (or generate) the &#42;&#42;right sound effect for a moment of narration&#42;&#42; — and weave it in.
+- [API reference](api.html.md): | &#96;foley&#96;   | foley — a retrieval-first façade for sound effects.   |
+- [foley](_autosummary/foley.html.md): foley — a retrieval-first façade for sound effects.
+- [foley.audio](_autosummary/foley.audio.html.md): Audio I/O and DSP primitives for foley.
+- [foley.index](_autosummary/foley.index.html.md): foley INDEX stage — make every sound findable by keyword &#42;and&#42; meaning.
+- [foley.index.taxonomy](_autosummary/foley.index.taxonomy.html.md): UCS + AudioSet taxonomy: the &#96;tags -&gt; UCS CatID&#96; resolver for foley.
+- [foley.index.taxonomy.audioset](_autosummary/foley.index.taxonomy.audioset.html.md): AudioSet-label -&gt; UCS-CatID overlap map (report 04 §5.3, &#91;11 §3.1&#93;).
+- [foley.index.taxonomy.model](_autosummary/foley.index.taxonomy.model.html.md): Data structures for the UCS/AudioSet taxonomy resolver (stdlib-only).
+- [foley.index.taxonomy.resolver](_autosummary/foley.index.taxonomy.resolver.html.md): Resolve free tags/caption/labels to a UCS CatID (the EnvSound-UCS pipeline).
+- [foley.index.taxonomy.seed](_autosummary/foley.index.taxonomy.seed.html.md): Seed taxonomy data — a representative in-code UCS subset + AudioSet overlap map.
+- [foley.index.taxonomy.ucs](_autosummary/foley.index.taxonomy.ucs.html.md): UCS table loading + the UCS-filename CatID parse (report 04 §5.2, §6.4).
+- [foley.index.embedders](_autosummary/foley.index.embedders.html.md): Embedders — the joint text&lt;-&gt;audio space that powers retrieval.
+- [foley.index.indexes](_autosummary/foley.index.indexes.html.md): Concrete vector + keyword index backends (the swappable retrieval engines).
+- [foley.index.ingest](_autosummary/foley.index.ingest.html.md): The ingestion pipeline — turn any audio file into a searchable SoundRecord.
+- [foley.index.library](_autosummary/foley.index.library.html.md): The &#96;SoundLibrary&#96; façade — one searchable, license-aware sound library.
+- [foley.index.protocols](_autosummary/foley.index.protocols.html.md): Structural contracts for the foley index (the retrieval boundary).
+- [foley.index.search](_autosummary/foley.index.search.html.md): Hybrid retrieval: reciprocal rank fusion over a vector list and a keyword list.
+- [foley.index.taggers](_autosummary/foley.index.taggers.html.md): Taggers — auto-fill a sound’s semantic labels on ingest (report 03).
+- [foley.obs](_autosummary/foley.obs.html.md): Observability &amp; the reproducible run-artifact for foley (#11).
+- [foley.obs.recorder](_autosummary/foley.obs.recorder.html.md): The run-recorder: owns the manifest, drives the OTel mirror, off by default (#11).
+- [foley.obs.redact](_autosummary/foley.obs.redact.html.md): Redaction of sensitive narration / prompt / query text in telemetry (#11).
+- [foley.obs.run_artifact](_autosummary/foley.obs.run_artifact.html.md): The reproducible run-artifact SSOT — &#96;RunManifest&#96; + &#96;SpanRecord&#96; (#11).
+- [foley.obs.trace](_autosummary/foley.obs.trace.html.md): The OpenTelemetry MIRROR seam for foley’s observability (#11).
+- [foley.agent](_autosummary/foley.agent.html.md): The SELECT stage — the search-agent that finds the right sound for a context (#7).
+- [foley.agent.decompose](_autosummary/foley.agent.decompose.html.md): &#96;decompose_context&#96; — narrative passage → a sparse, salience-ranked event list.
+- [foley.agent.local_llm](_autosummary/foley.agent.local_llm.html.md): Offline / local-LLM SELECT rungs — OpenAI-compatible &#96;Decomposer&#96; / &#96;Judge&#96; / &#96;Refiner&#96;.
+- [foley.agent.mcp](_autosummary/foley.agent.mcp.html.md): The MCP surface — foley’s façade as agent-callable tools (py2mcp, #12, report 05/10).
+- [foley.agent.policy](_autosummary/foley.agent.policy.html.md): The SELECT policy: the fail-closed rights gate + the single generate-vs-retrieve branch.
+- [foley.agent.preview](_autosummary/foley.agent.preview.html.md): Audition UX — preview a sound, find similar ones, and refine by relevance feedback (#12).
+- [foley.agent.protocols](_autosummary/foley.agent.protocols.html.md): The structural DI seams of the SELECT stage — &#96;Decomposer&#96; / &#96;Judge&#96; / &#96;Refiner&#96;.
+- [foley.agent.refine](_autosummary/foley.agent.refine.html.md): &#96;refine_query&#96; — one event query → 2–4 paraphrases for multi-query retrieval.
+- [foley.agent.session](_autosummary/foley.agent.session.html.md): Session-scoped audition state — cached candidates, picks, and rejects (#12).
+- [foley.agent.tools](_autosummary/foley.agent.tools.html.md): The SELECT orchestration: &#96;find()&#96; / &#96;plan()&#96; + the small pure tool wrappers.
+- [foley.agent.verify](_autosummary/foley.agent.verify.html.md): &#96;verify_match&#96; — the retrieve→verify ladder (clap → listen → judge) + &#96;Judge&#96; impls.
+- [foley.weave](_autosummary/foley.weave.html.md): Page content
+- [foley.eval](_autosummary/foley.eval.html.md): Tier-1 retrieval evaluation — metrics, a frozen golden set, and the nDCG gate.
+- [foley.eval.baseline](_autosummary/foley.eval.baseline.html.md): The committed nDCG baseline — the PR gate’s SSOT + staleness stamps.
+- [foley.eval.embedder](_autosummary/foley.eval.embedder.html.md): A deterministic, numpy-only text embedder for the retrieval eval gate.
+- [foley.eval.fidelity](_autosummary/foley.eval.fidelity.html.md): Set-level generation-fidelity — Fréchet Audio Distance (FAD) + Kernel Audio Distance (KAD).
+- [foley.eval.fit](_autosummary/foley.eval.fit.html.md): Tier-2 fit evaluation — “does the accepted clip actually match the intent?” (report 08 §2/§5).
+- [foley.eval.golden](_autosummary/foley.eval.golden.html.md): The frozen golden set + the deterministic Ring-0 retrieval harness.
+- [foley.eval.reliability](_autosummary/foley.eval.reliability.html.md): Inter-rater reliability — Krippendorff’s α + the judge-vs-human calibration guardrail.
+- [foley.eval.retrieval](_autosummary/foley.eval.retrieval.html.md): Tier-1 retrieval metrics + run assembly — pure stdlib, CI-safe, ranx-exact.
+- [foley.provenance](_autosummary/foley.provenance.html.md): Provenance layer for foley — attribution/credits (and, later, disclosure).
+- [foley.provenance.credits](_autosummary/foley.provenance.credits.html.md): TASL attribution / credits generator — the provenance render layer (#9a).
+- [foley.provenance.disclosure](_autosummary/foley.provenance.disclosure.html.md): Disclosure, watermarking &amp; safety for AI-generated audio (#9b).
+- [foley.agent_kit](_autosummary/foley.agent_kit.html.md): Install foley’s shipped agent kit — the consumer skill + Claude slash command + subagent.
+- [foley.base](_autosummary/foley.base.html.md): Canonical data models for foley — the single source of truth (SSOT) types.
+- [foley.cli](_autosummary/foley.cli.html.md): The &#96;foley&#96; command-line interface (stdlib &#96;argparse&#96;, zero new deps).
+- [foley.licensing](_autosummary/foley.licensing.html.md): License policy for foley: the license_id -&gt; flag-set SSOT, flag derivation
+- [foley.qc](_autosummary/foley.qc.html.md): Tier-0 deterministic audio QC for foley (research report 08 §3).
+- [foley.requirements](_autosummary/foley.requirements.html.md): Onboarding — check what foley needs, tell the user how to get it (accompy-style, #12).
+- [foley.runtime](_autosummary/foley.runtime.html.md): Runtime posture — local-first / offline mode as one verifiable contract (#12, report 12).
+- [foley.sources](_autosummary/foley.sources.html.md): Bulk-corpus source adapters for foley’s SOURCE stage.
+- [foley.sources.base](_autosummary/foley.sources.base.html.md): The bulk-corpus source contract — a downloaded corpus as an ingestable stream.
+- [foley.sources.bbc_remarc](_autosummary/foley.sources.bbc_remarc.html.md): BBC RemArc (Rewind Archive) — a Ring-2, quarantined corpus.
+- [foley.sources.clotho](_autosummary/foley.sources.clotho.html.md): Clotho-eval — a captioned Ring-0 corpus that doubles as a retrieval fixture.
+- [foley.sources.elevenlabs](_autosummary/foley.sources.elevenlabs.html.md): ElevenLabs Sound Effects generate source (hosted; #6).
+- [foley.sources.elevenlabs.adapter](_autosummary/foley.sources.elevenlabs.adapter.html.md): ElevenLabs Sound Effects generate adapter — hosted Text-to-SFX v2 over HTTP.
+- [foley.sources.elevenlabs.config](_autosummary/foley.sources.elevenlabs.config.html.md): &#96;SOURCE_CONFIG&#96; for the ElevenLabs Sound Effects generator (report 02 · 07 · 10 §4.1).
+- [foley.sources.foleyset](_autosummary/foley.sources.foleyset.html.md): FoleySet — a CC-BY, Foley-native starter corpus (Ring 0).
+- [foley.sources.freesound](_autosummary/foley.sources.freesound.html.md): Freesound APIv2 retrieve source — CC0 sounds, stored by-reference (&#96;foley&#91;freesound&#93;&#96;).
+- [foley.sources.freesound.adapter](_autosummary/foley.sources.freesound.adapter.html.md): Freesound APIv2 retrieve adapter — CC0 sounds, stored strictly by-reference.
+- [foley.sources.freesound.config](_autosummary/foley.sources.freesound.config.html.md): &#96;SOURCE_CONFIG&#96; for the Freesound APIv2 retrieve source (report 01 · 07 · 10 §4.1).
+- [foley.sources.fsd50k](_autosummary/foley.sources.fsd50k.html.md): FSD50K — the labeled, commercial-safe backbone corpus (Ring 1).
+- [foley.sources.http](_autosummary/foley.sources.http.html.md): Injectable HTTP transport for foley’s live source adapters.
+- [foley.sources.pull](_autosummary/foley.sources.pull.html.md): &#96;add_from&#96; — the live-source pull façade (SOURCE → INDEX in one call).
+- [foley.sources.registry](_autosummary/foley.sources.registry.html.md): Live-source adapter registry: auto-discovery + lazy loading (arioso’s registry, ported).
+- [foley.sources.resilience](_autosummary/foley.sources.resilience.html.md): Graceful degradation for HTTP source adapters — throttle · backoff · circuit-break (#12).
+- [foley.sources.sonniss](_autosummary/foley.sources.sonniss.html.md): Sonniss GameAudioGDC — a Ring-2, quarantined corpus.
+- [foley.sources.stable_audio](_autosummary/foley.sources.stable_audio.html.md): Stable Audio Open 1.0 generate source (local default; #6).
+- [foley.sources.stable_audio.adapter](_autosummary/foley.sources.stable_audio.adapter.html.md): Stable Audio Open 1.0 generate adapter — local &#96;diffusers&#96; inference.
+- [foley.sources.stable_audio.config](_autosummary/foley.sources.stable_audio.config.html.md): &#96;SOURCE_CONFIG&#96; for the local Stable Audio Open 1.0 generator (report 02 · 07 · 10 §4.1).
+- [foley.stores](_autosummary/foley.stores.html.md): dol-backed storage for foley: content-addressed bytes + a metadata store.
+- [For AI agents](ai-agents.html.md): &#96;foley&#96; ships artifacts for coding agents alongside its code. This page lists
+- [foley.weave.align](_autosummary/foley.weave.align.html.md): Forced-alignment adapters — the &#96;Aligner&#96; seam’s fake default + WhisperX real impl.
+- [foley.weave.anchor](_autosummary/foley.weave.anchor.html.md): Symbolic-anchor → sample-onset heuristics — the SELECT→WEAVE timing bridge (report 06 §2.4).
+- [foley.weave.master](_autosummary/foley.weave.master.html.md): Mastering — loudness-normalize + true-peak-limit the finished mix (report 06 §5).
+- [foley.weave.mix](_autosummary/foley.weave.mix.html.md): Pure-numpy mixing DSP — making a clip sit under the voice (report 06 §3).
+- [foley.weave.protocols](_autosummary/foley.weave.protocols.html.md): The structural DI seams of the WEAVE stage — &#96;Aligner&#96; / &#96;ApplyStrategy&#96;.
+- [foley.weave.requirements](_autosummary/foley.weave.requirements.html.md): System-dependency onboarding for WEAVE’s optional upgrade paths (accompy-style).
+- [foley.weave.timeline](_autosummary/foley.weave.timeline.html.md): The sound-design timeline as an editable document — hydrate, edit, caption.
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-22 12:53 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+
+## Optional
+
+- [foley.md](foley.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

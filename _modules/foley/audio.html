@@ -1,164 +1,720 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.audio &mdash; foley 0.0.22 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="alternate" type="text/markdown" href="audio.html.md">
+<link rel="describedby" href="../../llms.txt" type="text/markdown">
+    <title>foley.audio &#8212; foley</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/epythet.css?v=e39d37f2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/foley/audio';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.23" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=96ec9c95"></script>
-      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            foley
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley.html">foley</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent.html">foley.agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/local_llm.html">foley.agent.local_llm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent_kit.html">foley.agent_kit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/audio.html">foley.audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/base.html">foley.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/cli.html">foley.cli</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval.html">foley.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/library.html">foley.index.library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/search.html">foley.index.search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/licensing.html">foley.licensing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs.html">foley.obs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance.html">foley.provenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/requirements.html">foley.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/runtime.html">foley.runtime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/score.html">foley.score</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources.html">foley.sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/stores.html">foley.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave.html">foley.weave</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
-</ul>
 
-        </div>
-      </div>
-    </nav>
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">foley</a>
-      </nav>
+  
+    
+  
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-          <li class="breadcrumb-item"><a href="../foley.html">foley</a></li>
-      <li class="breadcrumb-item active">foley.audio</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">foley</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
   </ul>
-  <hr/>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../foley.html" class="nav-link">foley</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">foley.audio</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <h1>Source code for foley.audio</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Audio I/O and DSP primitives for foley.</span>
+<span></span><span class="sd">"""Audio I/O and DSP primitives for foley.</span>
 
 <span class="sd">The foundation every other foley layer decodes/encodes/transforms audio through.</span>
 <span class="sd">It commits to a small, explicit set of representations (report 09):</span>
@@ -188,7 +744,7 @@
 <span class="sd">All ops assume the working representation (float array, time on axis 0). ``load``</span>
 <span class="sd">is the one function that produces it from arbitrary sources (path, raw bytes, or</span>
 <span class="sd">a file-like object).</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -205,15 +761,15 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 <span class="n">WORKING_SAMPLE_RATE</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">48_000</span>  <span class="c1"># CLAP + video/broadcast standard (report 09)</span>
-<span class="n">WORKING_DTYPE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;float32&quot;</span>  <span class="c1"># float avoids clipping across chained DSP ops</span>
-<span class="n">ARCHIVE_FORMAT</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;flac&quot;</span>  <span class="c1"># lossless, small, metadata-rich, royalty-free</span>
-<span class="n">ARCHIVE_SUBTYPE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PCM_24&quot;</span>  <span class="c1"># recording-grade archive depth (24-bit)</span>
-<span class="n">DELIVERY_FORMAT</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;opus&quot;</span>  <span class="c1"># royalty-free preview codec (transcode = later)</span>
-<span class="n">RESAMPLE_QUALITY</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;HQ&quot;</span>  <span class="c1"># soxr preset: QQ | LQ | MQ | HQ | VHQ</span>
+<span class="n">WORKING_DTYPE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"float32"</span>  <span class="c1"># float avoids clipping across chained DSP ops</span>
+<span class="n">ARCHIVE_FORMAT</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"flac"</span>  <span class="c1"># lossless, small, metadata-rich, royalty-free</span>
+<span class="n">ARCHIVE_SUBTYPE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"PCM_24"</span>  <span class="c1"># recording-grade archive depth (24-bit)</span>
+<span class="n">DELIVERY_FORMAT</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"opus"</span>  <span class="c1"># royalty-free preview codec (transcode = later)</span>
+<span class="n">RESAMPLE_QUALITY</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"HQ"</span>  <span class="c1"># soxr preset: QQ | LQ | MQ | HQ | VHQ</span>
 
 <span class="n">TRIM_TOP_DB</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">30.0</span>  <span class="c1"># librosa trim: silence = &gt;= this many dB below peak</span>
 <span class="n">DEFAULT_FADE_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># 10 ms declick ramp at edit points</span>
-<span class="n">FADE_KIND</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span>  <span class="c1"># &#39;linear&#39; | &#39;equal_power&#39; (sqrt, for crossfades)</span>
+<span class="n">FADE_KIND</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"linear"</span>  <span class="c1"># 'linear' | 'equal_power' (sqrt, for crossfades)</span>
 
 <span class="c1"># Loudness targets (LUFS), each named so no literal hides in code.</span>
 <span class="n">LUFS_STREAMING</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">14.0</span>  <span class="c1"># Spotify/YouTube-class streaming target</span>
@@ -222,8 +778,8 @@
 <span class="n">LUFS_ATSC</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">24.0</span>  <span class="c1"># ATSC A/85 broadcast target</span>
 <span class="n">DEFAULT_LOUDNESS_TARGET_LUFS</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">LUFS_PODCAST</span>
 <span class="n">TRUE_PEAK_MAX_DBTP</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>  <span class="c1"># ceiling after loudness normalization</span>
-<span class="n">LUFS_GATE_FLOOR</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">70.0</span>  <span class="c1"># pyloudnorm near-silent gate; flag, don&#39;t amplify</span>
-<span class="n">LUFS_MIN_BLOCK_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span>  <span class="c1"># BS.1770 gating block; shorter clips can&#39;t be measured</span>
+<span class="n">LUFS_GATE_FLOOR</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">70.0</span>  <span class="c1"># pyloudnorm near-silent gate; flag, don't amplify</span>
+<span class="n">LUFS_MIN_BLOCK_S</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span>  <span class="c1"># BS.1770 gating block; shorter clips can't be measured</span>
 
 <span class="c1">#: A source ``load`` can decode: a filesystem path, raw encoded bytes, or an</span>
 <span class="c1">#: already-open binary file-like object (e.g. ``io.BytesIO``).</span>
@@ -236,15 +792,15 @@
 
 
 <div class="viewcode-block" id="load">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.load">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.load">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span>
     <span class="n">src</span><span class="p">:</span> <span class="n">AudioSource</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">target_sr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">mono</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">dtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">WORKING_DTYPE</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decode audio into a float working array.</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">"ndarray"</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Decode audio into a float working array.</span>
 
 <span class="sd">    ``src`` may be a filesystem path, raw encoded ``bytes`` (wrapped in a</span>
 <span class="sd">    ``BytesIO`` so nothing touches disk), or any binary file-like object.</span>
@@ -261,7 +817,7 @@
 <span class="sd">        (mono) or ``(frames, channels)``; ``sample_rate`` reflects any resample.</span>
 
 <span class="sd">    Lazy dependencies: ``soundfile`` (and ``soxr`` when ``target_sr`` differs).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">bytearray</span><span class="p">)):</span>
@@ -277,16 +833,16 @@
 
 
 <div class="viewcode-block" id="save">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.save">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.save">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span>
-    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">"ndarray"</span><span class="p">,</span>
     <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">dst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">BinaryIO</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ARCHIVE_FORMAT</span><span class="p">,</span>
     <span class="n">subtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ARCHIVE_SUBTYPE</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write ``samples`` to ``dst`` as ``fmt``/``subtype`` (default = FLAC archive).</span>
+<span class="w">    </span><span class="sd">"""Write ``samples`` to ``dst`` as ``fmt``/``subtype`` (default = FLAC archive).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        samples: The working array to write (shape ``(frames,)`` or</span>
@@ -297,7 +853,7 @@
 <span class="sd">        subtype: Sample subtype (e.g. ``PCM_24``, ``PCM_16``, ``FLOAT``).</span>
 
 <span class="sd">    Lazy dependency: ``soundfile``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
 
     <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">subtype</span><span class="o">=</span><span class="n">subtype</span><span class="p">)</span></div>
@@ -305,15 +861,15 @@
 
 
 <div class="viewcode-block" id="encode">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.encode">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.encode">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span>
-    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">"ndarray"</span><span class="p">,</span>
     <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ARCHIVE_FORMAT</span><span class="p">,</span>
     <span class="n">subtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ARCHIVE_SUBTYPE</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encode ``samples`` fully in memory and return the container bytes.</span>
+<span class="w">    </span><span class="sd">"""Encode ``samples`` fully in memory and return the container bytes.</span>
 
 <span class="sd">    This is the producer for the content-addressed byte store: default output is</span>
 <span class="sd">    the FLAC archive form.</span>
@@ -328,7 +884,7 @@
 <span class="sd">        The encoded audio as ``bytes``.</span>
 
 <span class="sd">    Lazy dependency: ``soundfile``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
 
     <span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
@@ -343,19 +899,19 @@
 
 
 <div class="viewcode-block" id="resample">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.resample">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.resample">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">resample</span><span class="p">(</span>
-    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">"ndarray"</span><span class="p">,</span>
     <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">target_sr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">,</span>
     <span class="n">quality</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">RESAMPLE_QUALITY</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resample ``samples`` to ``target_sr`` (a no-op when already there).</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ndarray"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Resample ``samples`` to ``target_sr`` (a no-op when already there).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        samples: Working array (mono ``(frames,)`` or ``(frames, channels)``).</span>
-<span class="sd">        sample_rate: The array&#39;s current rate in Hz.</span>
+<span class="sd">        sample_rate: The array's current rate in Hz.</span>
 <span class="sd">        target_sr: Desired output rate in Hz (default = the working rate).</span>
 <span class="sd">        quality: soxr quality preset (``QQ``/``LQ``/``MQ``/``HQ``/``VHQ``).</span>
 
@@ -364,7 +920,7 @@
 <span class="sd">        target_sr``). dtype is preserved by soxr.</span>
 
 <span class="sd">    Lazy dependency: ``soxr``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">sample_rate</span> <span class="o">==</span> <span class="n">target_sr</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">samples</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">soxr</span>
@@ -374,16 +930,16 @@
 
 
 <div class="viewcode-block" id="to_mono">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.to_mono">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Down-mix to mono by averaging channels; 1-D input passes through.</span>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.to_mono">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">"ndarray"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ndarray"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Down-mix to mono by averaging channels; 1-D input passes through.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        samples: Mono ``(frames,)`` or multichannel ``(frames, channels)`` array.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A 1-D mono array (dtype preserved).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">samples</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">samples</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">samples</span></div>
@@ -391,9 +947,9 @@
 
 
 <div class="viewcode-block" id="ensure_channels">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.ensure_channels">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ensure_channels</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce ``samples`` to exactly ``channels`` channels.</span>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.ensure_channels">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ensure_channels</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="s2">"ndarray"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ndarray"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Coerce ``samples`` to exactly ``channels`` channels.</span>
 
 <span class="sd">    Mappings: mono -&gt; N by duplication; N -&gt; mono by mean; N -&gt; M (N != M, both</span>
 <span class="sd">    &gt; 1) by collapsing to mono then tiling up to M.</span>
@@ -410,9 +966,9 @@
 <span class="sd">        ValueError: If ``channels &lt; 1``.</span>
 
 <span class="sd">    Lazy dependency: ``numpy`` (only for the up-mix / tile path).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">channels</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;channels must be &gt;= 1, got </span><span class="si">{</span><span class="n">channels</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"channels must be &gt;= 1, got </span><span class="si">{</span><span class="n">channels</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">current</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">samples</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">channels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
@@ -426,17 +982,17 @@
 
 
 <div class="viewcode-block" id="trim_silence">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.trim_silence">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.trim_silence">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">trim_silence</span><span class="p">(</span>
-    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">"ndarray"</span><span class="p">,</span>
     <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">top_db</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">TRIM_TOP_DB</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Strip leading/trailing silence, returning the clip and its kept span.</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">"ndarray"</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""Strip leading/trailing silence, returning the clip and its kept span.</span>
 
-<span class="sd">    Silence detection runs on a transient mono down-mix (so librosa&#39;s time-last</span>
-<span class="sd">    convention never clashes with foley&#39;s time-first ``(frames, channels)``</span>
+<span class="sd">    Silence detection runs on a transient mono down-mix (so librosa's time-last</span>
+<span class="sd">    convention never clashes with foley's time-first ``(frames, channels)``</span>
 <span class="sd">    layout); the returned sample indices then slice the *original* array along</span>
 <span class="sd">    axis 0, preserving its channel layout.</span>
 
@@ -453,7 +1009,7 @@
 <span class="sd">        full-length span ``(0, len(samples))``.</span>
 
 <span class="sd">    Lazy dependency: ``librosa``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">librosa</span>
 
     <span class="n">n</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -466,37 +1022,37 @@
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_fade_ramp</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return an ascending 0-&gt;1 gain ramp of ``length`` samples.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fade_ramp</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ndarray"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return an ascending 0-&gt;1 gain ramp of ``length`` samples.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        length: Number of samples in the ramp.</span>
 <span class="sd">        dtype: NumPy dtype for the ramp (matches the signal being faded).</span>
-<span class="sd">        kind: ``&#39;linear&#39;`` or ``&#39;equal_power&#39;`` (square-root of the linear ramp,</span>
+<span class="sd">        kind: ``'linear'`` or ``'equal_power'`` (square-root of the linear ramp,</span>
 <span class="sd">            for dip-free crossfades).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A 1-D ramp array rising from 0.0 to 1.0.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
     <span class="n">ramp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;equal_power&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"equal_power"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ramp</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ramp</span>
 
 
 <div class="viewcode-block" id="fade">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.fade">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.fade">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">fade</span><span class="p">(</span>
-    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">"ndarray"</span><span class="p">,</span>
     <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">fade_in_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_FADE_S</span><span class="p">,</span>
     <span class="n">fade_out_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_FADE_S</span><span class="p">,</span>
     <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">FADE_KIND</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply in/out gain ramps to ``samples`` (a short declick by default).</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ndarray"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Apply in/out gain ramps to ``samples`` (a short declick by default).</span>
 
 <span class="sd">    Ramp lengths are clamped to at most ``len(samples) // 2`` so the in- and</span>
 <span class="sd">    out-ramps never overlap on tiny inputs.</span>
@@ -506,13 +1062,13 @@
 <span class="sd">        sample_rate: Sample rate in Hz (converts the fade durations to samples).</span>
 <span class="sd">        fade_in_s: Fade-in duration in seconds.</span>
 <span class="sd">        fade_out_s: Fade-out duration in seconds.</span>
-<span class="sd">        kind: ``&#39;linear&#39;`` or ``&#39;equal_power&#39;`` ramp shape.</span>
+<span class="sd">        kind: ``'linear'`` or ``'equal_power'`` ramp shape.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A new array with the fade envelope applied (input is not mutated).</span>
 
 <span class="sd">    Lazy dependency: ``numpy``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
     <span class="n">n</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -531,21 +1087,21 @@
 
 
 <div class="viewcode-block" id="loudness_normalize">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.loudness_normalize">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.loudness_normalize">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">loudness_normalize</span><span class="p">(</span>
-    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">"ndarray"</span><span class="p">,</span>
     <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">target_lufs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_LOUDNESS_TARGET_LUFS</span><span class="p">,</span>
     <span class="n">peak_ceiling_dbfs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">TRUE_PEAK_MAX_DBTP</span><span class="p">,</span>
     <span class="n">min_block_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">LUFS_MIN_BLOCK_S</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">&quot;ndarray&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loudness-normalize to ``target_lufs``, then keep it peak-safe.</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="s2">"ndarray"</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Loudness-normalize to ``target_lufs``, then keep it peak-safe.</span>
 
 <span class="sd">    Integrated loudness is measured (ITU-R BS.1770-4 / EBU R128), the signal is</span>
 <span class="sd">    scaled to ``target_lufs``, and finally attenuated so its sample peak sits at</span>
 <span class="sd">    or below ``peak_ceiling_dbfs``. Two inputs are returned **unchanged** (flag</span>
-<span class="sd">    them, don&#39;t amplify): near-silent input (measured loudness at or below</span>
+<span class="sd">    them, don't amplify): near-silent input (measured loudness at or below</span>
 <span class="sd">    ``LUFS_GATE_FLOOR``), and a clip shorter than one BS.1770 gating block</span>
 <span class="sd">    (``min_block_s``) — which ``pyloudnorm`` cannot measure and would otherwise</span>
 <span class="sd">    raise ``ValueError`` on (routine for one-shots: clicks, blips, gunshots).</span>
@@ -554,7 +1110,7 @@
 <span class="sd">        samples: Working array (mono or multichannel, time on axis 0 — the layout</span>
 <span class="sd">            pyloudnorm expects).</span>
 <span class="sd">        sample_rate: Sample rate in Hz.</span>
-<span class="sd">        target_lufs: Desired integrated loudness (default = foley&#39;s podcast</span>
+<span class="sd">        target_lufs: Desired integrated loudness (default = foley's podcast</span>
 <span class="sd">            target).</span>
 <span class="sd">        peak_ceiling_dbfs: Sample-peak ceiling (dBFS) applied after loudness</span>
 <span class="sd">            normalization. Note this is a *sample*-peak limit, not an inter-sample</span>
@@ -570,19 +1126,19 @@
 <span class="sd">        the too-short case).</span>
 
 <span class="sd">    Lazy dependencies: ``pyloudnorm`` (+ ``numpy``).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">pyloudnorm</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pyln</span>
 
-    <span class="c1"># math.ceil (not int(round)) exactly mirrors pyloudnorm&#39;s float threshold</span>
+    <span class="c1"># math.ceil (not int(round)) exactly mirrors pyloudnorm's float threshold</span>
     <span class="c1"># n &lt; block_size*rate at every sample rate, incl. rates where 0.4*sr is not</span>
     <span class="c1"># integral; identical to int(round) at all standard (÷5) rates.</span>
     <span class="k">if</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">min_block_s</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>  <span class="c1"># too short to gate; flag, don&#39;t amplify</span>
+        <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"-inf"</span><span class="p">)</span>  <span class="c1"># too short to gate; flag, don't amplify</span>
 
     <span class="n">meter</span> <span class="o">=</span> <span class="n">pyln</span><span class="o">.</span><span class="n">Meter</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">)</span>
     <span class="n">measured</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">meter</span><span class="o">.</span><span class="n">integrated_loudness</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">measured</span> <span class="o">&lt;=</span> <span class="n">LUFS_GATE_FLOOR</span><span class="p">:</span>  <span class="c1"># near-silent: flag, don&#39;t amplify</span>
+    <span class="k">if</span> <span class="n">measured</span> <span class="o">&lt;=</span> <span class="n">LUFS_GATE_FLOOR</span><span class="p">:</span>  <span class="c1"># near-silent: flag, don't amplify</span>
         <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="n">measured</span>
 
     <span class="n">normalized</span> <span class="o">=</span> <span class="n">pyln</span><span class="o">.</span><span class="n">normalize</span><span class="o">.</span><span class="n">loudness</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">measured</span><span class="p">,</span> <span class="n">target_lufs</span><span class="p">)</span>
@@ -596,16 +1152,16 @@
 
 
 <div class="viewcode-block" id="to_working">
-<a class="viewcode-back" href="../../module_docs/foley/audio.html#foley.to_working">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.audio.html#foley.to_working">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">to_working</span><span class="p">(</span>
-    <span class="n">samples</span><span class="p">:</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">,</span>
+    <span class="n">samples</span><span class="p">:</span> <span class="s2">"ndarray"</span><span class="p">,</span>
     <span class="n">sample_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">mono</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">target_sr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">,</span>
     <span class="n">dtype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">WORKING_DTYPE</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ndarray&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Produce the canonical CLAP/QC working array from an arbitrary clip.</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ndarray"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Produce the canonical CLAP/QC working array from an arbitrary clip.</span>
 
 <span class="sd">    Down-mixes (when ``mono``), resamples to ``target_sr``, and casts to</span>
 <span class="sd">    ``dtype`` — the ``float32`` @ 48 kHz mono array every embedder/tagger/QC</span>
@@ -613,7 +1169,7 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        samples: Decoded working array (mono or multichannel).</span>
-<span class="sd">        sample_rate: The array&#39;s current rate in Hz.</span>
+<span class="sd">        sample_rate: The array's current rate in Hz.</span>
 <span class="sd">        mono: If ``True``, down-mix to mono.</span>
 <span class="sd">        target_sr: Working sample rate in Hz.</span>
 <span class="sd">        dtype: Output NumPy dtype string.</span>
@@ -622,7 +1178,7 @@
 <span class="sd">        The canonical working array.</span>
 
 <span class="sd">    Lazy dependency: ``soxr`` (only when ``sample_rate != target_sr``).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">mono</span><span class="p">:</span>
         <span class="n">samples</span> <span class="o">=</span> <span class="n">to_mono</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="n">resample</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">target_sr</span><span class="o">=</span><span class="n">target_sr</span><span class="p">)</span>
@@ -630,31 +1186,53 @@
 
 </pre></div>
 
-           </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
   </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
 
-</footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
-
-</body>
+  </footer>
+  </body>
 </html>

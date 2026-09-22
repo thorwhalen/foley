@@ -1,164 +1,720 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.obs.recorder &mdash; foley 0.0.22 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="alternate" type="text/markdown" href="recorder.html.md">
+<link rel="describedby" href="../../../llms.txt" type="text/markdown">
+    <title>foley.obs.recorder &#8212; foley</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/epythet.css?v=e39d37f2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/foley/obs/recorder';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.23" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=96ec9c95"></script>
-      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-</head>
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="../../../index.html" class="icon icon-home">
-            foley
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/local_llm.html">foley.agent.local_llm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent_kit.html">foley.agent_kit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/requirements.html">foley.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/runtime.html">foley.runtime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/score.html">foley.score</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave.html">foley.weave</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
-</ul>
 
-        </div>
-      </div>
-    </nav>
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">foley</a>
-      </nav>
+  
+    
+  
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
-      <li class="breadcrumb-item active">foley.obs.recorder</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">foley</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
   </ul>
-  <hr/>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../foley.html" class="nav-link">foley</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">foley.obs.recorder</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <h1>Source code for foley.obs.recorder</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;The run-recorder: owns the manifest, drives the OTel mirror, off by default (#11).</span>
+<span></span><span class="sd">"""The run-recorder: owns the manifest, drives the OTel mirror, off by default (#11).</span>
 
 <span class="sd">This is where the manifest-first design lives. A :class:`RunRecorder` builds the</span>
 <span class="sd">:class:`~foley.obs.run_artifact.RunManifest` + its span tree from its own clock +</span>
@@ -173,7 +729,7 @@
 <span class="sd">``with foley.obs.run(...)`` turn it on. Emitting a manifest needs NO extra (all</span>
 <span class="sd">stdlib); only the OTel span mirror needs ``foley[obs]``. Recording never raises into a</span>
 <span class="sd">façade — a store-write failure degrades gracefully.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -196,24 +752,24 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_iso_now</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;ISO-8601 UTC timestamp (real wall-clock; overridden to ``None`` in tests).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""ISO-8601 UTC timestamp (real wall-clock; overridden to ``None`` in tests)."""</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
 
     <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="ObsConfig">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.ObsConfig">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.ObsConfig">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ObsConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process-wide observability configuration (flipped by :func:`enable`/:func:`disable`).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Process-wide observability configuration (flipped by :func:`enable`/:func:`disable`)."""</span>
 
     <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">force_disabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="p">(</span>
         <span class="kc">False</span>  <span class="c1"># hard off — dominates ``enabled`` AND the $FOLEY_OBS env var</span>
     <span class="p">)</span>
     <span class="n">redaction_mode</span><span class="p">:</span> <span class="n">RedactionMode</span> <span class="o">=</span> <span class="n">RedactionMode</span><span class="o">.</span><span class="n">hash</span>
-    <span class="n">salt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foley-obs-v1&quot;</span>
+    <span class="n">salt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"foley-obs-v1"</span>
     <span class="n">prefer_otel</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">run_store</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MutableMapping</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># default: lazily make_run_store()</span>
     <span class="n">tracer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tracer</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># default: lazily get_tracer(prefer_otel)</span>
@@ -224,59 +780,59 @@
 
 
 <span class="n">_CONFIG</span> <span class="o">=</span> <span class="n">ObsConfig</span><span class="p">()</span>
-<span class="n">_CURRENT_RUN</span><span class="p">:</span> <span class="s2">&quot;ContextVar[Optional[RunRecorder]]&quot;</span> <span class="o">=</span> <span class="n">ContextVar</span><span class="p">(</span>
-    <span class="s2">&quot;foley_run&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+<span class="n">_CURRENT_RUN</span><span class="p">:</span> <span class="s2">"ContextVar[Optional[RunRecorder]]"</span> <span class="o">=</span> <span class="n">ContextVar</span><span class="p">(</span>
+    <span class="s2">"foley_run"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">)</span>
 
 
 <div class="viewcode-block" id="is_enabled">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.is_enabled">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.is_enabled">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">is_enabled</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether observability is on (via :func:`enable` or ``$FOLEY_OBS`` in {1,true,yes}).</span>
+<span class="w">    </span><span class="sd">"""Whether observability is on (via :func:`enable` or ``$FOLEY_OBS`` in {1,true,yes}).</span>
 
 <span class="sd">    ``force_disabled`` (set by :func:`foley.runtime.offline_scope` for a telemetry-off</span>
-<span class="sd">    posture) hard-overrides both — so offline mode&#39;s &quot;nothing leaves the device&quot;</span>
+<span class="sd">    posture) hard-overrides both — so offline mode's "nothing leaves the device"</span>
 <span class="sd">    contract holds even when ``$FOLEY_OBS`` is exported.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">_CONFIG</span><span class="o">.</span><span class="n">force_disabled</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">return</span> <span class="n">_CONFIG</span><span class="o">.</span><span class="n">enabled</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FOLEY_OBS&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span>
-        <span class="s2">&quot;1&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;true&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+    <span class="k">return</span> <span class="n">_CONFIG</span><span class="o">.</span><span class="n">enabled</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"FOLEY_OBS"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="s2">"1"</span><span class="p">,</span>
+        <span class="s2">"true"</span><span class="p">,</span>
+        <span class="s2">"yes"</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="enable">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.enable">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.enable">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">enable</span><span class="p">(</span><span class="o">**</span><span class="n">overrides</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Turn observability on process-wide (and apply any :class:`ObsConfig` overrides).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Turn observability on process-wide (and apply any :class:`ObsConfig` overrides)."""</span>
     <span class="n">_apply</span><span class="p">(</span><span class="n">overrides</span><span class="p">)</span>
     <span class="n">_CONFIG</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 
 
 <div class="viewcode-block" id="disable">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.disable">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.disable">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">disable</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Turn observability off process-wide (façades revert to a byte-for-byte no-op).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Turn observability off process-wide (façades revert to a byte-for-byte no-op)."""</span>
     <span class="n">_CONFIG</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
 
 <div class="viewcode-block" id="configure">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.configure">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.configure">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span><span class="o">**</span><span class="n">overrides</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply :class:`ObsConfig` overrides WITHOUT flipping ``enabled`` (the test-injection seam).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Apply :class:`ObsConfig` overrides WITHOUT flipping ``enabled`` (the test-injection seam)."""</span>
     <span class="n">_apply</span><span class="p">(</span><span class="n">overrides</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="reset">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.reset">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.reset">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Restore the default config (test teardown; clears injected store/tracer/clock).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Restore the default config (test teardown; clears injected store/tracer/clock)."""</span>
     <span class="k">global</span> <span class="n">_CONFIG</span>
     <span class="n">_CONFIG</span> <span class="o">=</span> <span class="n">ObsConfig</span><span class="p">()</span></div>
 
@@ -285,15 +841,15 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_apply</span><span class="p">(</span><span class="n">overrides</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">overrides</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_CONFIG</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown obs config field </span><span class="si">{</span><span class="n">k</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown obs config field </span><span class="si">{</span><span class="n">k</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="n">_CONFIG</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 
 
-<span class="n">_DEFAULT_STORE</span><span class="p">:</span> <span class="s2">&quot;Optional[MutableMapping]&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">_DEFAULT_STORE</span><span class="p">:</span> <span class="s2">"Optional[MutableMapping]"</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_default_store</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The process-wide default run store (lazily built under FOLEY_DATA_DIR/runs).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The process-wide default run store (lazily built under FOLEY_DATA_DIR/runs)."""</span>
     <span class="k">global</span> <span class="n">_DEFAULT_STORE</span>
     <span class="k">if</span> <span class="n">_DEFAULT_STORE</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">..stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_run_store</span>
@@ -306,9 +862,9 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
 
-        <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="s2">&quot;foley&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="s2">"foley"</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span>
+        <span class="k">return</span> <span class="s2">"unknown"</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -317,7 +873,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_SpanHandle</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yielded inside ``recorder.span(...)``; fans ``set_attribute`` to the record + mirror.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Yielded inside ``recorder.span(...)``; fans ``set_attribute`` to the record + mirror."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">SpanRecord</span><span class="p">,</span> <span class="n">mirror</span><span class="p">,</span> <span class="n">redactor</span><span class="p">:</span> <span class="n">Redactor</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_record</span> <span class="o">=</span> <span class="n">record</span>
@@ -326,11 +882,11 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">span_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The manifest ``SpanRecord.span_id`` (join target for a #7 :class:`Step`).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The manifest ``SpanRecord.span_id`` (join target for a #7 :class:`Step`)."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="o">.</span><span class="n">span_id</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a (redacted) attribute on both the manifest span record and the OTel mirror.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Set a (redacted) attribute on both the manifest span record and the OTel mirror."""</span>
         <span class="n">redacted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redactor</span><span class="o">.</span><span class="n">redact_value</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_record</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">redacted</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span>
@@ -342,9 +898,9 @@
 
 
 <div class="viewcode-block" id="RunRecorder">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.RunRecorder">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.RunRecorder">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RunRecorder</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Builds one :class:`RunManifest` (span tree + composed shapes), tracer-independent.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Builds one :class:`RunManifest` (span tree + composed shapes), tracer-independent."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -362,13 +918,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_run_store</span> <span class="o">=</span> <span class="n">run_store</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clock</span> <span class="o">=</span> <span class="n">clock</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_id_factory</span> <span class="o">=</span> <span class="n">id_factory</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_stack</span><span class="p">:</span> <span class="s2">&quot;list[SpanRecord]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stack</span><span class="p">:</span> <span class="s2">"list[SpanRecord]"</span> <span class="o">=</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="RunRecorder.span">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.RunRecorder.span">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.RunRecorder.span">[docs]</a>
     <span class="nd">@contextmanager</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">span</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attributes</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open a span: append a :class:`SpanRecord` (from our own clock/ids) + mirror it.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Open a span: append a :class:`SpanRecord` (from our own clock/ids) + mirror it."""</span>
         <span class="n">start_ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clock</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1000.0</span>
         <span class="n">rec</span> <span class="o">=</span> <span class="n">SpanRecord</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
@@ -385,7 +941,7 @@
                 <span class="n">name</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">rec</span><span class="o">.</span><span class="n">attributes</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">mirror</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">trace_ref</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span>
-                    <span class="n">mirror</span><span class="p">,</span> <span class="s2">&quot;trace_id&quot;</span><span class="p">,</span> <span class="kc">None</span>
+                    <span class="n">mirror</span><span class="p">,</span> <span class="s2">"trace_id"</span><span class="p">,</span> <span class="kc">None</span>
                 <span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">trace_ref</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="n">trace_id</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -393,14 +949,14 @@
                     <span class="n">mirror</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                     <span class="c1"># An exception message can echo the raw prompt/narration, so store</span>
-                    <span class="c1"># only a redacted form (the type name, unless mode=&#39;full&#39;) and set</span>
+                    <span class="c1"># only a redacted form (the type name, unless mode='full') and set</span>
                     <span class="c1"># the semconv-correct error.type (the class name) — never the raw</span>
-                    <span class="c1"># repr. record_exception (message + stacktrace) runs only in &#39;full&#39;.</span>
-                    <span class="n">rec</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span>
+                    <span class="c1"># repr. record_exception (message + stacktrace) runs only in 'full'.</span>
+                    <span class="n">rec</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s2">"error"</span>
                     <span class="n">rec</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redactor</span><span class="o">.</span><span class="n">redact_error</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
                     <span class="n">error_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
-                    <span class="n">rec</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;error_type&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">error_type</span>
-                    <span class="n">mirror</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;error_type&quot;</span><span class="p">],</span> <span class="n">error_type</span><span class="p">)</span>
+                    <span class="n">rec</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">GENAI</span><span class="p">[</span><span class="s2">"error_type"</span><span class="p">]]</span> <span class="o">=</span> <span class="n">error_type</span>
+                    <span class="n">mirror</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="n">GENAI</span><span class="p">[</span><span class="s2">"error_type"</span><span class="p">],</span> <span class="n">error_type</span><span class="p">)</span>
                     <span class="n">mirror</span><span class="o">.</span><span class="n">set_status</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">rec</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redactor</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">RedactionMode</span><span class="o">.</span><span class="n">full</span><span class="p">:</span>
                         <span class="n">mirror</span><span class="o">.</span><span class="n">record_exception</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
@@ -437,15 +993,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">disclosure_refs</span><span class="p">[</span><span class="n">sound_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span>
 
 <div class="viewcode-block" id="RunRecorder.add_step">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.RunRecorder.add_step">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.RunRecorder.add_step">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="n">Step</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a SELECT-stage :class:`Step` (#7), deep-redacting ``detail`` at record time.</span>
+<span class="w">        </span><span class="sd">"""Append a SELECT-stage :class:`Step` (#7), deep-redacting ``detail`` at record time.</span>
 
 <span class="sd">        The record-time net (belt over the emit-time sweep): event text carried in</span>
 <span class="sd">        ``detail`` (under the ``query`` key) is hashed here so a manifest read straight</span>
 <span class="sd">        off ``self.manifest.steps`` — before any emit — never holds raw narration.</span>
 <span class="sd">        ``seq`` is assigned here (append position) when the caller left it ``None``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">step</span><span class="o">.</span><span class="n">seq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">step</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
         <span class="n">step</span><span class="o">.</span><span class="n">detail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_redactor</span><span class="o">.</span><span class="n">redact_manifest</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="n">detail</span><span class="p">)</span>
@@ -453,9 +1009,9 @@
 
 
 <div class="viewcode-block" id="RunRecorder.set_plan_ref">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.RunRecorder.set_plan_ref">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.RunRecorder.set_plan_ref">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_plan_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plan_ref</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill the reserved #8 ``plan_ref`` slot (a light join dict — no text).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Fill the reserved #8 ``plan_ref`` slot (a light join dict — no text)."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">plan_ref</span> <span class="o">=</span> <span class="n">plan_ref</span></div>
 
 
@@ -463,17 +1019,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">set_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s2">"error"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">message</span>
 
 <div class="viewcode-block" id="RunRecorder.emit">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.RunRecorder.emit">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.RunRecorder.emit">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Persist the manifest to the run store — swallowing any write failure.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Persist the manifest to the run store — swallowing any write failure."""</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">emit_run_manifest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_run_store</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="p">,</span> <span class="n">redactor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_redactor</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 - obs must never break the façade</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;run-manifest emit failed: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"run-manifest emit failed: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">"</span></div>
 </div>
 
 
@@ -494,7 +1050,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_NullRun</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yielded by :func:`facade_run` / :func:`current_run` when obs is off — all no-ops.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Yielded by :func:`facade_run` / :func:`current_run` when obs is off — all no-ops."""</span>
 
     <span class="nd">@contextmanager</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">span</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attributes</span><span class="p">):</span>
@@ -553,10 +1109,10 @@
     <span class="n">recorder</span> <span class="o">=</span> <span class="n">_new_recorder</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
     <span class="n">token</span> <span class="o">=</span> <span class="n">_CURRENT_RUN</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">recorder</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">recorder</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s2">&quot;foley.&quot;</span> <span class="o">+</span> <span class="n">op</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">recorder</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="s2">"foley."</span> <span class="o">+</span> <span class="n">op</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">recorder</span>
     <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="c1"># Redacted (type name unless mode=&#39;full&#39;) — a raw message can echo the prompt.</span>
+        <span class="c1"># Redacted (type name unless mode='full') — a raw message can echo the prompt.</span>
         <span class="n">recorder</span><span class="o">.</span><span class="n">set_error</span><span class="p">(</span><span class="n">recorder</span><span class="o">.</span><span class="n">_redactor</span><span class="o">.</span><span class="n">redact_error</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
         <span class="k">raise</span>
     <span class="k">finally</span><span class="p">:</span>
@@ -565,15 +1121,15 @@
 
 
 <div class="viewcode-block" id="facade_run">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.facade_run">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.facade_run">[docs]</a>
 <span class="nd">@contextmanager</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">facade_run</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The get-or-create seam every façade wraps its body in.</span>
+<span class="w">    </span><span class="sd">"""The get-or-create seam every façade wraps its body in.</span>
 
 <span class="sd">    Nested (a run is already active) → a child span into the SAME manifest, no emit</span>
 <span class="sd">    (the outer owner emits). Enabled + top-level → a new recorder that emits one</span>
 <span class="sd">    manifest on exit. Disabled → the zero-cost :data:`_NULL_RUN`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">active</span> <span class="o">=</span> <span class="n">_CURRENT_RUN</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">active</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">active</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
@@ -588,28 +1144,28 @@
 
 
 <div class="viewcode-block" id="current_run">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.current_run">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.current_run">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">current_run</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The active :class:`RunRecorder`, or :data:`_NULL_RUN` (for the shared child span).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The active :class:`RunRecorder`, or :data:`_NULL_RUN` (for the shared child span)."""</span>
     <span class="k">return</span> <span class="n">_CURRENT_RUN</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="ow">or</span> <span class="n">_NULL_RUN</span></div>
 
 
 
 <div class="viewcode-block" id="run">
-<a class="viewcode-back" href="../../../module_docs/foley/obs/recorder.html#foley.obs.run">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.obs.recorder.html#foley.obs.run">[docs]</a>
 <span class="nd">@contextmanager</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">overrides</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Open an explicit run scope that aggregates nested façade calls into ONE manifest.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">op</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"run"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">overrides</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Open an explicit run scope that aggregates nested façade calls into ONE manifest.</span>
 
 <span class="sd">    Forces observability on for the scope even when it is merely *disabled* (the #7</span>
 <span class="sd">    ``find()`` aggregation entrypoint). The one thing it does **not** override is the</span>
 <span class="sd">    hard-off ``force_disabled`` flag: :func:`foley.runtime.offline_scope` sets it for a</span>
 <span class="sd">    telemetry-off posture, so an explicit ``run()`` inside offline mode records and</span>
-<span class="sd">    exports **nothing** — the &quot;nothing leaves the device&quot; contract holds on the</span>
+<span class="sd">    exports **nothing** — the "nothing leaves the device" contract holds on the</span>
 <span class="sd">    ``find()``/``weave()`` paths too, not just the ``facade_run`` ones. Get-or-create: a</span>
 <span class="sd">    nested :func:`run` reuses the active recorder. ``overrides`` are per-scope</span>
 <span class="sd">    :class:`ObsConfig` fields (e.g. ``run_store``, ``prefer_otel``, ``clock``).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">active</span> <span class="o">=</span> <span class="n">_CURRENT_RUN</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">active</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">active</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
@@ -617,7 +1173,7 @@
         <span class="k">return</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">_CONFIG</span><span class="p">,</span> <span class="o">**</span><span class="n">overrides</span><span class="p">)</span> <span class="k">if</span> <span class="n">overrides</span> <span class="k">else</span> <span class="n">_CONFIG</span>
     <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">force_disabled</span><span class="p">:</span>
-        <span class="c1"># Hard-off (offline posture) dominates run()&#39;s force-on: no recorder, no OTel</span>
+        <span class="c1"># Hard-off (offline posture) dominates run()'s force-on: no recorder, no OTel</span>
         <span class="c1"># tracer, no manifest — so `with foley.offline(): foley.find(...)` leaks nothing.</span>
         <span class="k">yield</span> <span class="n">_NULL_RUN</span>
         <span class="k">return</span>
@@ -626,31 +1182,53 @@
 
 </pre></div>
 
-           </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
   </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
 
-</footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
-
-</body>
+  </footer>
+  </body>
 </html>

@@ -1,164 +1,720 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.provenance.disclosure &mdash; foley 0.0.22 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="alternate" type="text/markdown" href="disclosure.html.md">
+<link rel="describedby" href="../../../llms.txt" type="text/markdown">
+    <title>foley.provenance.disclosure &#8212; foley</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/epythet.css?v=e39d37f2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/foley/provenance/disclosure';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.23" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=96ec9c95"></script>
-      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-</head>
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="../../../index.html" class="icon icon-home">
-            foley
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/local_llm.html">foley.agent.local_llm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent_kit.html">foley.agent_kit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/requirements.html">foley.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/runtime.html">foley.runtime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/score.html">foley.score</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave.html">foley.weave</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
-</ul>
 
-        </div>
-      </div>
-    </nav>
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">foley</a>
-      </nav>
+  
+    
+  
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
-      <li class="breadcrumb-item active">foley.provenance.disclosure</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">foley</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
   </ul>
-  <hr/>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../foley.html" class="nav-link">foley</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">foley.provenance.disclosure</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <h1>Source code for foley.provenance.disclosure</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Disclosure, watermarking &amp; safety for AI-generated audio (#9b).</span>
+<span></span><span class="sd">"""Disclosure, watermarking &amp; safety for AI-generated audio (#9b).</span>
 
 <span class="sd">The sibling of :mod:`foley.provenance.credits`: where ``credits`` renders TASL</span>
 <span class="sd">attribution, this module makes a *generated* clip **traceable, disclosed, and</span>
@@ -171,7 +727,7 @@
 <span class="sd">  stereo SFX, so the per-clip mark is a **soft-binding** provenance signal (the</span>
 <span class="sd">  achieved detection probability is recorded); C2PA is the hard-binding carrier.</span>
 <span class="sd">* **Content Credential (C2PA)** — #9b writes a portable, self-asserted JSON</span>
-<span class="sd">  &quot;content credential&quot; *sidecar* (a C2PA-shaped assertion dict: the &quot;AI use&quot;</span>
+<span class="sd">  "content credential" *sidecar* (a C2PA-shaped assertion dict: the "AI use"</span>
 <span class="sd">  action, the training-mining opt-out, and the TASL/license) into a provenance</span>
 <span class="sd">  store, and points ``LicenseRecord.c2pa_manifest_ref`` at it. A real</span>
 <span class="sd">  *signed + embedded* C2PA manifest (via ``c2pa-python``) over the final mix is a</span>
@@ -193,7 +749,7 @@
 <span class="sd">``torchaudio`` are imported *inside* the watermark functions (the</span>
 <span class="sd">``foley[provenance]`` extra), so importing this module (and ``import foley``) stays</span>
 <span class="sd">dependency-light.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -217,18 +773,18 @@
 <span class="c1">#: :meth:`AudioSealWatermarker.embed`.</span>
 <span class="n">DEFAULT_WATERMARK_MESSAGE</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0xF01E</span>  <span class="c1"># 61470; &lt;= 65535 (16 bits)</span>
 
-<span class="n">WATERMARK_METHOD</span> <span class="o">=</span> <span class="s2">&quot;audioseal&quot;</span>
-<span class="n">AUDIOSEAL_GENERATOR</span> <span class="o">=</span> <span class="s2">&quot;audioseal_wm_16bits&quot;</span>
-<span class="n">AUDIOSEAL_DETECTOR</span> <span class="o">=</span> <span class="s2">&quot;audioseal_detector_16bits&quot;</span>
+<span class="n">WATERMARK_METHOD</span> <span class="o">=</span> <span class="s2">"audioseal"</span>
+<span class="n">AUDIOSEAL_GENERATOR</span> <span class="o">=</span> <span class="s2">"audioseal_wm_16bits"</span>
+<span class="n">AUDIOSEAL_DETECTOR</span> <span class="o">=</span> <span class="s2">"audioseal_detector_16bits"</span>
 <span class="n">AUDIOSEAL_NBITS</span> <span class="o">=</span> <span class="mi">16</span>
-<span class="n">WATERMARK_EMBED_SR</span> <span class="o">=</span> <span class="mi">16_000</span>  <span class="c1"># AudioSeal&#39;s native (mono) rate</span>
+<span class="n">WATERMARK_EMBED_SR</span> <span class="o">=</span> <span class="mi">16_000</span>  <span class="c1"># AudioSeal's native (mono) rate</span>
 
-<span class="n">CONTENT_CREDENTIAL_SCHEMA</span> <span class="o">=</span> <span class="s2">&quot;foley/content-credential/v1&quot;</span>
+<span class="n">CONTENT_CREDENTIAL_SCHEMA</span> <span class="o">=</span> <span class="s2">"foley/content-credential/v1"</span>
 <span class="c1">#: IPTC digitalSourceType vocabulary (C2PA ``c2pa.actions`` assertion).</span>
 <span class="n">IPTC_TRAINED_ALGORITHMIC_MEDIA</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia&quot;</span>
+    <span class="s2">"http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"</span>
 <span class="p">)</span>
-<span class="n">IPTC_DIGITAL_CREATION</span> <span class="o">=</span> <span class="s2">&quot;http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation&quot;</span>
+<span class="n">IPTC_DIGITAL_CREATION</span> <span class="o">=</span> <span class="s2">"http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -237,13 +793,13 @@
 
 
 <div class="viewcode-block" id="TrademarkEntry">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.TrademarkEntry">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.TrademarkEntry">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">TrademarkEntry</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;One trademarked audio logo + the casefolded prompt substrings that flag it.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""One trademarked audio logo + the casefolded prompt substrings that flag it."""</span>
 
     <span class="n">canonical</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">aliases</span><span class="p">:</span> <span class="s2">&quot;frozenset[str]&quot;</span></div>
+    <span class="n">aliases</span><span class="p">:</span> <span class="s2">"frozenset[str]"</span></div>
 
 
 
@@ -251,94 +807,94 @@
 <span class="c1">#: commercial use (report 07 §7.2). Each entry maps a canonical mark to a set of</span>
 <span class="c1">#: casefolded trigger substrings. Extend freely — this is a best-effort aid, not a</span>
 <span class="c1">#: legal guarantee.</span>
-<span class="n">TRADEMARK_REGISTRY</span><span class="p">:</span> <span class="s2">&quot;tuple[TrademarkEntry, ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">&quot;THX Deep Note&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;thx&quot;</span><span class="p">,</span> <span class="s2">&quot;deep note&quot;</span><span class="p">})),</span>
+<span class="n">TRADEMARK_REGISTRY</span><span class="p">:</span> <span class="s2">"tuple[TrademarkEntry, ...]"</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">TrademarkEntry</span><span class="p">(</span><span class="s2">"THX Deep Note"</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"thx"</span><span class="p">,</span> <span class="s2">"deep note"</span><span class="p">})),</span>
     <span class="n">TrademarkEntry</span><span class="p">(</span>
-        <span class="s2">&quot;NBC chimes&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;nbc chimes&quot;</span><span class="p">,</span> <span class="s2">&quot;nbc chime&quot;</span><span class="p">,</span> <span class="s2">&quot;nbc three-note&quot;</span><span class="p">})</span>
+        <span class="s2">"NBC chimes"</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"nbc chimes"</span><span class="p">,</span> <span class="s2">"nbc chime"</span><span class="p">,</span> <span class="s2">"nbc three-note"</span><span class="p">})</span>
     <span class="p">),</span>
     <span class="n">TrademarkEntry</span><span class="p">(</span>
-        <span class="s2">&quot;Netflix Ta-dum&quot;</span><span class="p">,</span>
+        <span class="s2">"Netflix Ta-dum"</span><span class="p">,</span>
         <span class="nb">frozenset</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">&quot;ta-dum&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;ta dum&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;tudum&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;netflix intro&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;netflix sound&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;netflix chime&quot;</span><span class="p">,</span>
+                <span class="s2">"ta-dum"</span><span class="p">,</span>
+                <span class="s2">"ta dum"</span><span class="p">,</span>
+                <span class="s2">"tudum"</span><span class="p">,</span>
+                <span class="s2">"netflix intro"</span><span class="p">,</span>
+                <span class="s2">"netflix sound"</span><span class="p">,</span>
+                <span class="s2">"netflix chime"</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">),</span>
     <span class="p">),</span>
     <span class="n">TrademarkEntry</span><span class="p">(</span>
-        <span class="s2">&quot;MGM lion roar&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;mgm roar&quot;</span><span class="p">,</span> <span class="s2">&quot;mgm lion&quot;</span><span class="p">,</span> <span class="s2">&quot;metro-goldwyn-mayer lion&quot;</span><span class="p">})</span>
+        <span class="s2">"MGM lion roar"</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"mgm roar"</span><span class="p">,</span> <span class="s2">"mgm lion"</span><span class="p">,</span> <span class="s2">"metro-goldwyn-mayer lion"</span><span class="p">})</span>
     <span class="p">),</span>
     <span class="n">TrademarkEntry</span><span class="p">(</span>
-        <span class="s2">&quot;20th Century Fox fanfare&quot;</span><span class="p">,</span>
-        <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;20th century fox fanfare&quot;</span><span class="p">,</span> <span class="s2">&quot;fox fanfare&quot;</span><span class="p">,</span> <span class="s2">&quot;century fox intro&quot;</span><span class="p">}),</span>
+        <span class="s2">"20th Century Fox fanfare"</span><span class="p">,</span>
+        <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"20th century fox fanfare"</span><span class="p">,</span> <span class="s2">"fox fanfare"</span><span class="p">,</span> <span class="s2">"century fox intro"</span><span class="p">}),</span>
     <span class="p">),</span>
     <span class="n">TrademarkEntry</span><span class="p">(</span>
-        <span class="s2">&quot;Intel five-note bong&quot;</span><span class="p">,</span>
-        <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;intel bong&quot;</span><span class="p">,</span> <span class="s2">&quot;intel inside&quot;</span><span class="p">,</span> <span class="s2">&quot;intel jingle&quot;</span><span class="p">,</span> <span class="s2">&quot;intel chime&quot;</span><span class="p">}),</span>
+        <span class="s2">"Intel five-note bong"</span><span class="p">,</span>
+        <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"intel bong"</span><span class="p">,</span> <span class="s2">"intel inside"</span><span class="p">,</span> <span class="s2">"intel jingle"</span><span class="p">,</span> <span class="s2">"intel chime"</span><span class="p">}),</span>
     <span class="p">),</span>
     <span class="n">TrademarkEntry</span><span class="p">(</span>
-        <span class="s2">&quot;Homer Simpson D&#39;oh&quot;</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;d&#39;oh&quot;</span><span class="p">,</span> <span class="s2">&quot;homer doh&quot;</span><span class="p">,</span> <span class="s2">&quot;homer simpson doh&quot;</span><span class="p">})</span>
+        <span class="s2">"Homer Simpson D'oh"</span><span class="p">,</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"d'oh"</span><span class="p">,</span> <span class="s2">"homer doh"</span><span class="p">,</span> <span class="s2">"homer simpson doh"</span><span class="p">})</span>
     <span class="p">),</span>
 <span class="p">)</span>
 
 <span class="c1">#: Explicit voice-clone / human-voice-request cues (report 07 §7.1) — matched</span>
 <span class="c1">#: case-INSENSITIVELY, because these phrasings are unambiguous requests for a human</span>
 <span class="c1">#: voice and warrant a disclosure flag regardless of case.</span>
-<span class="n">_VOICE_CUE_PATTERNS</span><span class="p">:</span> <span class="s2">&quot;tuple[re.Pattern, ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;in the voice of&quot;</span><span class="p">),</span>
-    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;voice[ -]?clon\w*&quot;</span><span class="p">),</span>  <span class="c1"># &quot;voice clone&quot;, &quot;voice-cloning&quot;</span>
-    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;clon(?:e|ed|ing)\b.{0,20}\bvoice&quot;</span><span class="p">),</span>  <span class="c1"># &quot;clone her voice&quot;</span>
-    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;deep[ -]?fake&quot;</span><span class="p">),</span>
+<span class="n">_VOICE_CUE_PATTERNS</span><span class="p">:</span> <span class="s2">"tuple[re.Pattern, ...]"</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"in the voice of"</span><span class="p">),</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"voice[ -]?clon\w*"</span><span class="p">),</span>  <span class="c1"># "voice clone", "voice-cloning"</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"clon(?:e|ed|ing)\b.{0,20}\bvoice"</span><span class="p">),</span>  <span class="c1"># "clone her voice"</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"deep[ -]?fake"</span><span class="p">),</span>
 <span class="p">)</span>
 
 <span class="c1">#: Proper-name voice patterns (report 07 §7.1) — matched on the ORIGINAL (cased)</span>
 <span class="c1">#: prompt and requiring a Title-case proper name, so ordinary lowercase SFX</span>
-<span class="c1">#: descriptions (&quot;sounds like breaking glass&quot;, &quot;voice of thunder&quot;, &quot;impersonating a</span>
-<span class="c1">#: robot&quot;) are NOT flagged — only a named person is (e.g. &quot;sounds like Morgan</span>
-<span class="c1">#: Freeman&quot;). Best-effort: a lowercase real name is a known false-negative and a</span>
-<span class="c1">#: Title-case non-person (e.g. &quot;Big Ben&quot;) a known false-positive; the gate is a</span>
+<span class="c1">#: descriptions ("sounds like breaking glass", "voice of thunder", "impersonating a</span>
+<span class="c1">#: robot") are NOT flagged — only a named person is (e.g. "sounds like Morgan</span>
+<span class="c1">#: Freeman"). Best-effort: a lowercase real name is a known false-negative and a</span>
+<span class="c1">#: Title-case non-person (e.g. "Big Ben") a known false-positive; the gate is a</span>
 <span class="c1">#: warn/refuse aid, not a legal guarantee.</span>
-<span class="n">_VOICE_NAME_PATTERNS</span><span class="p">:</span> <span class="s2">&quot;tuple[re.Pattern, ...]&quot;</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bvoice of ([A-Z][a-z]+(?: [A-Z][a-z]+)+)&quot;</span><span class="p">),</span>
-    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bsounds? like ([A-Z][a-z]+ [A-Z][a-z]+)&quot;</span><span class="p">),</span>
-    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\bimpersonat\w*\s+([A-Z][a-z]+)&quot;</span><span class="p">),</span>
+<span class="n">_VOICE_NAME_PATTERNS</span><span class="p">:</span> <span class="s2">"tuple[re.Pattern, ...]"</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\bvoice of ([A-Z][a-z]+(?: [A-Z][a-z]+)+)"</span><span class="p">),</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\bsounds? like ([A-Z][a-z]+ [A-Z][a-z]+)"</span><span class="p">),</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\bimpersonat\w*\s+([A-Z][a-z]+)"</span><span class="p">),</span>
 <span class="p">)</span>
 
 
 <div class="viewcode-block" id="PromptScan">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.PromptScan">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.PromptScan">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">PromptScan</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of scanning a generation prompt for safety flags (pure).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The result of scanning a generation prompt for safety flags (pure)."""</span>
 
-    <span class="n">trademark_hits</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...]&quot;</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">voice_hits</span><span class="p">:</span> <span class="s2">&quot;tuple[str, ...]&quot;</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">trademark_hits</span><span class="p">:</span> <span class="s2">"tuple[str, ...]"</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">voice_hits</span><span class="p">:</span> <span class="s2">"tuple[str, ...]"</span> <span class="o">=</span> <span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">flagged</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the prompt matched any trademark or recognizable-voice pattern.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""True if the prompt matched any trademark or recognizable-voice pattern."""</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trademark_hits</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">potential_trademark</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the prompt matched a branded-audio-logo entry.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""True if the prompt matched a branded-audio-logo entry."""</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trademark_hits</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">contains_recognizable_voice</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the prompt matched a recognizable-voice / clone pattern.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""True if the prompt matched a recognizable-voice / clone pattern."""</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="scan_prompt">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.scan_prompt">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.scan_prompt">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">scan_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PromptScan</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan a generation ``prompt`` for trademarked-audio-logo + voice-clone risk.</span>
+<span class="w">    </span><span class="sd">"""Scan a generation ``prompt`` for trademarked-audio-logo + voice-clone risk.</span>
 
 <span class="sd">    Pure and stdlib-only (casefold substring + regex). Returns a</span>
 <span class="sd">    :class:`PromptScan`; it never raises and makes no decision — the generate</span>
@@ -349,8 +905,8 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A :class:`PromptScan` naming the matched marks / voice patterns.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">original</span> <span class="o">=</span> <span class="n">prompt</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">original</span> <span class="o">=</span> <span class="n">prompt</span> <span class="ow">or</span> <span class="s2">""</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">original</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span>
     <span class="n">trademark_hits</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
         <span class="n">e</span><span class="o">.</span><span class="n">canonical</span>
@@ -372,17 +928,17 @@
 
 
 <div class="viewcode-block" id="WatermarkUnavailable">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.WatermarkUnavailable">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.WatermarkUnavailable">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">WatermarkUnavailable</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a watermark is explicitly requested but ``foley[provenance]`` is absent.&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">"""Raised when a watermark is explicitly requested but ``foley[provenance]`` is absent."""</span></div>
 
 
 
 <div class="viewcode-block" id="WatermarkResult">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.WatermarkResult">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.WatermarkResult">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">WatermarkResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The output of a :class:`Watermarker`: the marked bytes + provenance meta.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The output of a :class:`Watermarker`: the marked bytes + provenance meta."""</span>
 
     <span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span>
     <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span>
@@ -391,34 +947,34 @@
 
 
 <div class="viewcode-block" id="Watermarker">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.Watermarker">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.Watermarker">[docs]</a>
 <span class="nd">@runtime_checkable</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Watermarker</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Embeds a detectable provenance watermark into audio bytes (the DI seam).</span>
+<span class="w">    </span><span class="sd">"""Embeds a detectable provenance watermark into audio bytes (the DI seam).</span>
 
 <span class="sd">    The default is :class:`AudioSealWatermarker`; tests inject a deterministic</span>
 <span class="sd">    fake — exactly the ``adapter=`` / ``pipeline=`` seam the source adapters use.</span>
 <span class="sd">    ``embed`` MUST be deterministic for a fixed ``message`` (same input bytes →</span>
 <span class="sd">    same output bytes) so the stored content-hash id stays reproducible and the</span>
 <span class="sd">    generation-flywheel dedup keeps working.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">version</span><span class="p">:</span> <span class="nb">str</span>
 
 <div class="viewcode-block" id="Watermarker.embed">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.Watermarker.embed">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.Watermarker.embed">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_WATERMARK_MESSAGE</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WatermarkResult</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the watermarked bytes + a provenance meta dict.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the watermarked bytes + a provenance meta dict."""</span>
         <span class="o">...</span></div>
 </div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_int_to_bits</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nbits</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;``message`` → a ``(1, nbits)`` torch.long bit tensor (bit i = (message&gt;&gt;i)&amp;1).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""``message`` → a ``(1, nbits)`` torch.long bit tensor (bit i = (message&gt;&gt;i)&amp;1)."""</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
     <span class="n">bits</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">int</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbits</span><span class="p">)]</span>
@@ -426,14 +982,14 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_bits_to_int</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inverse of :func:`_int_to_bits` over a length-``nbits`` 0/1 sequence.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Inverse of :func:`_int_to_bits` over a length-``nbits`` 0/1 sequence."""</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bits</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="AudioSealWatermarker">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.AudioSealWatermarker">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.AudioSealWatermarker">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AudioSealWatermarker</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The default :class:`Watermarker` — Meta AudioSeal, run on CPU, deterministic.</span>
+<span class="w">    </span><span class="sd">"""The default :class:`Watermarker` — Meta AudioSeal, run on CPU, deterministic.</span>
 
 <span class="sd">    ``audioseal`` / ``torch`` / ``torchaudio`` are imported lazily inside the</span>
 <span class="sd">    methods (the ``foley[provenance]`` extra), so importing this class stays</span>
@@ -442,7 +998,7 @@
 <span class="sd">    Because AudioSeal is a 16 kHz mono model, 44.1 kHz stereo SFX is watermarked</span>
 <span class="sd">    per channel via a 16 kHz round-trip (lossy) — the mark is a soft-binding</span>
 <span class="sd">    signal and the achieved detection probability is recorded in the meta.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">method</span> <span class="o">=</span> <span class="n">WATERMARK_METHOD</span>
 
@@ -451,37 +1007,37 @@
 
     <span class="nd">@functools</span><span class="o">.</span><span class="n">cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The installed ``audioseal`` package version (best-effort).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The installed ``audioseal`` package version (best-effort)."""</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
 
-            <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="s2">&quot;audioseal&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="s2">"audioseal"</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pragma: no cover - metadata edge</span>
-            <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span>
+            <span class="k">return</span> <span class="s2">"unknown"</span>
 
     <span class="nd">@functools</span><span class="o">.</span><span class="n">cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>  <span class="c1"># noqa: F401 - ensures torch present for the model</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">audioseal</span><span class="w"> </span><span class="kn">import</span> <span class="n">AudioSeal</span>
 
-        <span class="k">return</span> <span class="n">AudioSeal</span><span class="o">.</span><span class="n">load_generator</span><span class="p">(</span><span class="n">AUDIOSEAL_GENERATOR</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">AudioSeal</span><span class="o">.</span><span class="n">load_generator</span><span class="p">(</span><span class="n">AUDIOSEAL_GENERATOR</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">"cpu"</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
 <div class="viewcode-block" id="AudioSealWatermarker.embed">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.AudioSealWatermarker.embed">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.AudioSealWatermarker.embed">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WatermarkResult</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Embed the AudioSeal watermark; return the marked bytes + meta.</span>
+<span class="w">        </span><span class="sd">"""Embed the AudioSeal watermark; return the marked bytes + meta.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            audio_bytes: The clip&#39;s container bytes (WAV/FLAC/…).</span>
+<span class="sd">            audio_bytes: The clip's container bytes (WAV/FLAC/…).</span>
 <span class="sd">            message: The 16-bit id to embed (default :data:`DEFAULT_WATERMARK_MESSAGE`).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A :class:`WatermarkResult` whose ``audio_bytes`` is lossless WAV</span>
 <span class="sd">            (float32) — a deterministic PCM round-trip so its content-hash id is</span>
 <span class="sd">            reproducible — and whose ``meta`` is the ``LicenseRecord.watermark`` dict.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
 
         <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -527,22 +1083,22 @@
 
         <span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
         <span class="n">sf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-            <span class="n">buf</span><span class="p">,</span> <span class="n">out</span> <span class="k">if</span> <span class="n">channels</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">out</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sr</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;WAV&quot;</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="s2">&quot;FLOAT&quot;</span>
+            <span class="n">buf</span><span class="p">,</span> <span class="n">out</span> <span class="k">if</span> <span class="n">channels</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">out</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sr</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"WAV"</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="s2">"FLOAT"</span>
         <span class="p">)</span>
         <span class="n">wm_bytes</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
 
         <span class="n">prob</span><span class="p">,</span> <span class="n">recovered</span> <span class="o">=</span> <span class="n">detect_watermark</span><span class="p">(</span><span class="n">wm_bytes</span><span class="p">)</span>
         <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;present&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">WATERMARK_METHOD</span><span class="p">,</span>
-            <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
-            <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">AUDIOSEAL_GENERATOR</span><span class="p">,</span>
-            <span class="s2">&quot;detector&quot;</span><span class="p">:</span> <span class="n">AUDIOSEAL_DETECTOR</span><span class="p">,</span>
-            <span class="s2">&quot;nbits&quot;</span><span class="p">:</span> <span class="n">AUDIOSEAL_NBITS</span><span class="p">,</span>
-            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">msg_int</span><span class="p">,</span>
-            <span class="s2">&quot;embed_sample_rate&quot;</span><span class="p">:</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">,</span>
-            <span class="s2">&quot;embed_channels&quot;</span><span class="p">:</span> <span class="s2">&quot;per-channel&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;detection_prob&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">prob</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span>
+            <span class="s2">"present"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">"method"</span><span class="p">:</span> <span class="n">WATERMARK_METHOD</span><span class="p">,</span>
+            <span class="s2">"version"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
+            <span class="s2">"model"</span><span class="p">:</span> <span class="n">AUDIOSEAL_GENERATOR</span><span class="p">,</span>
+            <span class="s2">"detector"</span><span class="p">:</span> <span class="n">AUDIOSEAL_DETECTOR</span><span class="p">,</span>
+            <span class="s2">"nbits"</span><span class="p">:</span> <span class="n">AUDIOSEAL_NBITS</span><span class="p">,</span>
+            <span class="s2">"message"</span><span class="p">:</span> <span class="n">msg_int</span><span class="p">,</span>
+            <span class="s2">"embed_sample_rate"</span><span class="p">:</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">,</span>
+            <span class="s2">"embed_channels"</span><span class="p">:</span> <span class="s2">"per-channel"</span><span class="p">,</span>
+            <span class="s2">"detection_prob"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">prob</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">WatermarkResult</span><span class="p">(</span><span class="n">audio_bytes</span><span class="o">=</span><span class="n">wm_bytes</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span> <span class="n">detection_prob</span><span class="o">=</span><span class="n">prob</span><span class="p">)</span></div>
 </div>
@@ -550,20 +1106,20 @@
 
 
 <div class="viewcode-block" id="detect_watermark">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.detect_watermark">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">detect_watermark</span><span class="p">(</span><span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;tuple[float, Optional[int]]&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect a foley watermark in ``audio_bytes`` (lazy AudioSeal).</span>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.detect_watermark">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">detect_watermark</span><span class="p">(</span><span class="n">audio_bytes</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"tuple[float, Optional[int]]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Detect a foley watermark in ``audio_bytes`` (lazy AudioSeal).</span>
 
 <span class="sd">    Downmixes to mono + resamples to 16 kHz, then runs the AudioSeal detector.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        audio_bytes: The clip&#39;s container bytes.</span>
+<span class="sd">        audio_bytes: The clip's container bytes.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        ``(probability, recovered_message)`` — ``probability`` in ``[0, 1]`` that a</span>
 <span class="sd">        watermark is present, and the recovered 16-bit id (``None`` if the</span>
 <span class="sd">        probability is below 0.5).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">torchaudio</span>
@@ -577,7 +1133,7 @@
     <span class="p">]</span>
     <span class="k">if</span> <span class="n">sr</span> <span class="o">!=</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torchaudio</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sr</span><span class="p">,</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">)</span>
-    <span class="n">detector</span> <span class="o">=</span> <span class="n">AudioSeal</span><span class="o">.</span><span class="n">load_detector</span><span class="p">(</span><span class="n">AUDIOSEAL_DETECTOR</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">detector</span> <span class="o">=</span> <span class="n">AudioSeal</span><span class="o">.</span><span class="n">load_detector</span><span class="p">(</span><span class="n">AUDIOSEAL_DETECTOR</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">"cpu"</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
         <span class="n">prob</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">detect_watermark</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">WATERMARK_EMBED_SR</span><span class="p">)</span>
     <span class="n">prob</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
@@ -589,11 +1145,11 @@
 
 
 <div class="viewcode-block" id="resolve_watermarker">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.resolve_watermarker">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.resolve_watermarker">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">resolve_watermarker</span><span class="p">(</span>
     <span class="n">watermark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span> <span class="n">watermarker</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Watermarker</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Watermarker</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve the effective :class:`Watermarker` for a generate call.</span>
+<span class="w">    </span><span class="sd">"""Resolve the effective :class:`Watermarker` for a generate call.</span>
 
 <span class="sd">    Progressive disclosure: generation works with or without ``foley[provenance]``.</span>
 
@@ -608,17 +1164,17 @@
 <span class="sd">    Raises:</span>
 <span class="sd">        WatermarkUnavailable: If ``watermark=True`` but ``audioseal`` is not installed</span>
 <span class="sd">            (and no ``watermarker`` was injected).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">watermark</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">watermarker</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">watermarker</span>
-    <span class="n">available</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;audioseal&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">available</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">"audioseal"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">watermark</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">available</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">WatermarkUnavailable</span><span class="p">(</span>
-            <span class="s2">&quot;watermark=True but AudioSeal is not installed. &quot;</span>
-            <span class="s2">&quot;Install it with `pip install &#39;foley[provenance]&#39;`, pass watermark=False, &quot;</span>
-            <span class="s2">&quot;or leave watermark=None (auto).&quot;</span>
+            <span class="s2">"watermark=True but AudioSeal is not installed. "</span>
+            <span class="s2">"Install it with `pip install 'foley[provenance]'`, pass watermark=False, "</span>
+            <span class="s2">"or leave watermark=None (auto)."</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">AudioSealWatermarker</span><span class="p">()</span> <span class="k">if</span> <span class="n">available</span> <span class="k">else</span> <span class="kc">None</span></div>
 
@@ -629,8 +1185,8 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_coerce</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="s2">&quot;CreditInput&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize a credit input to ``(license, caption, fmt)``.&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="s2">"CreditInput"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Normalize a credit input to ``(license, caption, fmt)``."""</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">LicenseRecord</span><span class="p">,</span> <span class="n">SoundRecord</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">Candidate</span><span class="p">):</span>
@@ -640,22 +1196,22 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">LicenseRecord</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">record</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-        <span class="s2">&quot;content-credential input must be SoundRecord | Candidate | LicenseRecord, &quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">record</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="s2">"content-credential input must be SoundRecord | Candidate | LicenseRecord, "</span>
+        <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">record</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span>
     <span class="p">)</span>
 
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
-    <span class="n">CreditInput</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;SoundRecord&quot;</span><span class="p">,</span> <span class="s2">&quot;Candidate&quot;</span><span class="p">,</span> <span class="s2">&quot;LicenseRecord&quot;</span><span class="p">]</span>
+    <span class="n">CreditInput</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="s2">"SoundRecord"</span><span class="p">,</span> <span class="s2">"Candidate"</span><span class="p">,</span> <span class="s2">"LicenseRecord"</span><span class="p">]</span>
 
 <span class="n">_MIME_BY_FORMAT</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;wav&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/wav&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;flac&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/flac&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;mp3&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/mpeg&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;opus&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/opus&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;m4a&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/mp4&quot;</span><span class="p">,</span>
+    <span class="s2">"wav"</span><span class="p">:</span> <span class="s2">"audio/wav"</span><span class="p">,</span>
+    <span class="s2">"flac"</span><span class="p">:</span> <span class="s2">"audio/flac"</span><span class="p">,</span>
+    <span class="s2">"mp3"</span><span class="p">:</span> <span class="s2">"audio/mpeg"</span><span class="p">,</span>
+    <span class="s2">"opus"</span><span class="p">:</span> <span class="s2">"audio/opus"</span><span class="p">,</span>
+    <span class="s2">"m4a"</span><span class="p">:</span> <span class="s2">"audio/mp4"</span><span class="p">,</span>
 <span class="p">}</span>
 
 
@@ -663,20 +1219,20 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
 
-        <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="s2">&quot;foley&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="s2">"foley"</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="k">return</span> <span class="s2">&quot;unknown&quot;</span>
+        <span class="k">return</span> <span class="s2">"unknown"</span>
 
 
 <div class="viewcode-block" id="build_content_credential">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.build_content_credential">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.build_content_credential">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">build_content_credential</span><span class="p">(</span>
-    <span class="n">record</span><span class="p">:</span> <span class="s2">&quot;CreditInput&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">asset_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">record</span><span class="p">:</span> <span class="s2">"CreditInput"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">asset_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the portable, self-asserted C2PA-shaped content-credential dict.</span>
+<span class="w">    </span><span class="sd">"""Build the portable, self-asserted C2PA-shaped content-credential dict.</span>
 
 <span class="sd">    A pure reader over the ``LicenseRecord`` SSOT (flags never re-derived), mirroring</span>
-<span class="sd">    :func:`foley.provenance.credits.credit_entry`&#39;s discipline. The ``manifest``</span>
+<span class="sd">    :func:`foley.provenance.credits.credit_entry`'s discipline. The ``manifest``</span>
 <span class="sd">    sub-object is byte-for-byte the dict a future signer (``c2pa.Builder``, #8/weave)</span>
 <span class="sd">    promotes into a real signed + embedded manifest — so the credential shape can</span>
 <span class="sd">    never fork between the generate-time sidecar and the export-time manifest.</span>
@@ -684,54 +1240,54 @@
 <span class="sd">    Args:</span>
 <span class="sd">        record: A :class:`~foley.base.SoundRecord`, :class:`~foley.base.Candidate`,</span>
 <span class="sd">            or :class:`~foley.base.LicenseRecord`.</span>
-<span class="sd">        asset_id: The clip&#39;s content-hash id (the sidecar store key / ref).</span>
-<span class="sd">        asset_hash: Optional ``{&quot;alg&quot;: &quot;sha256&quot;, &quot;value&quot;: &lt;hex&gt;}`` of the asset bytes.</span>
+<span class="sd">        asset_id: The clip's content-hash id (the sidecar store key / ref).</span>
+<span class="sd">        asset_hash: Optional ``{"alg": "sha256", "value": &lt;hex&gt;}`` of the asset bytes.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A JSON-serializable content-credential dict (``signed``/``embedded`` False —</span>
 <span class="sd">        it is self-asserted until #8 signs it).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">license_meta</span>
 
     <span class="n">lic</span><span class="p">,</span> <span class="n">caption</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">_coerce</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
     <span class="n">source_type</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">IPTC_TRAINED_ALGORITHMIC_MEDIA</span> <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">is_ai_generated</span> <span class="k">else</span> <span class="n">IPTC_DIGITAL_CREATION</span>
     <span class="p">)</span>
-    <span class="c1"># Prefer the record&#39;s own URL, else the canonical URL from the licensing SSOT</span>
+    <span class="c1"># Prefer the record's own URL, else the canonical URL from the licensing SSOT</span>
     <span class="c1"># (a resolvable URL is what a machine-readable credential needs), else the id.</span>
     <span class="n">license_ref</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">license_url</span> <span class="ow">or</span> <span class="n">license_meta</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="p">)</span><span class="o">.</span><span class="n">url</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">license_id</span>
     <span class="n">software_agent</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span><span class="p">:</span>
-        <span class="n">software_agent</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span>
+        <span class="n">software_agent</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span>
     <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span><span class="p">:</span>
-        <span class="n">software_agent</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span>
+        <span class="n">software_agent</span><span class="p">[</span><span class="s2">"version"</span><span class="p">]</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span>
 
-    <span class="n">created_action</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;c2pa.created&quot;</span><span class="p">,</span> <span class="s2">&quot;digitalSourceType&quot;</span><span class="p">:</span> <span class="n">source_type</span><span class="p">}</span>
+    <span class="n">created_action</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"action"</span><span class="p">:</span> <span class="s2">"c2pa.created"</span><span class="p">,</span> <span class="s2">"digitalSourceType"</span><span class="p">:</span> <span class="n">source_type</span><span class="p">}</span>
     <span class="k">if</span> <span class="n">software_agent</span><span class="p">:</span>
-        <span class="n">created_action</span><span class="p">[</span><span class="s2">&quot;softwareAgent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">software_agent</span>
+        <span class="n">created_action</span><span class="p">[</span><span class="s2">"softwareAgent"</span><span class="p">]</span> <span class="o">=</span> <span class="n">software_agent</span>
 
-    <span class="n">ai_use</span> <span class="o">=</span> <span class="s2">&quot;notAllowed&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span> <span class="k">else</span> <span class="s2">&quot;allowed&quot;</span>
+    <span class="n">ai_use</span> <span class="o">=</span> <span class="s2">"notAllowed"</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span> <span class="k">else</span> <span class="s2">"allowed"</span>
     <span class="n">assertions</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;c2pa.actions&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">created_action</span><span class="p">]}},</span>
+        <span class="p">{</span><span class="s2">"label"</span><span class="p">:</span> <span class="s2">"c2pa.actions"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"actions"</span><span class="p">:</span> <span class="p">[</span><span class="n">created_action</span><span class="p">]}},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;cawg.training-mining&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;entries&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;cawg.ai_inference&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;use&quot;</span><span class="p">:</span> <span class="n">ai_use</span><span class="p">},</span>
-                    <span class="s2">&quot;cawg.ai_generative_training&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;use&quot;</span><span class="p">:</span> <span class="n">ai_use</span><span class="p">},</span>
+            <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"cawg.training-mining"</span><span class="p">,</span>
+            <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"entries"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"cawg.ai_inference"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"use"</span><span class="p">:</span> <span class="n">ai_use</span><span class="p">},</span>
+                    <span class="s2">"cawg.ai_generative_training"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"use"</span><span class="p">:</span> <span class="n">ai_use</span><span class="p">},</span>
                 <span class="p">}</span>
             <span class="p">},</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;stds.schema-org.CreativeWork&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;@context&quot;</span><span class="p">:</span> <span class="s2">&quot;https://schema.org&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;@type&quot;</span><span class="p">:</span> <span class="s2">&quot;CreativeWork&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;license&quot;</span><span class="p">:</span> <span class="n">license_ref</span><span class="p">,</span>
-                <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"stds.schema-org.CreativeWork"</span><span class="p">,</span>
+            <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"@context"</span><span class="p">:</span> <span class="s2">"https://schema.org"</span><span class="p">,</span>
+                <span class="s2">"@type"</span><span class="p">:</span> <span class="s2">"CreativeWork"</span><span class="p">,</span>
+                <span class="s2">"license"</span><span class="p">:</span> <span class="n">license_ref</span><span class="p">,</span>
+                <span class="s2">"author"</span><span class="p">:</span> <span class="p">[</span>
                     <span class="p">{</span>
-                        <span class="s2">&quot;@type&quot;</span><span class="p">:</span> <span class="s2">&quot;Organization&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">creator_name</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">rights_holder</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                        <span class="s2">"@type"</span><span class="p">:</span> <span class="s2">"Organization"</span><span class="p">,</span>
+                        <span class="s2">"name"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">creator_name</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">rights_holder</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
                     <span class="p">}</span>
                 <span class="p">],</span>
             <span class="p">},</span>
@@ -741,45 +1297,45 @@
     <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">is_ai_generated</span><span class="p">:</span>
         <span class="n">assertions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;foley.generation&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span><span class="p">,</span>
-                    <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_seed</span><span class="p">,</span>
-                    <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_params</span> <span class="ow">or</span> <span class="p">{},</span>
-                    <span class="s2">&quot;watermark&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="p">,</span>
+                <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"foley.generation"</span><span class="p">,</span>
+                <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"prompt"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span><span class="p">,</span>
+                    <span class="s2">"seed"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_seed</span><span class="p">,</span>
+                    <span class="s2">"params"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_params</span> <span class="ow">or</span> <span class="p">{},</span>
+                    <span class="s2">"watermark"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">}</span>
         <span class="p">)</span>
 
     <span class="n">manifest</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;claim_generator_info&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;foley&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">_foley_version</span><span class="p">()}],</span>
-        <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="n">_MIME_BY_FORMAT</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">fmt</span> <span class="ow">or</span> <span class="s2">&quot;wav&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">&quot;audio/wav&quot;</span><span class="p">),</span>
-        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">caption</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span> <span class="ow">or</span> <span class="n">asset_id</span><span class="p">,</span>
-        <span class="s2">&quot;ingredients&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="s2">&quot;assertions&quot;</span><span class="p">:</span> <span class="n">assertions</span><span class="p">,</span>
+        <span class="s2">"claim_generator_info"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"foley"</span><span class="p">,</span> <span class="s2">"version"</span><span class="p">:</span> <span class="n">_foley_version</span><span class="p">()}],</span>
+        <span class="s2">"format"</span><span class="p">:</span> <span class="n">_MIME_BY_FORMAT</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">fmt</span> <span class="ow">or</span> <span class="s2">"wav"</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="s2">"audio/wav"</span><span class="p">),</span>
+        <span class="s2">"title"</span><span class="p">:</span> <span class="n">caption</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span> <span class="ow">or</span> <span class="n">asset_id</span><span class="p">,</span>
+        <span class="s2">"ingredients"</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">"assertions"</span><span class="p">:</span> <span class="n">assertions</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="n">CONTENT_CREDENTIAL_SCHEMA</span><span class="p">,</span>
-        <span class="s2">&quot;signed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;embedded&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="s2">&quot;asset_ref&quot;</span><span class="p">:</span> <span class="n">asset_id</span><span class="p">,</span>
-        <span class="s2">&quot;asset_hash&quot;</span><span class="p">:</span> <span class="n">asset_hash</span><span class="p">,</span>
-        <span class="s2">&quot;manifest&quot;</span><span class="p">:</span> <span class="n">manifest</span><span class="p">,</span>
+        <span class="s2">"$schema"</span><span class="p">:</span> <span class="n">CONTENT_CREDENTIAL_SCHEMA</span><span class="p">,</span>
+        <span class="s2">"signed"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">"embedded"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">"asset_ref"</span><span class="p">:</span> <span class="n">asset_id</span><span class="p">,</span>
+        <span class="s2">"asset_hash"</span><span class="p">:</span> <span class="n">asset_hash</span><span class="p">,</span>
+        <span class="s2">"manifest"</span><span class="p">:</span> <span class="n">manifest</span><span class="p">,</span>
     <span class="p">}</span></div>
 
 
 
 <div class="viewcode-block" id="write_content_credential">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.write_content_credential">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.write_content_credential">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">write_content_credential</span><span class="p">(</span>
     <span class="n">store</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">credential</span><span class="p">:</span> <span class="nb">dict</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write ``credential`` into ``store`` keyed by ``asset_id``; return ``asset_id``.</span>
+<span class="w">    </span><span class="sd">"""Write ``credential`` into ``store`` keyed by ``asset_id``; return ``asset_id``.</span>
 
 <span class="sd">    ``store`` is any ``MutableMapping[str, dict]`` (default:</span>
 <span class="sd">    :func:`foley.stores.make_provenance_store`, a local JSON-file store; swap for a</span>
 <span class="sd">    cloud ``dol`` store to move sidecars off-box).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">store</span><span class="p">[</span><span class="n">asset_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">credential</span>
     <span class="k">return</span> <span class="n">asset_id</span></div>
 
@@ -791,9 +1347,9 @@
 
 
 <div class="viewcode-block" id="art50_checklist">
-<a class="viewcode-back" href="../../../module_docs/foley/provenance/disclosure.html#foley.provenance.disclosure.art50_checklist">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">art50_checklist</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="s2">&quot;CreditInput&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the per-clip EU AI Act Art. 50 transparency checklist (pure reader).</span>
+<a class="viewcode-back" href="../../../_autosummary/foley.provenance.disclosure.html#foley.provenance.disclosure.art50_checklist">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">art50_checklist</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="s2">"CreditInput"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return the per-clip EU AI Act Art. 50 transparency checklist (pure reader).</span>
 
 <span class="sd">    Reports, per obligation, whether it is ``required`` for this clip and whether it</span>
 <span class="sd">    has been ``met`` — so a caller can see what a publish still needs (e.g. the</span>
@@ -807,83 +1363,105 @@
 <span class="sd">            or :class:`~foley.base.LicenseRecord`.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        ``{&quot;is_ai_generated&quot;, &quot;obligations&quot;: {name: {required, met, detail}},</span>
-<span class="sd">        &quot;pending&quot;: [...], &quot;publish_ready&quot;: bool, &quot;provenance&quot;: {...}}``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        ``{"is_ai_generated", "obligations": {name: {required, met, detail}},</span>
+<span class="sd">        "pending": [...], "publish_ready": bool, "provenance": {...}}``.</span>
+<span class="sd">    """</span>
     <span class="n">lic</span><span class="p">,</span> <span class="n">_caption</span><span class="p">,</span> <span class="n">_fmt</span> <span class="o">=</span> <span class="n">_coerce</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
     <span class="n">ai</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">is_ai_generated</span>
-    <span class="n">watermarked</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">watermark</span> <span class="ow">and</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;present&quot;</span><span class="p">))</span>
+    <span class="n">watermarked</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">watermark</span> <span class="ow">and</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"present"</span><span class="p">))</span>
     <span class="n">has_manifest</span> <span class="o">=</span> <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 
     <span class="n">obligations</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;machine_readable_mark&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="n">ai</span><span class="p">,</span>
-            <span class="s2">&quot;met&quot;</span><span class="p">:</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ai</span><span class="p">)</span> <span class="ow">or</span> <span class="n">watermarked</span><span class="p">,</span>
-            <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;AudioSeal watermark on the generated clip (Art. 50(2))&quot;</span><span class="p">,</span>
+        <span class="s2">"machine_readable_mark"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"required"</span><span class="p">:</span> <span class="n">ai</span><span class="p">,</span>
+            <span class="s2">"met"</span><span class="p">:</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ai</span><span class="p">)</span> <span class="ow">or</span> <span class="n">watermarked</span><span class="p">,</span>
+            <span class="s2">"detail"</span><span class="p">:</span> <span class="s2">"AudioSeal watermark on the generated clip (Art. 50(2))"</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="s2">&quot;provenance_manifest&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="n">ai</span><span class="p">,</span>
-            <span class="s2">&quot;met&quot;</span><span class="p">:</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ai</span><span class="p">)</span> <span class="ow">or</span> <span class="n">has_manifest</span><span class="p">,</span>
-            <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;C2PA / content-credential recording the AI origin&quot;</span><span class="p">,</span>
+        <span class="s2">"provenance_manifest"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"required"</span><span class="p">:</span> <span class="n">ai</span><span class="p">,</span>
+            <span class="s2">"met"</span><span class="p">:</span> <span class="p">(</span><span class="ow">not</span> <span class="n">ai</span><span class="p">)</span> <span class="ow">or</span> <span class="n">has_manifest</span><span class="p">,</span>
+            <span class="s2">"detail"</span><span class="p">:</span> <span class="s2">"C2PA / content-credential recording the AI origin"</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="s2">&quot;platform_label&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">),</span>
-            <span class="s2">&quot;met&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">),</span>  <span class="c1"># recommendation surfaced = met</span>
-            <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;synthetic-media platform-label recommendation (Art. 50(4))&quot;</span><span class="p">,</span>
+        <span class="s2">"platform_label"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"required"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">),</span>
+            <span class="s2">"met"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">),</span>  <span class="c1"># recommendation surfaced = met</span>
+            <span class="s2">"detail"</span><span class="p">:</span> <span class="s2">"synthetic-media platform-label recommendation (Art. 50(4))"</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="s2">&quot;voice_disclosure&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">contains_recognizable_voice</span><span class="p">),</span>
-            <span class="s2">&quot;met&quot;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">)</span>
+        <span class="s2">"voice_disclosure"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"required"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">contains_recognizable_voice</span><span class="p">),</span>
+            <span class="s2">"met"</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">contains_recognizable_voice</span>
             <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;recognizable-voice deepfake disclosure&quot;</span><span class="p">,</span>
+            <span class="s2">"detail"</span><span class="p">:</span> <span class="s2">"recognizable-voice deepfake disclosure"</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">}</span>
     <span class="n">pending</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obligations</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">o</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">o</span><span class="p">[</span><span class="s2">&quot;met&quot;</span><span class="p">]</span>
+        <span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obligations</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">o</span><span class="p">[</span><span class="s2">"required"</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">o</span><span class="p">[</span><span class="s2">"met"</span><span class="p">]</span>
     <span class="p">]</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;is_ai_generated&quot;</span><span class="p">:</span> <span class="n">ai</span><span class="p">,</span>
-        <span class="s2">&quot;obligations&quot;</span><span class="p">:</span> <span class="n">obligations</span><span class="p">,</span>
-        <span class="s2">&quot;pending&quot;</span><span class="p">:</span> <span class="n">pending</span><span class="p">,</span>
-        <span class="s2">&quot;publish_ready&quot;</span><span class="p">:</span> <span class="ow">not</span> <span class="n">pending</span><span class="p">,</span>
-        <span class="s2">&quot;provenance&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;generator_model&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span><span class="p">,</span>
-            <span class="s2">&quot;generator_version&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span><span class="p">,</span>
-            <span class="s2">&quot;generation_prompt&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span><span class="p">,</span>
-            <span class="s2">&quot;generation_seed&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_seed</span><span class="p">,</span>
-            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
-            <span class="s2">&quot;license_id&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="p">,</span>
+        <span class="s2">"is_ai_generated"</span><span class="p">:</span> <span class="n">ai</span><span class="p">,</span>
+        <span class="s2">"obligations"</span><span class="p">:</span> <span class="n">obligations</span><span class="p">,</span>
+        <span class="s2">"pending"</span><span class="p">:</span> <span class="n">pending</span><span class="p">,</span>
+        <span class="s2">"publish_ready"</span><span class="p">:</span> <span class="ow">not</span> <span class="n">pending</span><span class="p">,</span>
+        <span class="s2">"provenance"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"generator_model"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span><span class="p">,</span>
+            <span class="s2">"generator_version"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span><span class="p">,</span>
+            <span class="s2">"generation_prompt"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span><span class="p">,</span>
+            <span class="s2">"generation_seed"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_seed</span><span class="p">,</span>
+            <span class="s2">"source"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="s2">"license_id"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">}</span></div>
 
 </pre></div>
 
-           </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
   </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
 
-</footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
-
-</body>
+  </footer>
+  </body>
 </html>

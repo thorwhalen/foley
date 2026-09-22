@@ -1,0 +1,542 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="alternate" type="text/markdown" href="foley.weave.anchor.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+<link rel="alternate" type="text/markdown" href="foley.weave.anchor.html.md">
+<link rel="describedby" href="llms.txt">
+    <title>foley.weave.anchor &#8212; foley</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=e39d37f2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fd10adb8"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_autosummary/foley.weave.anchor';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.23" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">foley</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">foley.weave.anchor</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-foley.weave.anchor">
+<span id="foley-weave-anchor"></span><h1>foley.weave.anchor<a class="headerlink" href="#module-foley.weave.anchor" title="Link to this heading">#</a></h1>
+<p>Symbolic-anchor → sample-onset heuristics — the SELECT→WEAVE timing bridge (report 06 §2.4).</p>
+<p>Pure, stdlib-only functions that turn a placed sound’s <em>symbolic</em> anchor (SELECT’s
+<code class="docutils literal notranslate"><span class="pre">&quot;on</span> <span class="pre">'pushed</span> <span class="pre">open'&quot;</span></code> string, or a resolved <a class="reference internal" href="foley.base.html#foley.base.Placement" title="foley.base.Placement"><code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code></a>) into a
+concrete trigger time (seconds) against a forced-aligned <code class="docutils literal notranslate"><span class="pre">word_timeline</span></code>
+(<code class="docutils literal notranslate"><span class="pre">[{'word','start','end'},</span> <span class="pre">...]</span></code>). Cheapest-first, exactly as report 06 §2.4:</p>
+<ul class="simple">
+<li><p><strong>word anchor</strong> (one-shots) — fire on the onset of the trigger word;</p></li>
+<li><p><strong>pre-roll</strong> — shift a clip earlier so its salient transient lands on the anchor;</p></li>
+<li><p><strong>sentence span</strong> (beds) — start at the first word of the sentence, run to the last;</p></li>
+<li><p><strong>scene / paragraph boundary</strong> (stingers, ambience swaps) — the boundary’s first word;</p></li>
+<li><p><strong>pause snapping</strong> — nudge an onset to the nearest inter-word gap to avoid masking speech.</p></li>
+</ul>
+<p>These are pure <code class="docutils literal notranslate"><span class="pre">(anchor,</span> <span class="pre">word_timeline)</span> <span class="pre">-&gt;</span> <span class="pre">seconds</span></code> functions with no I/O and no
+heavy dependency, so they are independently unit-testable and keep <code class="docutils literal notranslate"><span class="pre">import</span>
+<span class="pre">foley.weave</span></code> dol-only. <code class="docutils literal notranslate"><span class="pre">foley.weave.anchor.parse_symbolic_anchor</span></code> is the single
+SSOT bridge from SELECT’s sparse <code class="docutils literal notranslate"><span class="pre">TimelineItem.onset</span></code> string to a
+<a class="reference internal" href="foley.base.html#foley.base.Placement" title="foley.base.Placement"><code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code></a>.</p>
+<p class="rubric">Module Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.weave.anchor.SEGMENT_GAP_S" title="foley.weave.anchor.SEGMENT_GAP_S"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SEGMENT_GAP_S</span></code></a></p></td>
+<td><p>Inter-word gap (seconds) that ends a sentence segment (report 06 §2.4 uses <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">~350</span> <span class="pre">ms</span></code> as a lightweight sentence segmenter over the aligned transcript).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.weave.anchor.parse_symbolic_anchor" title="foley.weave.anchor.parse_symbolic_anchor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_symbolic_anchor</span></code></a>(onset, *[, layer, loop])</p></td>
+<td><p>Parse SELECT's sparse symbolic <code class="docutils literal notranslate"><span class="pre">onset</span></code> string into a resolved-later <code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.weave.anchor.resolve_anchor" title="foley.weave.anchor.resolve_anchor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_anchor</span></code></a>(placement, word_timeline, *)</p></td>
+<td><p>Resolve a <code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code> to a concrete <code class="docutils literal notranslate"><span class="pre">(onset_seconds,</span> <span class="pre">duration_seconds)</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.weave.anchor.SEGMENT_GAP_S">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.anchor.</span></span><span class="sig-name descname"><span class="pre">SEGMENT_GAP_S</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.35</span></span><a class="headerlink" href="#foley.weave.anchor.SEGMENT_GAP_S" title="Link to this definition">#</a></dt>
+<dd><p>Inter-word gap (seconds) that ends a sentence segment (report 06 §2.4 uses
+<code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">~350</span> <span class="pre">ms</span></code> as a lightweight sentence segmenter over the aligned transcript).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.anchor.parse_symbolic_anchor">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.anchor.</span></span><span class="sig-name descname"><span class="pre">parse_symbolic_anchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">onset</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Layer.sfx_fg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/weave/anchor.html#parse_symbolic_anchor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.anchor.parse_symbolic_anchor" title="Link to this definition">#</a></dt>
+<dd><p>Parse SELECT’s sparse symbolic <code class="docutils literal notranslate"><span class="pre">onset</span></code> string into a resolved-later <code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code>.</p>
+<p>The anchor <em>type</em> follows the item’s role (report 06 §2.4): beds
+(<code class="docutils literal notranslate"><span class="pre">loop</span></code> / <code class="docutils literal notranslate"><span class="pre">ambience</span></code> / <code class="docutils literal notranslate"><span class="pre">music</span></code>) span a <strong>sentence</strong>, stingers land on a
+<strong>scene</strong> boundary, and everything else is a <strong>word</strong> anchor; the <code class="docutils literal notranslate"><span class="pre">ref</span></code> is the
+quoted phrase the sound lands on. A <code class="docutils literal notranslate"><span class="pre">None</span></code> onset means “no cue”: beds span from
+the start, one-shots sit at <code class="docutils literal notranslate"><span class="pre">absolute</span></code> 0. A bare number (defensive — SELECT is
+told never to emit one) is read as an absolute offset in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>onset</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – The symbolic anchor string (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;on</span> <span class="pre">'pushed</span> <span class="pre">open'&quot;</span></code>) or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>layer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="foley.base.html#foley.base.Layer" title="foley.base.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></span>) – The item’s mix layer (selects span/boundary vs word anchoring).</p></li>
+<li><p><strong>loop</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether the item is a looping bed (span-anchored).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="foley.base.html#foley.base.Placement" title="foley.base.Placement"><code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code> whose <code class="docutils literal notranslate"><span class="pre">onset</span></code> (seconds) is resolved later by
+<a class="reference internal" href="#foley.weave.anchor.resolve_anchor" title="foley.weave.anchor.resolve_anchor"><code class="xref py py-func docutils literal notranslate"><span class="pre">resolve_anchor()</span></code></a> against the <code class="docutils literal notranslate"><span class="pre">word_timeline</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.weave.anchor.resolve_anchor">
+<span class="sig-prename descclassname"><span class="pre">foley.weave.anchor.</span></span><span class="sig-name descname"><span class="pre">resolve_anchor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">placement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_timeline</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">snap_pauses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/weave/anchor.html#resolve_anchor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.weave.anchor.resolve_anchor" title="Link to this definition">#</a></dt>
+<dd><p>Resolve a <code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code> to a concrete <code class="docutils literal notranslate"><span class="pre">(onset_seconds,</span> <span class="pre">duration_seconds)</span></code>.</p>
+<p>Dispatches on <code class="docutils literal notranslate"><span class="pre">placement.anchor</span></code> (report 06 §2.4): <code class="docutils literal notranslate"><span class="pre">absolute</span></code> uses the
+stored offset; <code class="docutils literal notranslate"><span class="pre">word</span></code> fires on the trigger word; <code class="docutils literal notranslate"><span class="pre">sentence</span></code> spans its
+sentence (filling <code class="docutils literal notranslate"><span class="pre">duration</span></code> when unset — beds loop to fill it); <code class="docutils literal notranslate"><span class="pre">scene</span></code> /
+<code class="docutils literal notranslate"><span class="pre">paragraph</span></code> land on the boundary. <code class="docutils literal notranslate"><span class="pre">pre_roll</span></code> is then subtracted (clamped at
+0), and — when <code class="docutils literal notranslate"><span class="pre">snap_pauses</span></code> — the onset snaps to the nearest inter-word gap.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>placement</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="foley.base.html#foley.base.Placement" title="foley.base.Placement"><code class="xref py py-class docutils literal notranslate"><span class="pre">Placement</span></code></a></span>) – The symbolic placement to resolve.</p></li>
+<li><p><strong>word_timeline</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</span>) – The forced-aligned <code class="docutils literal notranslate"><span class="pre">[{'word','start','end'},</span> <span class="pre">...]</span></code>.</p></li>
+<li><p><strong>snap_pauses</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, snap the resolved onset to the nearest pause.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">(onset_seconds,</span> <span class="pre">duration_seconds_or_None)</span></code>. <code class="docutils literal notranslate"><span class="pre">duration</span></code> is filled only
+for a span anchor whose <code class="docutils literal notranslate"><span class="pre">placement.duration</span></code> was unset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.weave.anchor.SEGMENT_GAP_S"><code class="docutils literal notranslate"><span class="pre">SEGMENT_GAP_S</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.weave.anchor.parse_symbolic_anchor"><code class="docutils literal notranslate"><span class="pre">parse_symbolic_anchor()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.weave.anchor.resolve_anchor"><code class="docutils literal notranslate"><span class="pre">resolve_anchor()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/_autosummary/foley.weave.anchor.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,164 +1,720 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.generate &mdash; foley 0.0.22 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="alternate" type="text/markdown" href="generate.html.md">
+<link rel="describedby" href="../../../llms.txt" type="text/markdown">
+    <title>foley.sources.generate &#8212; foley</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/epythet.css?v=e39d37f2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/foley/sources/generate';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.23" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=96ec9c95"></script>
-      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-</head>
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="../../../index.html" class="icon icon-home">
-            foley
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley.html">foley</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent.html">foley.agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/local_llm.html">foley.agent.local_llm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/agent_kit.html">foley.agent_kit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/audio.html">foley.audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/base.html">foley.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/cli.html">foley.cli</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval.html">foley.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index.html">foley.index</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/library.html">foley.index.library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/search.html">foley.index.search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/licensing.html">foley.licensing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs.html">foley.obs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance.html">foley.provenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/qc.html">foley.qc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/requirements.html">foley.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/runtime.html">foley.runtime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/score.html">foley.score</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources.html">foley.sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/stores.html">foley.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave.html">foley.weave</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
-</ul>
 
-        </div>
-      </div>
-    </nav>
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">foley</a>
-      </nav>
+  
+    
+  
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-          <li class="breadcrumb-item"><a href="../../foley.html">foley</a></li>
-      <li class="breadcrumb-item active">foley.sources.generate</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">foley</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
   </ul>
-  <hr/>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../foley.html" class="nav-link">foley</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">foley.sources.generate</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <h1>Source code for foley.sources.generate</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;``generate`` — the live generation-source façade (SOURCE → INDEX in one call).</span>
+<span></span><span class="sd">"""``generate`` — the live generation-source façade (SOURCE → INDEX in one call).</span>
 
 <span class="sd">The generate sibling of :func:`foley.sources.pull.add_from`: resolve a registered</span>
 <span class="sd">:class:`~foley.sources.base.GenerateAdapter`, synthesize a sound from a prompt, and</span>
@@ -173,13 +729,13 @@
 
 <span class="sd">* **By-value storage — the generation flywheel.** Both generator licenses</span>
 <span class="sd">  (``Stability-Community``, ``ElevenLabs-SFX``) carry ``cache_bytes_ok=True``, so</span>
-<span class="sd">  the bytes are stored by-value (the opposite of Freesound&#39;s by-reference); every</span>
+<span class="sd">  the bytes are stored by-value (the opposite of Freesound's by-reference); every</span>
 <span class="sd">  generation becomes a first-class, re-searchable, locally-served library entry —</span>
 <span class="sd">  a future free retrieval. The id is the decoded-PCM content hash</span>
 <span class="sd">  (``sound_id=None``), so a byte-identical regeneration content-dedups</span>
 <span class="sd">  (``skipped_dup``) and is never stored twice.</span>
 <span class="sd">* **Operator-consented AI-training gate.** Both generator licenses carry</span>
-<span class="sd">  ``ai_training_ok=False``, which ``ingest_one``&#39;s universal fail-closed gate would</span>
+<span class="sd">  ``ai_training_ok=False``, which ``ingest_one``'s universal fail-closed gate would</span>
 <span class="sd">  reject. The user calling :func:`foley.generate` and keeping the result IS the</span>
 <span class="sd">  explicit consent (they asked to create + persist THIS sound), so the façade calls</span>
 <span class="sd">  ``ingest_one(..., allow_ai_training_forbidden=True)`` — the SAME lever</span>
@@ -193,7 +749,7 @@
 <span class="sd">returns the full :class:`~foley.index.ingest.IngestReport` for ``add_from``-symmetric</span>
 <span class="sd">resilience — a backend failure becomes a recorded ``error`` entry, never an</span>
 <span class="sd">unhandled exception.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -205,14 +761,14 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_source</span>
 
 <span class="c1">#: The consent note stamped on a stored generation whose license forbids AI</span>
-<span class="c1">#: training (mirrors :func:`foley.bootstrap.bootstrap`&#39;s Ring-2 acknowledgement).</span>
-<span class="n">_CONSENT_NOTE</span> <span class="o">=</span> <span class="s2">&quot;AI-training restriction acknowledged by operator (consent recorded)&quot;</span>
+<span class="c1">#: training (mirrors :func:`foley.bootstrap.bootstrap`'s Ring-2 acknowledgement).</span>
+<span class="n">_CONSENT_NOTE</span> <span class="o">=</span> <span class="s2">"AI-training restriction acknowledged by operator (consent recorded)"</span>
 
 
 <div class="viewcode-block" id="GenerationError">
-<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.GenerationError">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.sources.html#foley.GenerationError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GenerationError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised by :func:`foley.generate` when a backend yields no stored sound.</span>
+<span class="w">    </span><span class="sd">"""Raised by :func:`foley.generate` when a backend yields no stored sound.</span>
 
 <span class="sd">    Carries the full :class:`~foley.index.ingest.IngestReport` and the terminal</span>
 <span class="sd">    :attr:`status` so a caller can react distinctly to ``quarantined`` (QC-rejected —</span>
@@ -223,8 +779,8 @@
 <span class="sd">    Attributes:</span>
 <span class="sd">        report: The :class:`~foley.index.ingest.IngestReport` from the run.</span>
 <span class="sd">        status: The terminal :class:`~foley.index.ingest.IngestResult` status</span>
-<span class="sd">            (``&#39;quarantined&#39;`` | ``&#39;rights_blocked&#39;`` | ``&#39;error&#39;`` | …).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">            (``'quarantined'`` | ``'rights_blocked'`` | ``'error'`` | …).</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">report</span><span class="p">:</span> <span class="n">IngestReport</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
@@ -234,43 +790,43 @@
 
 
 <div class="viewcode-block" id="SafetyRefusal">
-<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.SafetyRefusal">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.sources.html#foley.SafetyRefusal">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SafetyRefusal</span><span class="p">(</span><span class="n">GenerationError</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised (fail-closed) when a generation prompt trips a #9b safety gate.</span>
+<span class="w">    </span><span class="sd">"""Raised (fail-closed) when a generation prompt trips a #9b safety gate.</span>
 
 <span class="sd">    A pre-synthesis hard stop: nothing is generated or stored. Distinct from a</span>
 <span class="sd">    resilience ``error`` result (a backend/ingest failure the workhorse records</span>
 <span class="sd">    without raising) — a safety refusal is a deliberate refusal of an unsafe</span>
 <span class="sd">    request. Its ``report`` is an empty pre-generation report and ``status`` is</span>
-<span class="sd">    ``&#39;refused&#39;``. Carries :attr:`hits` (the matched marks/patterns). Subclass of</span>
+<span class="sd">    ``'refused'``. Carries :attr:`hits` (the matched marks/patterns). Subclass of</span>
 <span class="sd">    :class:`GenerationError` so the public :func:`foley.generate` ``Raises`` clause</span>
 <span class="sd">    already covers it. See :func:`foley.provenance.disclosure.scan_prompt`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hits</span><span class="p">:</span> <span class="s2">&quot;list[str]&quot;</span><span class="p">,</span> <span class="n">report</span><span class="p">:</span> <span class="n">IngestReport</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="n">report</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;refused&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hits</span><span class="p">:</span> <span class="s2">"list[str]"</span><span class="p">,</span> <span class="n">report</span><span class="p">:</span> <span class="n">IngestReport</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="n">report</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">"refused"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hits</span> <span class="o">=</span> <span class="n">hits</span></div>
 
 
 
 <div class="viewcode-block" id="TrademarkRefusal">
-<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.TrademarkRefusal">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.sources.html#foley.TrademarkRefusal">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TrademarkRefusal</span><span class="p">(</span><span class="n">SafetyRefusal</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`SafetyRefusal` for a prompt naming a trademarked audio logo (report 07 §7.2).&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">"""A :class:`SafetyRefusal` for a prompt naming a trademarked audio logo (report 07 §7.2)."""</span></div>
 
 
 
 <div class="viewcode-block" id="RecognizableVoiceRefusal">
-<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.RecognizableVoiceRefusal">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.sources.html#foley.RecognizableVoiceRefusal">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RecognizableVoiceRefusal</span><span class="p">(</span><span class="n">SafetyRefusal</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`SafetyRefusal` for a prompt requesting a recognizable / cloned voice (report 07 §7.1).&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">"""A :class:`SafetyRefusal` for a prompt requesting a recognizable / cloned voice (report 07 §7.1)."""</span></div>
 
 
 
 <div class="viewcode-block" id="candidate_of">
-<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.candidate_of">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.sources.html#foley.candidate_of">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">candidate_of</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">IngestResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Candidate</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap a stored :class:`~foley.index.ingest.IngestResult` as a generated candidate.</span>
+<span class="w">    </span><span class="sd">"""Wrap a stored :class:`~foley.index.ingest.IngestResult` as a generated candidate.</span>
 
 <span class="sd">    The report-10 §4.2 shape: retrieval and generation return the same</span>
 <span class="sd">    :class:`~foley.base.Candidate`, differing only in ``origin``. Use on a</span>
@@ -282,7 +838,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A :class:`~foley.base.Candidate` with ``origin=CandidateOrigin.generated``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">Candidate</span><span class="p">(</span><span class="n">sound</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">record</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">CandidateOrigin</span><span class="o">.</span><span class="n">generated</span><span class="p">)</span></div>
 
 
@@ -290,19 +846,19 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_generate</span><span class="p">(</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stable_audio&quot;</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"stable_audio"</span><span class="p">,</span>
     <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">store</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">adapter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">watermark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">on_flagged</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;refuse&quot;</span><span class="p">,</span>
+    <span class="n">on_flagged</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"refuse"</span><span class="p">,</span>
     <span class="n">watermarker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">provenance_store</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">affordances</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestReport</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a sound via ``backend`` and ingest it (by-value) into ``library``.</span>
+<span class="w">    </span><span class="sd">"""Generate a sound via ``backend`` and ingest it (by-value) into ``library``.</span>
 
-<span class="sd">    Progressive disclosure: ``generate(&quot;a single wooden door creak&quot;)`` works out of</span>
+<span class="sd">    Progressive disclosure: ``generate("a single wooden door creak")`` works out of</span>
 <span class="sd">    the box (the local Stable Audio Open backend, into the process-wide default</span>
 <span class="sd">    library); every other knob is an optional keyword. The generated bytes are</span>
 <span class="sd">    routed through the shared :func:`~foley.index.ingest.ingest_one` pipeline</span>
@@ -312,8 +868,8 @@
 
 <span class="sd">    * **Safety gate** — the prompt is scanned for trademarked audio logos + cloned</span>
 <span class="sd">      voices *before* any synthesis spend (:func:`foley.provenance.disclosure.scan_prompt`).</span>
-<span class="sd">      Fail-closed by default (``on_flagged=&#39;refuse&#39;`` raises :class:`SafetyRefusal`);</span>
-<span class="sd">      ``on_flagged=&#39;warn&#39;`` proceeds but stamps ``potential_trademark`` /</span>
+<span class="sd">      Fail-closed by default (``on_flagged='refuse'`` raises :class:`SafetyRefusal`);</span>
+<span class="sd">      ``on_flagged='warn'`` proceeds but stamps ``potential_trademark`` /</span>
 <span class="sd">      ``contains_recognizable_voice`` on the record so :func:`foley.keep` drops it</span>
 <span class="sd">      downstream.</span>
 <span class="sd">    * **Watermark** — with ``foley[provenance]`` installed, the generated bytes are</span>
@@ -326,8 +882,8 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        prompt: The natural-language sound description.</span>
-<span class="sd">        backend: A registered generate-source name (``&#39;stable_audio&#39;`` (default,</span>
-<span class="sd">            local) | ``&#39;elevenlabs&#39;`` (hosted)).</span>
+<span class="sd">        backend: A registered generate-source name (``'stable_audio'`` (default,</span>
+<span class="sd">            local) | ``'elevenlabs'`` (hosted)).</span>
 <span class="sd">        library: Target :class:`~foley.index.library.SoundLibrary` (default: the</span>
 <span class="sd">            process-wide default library).</span>
 <span class="sd">        store: If ``False``, synthesize + enrich but do not add to the library</span>
@@ -338,17 +894,17 @@
 <span class="sd">        watermark: ``True`` require an AudioSeal watermark (error if</span>
 <span class="sd">            ``foley[provenance]`` absent), ``False`` never watermark, ``None``</span>
 <span class="sd">            (default, auto) watermark iff AudioSeal is installed.</span>
-<span class="sd">        on_flagged: ``&#39;refuse&#39;`` (default, fail-closed) raise on a safety-flagged</span>
-<span class="sd">            prompt; ``&#39;warn&#39;`` proceed and flag the record.</span>
+<span class="sd">        on_flagged: ``'refuse'`` (default, fail-closed) raise on a safety-flagged</span>
+<span class="sd">            prompt; ``'warn'`` proceed and flag the record.</span>
 <span class="sd">        watermarker: An injected :class:`~foley.provenance.disclosure.Watermarker`</span>
 <span class="sd">            (the DI seam; wins over auto-detect — tests pass a fake).</span>
 <span class="sd">        provenance_store: A ``MutableMapping[str, dict]`` for content-credential</span>
 <span class="sd">            sidecars (default: :func:`foley.stores.make_provenance_store`).</span>
-<span class="sd">        **affordances: Unified generation affordances forwarded to the adapter&#39;s</span>
+<span class="sd">        **affordances: Unified generation affordances forwarded to the adapter's</span>
 <span class="sd">            ``generate`` (``duration``, ``prompt_influence``, ``negative_prompt``,</span>
 <span class="sd">            ``steps``, ``seed``, ``loop``, ``output_format`` — see</span>
 <span class="sd">            :data:`foley.base.GENERATION_AFFORDANCES`); unsupported ones are</span>
-<span class="sd">            warn-and-dropped per the source&#39;s ``on_unsupported_param``.</span>
+<span class="sd">            warn-and-dropped per the source's ``on_unsupported_param``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        An :class:`~foley.index.ingest.IngestReport` — inspect ``.ingested`` for the</span>
@@ -357,29 +913,29 @@
 <span class="sd">        raised (``add_from``-symmetric resilience).</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        SafetyRefusal: If the prompt trips a safety gate and ``on_flagged=&#39;refuse&#39;``.</span>
+<span class="sd">        SafetyRefusal: If the prompt trips a safety gate and ``on_flagged='refuse'``.</span>
 <span class="sd">        WatermarkUnavailable: If ``watermark=True`` but ``foley[provenance]`` is absent.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..index.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_library</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..provenance</span><span class="w"> </span><span class="kn">import</span> <span class="n">disclosure</span>  <span class="c1"># stdlib top-level; heavy deps lazy inside</span>
 
-    <span class="k">if</span> <span class="n">on_flagged</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;refuse&quot;</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;on_flagged must be &#39;refuse&#39; or &#39;warn&#39;, got </span><span class="si">{</span><span class="n">on_flagged</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">on_flagged</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"refuse"</span><span class="p">,</span> <span class="s2">"warn"</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"on_flagged must be 'refuse' or 'warn', got </span><span class="si">{</span><span class="n">on_flagged</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># -- Safety gate (fail-closed) — BEFORE any GPU/HTTP spend ------------------</span>
     <span class="n">scan</span> <span class="o">=</span> <span class="n">disclosure</span><span class="o">.</span><span class="n">scan_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">flagged</span> <span class="ow">and</span> <span class="n">on_flagged</span> <span class="o">==</span> <span class="s2">&quot;refuse&quot;</span><span class="p">:</span>
-        <span class="n">empty</span> <span class="o">=</span> <span class="n">IngestReport</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">flagged</span> <span class="ow">and</span> <span class="n">on_flagged</span> <span class="o">==</span> <span class="s2">"refuse"</span><span class="p">:</span>
+        <span class="n">empty</span> <span class="o">=</span> <span class="n">IngestReport</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">TrademarkRefusal</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;prompt matches trademarked audio logo(s): </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;Pass on_flagged=&#39;warn&#39; to override (the clip is then flagged and keep() drops it).&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"prompt matches trademarked audio logo(s): </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="p">)</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"Pass on_flagged='warn' to override (the clip is then flagged and keep() drops it)."</span><span class="p">,</span>
                 <span class="n">hits</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="p">),</span>
                 <span class="n">report</span><span class="o">=</span><span class="n">empty</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">raise</span> <span class="n">RecognizableVoiceRefusal</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;prompt requests a recognizable / cloned voice: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
-            <span class="s2">&quot;Pass on_flagged=&#39;warn&#39; to override (the clip is then flagged and keep() drops it).&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"prompt requests a recognizable / cloned voice: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="s2">"Pass on_flagged='warn' to override (the clip is then flagged and keep() drops it)."</span><span class="p">,</span>
             <span class="n">hits</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">),</span>
             <span class="n">report</span><span class="o">=</span><span class="n">empty</span><span class="p">,</span>
         <span class="p">)</span>
@@ -389,9 +945,9 @@
     <span class="n">wm</span> <span class="o">=</span> <span class="n">disclosure</span><span class="o">.</span><span class="n">resolve_watermarker</span><span class="p">(</span><span class="n">watermark</span><span class="p">,</span> <span class="n">watermarker</span><span class="p">)</span>
 
     <span class="n">lib</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
-    <span class="n">gen</span> <span class="o">=</span> <span class="n">adapter</span> <span class="k">if</span> <span class="n">adapter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">get_source</span><span class="p">(</span><span class="n">backend</span><span class="p">)[</span><span class="s2">&quot;adapter&quot;</span><span class="p">]</span>
+    <span class="n">gen</span> <span class="o">=</span> <span class="n">adapter</span> <span class="k">if</span> <span class="n">adapter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">get_source</span><span class="p">(</span><span class="n">backend</span><span class="p">)[</span><span class="s2">"adapter"</span><span class="p">]</span>
 
-    <span class="n">report</span> <span class="o">=</span> <span class="n">IngestReport</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">IngestReport</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="c1"># A synthesis failure (auth / rate-limit / model load / bad response) yields an</span>
     <span class="c1"># inspectable report with one error entry, never an unhandled exception.</span>
     <span class="k">try</span><span class="p">:</span>
@@ -400,24 +956,24 @@
 
         <span class="c1"># GenAI child span for the actual synthesis (no-op unless obs is enabled, #11).</span>
         <span class="k">with</span> <span class="n">current_run</span><span class="p">()</span><span class="o">.</span><span class="n">span</span><span class="p">(</span>
-            <span class="s2">&quot;gen.generate&quot;</span><span class="p">,</span>
-            <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;CLIENT&quot;</span><span class="p">,</span>
+            <span class="s2">"gen.generate"</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="s2">"CLIENT"</span><span class="p">,</span>
             <span class="o">**</span><span class="p">{</span>
-                <span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;operation&quot;</span><span class="p">]:</span> <span class="s2">&quot;generate_content&quot;</span><span class="p">,</span>
-                <span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;provider&quot;</span><span class="p">]:</span> <span class="n">backend</span><span class="p">,</span>
-                <span class="n">GENAI</span><span class="p">[</span><span class="s2">&quot;request_model&quot;</span><span class="p">]:</span> <span class="n">backend</span><span class="p">,</span>
+                <span class="n">GENAI</span><span class="p">[</span><span class="s2">"operation"</span><span class="p">]:</span> <span class="s2">"generate_content"</span><span class="p">,</span>
+                <span class="n">GENAI</span><span class="p">[</span><span class="s2">"provider"</span><span class="p">]:</span> <span class="n">backend</span><span class="p">,</span>
+                <span class="n">GENAI</span><span class="p">[</span><span class="s2">"request_model"</span><span class="p">]:</span> <span class="n">backend</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">):</span>
             <span class="n">clip</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
-            <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:generate&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+            <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:generate"</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">"error"</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">report</span>
 
     <span class="n">lic</span> <span class="o">=</span> <span class="n">clip</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span>
 
-    <span class="c1"># Warn-mode: reaching here with a flagged scan means on_flagged=&#39;warn&#39;. Stamp the</span>
+    <span class="c1"># Warn-mode: reaching here with a flagged scan means on_flagged='warn'. Stamp the</span>
     <span class="c1"># safety flags on the record so the fail-closed keep() gate drops it downstream.</span>
     <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">flagged</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">potential_trademark</span><span class="p">:</span>
@@ -425,7 +981,7 @@
         <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">contains_recognizable_voice</span><span class="p">:</span>
             <span class="n">lic</span><span class="o">.</span><span class="n">contains_recognizable_voice</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;safety: proceeded in warn mode; flagged </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">scan</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"safety: proceeded in warn mode; flagged </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">scan</span><span class="o">.</span><span class="n">trademark_hits</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">scan</span><span class="o">.</span><span class="n">voice_hits</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="c1"># Watermark BEFORE ingest so the stored bytes carry the mark AND the content-hash</span>
@@ -438,9 +994,9 @@
             <span class="n">audio_bytes</span> <span class="o">=</span> <span class="n">wres</span><span class="o">.</span><span class="n">audio_bytes</span>
             <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span> <span class="o">=</span> <span class="n">wres</span><span class="o">.</span><span class="n">meta</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 - any embed failure degrades gracefully</span>
-            <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;watermarking skipped: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"watermarking skipped: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">watermark</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;watermarking skipped: foley[provenance] not installed&quot;</span><span class="p">)</span>
+        <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"watermarking skipped: foley[provenance] not installed"</span><span class="p">)</span>
 
     <span class="c1"># One try guards BOTH the content-credential sidecar (which decodes the bytes to</span>
     <span class="c1"># pre-compute the id) AND the ingest — so an undecodable response (a hosted API</span>
@@ -467,7 +1023,7 @@
             <span class="n">credential</span> <span class="o">=</span> <span class="n">disclosure</span><span class="o">.</span><span class="n">build_content_credential</span><span class="p">(</span>
                 <span class="n">clip</span><span class="o">.</span><span class="n">candidate</span><span class="o">.</span><span class="n">sound</span><span class="p">,</span>
                 <span class="n">asset_id</span><span class="o">=</span><span class="n">sound_id</span><span class="p">,</span>
-                <span class="n">asset_hash</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alg&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">content_key</span><span class="p">(</span><span class="n">audio_bytes</span><span class="p">)},</span>
+                <span class="n">asset_hash</span><span class="o">=</span><span class="p">{</span><span class="s2">"alg"</span><span class="p">:</span> <span class="s2">"sha256"</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">:</span> <span class="n">content_key</span><span class="p">(</span><span class="n">audio_bytes</span><span class="p">)},</span>
             <span class="p">)</span>
             <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span> <span class="o">=</span> <span class="n">sound_id</span>  <span class="c1"># the stored record carries the ref</span>
 
@@ -483,24 +1039,24 @@
         <span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
-            <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:ingest&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+            <span class="n">IngestResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">:ingest"</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">"error"</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">report</span>
 
     <span class="c1"># Write the content-credential sidecar ONLY for a freshly stored clip — a</span>
     <span class="c1"># quarantined (QC-failed), duplicate, or errored generation was never added to the</span>
     <span class="c1"># library, so it gets no orphan credential (its already-stored twin keeps one).</span>
-    <span class="k">if</span> <span class="n">credential</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">credential</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"pass"</span><span class="p">,</span> <span class="s2">"warn"</span><span class="p">):</span>
         <span class="n">disclosure</span><span class="o">.</span><span class="n">write_content_credential</span><span class="p">(</span><span class="n">pstore</span><span class="p">,</span> <span class="n">sound_id</span><span class="p">,</span> <span class="n">credential</span><span class="p">)</span>
 
-    <span class="c1"># Surface the adapter&#39;s + disclosure notes (unsupported affordances, warn-mode</span>
+    <span class="c1"># Surface the adapter's + disclosure notes (unsupported affordances, warn-mode</span>
     <span class="c1"># flag, watermark-skip) in the run report.</span>
     <span class="k">if</span> <span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="p">:</span>
         <span class="n">res</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">clip</span><span class="o">.</span><span class="n">notes</span><span class="p">)</span>
     <span class="c1"># Record the operator-consent acknowledgement on a stored generation whose</span>
-    <span class="c1"># license forbids AI training (mirrors bootstrap&#39;s Ring-2 note). ai_training_ok</span>
+    <span class="c1"># license forbids AI training (mirrors bootstrap's Ring-2 note). ai_training_ok</span>
     <span class="c1"># stays False on the record — keep() still rejects it for will_train uses.</span>
-    <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"pass"</span><span class="p">,</span> <span class="s2">"warn"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span><span class="p">:</span>
         <span class="n">res</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_CONSENT_NOTE</span><span class="p">)</span>
     <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">report</span>
@@ -509,23 +1065,23 @@
 <span class="c1">#: Non-affordance keyword params of :func:`_generate` (the rest are GENERATION_AFFORDANCES).</span>
 <span class="n">_GENERATE_KNOWN</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
     <span class="p">{</span>
-        <span class="s2">&quot;backend&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;library&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;store&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;adapter&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;watermark&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;on_flagged&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;watermarker&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;provenance_store&quot;</span><span class="p">,</span>
+        <span class="s2">"backend"</span><span class="p">,</span>
+        <span class="s2">"library"</span><span class="p">,</span>
+        <span class="s2">"store"</span><span class="p">,</span>
+        <span class="s2">"adapter"</span><span class="p">,</span>
+        <span class="s2">"watermark"</span><span class="p">,</span>
+        <span class="s2">"on_flagged"</span><span class="p">,</span>
+        <span class="s2">"watermarker"</span><span class="p">,</span>
+        <span class="s2">"provenance_store"</span><span class="p">,</span>
     <span class="p">}</span>
 <span class="p">)</span>
 
 
 <div class="viewcode-block" id="generate">
-<a class="viewcode-back" href="../../../module_docs/foley/sources/generate.html#foley.generate">[docs]</a>
+<a class="viewcode-back" href="../../../_autosummary/foley.sources.html#foley.generate">[docs]</a>
 <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">_generate</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestReport</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Observability wrapper over :func:`_generate` (#11).</span>
+<span class="w">    </span><span class="sd">"""Observability wrapper over :func:`_generate` (#11).</span>
 
 <span class="sd">    Opens a root ``generate`` run-span (a no-op unless observability is enabled) and,</span>
 <span class="sd">    on completion, appends the run-manifest facts read off the stored records — result</span>
@@ -533,19 +1089,19 @@
 <span class="sd">    the embedded :class:`~foley.index.ingest.IngestReport`. The signature + docstring</span>
 <span class="sd">    are inherited from :func:`_generate` via :func:`functools.wraps`; the internal</span>
 <span class="sd">    ``gen.generate`` GenAI child span is emitted inside ``_generate``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.recorder</span><span class="w"> </span><span class="kn">import</span> <span class="n">facade_run</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..obs.run_artifact</span><span class="w"> </span><span class="kn">import</span> <span class="n">ingest_digest</span>
 
-    <span class="n">prompt</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;prompt&quot;</span><span class="p">)</span>
-    <span class="n">backend</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;backend&quot;</span><span class="p">,</span> <span class="s2">&quot;stable_audio&quot;</span><span class="p">)</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"prompt"</span><span class="p">)</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"backend"</span><span class="p">,</span> <span class="s2">"stable_audio"</span><span class="p">)</span>
     <span class="n">affordances</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_GENERATE_KNOWN</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;prompt&quot;</span>
+        <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_GENERATE_KNOWN</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">"prompt"</span>
     <span class="p">}</span>
-    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="s2">&quot;on_flagged&quot;</span><span class="p">,</span> <span class="s2">&quot;watermark&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"store"</span><span class="p">,</span> <span class="s2">"on_flagged"</span><span class="p">,</span> <span class="s2">"watermark"</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">}</span>
     <span class="k">with</span> <span class="n">facade_run</span><span class="p">(</span>
-        <span class="s2">&quot;generate&quot;</span><span class="p">,</span>
-        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span> <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">},</span>
+        <span class="s2">"generate"</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">"prompt"</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span> <span class="s2">"backend"</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span> <span class="o">**</span><span class="n">affordances</span><span class="p">},</span>
         <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">run</span><span class="p">:</span>
         <span class="n">report</span> <span class="o">=</span> <span class="n">_generate</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -556,21 +1112,21 @@
             <span class="n">run</span><span class="o">.</span><span class="n">add_seed</span><span class="p">(</span>
                 <span class="n">rec</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span>
-                    <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span><span class="p">,</span>
-                    <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span><span class="p">,</span>
-                    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span><span class="p">,</span>
-                    <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_seed</span><span class="p">,</span>
-                    <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_params</span><span class="p">,</span>
-                    <span class="s2">&quot;c2pa_manifest_ref&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span><span class="p">,</span>
+                    <span class="s2">"backend"</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span>
+                    <span class="s2">"model"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_model</span><span class="p">,</span>
+                    <span class="s2">"version"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generator_version</span><span class="p">,</span>
+                    <span class="s2">"prompt"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_prompt</span><span class="p">,</span>
+                    <span class="s2">"seed"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_seed</span><span class="p">,</span>
+                    <span class="s2">"params"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">generation_params</span><span class="p">,</span>
+                    <span class="s2">"c2pa_manifest_ref"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">)</span>
             <span class="n">run</span><span class="o">.</span><span class="n">add_disclosure_ref</span><span class="p">(</span>
                 <span class="n">rec</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;watermark&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="p">,</span>
-                    <span class="s2">&quot;c2pa_manifest_ref&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span><span class="p">,</span>
-                    <span class="s2">&quot;disclosure_recommended&quot;</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">,</span>
+                    <span class="s2">"watermark"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">watermark</span><span class="p">,</span>
+                    <span class="s2">"c2pa_manifest_ref"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span><span class="p">,</span>
+                    <span class="s2">"disclosure_recommended"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">disclosure_recommended</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">)</span>
         <span class="n">run</span><span class="o">.</span><span class="n">set_ingest_report</span><span class="p">(</span><span class="n">ingest_digest</span><span class="p">(</span><span class="n">report</span><span class="p">))</span>
@@ -579,41 +1135,63 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_metadata_captioner</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The prompt as the sound&#39;s caption (feeds the BM25 keyword index).</span>
+<span class="w">    </span><span class="sd">"""The prompt as the sound's caption (feeds the BM25 keyword index).</span>
 
 <span class="sd">    Imported from :mod:`foley.bootstrap` locally to avoid a</span>
 <span class="sd">    ``sources`` ↔ ``bootstrap`` import cycle (same seam :func:`add_from` uses).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..bootstrap</span><span class="w"> </span><span class="kn">import</span> <span class="n">MetadataCaptioner</span>
 
     <span class="k">return</span> <span class="n">MetadataCaptioner</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span> <span class="k">if</span> <span class="n">prompt</span> <span class="k">else</span> <span class="kc">None</span>
 </pre></div>
 
-           </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
   </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
 
-</footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
-
-</body>
+  </footer>
+  </body>
 </html>

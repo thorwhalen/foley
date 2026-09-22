@@ -1,0 +1,924 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="alternate" type="text/markdown" href="foley.audio.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+<link rel="alternate" type="text/markdown" href="foley.audio.html.md">
+<link rel="describedby" href="llms.txt">
+    <title>foley.audio &#8212; foley</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=e39d37f2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fd10adb8"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_autosummary/foley.audio';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="foley.index" href="foley.index.html" />
+    <link rel="prev" title="foley" href="foley.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.23" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">foley</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="foley.html">foley</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">foley.audio</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="foley.index.html">foley.index</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="foley.index.taxonomy.html">foley.index.taxonomy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.index.embedders.html">foley.index.embedders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.index.indexes.html">foley.index.indexes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.index.ingest.html">foley.index.ingest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.index.library.html">foley.index.library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.index.protocols.html">foley.index.protocols</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.index.search.html">foley.index.search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.index.taggers.html">foley.index.taggers</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="foley.obs.html">foley.obs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="foley.obs.recorder.html">foley.obs.recorder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.obs.redact.html">foley.obs.redact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.obs.run_artifact.html">foley.obs.run_artifact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.obs.trace.html">foley.obs.trace</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="foley.agent.html">foley.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.local_llm.html">foley.agent.local_llm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.mcp.html">foley.agent.mcp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.policy.html">foley.agent.policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.preview.html">foley.agent.preview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.protocols.html">foley.agent.protocols</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.refine.html">foley.agent.refine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.session.html">foley.agent.session</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.tools.html">foley.agent.tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.verify.html">foley.agent.verify</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.weave.html">foley.weave</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="foley.eval.html">foley.eval</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="foley.eval.baseline.html">foley.eval.baseline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.eval.embedder.html">foley.eval.embedder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.eval.fidelity.html">foley.eval.fidelity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.eval.fit.html">foley.eval.fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.eval.golden.html">foley.eval.golden</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.eval.reliability.html">foley.eval.reliability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.eval.retrieval.html">foley.eval.retrieval</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="foley.provenance.html">foley.provenance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="foley.provenance.credits.html">foley.provenance.credits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.provenance.disclosure.html">foley.provenance.disclosure</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.agent_kit.html">foley.agent_kit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.base.html">foley.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.cli.html">foley.cli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.licensing.html">foley.licensing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.qc.html">foley.qc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.requirements.html">foley.requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.runtime.html">foley.runtime</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="foley.sources.html">foley.sources</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.base.html">foley.sources.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.bbc_remarc.html">foley.sources.bbc_remarc</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.clotho.html">foley.sources.clotho</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.elevenlabs.html">foley.sources.elevenlabs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.foleyset.html">foley.sources.foleyset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.freesound.html">foley.sources.freesound</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.fsd50k.html">foley.sources.fsd50k</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.http.html">foley.sources.http</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.pull.html">foley.sources.pull</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.registry.html">foley.sources.registry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.resilience.html">foley.sources.resilience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.sonniss.html">foley.sources.sonniss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.sources.stable_audio.html">foley.sources.stable_audio</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.stores.html">foley.stores</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="foley.html" class="nav-link">foley</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">foley.audio</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-foley.audio">
+<span id="foley-audio"></span><h1>foley.audio<a class="headerlink" href="#module-foley.audio" title="Link to this heading">#</a></h1>
+<p>Audio I/O and DSP primitives for foley.</p>
+<p>The foundation every other foley layer decodes/encodes/transforms audio through.
+It commits to a small, explicit set of representations (report 09):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Working</strong> (in RAM, between DSP ops): a <code class="docutils literal notranslate"><span class="pre">float32</span></code> NumPy array at
+<code class="docutils literal notranslate"><span class="pre">48</span> <span class="pre">kHz</span></code> — shape <code class="docutils literal notranslate"><span class="pre">(frames,)</span></code> mono or <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">channels)</span></code>. This is
+the lingua franca of <code class="docutils literal notranslate"><span class="pre">soundfile</span></code>/<code class="docutils literal notranslate"><span class="pre">librosa</span></code>/<code class="docutils literal notranslate"><span class="pre">soxr</span></code> and exactly what
+CLAP expects.</p></li>
+<li><p><strong>Archive</strong> (bytes at rest): <strong>FLAC</strong>, source sample-rate and bit-depth
+preserved — lossless, ~40-60% smaller than WAV, self-describing.</p></li>
+<li><p><strong>Delivery / preview</strong> (derived): <strong>Opus</strong> by default (not implemented in
+the foundation — an FFmpeg/<code class="code docutils literal notranslate"><span class="pre">foley[ffmpeg]</span></code> concern surfaced later).</p></li>
+</ul>
+</div></blockquote>
+<p>Design rules honoured here:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Zero-dep import.</strong> This module imports only the stdlib at top level; the
+heavy libraries (<code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">soundfile</span></code>, <code class="docutils literal notranslate"><span class="pre">soxr</span></code>, <code class="docutils literal notranslate"><span class="pre">librosa</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code>) are lazy-imported <em>inside</em> the functions that need them, so
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">foley.audio</span></code> always succeeds on a bare install and only the
+function you call pays for (and requires) its dependency.</p></li>
+<li><p><strong>No magic numbers.</strong> Every default (sample rate, dtype, archive subtype,
+resample quality, trim/fade/loudness targets) is a named module-level
+constant used as a keyword-only argument default.</p></li>
+<li><p><strong>Never bundle FFmpeg / pydub / torchaudio.</strong> MP3/AAC/Opus transcode is an
+optional external-tool concern, not part of this royalty-free core.</p></li>
+</ul>
+</div></blockquote>
+<p>All ops assume the working representation (float array, time on axis 0). <code class="docutils literal notranslate"><span class="pre">load</span></code>
+is the one function that produces it from arbitrary sources (path, raw bytes, or
+a file-like object).</p>
+<p class="rubric">Module Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.audio.AudioSource" title="foley.audio.AudioSource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AudioSource</span></code></a></p></td>
+<td><p>a filesystem path, raw encoded bytes, or an already-open binary file-like object (e.g. <code class="docutils literal notranslate"><span class="pre">io.BytesIO</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.audio.encode" title="foley.audio.encode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">encode</span></code></a>(samples, sample_rate, *[, fmt, subtype])</p></td>
+<td><p>Encode <code class="docutils literal notranslate"><span class="pre">samples</span></code> fully in memory and return the container bytes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.audio.ensure_channels" title="foley.audio.ensure_channels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_channels</span></code></a>(samples, *, channels)</p></td>
+<td><p>Coerce <code class="docutils literal notranslate"><span class="pre">samples</span></code> to exactly <code class="docutils literal notranslate"><span class="pre">channels</span></code> channels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.audio.fade" title="foley.audio.fade"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fade</span></code></a>(samples, sample_rate, *[, fade_in_s, ...])</p></td>
+<td><p>Apply in/out gain ramps to <code class="docutils literal notranslate"><span class="pre">samples</span></code> (a short declick by default).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.audio.load" title="foley.audio.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(src, *[, target_sr, mono, dtype])</p></td>
+<td><p>Decode audio into a float working array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.audio.loudness_normalize" title="foley.audio.loudness_normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loudness_normalize</span></code></a>(samples, sample_rate, *)</p></td>
+<td><p>Loudness-normalize to <code class="docutils literal notranslate"><span class="pre">target_lufs</span></code>, then keep it peak-safe.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.audio.resample" title="foley.audio.resample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resample</span></code></a>(samples, sample_rate, *[, ...])</p></td>
+<td><p>Resample <code class="docutils literal notranslate"><span class="pre">samples</span></code> to <code class="docutils literal notranslate"><span class="pre">target_sr</span></code> (a no-op when already there).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.audio.save" title="foley.audio.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(samples, sample_rate, dst, *[, fmt, ...])</p></td>
+<td><p>Write <code class="docutils literal notranslate"><span class="pre">samples</span></code> to <code class="docutils literal notranslate"><span class="pre">dst</span></code> as <code class="docutils literal notranslate"><span class="pre">fmt</span></code>/<code class="docutils literal notranslate"><span class="pre">subtype</span></code> (default = FLAC archive).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.audio.to_mono" title="foley.audio.to_mono"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_mono</span></code></a>(samples)</p></td>
+<td><p>Down-mix to mono by averaging channels; 1-D input passes through.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.audio.to_working" title="foley.audio.to_working"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_working</span></code></a>(samples, sample_rate, *[, mono, ...])</p></td>
+<td><p>Produce the canonical CLAP/QC working array from an arbitrary clip.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.audio.trim_silence" title="foley.audio.trim_silence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trim_silence</span></code></a>(samples, sample_rate, *[, top_db])</p></td>
+<td><p>Strip leading/trailing silence, returning the clip and its kept span.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.audio.AudioSource">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">AudioSource</span></span><a class="headerlink" href="#foley.audio.AudioSource" title="Link to this definition">#</a></dt>
+<dd><p>a filesystem path, raw encoded bytes, or an
+already-open binary file-like object (e.g. <code class="docutils literal notranslate"><span class="pre">io.BytesIO</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A source <code class="docutils literal notranslate"><span class="pre">load</span></code> can decode</p>
+</dd>
+</dl>
+<p>alias of <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BinaryIO</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.encode">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'flac'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PCM_24'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.encode" title="Link to this definition">#</a></dt>
+<dd><p>Encode <code class="docutils literal notranslate"><span class="pre">samples</span></code> fully in memory and return the container bytes.</p>
+<p>This is the producer for the content-addressed byte store: default output is
+the FLAC archive form.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – The working array to encode.</p></li>
+<li><p><strong>sample_rate</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Sample rate in Hz.</p></li>
+<li><p><strong>fmt</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Container/codec name (case-insensitive).</p></li>
+<li><p><strong>subtype</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Sample subtype (e.g. <code class="docutils literal notranslate"><span class="pre">PCM_24</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The encoded audio as <code class="docutils literal notranslate"><span class="pre">bytes</span></code>.</p>
+</dd>
+</dl>
+<p>Lazy dependency: <code class="docutils literal notranslate"><span class="pre">soundfile</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.ensure_channels">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">ensure_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#ensure_channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.ensure_channels" title="Link to this definition">#</a></dt>
+<dd><p>Coerce <code class="docutils literal notranslate"><span class="pre">samples</span></code> to exactly <code class="docutils literal notranslate"><span class="pre">channels</span></code> channels.</p>
+<p>Mappings: mono -&gt; N by duplication; N -&gt; mono by mean; N -&gt; M (N != M, both
+&gt; 1) by collapsing to mono then tiling up to M.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – Mono or multichannel working array.</p></li>
+<li><p><strong>channels</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Target channel count (must be &gt;= 1).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <code class="docutils literal notranslate"><span class="pre">(frames,)</span></code> array when <code class="docutils literal notranslate"><span class="pre">channels</span> <span class="pre">==</span> <span class="pre">1</span></code>, else a
+<code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">channels)</span></code> array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">channels</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p>
+</dd>
+</dl>
+<p>Lazy dependency: <code class="docutils literal notranslate"><span class="pre">numpy</span></code> (only for the up-mix / tile path).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.fade">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">fade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fade_in_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fade_out_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#fade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.fade" title="Link to this definition">#</a></dt>
+<dd><p>Apply in/out gain ramps to <code class="docutils literal notranslate"><span class="pre">samples</span></code> (a short declick by default).</p>
+<p>Ramp lengths are clamped to at most <code class="docutils literal notranslate"><span class="pre">len(samples)</span> <span class="pre">//</span> <span class="pre">2</span></code> so the in- and
+out-ramps never overlap on tiny inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – Working array (mono or multichannel).</p></li>
+<li><p><strong>sample_rate</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Sample rate in Hz (converts the fade durations to samples).</p></li>
+<li><p><strong>fade_in_s</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Fade-in duration in seconds.</p></li>
+<li><p><strong>fade_out_s</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Fade-out duration in seconds.</p></li>
+<li><p><strong>kind</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">'linear'</span></code> or <code class="docutils literal notranslate"><span class="pre">'equal_power'</span></code> ramp shape.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new array with the fade envelope applied (input is not mutated).</p>
+</dd>
+</dl>
+<p>Lazy dependency: <code class="docutils literal notranslate"><span class="pre">numpy</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.load">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mono</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.load" title="Link to this definition">#</a></dt>
+<dd><p>Decode audio into a float working array.</p>
+<p><code class="docutils literal notranslate"><span class="pre">src</span></code> may be a filesystem path, raw encoded <code class="docutils literal notranslate"><span class="pre">bytes</span></code> (wrapped in a
+<code class="docutils literal notranslate"><span class="pre">BytesIO</span></code> so nothing touches disk), or any binary file-like object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#bytes" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BinaryIO</span></code></a>]</span>) – Path, raw bytes, or file-like object to decode.</p></li>
+<li><p><strong>target_sr</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – If given, resample the decoded audio to this rate (via
+<a class="reference internal" href="#foley.audio.resample" title="foley.audio.resample"><code class="xref py py-func docutils literal notranslate"><span class="pre">resample()</span></code></a>); otherwise the native rate is returned.</p></li>
+<li><p><strong>mono</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, down-mix multichannel audio to mono.</p></li>
+<li><p><strong>dtype</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – NumPy dtype string for the returned array (default <code class="docutils literal notranslate"><span class="pre">float32</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <code class="docutils literal notranslate"><span class="pre">(samples,</span> <span class="pre">sample_rate)</span></code> tuple. <code class="docutils literal notranslate"><span class="pre">samples</span></code> has shape <code class="docutils literal notranslate"><span class="pre">(frames,)</span></code>
+(mono) or <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">channels)</span></code>; <code class="docutils literal notranslate"><span class="pre">sample_rate</span></code> reflects any resample.</p>
+</dd>
+</dl>
+<p>Lazy dependencies: <code class="docutils literal notranslate"><span class="pre">soundfile</span></code> (and <code class="docutils literal notranslate"><span class="pre">soxr</span></code> when <code class="docutils literal notranslate"><span class="pre">target_sr</span></code> differs).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.loudness_normalize">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">loudness_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_lufs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-16.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_ceiling_dbfs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_block_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#loudness_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.loudness_normalize" title="Link to this definition">#</a></dt>
+<dd><p>Loudness-normalize to <code class="docutils literal notranslate"><span class="pre">target_lufs</span></code>, then keep it peak-safe.</p>
+<p>Integrated loudness is measured (ITU-R BS.1770-4 / EBU R128), the signal is
+scaled to <code class="docutils literal notranslate"><span class="pre">target_lufs</span></code>, and finally attenuated so its sample peak sits at
+or below <code class="docutils literal notranslate"><span class="pre">peak_ceiling_dbfs</span></code>. Two inputs are returned <strong>unchanged</strong> (flag
+them, don’t amplify): near-silent input (measured loudness at or below
+<code class="docutils literal notranslate"><span class="pre">LUFS_GATE_FLOOR</span></code>), and a clip shorter than one BS.1770 gating block
+(<code class="docutils literal notranslate"><span class="pre">min_block_s</span></code>) — which <code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> cannot measure and would otherwise
+raise <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> on (routine for one-shots: clicks, blips, gunshots).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – Working array (mono or multichannel, time on axis 0 — the layout
+pyloudnorm expects).</p></li>
+<li><p><strong>sample_rate</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Sample rate in Hz.</p></li>
+<li><p><strong>target_lufs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Desired integrated loudness (default = foley’s podcast
+target).</p></li>
+<li><p><strong>peak_ceiling_dbfs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Sample-peak ceiling (dBFS) applied after loudness
+normalization. Note this is a <em>sample</em>-peak limit, not an inter-sample
+true-peak (dBTP) limit — see <a class="reference internal" href="foley.qc.html#foley.qc.true_peak_dbtp" title="foley.qc.true_peak_dbtp"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.qc.true_peak_dbtp()</span></code></a> for the
+oversampled measurement.</p></li>
+<li><p><strong>min_block_s</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Minimum clip length (seconds) that can be loudness-measured;
+shorter clips are returned unchanged with <code class="docutils literal notranslate"><span class="pre">measured</span> <span class="pre">=</span> <span class="pre">-inf</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">(normalized,</span> <span class="pre">measured_input_lufs)</span></code>. When the input is near-silent or
+too short to measure, <code class="docutils literal notranslate"><span class="pre">normalized</span></code> is the unchanged input and
+<code class="docutils literal notranslate"><span class="pre">measured_input_lufs</span></code> is at or below <code class="docutils literal notranslate"><span class="pre">LUFS_GATE_FLOOR</span></code> (<code class="docutils literal notranslate"><span class="pre">-inf</span></code> for
+the too-short case).</p>
+</dd>
+</dl>
+<p>Lazy dependencies: <code class="docutils literal notranslate"><span class="pre">pyloudnorm</span></code> (+ <code class="docutils literal notranslate"><span class="pre">numpy</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.resample">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">resample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">48000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HQ'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#resample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.resample" title="Link to this definition">#</a></dt>
+<dd><p>Resample <code class="docutils literal notranslate"><span class="pre">samples</span></code> to <code class="docutils literal notranslate"><span class="pre">target_sr</span></code> (a no-op when already there).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – Working array (mono <code class="docutils literal notranslate"><span class="pre">(frames,)</span></code> or <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">channels)</span></code>).</p></li>
+<li><p><strong>sample_rate</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The array’s current rate in Hz.</p></li>
+<li><p><strong>target_sr</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Desired output rate in Hz (default = the working rate).</p></li>
+<li><p><strong>quality</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – soxr quality preset (<code class="docutils literal notranslate"><span class="pre">QQ</span></code>/<code class="docutils literal notranslate"><span class="pre">LQ</span></code>/<code class="docutils literal notranslate"><span class="pre">MQ</span></code>/<code class="docutils literal notranslate"><span class="pre">HQ</span></code>/<code class="docutils literal notranslate"><span class="pre">VHQ</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The resampled array (the input unchanged when <code class="docutils literal notranslate"><span class="pre">sample_rate</span> <span class="pre">==</span>
+<span class="pre">target_sr</span></code>). dtype is preserved by soxr.</p>
+</dd>
+</dl>
+<p>Lazy dependency: <code class="docutils literal notranslate"><span class="pre">soxr</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.save">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'flac'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PCM_24'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.save" title="Link to this definition">#</a></dt>
+<dd><p>Write <code class="docutils literal notranslate"><span class="pre">samples</span></code> to <code class="docutils literal notranslate"><span class="pre">dst</span></code> as <code class="docutils literal notranslate"><span class="pre">fmt</span></code>/<code class="docutils literal notranslate"><span class="pre">subtype</span></code> (default = FLAC archive).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – The working array to write (shape <code class="docutils literal notranslate"><span class="pre">(frames,)</span></code> or
+<code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">channels)</span></code>).</p></li>
+<li><p><strong>sample_rate</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Sample rate in Hz.</p></li>
+<li><p><strong>dst</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BinaryIO</span></code></a>]</span>) – Destination path or writable binary file-like object.</p></li>
+<li><p><strong>fmt</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Container/codec name (case-insensitive; passed to libsndfile).</p></li>
+<li><p><strong>subtype</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Sample subtype (e.g. <code class="docutils literal notranslate"><span class="pre">PCM_24</span></code>, <code class="docutils literal notranslate"><span class="pre">PCM_16</span></code>, <code class="docutils literal notranslate"><span class="pre">FLOAT</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+<p>Lazy dependency: <code class="docutils literal notranslate"><span class="pre">soundfile</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.to_mono">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">to_mono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#to_mono"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.to_mono" title="Link to this definition">#</a></dt>
+<dd><p>Down-mix to mono by averaging channels; 1-D input passes through.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>samples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – Mono <code class="docutils literal notranslate"><span class="pre">(frames,)</span></code> or multichannel <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">channels)</span></code> array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A 1-D mono array (dtype preserved).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.to_working">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">to_working</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">mono</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">48000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float32'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#to_working"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.to_working" title="Link to this definition">#</a></dt>
+<dd><p>Produce the canonical CLAP/QC working array from an arbitrary clip.</p>
+<p>Down-mixes (when <code class="docutils literal notranslate"><span class="pre">mono</span></code>), resamples to <code class="docutils literal notranslate"><span class="pre">target_sr</span></code>, and casts to
+<code class="docutils literal notranslate"><span class="pre">dtype</span></code> — the <code class="docutils literal notranslate"><span class="pre">float32</span></code> &#64; 48 kHz mono array every embedder/tagger/QC
+check consumes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – Decoded working array (mono or multichannel).</p></li>
+<li><p><strong>sample_rate</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – The array’s current rate in Hz.</p></li>
+<li><p><strong>mono</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, down-mix to mono.</p></li>
+<li><p><strong>target_sr</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Working sample rate in Hz.</p></li>
+<li><p><strong>dtype</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Output NumPy dtype string.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The canonical working array.</p>
+</dd>
+</dl>
+<p>Lazy dependency: <code class="docutils literal notranslate"><span class="pre">soxr</span></code> (only when <code class="docutils literal notranslate"><span class="pre">sample_rate</span> <span class="pre">!=</span> <span class="pre">target_sr</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.audio.trim_silence">
+<span class="sig-prename descclassname"><span class="pre">foley.audio.</span></span><span class="sig-name descname"><span class="pre">trim_silence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/audio.html#trim_silence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.audio.trim_silence" title="Link to this definition">#</a></dt>
+<dd><p>Strip leading/trailing silence, returning the clip and its kept span.</p>
+<p>Silence detection runs on a transient mono down-mix (so librosa’s time-last
+convention never clashes with foley’s time-first <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">channels)</span></code>
+layout); the returned sample indices then slice the <em>original</em> array along
+axis 0, preserving its channel layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – Working array (mono or multichannel).</p></li>
+<li><p><strong>sample_rate</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Sample rate in Hz (kept in the signature for API symmetry;
+trimming is index-based).</p></li>
+<li><p><strong>top_db</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – A frame is silent when it sits at least this many dB below the
+reference (peak) level.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">(trimmed,</span> <span class="pre">(start_sample,</span> <span class="pre">end_sample))</span></code>. On all-silent (or otherwise
+degenerate) input the original array is returned unchanged with a
+full-length span <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">len(samples))</span></code>.</p>
+</dd>
+</dl>
+<p>Lazy dependency: <code class="docutils literal notranslate"><span class="pre">librosa</span></code>.</p>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="foley.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">foley</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="foley.index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">foley.index</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.AudioSource"><code class="docutils literal notranslate"><span class="pre">AudioSource</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.encode"><code class="docutils literal notranslate"><span class="pre">encode()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.ensure_channels"><code class="docutils literal notranslate"><span class="pre">ensure_channels()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.fade"><code class="docutils literal notranslate"><span class="pre">fade()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.loudness_normalize"><code class="docutils literal notranslate"><span class="pre">loudness_normalize()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.resample"><code class="docutils literal notranslate"><span class="pre">resample()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.to_mono"><code class="docutils literal notranslate"><span class="pre">to_mono()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.to_working"><code class="docutils literal notranslate"><span class="pre">to_working()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.audio.trim_silence"><code class="docutils literal notranslate"><span class="pre">trim_silence()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/_autosummary/foley.audio.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

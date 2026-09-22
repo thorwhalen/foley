@@ -1,164 +1,720 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.base &mdash; foley 0.0.22 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="alternate" type="text/markdown" href="base.html.md">
+<link rel="describedby" href="../../llms.txt" type="text/markdown">
+    <title>foley.base &#8212; foley</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/epythet.css?v=e39d37f2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/foley/base';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.23" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=96ec9c95"></script>
-      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            foley
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley.html">foley</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent.html">foley.agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/local_llm.html">foley.agent.local_llm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/agent_kit.html">foley.agent_kit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/audio.html">foley.audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/base.html">foley.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/cli.html">foley.cli</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval.html">foley.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index.html">foley.index</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/library.html">foley.index.library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/search.html">foley.index.search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/licensing.html">foley.licensing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs.html">foley.obs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance.html">foley.provenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/qc.html">foley.qc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/requirements.html">foley.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/runtime.html">foley.runtime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/score.html">foley.score</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources.html">foley.sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/stores.html">foley.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave.html">foley.weave</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
-</ul>
 
-        </div>
-      </div>
-    </nav>
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">foley</a>
-      </nav>
+  
+    
+  
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-          <li class="breadcrumb-item"><a href="../foley.html">foley</a></li>
-      <li class="breadcrumb-item active">foley.base</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">foley</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
   </ul>
-  <hr/>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../foley.html" class="nav-link">foley</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">foley.base</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <h1>Source code for foley.base</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Canonical data models for foley — the single source of truth (SSOT) types.</span>
+<span></span><span class="sd">"""Canonical data models for foley — the single source of truth (SSOT) types.</span>
 
 <span class="sd">This module is stdlib-only and declarative: it defines the dataclasses, enums,</span>
 <span class="sd">and affordance registries every other layer shares, plus generic dict/JSON</span>
@@ -174,7 +730,7 @@
 <span class="sd">      fields from their string values and nested ``LicenseRecord`` from its dict.</span>
 <span class="sd">      Unknown keys are ignored (forward-compatible schema evolution); missing keys</span>
 <span class="sd">      fall back to field defaults.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -198,88 +754,88 @@
 
 
 <div class="viewcode-block" id="StorageMode">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.StorageMode">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.StorageMode">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StorageMode</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How a sound&#39;s bytes are held (DERIVED from ``license.cache_bytes_ok``).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""How a sound's bytes are held (DERIVED from ``license.cache_bytes_ok``)."""</span>
 
-    <span class="n">by_value</span> <span class="o">=</span> <span class="s2">&quot;by_value&quot;</span>  <span class="c1"># bytes cached in the byte store</span>
-    <span class="n">by_reference</span> <span class="o">=</span> <span class="s2">&quot;by_reference&quot;</span>  <span class="c1"># URI + provenance only; no bytes stored</span></div>
+    <span class="n">by_value</span> <span class="o">=</span> <span class="s2">"by_value"</span>  <span class="c1"># bytes cached in the byte store</span>
+    <span class="n">by_reference</span> <span class="o">=</span> <span class="s2">"by_reference"</span>  <span class="c1"># URI + provenance only; no bytes stored</span></div>
 
 
 
 <div class="viewcode-block" id="AcquisitionMethod">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.AcquisitionMethod">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.AcquisitionMethod">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AcquisitionMethod</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How a sound entered foley (retrieval channel or origin).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""How a sound entered foley (retrieval channel or origin)."""</span>
 
-    <span class="n">api</span> <span class="o">=</span> <span class="s2">&quot;api&quot;</span>
-    <span class="n">bulk</span> <span class="o">=</span> <span class="s2">&quot;bulk&quot;</span>
-    <span class="n">scrape_pointer</span> <span class="o">=</span> <span class="s2">&quot;scrape_pointer&quot;</span>
-    <span class="n">generated</span> <span class="o">=</span> <span class="s2">&quot;generated&quot;</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span></div>
+    <span class="n">api</span> <span class="o">=</span> <span class="s2">"api"</span>
+    <span class="n">bulk</span> <span class="o">=</span> <span class="s2">"bulk"</span>
+    <span class="n">scrape_pointer</span> <span class="o">=</span> <span class="s2">"scrape_pointer"</span>
+    <span class="n">generated</span> <span class="o">=</span> <span class="s2">"generated"</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="s2">"user"</span></div>
 
 
 
 <div class="viewcode-block" id="CandidateOrigin">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.CandidateOrigin">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.CandidateOrigin">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CandidateOrigin</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether a candidate was retrieved from the index or freshly generated.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Whether a candidate was retrieved from the index or freshly generated."""</span>
 
-    <span class="n">retrieved</span> <span class="o">=</span> <span class="s2">&quot;retrieved&quot;</span>
-    <span class="n">generated</span> <span class="o">=</span> <span class="s2">&quot;generated&quot;</span></div>
+    <span class="n">retrieved</span> <span class="o">=</span> <span class="s2">"retrieved"</span>
+    <span class="n">generated</span> <span class="o">=</span> <span class="s2">"generated"</span></div>
 
 
 
 <div class="viewcode-block" id="Salience">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Salience">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.Salience">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Salience</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How prominent a sound event is within a passage.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""How prominent a sound event is within a passage."""</span>
 
-    <span class="n">high</span> <span class="o">=</span> <span class="s2">&quot;high&quot;</span>
-    <span class="n">medium</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
-    <span class="n">low</span> <span class="o">=</span> <span class="s2">&quot;low&quot;</span></div>
+    <span class="n">high</span> <span class="o">=</span> <span class="s2">"high"</span>
+    <span class="n">medium</span> <span class="o">=</span> <span class="s2">"medium"</span>
+    <span class="n">low</span> <span class="o">=</span> <span class="s2">"low"</span></div>
 
 
 
 <div class="viewcode-block" id="Layer">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Layer">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.Layer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Layer</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mix layer (shared by ``SoundEvent`` now and ``TimelineItem`` later).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Mix layer (shared by ``SoundEvent`` now and ``TimelineItem`` later)."""</span>
 
-    <span class="n">voice</span> <span class="o">=</span> <span class="s2">&quot;voice&quot;</span>
-    <span class="n">sfx_fg</span> <span class="o">=</span> <span class="s2">&quot;sfx_fg&quot;</span>
-    <span class="n">ambience</span> <span class="o">=</span> <span class="s2">&quot;ambience&quot;</span>
-    <span class="n">stinger</span> <span class="o">=</span> <span class="s2">&quot;stinger&quot;</span>
-    <span class="n">music</span> <span class="o">=</span> <span class="s2">&quot;music&quot;</span></div>
+    <span class="n">voice</span> <span class="o">=</span> <span class="s2">"voice"</span>
+    <span class="n">sfx_fg</span> <span class="o">=</span> <span class="s2">"sfx_fg"</span>
+    <span class="n">ambience</span> <span class="o">=</span> <span class="s2">"ambience"</span>
+    <span class="n">stinger</span> <span class="o">=</span> <span class="s2">"stinger"</span>
+    <span class="n">music</span> <span class="o">=</span> <span class="s2">"music"</span></div>
 
 
 
 <div class="viewcode-block" id="Anchor">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Anchor">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.Anchor">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Anchor</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How a WEAVE ``Placement`` binds its symbolic time to the narration (report 06 §2.4).</span>
+<span class="w">    </span><span class="sd">"""How a WEAVE ``Placement`` binds its symbolic time to the narration (report 06 §2.4).</span>
 
 <span class="sd">    ``absolute`` is a fixed offset; the rest resolve against the forced-aligned</span>
-<span class="sd">    ``word_timeline`` — ``word`` to a trigger word&#39;s onset, ``sentence`` across a</span>
-<span class="sd">    sentence span, ``scene``/``paragraph`` to a boundary&#39;s first spoken word.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    ``word_timeline`` — ``word`` to a trigger word's onset, ``sentence`` across a</span>
+<span class="sd">    sentence span, ``scene``/``paragraph`` to a boundary's first spoken word.</span>
+<span class="sd">    """</span>
 
-    <span class="n">absolute</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span>
-    <span class="n">word</span> <span class="o">=</span> <span class="s2">&quot;word&quot;</span>
-    <span class="n">sentence</span> <span class="o">=</span> <span class="s2">&quot;sentence&quot;</span>
-    <span class="n">scene</span> <span class="o">=</span> <span class="s2">&quot;scene&quot;</span>
-    <span class="n">paragraph</span> <span class="o">=</span> <span class="s2">&quot;paragraph&quot;</span></div>
+    <span class="n">absolute</span> <span class="o">=</span> <span class="s2">"absolute"</span>
+    <span class="n">word</span> <span class="o">=</span> <span class="s2">"word"</span>
+    <span class="n">sentence</span> <span class="o">=</span> <span class="s2">"sentence"</span>
+    <span class="n">scene</span> <span class="o">=</span> <span class="s2">"scene"</span>
+    <span class="n">paragraph</span> <span class="o">=</span> <span class="s2">"paragraph"</span></div>
 
 
 
 <div class="viewcode-block" id="VerifyLevel">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.VerifyLevel">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.VerifyLevel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">VerifyLevel</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Which rung of the verification ladder produced a ``Verdict``.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Which rung of the verification ladder produced a ``Verdict``."""</span>
 
-    <span class="n">clap</span> <span class="o">=</span> <span class="s2">&quot;clap&quot;</span>
-    <span class="n">listen</span> <span class="o">=</span> <span class="s2">&quot;listen&quot;</span>
-    <span class="n">judge</span> <span class="o">=</span> <span class="s2">&quot;judge&quot;</span></div>
+    <span class="n">clap</span> <span class="o">=</span> <span class="s2">"clap"</span>
+    <span class="n">listen</span> <span class="o">=</span> <span class="s2">"listen"</span>
+    <span class="n">judge</span> <span class="o">=</span> <span class="s2">"judge"</span></div>
 
 
 
@@ -295,66 +851,66 @@
 
 
 <div class="viewcode-block" id="Affordance">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Affordance">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.Affordance">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Affordance</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Descriptor for a unified parameter affordance (arioso analog).</span>
+<span class="w">    </span><span class="sd">"""Descriptor for a unified parameter affordance (arioso analog).</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        name: Canonical parameter name used at the façade level.</span>
 <span class="sd">        type: Expected Python type.</span>
 <span class="sd">        description: Human-readable description.</span>
 <span class="sd">        default: Default value (``None`` = no default / required).</span>
-<span class="sd">        stage: ``&#39;query&#39;`` (search/find/filter) or ``&#39;generate&#39;``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        stage: ``'query'`` (search/find/filter) or ``'generate'``.</span>
+<span class="sd">    """</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="nb">type</span><span class="p">:</span> <span class="nb">type</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">default</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">stage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;query&quot;</span></div>
+    <span class="n">stage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"query"</span></div>
 
 
 
 <span class="c1">#: Unified query-stage parameters (search / find / filter surface).</span>
 <span class="n">QUERY_AFFORDANCES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Affordance</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Natural-language query&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;semantic_text&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
-        <span class="s2">&quot;semantic_text&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Query for CLAP semantic space&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;query&quot;</span>
+    <span class="s2">"text"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"text"</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"Natural-language query"</span><span class="p">),</span>
+    <span class="s2">"semantic_text"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">"semantic_text"</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"Query for CLAP semantic space"</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">"query"</span>
     <span class="p">),</span>
-    <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;Number of results&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
-    <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;filters&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="s2">&quot;Metadata predicates (SQL-style)&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;ucs_category&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;ucs_category&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;UCS CatID facet&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;audioset_label&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
-        <span class="s2">&quot;audioset_label&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;AudioSet ontology facet (rolls up children)&quot;</span>
+    <span class="s2">"k"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"k"</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">"Number of results"</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="s2">"filters"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"filters"</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="s2">"Metadata predicates (SQL-style)"</span><span class="p">),</span>
+    <span class="s2">"ucs_category"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"ucs_category"</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"UCS CatID facet"</span><span class="p">),</span>
+    <span class="s2">"audioset_label"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">"audioset_label"</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"AudioSet ontology facet (rolls up children)"</span>
     <span class="p">),</span>
-    <span class="s2">&quot;duration_range&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;duration_range&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="s2">&quot;(min_s, max_s)&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;min_snr&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;min_snr&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;QC filter: min SNR dB&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;commercial_ok&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;commercial_ok&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">&quot;License filter shorthand&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;license&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Explicit license id constraint&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;sort&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;sort&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;score|duration|created|downloads&quot;</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;rerank&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;rerank&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">&quot;Apply second-stage rerank&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"duration_range"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"duration_range"</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="s2">"(min_s, max_s)"</span><span class="p">),</span>
+    <span class="s2">"min_snr"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"min_snr"</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">"QC filter: min SNR dB"</span><span class="p">),</span>
+    <span class="s2">"commercial_ok"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"commercial_ok"</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">"License filter shorthand"</span><span class="p">),</span>
+    <span class="s2">"license"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"license"</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"Explicit license id constraint"</span><span class="p">),</span>
+    <span class="s2">"sort"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"sort"</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"score|duration|created|downloads"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">),</span>
+    <span class="s2">"rerank"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"rerank"</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">"Apply second-stage rerank"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
 <span class="p">}</span>
 
 <span class="c1">#: Unified generation-stage parameters (generate backends map onto these).</span>
 <span class="n">GENERATION_AFFORDANCES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Affordance</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;prompt&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Sound description&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
-        <span class="s2">&quot;duration&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;Seconds; None =&gt; backend default&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span>
+    <span class="s2">"prompt"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"prompt"</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"Sound description"</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">"generate"</span><span class="p">),</span>
+    <span class="s2">"duration"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">"duration"</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">"Seconds; None =&gt; backend default"</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">"generate"</span>
     <span class="p">),</span>
-    <span class="s2">&quot;prompt_influence&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
-        <span class="s2">&quot;prompt_influence&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;0..1 unified guidance&quot;</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;generate&quot;</span>
+    <span class="s2">"prompt_influence"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">"prompt_influence"</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">"0..1 unified guidance"</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s2">"generate"</span>
     <span class="p">),</span>
-    <span class="s2">&quot;negative_prompt&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
-        <span class="s2">&quot;negative_prompt&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;Content to exclude&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span>
+    <span class="s2">"negative_prompt"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">"negative_prompt"</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"Content to exclude"</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">"generate"</span>
     <span class="p">),</span>
-    <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;Diffusion/flow steps&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
-        <span class="s2">&quot;seed&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;Reproducibility (capture in provenance)&quot;</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">&quot;generate&quot;</span>
+    <span class="s2">"steps"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"steps"</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">"Diffusion/flow steps"</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">"generate"</span><span class="p">),</span>
+    <span class="s2">"seed"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">"seed"</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">"Reproducibility (capture in provenance)"</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="s2">"generate"</span>
     <span class="p">),</span>
-    <span class="s2">&quot;loop&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">&quot;loop&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">&quot;Seamless-loopable clip&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;generate&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;output_format&quot;</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
-        <span class="s2">&quot;output_format&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;wav|opus|mp3&quot;</span><span class="p">,</span> <span class="s2">&quot;wav&quot;</span><span class="p">,</span> <span class="s2">&quot;generate&quot;</span>
+    <span class="s2">"loop"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span><span class="s2">"loop"</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">"Seamless-loopable clip"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"generate"</span><span class="p">),</span>
+    <span class="s2">"output_format"</span><span class="p">:</span> <span class="n">Affordance</span><span class="p">(</span>
+        <span class="s2">"output_format"</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">"wav|opus|mp3"</span><span class="p">,</span> <span class="s2">"wav"</span><span class="p">,</span> <span class="s2">"generate"</span>
     <span class="p">),</span>
 <span class="p">}</span>
 
@@ -365,7 +921,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_decode</span><span class="p">(</span><span class="n">tp</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce a JSON-decoded value into the field type ``tp``.</span>
+<span class="w">    </span><span class="sd">"""Coerce a JSON-decoded value into the field type ``tp``.</span>
 
 <span class="sd">    Handles ``Optional``/``Union``, list/set/tuple containers (recursing into</span>
 <span class="sd">    the element type), ``str``-enums (via ``EnumClass(value)``), and nested</span>
@@ -378,7 +934,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The value coerced to ``tp`` (or unchanged when no coercion applies).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="n">origin</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_origin</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
@@ -393,47 +949,47 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">tp</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">is_dataclass</span><span class="p">(</span><span class="n">tp</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tp</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="s2">&quot;from_dict&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">tp</span><span class="p">(</span><span class="o">**</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tp</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="s2">"from_dict"</span><span class="p">)</span> <span class="k">else</span> <span class="n">tp</span><span class="p">(</span><span class="o">**</span><span class="n">value</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
 
 <div class="viewcode-block" id="SerializableMixin">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.SerializableMixin">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SerializableMixin</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adds ``to_dict``/``to_json``/``from_dict``/``from_json`` to a dataclass.</span>
+<span class="w">    </span><span class="sd">"""Adds ``to_dict``/``to_json``/``from_dict``/``from_json`` to a dataclass.</span>
 
 <span class="sd">    Stdlib-only, DRY, no-magic (de)serialization. Every SSOT dataclass below</span>
 <span class="sd">    inherits this instead of hand-rolling per-class encoders/decoders.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <div class="viewcode-block" id="SerializableMixin.to_dict">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin.to_dict">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.SerializableMixin.to_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the recursive plain-dict form.</span>
+<span class="w">        </span><span class="sd">"""Return the recursive plain-dict form.</span>
 
 <span class="sd">        Enum members are preserved (and remain JSON-safe because every enum</span>
 <span class="sd">        subclasses ``str``); nested dataclasses are recursed via</span>
 <span class="sd">        ``dataclasses.asdict``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SerializableMixin.to_json">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin.to_json">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.SerializableMixin.to_json">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">indent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a JSON string (str-enums serialize to their ``.value``).</span>
+<span class="w">        </span><span class="sd">"""Return a JSON string (str-enums serialize to their ``.value``).</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            indent: Optional pretty-print indent passed to ``json.dumps``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="SerializableMixin.from_dict">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin.from_dict">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.SerializableMixin.from_dict">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableMixin&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reconstruct an instance from a plain dict.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"SerializableMixin"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Reconstruct an instance from a plain dict.</span>
 
 <span class="sd">        Enum fields and nested dataclasses are coerced via :func:`_decode`.</span>
 <span class="sd">        Unknown keys are ignored (forward-compatible); missing keys fall back</span>
@@ -441,7 +997,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            d: A plain dict (typically from ``to_dict()`` or ``json.loads``).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">hints</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="n">known</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">)}</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
@@ -451,14 +1007,14 @@
 
 
 <div class="viewcode-block" id="SerializableMixin.from_json">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SerializableMixin.from_json">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.SerializableMixin.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SerializableMixin&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reconstruct an instance from a JSON string.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"SerializableMixin"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Reconstruct an instance from a JSON string.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            s: A JSON string (typically from ``to_json()``).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">s</span><span class="p">))</span></div>
 </div>
 
@@ -470,10 +1026,10 @@
 
 
 <div class="viewcode-block" id="LicenseRecord">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.LicenseRecord">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.LicenseRecord">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">LicenseRecord</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-sound rights + provenance. SSOT for BOTH ``keep()`` and storage mode.</span>
+<span class="w">    </span><span class="sd">"""Per-sound rights + provenance. SSOT for BOTH ``keep()`` and storage mode.</span>
 
 <span class="sd">    The derived permission flags default fail-closed here (the bare-record</span>
 <span class="sd">    baseline) — with one deliberate exception: ``embed_in_derivative_ok``</span>
@@ -482,10 +1038,10 @@
 <span class="sd">    is rejected regardless. Populate the flags from the ``license_id`` via</span>
 <span class="sd">    ``foley.licensing.apply_license_flags`` (source overrides win). Never</span>
 <span class="sd">    hand-set the derived flags — always route through the policy layer.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># identity / origin</span>
-    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &#39;freesound&#39; | &#39;user&#39; | &#39;stable_audio&#39; | ...</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># 'freesound' | 'user' | 'stable_audio' | ...</span>
     <span class="n">source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">acquisition_method</span><span class="p">:</span> <span class="n">AcquisitionMethod</span> <span class="o">=</span> <span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">user</span>
@@ -494,7 +1050,7 @@
     <span class="n">content_sha256</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># rights (normalized)</span>
-    <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>  <span class="c1"># SPDX id or RemArc / Sonniss-GDC / ElevenLabs-SFX / Stability-Community / Proprietary-&lt;vendor&gt;</span>
+    <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"unknown"</span>  <span class="c1"># SPDX id or RemArc / Sonniss-GDC / ElevenLabs-SFX / Stability-Community / Proprietary-&lt;vendor&gt;</span>
     <span class="n">license_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">license_version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">license_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -519,7 +1075,7 @@
     <span class="c1"># provenance / transformation</span>
     <span class="n">transformations</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
         <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span>
-    <span class="p">)</span>  <span class="c1"># ordered ops; non-empty =&gt; &quot;(modified)&quot;</span>
+    <span class="p">)</span>  <span class="c1"># ordered ops; non-empty =&gt; "(modified)"</span>
 
     <span class="c1"># generation (present iff AI-generated)</span>
     <span class="n">is_ai_generated</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
@@ -529,7 +1085,7 @@
     <span class="n">generation_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">generation_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">watermark</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="kc">None</span>  <span class="c1"># {&quot;present&quot;: True, &quot;method&quot;: &quot;audioseal&quot;, &quot;version&quot;: ...}</span>
+        <span class="kc">None</span>  <span class="c1"># {"present": True, "method": "audioseal", "version": ...}</span>
     <span class="p">)</span>
     <span class="n">c2pa_manifest_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -549,31 +1105,31 @@
 
 
 <div class="viewcode-block" id="SoundRecord">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SoundRecord">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.SoundRecord">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SoundRecord</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Canonical SSOT per sound.</span>
+<span class="w">    </span><span class="sd">"""Canonical SSOT per sound.</span>
 
 <span class="sd">    Audio bytes + CLAP vector live in SEPARATE stores keyed by the same id; this</span>
 <span class="sd">    record holds a content-hash ``uri``, never raw bytes.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># identity</span>
     <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">content_sha256</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># content-address key into `sounds`</span>
-    <span class="n">hash_algo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sha256&quot;</span>
+    <span class="n">hash_algo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"sha256"</span>
 
     <span class="c1"># storage (report 09)</span>
     <span class="n">uri</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># content key | local path | s3://… | https://…</span>
     <span class="n">storage_mode</span><span class="p">:</span> <span class="n">StorageMode</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">StorageMode</span><span class="o">.</span><span class="n">by_reference</span>
     <span class="p">)</span>  <span class="c1"># DERIVED from license.cache_bytes_ok</span>
-    <span class="n">archive_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># &#39;flac&#39;</span>
+    <span class="n">archive_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 'flac'</span>
     <span class="n">source_sample_rate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># preserved native rate (e.g. 96/192 kHz)</span>
     <span class="n">source_bit_depth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># rights + provenance</span>
-    <span class="n">license</span><span class="p">:</span> <span class="n">LicenseRecord</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">))</span>
+    <span class="n">license</span><span class="p">:</span> <span class="n">LicenseRecord</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">"user"</span><span class="p">))</span>
 
     <span class="c1"># descriptive text (feeds BM25 + display)</span>
     <span class="n">caption</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -589,7 +1145,7 @@
     <span class="n">sample_rate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># working/delivered rate</span>
     <span class="n">channels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">loudness_lufs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># &#39;wav&#39;|&#39;flac&#39;|&#39;opus&#39;|&#39;mp3&#39;</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 'wav'|'flac'|'opus'|'mp3'</span>
 
     <span class="c1"># quality control (report 08; QCReport.to_dict())</span>
     <span class="n">qc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -612,10 +1168,10 @@
 
 
 <div class="viewcode-block" id="SoundEvent">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SoundEvent">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.SoundEvent">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SoundEvent</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;One salient, physically-audible event decomposed from a passage.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""One salient, physically-audible event decomposed from a passage."""</span>
 
     <span class="n">query</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span> <span class="o">=</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span>
@@ -630,28 +1186,28 @@
 
 
 <div class="viewcode-block" id="Verdict">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Verdict">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.Verdict">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Verdict</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of one verification rung for a candidate.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The result of one verification rung for a candidate."""</span>
 
     <span class="n">match</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># 0..1</span>
-    <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">level</span><span class="p">:</span> <span class="n">VerifyLevel</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span></div>
 
 
 
 <div class="viewcode-block" id="Candidate">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Candidate">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.Candidate">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Candidate</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ranked, license-checked, (optionally) verified sound for one SoundEvent.</span>
+<span class="w">    </span><span class="sd">"""A ranked, license-checked, (optionally) verified sound for one SoundEvent.</span>
 
 <span class="sd">    Retrieval and generation return the SAME shape; only ``origin`` differs.</span>
 <span class="sd">    Nested ``sound`` / ``event`` / ``verdict`` dataclasses are decoded generically</span>
 <span class="sd">    by :func:`_decode` — no per-field code needed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">sound</span><span class="p">:</span> <span class="n">SoundRecord</span>
     <span class="n">origin</span><span class="p">:</span> <span class="n">CandidateOrigin</span> <span class="o">=</span> <span class="n">CandidateOrigin</span><span class="o">.</span><span class="n">retrieved</span>
@@ -667,15 +1223,15 @@
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
-<span class="c1"># IntendedUse — the caller&#39;s rights intent</span>
+<span class="c1"># IntendedUse — the caller's rights intent</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 
 <div class="viewcode-block" id="IntendedUse">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.IntendedUse">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.IntendedUse">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">IntendedUse</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;What the caller intends to do with a sound; consumed by ``keep()``.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""What the caller intends to do with a sound; consumed by ``keep()``."""</span>
 
     <span class="n">commercial</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">publish</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -696,44 +1252,44 @@
 <span class="c1"># additively: the sparse flat fields stay untouched (so ``plan()`` /</span>
 <span class="c1"># ``place_in_timeline`` keep working), and the resolved render model layers on top</span>
 <span class="c1"># through ``Placement`` / ``Processing`` (per item) and ``word_timeline`` / ``master``</span>
-<span class="c1"># (per timeline). ``TimelineItem.onset`` (a SYMBOLIC str — SELECT&#39;s input) and</span>
-<span class="c1"># ``Placement.onset`` (a RESOLVED float — WEAVE&#39;s output) deliberately coexist;</span>
+<span class="c1"># (per timeline). ``TimelineItem.onset`` (a SYMBOLIC str — SELECT's input) and</span>
+<span class="c1"># ``Placement.onset`` (a RESOLVED float — WEAVE's output) deliberately coexist;</span>
 <span class="c1"># ``foley.weave.anchor.parse_symbolic_anchor`` is the single bridge between them.</span>
 
 
 <div class="viewcode-block" id="Placement">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Placement">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.Placement">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Placement</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;WHERE/WHEN a clip sits — a symbolic anchor plus its resolved time (report 06 §6.3).</span>
+<span class="w">    </span><span class="sd">"""WHERE/WHEN a clip sits — a symbolic anchor plus its resolved time (report 06 §6.3).</span>
 
-<span class="sd">    Filled by WEAVE&#39;s aligner+anchor pass. ``onset`` is the resolved start in</span>
+<span class="sd">    Filled by WEAVE's aligner+anchor pass. ``onset`` is the resolved start in</span>
 <span class="sd">    seconds (distinct from the sparse :attr:`TimelineItem.onset` symbolic string);</span>
 <span class="sd">    ``pre_roll`` shifts the clip earlier so its salient transient — not its file</span>
 <span class="sd">    start — lands on the anchor (report 06 §2.4).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">anchor</span><span class="p">:</span> <span class="n">Anchor</span> <span class="o">=</span> <span class="n">Anchor</span><span class="o">.</span><span class="n">absolute</span>
     <span class="n">ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="kc">None</span>  <span class="c1"># transcript word / sentence / scene id the anchor binds to</span>
     <span class="p">)</span>
     <span class="n">onset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># RESOLVED start (seconds), filled by the aligner+anchor pass</span>
-    <span class="n">pre_roll</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># lead so the clip&#39;s transient lands on the anchor</span>
+    <span class="n">pre_roll</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># lead so the clip's transient lands on the anchor</span>
     <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># None = full clip length</span>
     <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># seamless-loop to fill ``duration`` (beds)</span></div>
 
 
 
 <div class="viewcode-block" id="Processing">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.Processing">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.Processing">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Processing</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;HOW a clip sounds — all optional with identity defaults (report 06 §3, §6.3).</span>
+<span class="w">    </span><span class="sd">"""HOW a clip sounds — all optional with identity defaults (report 06 §3, §6.3).</span>
 
 <span class="sd">    Every field is a no-op at its default, so a sparse item (no ``processing``)</span>
 <span class="sd">    renders untouched; the mixer departs from dry/centered/full-level only when a</span>
 <span class="sd">    field is set.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">gain_db</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># relative to the voice bus</span>
     <span class="n">pan</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># -1 (L) .. +1 (R), constant-power</span>
@@ -746,24 +1302,24 @@
 
 
 <div class="viewcode-block" id="TimelineItem">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.TimelineItem">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.TimelineItem">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">TimelineItem</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;One placed sound on the sound-design timeline — sparse seed + resolved render fields.</span>
+<span class="w">    </span><span class="sd">"""One placed sound on the sound-design timeline — sparse seed + resolved render fields.</span>
 
 <span class="sd">    SELECT (#7) sets only the sparse flat fields (``clip_ref·onset·gain·layer·loop``);</span>
 <span class="sd">    WEAVE (#8) additively fills ``id`` / ``placement`` / ``processing`` (and may carry</span>
 <span class="sd">    the originating ``event`` for provenance). ``enabled`` is a non-destructive mute.</span>
-<span class="sd">    The sparse flat fields are never removed — they stay SELECT&#39;s SSOT input; the render</span>
+<span class="sd">    The sparse flat fields are never removed — they stay SELECT's SSOT input; the render</span>
 <span class="sd">    reads the resolved ``placement``/``processing`` (falling back to the flat fields when</span>
 <span class="sd">    those are absent).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">clip_ref</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># SoundRecord id in the dol library (by reference, never bytes)</span>
     <span class="n">onset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="kc">None</span>  <span class="c1"># SYMBOLIC anchor (&quot;on &#39;pushed open&#39;&quot;); WEAVE resolves it into ``placement``</span>
+        <span class="kc">None</span>  <span class="c1"># SYMBOLIC anchor ("on 'pushed open'"); WEAVE resolves it into ``placement``</span>
     <span class="p">)</span>
-    <span class="n">gain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># dB relative to the voice bus (SELECT&#39;s sparse level)</span>
+    <span class="n">gain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># dB relative to the voice bus (SELECT's sparse level)</span>
     <span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span> <span class="o">=</span> <span class="n">Layer</span><span class="o">.</span><span class="n">sfx_fg</span>
     <span class="n">loop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="c1"># --- WEAVE-resolved (all default to None/identity, so a sparse item is valid) ---</span>
@@ -776,10 +1332,10 @@
 
 
 <div class="viewcode-block" id="MasterProfile">
-<a class="viewcode-back" href="../../module_docs/foley/weave.html#foley.MasterProfile">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.MasterProfile">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MasterProfile</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loudness master target — the delivery spec as data, not code (report 06 §5.2).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Loudness master target — the delivery spec as data, not code (report 06 §5.2)."""</span>
 
     <span class="n">target_lufs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">16.0</span>  <span class="c1"># podcast default (the dominant spoken-word norm)</span>
     <span class="n">true_peak_db</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
@@ -790,21 +1346,21 @@
 <span class="c1">#: The named delivery targets (report 06 §5.2). :func:`resolve_master` maps a</span>
 <span class="c1">#: profile name to one of these; these values are the SSOT so no LUFS literal</span>
 <span class="c1">#: hides in code.</span>
-<span class="n">MASTER_PROFILES</span><span class="p">:</span> <span class="s2">&quot;dict[str, MasterProfile]&quot;</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;podcast&quot;</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">16.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">11.0</span><span class="p">),</span>
-    <span class="s2">&quot;streaming&quot;</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">14.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">11.0</span><span class="p">),</span>
-    <span class="s2">&quot;broadcast_ebu&quot;</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">23.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">7.0</span><span class="p">),</span>
-    <span class="s2">&quot;broadcast_atsc&quot;</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">24.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">7.0</span><span class="p">),</span>
+<span class="n">MASTER_PROFILES</span><span class="p">:</span> <span class="s2">"dict[str, MasterProfile]"</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"podcast"</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">16.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">11.0</span><span class="p">),</span>
+    <span class="s2">"streaming"</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">14.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">11.0</span><span class="p">),</span>
+    <span class="s2">"broadcast_ebu"</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">23.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">7.0</span><span class="p">),</span>
+    <span class="s2">"broadcast_atsc"</span><span class="p">:</span> <span class="n">MasterProfile</span><span class="p">(</span><span class="n">target_lufs</span><span class="o">=-</span><span class="mf">24.0</span><span class="p">,</span> <span class="n">true_peak_db</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">lra</span><span class="o">=</span><span class="mf">7.0</span><span class="p">),</span>
 <span class="p">}</span>
 
 
 <div class="viewcode-block" id="resolve_master">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.resolve_master">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">resolve_master</span><span class="p">(</span><span class="n">master</span><span class="p">:</span> <span class="s2">&quot;Union[str, MasterProfile, None]&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MasterProfile</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve a master spec (profile name, explicit profile, or ``None``) to a ``MasterProfile``.</span>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.resolve_master">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_master</span><span class="p">(</span><span class="n">master</span><span class="p">:</span> <span class="s2">"Union[str, MasterProfile, None]"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MasterProfile</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Resolve a master spec (profile name, explicit profile, or ``None``) to a ``MasterProfile``.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        master: A :data:`MASTER_PROFILES` key (e.g. ``&#39;podcast&#39;``), an explicit</span>
+<span class="sd">        master: A :data:`MASTER_PROFILES` key (e.g. ``'podcast'``), an explicit</span>
 <span class="sd">            :class:`MasterProfile`, or ``None`` (-&gt; the podcast default).</span>
 
 <span class="sd">    Returns:</span>
@@ -812,7 +1368,7 @@
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: If ``master`` is an unknown profile name.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">master</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">MasterProfile</span><span class="p">()</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">master</span><span class="p">,</span> <span class="n">MasterProfile</span><span class="p">):</span>
@@ -824,16 +1380,16 @@
         <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">MASTER_PROFILES</span><span class="p">[</span><span class="n">master</span><span class="p">])</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;unknown master profile </span><span class="si">{</span><span class="n">master</span><span class="si">!r}</span><span class="s2">; known: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">MASTER_PROFILES</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"unknown master profile </span><span class="si">{</span><span class="n">master</span><span class="si">!r}</span><span class="s2">; known: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">MASTER_PROFILES</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span></div>
 
 
 
 <div class="viewcode-block" id="SoundDesignTimeline">
-<a class="viewcode-back" href="../../module_docs/foley/base.html#foley.SoundDesignTimeline">[docs]</a>
+<a class="viewcode-back" href="../../_autosummary/foley.base.html#foley.SoundDesignTimeline">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SoundDesignTimeline</span><span class="p">(</span><span class="n">SerializableMixin</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The editable, re-renderable sound-design plan — the SELECT→WEAVE bridge and render SSOT.</span>
+<span class="w">    </span><span class="sd">"""The editable, re-renderable sound-design plan — the SELECT→WEAVE bridge and render SSOT.</span>
 
 <span class="sd">    SELECT (#7) emits the SPARSE form (just ``items`` + the run/transcript joins) via</span>
 <span class="sd">    ``foley.agent.plan()``. WEAVE (#8) grows it additively: ``narration_ref`` binds the</span>
@@ -843,9 +1399,9 @@
 <span class="sd">    this data + the library, so editing any field and re-rendering reproduces exactly that</span>
 <span class="sd">    change. ``run_manifest_ref`` == :attr:`foley.obs.RunManifest.run_id` (the reserved #8</span>
 <span class="sd">    ``plan_ref`` join).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">items</span><span class="p">:</span> <span class="s2">&quot;list[TimelineItem]&quot;</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># rehydrated element-wise</span>
+    <span class="n">items</span><span class="p">:</span> <span class="s2">"list[TimelineItem]"</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># rehydrated element-wise</span>
     <span class="n">run_manifest_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># join to the obs RunManifest.run_id</span>
     <span class="n">transcript_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># narration transcript ref (resolved by WEAVE)</span>
     <span class="n">schema_version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">SCHEMA_VERSION</span>
@@ -853,36 +1409,58 @@
     <span class="n">narration_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># the voice audio (dol ref); WEAVE binds it</span>
     <span class="n">word_timeline</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
         <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span>
-    <span class="p">)</span>  <span class="c1"># [{&#39;word&#39;,&#39;start&#39;,&#39;end&#39;}, ...] from forced alignment (the reproducible seed)</span>
+    <span class="p">)</span>  <span class="c1"># [{'word','start','end'}, ...] from forced alignment (the reproducible seed)</span>
     <span class="n">master</span><span class="p">:</span> <span class="n">MasterProfile</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">MasterProfile</span><span class="p">)</span>  <span class="c1"># loudness target</span></div>
 
 </pre></div>
 
-           </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
   </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
 
-</footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
-
-</body>
+  </footer>
+  </body>
 </html>

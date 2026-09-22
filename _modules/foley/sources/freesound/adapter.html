@@ -1,172 +1,728 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>foley.sources.freesound.adapter &mdash; foley 0.0.22 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="alternate" type="text/markdown" href="adapter.html.md">
+<link rel="describedby" href="../../../../llms.txt" type="text/markdown">
+    <title>foley.sources.freesound.adapter &#8212; foley</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/epythet.css?v=e39d37f2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/foley/sources/freesound/adapter';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.23" />
+  
+    
+    <script src="../../../../_static/searchtools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script src="../../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
 
   
-      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=96ec9c95"></script>
-      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="../../../../_static/toggleprompt.js?v=d7ede5d2"></script>
-      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
-      <script src="../../../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" /> 
-</head>
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="../../../../index.html" class="icon icon-home">
-            foley
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley.html">foley</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent.html">foley.agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/_genai.html">foley.agent._genai</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/decompose.html">foley.agent.decompose</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/local_llm.html">foley.agent.local_llm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/mcp.html">foley.agent.mcp</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/policy.html">foley.agent.policy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/preview.html">foley.agent.preview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/protocols.html">foley.agent.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/refine.html">foley.agent.refine</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/session.html">foley.agent.session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/tools.html">foley.agent.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent/verify.html">foley.agent.verify</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/agent_kit.html">foley.agent_kit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/audio.html">foley.audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/base.html">foley.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/bootstrap.html">foley.bootstrap</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/cli.html">foley.cli</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval.html">foley.eval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/baseline.html">foley.eval.baseline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/embedder.html">foley.eval.embedder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/fidelity.html">foley.eval.fidelity</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/fit.html">foley.eval.fit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/golden.html">foley.eval.golden</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/reliability.html">foley.eval.reliability</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/eval/retrieval.html">foley.eval.retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index.html">foley.index</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/embedders.html">foley.index.embedders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/indexes.html">foley.index.indexes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/ingest.html">foley.index.ingest</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/library.html">foley.index.library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/protocols.html">foley.index.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/search.html">foley.index.search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taggers.html">foley.index.taggers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy.html">foley.index.taxonomy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/audioset.html">foley.index.taxonomy.audioset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/model.html">foley.index.taxonomy.model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/resolver.html">foley.index.taxonomy.resolver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/seed.html">foley.index.taxonomy.seed</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/index/taxonomy/ucs.html">foley.index.taxonomy.ucs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/licensing.html">foley.licensing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/obs.html">foley.obs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/obs/recorder.html">foley.obs.recorder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/obs/redact.html">foley.obs.redact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/obs/run_artifact.html">foley.obs.run_artifact</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/obs/trace.html">foley.obs.trace</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/provenance.html">foley.provenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/provenance/credits.html">foley.provenance.credits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/provenance/disclosure.html">foley.provenance.disclosure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/qc.html">foley.qc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/requirements.html">foley.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/runtime.html">foley.runtime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/score.html">foley.score</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources.html">foley.sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/base.html">foley.sources.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/bbc_remarc.html">foley.sources.bbc_remarc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/clotho.html">foley.sources.clotho</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/elevenlabs.html">foley.sources.elevenlabs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/elevenlabs/adapter.html">foley.sources.elevenlabs.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/elevenlabs/config.html">foley.sources.elevenlabs.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/foleyset.html">foley.sources.foleyset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/freesound.html">foley.sources.freesound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/freesound/adapter.html">foley.sources.freesound.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/freesound/config.html">foley.sources.freesound.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/fsd50k.html">foley.sources.fsd50k</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/generate.html">foley.sources.generate</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/http.html">foley.sources.http</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/pull.html">foley.sources.pull</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/registry.html">foley.sources.registry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/resilience.html">foley.sources.resilience</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/sonniss.html">foley.sources.sonniss</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/stable_audio.html">foley.sources.stable_audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/stable_audio/adapter.html">foley.sources.stable_audio.adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/sources/stable_audio/config.html">foley.sources.stable_audio.config</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/stores.html">foley.stores</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/weave.html">foley.weave</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/weave/align.html">foley.weave.align</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/weave/anchor.html">foley.weave.anchor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/weave/master.html">foley.weave.master</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/weave/mix.html">foley.weave.mix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/weave/protocols.html">foley.weave.protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/weave/render.html">foley.weave.render</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/weave/requirements.html">foley.weave.requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/foley/weave/timeline.html">foley.weave.timeline</a></li>
-</ul>
 
-        </div>
-      </div>
-    </nav>
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">foley</a>
-      </nav>
+  
+    
+  
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
-          <li class="breadcrumb-item"><a href="../../../foley.html">foley</a></li>
-      <li class="breadcrumb-item active">foley.sources.freesound.adapter</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">foley</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
   </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <h1>Source code for foley.sources.freesound.adapter</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Freesound APIv2 retrieve adapter — CC0 sounds, stored strictly by-reference.</span>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
 
-<span class="sd">Freesound (report 01 §Freesound) is foley&#39;s anchor retrieve source. This adapter</span>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/foley" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../foley.html" class="nav-link">foley</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">foley.sources.freesound.adapter</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for foley.sources.freesound.adapter</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Freesound APIv2 retrieve adapter — CC0 sounds, stored strictly by-reference.</span>
+
+<span class="sd">Freesound (report 01 §Freesound) is foley's anchor retrieve source. This adapter</span>
 <span class="sd">turns a natural-language query into ranked, license-clean</span>
 <span class="sd">:class:`~foley.base.Candidate`\\ s over the Freesound APIv2, honoring two</span>
 <span class="sd">load-bearing constraints:</span>
 
 <span class="sd">* **CC0-only (for #5), pushed into the query.** The CC0 filter is sent as the</span>
-<span class="sd">  native ``filter=license:&quot;Creative Commons 0&quot;`` so non-CC0 sounds never leave the</span>
+<span class="sd">  native ``filter=license:"Creative Commons 0"`` so non-CC0 sounds never leave the</span>
 <span class="sd">  server; each returned item is *also* re-checked fail-closed against the</span>
 <span class="sd">  ``accepted_license_ids`` allowlist — the server filter is a promise foley does</span>
 <span class="sd">  not control, so a non-CC0 item that slips through is dropped, never indexed.</span>
@@ -185,7 +741,7 @@
 <span class="sd">Ingestion (decode / QC / embed / tag / store) is NOT reimplemented here — the</span>
 <span class="sd">:func:`foley.sources.pull.add_from` façade routes every hit through the shared</span>
 <span class="sd">``ingest_one`` pipeline (it wraps the corpus machinery, it does not fork it).</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -200,22 +756,22 @@
 
 <span class="c1">#: Preview keys in the Freesound ``previews`` object, best (highest fidelity) first.</span>
 <span class="n">_PREVIEW_KEYS</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;preview-hq-mp3&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;preview-hq-ogg&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;preview-lq-mp3&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;preview-lq-ogg&quot;</span><span class="p">,</span>
+    <span class="s2">"preview-hq-mp3"</span><span class="p">,</span>
+    <span class="s2">"preview-hq-ogg"</span><span class="p">,</span>
+    <span class="s2">"preview-lq-mp3"</span><span class="p">,</span>
+    <span class="s2">"preview-lq-ogg"</span><span class="p">,</span>
 <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_raw_id</span><span class="p">(</span><span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Strip the ``freesound:`` namespace prefix (accept either id form).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Strip the ``freesound:`` namespace prefix (accept either id form)."""</span>
     <span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">source_id</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;freesound:&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"freesound:"</span><span class="p">)</span> <span class="k">else</span> <span class="n">s</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_preview_url</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The best available preview URL for a sound item (token-tier, public CDN).&quot;&quot;&quot;</span>
-    <span class="n">previews</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;previews&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+<span class="w">    </span><span class="sd">"""The best available preview URL for a sound item (token-tier, public CDN)."""</span>
+    <span class="n">previews</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"previews"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">_PREVIEW_KEYS</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">previews</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">previews</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
@@ -223,28 +779,28 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_safe_detail</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Best-effort extract of the Freesound error ``detail`` (never raises).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Best-effort extract of the Freesound error ``detail`` (never raises)."""</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">body</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;no detail&gt;&quot;</span>
+        <span class="k">return</span> <span class="s2">"&lt;no detail&gt;"</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;detail&quot;</span><span class="p">,</span> <span class="n">body</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"detail"</span><span class="p">,</span> <span class="n">body</span><span class="p">))</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="FreesoundAdapter">
-<a class="viewcode-back" href="../../../../module_docs/foley/sources/freesound/adapter.html#foley.sources.freesound.adapter.FreesoundAdapter">[docs]</a>
+<a class="viewcode-back" href="../../../../_autosummary/foley.sources.freesound.adapter.html#foley.sources.freesound.adapter.FreesoundAdapter">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FreesoundAdapter</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Live Freesound APIv2 retrieve adapter (a :class:`~foley.sources.base.SourceAdapter`).</span>
+<span class="w">    </span><span class="sd">"""Live Freesound APIv2 retrieve adapter (a :class:`~foley.sources.base.SourceAdapter`).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        config: The ``SOURCE_CONFIG`` (defaults to the module&#39;s). Passed positionally</span>
-<span class="sd">            by the registry&#39;s lazy loader (the arioso ``Adapter(config)`` convention).</span>
+<span class="sd">        config: The ``SOURCE_CONFIG`` (defaults to the module's). Passed positionally</span>
+<span class="sd">            by the registry's lazy loader (the arioso ``Adapter(config)`` convention).</span>
 <span class="sd">        api_key: The Freesound token. Defaults to ``$FREESOUND_API_KEY``.</span>
 <span class="sd">        http: The injected :class:`~foley.sources.http.Transport` (defaults to</span>
 <span class="sd">            :func:`~foley.sources.http.requests_transport`); tests pass a fake.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -259,102 +815,102 @@
         <span class="c1"># id -&gt; preview URL, populated as search hits are parsed, so a subsequent</span>
         <span class="c1"># download(id) needs no extra sound-instance round-trip (the pull path calls</span>
         <span class="c1"># download with only the id — the SourceAdapter contract).</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_preview_cache</span><span class="p">:</span> <span class="s2">&quot;dict[str, str]&quot;</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_preview_cache</span><span class="p">:</span> <span class="s2">"dict[str, str]"</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># -- auth / http helpers ------------------------------------------------</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">api_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The Freesound token (from the constructor or ``$FREESOUND_API_KEY``).&quot;&quot;&quot;</span>
-        <span class="n">env_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">][</span><span class="s2">&quot;env_var&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">"""The Freesound token (from the constructor or ``$FREESOUND_API_KEY``)."""</span>
+        <span class="n">env_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">][</span><span class="s2">"env_var"</span><span class="p">]</span>
         <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">env_var</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Freesound needs an API token: set $</span><span class="si">{</span><span class="n">env_var</span><span class="si">}</span><span class="s2"> or pass api_key=. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Get one at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;auth&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;apply_url&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;https://freesound.org/apiv2/apply/&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Freesound needs an API token: set $</span><span class="si">{</span><span class="n">env_var</span><span class="si">}</span><span class="s2"> or pass api_key=. "</span>
+                <span class="sa">f</span><span class="s2">"Get one at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">'auth'</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'apply_url'</span><span class="p">,</span><span class="w"> </span><span class="s1">'https://freesound.org/apiv2/apply/'</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">key</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="n">scheme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scheme&quot;</span><span class="p">,</span> <span class="s2">&quot;Token &quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scheme</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+        <span class="n">scheme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"auth"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"scheme"</span><span class="p">,</span> <span class="s2">"Token "</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"Authorization"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">scheme</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="si">}</span><span class="s2">"</span><span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">][</span><span class="s2">&quot;base_url&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">path</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"api"</span><span class="p">][</span><span class="s2">"base_url"</span><span class="p">]</span> <span class="o">+</span> <span class="n">path</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">())</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Freesound GET </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">_safe_detail</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Freesound GET </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">_safe_detail</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">())</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Freesound byte fetch </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Freesound byte fetch </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span>
 
     <span class="c1"># -- SourceAdapter surface ----------------------------------------------</span>
 
 <div class="viewcode-block" id="FreesoundAdapter.search">
-<a class="viewcode-back" href="../../../../module_docs/foley/sources/freesound/adapter.html#foley.sources.freesound.adapter.FreesoundAdapter.search">[docs]</a>
+<a class="viewcode-back" href="../../../../_autosummary/foley.sources.freesound.adapter.html#foley.sources.freesound.adapter.FreesoundAdapter.search">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
-        <span class="n">license</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cc0&quot;</span><span class="p">,</span>
+        <span class="n">license</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cc0"</span><span class="p">,</span>
         <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
-        <span class="n">duration_range</span><span class="p">:</span> <span class="s2">&quot;Optional[tuple[float, float]]&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">duration_range</span><span class="p">:</span> <span class="s2">"Optional[tuple[float, float]]"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;list[Candidate]&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search Freesound for ``query``; return license-clean candidates.</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"list[Candidate]"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Search Freesound for ``query``; return license-clean candidates.</span>
 
-<span class="sd">        The ``license=&#39;cc0&#39;`` filter is pushed into the native Solr ``filter`` so</span>
+<span class="sd">        The ``license='cc0'`` filter is pushed into the native Solr ``filter`` so</span>
 <span class="sd">        non-CC0 sounds never leave the server; every returned item is still</span>
 <span class="sd">        re-checked fail-closed before it becomes a candidate.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            license: License constraint. ``&#39;cc0&#39;`` (default) sends the CC0 filter;</span>
+<span class="sd">            license: License constraint. ``'cc0'`` (default) sends the CC0 filter;</span>
 <span class="sd">                ``None`` sends none (the per-item guard still enforces the</span>
 <span class="sd">                ``accepted_license_ids`` allowlist, so results stay CC0 for #5).</span>
 <span class="sd">            k: Max results (Freesound caps ``page_size`` at 150).</span>
 <span class="sd">            duration_range: Optional ``(min_s, max_s)`` native duration filter.</span>
 <span class="sd">            sort: Optional native sort key (default: Freesound relevance).</span>
-<span class="sd">            **kw: Ignored extra affordances (``on_unsupported_param=&#39;warn&#39;``).</span>
+<span class="sd">            **kw: Ignored extra affordances (``on_unsupported_param='warn'``).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Up to ``k`` :class:`~foley.base.Candidate`\\ s (``origin=retrieved``),</span>
 <span class="sd">            each carrying a by-reference :class:`~foley.base.LicenseRecord` and a</span>
 <span class="sd">            transient ``preview_uri``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
-            <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;page_size&quot;</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="mi">150</span><span class="p">),</span>
+            <span class="s2">"query"</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+            <span class="s2">"fields"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"fields"</span><span class="p">],</span>
+            <span class="s2">"page_size"</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="mi">150</span><span class="p">),</span>
         <span class="p">}</span>
-        <span class="n">filters</span><span class="p">:</span> <span class="s2">&quot;list[str]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">license</span> <span class="o">==</span> <span class="s2">&quot;cc0&quot;</span><span class="p">:</span>
-            <span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;param_map&quot;</span><span class="p">][</span><span class="s2">&quot;license&quot;</span><span class="p">][</span><span class="s2">&quot;to_native&quot;</span><span class="p">])</span>
+        <span class="n">filters</span><span class="p">:</span> <span class="s2">"list[str]"</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">license</span> <span class="o">==</span> <span class="s2">"cc0"</span><span class="p">:</span>
+            <span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"param_map"</span><span class="p">][</span><span class="s2">"license"</span><span class="p">][</span><span class="s2">"to_native"</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">duration_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">duration_range</span>
             <span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;param_map&quot;</span><span class="p">][</span><span class="s2">&quot;duration_range&quot;</span><span class="p">][</span><span class="s2">&quot;to_native&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"param_map"</span><span class="p">][</span><span class="s2">"duration_range"</span><span class="p">][</span><span class="s2">"to_native"</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">lo</span><span class="o">=</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">hi</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">filters</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filters</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">"filter"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filters</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">sort</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">"sort"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">][</span><span class="s2">&quot;search_endpoint&quot;</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]),</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"api"</span><span class="p">][</span><span class="s2">"search_endpoint"</span><span class="p">][</span><span class="s2">"path"</span><span class="p">]),</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
         <span class="p">)</span>
-        <span class="n">candidates</span><span class="p">:</span> <span class="s2">&quot;list[Candidate]&quot;</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">candidates</span><span class="p">:</span> <span class="s2">"list[Candidate]"</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"results"</span><span class="p">,</span> <span class="p">[]):</span>
             <span class="n">cand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_from_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">cand</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># None =&gt; fail-closed drop (non-accepted license)</span>
                 <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cand</span><span class="p">)</span>
@@ -362,28 +918,28 @@
 
 
 <div class="viewcode-block" id="FreesoundAdapter.get">
-<a class="viewcode-back" href="../../../../module_docs/foley/sources/freesound/adapter.html#foley.sources.freesound.adapter.FreesoundAdapter.get">[docs]</a>
+<a class="viewcode-back" href="../../../../_autosummary/foley.sources.freesound.adapter.html#foley.sources.freesound.adapter.FreesoundAdapter.get">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SoundRecord</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve one Freesound id (``&#39;12345&#39;`` or ``&#39;freesound:12345&#39;``) to a record.</span>
+<span class="w">        </span><span class="sd">"""Resolve one Freesound id (``'12345'`` or ``'freesound:12345'``) to a record.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            LookupError: If the sound&#39;s license is not in the accepted allowlist.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            LookupError: If the sound's license is not in the accepted allowlist.</span>
+<span class="sd">        """</span>
         <span class="n">rid</span> <span class="o">=</span> <span class="n">_raw_id</span><span class="p">(</span><span class="n">source_id</span><span class="p">)</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">][</span><span class="s2">&quot;sound_endpoint&quot;</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">rid</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"api"</span><span class="p">][</span><span class="s2">"sound_endpoint"</span><span class="p">][</span><span class="s2">"path"</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">rid</span><span class="p">)</span>
         <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
         <span class="n">cand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_candidate_from_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cand</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Freesound sound </span><span class="si">{</span><span class="n">rid</span><span class="si">}</span><span class="s2"> has a non-accepted license; refused (fail-closed).&quot;</span>
+                <span class="sa">f</span><span class="s2">"Freesound sound </span><span class="si">{</span><span class="n">rid</span><span class="si">}</span><span class="s2"> has a non-accepted license; refused (fail-closed)."</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">cand</span><span class="o">.</span><span class="n">sound</span></div>
 
 
 <div class="viewcode-block" id="FreesoundAdapter.download">
-<a class="viewcode-back" href="../../../../module_docs/foley/sources/freesound/adapter.html#foley.sources.freesound.adapter.FreesoundAdapter.download">[docs]</a>
+<a class="viewcode-back" href="../../../../_autosummary/foley.sources.freesound.adapter.html#foley.sources.freesound.adapter.FreesoundAdapter.download">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">preview_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a sound&#39;s transient preview bytes (token-tier; never cached).</span>
+<span class="w">        </span><span class="sd">"""Return a sound's transient preview bytes (token-tier; never cached).</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            source_id: The Freesound id (either id form).</span>
@@ -397,61 +953,61 @@
 
 <span class="sd">        Raises:</span>
 <span class="sd">            LookupError: If the sound exposes no preview.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">rid</span> <span class="o">=</span> <span class="n">_raw_id</span><span class="p">(</span><span class="n">source_id</span><span class="p">)</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">preview_url</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_preview_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># not from a prior search hit -&gt; resolve via the instance</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">][</span><span class="s2">&quot;sound_endpoint&quot;</span><span class="p">][</span><span class="s2">&quot;path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">rid</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"api"</span><span class="p">][</span><span class="s2">"sound_endpoint"</span><span class="p">][</span><span class="s2">"path"</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">rid</span><span class="p">)</span>
             <span class="n">url</span> <span class="o">=</span> <span class="n">_preview_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Freesound sound </span><span class="si">{</span><span class="n">rid</span><span class="si">}</span><span class="s2"> exposes no downloadable preview.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Freesound sound </span><span class="si">{</span><span class="n">rid</span><span class="si">}</span><span class="s2"> exposes no downloadable preview."</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bytes</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
 
 
     <span class="c1"># -- item -&gt; license-checked Candidate ----------------------------------</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_candidate_from_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Optional[Candidate]&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a license-checked :class:`~foley.base.Candidate` (None =&gt; drop).</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_candidate_from_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Optional[Candidate]"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Build a license-checked :class:`~foley.base.Candidate` (None =&gt; drop).</span>
 
 <span class="sd">        The per-item fail-closed guard: an item whose license is unverified or not</span>
 <span class="sd">        in ``accepted_license_ids`` returns ``None`` (dropped, never indexed) even</span>
 <span class="sd">        if the server-side filter returned it. Every kept item gets a</span>
 <span class="sd">        by-reference :class:`~foley.base.LicenseRecord` (``cache_bytes_ok=False``)</span>
 <span class="sd">        and a short, case-stable ``freesound:&lt;id&gt;`` canonical id.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">raw_id</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">raw_id</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"id"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">raw_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="n">license_id</span><span class="p">,</span> <span class="n">verified</span> <span class="o">=</span> <span class="n">license_id_from_cc_url</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">))</span>
-        <span class="n">accepted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;license&quot;</span><span class="p">][</span><span class="s2">&quot;accepted_license_ids&quot;</span><span class="p">]</span>
+        <span class="n">license_id</span><span class="p">,</span> <span class="n">verified</span> <span class="o">=</span> <span class="n">license_id_from_cc_url</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"license"</span><span class="p">))</span>
+        <span class="n">accepted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"license"</span><span class="p">][</span><span class="s2">"accepted_license_ids"</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">verified</span> <span class="ow">or</span> <span class="n">license_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">accepted</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># fail-closed: never index a non-accepted-license sound</span>
 
-        <span class="n">overrides</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cache_bytes_ok&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>  <span class="c1"># TOS: by-reference even for CC0</span>
-        <span class="c1"># Honor the uploader&#39;s AI-training preference: CLAP-embedding + persisting</span>
-        <span class="c1"># IS a form of training, so a &#39;no-gen-ai&#39; sound is marked ai_training_ok</span>
-        <span class="c1"># False and then refused by ingest_one&#39;s fail-closed gate.</span>
-        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;gen_ai_preference&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;no-gen-ai&quot;</span><span class="p">:</span>
-            <span class="n">overrides</span><span class="p">[</span><span class="s2">&quot;ai_training_ok&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">overrides</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"cache_bytes_ok"</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>  <span class="c1"># TOS: by-reference even for CC0</span>
+        <span class="c1"># Honor the uploader's AI-training preference: CLAP-embedding + persisting</span>
+        <span class="c1"># IS a form of training, so a 'no-gen-ai' sound is marked ai_training_ok</span>
+        <span class="c1"># False and then refused by ingest_one's fail-closed gate.</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"gen_ai_preference"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"no-gen-ai"</span><span class="p">:</span>
+            <span class="n">overrides</span><span class="p">[</span><span class="s2">"ai_training_ok"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
-        <span class="n">page</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">&quot;https://freesound.org/s/</span><span class="si">{</span><span class="n">raw_id</span><span class="si">}</span><span class="s2">/&quot;</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">"https://freesound.org/s/</span><span class="si">{</span><span class="n">raw_id</span><span class="si">}</span><span class="s2">/"</span>
         <span class="n">lic</span> <span class="o">=</span> <span class="n">api_license</span><span class="p">(</span>
-            <span class="n">source</span><span class="o">=</span><span class="s2">&quot;freesound&quot;</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="s2">"freesound"</span><span class="p">,</span>
             <span class="n">source_id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">raw_id</span><span class="p">),</span>
             <span class="n">source_url</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>  <span class="c1"># stable human page = the by-reference re-fetch handle</span>
-            <span class="n">license_url</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">),</span>  <span class="c1"># the CC URL/label as served</span>
+            <span class="n">license_url</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"license"</span><span class="p">),</span>  <span class="c1"># the CC URL/label as served</span>
             <span class="n">license_id</span><span class="o">=</span><span class="n">license_id</span><span class="p">,</span>
             <span class="n">rights_verified</span><span class="o">=</span><span class="n">verified</span><span class="p">,</span>  <span class="c1"># True — required or keep() rejects</span>
-            <span class="n">creator_name</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">),</span>
+            <span class="n">creator_name</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"username"</span><span class="p">),</span>
             <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">record</span> <span class="o">=</span> <span class="n">SoundRecord</span><span class="p">(</span>
-            <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;freesound:</span><span class="si">{</span><span class="n">raw_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># short, case-stable, no URL</span>
+            <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">"freesound:</span><span class="si">{</span><span class="n">raw_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>  <span class="c1"># short, case-stable, no URL</span>
             <span class="n">uri</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>
             <span class="n">license</span><span class="o">=</span><span class="n">lic</span><span class="p">,</span>
-            <span class="n">caption</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
-            <span class="n">tags</span><span class="o">=</span><span class="nb">sorted</span><span class="p">({</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="n">t</span><span class="p">}),</span>
-            <span class="n">duration_s</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;duration&quot;</span><span class="p">),</span>
+            <span class="n">caption</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">),</span>
+            <span class="n">tags</span><span class="o">=</span><span class="nb">sorted</span><span class="p">({</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="n">t</span><span class="p">}),</span>
+            <span class="n">duration_s</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"duration"</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">preview</span> <span class="o">=</span> <span class="n">_preview_url</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">preview</span><span class="p">:</span>  <span class="c1"># remember it so download(id) needs no extra instance fetch</span>
@@ -468,31 +1024,53 @@
 <span class="n">Adapter</span> <span class="o">=</span> <span class="n">FreesoundAdapter</span>
 </pre></div>
 
-           </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p></p>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
   </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
 
-</footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
-
-</body>
+  </footer>
+  </body>
 </html>
