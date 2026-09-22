@@ -122,6 +122,10 @@ lazily, so a bare install stays light. What each adds:
 `foley.check_requirements()` (and the `foley_capabilities` MCP tool) report what's installed and
 what's degraded. Full docs: **[thorwhalen.github.io/foley](https://thorwhalen.github.io/foley)**.
 
+## Changelog
+
+Per-release changes are in [CHANGELOG.md](CHANGELOG.md).
+
 ## License
 
 MIT

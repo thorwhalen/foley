@@ -2,9 +2,7 @@
 
 All notable changes to this project are documented in this file.
 
-The format is inspired by [Keep a Changelog](https://keepachangelog.com/);
-each section corresponds to a git version tag (which is also the release
-published to PyPI). Entries are commit subjects and PR titles, verbatim.
+The format is inspired by [Keep a Changelog](https://keepachangelog.com/); each section corresponds to a git version tag (which is also the release published to PyPI). Entries are commit subjects and PR titles, verbatim.
 
 ## [0.0.24] - 2026-09-22
 
