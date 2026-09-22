@@ -40,7 +40,7 @@ def _sha256(path) -> str:
 
 def load_baseline(path=DEFAULT_BASELINE_PATH) -> dict:
     """Load the committed baseline dict from ``path``."""
-    return json.loads(Path(path).read_text())
+    return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
 def is_stale(baseline: dict, *, seed_path, manifest_path) -> bool:
@@ -98,5 +98,5 @@ def write_baseline(
         },
         "updated_at": updated_at,
     }
-    Path(path).write_text(json.dumps(baseline, indent=2) + "\n")
+    Path(path).write_text(json.dumps(baseline, indent=2) + "\n", encoding="utf-8")
     return baseline

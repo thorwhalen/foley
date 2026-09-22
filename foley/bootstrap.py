@@ -238,7 +238,7 @@ def demo(*, library=None, query: str = "rain on a window", k: int = 3) -> dict:
         ``{"ingested": <summary dict>, "top_hit": <id or None>, "caption": <str>}``.
     """
     lib = library if library is not None else _fresh_memory_library()
-    manifest = json.loads((RING0_DIR / "manifest.json").read_text())
+    manifest = json.loads((RING0_DIR / "manifest.json").read_text(encoding="utf-8"))
     lic = _ring0_license()
     report = IngestReport(root=str(RING0_DIR))
     for entry in manifest:

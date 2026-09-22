@@ -69,7 +69,11 @@ class GoldenItem:
 
 def load_golden(path=DEFAULT_GOLDEN_PATH) -> "list[GoldenItem]":
     """Load and validate the frozen golden set from ``path`` (JSON list)."""
-    raw = json.loads(Path(path).read_text())
+    # The fixtures are written as UTF-8, so they are read as UTF-8 — a bare
+    # read_text() decodes with the process locale (cp1252 on a stock Windows
+    # console), mojibaking or refusing a non-ASCII caption. Same hazard as the
+    # one documented at foley/sources/clotho.py.
+    raw = json.loads(Path(path).read_text(encoding="utf-8"))
     return [
         GoldenItem(
             id=it["id"],
@@ -127,7 +131,7 @@ def build_eval_library(*, embedder=None, manifest_path=RING0_CORPUS_PATH):
     emb = embedder if embedder is not None else HashingBowEmbedder()
     lib = _fresh_memory_library(embedder=emb)
     manifest_dir = Path(manifest_path).parent
-    manifest = json.loads(Path(manifest_path).read_text())
+    manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
     for entry in manifest:
         stem = Path(entry["file"]).stem
         text = entry["caption"] + " " + " ".join(entry.get("tags", []))
