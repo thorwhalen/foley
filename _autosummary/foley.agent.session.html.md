@@ -23,7 +23,7 @@ Stdlib + `dol` only (via [`foley.stores`](foley.stores.html.md#module-foley.stor
 
 ### *class* foley.agent.session.SessionStore(session_id='default', candidates=None, picks=None, rejects=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Three namespaced stores for one audition session (candidates / picks / rejects).
 
@@ -31,57 +31,57 @@ Each store defaults to a [`foley.stores.make_session_store()`](foley.stores.html
 inject plain dicts. All values are JSON-safe dicts.
 
 * **Parameters:**
-  * **session_id** (`str`) – The session namespace.
-  * **rejects** (`Optional`[`dict`]) – Optional injected `MutableMapping` stores.
+  * **session_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The session namespace.
+  * **rejects** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional injected `MutableMapping` stores.
 
 #### add_pick(sound_id, , layer=None, onset=None)
 
 Persist an accepted pick (+ optional layer/onset); return the pick count.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### add_reject(sound_id, , reason=None)
 
 Record a rejected sound (feeds `refine` relevance feedback); return the count.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### cache_candidates(candidates)
 
 Cache each candidate’s full `to_dict()` keyed by sound id; return the count cached.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### drop_pick(sound_id)
 
 Remove a pick (idempotent); return the remaining pick count.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### list_picks()
 
 All persisted picks.
 
 * **Return type:**
-  `list`[`dict`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
 #### list_rejects()
 
 All recorded rejects.
 
 * **Return type:**
-  `list`[`dict`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
 #### picked_ids()
 
 The picked sound ids.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 #### rehydrate(ids)
 
@@ -91,11 +91,11 @@ Missing ids are skipped. Uses `Candidate.from_dict` (rebuilds the nested
 `SoundRecord` / `LicenseRecord` / `Verdict`).
 
 * **Return type:**
-  `list`[[`Candidate`](foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.html.md#foley.base.Candidate)]
 
 #### rejected_ids()
 
 The rejected sound ids.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]

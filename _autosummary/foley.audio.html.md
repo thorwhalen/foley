@@ -58,7 +58,7 @@ already-open binary file-like object (e.g. `io.BytesIO`).
 * **Type:**
   A source `load` can decode
 
-alias of `str` | `PathLike` | `bytes` | `BinaryIO`
+alias of [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) | [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes) | [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)
 
 ### foley.audio.encode(samples, sample_rate, , fmt='flac', subtype='PCM_24')
 
@@ -69,11 +69,11 @@ the FLAC archive form.
 
 * **Parameters:**
   * **samples** (`ndarray`) – The working array to encode.
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **fmt** (`str`) – Container/codec name (case-insensitive).
-  * **subtype** (`str`) – Sample subtype (e.g. `PCM_24`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Container/codec name (case-insensitive).
+  * **subtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Sample subtype (e.g. `PCM_24`).
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 * **Returns:**
   The encoded audio as `bytes`.
 
@@ -88,14 +88,14 @@ Mappings: mono -> N by duplication; N -> mono by mean; N -> M (N != M, both
 
 * **Parameters:**
   * **samples** (`ndarray`) – Mono or multichannel working array.
-  * **channels** (`int`) – Target channel count (must be >= 1).
+  * **channels** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Target channel count (must be >= 1).
 * **Return type:**
   `ndarray`
 * **Returns:**
   A `(frames,)` array when `channels == 1`, else a
   `(frames, channels)` array.
 * **Raises:**
-  **ValueError** – If `channels < 1`.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `channels < 1`.
 
 Lazy dependency: `numpy` (only for the up-mix / tile path).
 
@@ -108,10 +108,10 @@ out-ramps never overlap on tiny inputs.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono or multichannel).
-  * **sample_rate** (`int`) – Sample rate in Hz (converts the fade durations to samples).
-  * **fade_in_s** (`float`) – Fade-in duration in seconds.
-  * **fade_out_s** (`float`) – Fade-out duration in seconds.
-  * **kind** (`str`) – `'linear'` or `'equal_power'` ramp shape.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (converts the fade durations to samples).
+  * **fade_in_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Fade-in duration in seconds.
+  * **fade_out_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Fade-out duration in seconds.
+  * **kind** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'linear'` or `'equal_power'` ramp shape.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -127,13 +127,13 @@ Decode audio into a float working array.
 `BytesIO` so nothing touches disk), or any binary file-like object.
 
 * **Parameters:**
-  * **src** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – Path, raw bytes, or file-like object to decode.
-  * **target_sr** (`Optional`[`int`]) – If given, resample the decoded audio to this rate (via
+  * **src** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – Path, raw bytes, or file-like object to decode.
+  * **target_sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – If given, resample the decoded audio to this rate (via
     [`resample()`](#foley.audio.resample)); otherwise the native rate is returned.
-  * **mono** (`bool`) – If `True`, down-mix multichannel audio to mono.
-  * **dtype** (`str`) – NumPy dtype string for the returned array (default `float32`).
+  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, down-mix multichannel audio to mono.
+  * **dtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – NumPy dtype string for the returned array (default `float32`).
 * **Return type:**
-  `tuple`[`ndarray`, `int`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`int`](https://docs.python.org/3/builtins/functions.html#int)]
 * **Returns:**
   A `(samples, sample_rate)` tuple. `samples` has shape `(frames,)`
   (mono) or `(frames, channels)`; `sample_rate` reflects any resample.
@@ -155,17 +155,17 @@ raise `ValueError` on (routine for one-shots: clicks, blips, gunshots).
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono or multichannel, time on axis 0 — the layout
     pyloudnorm expects).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **target_lufs** (`float`) – Desired integrated loudness (default = foley’s podcast
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **target_lufs** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Desired integrated loudness (default = foley’s podcast
     target).
-  * **peak_ceiling_dbfs** (`float`) – Sample-peak ceiling (dBFS) applied after loudness
+  * **peak_ceiling_dbfs** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sample-peak ceiling (dBFS) applied after loudness
     normalization. Note this is a *sample*-peak limit, not an inter-sample
     true-peak (dBTP) limit — see [`foley.qc.true_peak_dbtp()`](foley.qc.html.md#foley.qc.true_peak_dbtp) for the
     oversampled measurement.
-  * **min_block_s** (`float`) – Minimum clip length (seconds) that can be loudness-measured;
+  * **min_block_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Minimum clip length (seconds) that can be loudness-measured;
     shorter clips are returned unchanged with `measured = -inf`.
 * **Return type:**
-  `tuple`[`ndarray`, `float`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 * **Returns:**
   `(normalized, measured_input_lufs)`. When the input is near-silent or
   too short to measure, `normalized` is the unchanged input and
@@ -180,9 +180,9 @@ Resample `samples` to `target_sr` (a no-op when already there).
 
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono `(frames,)` or `(frames, channels)`).
-  * **sample_rate** (`int`) – The array’s current rate in Hz.
-  * **target_sr** (`int`) – Desired output rate in Hz (default = the working rate).
-  * **quality** (`str`) – soxr quality preset (`QQ`/`LQ`/`MQ`/`HQ`/`VHQ`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The array’s current rate in Hz.
+  * **target_sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Desired output rate in Hz (default = the working rate).
+  * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – soxr quality preset (`QQ`/`LQ`/`MQ`/`HQ`/`VHQ`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -198,12 +198,12 @@ Write `samples` to `dst` as `fmt`/`subtype` (default = FLAC archive).
 * **Parameters:**
   * **samples** (`ndarray`) – The working array to write (shape `(frames,)` or
     `(frames, channels)`).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **dst** (`Union`[`str`, `PathLike`, `BinaryIO`]) – Destination path or writable binary file-like object.
-  * **fmt** (`str`) – Container/codec name (case-insensitive; passed to libsndfile).
-  * **subtype** (`str`) – Sample subtype (e.g. `PCM_24`, `PCM_16`, `FLOAT`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **dst** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – Destination path or writable binary file-like object.
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Container/codec name (case-insensitive; passed to libsndfile).
+  * **subtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Sample subtype (e.g. `PCM_24`, `PCM_16`, `FLOAT`).
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 Lazy dependency: `soundfile`.
 
@@ -228,10 +228,10 @@ check consumes.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Decoded working array (mono or multichannel).
-  * **sample_rate** (`int`) – The array’s current rate in Hz.
-  * **mono** (`bool`) – If `True`, down-mix to mono.
-  * **target_sr** (`int`) – Working sample rate in Hz.
-  * **dtype** (`str`) – Output NumPy dtype string.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The array’s current rate in Hz.
+  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, down-mix to mono.
+  * **target_sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Working sample rate in Hz.
+  * **dtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output NumPy dtype string.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -250,12 +250,12 @@ axis 0, preserving its channel layout.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono or multichannel).
-  * **sample_rate** (`int`) – Sample rate in Hz (kept in the signature for API symmetry;
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (kept in the signature for API symmetry;
     trimming is index-based).
-  * **top_db** (`float`) – A frame is silent when it sits at least this many dB below the
+  * **top_db** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A frame is silent when it sits at least this many dB below the
     reference (peak) level.
 * **Return type:**
-  `tuple`[`ndarray`, `tuple`[`int`, `int`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`int`](https://docs.python.org/3/builtins/functions.html#int), [`int`](https://docs.python.org/3/builtins/functions.html#int)]]
 * **Returns:**
   `(trimmed, (start_sample, end_sample))`. On all-silent (or otherwise
   degenerate) input the original array is returned unchanged with a

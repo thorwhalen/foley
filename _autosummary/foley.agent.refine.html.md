@@ -26,7 +26,7 @@ method only, so `import foley` stays dol-only).
 
 ### *class* foley.agent.refine.AnthropicRefiner(, client=None, model='claude-opus-4-8', max_tokens=500)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LLM-backed refiner (`foley[agent]`): Claude → a paraphrase list.
 
@@ -38,11 +38,11 @@ LLM-backed refiner (`foley[agent]`): Claude → a paraphrase list.
 Call Claude for `n` paraphrases; the original `query` is always first.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.agent.refine.KeywordRefiner
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic template-expansion refiner — the default and CI fake.
 
@@ -55,22 +55,22 @@ query → identical paraphrase list.
 Return up to `n` distinct paraphrases of `query` (the first is `query`).
 
 * **Parameters:**
-  * **query** (`str`) – The event query to expand.
-  * **n** (`int`) – How many paraphrases to return (2–4 is typical).
-  * **hint** (`Optional`[`str`]) – Optional verify-failure reason to steer re-retrieval.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The event query to expand.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many paraphrases to return (2–4 is typical).
+  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional verify-failure reason to steer re-retrieval.
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.agent.refine.refine_query(query, , n=3, hint=None, refiner=None, \_span=None)
 
 Expand `query` into up to `n` paraphrases for multi-query retrieval.
 
 * **Parameters:**
-  * **query** (`str`) – The event query to expand.
-  * **n** (`int`) – Number of paraphrases.
-  * **hint** (`Optional`[`str`]) – Optional verify-failure reason to steer re-retrieval.
-  * **refiner** (`Optional`[[`Refiner`](foley.agent.protocols.html.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (the DI seam);
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The event query to expand.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of paraphrases.
+  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional verify-failure reason to steer re-retrieval.
+  * **refiner** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Refiner`](foley.agent.protocols.html.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (the DI seam);
     defaults to `_default_refiner()`.
   * **\_span** – Internal — the obs span handle for GenAI recording.
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]

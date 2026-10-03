@@ -27,11 +27,11 @@ is a thin call into the library facade ([`foley.bootstrap()`](foley.md#foley.boo
 Build the `foley` argument parser.
 
 * **Return type:**
-  `ArgumentParser`
+  [`ArgumentParser`](https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser)
 
 ### foley.cli.main(argv=None)
 
 Entry point for the `foley` console script.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)

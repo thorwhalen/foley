@@ -39,7 +39,7 @@ one shared RRF, so ranking is identical across backends.
 
 ### *class* foley.index.indexes.LanceIndex(, uri, dim, table_name='sounds')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LanceDB-backed index: one table with a vector column + a native FTS index.
 
@@ -63,14 +63,14 @@ keyword-searchable). For a keyword-only library with no embeddings, use
 Native full-text (BM25) search; returns `[(id, score), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### commit()
 
 Flush all staged writes to the LanceDB table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### *property* db
 
@@ -81,21 +81,21 @@ The lazily-connected LanceDB database handle.
 Return the stored vector for `id` (staged or persisted), else `None`.
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Stage the searchable text for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 Exact cosine KNN; returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### *property* table
 
@@ -106,11 +106,11 @@ The lazily-opened (or created-empty) LanceDB table.
 Stage the vector for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.indexes.MemoryIndex(, dim=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 In-memory vector + keyword index (numpy cosine + compact BM25).
 
@@ -128,46 +128,46 @@ A compact Okapi BM25 (`k1=1.5`, `b=0.75`) recomputed per query — O(N)
 in the corpus size, which is fine for the in-memory tier’s scale.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### commit()
 
 No-op (writes are immediate); present for interface symmetry.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 Return the `k` cosine-nearest ids to `vector` (most-similar first).
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.indexes.SqliteVecIndex(, path, dim)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Single-file index: sqlite-vec `vec0` KNN + stdlib FTS5 keyword search.
 
@@ -185,49 +185,49 @@ FTS5’s `rank` is more-negative-is-better; it is negated so the returned
 score is larger-is-better (consistent with the other backends).
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### close()
 
 Close the underlying SQLite connection.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### commit()
 
 Commit any pending SQLite transaction (writes auto-commit already).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text for `id` in the FTS5 table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 KNN over `vec0` (cosine); returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector for `id` in the `vec0` table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.index.indexes.default_index(, data_dir, dim)
 
@@ -240,18 +240,18 @@ must survive restarts); inject it explicitly for tests/ephemeral use.
 
 * **Parameters:**
   * **data_dir** – The library data root (a `pathlib.Path`-like).
-  * **dim** (`int`) – The embedding dimensionality from the active embedder.
+  * **dim** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The embedding dimensionality from the active embedder.
 * **Returns:**
   A ready index object (both `VectorIndex` and `KeywordIndex`).
 * **Raises:**
-  **RuntimeError** – If no persistent backend is installed/usable.
+  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – If no persistent backend is installed/usable.
 
 ### foley.index.indexes.lancedb_available()
 
 True if `lancedb` is importable (the `foley[index]` extra is present).
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.index.indexes.sqlite_vec_loadable()
 
@@ -268,4 +268,4 @@ sqlite-vec cannot be used even when
 pip install\`\`ed. This probes both.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)

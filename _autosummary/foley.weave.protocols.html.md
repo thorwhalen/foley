@@ -2,7 +2,7 @@
 
 The structural DI seams of the WEAVE stage — `Aligner` / `ApplyStrategy`.
 
-Two `@runtime_checkable` `typing.Protocol`s (PEP 544), each a
+Two `@runtime_checkable` [`typing.Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)s (PEP 544), each a
 behaviour-free, open-closed contract that every implementation (the deterministic
 fake *and* the heavy real impl) satisfies. They are dependency-injected into
 `foley.weave.render()` / `foley.weave.weave()` by keyword
@@ -22,7 +22,7 @@ importing this module pulls no heavy dependency and keeps `import foley` and
 
 ### *class* foley.weave.protocols.Aligner(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Narration audio + its transcript → word-level timestamps (forced alignment).
 
@@ -35,7 +35,7 @@ is the real ≈±50 ms impl behind `foley[align]`.
 
 ### *class* foley.weave.protocols.ApplyStrategy(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 How ONE hydrated item’s clip is placed onto its layer bus (report 10 §4.2).
 

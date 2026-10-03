@@ -26,14 +26,14 @@ onboarding. Stdlib-only, so importing it keeps `import foley.weave` dol-only.
 | [`Requirement`](#foley.weave.requirements.Requirement)(name, purpose, url, install[, probe])   | A single optional dependency: what it is, how to get it, why foley wants it.   |
 |------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
 
-### foley.weave.requirements.REQUIREMENTS *: dict[str, [Requirement](#foley.weave.requirements.Requirement)]* *= {'ffmpeg': Requirement(name='ffmpeg', purpose="two-pass loudnorm 'guarantee-the-numbers' master (report 06 §5.4)", url='https://ffmpeg.org/download.html', install={'darwin': 'brew install ffmpeg', 'linux': 'sudo apt-get install -y ffmpeg', 'win32': 'winget install --id=Gyan.FFmpeg -e'}, probe='binary'), 'rubberband': Requirement(name='rubberband', purpose='high-quality time-stretch / pitch-shift for loop fitting', url='https://breakfastquay.com/rubberband/', install={'darwin': 'brew install rubberband', 'linux': 'sudo apt-get install -y rubberband-cli', 'win32': 'download from https://breakfastquay.com/rubberband/'}, probe='binary')}*
+### foley.weave.requirements.REQUIREMENTS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Requirement](#foley.weave.requirements.Requirement)]* *= {'ffmpeg': Requirement(name='ffmpeg', purpose="two-pass loudnorm 'guarantee-the-numbers' master (report 06 §5.4)", url='https://ffmpeg.org/download.html', install={'darwin': 'brew install ffmpeg', 'linux': 'sudo apt-get install -y ffmpeg', 'win32': 'winget install --id=Gyan.FFmpeg -e'}, probe='binary'), 'rubberband': Requirement(name='rubberband', purpose='high-quality time-stretch / pitch-shift for loop fitting', url='https://breakfastquay.com/rubberband/', install={'darwin': 'brew install rubberband', 'linux': 'sudo apt-get install -y rubberband-cli', 'win32': 'download from https://breakfastquay.com/rubberband/'}, probe='binary')}*
 
 The SSOT of WEAVE’s optional system dependencies. Both are opt-in upgrades; the
 bare install renders + masters entirely in-process, so neither is required.
 
 ### *class* foley.weave.requirements.Requirement(name, purpose, url, install, probe='binary')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A single optional dependency: what it is, how to get it, why foley wants it.
 
@@ -47,10 +47,10 @@ generalized [`foley.requirements`](foley.requirements.md#module-foley.requiremen
 Report which optional WEAVE system binaries are available (`shutil.which`).
 
 * **Parameters:**
-  * **names** (`tuple`[`str`, `...`] | `None`) – Which requirements to check (default: all of [`REQUIREMENTS`](#foley.weave.requirements.REQUIREMENTS)).
-  * **verbose** (`bool`) – If `True`, print an install hint for each missing binary.
+  * **names** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)] | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Which requirements to check (default: all of [`REQUIREMENTS`](#foley.weave.requirements.REQUIREMENTS)).
+  * **verbose** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, print an install hint for each missing binary.
 * **Return type:**
-  `dict`[`str`, `bool`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
   `{name: is_available}`. All-absent is fine — WEAVE degrades to its
   in-process path; the report just tells the user what each binary would unlock.
@@ -63,6 +63,6 @@ Does **not** run installers (system-binary installs need the user’s consent an
 sudo). Surfaces the exact per-platform command so the user can opt in.
 
 * **Return type:**
-  `dict`[`str`, `dict`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   `{name: {'available': bool, 'purpose': str, 'install': str, 'url': str}}`.

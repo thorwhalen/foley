@@ -32,13 +32,13 @@ the functions here cover the math.
 
 ### *class* foley.eval.fidelity.FidelityResult(metric, value, stamp)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A stamped set-level fidelity score (attached to `FitReport.fidelity`).
 
 ### *class* foley.eval.fidelity.FidelityStamp(embedding, toolkit, version, n_ref, n_gen)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Mandatory provenance for a FAD/KAD score — it is meaningless without it.
 
@@ -57,7 +57,7 @@ embeddings for “FAD-P”, or CLAP for a domain-matched FAD.
   * **x_ref** – Reference embeddings `(n_ref, d)`.
   * **x_gen** – Generated embeddings `(n_gen, d)`.
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The FAD as a `float` (`≥ 0` up to numerical round-off; `~0` for identical
   distributions).
@@ -74,10 +74,10 @@ hashing embedder in CI, PANNs / CLAP (`foley[fit]`) in prod. The embedder’s
   * **ref_wavs** – An iterable of reference waveforms (1-D arrays).
   * **gen_wavs** – An iterable of generated waveforms (1-D arrays).
   * **embedder** – An object with `embed_audio(wav, sr) -> vector` and `model_id`.
-  * **sr** (`int`) – The sample rate passed to `embed_audio`.
-  * **metric** (`str`) – `'fad'` (default) or `'kad'`.
-  * **toolkit** (`str`) – Provenance label for the stamp (default `'foley-numpy'`).
-  * **version** (`str`) – Provenance version for the stamp.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sample rate passed to `embed_audio`.
+  * **metric** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'fad'` (default) or `'kad'`.
+  * **toolkit** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance label for the stamp (default `'foley-numpy'`).
+  * **version** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance version for the stamp.
 * **Return type:**
   [`FidelityResult`](#foley.eval.fidelity.FidelityResult)
 * **Returns:**
@@ -95,8 +95,8 @@ negative.
 * **Parameters:**
   * **x_ref** – Reference embeddings `(n_ref, d)`.
   * **x_gen** – Generated embeddings `(n_gen, d)`.
-  * **bandwidth** (`Optional`[`float`]) – RBF bandwidth σ (default: the median heuristic over the pooled set).
+  * **bandwidth** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – RBF bandwidth σ (default: the median heuristic over the pooled set).
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The unbiased MMD² as a `float`.

@@ -34,7 +34,7 @@ Stdlib-only. Applied at TWO boundaries (belt-and-suspenders, mirroring
 |------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
 | [`Redactor`](#foley.obs.redact.Redactor)([mode, salt, preview_chars, fields]) | The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifests.  |
 
-### foley.obs.redact.REDACT_FIELDS *: frozenset[str]* *= frozenset({'context_text', 'gen_ai.completion', 'gen_ai.prompt', 'generation_prompt', 'narration', 'negative_prompt', 'onset', 'prompt', 'query'})*
+### foley.obs.redact.REDACT_FIELDS *: [frozenset](https://docs.python.org/3/builtins/stdtypes.html#frozenset)[[str](https://docs.python.org/3/builtins/stdtypes.html#str)]* *= frozenset({'context_text', 'gen_ai.completion', 'gen_ai.prompt', 'generation_prompt', 'narration', 'negative_prompt', 'onset', 'prompt', 'query'})*
 
 The attribute / field keys whose string values are sensitive and redacted. The
 narration/prompt/query surfaces report 12 §11 names; `context_text` / `narration`
@@ -42,13 +42,13 @@ narration/prompt/query surfaces report 12 §11 names; `context_text` / `narratio
 
 ### *class* foley.obs.redact.RedactionMode(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a sensitive string is rendered in telemetry (`str`-Enum → serializes cleanly).
 
 ### *class* foley.obs.redact.Redactor(mode=RedactionMode.hash, salt='foley-obs-v1', preview_chars=0, fields=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifests.
 
@@ -57,7 +57,7 @@ The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifes
 Redact every sensitive key in a (shallow) attribute/inputs dict.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### redact_error(exc)
 
@@ -69,7 +69,7 @@ recorded (safe + still useful); the full `repr` is kept only in
 `full` mode (opt-in local debug).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### redact_manifest(payload)
 
@@ -87,12 +87,12 @@ Redact `value` iff `key` is a sensitive field and `value` is a string.
 Redact one string per `mode`.
 
 * **Parameters:**
-  * **text** (`Optional`[`str`]) – The (possibly sensitive) string, or `None`.
+  * **text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The (possibly sensitive) string, or `None`.
   * **mode** ([`RedactionMode`](#foley.obs.redact.RedactionMode)) – `off` → `None`; `full` → `text` verbatim; `hash` (default) →
     `{"sha256": <salted hex>, "len": <n>}` (+ `"preview"` only if
     `preview_chars > 0`).
-  * **salt** (`str`) – Salt mixed into the hash (injectable; default fixed for diffability).
-  * **preview_chars** (`int`) – If > 0 (hash mode), include a leading `text[:preview_chars]`
+  * **salt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Salt mixed into the hash (injectable; default fixed for diffability).
+  * **preview_chars** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – If > 0 (hash mode), include a leading `text[:preview_chars]`
     preview. Default 0 → **zero content leak**.
 * **Returns:**
   `None`, the raw string, or a hash dict — depending on `mode`.

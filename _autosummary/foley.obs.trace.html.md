@@ -43,13 +43,13 @@ stability and shift across minor versions. This dict is the single place they ar
 
 ### *class* foley.obs.trace.NoOpSpan
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A zero-cost span: every method does nothing; `trace_id` is always `None`.
 
 ### *class* foley.obs.trace.NoOpTracer
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The default [`Tracer`](#foley.obs.trace.Tracer) — yields the shared `_NOOP_SPAN`, zero deps.
 
@@ -59,7 +59,7 @@ Yield the no-op span (context-manager protocol; nothing is recorded).
 
 ### *class* foley.obs.trace.OTelTracer
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 An OpenTelemetry-backed [`Tracer`](#foley.obs.trace.Tracer) (lazy import; requires `foley[obs]`).
 
@@ -69,13 +69,13 @@ Open a real OTel span, mapping `kind` to `SpanKind` and yielding a mirror.
 
 ### *class* foley.obs.trace.Span(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 The minimal mirror-span surface foley code calls (structural).
 
 ### *class* foley.obs.trace.Tracer(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Starts mirror spans; the DI seam (default no-op, OTel-backed when present).
 
@@ -84,7 +84,7 @@ Starts mirror spans; the DI seam (default no-op, OTel-backed when present).
 Return the effective [`Tracer`](#foley.obs.trace.Tracer) (OTel-backed when available, else no-op).
 
 * **Parameters:**
-  **prefer_otel** (`bool`) – When `True` (default) and `opentelemetry` is importable, return
+  **prefer_otel** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – When `True` (default) and `opentelemetry` is importable, return
   an [`OTelTracer`](#foley.obs.trace.OTelTracer) (itself a free no-op until the host configures an SDK);
   any construction failure falls back to the no-op. `False` forces the stdlib
   [`NoOpTracer`](#foley.obs.trace.NoOpTracer) — the hermetic-test lever (this dev env may have otel).

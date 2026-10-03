@@ -47,12 +47,12 @@ Registry convention (arioso): the loader imports `adapter.Adapter`.
 
 ### *class* foley.sources.stable_audio.adapter.StableAudioAdapter(config=None, , pipeline=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Local Stable Audio Open 1.0 generate adapter (a [`GenerateAdapter`](foley.sources.base.html.md#foley.sources.base.GenerateAdapter)).
 
 * **Parameters:**
-  * **config** (`Optional`[`dict`]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
+  * **config** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
     by the registry’s lazy loader (the arioso `Adapter(config)` convention).
   * **pipeline** – An optional pre-built pipeline (the dependency-injection seam —
     a test injects a fake callable exposing `.vae.sampling_rate` +
@@ -64,19 +64,19 @@ Local Stable Audio Open 1.0 generate adapter (a [`GenerateAdapter`](foley.source
 Generate a sound for `prompt`; return its bytes + provisional candidate.
 
 * **Parameters:**
-  * **prompt** (`str`) – The natural-language sound description (required).
-  * **duration** (`Optional`[`float`]) – Seconds (clamped to the model’s ~47.55 s max). `None` uses a
+  * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language sound description (required).
+  * **duration** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Seconds (clamped to the model’s ~47.55 s max). `None` uses a
     sane 10 s default (NOT the 47.55 s maximum).
-  * **prompt_influence** (`float`) – `0..1` unified guidance; mapped to the native
+  * **prompt_influence** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – `0..1` unified guidance; mapped to the native
     `guidance_scale` via `1 + prompt_influence * (cfg_max - 1)`.
     Default `0.3` → `guidance_scale ≈ 5.2`.
-  * **negative_prompt** (`Optional`[`str`]) – Content to exclude (ignored by the model when guidance
+  * **negative_prompt** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Content to exclude (ignored by the model when guidance
     ≤ 1).
-  * **steps** (`Optional`[`int`]) – Diffusion steps (native `num_inference_steps`); default 200.
-  * **seed** (`Optional`[`int`]) – Reproducibility seed → a per-device `torch.Generator`; recorded
+  * **steps** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Diffusion steps (native `num_inference_steps`); default 200.
+  * **seed** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Reproducibility seed → a per-device `torch.Generator`; recorded
     in provenance. `None` → non-deterministic (no torch import).
-  * **loop** (`bool`) – No native param (a future WEAVE crossfade) — warn-and-drop.
-  * **output_format** (`str`) – No native param (the audio-write layer) — warn-and-drop;
+  * **loop** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – No native param (a future WEAVE crossfade) — warn-and-drop.
+  * **output_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – No native param (the audio-write layer) — warn-and-drop;
     the clip is archived as FLAC by ingest regardless.
   * **\*\*kw** – Extra/unknown affordances (warn-and-dropped).
 * **Return type:**

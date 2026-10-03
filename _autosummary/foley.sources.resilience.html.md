@@ -41,23 +41,23 @@ with a fake clock and a no-op sleep — no real network, no real waiting. Stdlib
 
 ### *class* foley.sources.resilience.BreakerPolicy(fail_threshold=5, reset_timeout_s=30.0)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Circuit-breaker thresholds.
 
 ### *class* foley.sources.resilience.RetryPolicy(max_attempts=4, retry_on=(429, 500, 502, 503, 504), base_delay_s=0.5, max_delay_s=30.0, respect_retry_after=True)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Exponential-backoff retry policy for transient HTTP failures.
 
-### foley.sources.resilience.SECONDS_PER_DAY *: float* *= 86400.0*
+### foley.sources.resilience.SECONDS_PER_DAY *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 86400.0*
 
 Seconds in a rolling rate-limit day (the `per_day` window length).
 
 ### *exception* foley.sources.resilience.SourceUnavailable
 
-Bases: `RuntimeError`
+Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
 
 Raised when a source’s circuit breaker is open or its retries are exhausted.
 
@@ -66,7 +66,7 @@ Raised when a source’s circuit breaker is open or its retries are exhausted.
 Build a resilient transport from a source `config` (its `rate` drives the throttle).
 
 * **Parameters:**
-  * **config** (`dict`) – A `SOURCE_CONFIG` dict (reads `config['rate']`).
+  * **config** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – A `SOURCE_CONFIG` dict (reads `config['rate']`).
   * **base** – The base transport (default: [`foley.sources.http.requests_transport()`](foley.sources.http.html.md#foley.sources.http.requests_transport)).
   * **\*\*inject** – `retry` / `breaker` / `clock` / `sleep` overrides.
 * **Returns:**
@@ -78,11 +78,11 @@ Wrap a [`Transport`](foley.sources.http.html.md#foley.sources.http.Transport) wi
 
 * **Parameters:**
   * **transport** – The base transport callable `(method, url, *, params, headers, json)`.
-  * **rate** (`Optional`[`dict`]) – The source config’s `rate` dict (`{'per_min':…, 'per_day':…}`).
-  * **retry** (`Optional`[[`RetryPolicy`](#foley.sources.resilience.RetryPolicy)]) – The [`RetryPolicy`](#foley.sources.resilience.RetryPolicy) (default: 4 attempts on 429/5xx).
-  * **breaker** (`Optional`[[`BreakerPolicy`](#foley.sources.resilience.BreakerPolicy)]) – The [`BreakerPolicy`](#foley.sources.resilience.BreakerPolicy) (default: open after 5 consecutive fails).
-  * **clock** (`Callable`[[], `float`]) – Monotonic time source (injected for tests).
-  * **sleep** (`Callable`[[`float`], `None`]) – Blocking sleep (injected for tests).
+  * **rate** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The source config’s `rate` dict (`{'per_min':…, 'per_day':…}`).
+  * **retry** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`RetryPolicy`](#foley.sources.resilience.RetryPolicy)]) – The [`RetryPolicy`](#foley.sources.resilience.RetryPolicy) (default: 4 attempts on 429/5xx).
+  * **breaker** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`BreakerPolicy`](#foley.sources.resilience.BreakerPolicy)]) – The [`BreakerPolicy`](#foley.sources.resilience.BreakerPolicy) (default: open after 5 consecutive fails).
+  * **clock** ([`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[], [`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Monotonic time source (injected for tests).
+  * **sleep** ([`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Blocking sleep (injected for tests).
 * **Returns:**
   A transport with the same signature, plus a `.reset()` method. Raises
   [`SourceUnavailable`](#foley.sources.resilience.SourceUnavailable) when the breaker is open or retries are exhausted.

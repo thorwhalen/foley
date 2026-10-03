@@ -30,7 +30,7 @@ SSOT bridge from SELECT’s sparse `TimelineItem.onset` string to a
 |----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
 | [`resolve_anchor`](#foley.weave.anchor.resolve_anchor)(placement, word_timeline, \*)      | Resolve a `Placement` to a concrete `(onset_seconds, duration_seconds)`.           |
 
-### foley.weave.anchor.SEGMENT_GAP_S *: float* *= 0.35*
+### foley.weave.anchor.SEGMENT_GAP_S *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.35*
 
 Inter-word gap (seconds) that ends a sentence segment (report 06 §2.4 uses
 `> ~350 ms` as a lightweight sentence segmenter over the aligned transcript).
@@ -47,9 +47,9 @@ the start, one-shots sit at `absolute` 0. A bare number (defensive — SELECT is
 told never to emit one) is read as an absolute offset in seconds.
 
 * **Parameters:**
-  * **onset** (`Optional`[`str`]) – The symbolic anchor string (e.g. `"on 'pushed open'"`) or `None`.
+  * **onset** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The symbolic anchor string (e.g. `"on 'pushed open'"`) or `None`.
   * **layer** ([`Layer`](foley.base.html.md#foley.base.Layer)) – The item’s mix layer (selects span/boundary vs word anchoring).
-  * **loop** (`bool`) – Whether the item is a looping bed (span-anchored).
+  * **loop** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the item is a looping bed (span-anchored).
 * **Return type:**
   [`Placement`](foley.base.html.md#foley.base.Placement)
 * **Returns:**
@@ -68,10 +68,10 @@ sentence (filling `duration` when unset — beds loop to fill it); `scene` /
 
 * **Parameters:**
   * **placement** ([`Placement`](foley.base.html.md#foley.base.Placement)) – The symbolic placement to resolve.
-  * **word_timeline** (`list`[`dict`]) – The forced-aligned `[{'word','start','end'}, ...]`.
-  * **snap_pauses** (`bool`) – If `True`, snap the resolved onset to the nearest pause.
+  * **word_timeline** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The forced-aligned `[{'word','start','end'}, ...]`.
+  * **snap_pauses** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, snap the resolved onset to the nearest pause.
 * **Return type:**
-  `tuple`[`float`, `Optional`[`float`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `(onset_seconds, duration_seconds_or_None)`. `duration` is filled only
   for a span anchor whose `placement.duration` was unset.

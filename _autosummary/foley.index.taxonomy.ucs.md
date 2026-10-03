@@ -36,7 +36,7 @@ Build the UCS lookup: the seed rows, overridden/extended by a JSON drop.
   * **data_dir** – Directory to look for `ucs_full.json` in (defaults to the
     package’s `taxonomy/data/`). When present, its rows override the
     seed on CatID collision and add the rest of the ~750-row master.
-  * **include_seed** (`bool`) – Start from the in-code seed table (default `True`).
+  * **include_seed** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Start from the in-code seed table (default `True`).
 * **Return type:**
   [`UcsTable`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.UcsTable)
 * **Returns:**
@@ -50,7 +50,7 @@ Strips directory and extension; requires at least one `_` (the field
 delimiter). Does not validate the token against the table.
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.index.taxonomy.ucs.parse_ucs_filename(filename, , table=None)
 
@@ -61,7 +61,7 @@ its CatID token is unknown (so a wrong subcategory is never emitted).
 
 * **Parameters:**
   * **filename** – A path or filename (only the basename’s token 0 is used).
-  * **table** (`Optional`[[`UcsTable`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
     [`default_ucs_table()`](#foley.index.taxonomy.ucs.default_ucs_table)).
 * **Return type:**
-  `tuple`[`Optional`[`str`], `Optional`[`str`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]

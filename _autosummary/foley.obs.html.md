@@ -51,7 +51,7 @@ All four submodules are stdlib-only at import; `opentelemetry` loads lazily insi
 
 ### *class* foley.obs.NoOpTracer
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The default [`Tracer`](#foley.obs.Tracer) — yields the shared `_NOOP_SPAN`, zero deps.
 
@@ -61,7 +61,7 @@ Yield the no-op span (context-manager protocol; nothing is recorded).
 
 ### *class* foley.obs.ObsConfig(enabled=False, force_disabled=False, redaction_mode=RedactionMode.hash, salt='foley-obs-v1', prefer_otel=True, run_store=None, tracer=None, clock=<built-in function time>, id_factory=<function ObsConfig.<lambda>>, now=<function \_iso_now>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Process-wide observability configuration (flipped by [`enable()`](#foley.obs.enable)/[`disable()`](#foley.obs.disable)).
 
@@ -77,17 +77,17 @@ Fractions of a second may be present if the system clock provides them.
 ISO-8601 UTC timestamp (real wall-clock; overridden to `None` in tests).
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.obs.RedactionMode(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a sensitive string is rendered in telemetry (`str`-Enum → serializes cleanly).
 
 ### *class* foley.obs.Redactor(mode=RedactionMode.hash, salt='foley-obs-v1', preview_chars=0, fields=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifests.
 
@@ -96,7 +96,7 @@ The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifes
 Redact every sensitive key in a (shallow) attribute/inputs dict.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### redact_error(exc)
 
@@ -108,7 +108,7 @@ recorded (safe + still useful); the full `repr` is kept only in
 `full` mode (opt-in local debug).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### redact_manifest(payload)
 
@@ -134,7 +134,7 @@ trace can be replayed against a fresh index.
 
 ### *class* foley.obs.RunRecorder(manifest, , tracer, redactor, run_store, clock, id_factory)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Builds one [`RunManifest`](#foley.obs.RunManifest) (span tree + composed shapes), tracer-independent.
 
@@ -148,21 +148,21 @@ off `self.manifest.steps` — before any emit — never holds raw narration.
 `seq` is assigned here (append position) when the caller left it `None`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### emit()
 
 Persist the manifest to the run store — swallowing any write failure.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### set_plan_ref(plan_ref)
 
 Fill the reserved #8 `plan_ref` slot (a light join dict — no text).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### span(name, , kind=None, \*\*attributes)
 
@@ -193,7 +193,7 @@ catches it). Rehydrated element-wise by `RunManifest.from_dict()` exactly like
 
 ### *class* foley.obs.Tracer(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Starts mirror spans; the DI seam (default no-op, OTel-backed when present).
 
@@ -202,7 +202,7 @@ Starts mirror spans; the DI seam (default no-op, OTel-backed when present).
 Apply [`ObsConfig`](#foley.obs.ObsConfig) overrides WITHOUT flipping `enabled` (the test-injection seam).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.current_run()
 
@@ -213,7 +213,7 @@ The active [`RunRecorder`](#foley.obs.RunRecorder), or `_NULL_RUN` (for the shar
 Turn observability off process-wide (façades revert to a byte-for-byte no-op).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.emit_run_manifest(store, manifest, , redactor=None)
 
@@ -224,20 +224,20 @@ belt-and-suspenders redaction sweep (do NOT couple the write to
 auto-serialization). Returns the `run_id`.
 
 * **Parameters:**
-  * **store** (`MutableMapping`) – A `MutableMapping[str, dict]` (default:
+  * **store** ([`MutableMapping`](https://docs.python.org/3/library/typing.html#typing.MutableMapping)) – A `MutableMapping[str, dict]` (default:
     [`foley.stores.make_run_store()`](foley.stores.html.md#foley.stores.make_run_store); a dict in tests).
   * **manifest** ([`RunManifest`](foley.obs.run_artifact.html.md#foley.obs.run_artifact.RunManifest)) – The [`RunManifest`](#foley.obs.RunManifest) to persist.
   * **redactor** – An optional [`Redactor`](foley.obs.redact.html.md#foley.obs.redact.Redactor) applied to the full
     payload before the write (the emit-time net).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.obs.enable(\*\*overrides)
 
 Turn observability on process-wide (and apply any [`ObsConfig`](#foley.obs.ObsConfig) overrides).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.facade_run(op, , inputs=None, params=None)
 
@@ -252,7 +252,7 @@ manifest on exit. Disabled → the zero-cost `_NULL_RUN`.
 Return the effective [`Tracer`](#foley.obs.Tracer) (OTel-backed when available, else no-op).
 
 * **Parameters:**
-  **prefer_otel** (`bool`) – When `True` (default) and `opentelemetry` is importable, return
+  **prefer_otel** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – When `True` (default) and `opentelemetry` is importable, return
   an `OTelTracer` (itself a free no-op until the host configures an SDK);
   any construction failure falls back to the no-op. `False` forces the stdlib
   [`NoOpTracer`](#foley.obs.NoOpTracer) — the hermetic-test lever (this dev env may have otel).
@@ -273,7 +273,7 @@ leak prompt text into the manifest and duplicate data. Duck-typed over the repor
 (`.summary()` + `.results`) to avoid an obs → index import coupling.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.obs.is_enabled()
 
@@ -284,7 +284,7 @@ posture) hard-overrides both — so offline mode’s “nothing leaves the devic
 contract holds even when `$FOLEY_OBS` is exported.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.obs.load_run(store, run_id)
 
@@ -298,12 +298,12 @@ Load and typed-rehydrate a [`RunManifest`](#foley.obs.RunManifest) from `store` 
 Redact one string per `mode`.
 
 * **Parameters:**
-  * **text** (`Optional`[`str`]) – The (possibly sensitive) string, or `None`.
+  * **text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The (possibly sensitive) string, or `None`.
   * **mode** ([`RedactionMode`](foley.obs.redact.html.md#foley.obs.redact.RedactionMode)) – `off` → `None`; `full` → `text` verbatim; `hash` (default) →
     `{"sha256": <salted hex>, "len": <n>}` (+ `"preview"` only if
     `preview_chars > 0`).
-  * **salt** (`str`) – Salt mixed into the hash (injectable; default fixed for diffability).
-  * **preview_chars** (`int`) – If > 0 (hash mode), include a leading `text[:preview_chars]`
+  * **salt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Salt mixed into the hash (injectable; default fixed for diffability).
+  * **preview_chars** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – If > 0 (hash mode), include a leading `text[:preview_chars]`
     preview. Default 0 → **zero content leak**.
 * **Returns:**
   `None`, the raw string, or a hash dict — depending on `mode`.
@@ -313,7 +313,7 @@ Redact one string per `mode`.
 Restore the default config (test teardown; clears injected store/tracer/clock).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.run(op='run', , inputs=None, params=None, \*\*overrides)
 

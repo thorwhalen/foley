@@ -32,7 +32,7 @@ under `TYPE_CHECKING` so `import foley.index.protocols` never pulls numpy.
 
 ### *class* foley.index.protocols.Captioner(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Produce one natural-language sentence describing a clip (report 03).
 
@@ -45,11 +45,11 @@ Both are `foley[caption]` adapters plugged in behind this protocol.
 Return a one-sentence caption for the clip.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### *class* foley.index.protocols.Embedder(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 A joint text<->audio embedding space (CLAP by default).
 
@@ -75,7 +75,7 @@ Embed one audio clip.
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`, mono preferred). CLAP expects
     48 kHz; implementations resample as needed.
-  * **sr** (`int`) – The clip’s sample rate in Hz.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -86,7 +86,7 @@ Embed one audio clip.
 Embed one or more query strings.
 
 * **Parameters:**
-  **text** (`Union`[`str`, `list`[`str`]]) – A single string or a list of strings.
+  **text** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – A single string or a list of strings.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -96,7 +96,7 @@ Embed one or more query strings.
 
 ### *class* foley.index.protocols.KeywordIndex(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 BM25 / full-text index over each sound’s tags + caption.
 
@@ -109,11 +109,11 @@ single-file fallback. Same `where` push-down contract as
 Return the top-`k` BM25 matches for `query`, best first.
 
 * **Parameters:**
-  * **query** (`str`) – A natural-language / keyword query.
-  * **k** (`int`) – Number of matches to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A natural-language / keyword query.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of matches to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, bm25_score), ...]` in descending-score order.
 
@@ -122,11 +122,11 @@ Return the top-`k` BM25 matches for `query`, best first.
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.protocols.Tagger(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Map a clip to `(label, score)` pairs against a label vocabulary.
 
@@ -141,11 +141,11 @@ working array (`float32`, any sr — the impl resamples to its model’s rate).
 Return the top-`k` `(label, score)` tags for the clip, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 ### *class* foley.index.protocols.VectorIndex(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Approximate-nearest-neighbour store over embedding vectors.
 
@@ -162,7 +162,7 @@ Needed by `SoundLibrary.similar` (fetch a sound’s own vector, then run
 [`knn()`](#foley.index.protocols.VectorIndex.knn)) and by the optional CLAP rerank (score keyword-only hits).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### knn(vector, k, , where=None)
 
@@ -170,10 +170,10 @@ Return the `k` nearest ids to `vector`, most-similar first.
 
 * **Parameters:**
   * **vector** (`ndarray`) – A `(dim,)` query vector (already L2-normalized).
-  * **k** (`int`) – Number of neighbours to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of neighbours to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, cosine_similarity), ...]` in descending-similarity order.
 
@@ -182,4 +182,4 @@ Return the `k` nearest ids to `vector`, most-similar first.
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)

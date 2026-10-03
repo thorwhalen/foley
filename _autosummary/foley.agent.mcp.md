@@ -63,11 +63,11 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
 
 * **Parameters:**
   * **library** – The [`foley.index.SoundLibrary`](foley.index.md#foley.index.SoundLibrary) (default: the shared one).
-  * **session** (`str`) – The default session id.
+  * **session** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The default session id.
   * **runtime** – A [`foley.runtime.RuntimeConfig`](foley.runtime.md#foley.runtime.RuntimeConfig) (default: the active one).
   * **byte_store** – A `MutableMapping[str, bytes]` for previews / rendered mixes.
-  * **include** (`Optional`[`list`[`str`]]) – Optional subset of tool names to expose.
-  * **name** (`str`) – The MCP server name.
+  * **include** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Optional subset of tool names to expose.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP server name.
 * **Returns:**
   A `fastmcp.FastMCP` server.
 
@@ -76,14 +76,14 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
 What foley can do here — keys / extras / system deps / offline / sources / degraded.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_drop_pick(sound_id, session='default')
 
 Remove a previously-picked sound from the session.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_find(context, max_events=6, verify='listen', commercial_ok=False, k=10, session='default')
 
@@ -93,14 +93,14 @@ Caches the full candidates in the session so `foley_plan` / `foley_weave` can
 rehydrate them by id. Returns compact candidate rows.
 
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 ### foley.agent.mcp.foley_generate(prompt, backend='stable_audio', commercial_ok=False, session='default')
 
 Generate a sound from a text prompt (local backends only when offline).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_guide()
 
@@ -110,28 +110,28 @@ Call this first if you are unsure of the workflow: it returns the tool order, th
 heuristics (restraint, layering, ducking, licensing), and the offline posture.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_list_picks(session='default')
 
 The sounds picked in this session (the ‘persist picks’ read side).
 
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 ### foley.agent.mcp.foley_nudge(timeline, item_id, delta_s)
 
 Shift a timeline item’s onset by `delta_s` seconds; returns the new timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_pick(sound_id, session='default', layer=None, onset=None)
 
 Accept a sound into the session (persisted); `foley_plan` folds picks into a timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_plan(session='default', transcript=None, candidate_ids=None)
 
@@ -143,28 +143,28 @@ placement choices — a numeric `onset` becomes an absolute-seconds anchor (see
 [`foley.weave.anchor.parse_symbolic_anchor()`](foley.weave.anchor.md#foley.weave.anchor.parse_symbolic_anchor)).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_preview(sound_id, seconds=6, session='default')
 
 Produce a short audition of a sound; returns its store key (never audio bytes).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_refine(session='default', query=None, picked_ids=None, rejected_ids=None, hint=None, k=10)
 
 Relevance-feedback refinement: expand the query, boost picks, drop rejects, re-rank.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_reject(sound_id, session='default', reason=None)
 
 Reject a sound (feeds `foley_refine` relevance feedback).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_score(context, commercial_ok=False, verify='listen', max_events=6, session='default')
 
@@ -176,21 +176,21 @@ timeline plus a rationale for each chosen sound. Weaving (rendering the mastered
 clip, nudge an onset, drop a cue — before committing to a render.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_search(query, k=10, commercial_ok=False, ucs_category=None, rerank=False, session='default')
 
 Hybrid (CLAP + keyword) search of the library for a text query; returns candidate rows.
 
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 ### foley.agent.mcp.foley_set_gain(timeline, item_id, gain_db)
 
 Set a timeline item’s gain (dB); returns the new timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_set_master(timeline, target_lufs=None, peak_dbfs=None)
 
@@ -200,49 +200,49 @@ Either field may be set independently — omitting one keeps the podcast default
 that field (so `peak_dbfs=-2.0` alone tightens only the true-peak ceiling).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_similar_to(sound_id, k=10, session='default')
 
 “More like this” — the library neighbours of a sound (by id); returns candidate rows.
 
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 ### foley.agent.mcp.foley_status(session='default')
 
 The current runtime posture + this session’s pick/reject counts.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_swap_clip(timeline, item_id, sound_id)
 
 Swap a timeline item’s clip; returns the new timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_timeline_captions(timeline, fmt='vtt')
 
 Export SDH captions for a timeline (`fmt='vtt'` | `'srt'`).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_toggle(timeline, item_id, enabled)
 
 Mute/unmute a timeline item; returns the new timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_weave(narration, timeline, session='default')
 
 Render a timeline under the narration; returns the mix by store key + captions + credits.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.make_http_app(, auth, path='/mcp', json_response=False, library=None, runtime=None, byte_store=None, include=None, name='foley')
 
@@ -256,21 +256,21 @@ gunicorn, a parent FastAPI). `py2mcp` / `fastmcp` are imported lazily inside
 [`build_mcp_server()`](#foley.agent.mcp.build_mcp_server), so `import foley` stays dol-only.
 
 * **Parameters:**
-  * **auth** (`dict`) – `{'bearer_tokens': [...]}` — required; empty/missing raises (fail-closed).
-  * **path** (`str`) – The MCP HTTP mount path.
-  * **json_response** (`bool`) – Return a single JSON response instead of an SSE stream (simple clients).
-  * **name** (`str`) – As [`build_mcp_server()`](#foley.agent.mcp.build_mcp_server).
+  * **auth** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – `{'bearer_tokens': [...]}` — required; empty/missing raises (fail-closed).
+  * **path** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP HTTP mount path.
+  * **json_response** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Return a single JSON response instead of an SSE stream (simple clients).
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – As [`build_mcp_server()`](#foley.agent.mcp.build_mcp_server).
 * **Returns:**
   An ASGI application (the bearer-gated MCP HTTP app).
 * **Raises:**
-  **ValueError** – If `auth` carries no bearer tokens (no anonymous HTTP access).
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `auth` carries no bearer tokens (no anonymous HTTP access).
 
 ### foley.agent.mcp.serve(, name='foley', runtime=None, \*\*kwargs)
 
 Build and run the foley MCP server over stdio (blocks); enforces an offline posture.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.agent.mcp.serve_http(, host='127.0.0.1', port=8000, auth, path='/mcp', \*\*kwargs)
 
@@ -279,4 +279,4 @@ Build and serve the foley MCP tools over authenticated streamable HTTP (blocks).
 Wraps [`make_http_app()`](#foley.agent.mcp.make_http_app) and runs it with uvicorn. `auth` is required (fail-closed).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)

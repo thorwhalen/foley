@@ -104,7 +104,7 @@ Suffix given to on-disk metadata files (keys stay the bare `sound_id`).
 
 A filesystem location (path or path-like string) for a local store root.
 
-alias of `str` | `os.PathLike[str]`
+alias of [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | `os.PathLike[str]`
 
 ### foley.stores.content_key(data, , algo='sha256')
 
@@ -114,10 +114,10 @@ Using the hash as the key gives free deduplication (identical bytes map to
 the same key) and immutability (a key always names the exact same bytes).
 
 * **Parameters:**
-  * **data** (`bytes`) – The raw bytes to address (e.g. a FLAC archive blob).
-  * **algo** (`str`) – A `hashlib` algorithm name (defaults to [`HASH_ALGO`](#foley.stores.HASH_ALGO)).
+  * **data** ([`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)) – The raw bytes to address (e.g. a FLAC archive blob).
+  * **algo** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A `hashlib` algorithm name (defaults to [`HASH_ALGO`](#foley.stores.HASH_ALGO)).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The lowercase hex digest of `data` under `algo`.
 
@@ -131,9 +131,9 @@ it directly to [`store_sound()`](#foley.stores.store_sound) instead of calling t
 `store_sound` gate treats `sounds` as an opaque `MutableMapping`.
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the blobs (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the blobs (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, `bytes`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 * **Returns:**
   A `MutableMapping[str, bytes]` keyed by [`content_key()`](#foley.stores.content_key).
 
@@ -148,9 +148,9 @@ bare `sound_id` (invariant #3 — the id is escaped at this boundary so an
 externally-derived id can never escape `rootdir` or collide via `/`/`..`).
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the metadata JSON files (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the metadata JSON files (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)]
 * **Returns:**
   A `MutableMapping[str, SoundRecord]` keyed by `sound_id`.
 
@@ -167,9 +167,9 @@ C2PA-shaped assertion dict written next to each generated clip; a
 default; swap in any `dol` Mapping to move sidecars to the cloud.
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the credential JSON files (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the credential JSON files (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, `dict`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   A `MutableMapping[str, dict]` keyed by content id.
 
@@ -184,9 +184,9 @@ exposing bare `run_id` keys; values are plain dicts ((de)serialized by
 `dol.JsonFiles`). Local by default; swap in any `dol` Mapping for the cloud.
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the run JSON files (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the run JSON files (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, `dict`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   A `MutableMapping[str, dict]` keyed by `run_id`.
 
@@ -201,12 +201,12 @@ exposing bare keys; values are plain dicts. Local by default; swap in any `dol`
 Mapping for the cloud.
 
 * **Parameters:**
-  * **session_id** (`str`) – The session namespace (default `'default'`).
-  * **name** (`str`) – The store namespace within the session (`candidates` / `picks` /
+  * **session_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The session namespace (default `'default'`).
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The store namespace within the session (`candidates` / `picks` /
     `rejects`).
-  * **rootdir** (`Union`[`str`, `PathLike`[`str`], `None`]) – Root sessions directory (default: [`DEFAULT_SESSION_DIR`](#foley.stores.DEFAULT_SESSION_DIR)).
+  * **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Root sessions directory (default: [`DEFAULT_SESSION_DIR`](#foley.stores.DEFAULT_SESSION_DIR)).
 * **Return type:**
-  `MutableMapping`[`str`, `dict`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   A `MutableMapping[str, dict]` keyed by the bare key.
 
@@ -226,19 +226,19 @@ written, only its fetchable `uri` plus provenance.
     for the storage mode. Mutated in place with the resolved
     `storage_mode` / `uri` / `content_sha256` and written into
     `meta`.
-  * **data** (`Optional`[`bytes`]) – The canonical archive bytes (FLAC). Required for by-value storage;
+  * **data** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The canonical archive bytes (FLAC). Required for by-value storage;
     for by-reference it is optional — if given, its hash is recorded in
     `content_sha256` for provenance but the bytes are NOT stored.
-  * **sounds** (`MutableMapping`[`str`, `bytes`]) – The content-addressed byte store (see [`make_byte_store()`](#foley.stores.make_byte_store)).
-  * **meta** (`MutableMapping`[`str`, [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)]) – The metadata store (see [`make_meta_store()`](#foley.stores.make_meta_store)).
-  * **cache_bytes_ok** (`Optional`[`bool`]) – Optional override. `None` (the default) means “use
+  * **sounds** ([`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The content-addressed byte store (see [`make_byte_store()`](#foley.stores.make_byte_store)).
+  * **meta** ([`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)]) – The metadata store (see [`make_meta_store()`](#foley.stores.make_meta_store)).
+  * **cache_bytes_ok** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Optional override. `None` (the default) means “use
     `record.license.cache_bytes_ok`”.
 * **Return type:**
   [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)
 * **Returns:**
   The same (mutated) `record`, after it has been written into `meta`.
 * **Raises:**
-  **ValueError** – If `record.id` is empty/non-`str` (checked first, so a bad
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `record.id` is empty/non-`str` (checked first, so a bad
       id never leaves an orphan blob), or if the sound resolves to
       by-reference storage but `record.uri` is empty (a by-reference sound
       must name a fetchable source URL).

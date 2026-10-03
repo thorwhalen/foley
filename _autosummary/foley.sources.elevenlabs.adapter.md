@@ -41,18 +41,18 @@ Registry convention (arioso): the loader imports `adapter.Adapter`.
 
 ### *class* foley.sources.elevenlabs.adapter.ElevenLabsAdapter(config=None, , api_key=None, http=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](foley.sources.base.md#foley.sources.base.GenerateAdapter)).
 
 * **Parameters:**
-  * **config** (`Optional`[`dict`]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
+  * **config** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
     by the registry’s lazy loader (the arioso `Adapter(config)` convention).
-  * **api_key** (`Optional`[`str`]) – The ElevenLabs token. Defaults to `$ELEVENLABS_API_KEY`.
-  * **http** (`Optional`[[`Transport`](foley.sources.http.md#foley.sources.http.Transport)]) – The injected [`Transport`](foley.sources.http.md#foley.sources.http.Transport) (defaults to
+  * **api_key** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The ElevenLabs token. Defaults to `$ELEVENLABS_API_KEY`.
+  * **http** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Transport`](foley.sources.http.md#foley.sources.http.Transport)]) – The injected [`Transport`](foley.sources.http.md#foley.sources.http.Transport) (defaults to
     [`requests_transport()`](foley.sources.http.md#foley.sources.http.requests_transport)); tests pass a fake.
 
-#### *property* api_key *: str*
+#### *property* api_key *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The ElevenLabs token (from the constructor or `$ELEVENLABS_API_KEY`).
 
@@ -61,16 +61,16 @@ The ElevenLabs token (from the constructor or `$ELEVENLABS_API_KEY`).
 Generate a sound effect for `prompt`; return its bytes + provisional candidate.
 
 * **Parameters:**
-  * **prompt** (`str`) – The natural-language sound description (required).
-  * **duration** (`Optional`[`float`]) – Seconds (clamped to the native `0.5..30` range). `None`
+  * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language sound description (required).
+  * **duration** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Seconds (clamped to the native `0.5..30` range). `None`
     lets the model auto-determine the length from the prompt.
-  * **prompt_influence** (`float`) – `0..1` (identity map to the native field; higher =
+  * **prompt_influence** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – `0..1` (identity map to the native field; higher =
     closer to the prompt, less variety). Default `0.3`.
-  * **seed** (`Optional`[`int`]) – No ElevenLabs SFX equivalent — a
+  * **seed** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – No ElevenLabs SFX equivalent — a
     non-default value warns-and-drops (recorded in the clip notes);
     `generation_seed` stays `None`.
-  * **loop** (`bool`) – Produce a seamless-loopable clip (native `loop`; v2 default).
-  * **output_format** (`str`) – Coarse foley token (`wav` | `opus` | `mp3`)
+  * **loop** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Produce a seamless-loopable clip (native `loop`; v2 default).
+  * **output_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Coarse foley token (`wav` | `opus` | `mp3`)
     translated to the native enum; `wav` falls back to MP3 (the SFX
     endpoint has no lossless container) and is re-archived to FLAC by
     ingest.

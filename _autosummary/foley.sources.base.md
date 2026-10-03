@@ -60,13 +60,13 @@ so the derived permission flags stay single-sourced.
 | [`GeneratedClip`](#foley.sources.base.GeneratedClip)(audio_bytes, candidate[, notes]) | One freshly-generated sound: its transient bytes + a provisional candidate.     |
 | [`UniformCorpus`](#foley.sources.base.UniformCorpus)(name, ring, ...[, ...])          | A bulk corpus where **every** clip carries the same license.                    |
 
-### foley.sources.base.CORPUS_REGISTRY *: dict[str, [CorpusAdapter](#foley.sources.base.CorpusAdapter)]* *= {'bbc_remarc': UniformCorpus(name='bbc_remarc', ring=2, default_license_id='RemArc', source='bbc_remarc', rights_verified=True, tag_hints_from_path=False), 'clotho': ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False), 'foleyset': UniformCorpus(name='foleyset', ring=0, default_license_id='CC-BY-4.0', source='foleyset', rights_verified=True, tag_hints_from_path=True), 'fsd50k': <foley.sources.fsd50k.Fsd50kCorpus object>, 'sonniss': UniformCorpus(name='sonniss', ring=2, default_license_id='Sonniss-GDC', source='sonniss', rights_verified=True, tag_hints_from_path=False)}*
+### foley.sources.base.CORPUS_REGISTRY *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [CorpusAdapter](#foley.sources.base.CorpusAdapter)]* *= {'bbc_remarc': UniformCorpus(name='bbc_remarc', ring=2, default_license_id='RemArc', source='bbc_remarc', rights_verified=True, tag_hints_from_path=False), 'clotho': ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False), 'foleyset': UniformCorpus(name='foleyset', ring=0, default_license_id='CC-BY-4.0', source='foleyset', rights_verified=True, tag_hints_from_path=True), 'fsd50k': <foley.sources.fsd50k.Fsd50kCorpus object>, 'sonniss': UniformCorpus(name='sonniss', ring=2, default_license_id='Sonniss-GDC', source='sonniss', rights_verified=True, tag_hints_from_path=False)}*
 
 Registry of concrete bulk-corpus adapters, keyed by `adapter.name`.
 
 ### *class* foley.sources.base.ClipSpec(path, source_id, meta=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One clip inside a local bulk corpus, described but not yet ingested.
 
@@ -89,7 +89,7 @@ hints — e.g. `{"license_id", "creator_name", "source_url",
 
 ### *class* foley.sources.base.CorpusAdapter(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 A downloaded bulk corpus presented as an ingestable stream of clips.
 
@@ -102,9 +102,9 @@ two methods below. They perform **no** embedding, storage, or library access.
 The on-disk root for this corpus under `data_dir` (`data_dir/name`).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
-#### default_license_id *: str*
+#### default_license_id *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The corpus compilation license id (a per-clip license may still override).
 
@@ -113,9 +113,9 @@ The corpus compilation license id (a per-clip license may still override).
 Yield a [`ClipSpec`](#foley.sources.base.ClipSpec) for every ingestable clip under `root`.
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](#foley.sources.base.ClipSpec)]
 
-#### name *: str*
+#### name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 Registry key / CLI name — `'fsd50k'` | `'clotho'` | `'foleyset'` | …
 
@@ -126,7 +126,7 @@ Return the fully-derived rights record for `spec` (licensing SSOT).
 * **Return type:**
   [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)
 
-#### ring *: int*
+#### ring *: [int](https://docs.python.org/3/builtins/functions.html#int)*
 
 `0` ship-in-repo, `1` fetch, `2` opt-in/quarantined.
 
@@ -135,7 +135,7 @@ Return the fully-derived rights record for `spec` (licensing SSOT).
 
 ### *class* foley.sources.base.GenerateAdapter(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 The generation source contract (report 10 §4.2) — a SIBLING of `SourceAdapter`.
 
@@ -161,13 +161,13 @@ Synthesize a sound for `prompt`; return its bytes + provisional candidate.
 * **Return type:**
   [`GeneratedClip`](#foley.sources.base.GeneratedClip)
 
-#### name *: str*
+#### name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 Registry / façade key — `'stable_audio'` | `'elevenlabs'` | …
 
 ### *class* foley.sources.base.GeneratedClip(audio_bytes, candidate, notes=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One freshly-generated sound: its transient bytes + a provisional candidate.
 
@@ -215,7 +215,7 @@ surface in the run report.
 
 ### *class* foley.sources.base.SourceAdapter(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 The live/HTTP source contract (report 10 §4.2): `search` + `get` + `download`.
 
@@ -240,7 +240,7 @@ adapters.
 Return a sound’s bytes (honoring `cache_bytes_ok` at the storage gate).
 
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 
 #### get(source_id)
 
@@ -254,11 +254,11 @@ Resolve one source id to a metadata [`SoundRecord`](foley.base.md#foley.base.Sou
 Return ranked candidates for `query` (license filter pushed native).
 
 * **Return type:**
-  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]
 
 ### *class* foley.sources.base.UniformCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A bulk corpus where **every** clip carries the same license.
 
@@ -274,7 +274,7 @@ fail-closed. Subclass to enrich per-clip `meta` (see
 `data_dir/<name>` — the conventional on-disk root for this corpus.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### iter_clips(root)
 
@@ -285,7 +285,7 @@ When `tag_hints_from_path` is set, the clip’s parent folder names
 FoleySet encode a Foley taxonomy in their directory structure.
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](#foley.sources.base.ClipSpec)]
 
 #### resolve_license(spec)
 
@@ -308,20 +308,20 @@ caching the bytes even for CC0. `redistribute_standalone_ok` (copyright) and
 `cache_bytes_ok` (TOS) are distinct; only the latter is flipped.
 
 * **Parameters:**
-  * **source** (`str`) – Provenance source tag (e.g. `'freesound'`).
-  * **license_id** (`str`) – The per-item normalized license id (a key of `LICENSE_FLAGS`).
-  * **rights_verified** (`bool`) – `True` only for an authoritatively-recognized license
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'freesound'`).
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The per-item normalized license id (a key of `LICENSE_FLAGS`).
+  * **rights_verified** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – `True` only for an authoritatively-recognized license
     (fail-closed gate input); MUST be `True` for [`foley.keep()`](foley.md#foley.keep) to
     admit the sound.
-  * **overrides** (`Optional`[`dict`]) – Per-source flag overrides applied on top of `license_id`’s row
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Per-source flag overrides applied on top of `license_id`’s row
     (e.g. `{'cache_bytes_ok': False}`). Keys must be `LicenseFlags`
     fields (validated by [`derive_license_flags()`](foley.licensing.md#foley.licensing.derive_license_flags)).
-  * **source_id** (`Optional`[`str`]) – The source-native id (e.g. a Freesound numeric id), for provenance.
-  * **source_url** (`Optional`[`str`]) – A human-resolvable URL for the item (attribution + the stable
+  * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The source-native id (e.g. a Freesound numeric id), for provenance.
+  * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the item (attribution + the stable
     by-reference re-fetch handle).
-  * **license_url** (`Optional`[`str`]) – The license URL/label exactly as the source served it.
-  * **creator_name** (`Optional`[`str`]) – The uploader/creator (required for CC-BY attribution).
-  * **attribution_text** (`Optional`[`str`]) – A ready-made attribution string, if supplied.
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The license URL/label exactly as the source served it.
+  * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
+  * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if supplied.
 * **Return type:**
   [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)
 * **Returns:**
@@ -337,15 +337,15 @@ signature is unchanged from #4 — no `overrides` (a downloaded corpus is
 cacheable by-value), so every existing corpus adapter keeps working verbatim.
 
 * **Parameters:**
-  * **source** (`str`) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
-  * **license_id** (`str`) – The normalized license id (a key of `LICENSE_FLAGS`, else it
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The normalized license id (a key of `LICENSE_FLAGS`, else it
     falls back to the all-False `unknown` flags).
-  * **rights_verified** (`bool`) – Whether the license is authoritatively known (fail-closed
+  * **rights_verified** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the license is authoritatively known (fail-closed
     gate input — pass `False` for unrecognized/ambiguous licenses).
-  * **source_id** (`Optional`[`str`]) – The corpus-native clip id, for provenance.
-  * **source_url** (`Optional`[`str`]) – A human-resolvable URL for the clip (attribution/credits).
-  * **creator_name** (`Optional`[`str`]) – The uploader/creator (required for CC-BY attribution).
-  * **attribution_text** (`Optional`[`str`]) – A ready-made attribution string, if the corpus supplies one.
+  * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The corpus-native clip id, for provenance.
+  * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the clip (attribution/credits).
+  * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
+  * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if the corpus supplies one.
 * **Return type:**
   [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)
 * **Returns:**
@@ -356,7 +356,7 @@ cacheable by-value), so every existing corpus adapter keeps working verbatim.
 Registered adapters whose ring is in `rings` (sorted by name).
 
 * **Return type:**
-  `list`[[`CorpusAdapter`](#foley.sources.base.CorpusAdapter)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`CorpusAdapter`](#foley.sources.base.CorpusAdapter)]
 
 ### foley.sources.base.generated_license(, source, license_id, generator_model, generation_prompt, rights_verified=True, generator_version=None, generation_seed=None, generation_params=None, disclosure_recommended=True, watermark=None, c2pa_manifest_ref=None, overrides=None, source_id=None, source_url=None, license_url=None, creator_name=None, attribution_text=None)
 
@@ -379,30 +379,30 @@ but never flips the flag, so [`foley.keep()`](foley.md#foley.keep) still rejects
 `revenue_cap_usd=1_000_000` (enforced by [`foley.keep()`](foley.md#foley.keep) at select time).
 
 * **Parameters:**
-  * **source** (`str`) – The generator tag (e.g. `'stable_audio'` / `'elevenlabs'`).
-  * **license_id** (`str`) – The generator license id (`'Stability-Community'` /
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The generator tag (e.g. `'stable_audio'` / `'elevenlabs'`).
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The generator license id (`'Stability-Community'` /
     `'ElevenLabs-SFX'` — a key of `LICENSE_FLAGS`).
-  * **generator_model** (`str`) – The model identifier (e.g. `'stable-audio-open-1.0'`,
+  * **generator_model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The model identifier (e.g. `'stable-audio-open-1.0'`,
     `'eleven_text_to_sound_v2'`).
-  * **generation_prompt** (`str`) – The user prompt, verbatim.
-  * **rights_verified** (`bool`) – `True` (a generator license is authoritatively known);
+  * **generation_prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The user prompt, verbatim.
+  * **rights_verified** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – `True` (a generator license is authoritatively known);
     MUST be `True` or [`foley.keep()`](foley.md#foley.keep) rejects the sound.
-  * **generator_version** (`Optional`[`str`]) – Optional model/version string.
-  * **generation_seed** (`Optional`[`int`]) – The reproducibility seed (an `int` for a seeded
+  * **generator_version** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional model/version string.
+  * **generation_seed** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The reproducibility seed (an `int` for a seeded
     Stable-Audio-Open run; `None` for a non-deterministic backend).
-  * **generation_params** (`Optional`[`dict`]) – The RESOLVED NATIVE params actually sent to the backend
+  * **generation_params** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The RESOLVED NATIVE params actually sent to the backend
     (e.g. `guidance_scale` — not the unified `prompt_influence` —
     `audio_end_in_s`, …), for reproducibility + audit.
-  * **disclosure_recommended** (`bool`) – EU AI Act Art. 50 hint (default `True`); makes the
+  * **disclosure_recommended** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – EU AI Act Art. 50 hint (default `True`); makes the
     credits AI-disclosure line render immediately (#9a already reads it).
-  * **watermark** (`Optional`[`dict`]) – Pass-through carrier for #9b (AudioSeal); `None` until then.
-  * **c2pa_manifest_ref** (`Optional`[`str`]) – Pass-through carrier for #9b (C2PA); `None` until then.
-  * **overrides** (`Optional`[`dict`]) – Optional per-source flag overrides (rare for generation).
-  * **source_id** (`Optional`[`str`]) – Optional source-native id, for provenance.
-  * **source_url** (`Optional`[`str`]) – Optional human-resolvable URL.
-  * **license_url** (`Optional`[`str`]) – Optional license URL/label.
-  * **creator_name** (`Optional`[`str`]) – Optional creator (usually unset for generation).
-  * **attribution_text** (`Optional`[`str`]) – Optional ready-made attribution string.
+  * **watermark** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Pass-through carrier for #9b (AudioSeal); `None` until then.
+  * **c2pa_manifest_ref** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Pass-through carrier for #9b (C2PA); `None` until then.
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional per-source flag overrides (rare for generation).
+  * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional source-native id, for provenance.
+  * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional human-resolvable URL.
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional license URL/label.
+  * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional creator (usually unset for generation).
+  * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional ready-made attribution string.
 * **Return type:**
   [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)
 * **Returns:**
@@ -414,7 +414,7 @@ but never flips the flag, so [`foley.keep()`](foley.md#foley.keep) still rejects
 Register `adapter` in [`CORPUS_REGISTRY`](#foley.sources.base.CORPUS_REGISTRY) (idempotent) and return it.
 
 * **Raises:**
-  **ValueError** – If a *different* adapter is already registered under the name.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If a *different* adapter is already registered under the name.
 * **Return type:**
   [`CorpusAdapter`](#foley.sources.base.CorpusAdapter)
 
@@ -423,7 +423,7 @@ Register `adapter` in [`CORPUS_REGISTRY`](#foley.sources.base.CORPUS_REGISTRY) (
 Return the ring of the registered corpus `name` (raises `KeyError`).
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 ### foley.sources.base.select_corpora(, rings=(0, 1), corpora=None)
 
@@ -434,6 +434,6 @@ every registered adapter in the given rings is selected. Ring 2 is never in
 the default `rings` — it is opt-in only.
 
 * **Raises:**
-  **KeyError** – If a name in `corpora` is not registered.
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If a name in `corpora` is not registered.
 * **Return type:**
-  `list`[[`CorpusAdapter`](#foley.sources.base.CorpusAdapter)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`CorpusAdapter`](#foley.sources.base.CorpusAdapter)]

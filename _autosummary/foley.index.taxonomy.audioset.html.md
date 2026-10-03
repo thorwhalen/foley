@@ -28,12 +28,12 @@ Build the AudioSet(name|MID) -> UCS-CatID map.
 * **Parameters:**
   * **data_dir** – Directory to look for `audioset_ucs.json` in (defaults to the
     package’s `taxonomy/data/`); merged over the seed when present.
-  * **table** (`Optional`[[`UcsTable`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table every target CatID must exist in (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table every target CatID must exist in (defaults to
     [`default_ucs_table()`](foley.index.taxonomy.ucs.html.md#foley.index.taxonomy.ucs.default_ucs_table)).
-  * **include_seed** (`bool`) – Start from the in-code seed map (default `True`).
+  * **include_seed** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Start from the in-code seed map (default `True`).
 * **Return type:**
   [`AudioSetUcsMap`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)
 * **Returns:**
   A ready [`AudioSetUcsMap`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap).
 * **Raises:**
-  **ValueError** – If any entry targets a CatID absent from `table`.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If any entry targets a CatID absent from `table`.

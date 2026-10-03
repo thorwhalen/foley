@@ -43,7 +43,7 @@ EnvSound-UCS mapping drop in later as JSON under `data/` with no logic change.
 
 ### *class* foley.index.taxonomy.AudioSetUcsMap(by_name=<factory>, by_mid=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 AudioSet-label -> UCS-CatID overlap map (report 04 §5.3).
 
@@ -56,11 +56,11 @@ validated against the UCS table at load time (fail-fast on a broken map).
 Map one AudioSet label (a MID or a name) to a UCS CatID (or `None`).
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.index.taxonomy.CatIdResolution(catid=None, category=None, subcategory=None, source=None, confidence=0.0, matched_terms=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The result of resolving free tags/caption/labels to a UCS CatID.
 
@@ -70,7 +70,7 @@ ingest, and `ucs_catid` on the query side.
 
 ### *class* foley.index.taxonomy.KeywordResolver(, table=None, audioset_map=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The default stdlib resolver — staged keyword/synonym/AudioSet resolution.
 
@@ -86,7 +86,7 @@ Resolve a [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)’s tags/ca
 
 ### *class* foley.index.taxonomy.TaxonomyResolver(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Resolve a [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord) to a UCS CatID.
 
@@ -99,7 +99,7 @@ Return the CatID resolution for `record`.
 
 ### *class* foley.index.taxonomy.UcsRow(catid, category, subcategory, synonyms=(), confident=False)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One Universal Category System entry.
 
@@ -112,7 +112,7 @@ authoritative.
 
 ### *class* foley.index.taxonomy.UcsTable(by_catid=<factory>, order=<factory>, \_ci_index=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A loaded UCS lookup: by CatID (exact + case-insensitive) and by synonym.
 
@@ -129,7 +129,7 @@ The CatIDs in stable insertion order (deterministic tie-breaking).
 Look up a row by CatID: exact first, then case-insensitive.
 
 * **Return type:**
-  `Optional`[[`UcsRow`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsRow)]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsRow`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsRow)]
 
 ### foley.index.taxonomy.default_audioset_ucs_map()
 
@@ -152,15 +152,15 @@ Build the AudioSet(name|MID) -> UCS-CatID map.
 * **Parameters:**
   * **data_dir** – Directory to look for `audioset_ucs.json` in (defaults to the
     package’s `taxonomy/data/`); merged over the seed when present.
-  * **table** (`Optional`[[`UcsTable`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table every target CatID must exist in (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table every target CatID must exist in (defaults to
     [`default_ucs_table()`](foley.index.taxonomy.ucs.html.md#foley.index.taxonomy.ucs.default_ucs_table)).
-  * **include_seed** (`bool`) – Start from the in-code seed map (default `True`).
+  * **include_seed** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Start from the in-code seed map (default `True`).
 * **Return type:**
   [`AudioSetUcsMap`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)
 * **Returns:**
   A ready [`AudioSetUcsMap`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap).
 * **Raises:**
-  **ValueError** – If any entry targets a CatID absent from `table`.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If any entry targets a CatID absent from `table`.
 
 ### foley.index.taxonomy.load_ucs_table(, data_dir=None, include_seed=True)
 
@@ -170,7 +170,7 @@ Build the UCS lookup: the seed rows, overridden/extended by a JSON drop.
   * **data_dir** – Directory to look for `ucs_full.json` in (defaults to the
     package’s `taxonomy/data/`). When present, its rows override the
     seed on CatID collision and add the rest of the ~750-row master.
-  * **include_seed** (`bool`) – Start from the in-code seed table (default `True`).
+  * **include_seed** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Start from the in-code seed table (default `True`).
 * **Return type:**
   [`UcsTable`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)
 * **Returns:**
@@ -184,7 +184,7 @@ Strips directory and extension; requires at least one `_` (the field
 delimiter). Does not validate the token against the table.
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.index.taxonomy.parse_ucs_filename(filename, , table=None)
 
@@ -195,23 +195,23 @@ its CatID token is unknown (so a wrong subcategory is never emitted).
 
 * **Parameters:**
   * **filename** – A path or filename (only the basename’s token 0 is used).
-  * **table** (`Optional`[[`UcsTable`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
     [`default_ucs_table()`](#foley.index.taxonomy.default_ucs_table)).
 * **Return type:**
-  `tuple`[`Optional`[`str`], `Optional`[`str`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 ### foley.index.taxonomy.resolve_catid(, tags=(), caption=None, audioset_labels=(), filename=None, table=None, audioset_map=None)
 
 Resolve inputs to a best UCS CatID by the staged precedence.
 
 * **Parameters:**
-  * **tags** (`Sequence`[`str`]) – Free tags on the sound.
-  * **caption** (`Optional`[`str`]) – Free-text caption/description.
-  * **audioset_labels** (`Sequence`[`str`]) – AudioSet MIDs or names (e.g. from PANNs).
-  * **filename** (`Optional`[`str`]) – Optional UCS-style filename/path (its token-0 CatID wins if
+  * **tags** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free tags on the sound.
+  * **caption** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free-text caption/description.
+  * **audioset_labels** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – AudioSet MIDs or names (e.g. from PANNs).
+  * **filename** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional UCS-style filename/path (its token-0 CatID wins if
     recognized).
-  * **table** (`Optional`[[`UcsTable`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to [`default_ucs_table()`](#foley.index.taxonomy.default_ucs_table)).
-  * **audioset_map** (`Optional`[[`AudioSetUcsMap`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to [`default_ucs_table()`](#foley.index.taxonomy.default_ucs_table)).
+  * **audioset_map** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`AudioSetUcsMap`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
     [`default_audioset_ucs_map()`](foley.index.taxonomy.audioset.html.md#foley.index.taxonomy.audioset.default_audioset_ucs_map)).
 * **Return type:**
   [`CatIdResolution`](foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.CatIdResolution)

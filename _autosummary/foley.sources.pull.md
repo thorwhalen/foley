@@ -44,15 +44,15 @@ is an optional keyword. Each hit is license-gated BEFORE any bytes are fetched
 applies the by-reference storage gate from the sound’s own license.
 
 * **Parameters:**
-  * **source** (`str`) – A registered live-source name (e.g. `'freesound'`).
-  * **query** (`str`) – The natural-language search query.
-  * **license** (`Optional`[`str`]) – License constraint pushed into the source query (default
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A registered live-source name (e.g. `'freesound'`).
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language search query.
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – License constraint pushed into the source query (default
     `'cc0'`). The per-item fail-closed guard enforces the source’s
     accepted-license allowlist regardless.
-  * **limit** (`int`) – Max candidates to request from the source.
+  * **limit** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max candidates to request from the source.
   * **library** – Target [`SoundLibrary`](foley.index.library.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **intended_use** (`Optional`[[`IntendedUse`](foley.base.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](foley.base.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
     [`DEFAULT_INTENDED_USE`](#foley.sources.pull.DEFAULT_INTENDED_USE)).
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport

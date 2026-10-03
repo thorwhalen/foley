@@ -36,27 +36,27 @@ fail-closed license gate FIRST) → place` (report 05 §5). Works out of the box
 deterministic defaults; every model / threshold / seam is an optional keyword.
 
 * **Parameters:**
-  * **context** (`str`) – The narrative passage.
-  * **max_events** (`int`) – The sparse density cap on decomposed events.
-  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded).
-  * **intended_use** (`Optional`[[`IntendedUse`](foley.base.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
+  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap on decomposed events.
+  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded).
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](foley.base.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
     `IntendedUse` — `allow_voice_or_trademark` stays `False`).
-  * **backend** (`str`) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
-  * **verify** (`Union`[`str`, [`VerifyLevel`](foley.base.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
-  * **stream** (`bool`) – If `True`, return a generator yielding one `Candidate` per
+  * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
+  * **verify** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`VerifyLevel`](foley.base.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
+  * **stream** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, return a generator yielding one `Candidate` per
     resolved event; else return the collected `list`.
-  * **k** (`int`) – Retrieval shortlist depth per query.
-  * **tau_retrieve** (`float`) – Confidence threshold to auto-accept a retrieved clip.
-  * **tau_clap** (`float`) – The `clap`-rung gate threshold.
-  * **max_refine_loops** (`int`) – Max refine→re-retrieve passes per event (also the default
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval shortlist depth per query.
+  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Confidence threshold to auto-accept a retrieved clip.
+  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
+  * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
     `Budget`).
-  * **budget** (`Optional`[[`Budget`](foley.agent.policy.md#foley.agent.policy.Budget)]) – An explicit `Budget` (overrides `max_refine_loops`).
+  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](foley.agent.policy.md#foley.agent.policy.Budget)]) – An explicit `Budget` (overrides `max_refine_loops`).
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
     each defaults to the hermetic fake when `foley[agent]` is absent.
 * **Return type:**
-  `Union`[`list`[[`Candidate`](foley.base.md#foley.base.Candidate)], `Iterator`[[`Candidate`](foley.base.md#foley.base.Candidate)]]
+  `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](foley.base.md#foley.base.Candidate)]]
 * **Returns:**
   `list[Candidate]` (`stream=False`) or an `Iterator[Candidate]`
   (`stream=True`) — one verified, license-clean candidate per resolved event.
@@ -91,8 +91,8 @@ reserved #8 `plan_ref` slot is filled when called inside an active `foley.obs`
 run scope (`None`-safe otherwise).
 
 * **Parameters:**
-  * **candidates** (`list`[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The candidates returned by [`find()`](#foley.agent.tools.find).
-  * **transcript** (`Optional`[`str`]) – Optional narration transcript (WEAVE resolves the reference).
+  * **candidates** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The candidates returned by [`find()`](#foley.agent.tools.find).
+  * **transcript** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional narration transcript (WEAVE resolves the reference).
 * **Return type:**
   [`SoundDesignTimeline`](foley.base.md#foley.base.SoundDesignTimeline)
 
@@ -106,9 +106,9 @@ and RRF-merges (`k=RRF_K`) — the query-expansion recall lever, exercised only 
 refine pass.
 
 * **Parameters:**
-  * **queries** (`Union`[`str`, `list`[`str`]]) – One query string, or a list of paraphrases to merge.
-  * **k** (`int`) – Number of results.
+  * **queries** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – One query string, or a list of paraphrases to merge.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results.
   * **library** – Target library (default: the process-wide default).
-  * **filters** (`Optional`[`dict`]) – Extra `SoundLibrary.search()` kwargs (e.g. the license prefilter).
+  * **filters** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Extra `SoundLibrary.search()` kwargs (e.g. the license prefilter).
 * **Return type:**
-  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]

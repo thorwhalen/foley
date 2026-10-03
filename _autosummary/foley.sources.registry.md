@@ -52,7 +52,7 @@ never cross-captures the corpus adapters. Only `config.py` is imported here
 an already-registered name (e.g. a test double) is never overwritten.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 * **Returns:**
   The list of discovered source names.
 
@@ -64,32 +64,32 @@ Runs a discovery pass if `name` is not yet known, then instantiates the
 adapter on first use (cached in the entry).
 
 * **Parameters:**
-  **name** (`str`) – The source name.
+  **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The source name.
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   The registry entry (`{'config': dict, 'adapter': SourceAdapter, ...}`).
 * **Raises:**
-  **KeyError** – If no such source is registered (after discovery).
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
 
 ### foley.sources.registry.list_sources(, egress_allow=None)
 
 Return the names of registered live sources (runs discovery first).
 
 * **Parameters:**
-  **egress_allow** (`Optional`[`frozenset`]) – If given, keep only sources whose declared
+  **egress_allow** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)]) – If given, keep only sources whose declared
   `config['data_egress']` is in this set (the local-first / offline
   filter — see [`foley.runtime.RuntimeConfig`](foley.runtime.md#foley.runtime.RuntimeConfig)). A source that does
   not declare `data_egress` is **excluded** (fail-closed).
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.sources.registry.local_sources()
 
 The names of sources that run entirely on-device (`data_egress == 'local'`).
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.sources.registry.register_source(name, config, adapter=None)
 
@@ -101,15 +101,15 @@ from `config` on first [`get_source()`](#foley.sources.registry.get_source) (the
 importable `foley.sources.<name>` package).
 
 * **Parameters:**
-  * **name** (`str`) – The source name (the `add_from()` / [`get_source()`](#foley.sources.registry.get_source) key).
-  * **config** (`dict`) – The `SOURCE_CONFIG` declaration.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The source name (the `add_from()` / [`get_source()`](#foley.sources.registry.get_source) key).
+  * **config** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – The `SOURCE_CONFIG` declaration.
   * **adapter** – An optional pre-instantiated adapter (bypasses lazy loading).
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.sources.registry.source_egress(name)
 
 The declared `data_egress` class of source `name` (`None` if undeclared).
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]

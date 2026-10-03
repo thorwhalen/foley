@@ -36,7 +36,7 @@ façade — a store-write failure degrades gracefully.
 
 ### *class* foley.obs.recorder.ObsConfig(enabled=False, force_disabled=False, redaction_mode=RedactionMode.hash, salt='foley-obs-v1', prefer_otel=True, run_store=None, tracer=None, clock=<built-in function time>, id_factory=<function ObsConfig.<lambda>>, now=<function \_iso_now>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Process-wide observability configuration (flipped by [`enable()`](#foley.obs.recorder.enable)/[`disable()`](#foley.obs.recorder.disable)).
 
@@ -52,11 +52,11 @@ Fractions of a second may be present if the system clock provides them.
 ISO-8601 UTC timestamp (real wall-clock; overridden to `None` in tests).
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.obs.recorder.RunRecorder(manifest, , tracer, redactor, run_store, clock, id_factory)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Builds one `RunManifest` (span tree + composed shapes), tracer-independent.
 
@@ -70,21 +70,21 @@ off `self.manifest.steps` — before any emit — never holds raw narration.
 `seq` is assigned here (append position) when the caller left it `None`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### emit()
 
 Persist the manifest to the run store — swallowing any write failure.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### set_plan_ref(plan_ref)
 
 Fill the reserved #8 `plan_ref` slot (a light join dict — no text).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### span(name, , kind=None, \*\*attributes)
 
@@ -95,7 +95,7 @@ Open a span: append a `SpanRecord` (from our own clock/ids) + mirror it.
 Apply [`ObsConfig`](#foley.obs.recorder.ObsConfig) overrides WITHOUT flipping `enabled` (the test-injection seam).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.recorder.current_run()
 
@@ -106,14 +106,14 @@ The active [`RunRecorder`](#foley.obs.recorder.RunRecorder), or `_NULL_RUN` (for
 Turn observability off process-wide (façades revert to a byte-for-byte no-op).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.recorder.enable(\*\*overrides)
 
 Turn observability on process-wide (and apply any [`ObsConfig`](#foley.obs.recorder.ObsConfig) overrides).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.recorder.facade_run(op, , inputs=None, params=None)
 
@@ -132,14 +132,14 @@ posture) hard-overrides both — so offline mode’s “nothing leaves the devic
 contract holds even when `$FOLEY_OBS` is exported.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.obs.recorder.reset()
 
 Restore the default config (test teardown; clears injected store/tracer/clock).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.recorder.run(op='run', , inputs=None, params=None, \*\*overrides)
 

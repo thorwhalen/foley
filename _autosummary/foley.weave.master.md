@@ -29,7 +29,7 @@ errors, so weaving never depends on it. `ffmpeg` is a WEAVE system requirement (
 
 ### *class* foley.weave.master.MasterReport(target_lufs, input_lufs, output_lufs, true_peak_dbtp, true_peak_ceiling_db, gain_db, limited, engine)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 What the master stage did — a JSON-serialisable audit row for the run-artifact.
 
@@ -38,7 +38,7 @@ What the master stage did — a JSON-serialisable audit row for the run-artifact
 Return the plain-dict form (for `WeaveResult.master_report` / obs).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.weave.master.master(mix, sample_rate, profile, , engine='auto')
 
@@ -46,13 +46,13 @@ Master `mix` to `profile` — LUFS-normalise then true-peak-limit (report 06 §5
 
 * **Parameters:**
   * **mix** (`ndarray`) – The summed working mix (stereo `(frames, 2)` float32).
-  * **sample_rate** (`int`) – Sample rate in Hz.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
   * **profile** ([`MasterProfile`](foley.base.md#foley.base.MasterProfile)) – The [`MasterProfile`](foley.base.md#foley.base.MasterProfile) (target LUFS / true-peak / LRA).
-  * **engine** (`str`) – `'auto'`/`'inprocess'` master in-process (default, portable). `'ffmpeg'`
+  * **engine** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'auto'`/`'inprocess'` master in-process (default, portable). `'ffmpeg'`
     uses the two-pass `ffmpeg loudnorm` “guarantee the numbers” master (report 06
     §5.4) and **fails safe** back to in-process if ffmpeg is unavailable or errors.
 * **Return type:**
-  `tuple`[`ndarray`, [`MasterReport`](#foley.weave.master.MasterReport)]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`MasterReport`](#foley.weave.master.MasterReport)]
 * **Returns:**
   `(mastered_mix, MasterReport)`. Loudness is measured before and after so the
   report is a faithful audit; when a true-peak limit engages, output LUFS may

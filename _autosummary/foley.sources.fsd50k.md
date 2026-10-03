@@ -40,7 +40,7 @@ The FSD50K Ring-1 adapter.
 
 ### *class* foley.sources.fsd50k.Fsd50kCorpus
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Ring-1 FSD50K adapter with per-clip Freesound license resolution.
 
@@ -49,7 +49,7 @@ Ring-1 FSD50K adapter with per-clip Freesound license resolution.
 `data_dir/fsd50k` — the conventional on-disk root.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### iter_clips(root)
 
@@ -60,7 +60,7 @@ source_url}` resolved from the FSD50K clips-info JSON (fail-closed when a
 clip is absent from the metadata).
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](foley.sources.base.md#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](foley.sources.base.md#foley.sources.base.ClipSpec)]
 
 #### resolve_license(spec)
 

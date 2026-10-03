@@ -1,4 +1,4 @@
-> built 2026-10-03 10:30 UTC from e0dd52b (main) · foley 0.0.26. Details: build_info.json
+> built 2026-10-03 11:02 UTC from 0a5d060 (main) · foley 0.0.27. Details: build_info.json
 
 # index.html.md
 
@@ -173,7 +173,7 @@ the real path.
 
 ### *class* foley.agent.decompose.AnthropicDecomposer(, client=None, model='claude-opus-4-8', max_tokens=2000)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LLM-backed decomposer (`foley[agent]`): Claude → a structured event list.
 
@@ -188,11 +188,11 @@ conventions (`claude-opus-4-8`, adaptive thinking — never `budget_tokens`).
 Call Claude and round-trip each event through `SoundEvent.from_dict()`.
 
 * **Return type:**
-  `list`[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
 
 ### *class* foley.agent.decompose.KeywordDecomposer
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic cue-lexicon decomposer — the zero-dependency default and CI fake.
 
@@ -206,12 +206,12 @@ budget). No RNG, no network, no `anthropic` — same passage → identical list.
 Return `<= max_events` deterministic `SoundEvent`s for `context`.
 
 * **Parameters:**
-  * **context** (`str`) – The narrative passage.
-  * **max_events** (`int`) – The sparse density cap (the salience budget).
-  * **seconds** (`Optional`[`float`]) – Accepted for signature parity (the per-second density window is a
+  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap (the salience budget).
+  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Accepted for signature parity (the per-second density window is a
     later refinement); ignored here.
 * **Return type:**
-  `list`[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
 
 ### foley.agent.decompose.decompose_context(context, , max_events=6, seconds=None, decomposer=None, \_span=None)
 
@@ -222,14 +222,14 @@ default decomposer when `decomposer` is `None`, calls it, and records the GenAI
 span on the real path (the fake’s `last_response` is `None` → no-op).
 
 * **Parameters:**
-  * **context** (`str`) – The narrative passage.
-  * **max_events** (`int`) – The sparse density cap.
-  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded, else ignored).
-  * **decomposer** (`Optional`[[`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) (the DI seam);
+  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap.
+  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded, else ignored).
+  * **decomposer** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) (the DI seam);
     defaults to `_default_decomposer()`.
   * **\_span** – Internal — the obs span handle `find()` opens for GenAI recording.
 * **Return type:**
-  `list`[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
 
 
 # _autosummary/foley.agent.html.md
@@ -289,7 +289,7 @@ verify + generate aggregate into a single reproducible run-manifest.
 
 ### *class* foley.agent.AnthropicDecomposer(, client=None, model='claude-opus-4-8', max_tokens=2000)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LLM-backed decomposer (`foley[agent]`): Claude → a structured event list.
 
@@ -304,11 +304,11 @@ conventions (`claude-opus-4-8`, adaptive thinking — never `budget_tokens`).
 Call Claude and round-trip each event through `SoundEvent.from_dict()`.
 
 * **Return type:**
-  `list`[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
 
 ### *class* foley.agent.AnthropicJudge(, client=None, model='claude-opus-4-8', max_tokens=500)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LLM arbiter for the `judge` rung (`foley[agent]`): Claude → a `Verdict`.
 
@@ -324,7 +324,7 @@ Call Claude to arbitrate the match; returns a `Verdict` at `level`.
 
 ### *class* foley.agent.AnthropicRefiner(, client=None, model='claude-opus-4-8', max_tokens=500)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LLM-backed refiner (`foley[agent]`): Claude → a paraphrase list.
 
@@ -336,11 +336,11 @@ LLM-backed refiner (`foley[agent]`): Claude → a paraphrase list.
 Call Claude for `n` paraphrases; the original `query` is always first.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.agent.AudioLMJudge(, pipeline=None, model='Qwen/Qwen2-Audio-7B-Instruct', max_tokens=300, tau=0.5)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The audio-LM `listen` rung (`foley[fit]`): Qwen2-Audio “does this contain {event}?”.
 
@@ -359,7 +359,7 @@ Listen to the clip and return the AQAScore `Verdict` (`P(yes) ≥ tau`).
 
 ### *class* foley.agent.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Bounded-cost accounting for the per-event refine/generate loops.
 
@@ -371,14 +371,14 @@ Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](_autosum
 Whether a generation fallback is allowed and within budget.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### refine_ok()
 
 Whether another refine→re-retrieve pass is within budget.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### reset()
 
@@ -389,25 +389,25 @@ refine/generate spend never starves later events (the documented per-event
 semantics).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### spend_gen()
 
 Charge one generation.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### spend_refine()
 
 Charge one refine loop.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.agent.ClapJudge
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The zero-config `clap` rung: gate on the retrieval cosine (no ML, no network).
 
@@ -423,19 +423,19 @@ Return the `clap`-rung `Verdict` for `candidate`.
 
 ### *class* foley.agent.DecideAction(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 What [`decide()`](_autosummary/foley.agent.html.md#foley.agent.decide) chose for one event (the single branch’s outcomes).
 
 ### *class* foley.agent.Decision(action, candidate=None, reason='')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The tiny result of [`decide()`](_autosummary/foley.agent.html.md#foley.agent.decide); `reason` feeds the refine hint + the audit Step.
 
 ### *class* foley.agent.Decomposer(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Narrative context → a sparse, salience-ranked, diegetic-tagged event list.
 
@@ -446,7 +446,7 @@ The default is the deterministic [`KeywordDecomposer`](_autosummary/foley.agent.
 
 ### *class* foley.agent.Judge(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 One rung of the verify ladder: does this candidate match this event? (report 10 §4.2).
 
@@ -457,7 +457,7 @@ returned `Verdict` carries `level` == the rung that produced it. Only the
 
 ### *class* foley.agent.KeywordDecomposer
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic cue-lexicon decomposer — the zero-dependency default and CI fake.
 
@@ -471,16 +471,16 @@ budget). No RNG, no network, no `anthropic` — same passage → identical list.
 Return `<= max_events` deterministic `SoundEvent`s for `context`.
 
 * **Parameters:**
-  * **context** (`str`) – The narrative passage.
-  * **max_events** (`int`) – The sparse density cap (the salience budget).
-  * **seconds** (`Optional`[`float`]) – Accepted for signature parity (the per-second density window is a
+  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap (the salience budget).
+  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Accepted for signature parity (the per-second density window is a
     later refinement); ignored here.
 * **Return type:**
-  `list`[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
 
 ### *class* foley.agent.KeywordRefiner
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic template-expansion refiner — the default and CI fake.
 
@@ -493,15 +493,15 @@ query → identical paraphrase list.
 Return up to `n` distinct paraphrases of `query` (the first is `query`).
 
 * **Parameters:**
-  * **query** (`str`) – The event query to expand.
-  * **n** (`int`) – How many paraphrases to return (2–4 is typical).
-  * **hint** (`Optional`[`str`]) – Optional verify-failure reason to steer re-retrieval.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The event query to expand.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many paraphrases to return (2–4 is typical).
+  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional verify-failure reason to steer re-retrieval.
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.agent.Refiner(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 One event query → 2–4 paraphrases/expansions (query-expansion for retrieval).
 
@@ -512,7 +512,7 @@ is a later drop-in behind this same seam). The default is the deterministic
 
 ### *class* foley.agent.StringOverlapJudge(, threshold=0.3)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic stand-in for the `listen`/`judge` rungs (the hermetic CI fake).
 
@@ -546,11 +546,11 @@ Policy (report 05 §4):
 >   generation is off, in which case fall back to that best-effort pick.
 * **Parameters:**
   * **event** ([`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)) – The event being resolved.
-  * **kept** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
-  * **verified** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
-  * **tau_retrieve** (`float`) – The confidence threshold for auto-accepting a retrieved clip.
+  * **kept** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
+  * **verified** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
+  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The confidence threshold for auto-accepting a retrieved clip.
   * **budget** ([`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)) – The per-event cost budget.
-  * **loop** (`int`) – The current refine-loop index (for the audit reason).
+  * **loop** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The current refine-loop index (for the audit reason).
 * **Return type:**
   [`Decision`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Decision)
 * **Returns:**
@@ -565,14 +565,14 @@ default decomposer when `decomposer` is `None`, calls it, and records the GenAI
 span on the real path (the fake’s `last_response` is `None` → no-op).
 
 * **Parameters:**
-  * **context** (`str`) – The narrative passage.
-  * **max_events** (`int`) – The sparse density cap.
-  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded, else ignored).
-  * **decomposer** (`Optional`[[`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) (the DI seam);
+  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap.
+  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded, else ignored).
+  * **decomposer** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) (the DI seam);
     defaults to `_default_decomposer()`.
   * **\_span** – Internal — the obs span handle `find()` opens for GenAI recording.
 * **Return type:**
-  `list`[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
 
 ### foley.agent.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None)
 
@@ -584,27 +584,27 @@ fail-closed license gate FIRST) → place` (report 05 §5). Works out of the box
 deterministic defaults; every model / threshold / seam is an optional keyword.
 
 * **Parameters:**
-  * **context** (`str`) – The narrative passage.
-  * **max_events** (`int`) – The sparse density cap on decomposed events.
-  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded).
-  * **intended_use** (`Optional`[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
+  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap on decomposed events.
+  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded).
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
     `IntendedUse` — `allow_voice_or_trademark` stays `False`).
-  * **backend** (`str`) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
-  * **verify** (`Union`[`str`, [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
-  * **stream** (`bool`) – If `True`, return a generator yielding one `Candidate` per
+  * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
+  * **verify** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
+  * **stream** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, return a generator yielding one `Candidate` per
     resolved event; else return the collected `list`.
-  * **k** (`int`) – Retrieval shortlist depth per query.
-  * **tau_retrieve** (`float`) – Confidence threshold to auto-accept a retrieved clip.
-  * **tau_clap** (`float`) – The `clap`-rung gate threshold.
-  * **max_refine_loops** (`int`) – Max refine→re-retrieve passes per event (also the default
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval shortlist depth per query.
+  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Confidence threshold to auto-accept a retrieved clip.
+  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
+  * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
     [`Budget`](_autosummary/foley.agent.html.md#foley.agent.Budget)).
-  * **budget** (`Optional`[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](_autosummary/foley.agent.html.md#foley.agent.Budget) (overrides `max_refine_loops`).
+  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](_autosummary/foley.agent.html.md#foley.agent.Budget) (overrides `max_refine_loops`).
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
     each defaults to the hermetic fake when `foley[agent]` is absent.
 * **Return type:**
-  `Union`[`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)], `Iterator`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]]
+  `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]]
 * **Returns:**
   `list[Candidate]` (`stream=False`) or an `Iterator[Candidate]`
   (`stream=True`) — one verified, license-clean candidate per resolved event.
@@ -620,10 +620,10 @@ the single rights-rejection point; [`verify_match()`](_autosummary/foley.agent.v
 its survivors are license-clean.
 
 * **Parameters:**
-  * **candidates** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The retrieved shortlist (`license_ok` typically `None`).
+  * **candidates** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The retrieved shortlist (`license_ok` typically `None`).
   * **intended_use** ([`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)) – The caller’s declared rights intent.
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   The license-clean sublist (each with `license_ok is True`), order preserved.
 
@@ -657,8 +657,8 @@ reserved #8 `plan_ref` slot is filled when called inside an active `foley.obs`
 run scope (`None`-safe otherwise).
 
 * **Parameters:**
-  * **candidates** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The candidates returned by [`find()`](_autosummary/foley.agent.html.md#foley.agent.find).
-  * **transcript** (`Optional`[`str`]) – Optional narration transcript (WEAVE resolves the reference).
+  * **candidates** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The candidates returned by [`find()`](_autosummary/foley.agent.html.md#foley.agent.find).
+  * **transcript** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional narration transcript (WEAVE resolves the reference).
 * **Return type:**
   [`SoundDesignTimeline`](_autosummary/foley.base.html.md#foley.base.SoundDesignTimeline)
 
@@ -667,14 +667,14 @@ run scope (`None`-safe otherwise).
 Expand `query` into up to `n` paraphrases for multi-query retrieval.
 
 * **Parameters:**
-  * **query** (`str`) – The event query to expand.
-  * **n** (`int`) – Number of paraphrases.
-  * **hint** (`Optional`[`str`]) – Optional verify-failure reason to steer re-retrieval.
-  * **refiner** (`Optional`[[`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (the DI seam);
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The event query to expand.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of paraphrases.
+  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional verify-failure reason to steer re-retrieval.
+  * **refiner** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (the DI seam);
     defaults to `_default_refiner()`.
   * **\_span** – Internal — the obs span handle for GenAI recording.
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.agent.search_sounds(queries, , k=10, library=None, filters=None)
 
@@ -686,12 +686,12 @@ and RRF-merges (`k=RRF_K`) — the query-expansion recall lever, exercised only 
 refine pass.
 
 * **Parameters:**
-  * **queries** (`Union`[`str`, `list`[`str`]]) – One query string, or a list of paraphrases to merge.
-  * **k** (`int`) – Number of results.
+  * **queries** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – One query string, or a list of paraphrases to merge.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results.
   * **library** – Target library (default: the process-wide default).
-  * **filters** (`Optional`[`dict`]) – Extra `SoundLibrary.search()` kwargs (e.g. the license prefilter).
+  * **filters** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Extra `SoundLibrary.search()` kwargs (e.g. the license prefilter).
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 
 ### foley.agent.verify_match(event, candidate, , level=VerifyLevel.clap, judge=None, tau_clap=0.35, \_span=None)
 
@@ -705,13 +705,13 @@ escalates to the injected/​default judge for that rung and returns *its* verdi
   * **event** ([`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)) – The wanted `SoundEvent`.
   * **candidate** ([`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)) – A **license-clean** `Candidate` — this MUST run after the
     [`gate_candidates()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.gate_candidates) gate (asserted).
-  * **level** (`str` | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
-  * **judge** (`Optional`[[`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the higher rungs
+  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
+  * **judge** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the higher rungs
     (the DI seam; defaults per `_default_judge()`).
-  * **tau_clap** (`float`) – The clap-gate threshold.
+  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The clap-gate threshold.
   * **\_span** – Internal — the obs span handle for GenAI recording on the LLM rung.
 * **Raises:**
-  **AssertionError** – If `candidate.license_ok` is not `True` (verify-before-gate
+  [**AssertionError**](https://docs.python.org/3/builtins/exceptions.html#AssertionError) – If `candidate.license_ok` is not `True` (verify-before-gate
       is a bug — the license gate is the fail-closed first pass).
 * **Return type:**
   [`Verdict`](_autosummary/foley.base.html.md#foley.base.Verdict)
@@ -775,7 +775,7 @@ The default local model id (override per call or via `FOLEY_LLM_MODEL`).
 
 ### *class* foley.agent.local_llm.LocalLLMDecomposer(, client=None, model=None, max_tokens=2000)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 OpenAI-compatible [`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) (local endpoint).
 
@@ -784,11 +784,11 @@ OpenAI-compatible [`Decomposer`](_autosummary/foley.agent.protocols.html.md#fole
 Decompose `context` into `<= max_events` events via the local LLM.
 
 * **Return type:**
-  `list`[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
 
 ### *class* foley.agent.local_llm.LocalLLMJudge(, client=None, model=None, max_tokens=500)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 OpenAI-compatible [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the `judge` rung.
 
@@ -801,7 +801,7 @@ Arbitrate the match via the local LLM; returns a `Verdict` at `level`.
 
 ### *class* foley.agent.local_llm.LocalLLMRefiner(, client=None, model=None, max_tokens=500)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 OpenAI-compatible [`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (local endpoint).
 
@@ -810,14 +810,14 @@ OpenAI-compatible [`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.a
 Return `n` paraphrases via the local LLM (the original `query` always first).
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.agent.local_llm.local_llm_configured()
 
 True iff a local OpenAI-compatible endpoint is configured (`FOLEY_LLM_BASE_URL`).
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 
 # _autosummary/foley.agent.mcp.html.md
@@ -887,11 +887,11 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
 
 * **Parameters:**
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the shared one).
-  * **session** (`str`) – The default session id.
+  * **session** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The default session id.
   * **runtime** – A [`foley.runtime.RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) (default: the active one).
   * **byte_store** – A `MutableMapping[str, bytes]` for previews / rendered mixes.
-  * **include** (`Optional`[`list`[`str`]]) – Optional subset of tool names to expose.
-  * **name** (`str`) – The MCP server name.
+  * **include** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Optional subset of tool names to expose.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP server name.
 * **Returns:**
   A `fastmcp.FastMCP` server.
 
@@ -900,14 +900,14 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
 What foley can do here — keys / extras / system deps / offline / sources / degraded.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_drop_pick(sound_id, session='default')
 
 Remove a previously-picked sound from the session.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_find(context, max_events=6, verify='listen', commercial_ok=False, k=10, session='default')
 
@@ -917,14 +917,14 @@ Caches the full candidates in the session so `foley_plan` / `foley_weave` can
 rehydrate them by id. Returns compact candidate rows.
 
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 ### foley.agent.mcp.foley_generate(prompt, backend='stable_audio', commercial_ok=False, session='default')
 
 Generate a sound from a text prompt (local backends only when offline).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_guide()
 
@@ -934,28 +934,28 @@ Call this first if you are unsure of the workflow: it returns the tool order, th
 heuristics (restraint, layering, ducking, licensing), and the offline posture.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_list_picks(session='default')
 
 The sounds picked in this session (the ‘persist picks’ read side).
 
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 ### foley.agent.mcp.foley_nudge(timeline, item_id, delta_s)
 
 Shift a timeline item’s onset by `delta_s` seconds; returns the new timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_pick(sound_id, session='default', layer=None, onset=None)
 
 Accept a sound into the session (persisted); `foley_plan` folds picks into a timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_plan(session='default', transcript=None, candidate_ids=None)
 
@@ -967,28 +967,28 @@ placement choices — a numeric `onset` becomes an absolute-seconds anchor (see
 [`foley.weave.anchor.parse_symbolic_anchor()`](_autosummary/foley.weave.anchor.html.md#foley.weave.anchor.parse_symbolic_anchor)).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_preview(sound_id, seconds=6, session='default')
 
 Produce a short audition of a sound; returns its store key (never audio bytes).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_refine(session='default', query=None, picked_ids=None, rejected_ids=None, hint=None, k=10)
 
 Relevance-feedback refinement: expand the query, boost picks, drop rejects, re-rank.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_reject(sound_id, session='default', reason=None)
 
 Reject a sound (feeds `foley_refine` relevance feedback).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_score(context, commercial_ok=False, verify='listen', max_events=6, session='default')
 
@@ -1000,21 +1000,21 @@ timeline plus a rationale for each chosen sound. Weaving (rendering the mastered
 clip, nudge an onset, drop a cue — before committing to a render.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_search(query, k=10, commercial_ok=False, ucs_category=None, rerank=False, session='default')
 
 Hybrid (CLAP + keyword) search of the library for a text query; returns candidate rows.
 
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 ### foley.agent.mcp.foley_set_gain(timeline, item_id, gain_db)
 
 Set a timeline item’s gain (dB); returns the new timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_set_master(timeline, target_lufs=None, peak_dbfs=None)
 
@@ -1024,49 +1024,49 @@ Either field may be set independently — omitting one keeps the podcast default
 that field (so `peak_dbfs=-2.0` alone tightens only the true-peak ceiling).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_similar_to(sound_id, k=10, session='default')
 
 “More like this” — the library neighbours of a sound (by id); returns candidate rows.
 
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 ### foley.agent.mcp.foley_status(session='default')
 
 The current runtime posture + this session’s pick/reject counts.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_swap_clip(timeline, item_id, sound_id)
 
 Swap a timeline item’s clip; returns the new timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_timeline_captions(timeline, fmt='vtt')
 
 Export SDH captions for a timeline (`fmt='vtt'` | `'srt'`).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_toggle(timeline, item_id, enabled)
 
 Mute/unmute a timeline item; returns the new timeline.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.foley_weave(narration, timeline, session='default')
 
 Render a timeline under the narration; returns the mix by store key + captions + credits.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.agent.mcp.make_http_app(, auth, path='/mcp', json_response=False, library=None, runtime=None, byte_store=None, include=None, name='foley')
 
@@ -1080,21 +1080,21 @@ gunicorn, a parent FastAPI). `py2mcp` / `fastmcp` are imported lazily inside
 [`build_mcp_server()`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.build_mcp_server), so `import foley` stays dol-only.
 
 * **Parameters:**
-  * **auth** (`dict`) – `{'bearer_tokens': [...]}` — required; empty/missing raises (fail-closed).
-  * **path** (`str`) – The MCP HTTP mount path.
-  * **json_response** (`bool`) – Return a single JSON response instead of an SSE stream (simple clients).
-  * **name** (`str`) – As [`build_mcp_server()`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.build_mcp_server).
+  * **auth** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – `{'bearer_tokens': [...]}` — required; empty/missing raises (fail-closed).
+  * **path** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP HTTP mount path.
+  * **json_response** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Return a single JSON response instead of an SSE stream (simple clients).
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – As [`build_mcp_server()`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.build_mcp_server).
 * **Returns:**
   An ASGI application (the bearer-gated MCP HTTP app).
 * **Raises:**
-  **ValueError** – If `auth` carries no bearer tokens (no anonymous HTTP access).
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `auth` carries no bearer tokens (no anonymous HTTP access).
 
 ### foley.agent.mcp.serve(, name='foley', runtime=None, \*\*kwargs)
 
 Build and run the foley MCP server over stdio (blocks); enforces an offline posture.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.agent.mcp.serve_http(, host='127.0.0.1', port=8000, auth, path='/mcp', \*\*kwargs)
 
@@ -1103,7 +1103,7 @@ Build and serve the foley MCP tools over authenticated streamable HTTP (blocks).
 Wraps [`make_http_app()`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.make_http_app) and runs it with uvicorn. `auth` is required (fail-closed).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 
 # _autosummary/foley.agent.policy.html.md
@@ -1142,7 +1142,7 @@ run away. This module is stdlib-only (imports only [`foley.base`](_autosummary/f
 
 ### *class* foley.agent.policy.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Bounded-cost accounting for the per-event refine/generate loops.
 
@@ -1154,14 +1154,14 @@ Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](_autosum
 Whether a generation fallback is allowed and within budget.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### refine_ok()
 
 Whether another refine→re-retrieve pass is within budget.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### reset()
 
@@ -1172,31 +1172,31 @@ refine/generate spend never starves later events (the documented per-event
 semantics).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### spend_gen()
 
 Charge one generation.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### spend_refine()
 
 Charge one refine loop.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.agent.policy.DecideAction(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 What [`decide()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.decide) chose for one event (the single branch’s outcomes).
 
 ### *class* foley.agent.policy.Decision(action, candidate=None, reason='')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The tiny result of [`decide()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.decide); `reason` feeds the refine hint + the audit Step.
 
@@ -1219,11 +1219,11 @@ Policy (report 05 §4):
 >   generation is off, in which case fall back to that best-effort pick.
 * **Parameters:**
   * **event** ([`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)) – The event being resolved.
-  * **kept** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
-  * **verified** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
-  * **tau_retrieve** (`float`) – The confidence threshold for auto-accepting a retrieved clip.
+  * **kept** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
+  * **verified** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
+  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The confidence threshold for auto-accepting a retrieved clip.
   * **budget** ([`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)) – The per-event cost budget.
-  * **loop** (`int`) – The current refine-loop index (for the audit reason).
+  * **loop** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The current refine-loop index (for the audit reason).
 * **Return type:**
   [`Decision`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Decision)
 * **Returns:**
@@ -1240,10 +1240,10 @@ the single rights-rejection point; [`verify_match()`](_autosummary/foley.agent.v
 its survivors are license-clean.
 
 * **Parameters:**
-  * **candidates** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The retrieved shortlist (`license_ok` typically `None`).
+  * **candidates** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The retrieved shortlist (`license_ok` typically `None`).
   * **intended_use** ([`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)) – The caller’s declared rights intent.
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   The license-clean sublist (each with `license_ok is True`), order preserved.
 
@@ -1287,13 +1287,13 @@ Dol-only core (numpy/soundfile only inside [`preview()`](_autosummary/foley.agen
 | [`RefineResult`](_autosummary/foley.agent.preview.html.md#foley.agent.preview.RefineResult)(queries, results)   | The output of [`refine()`](_autosummary/foley.agent.preview.html.md#foley.agent.preview.refine): the expanded queries and the re-ranked candidates.   |
 |-----------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 
-### foley.agent.preview.PREVIEW_SECONDS *: int* *= 6*
+### foley.agent.preview.PREVIEW_SECONDS *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 6*
 
 Default audition length (seconds).
 
 ### *class* foley.agent.preview.RefineResult(queries, results)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The output of [`refine()`](_autosummary/foley.agent.preview.html.md#foley.agent.preview.refine): the expanded queries and the re-ranked candidates.
 
@@ -1309,11 +1309,11 @@ still let a client fetch it).
 
 * **Parameters:**
   * **candidate_or_id** – A [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate) or a sound id.
-  * **seconds** (`int`) – Audition length.
+  * **seconds** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Audition length.
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the shared one).
   * **byte_store** – A `MutableMapping[str, bytes]` to hold the preview (default: none —
     then `preview_uri` stays `None`).
-  * **session** (`Optional`[[`SessionStore`](_autosummary/foley.agent.session.html.md#foley.agent.session.SessionStore)]) – Optional session (unused here; accepted for a uniform signature).
+  * **session** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`SessionStore`](_autosummary/foley.agent.session.html.md#foley.agent.session.SessionStore)]) – Optional session (unused here; accepted for a uniform signature).
 * **Return type:**
   [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)
 * **Returns:**
@@ -1329,12 +1329,12 @@ expands the query into paraphrases for recall, gathers neighbours of every pick,
 the rejects, and re-ranks by score.
 
 * **Parameters:**
-  * **session** (`Optional`[[`SessionStore`](_autosummary/foley.agent.session.html.md#foley.agent.session.SessionStore)]) – The audition session (source of picks/rejects when not passed explicitly).
-  * **query** (`Optional`[`str`]) – The base text query to expand (optional).
-  * **rejected_ids** (`tuple`[`str`, `...`]) – Explicit feedback (override the session’s).
-  * **hint** (`Optional`[`str`]) – A steer for the query expansion.
-  * **n** (`int`) – Paraphrases to request.
-  * **k** (`int`) – Result depth.
+  * **session** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`SessionStore`](_autosummary/foley.agent.session.html.md#foley.agent.session.SessionStore)]) – The audition session (source of picks/rejects when not passed explicitly).
+  * **query** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The base text query to expand (optional).
+  * **rejected_ids** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Explicit feedback (override the session’s).
+  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A steer for the query expansion.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Paraphrases to request.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Result depth.
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the shared one).
   * **refiner** – The query-expansion seam (default: the deterministic fake).
 * **Return type:**
@@ -1352,10 +1352,10 @@ audio-to-audio search (`SoundLibrary.search_clip`).
 
 * **Parameters:**
   * **clip_or_candidate** – A sound id, a [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), or a clip.
-  * **k** (`int`) – How many neighbours to return.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many neighbours to return.
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the shared one).
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   A list of [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate).
 
@@ -1366,7 +1366,7 @@ audio-to-audio search (`SoundLibrary.search_clip`).
 
 The structural DI seams of the SELECT stage — `Decomposer` / `Judge` / `Refiner`.
 
-Three `@runtime_checkable` `typing.Protocol`s (PEP 544), each a
+Three `@runtime_checkable` [`typing.Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)s (PEP 544), each a
 behaviour-free, open-closed contract that every implementation (the deterministic
 fake *and* the Anthropic-backed real impl) satisfies. They are dependency-injected
 into [`foley.agent.find()`](_autosummary/foley.agent.html.md#foley.agent.find) by keyword (`decomposer=` / `judge=` / `refiner=`),
@@ -1385,7 +1385,7 @@ keeps `import foley` dol-only.
 
 ### *class* foley.agent.protocols.Decomposer(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Narrative context → a sparse, salience-ranked, diegetic-tagged event list.
 
@@ -1396,7 +1396,7 @@ The default is the deterministic [`KeywordDecomposer`](_autosummary/foley.agent.
 
 ### *class* foley.agent.protocols.Judge(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 One rung of the verify ladder: does this candidate match this event? (report 10 §4.2).
 
@@ -1407,7 +1407,7 @@ returned `Verdict` carries `level` == the rung that produced it. Only the
 
 ### *class* foley.agent.protocols.Refiner(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 One event query → 2–4 paraphrases/expansions (query-expansion for retrieval).
 
@@ -1447,7 +1447,7 @@ method only, so `import foley` stays dol-only).
 
 ### *class* foley.agent.refine.AnthropicRefiner(, client=None, model='claude-opus-4-8', max_tokens=500)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LLM-backed refiner (`foley[agent]`): Claude → a paraphrase list.
 
@@ -1459,11 +1459,11 @@ LLM-backed refiner (`foley[agent]`): Claude → a paraphrase list.
 Call Claude for `n` paraphrases; the original `query` is always first.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.agent.refine.KeywordRefiner
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic template-expansion refiner — the default and CI fake.
 
@@ -1476,25 +1476,25 @@ query → identical paraphrase list.
 Return up to `n` distinct paraphrases of `query` (the first is `query`).
 
 * **Parameters:**
-  * **query** (`str`) – The event query to expand.
-  * **n** (`int`) – How many paraphrases to return (2–4 is typical).
-  * **hint** (`Optional`[`str`]) – Optional verify-failure reason to steer re-retrieval.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The event query to expand.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many paraphrases to return (2–4 is typical).
+  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional verify-failure reason to steer re-retrieval.
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.agent.refine.refine_query(query, , n=3, hint=None, refiner=None, \_span=None)
 
 Expand `query` into up to `n` paraphrases for multi-query retrieval.
 
 * **Parameters:**
-  * **query** (`str`) – The event query to expand.
-  * **n** (`int`) – Number of paraphrases.
-  * **hint** (`Optional`[`str`]) – Optional verify-failure reason to steer re-retrieval.
-  * **refiner** (`Optional`[[`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (the DI seam);
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The event query to expand.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of paraphrases.
+  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional verify-failure reason to steer re-retrieval.
+  * **refiner** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (the DI seam);
     defaults to `_default_refiner()`.
   * **\_span** – Internal — the obs span handle for GenAI recording.
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 
 # _autosummary/foley.agent.session.html.md
@@ -1524,7 +1524,7 @@ Stdlib + `dol` only (via [`foley.stores`](_autosummary/foley.stores.html.md#modu
 
 ### *class* foley.agent.session.SessionStore(session_id='default', candidates=None, picks=None, rejects=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Three namespaced stores for one audition session (candidates / picks / rejects).
 
@@ -1532,57 +1532,57 @@ Each store defaults to a [`foley.stores.make_session_store()`](_autosummary/fole
 inject plain dicts. All values are JSON-safe dicts.
 
 * **Parameters:**
-  * **session_id** (`str`) – The session namespace.
-  * **rejects** (`Optional`[`dict`]) – Optional injected `MutableMapping` stores.
+  * **session_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The session namespace.
+  * **rejects** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional injected `MutableMapping` stores.
 
 #### add_pick(sound_id, , layer=None, onset=None)
 
 Persist an accepted pick (+ optional layer/onset); return the pick count.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### add_reject(sound_id, , reason=None)
 
 Record a rejected sound (feeds `refine` relevance feedback); return the count.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### cache_candidates(candidates)
 
 Cache each candidate’s full `to_dict()` keyed by sound id; return the count cached.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### drop_pick(sound_id)
 
 Remove a pick (idempotent); return the remaining pick count.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### list_picks()
 
 All persisted picks.
 
 * **Return type:**
-  `list`[`dict`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
 #### list_rejects()
 
 All recorded rejects.
 
 * **Return type:**
-  `list`[`dict`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
 #### picked_ids()
 
 The picked sound ids.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 #### rehydrate(ids)
 
@@ -1592,14 +1592,14 @@ Missing ids are skipped. Uses `Candidate.from_dict` (rebuilds the nested
 `SoundRecord` / `LicenseRecord` / `Verdict`).
 
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 
 #### rejected_ids()
 
 The rejected sound ids.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 
 # _autosummary/foley.agent.tools.html.md
@@ -1642,27 +1642,27 @@ fail-closed license gate FIRST) → place` (report 05 §5). Works out of the box
 deterministic defaults; every model / threshold / seam is an optional keyword.
 
 * **Parameters:**
-  * **context** (`str`) – The narrative passage.
-  * **max_events** (`int`) – The sparse density cap on decomposed events.
-  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded).
-  * **intended_use** (`Optional`[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
+  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap on decomposed events.
+  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded).
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
     `IntendedUse` — `allow_voice_or_trademark` stays `False`).
-  * **backend** (`str`) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
-  * **verify** (`Union`[`str`, [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
-  * **stream** (`bool`) – If `True`, return a generator yielding one `Candidate` per
+  * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
+  * **verify** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
+  * **stream** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, return a generator yielding one `Candidate` per
     resolved event; else return the collected `list`.
-  * **k** (`int`) – Retrieval shortlist depth per query.
-  * **tau_retrieve** (`float`) – Confidence threshold to auto-accept a retrieved clip.
-  * **tau_clap** (`float`) – The `clap`-rung gate threshold.
-  * **max_refine_loops** (`int`) – Max refine→re-retrieve passes per event (also the default
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval shortlist depth per query.
+  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Confidence threshold to auto-accept a retrieved clip.
+  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
+  * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
     `Budget`).
-  * **budget** (`Optional`[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit `Budget` (overrides `max_refine_loops`).
+  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit `Budget` (overrides `max_refine_loops`).
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
     each defaults to the hermetic fake when `foley[agent]` is absent.
 * **Return type:**
-  `Union`[`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)], `Iterator`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]]
+  `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]]
 * **Returns:**
   `list[Candidate]` (`stream=False`) or an `Iterator[Candidate]`
   (`stream=True`) — one verified, license-clean candidate per resolved event.
@@ -1697,8 +1697,8 @@ reserved #8 `plan_ref` slot is filled when called inside an active `foley.obs`
 run scope (`None`-safe otherwise).
 
 * **Parameters:**
-  * **candidates** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The candidates returned by [`find()`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.find).
-  * **transcript** (`Optional`[`str`]) – Optional narration transcript (WEAVE resolves the reference).
+  * **candidates** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The candidates returned by [`find()`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.find).
+  * **transcript** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional narration transcript (WEAVE resolves the reference).
 * **Return type:**
   [`SoundDesignTimeline`](_autosummary/foley.base.html.md#foley.base.SoundDesignTimeline)
 
@@ -1712,12 +1712,12 @@ and RRF-merges (`k=RRF_K`) — the query-expansion recall lever, exercised only 
 refine pass.
 
 * **Parameters:**
-  * **queries** (`Union`[`str`, `list`[`str`]]) – One query string, or a list of paraphrases to merge.
-  * **k** (`int`) – Number of results.
+  * **queries** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – One query string, or a list of paraphrases to merge.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results.
   * **library** – Target library (default: the process-wide default).
-  * **filters** (`Optional`[`dict`]) – Extra `SoundLibrary.search()` kwargs (e.g. the license prefilter).
+  * **filters** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Extra `SoundLibrary.search()` kwargs (e.g. the license prefilter).
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 
 
 # _autosummary/foley.agent.verify.html.md
@@ -1757,7 +1757,7 @@ own fit-precision metric; it does not touch retrieval ranking (the [nDCG@10](mai
 
 ### *class* foley.agent.verify.AnthropicJudge(, client=None, model='claude-opus-4-8', max_tokens=500)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LLM arbiter for the `judge` rung (`foley[agent]`): Claude → a `Verdict`.
 
@@ -1773,7 +1773,7 @@ Call Claude to arbitrate the match; returns a `Verdict` at `level`.
 
 ### *class* foley.agent.verify.AudioLMJudge(, pipeline=None, model='Qwen/Qwen2-Audio-7B-Instruct', max_tokens=300, tau=0.5)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The audio-LM `listen` rung (`foley[fit]`): Qwen2-Audio “does this contain {event}?”.
 
@@ -1792,7 +1792,7 @@ Listen to the clip and return the AQAScore `Verdict` (`P(yes) ≥ tau`).
 
 ### *class* foley.agent.verify.ClapJudge
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The zero-config `clap` rung: gate on the retrieval cosine (no ML, no network).
 
@@ -1808,7 +1808,7 @@ Return the `clap`-rung `Verdict` for `candidate`.
 
 ### *class* foley.agent.verify.StringOverlapJudge(, threshold=0.3)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic stand-in for the `listen`/`judge` rungs (the hermetic CI fake).
 
@@ -1835,13 +1835,13 @@ escalates to the injected/​default judge for that rung and returns *its* verdi
   * **event** ([`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)) – The wanted `SoundEvent`.
   * **candidate** ([`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)) – A **license-clean** `Candidate` — this MUST run after the
     [`gate_candidates()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.gate_candidates) gate (asserted).
-  * **level** (`str` | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
-  * **judge** (`Optional`[[`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the higher rungs
+  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
+  * **judge** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the higher rungs
     (the DI seam; defaults per `_default_judge()`).
-  * **tau_clap** (`float`) – The clap-gate threshold.
+  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The clap-gate threshold.
   * **\_span** – Internal — the obs span handle for GenAI recording on the LLM rung.
 * **Raises:**
-  **AssertionError** – If `candidate.license_ok` is not `True` (verify-before-gate
+  [**AssertionError**](https://docs.python.org/3/builtins/exceptions.html#AssertionError) – If `candidate.license_ok` is not `True` (verify-before-gate
       is a bug — the license gate is the fail-closed first pass).
 * **Return type:**
   [`Verdict`](_autosummary/foley.base.html.md#foley.base.Verdict)
@@ -1877,9 +1877,9 @@ Installs:
 * **Parameters:**
   * **dest** – The target agent-config dir (default `./.claude` in the cwd; pass `~/.claude`
     to install globally for every project).
-  * **overwrite** (`bool`) – Replace existing files/dirs (default: skip what already exists).
+  * **overwrite** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Replace existing files/dirs (default: skip what already exists).
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 * **Returns:**
   The list of installed paths (as strings) — empty entries that already existed are skipped.
 
@@ -1946,7 +1946,7 @@ already-open binary file-like object (e.g. `io.BytesIO`).
 * **Type:**
   A source `load` can decode
 
-alias of `str` | `PathLike` | `bytes` | `BinaryIO`
+alias of [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) | [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes) | [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)
 
 ### foley.audio.encode(samples, sample_rate, , fmt='flac', subtype='PCM_24')
 
@@ -1957,11 +1957,11 @@ the FLAC archive form.
 
 * **Parameters:**
   * **samples** (`ndarray`) – The working array to encode.
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **fmt** (`str`) – Container/codec name (case-insensitive).
-  * **subtype** (`str`) – Sample subtype (e.g. `PCM_24`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Container/codec name (case-insensitive).
+  * **subtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Sample subtype (e.g. `PCM_24`).
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 * **Returns:**
   The encoded audio as `bytes`.
 
@@ -1976,14 +1976,14 @@ Mappings: mono -> N by duplication; N -> mono by mean; N -> M (N != M, both
 
 * **Parameters:**
   * **samples** (`ndarray`) – Mono or multichannel working array.
-  * **channels** (`int`) – Target channel count (must be >= 1).
+  * **channels** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Target channel count (must be >= 1).
 * **Return type:**
   `ndarray`
 * **Returns:**
   A `(frames,)` array when `channels == 1`, else a
   `(frames, channels)` array.
 * **Raises:**
-  **ValueError** – If `channels < 1`.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `channels < 1`.
 
 Lazy dependency: `numpy` (only for the up-mix / tile path).
 
@@ -1996,10 +1996,10 @@ out-ramps never overlap on tiny inputs.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono or multichannel).
-  * **sample_rate** (`int`) – Sample rate in Hz (converts the fade durations to samples).
-  * **fade_in_s** (`float`) – Fade-in duration in seconds.
-  * **fade_out_s** (`float`) – Fade-out duration in seconds.
-  * **kind** (`str`) – `'linear'` or `'equal_power'` ramp shape.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (converts the fade durations to samples).
+  * **fade_in_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Fade-in duration in seconds.
+  * **fade_out_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Fade-out duration in seconds.
+  * **kind** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'linear'` or `'equal_power'` ramp shape.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -2015,13 +2015,13 @@ Decode audio into a float working array.
 `BytesIO` so nothing touches disk), or any binary file-like object.
 
 * **Parameters:**
-  * **src** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – Path, raw bytes, or file-like object to decode.
-  * **target_sr** (`Optional`[`int`]) – If given, resample the decoded audio to this rate (via
+  * **src** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – Path, raw bytes, or file-like object to decode.
+  * **target_sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – If given, resample the decoded audio to this rate (via
     [`resample()`](_autosummary/foley.audio.html.md#foley.audio.resample)); otherwise the native rate is returned.
-  * **mono** (`bool`) – If `True`, down-mix multichannel audio to mono.
-  * **dtype** (`str`) – NumPy dtype string for the returned array (default `float32`).
+  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, down-mix multichannel audio to mono.
+  * **dtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – NumPy dtype string for the returned array (default `float32`).
 * **Return type:**
-  `tuple`[`ndarray`, `int`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`int`](https://docs.python.org/3/builtins/functions.html#int)]
 * **Returns:**
   A `(samples, sample_rate)` tuple. `samples` has shape `(frames,)`
   (mono) or `(frames, channels)`; `sample_rate` reflects any resample.
@@ -2043,17 +2043,17 @@ raise `ValueError` on (routine for one-shots: clicks, blips, gunshots).
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono or multichannel, time on axis 0 — the layout
     pyloudnorm expects).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **target_lufs** (`float`) – Desired integrated loudness (default = foley’s podcast
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **target_lufs** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Desired integrated loudness (default = foley’s podcast
     target).
-  * **peak_ceiling_dbfs** (`float`) – Sample-peak ceiling (dBFS) applied after loudness
+  * **peak_ceiling_dbfs** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sample-peak ceiling (dBFS) applied after loudness
     normalization. Note this is a *sample*-peak limit, not an inter-sample
     true-peak (dBTP) limit — see [`foley.qc.true_peak_dbtp()`](_autosummary/foley.qc.html.md#foley.qc.true_peak_dbtp) for the
     oversampled measurement.
-  * **min_block_s** (`float`) – Minimum clip length (seconds) that can be loudness-measured;
+  * **min_block_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Minimum clip length (seconds) that can be loudness-measured;
     shorter clips are returned unchanged with `measured = -inf`.
 * **Return type:**
-  `tuple`[`ndarray`, `float`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 * **Returns:**
   `(normalized, measured_input_lufs)`. When the input is near-silent or
   too short to measure, `normalized` is the unchanged input and
@@ -2068,9 +2068,9 @@ Resample `samples` to `target_sr` (a no-op when already there).
 
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono `(frames,)` or `(frames, channels)`).
-  * **sample_rate** (`int`) – The array’s current rate in Hz.
-  * **target_sr** (`int`) – Desired output rate in Hz (default = the working rate).
-  * **quality** (`str`) – soxr quality preset (`QQ`/`LQ`/`MQ`/`HQ`/`VHQ`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The array’s current rate in Hz.
+  * **target_sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Desired output rate in Hz (default = the working rate).
+  * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – soxr quality preset (`QQ`/`LQ`/`MQ`/`HQ`/`VHQ`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -2086,12 +2086,12 @@ Write `samples` to `dst` as `fmt`/`subtype` (default = FLAC archive).
 * **Parameters:**
   * **samples** (`ndarray`) – The working array to write (shape `(frames,)` or
     `(frames, channels)`).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **dst** (`Union`[`str`, `PathLike`, `BinaryIO`]) – Destination path or writable binary file-like object.
-  * **fmt** (`str`) – Container/codec name (case-insensitive; passed to libsndfile).
-  * **subtype** (`str`) – Sample subtype (e.g. `PCM_24`, `PCM_16`, `FLOAT`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **dst** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – Destination path or writable binary file-like object.
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Container/codec name (case-insensitive; passed to libsndfile).
+  * **subtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Sample subtype (e.g. `PCM_24`, `PCM_16`, `FLOAT`).
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 Lazy dependency: `soundfile`.
 
@@ -2116,10 +2116,10 @@ check consumes.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Decoded working array (mono or multichannel).
-  * **sample_rate** (`int`) – The array’s current rate in Hz.
-  * **mono** (`bool`) – If `True`, down-mix to mono.
-  * **target_sr** (`int`) – Working sample rate in Hz.
-  * **dtype** (`str`) – Output NumPy dtype string.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The array’s current rate in Hz.
+  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, down-mix to mono.
+  * **target_sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Working sample rate in Hz.
+  * **dtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output NumPy dtype string.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -2138,12 +2138,12 @@ axis 0, preserving its channel layout.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono or multichannel).
-  * **sample_rate** (`int`) – Sample rate in Hz (kept in the signature for API symmetry;
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (kept in the signature for API symmetry;
     trimming is index-based).
-  * **top_db** (`float`) – A frame is silent when it sits at least this many dB below the
+  * **top_db** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A frame is silent when it sits at least this many dB below the
     reference (peak) level.
 * **Return type:**
-  `tuple`[`ndarray`, `tuple`[`int`, `int`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`int`](https://docs.python.org/3/builtins/functions.html#int), [`int`](https://docs.python.org/3/builtins/functions.html#int)]]
 * **Returns:**
   `(trimmed, (start_sample, end_sample))`. On all-silent (or otherwise
   degenerate) input the original array is returned unchanged with a
@@ -2212,13 +2212,13 @@ Serialization contract:
 
 ### *class* foley.base.AcquisitionMethod(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a sound entered foley (retrieval channel or origin).
 
 ### *class* foley.base.Affordance(name, type, description, default=None, stage='query')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Descriptor for a unified parameter affordance (arioso analog).
 
@@ -2244,7 +2244,7 @@ Default value (`None` = no default / required).
 
 ### *class* foley.base.Anchor(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a WEAVE `Placement` binds its symbolic time to the narration (report 06 §2.4).
 
@@ -2264,11 +2264,11 @@ by `_decode()` — no per-field code needed.
 
 ### *class* foley.base.CandidateOrigin(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 Whether a candidate was retrieved from the index or freshly generated.
 
-### foley.base.GENERATION_AFFORDANCES *: dict[str, [Affordance](_autosummary/foley.base.html.md#foley.base.Affordance)]* *= {'duration': Affordance(name='duration', type=<class 'float'>, description='Seconds; None => backend default', default=None, stage='generate'), 'loop': Affordance(name='loop', type=<class 'bool'>, description='Seamless-loopable clip', default=False, stage='generate'), 'negative_prompt': Affordance(name='negative_prompt', type=<class 'str'>, description='Content to exclude', default=None, stage='generate'), 'output_format': Affordance(name='output_format', type=<class 'str'>, description='wav|opus|mp3', default='wav', stage='generate'), 'prompt': Affordance(name='prompt', type=<class 'str'>, description='Sound description', default=None, stage='generate'), 'prompt_influence': Affordance(name='prompt_influence', type=<class 'float'>, description='0..1 unified guidance', default=0.3, stage='generate'), 'seed': Affordance(name='seed', type=<class 'int'>, description='Reproducibility (capture in provenance)', default=None, stage='generate'), 'steps': Affordance(name='steps', type=<class 'int'>, description='Diffusion/flow steps', default=None, stage='generate')}*
+### foley.base.GENERATION_AFFORDANCES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Affordance](_autosummary/foley.base.html.md#foley.base.Affordance)]* *= {'duration': Affordance(name='duration', type=<class 'float'>, description='Seconds; None => backend default', default=None, stage='generate'), 'loop': Affordance(name='loop', type=<class 'bool'>, description='Seamless-loopable clip', default=False, stage='generate'), 'negative_prompt': Affordance(name='negative_prompt', type=<class 'str'>, description='Content to exclude', default=None, stage='generate'), 'output_format': Affordance(name='output_format', type=<class 'str'>, description='wav|opus|mp3', default='wav', stage='generate'), 'prompt': Affordance(name='prompt', type=<class 'str'>, description='Sound description', default=None, stage='generate'), 'prompt_influence': Affordance(name='prompt_influence', type=<class 'float'>, description='0..1 unified guidance', default=0.3, stage='generate'), 'seed': Affordance(name='seed', type=<class 'int'>, description='Reproducibility (capture in provenance)', default=None, stage='generate'), 'steps': Affordance(name='steps', type=<class 'int'>, description='Diffusion/flow steps', default=None, stage='generate')}*
 
 Unified generation-stage parameters (generate backends map onto these).
 
@@ -2280,7 +2280,7 @@ What the caller intends to do with a sound; consumed by `keep()`.
 
 ### *class* foley.base.Layer(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 Mix layer (shared by `SoundEvent` now and `TimelineItem` later).
 
@@ -2298,7 +2298,7 @@ is rejected regardless. Populate the flags from the `license_id` via
 `foley.licensing.apply_license_flags` (source overrides win). Never
 hand-set the derived flags — always route through the policy layer.
 
-### foley.base.MASTER_PROFILES *: dict[str, [MasterProfile](_autosummary/foley.base.html.md#foley.base.MasterProfile)]* *= {'broadcast_atsc': MasterProfile(target_lufs=-24.0, true_peak_db=-2.0, lra=7.0), 'broadcast_ebu': MasterProfile(target_lufs=-23.0, true_peak_db=-1.0, lra=7.0), 'podcast': MasterProfile(target_lufs=-16.0, true_peak_db=-1.0, lra=11.0), 'streaming': MasterProfile(target_lufs=-14.0, true_peak_db=-1.0, lra=11.0)}*
+### foley.base.MASTER_PROFILES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [MasterProfile](_autosummary/foley.base.html.md#foley.base.MasterProfile)]* *= {'broadcast_atsc': MasterProfile(target_lufs=-24.0, true_peak_db=-2.0, lra=7.0), 'broadcast_ebu': MasterProfile(target_lufs=-23.0, true_peak_db=-1.0, lra=7.0), 'podcast': MasterProfile(target_lufs=-16.0, true_peak_db=-1.0, lra=11.0), 'streaming': MasterProfile(target_lufs=-14.0, true_peak_db=-1.0, lra=11.0)}*
 
 The named delivery targets (report 06 §5.2). [`resolve_master()`](_autosummary/foley.base.html.md#foley.base.resolve_master) maps a
 profile name to one of these; these values are the SSOT so no LUFS literal
@@ -2331,19 +2331,19 @@ Every field is a no-op at its default, so a sparse item (no `processing`)
 renders untouched; the mixer departs from dry/centered/full-level only when a
 field is set.
 
-### foley.base.QUERY_AFFORDANCES *: dict[str, [Affordance](_autosummary/foley.base.html.md#foley.base.Affordance)]* *= {'audioset_label': Affordance(name='audioset_label', type=<class 'str'>, description='AudioSet ontology facet (rolls up children)', default=None, stage='query'), 'commercial_ok': Affordance(name='commercial_ok', type=<class 'bool'>, description='License filter shorthand', default=None, stage='query'), 'duration_range': Affordance(name='duration_range', type=<class 'tuple'>, description='(min_s, max_s)', default=None, stage='query'), 'filters': Affordance(name='filters', type=<class 'dict'>, description='Metadata predicates (SQL-style)', default=None, stage='query'), 'k': Affordance(name='k', type=<class 'int'>, description='Number of results', default=10, stage='query'), 'license': Affordance(name='license', type=<class 'str'>, description='Explicit license id constraint', default=None, stage='query'), 'min_snr': Affordance(name='min_snr', type=<class 'float'>, description='QC filter: min SNR dB', default=None, stage='query'), 'rerank': Affordance(name='rerank', type=<class 'bool'>, description='Apply second-stage rerank', default=False, stage='query'), 'semantic_text': Affordance(name='semantic_text', type=<class 'str'>, description='Query for CLAP semantic space', default=None, stage='query'), 'sort': Affordance(name='sort', type=<class 'str'>, description='score|duration|created|downloads', default='score', stage='query'), 'text': Affordance(name='text', type=<class 'str'>, description='Natural-language query', default=None, stage='query'), 'ucs_category': Affordance(name='ucs_category', type=<class 'str'>, description='UCS CatID facet', default=None, stage='query')}*
+### foley.base.QUERY_AFFORDANCES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Affordance](_autosummary/foley.base.html.md#foley.base.Affordance)]* *= {'audioset_label': Affordance(name='audioset_label', type=<class 'str'>, description='AudioSet ontology facet (rolls up children)', default=None, stage='query'), 'commercial_ok': Affordance(name='commercial_ok', type=<class 'bool'>, description='License filter shorthand', default=None, stage='query'), 'duration_range': Affordance(name='duration_range', type=<class 'tuple'>, description='(min_s, max_s)', default=None, stage='query'), 'filters': Affordance(name='filters', type=<class 'dict'>, description='Metadata predicates (SQL-style)', default=None, stage='query'), 'k': Affordance(name='k', type=<class 'int'>, description='Number of results', default=10, stage='query'), 'license': Affordance(name='license', type=<class 'str'>, description='Explicit license id constraint', default=None, stage='query'), 'min_snr': Affordance(name='min_snr', type=<class 'float'>, description='QC filter: min SNR dB', default=None, stage='query'), 'rerank': Affordance(name='rerank', type=<class 'bool'>, description='Apply second-stage rerank', default=False, stage='query'), 'semantic_text': Affordance(name='semantic_text', type=<class 'str'>, description='Query for CLAP semantic space', default=None, stage='query'), 'sort': Affordance(name='sort', type=<class 'str'>, description='score|duration|created|downloads', default='score', stage='query'), 'text': Affordance(name='text', type=<class 'str'>, description='Natural-language query', default=None, stage='query'), 'ucs_category': Affordance(name='ucs_category', type=<class 'str'>, description='UCS CatID facet', default=None, stage='query')}*
 
 Unified query-stage parameters (search / find / filter surface).
 
 ### *class* foley.base.Salience(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How prominent a sound event is within a passage.
 
 ### *class* foley.base.SerializableMixin
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Adds `to_dict`/`to_json`/`from_dict`/`from_json` to a dataclass.
 
@@ -2359,7 +2359,7 @@ Unknown keys are ignored (forward-compatible); missing keys fall back
 to field defaults.
 
 * **Parameters:**
-  **d** (`dict`) – A plain dict (typically from `to_dict()` or `json.loads`).
+  **d** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – A plain dict (typically from `to_dict()` or `json.loads`).
 * **Return type:**
   [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -2368,7 +2368,7 @@ to field defaults.
 Reconstruct an instance from a JSON string.
 
 * **Parameters:**
-  **s** (`str`) – A JSON string (typically from `to_json()`).
+  **s** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A JSON string (typically from `to_json()`).
 * **Return type:**
   [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -2381,16 +2381,16 @@ subclasses `str`); nested dataclasses are recursed via
 `dataclasses.asdict`.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### to_json(, indent=None)
 
 Return a JSON string (str-enums serialize to their `.value`).
 
 * **Parameters:**
-  **indent** (`Optional`[`int`]) – Optional pretty-print indent passed to `json.dumps`.
+  **indent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Optional pretty-print indent passed to `json.dumps`.
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### *class* foley.base.SoundDesignTimeline(items=<factory>, run_manifest_ref=None, transcript_ref=None, schema_version=1, narration_ref=None, word_timeline=<factory>, master=<factory>)
 
@@ -2424,7 +2424,7 @@ record holds a content-hash `uri`, never raw bytes.
 
 ### *class* foley.base.StorageMode(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a sound’s bytes are held (DERIVED from `license.cache_bytes_ok`).
 
@@ -2449,7 +2449,7 @@ The result of one verification rung for a candidate.
 
 ### *class* foley.base.VerifyLevel(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 Which rung of the verification ladder produced a `Verdict`.
 
@@ -2458,14 +2458,14 @@ Which rung of the verification ladder produced a `Verdict`.
 Resolve a master spec (profile name, explicit profile, or `None`) to a `MasterProfile`.
 
 * **Parameters:**
-  **master** (`Union`[`str`, [`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile), `None`]) – A [`MASTER_PROFILES`](_autosummary/foley.base.html.md#foley.base.MASTER_PROFILES) key (e.g. `'podcast'`), an explicit
+  **master** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile), [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – A [`MASTER_PROFILES`](_autosummary/foley.base.html.md#foley.base.MASTER_PROFILES) key (e.g. `'podcast'`), an explicit
   [`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile), or `None` (-> the podcast default).
 * **Return type:**
   [`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile)
 * **Returns:**
   The resolved [`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile).
 * **Raises:**
-  **ValueError** – If `master` is an unknown profile name.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `master` is an unknown profile name.
 
 
 # _autosummary/foley.cli.html.md
@@ -2499,14 +2499,14 @@ is a thin call into the library facade ([`foley.bootstrap()`](_autosummary/foley
 Build the `foley` argument parser.
 
 * **Return type:**
-  `ArgumentParser`
+  [`ArgumentParser`](https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser)
 
 ### foley.cli.main(argv=None)
 
 Entry point for the `foley` console script.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 
 # _autosummary/foley.eval.baseline.html.md
@@ -2549,14 +2549,14 @@ The regression tolerance from report 08 §5 (Δ [nDCG@10](mailto:nDCG@10) ≥ �
 True if the baseline’s fixture stamps no longer match the fixtures on disk.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.eval.baseline.load_baseline(path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/baseline.json'))
 
 Load the committed baseline dict from `path`.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.eval.baseline.write_baseline(report, , path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/baseline.json'), metric='ndcg@10', tolerance=0.02, seed_path, manifest_path, embedder_model_id='foley-eval/hashing-bow-v1', dim=64, rrf_k=60, updated_at, n_items, revision='gld-v1')
 
@@ -2568,7 +2568,7 @@ clock) so the caller controls reproducibility. `revision` labels the golden-set
 generation (bumped when the frozen set is regrown).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   The baseline dict that was written.
 
@@ -2609,7 +2609,7 @@ Default embedding width (matches the test `FakeEmbedder` for parity).
 
 ### *class* foley.eval.embedder.HashingBowEmbedder(, dim=64)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic hashing bag-of-words text embedder (L2-normalized).
 
@@ -2659,13 +2659,13 @@ the functions here cover the math.
 
 ### *class* foley.eval.fidelity.FidelityResult(metric, value, stamp)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A stamped set-level fidelity score (attached to `FitReport.fidelity`).
 
 ### *class* foley.eval.fidelity.FidelityStamp(embedding, toolkit, version, n_ref, n_gen)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Mandatory provenance for a FAD/KAD score — it is meaningless without it.
 
@@ -2684,7 +2684,7 @@ embeddings for “FAD-P”, or CLAP for a domain-matched FAD.
   * **x_ref** – Reference embeddings `(n_ref, d)`.
   * **x_gen** – Generated embeddings `(n_gen, d)`.
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The FAD as a `float` (`≥ 0` up to numerical round-off; `~0` for identical
   distributions).
@@ -2701,10 +2701,10 @@ hashing embedder in CI, PANNs / CLAP (`foley[fit]`) in prod. The embedder’s
   * **ref_wavs** – An iterable of reference waveforms (1-D arrays).
   * **gen_wavs** – An iterable of generated waveforms (1-D arrays).
   * **embedder** – An object with `embed_audio(wav, sr) -> vector` and `model_id`.
-  * **sr** (`int`) – The sample rate passed to `embed_audio`.
-  * **metric** (`str`) – `'fad'` (default) or `'kad'`.
-  * **toolkit** (`str`) – Provenance label for the stamp (default `'foley-numpy'`).
-  * **version** (`str`) – Provenance version for the stamp.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sample rate passed to `embed_audio`.
+  * **metric** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'fad'` (default) or `'kad'`.
+  * **toolkit** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance label for the stamp (default `'foley-numpy'`).
+  * **version** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance version for the stamp.
 * **Return type:**
   [`FidelityResult`](_autosummary/foley.eval.fidelity.html.md#foley.eval.fidelity.FidelityResult)
 * **Returns:**
@@ -2722,9 +2722,9 @@ negative.
 * **Parameters:**
   * **x_ref** – Reference embeddings `(n_ref, d)`.
   * **x_gen** – Generated embeddings `(n_gen, d)`.
-  * **bandwidth** (`Optional`[`float`]) – RBF bandwidth σ (default: the median heuristic over the pooled set).
+  * **bandwidth** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – RBF bandwidth σ (default: the median heuristic over the pooled set).
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The unbiased MMD² as a `float`.
 
@@ -2768,7 +2768,7 @@ fail-closed license gate (`verify_match` asserts `candidate.license_ok` is `True
 
 ### *class* foley.eval.fit.FitReport(per_item=<factory>, fit_precision=0.0, fit_recall=0.0, fit_f1=0.0, fit_score=0.0, auto_accept_rate=0.0, n_accepted=0, n_confirmed=0, strata=<factory>, calibration=None, fidelity=<factory>, judge_model='', embedder_model_id='', seed=0, k=10, schema_version=1)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Tier-2 fit metrics over a stratified golden sample (JSON-friendly, mirrors `RetrievalReport`).
 
@@ -2786,7 +2786,7 @@ The committed fit-baseline stamp is deferred until real judges produce stable
 numbers; this ships the trend path only.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### gate(min_fit_precision)
 
@@ -2796,14 +2796,14 @@ Structural guarantee that Tier-2 is never a silent per-PR gate: CI passes no
 floor, so this is always `True`; only the nightly/pre-release runner sets one.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.eval.fit.fit_f1(matches, relevants)
 
 The harmonic mean of [`fit_precision()`](_autosummary/foley.eval.fit.html.md#foley.eval.fit.fit_precision) and [`fit_recall()`](_autosummary/foley.eval.fit.html.md#foley.eval.fit.fit_recall).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.fit.fit_precision(matches, relevants)
 
@@ -2816,10 +2816,10 @@ closed-form, and the decisive correctness oracle (the Ring-0 + fake-judge plumbi
 makes the end-to-end value tautological, so the metric math is tested in isolation).
 
 * **Parameters:**
-  * **matches** (`Sequence`[`bool`]) – Per-candidate fit-judge `match` booleans.
-  * **relevants** (`Sequence`[`bool`]) – Per-candidate gold-relevance booleans (grade ≥ 1).
+  * **matches** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Per-candidate fit-judge `match` booleans.
+  * **relevants** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Per-candidate gold-relevance booleans (grade ≥ 1).
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The fit precision in `[0, 1]` (`0.0` when nothing was accepted).
 
@@ -2828,7 +2828,7 @@ makes the end-to-end value tautological, so the metric math is tested in isolati
 `TP / (TP + FN)` — of the gold-relevant candidates, how many the judge confirmed.
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.fit.run_fit_eval(, golden=None, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), sample=None, strata_keys=('family', 'diegetic'), fit_judge=None, embedder=None, level=VerifyLevel.judge, seed=0, k=10)
 
@@ -2843,23 +2843,23 @@ fit-judge as an independent audit, and aggregates fit-precision/recall/F1 + fit-
 * **Parameters:**
   * **golden** – A pre-loaded golden list (default: load `golden_path`).
   * **golden_path** – The golden JSON (default: the bundled Ring-0 seed set).
-  * **sample** (`Optional`[`int`]) – The stratified sample cap (default: the whole set — the cost gate).
+  * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The stratified sample cap (default: the whole set — the cost gate).
   * **strata_keys** – The stratification axes (default `('family', 'diegetic')`).
   * **fit_judge** – The injected authoritative [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)
     (default: `foley.agent.verify._default_fit_judge()` — the hermetic fake
     when no audio-LM / key is available).
   * **embedder** – The Ring-0 text/​audio embedder (default: `HashingBowEmbedder`).
-  * **level** (`str` | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
+  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
     (default `VerifyLevel.judge`). `'clap'` is rejected: it never invokes the
     fit-judge (it only re-runs the retrieval clap gate), so it cannot measure fit.
-  * **seed** (`int`) – The sampling RNG seed.
-  * **k** (`int`) – The retrieval shortlist depth per event.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sampling RNG seed.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The retrieval shortlist depth per event.
 * **Return type:**
   [`FitReport`](_autosummary/foley.eval.fit.html.md#foley.eval.fit.FitReport)
 * **Returns:**
   A [`FitReport`](_autosummary/foley.eval.fit.html.md#foley.eval.fit.FitReport). Gating is the caller’s job via [`FitReport.gate()`](_autosummary/foley.eval.fit.html.md#foley.eval.fit.FitReport.gate).
 * **Raises:**
-  **ValueError** – If `level` is `'clap'` (fit judging requires a listen/judge rung).
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `level` is `'clap'` (fit judging requires a listen/judge rung).
 
 ### foley.eval.fit.stratified_sample(units, , strata_keys, sample, seed)
 
@@ -2870,12 +2870,12 @@ Round-robins across strata (so an easy family cannot dominate a capped sample);
 event_dict)`.
 
 * **Parameters:**
-  * **units** (`list`) – The full `(item, ev_idx, ev_dict)` unit list.
+  * **units** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)) – The full `(item, ev_idx, ev_dict)` unit list.
   * **strata_keys** – The stratification axes (e.g. `('family', 'diegetic')`).
-  * **sample** (`Optional`[`int`]) – The total draw size, or `None` for all.
-  * **seed** (`int`) – The RNG seed (reproducibility).
+  * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The total draw size, or `None` for all.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RNG seed (reproducibility).
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 
 # _autosummary/foley.eval.golden.html.md
@@ -2922,7 +2922,7 @@ gate therefore does NOT exercise `ingest_one` (that path is covered by
 
 ### *class* foley.eval.golden.GoldenItem(id, context, expected_events, answer_clip_ids, grade, negatives=<factory>, labeler='llm+human', schema_version=1)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One frozen `(context → expected sounds)` judgment (report 08 §1.3).
 
@@ -2989,7 +2989,7 @@ clip lands at integer rank 1 (deterministic, cross-platform).
 Load and validate the frozen golden set from `path` (JSON list).
 
 * **Return type:**
-  `list`[[`GoldenItem`](_autosummary/foley.eval.golden.html.md#foley.eval.golden.GoldenItem)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GoldenItem`](_autosummary/foley.eval.golden.html.md#foley.eval.golden.GoldenItem)]
 
 ### foley.eval.golden.run_ring0_retrieval_eval(, k=10, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), embedder=None)
 
@@ -3000,7 +3000,7 @@ Runs every golden `expected_events[].query` through the real
 resulting runs against the golden qrels.
 
 * **Parameters:**
-  * **k** (`int`) – Retrieval cutoff (and the metric `@k`).
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval cutoff (and the metric `@k`).
   * **golden_path** – The golden set JSON.
   * **embedder** – The eval embedder (default: `HashingBowEmbedder`).
 * **Return type:**
@@ -3017,7 +3017,7 @@ One qrels row per `(item, event)` — `query_id = f"{item.id}::{event_idx}"`
 clip in `answer_clip_ids` carries its `grade`.
 
 * **Return type:**
-  `dict`[`str`, `dict`[`str`, `int`]]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`int`](https://docs.python.org/3/builtins/functions.html#int)]]
 
 
 # _autosummary/foley.eval.html.md
@@ -3084,7 +3084,7 @@ function-local so `import foley` stays dol-only.
 
 ### *class* foley.eval.AlphaResult(alpha, level, n_units, n_raters, percent_agreement, band, promoted)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A judge-vs-human calibration record (surfaced as `FitReport.calibration`).
 
@@ -3094,13 +3094,13 @@ unattended use only once its agreement with the human raters reaches the
 
 ### *class* foley.eval.FidelityResult(metric, value, stamp)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A stamped set-level fidelity score (attached to `FitReport.fidelity`).
 
 ### *class* foley.eval.FidelityStamp(embedding, toolkit, version, n_ref, n_gen)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Mandatory provenance for a FAD/KAD score — it is meaningless without it.
 
@@ -3109,7 +3109,7 @@ uninterpretable; this stamp makes the basis of comparison legible.
 
 ### *class* foley.eval.FitReport(per_item=<factory>, fit_precision=0.0, fit_recall=0.0, fit_f1=0.0, fit_score=0.0, auto_accept_rate=0.0, n_accepted=0, n_confirmed=0, strata=<factory>, calibration=None, fidelity=<factory>, judge_model='', embedder_model_id='', seed=0, k=10, schema_version=1)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Tier-2 fit metrics over a stratified golden sample (JSON-friendly, mirrors `RetrievalReport`).
 
@@ -3127,7 +3127,7 @@ The committed fit-baseline stamp is deferred until real judges produce stable
 numbers; this ships the trend path only.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### gate(min_fit_precision)
 
@@ -3137,11 +3137,11 @@ Structural guarantee that Tier-2 is never a silent per-PR gate: CI passes no
 floor, so this is always `True`; only the nightly/pre-release runner sets one.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### *class* foley.eval.GoldenItem(id, context, expected_events, answer_clip_ids, grade, negatives=<factory>, labeler='llm+human', schema_version=1)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One frozen `(context → expected sounds)` judgment (report 08 §1.3).
 
@@ -3180,7 +3180,7 @@ The GoldenItem schema version.
 
 ### *class* foley.eval.HashingBowEmbedder(, dim=64)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic hashing bag-of-words text embedder (L2-normalized).
 
@@ -3195,7 +3195,7 @@ Embed `text` (or a list of texts) -> a `(n, dim)` float32 array.
 
 ### *class* foley.eval.RetrievalReport(per_query=<factory>, mean=<factory>, ranks=<factory>, k=10)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).
 
@@ -3204,14 +3204,14 @@ Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).
 A human diff for a failing gate: mean vs baseline + the worst queries.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.eval.average_precision_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Average precision (trec_eval `map`: divide by TOTAL relevant, not `min(R,k)`).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.build_eval_library(, embedder=None, manifest_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/corpus.json'))
 
@@ -3241,7 +3241,7 @@ determinism the gate relies on. The doc id is `candidate.sound.id`.
   **candidates** – An ordered `list[Candidate]` from
   [`foley.index.library.SoundLibrary.search()`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary.search) (best first).
 * **Return type:**
-  `dict`[`str`, `float`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 * **Returns:**
   `{clip_id: score}` with distinct descending scores.
 
@@ -3257,7 +3257,7 @@ reliable band — the model judge may then be trusted unattended on that slice.
   * **human_grades** – A 1-D per-unit human grade sequence, or a 2-D `(humans × units)`
     matrix (`nan` = missing).
   * **judge_grades** – The model judge’s 1-D per-unit grades (`nan` = missing).
-  * **level** (`str`) – The measurement level (default `'ordinal'`).
+  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The measurement level (default `'ordinal'`).
 * **Return type:**
   [`AlphaResult`](_autosummary/foley.eval.reliability.html.md#foley.eval.reliability.AlphaResult)
 * **Returns:**
@@ -3279,7 +3279,7 @@ rank of the highest-graded answer (for the failure diff).
 The harmonic mean of [`fit_precision()`](_autosummary/foley.eval.html.md#foley.eval.fit_precision) and [`fit_recall()`](_autosummary/foley.eval.html.md#foley.eval.fit_recall).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.fit_precision(matches, relevants)
 
@@ -3292,10 +3292,10 @@ closed-form, and the decisive correctness oracle (the Ring-0 + fake-judge plumbi
 makes the end-to-end value tautological, so the metric math is tested in isolation).
 
 * **Parameters:**
-  * **matches** (`Sequence`[`bool`]) – Per-candidate fit-judge `match` booleans.
-  * **relevants** (`Sequence`[`bool`]) – Per-candidate gold-relevance booleans (grade ≥ 1).
+  * **matches** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Per-candidate fit-judge `match` booleans.
+  * **relevants** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Per-candidate gold-relevance booleans (grade ≥ 1).
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The fit precision in `[0, 1]` (`0.0` when nothing was accepted).
 
@@ -3304,7 +3304,7 @@ makes the end-to-end value tautological, so the metric math is tested in isolati
 `TP / (TP + FN)` — of the gold-relevant candidates, how many the judge confirmed.
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.frechet_distance(x_ref, x_gen)
 
@@ -3318,7 +3318,7 @@ embeddings for “FAD-P”, or CLAP for a domain-matched FAD.
   * **x_ref** – Reference embeddings `(n_ref, d)`.
   * **x_gen** – Generated embeddings `(n_gen, d)`.
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The FAD as a `float` (`≥ 0` up to numerical round-off; `~0` for identical
   distributions).
@@ -3335,10 +3335,10 @@ hashing embedder in CI, PANNs / CLAP (`foley[fit]`) in prod. The embedder’s
   * **ref_wavs** – An iterable of reference waveforms (1-D arrays).
   * **gen_wavs** – An iterable of generated waveforms (1-D arrays).
   * **embedder** – An object with `embed_audio(wav, sr) -> vector` and `model_id`.
-  * **sr** (`int`) – The sample rate passed to `embed_audio`.
-  * **metric** (`str`) – `'fad'` (default) or `'kad'`.
-  * **toolkit** (`str`) – Provenance label for the stamp (default `'foley-numpy'`).
-  * **version** (`str`) – Provenance version for the stamp.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sample rate passed to `embed_audio`.
+  * **metric** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'fad'` (default) or `'kad'`.
+  * **toolkit** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance label for the stamp (default `'foley-numpy'`).
+  * **version** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance version for the stamp.
 * **Return type:**
   [`FidelityResult`](_autosummary/foley.eval.fidelity.html.md#foley.eval.fidelity.FidelityResult)
 * **Returns:**
@@ -3349,7 +3349,7 @@ hashing embedder in CI, PANNs / CLAP (`foley[fit]`) in prod. The embedder’s
 True if the baseline’s fixture stamps no longer match the fixtures on disk.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.eval.kernel_audio_distance(x_ref, x_gen, , bandwidth=None)
 
@@ -3363,9 +3363,9 @@ negative.
 * **Parameters:**
   * **x_ref** – Reference embeddings `(n_ref, d)`.
   * **x_gen** – Generated embeddings `(n_gen, d)`.
-  * **bandwidth** (`Optional`[`float`]) – RBF bandwidth σ (default: the median heuristic over the pooled set).
+  * **bandwidth** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – RBF bandwidth σ (default: the median heuristic over the pooled set).
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The unbiased MMD² as a `float`.
 
@@ -3379,10 +3379,10 @@ tolerated (units with < 2 ratings are dropped, no imputation). Pure numpy.
 
 * **Parameters:**
   * **reliability_data** – A 2-D array-like `(raters × units)`; `nan` = missing.
-  * **level** (`str`) – `'ordinal'` (default) | `'nominal'` | `'interval'`.
+  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'ordinal'` (default) | `'nominal'` | `'interval'`.
   * **value_domain** – Optional explicit value set (for a label unobserved by some rater).
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   α as a bare `float` (`1.0` when there is no expected disagreement, `D_e = 0`).
 
@@ -3391,35 +3391,35 @@ tolerated (units with < 2 ratings are dropped, no imputation). Pure numpy.
 Load the committed baseline dict from `path`.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.eval.load_golden(path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'))
 
 Load and validate the frozen golden set from `path` (JSON list).
 
 * **Return type:**
-  `list`[[`GoldenItem`](_autosummary/foley.eval.golden.html.md#foley.eval.golden.GoldenItem)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GoldenItem`](_autosummary/foley.eval.golden.html.md#foley.eval.golden.GoldenItem)]
 
 ### foley.eval.mean_over_queries(values)
 
 Macro-average of per-query metric values (0.0 for an empty list).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.mrr_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Reciprocal rank of the first relevant doc in the top-`k` (0.0 if none).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.ndcg_at_k(qrels_q, run_q, k=10)
 
 Normalized DCG at `k` with linear gains (0.0 when no graded answer).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.percent_agreement(reliability_data)
 
@@ -3431,7 +3431,7 @@ On foley’s skewed ‘most candidates irrelevant’ label distribution a chance
 * **Parameters:**
   **reliability_data** – A 2-D array-like `(raters × units)`; `nan` = missing.
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The fraction of same-unit rater pairs that agree (`0.0` if no pairs).
 
@@ -3440,23 +3440,23 @@ On foley’s skewed ‘most candidates irrelevant’ label distribution a chance
 Fraction of the top-`k` that is relevant (denominator is literal `k`).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.recall_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Fraction of ALL relevant docs (grade ≥ `rel_lvl`) retrieved in the top-`k`.
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.reliability_band(alpha)
 
 Map an α (or κ) to Krippendorff’s benchmark band.
 
 * **Parameters:**
-  **alpha** (`float`) – A reliability coefficient in `(-∞, 1]`.
+  **alpha** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A reliability coefficient in `(-∞, 1]`.
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   `'reliable'` (α ≥ 0.8), `'tentative'` (0.667 ≤ α < 0.8), else
   `'revise-rubric'`.
@@ -3474,23 +3474,23 @@ fit-judge as an independent audit, and aggregates fit-precision/recall/F1 + fit-
 * **Parameters:**
   * **golden** – A pre-loaded golden list (default: load `golden_path`).
   * **golden_path** – The golden JSON (default: the bundled Ring-0 seed set).
-  * **sample** (`Optional`[`int`]) – The stratified sample cap (default: the whole set — the cost gate).
+  * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The stratified sample cap (default: the whole set — the cost gate).
   * **strata_keys** – The stratification axes (default `('family', 'diegetic')`).
   * **fit_judge** – The injected authoritative [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)
     (default: `foley.agent.verify._default_fit_judge()` — the hermetic fake
     when no audio-LM / key is available).
   * **embedder** – The Ring-0 text/​audio embedder (default: [`HashingBowEmbedder`](_autosummary/foley.eval.html.md#foley.eval.HashingBowEmbedder)).
-  * **level** (`str` | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
+  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
     (default `VerifyLevel.judge`). `'clap'` is rejected: it never invokes the
     fit-judge (it only re-runs the retrieval clap gate), so it cannot measure fit.
-  * **seed** (`int`) – The sampling RNG seed.
-  * **k** (`int`) – The retrieval shortlist depth per event.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sampling RNG seed.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The retrieval shortlist depth per event.
 * **Return type:**
   [`FitReport`](_autosummary/foley.eval.fit.html.md#foley.eval.fit.FitReport)
 * **Returns:**
   A [`FitReport`](_autosummary/foley.eval.html.md#foley.eval.FitReport). Gating is the caller’s job via [`FitReport.gate()`](_autosummary/foley.eval.html.md#foley.eval.FitReport.gate).
 * **Raises:**
-  **ValueError** – If `level` is `'clap'` (fit judging requires a listen/judge rung).
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `level` is `'clap'` (fit judging requires a listen/judge rung).
 
 ### foley.eval.run_ring0_retrieval_eval(, k=10, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), embedder=None)
 
@@ -3501,7 +3501,7 @@ Runs every golden `expected_events[].query` through the real
 resulting runs against the golden qrels.
 
 * **Parameters:**
-  * **k** (`int`) – Retrieval cutoff (and the metric `@k`).
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval cutoff (and the metric `@k`).
   * **golden_path** – The golden set JSON.
   * **embedder** – The eval embedder (default: [`HashingBowEmbedder`](_autosummary/foley.eval.html.md#foley.eval.HashingBowEmbedder)).
 * **Return type:**
@@ -3518,12 +3518,12 @@ Round-robins across strata (so an easy family cannot dominate a capped sample);
 event_dict)`.
 
 * **Parameters:**
-  * **units** (`list`) – The full `(item, ev_idx, ev_dict)` unit list.
+  * **units** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)) – The full `(item, ev_idx, ev_dict)` unit list.
   * **strata_keys** – The stratification axes (e.g. `('family', 'diegetic')`).
-  * **sample** (`Optional`[`int`]) – The total draw size, or `None` for all.
-  * **seed** (`int`) – The RNG seed (reproducibility).
+  * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The total draw size, or `None` for all.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RNG seed (reproducibility).
 * **Return type:**
-  `list`
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
 ### foley.eval.to_qrels(golden)
 
@@ -3534,7 +3534,7 @@ One qrels row per `(item, event)` — `query_id = f"{item.id}::{event_idx}"`
 clip in `answer_clip_ids` carries its `grade`.
 
 * **Return type:**
-  `dict`[`str`, `dict`[`str`, `int`]]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`int`](https://docs.python.org/3/builtins/functions.html#int)]]
 
 ### foley.eval.write_baseline(report, , path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/baseline.json'), metric='ndcg@10', tolerance=0.02, seed_path, manifest_path, embedder_model_id='foley-eval/hashing-bow-v1', dim=64, rrf_k=60, updated_at, n_items, revision='gld-v1')
 
@@ -3546,7 +3546,7 @@ clock) so the caller controls reproducibility. `revision` labels the golden-set
 generation (bumped when the frozen set is regrown).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   The baseline dict that was written.
 
@@ -3599,13 +3599,13 @@ this module keeps `import foley` dol-only (the same discipline as
 | [`AlphaResult`](_autosummary/foley.eval.reliability.html.md#foley.eval.reliability.AlphaResult)(alpha, level, n_units, n_raters, ...)   | A judge-vs-human calibration record (surfaced as `FitReport.calibration`).   |
 |------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
 
-### foley.eval.reliability.ALPHA_RELIABLE *: float* *= 0.8*
+### foley.eval.reliability.ALPHA_RELIABLE *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.8*
 
 Krippendorff’s benchmark bands for a reliability coefficient (report 08 §2.3).
 
 ### *class* foley.eval.reliability.AlphaResult(alpha, level, n_units, n_raters, percent_agreement, band, promoted)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A judge-vs-human calibration record (surfaced as `FitReport.calibration`).
 
@@ -3625,7 +3625,7 @@ reliable band — the model judge may then be trusted unattended on that slice.
   * **human_grades** – A 1-D per-unit human grade sequence, or a 2-D `(humans × units)`
     matrix (`nan` = missing).
   * **judge_grades** – The model judge’s 1-D per-unit grades (`nan` = missing).
-  * **level** (`str`) – The measurement level (default `'ordinal'`).
+  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The measurement level (default `'ordinal'`).
 * **Return type:**
   [`AlphaResult`](_autosummary/foley.eval.reliability.html.md#foley.eval.reliability.AlphaResult)
 * **Returns:**
@@ -3641,10 +3641,10 @@ tolerated (units with < 2 ratings are dropped, no imputation). Pure numpy.
 
 * **Parameters:**
   * **reliability_data** – A 2-D array-like `(raters × units)`; `nan` = missing.
-  * **level** (`str`) – `'ordinal'` (default) | `'nominal'` | `'interval'`.
+  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'ordinal'` (default) | `'nominal'` | `'interval'`.
   * **value_domain** – Optional explicit value set (for a label unobserved by some rater).
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   α as a bare `float` (`1.0` when there is no expected disagreement, `D_e = 0`).
 
@@ -3658,7 +3658,7 @@ On foley’s skewed ‘most candidates irrelevant’ label distribution a chance
 * **Parameters:**
   **reliability_data** – A 2-D array-like `(raters × units)`; `nan` = missing.
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   The fraction of same-unit rater pairs that agree (`0.0` if no pairs).
 
@@ -3667,9 +3667,9 @@ On foley’s skewed ‘most candidates irrelevant’ label distribution a chance
 Map an α (or κ) to Krippendorff’s benchmark band.
 
 * **Parameters:**
-  **alpha** (`float`) – A reliability coefficient in `(-∞, 1]`.
+  **alpha** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A reliability coefficient in `(-∞, 1]`.
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   `'reliable'` (α ≥ 0.8), `'tentative'` (0.667 ≤ α < 0.8), else
   `'revise-rubric'`.
@@ -3729,7 +3729,7 @@ The metrics reported by [`evaluate_run()`](_autosummary/foley.eval.retrieval.htm
 
 ### *class* foley.eval.retrieval.RetrievalReport(per_query=<factory>, mean=<factory>, ranks=<factory>, k=10)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).
 
@@ -3738,14 +3738,14 @@ Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).
 A human diff for a failing gate: mean vs baseline + the worst queries.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.eval.retrieval.average_precision_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Average precision (trec_eval `map`: divide by TOTAL relevant, not `min(R,k)`).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.build_run(candidates)
 
@@ -3760,7 +3760,7 @@ determinism the gate relies on. The doc id is `candidate.sound.id`.
   **candidates** – An ordered `list[Candidate]` from
   [`foley.index.library.SoundLibrary.search()`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary.search) (best first).
 * **Return type:**
-  `dict`[`str`, `float`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 * **Returns:**
   `{clip_id: score}` with distinct descending scores.
 
@@ -3780,35 +3780,35 @@ rank of the highest-graded answer (for the failure diff).
 Macro-average of per-query metric values (0.0 for an empty list).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.mrr_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Reciprocal rank of the first relevant doc in the top-`k` (0.0 if none).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.ndcg_at_k(qrels_q, run_q, k=10)
 
 Normalized DCG at `k` with linear gains (0.0 when no graded answer).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.precision_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Fraction of the top-`k` that is relevant (denominator is literal `k`).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.recall_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Fraction of ALL relevant docs (grade ≥ `rel_lvl`) retrieved in the top-`k`.
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 
 # _autosummary/foley.html.md
@@ -4029,13 +4029,13 @@ lazy-imported inside the audio/QC functions that need them (install via the
 
 ### *class* foley.AcquisitionMethod(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a sound entered foley (retrieval channel or origin).
 
 ### *class* foley.Affordance(name, type, description, default=None, stage='query')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Descriptor for a unified parameter affordance (arioso analog).
 
@@ -4061,7 +4061,7 @@ Default value (`None` = no default / required).
 
 ### *class* foley.Anchor(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a WEAVE `Placement` binds its symbolic time to the narration (report 06 §2.4).
 
@@ -4071,7 +4071,7 @@ sentence span, `scene`/`paragraph` to a boundary’s first spoken word.
 
 ### *class* foley.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Bounded-cost accounting for the per-event refine/generate loops.
 
@@ -4083,14 +4083,14 @@ Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](_autosum
 Whether a generation fallback is allowed and within budget.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### refine_ok()
 
 Whether another refine→re-retrieve pass is within budget.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### reset()
 
@@ -4101,21 +4101,21 @@ refine/generate spend never starves later events (the documented per-event
 semantics).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### spend_gen()
 
 Charge one generation.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### spend_refine()
 
 Charge one refine loop.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.Candidate(sound, origin=CandidateOrigin.retrieved, event=None, clap_score=None, bm25_score=None, rrf_score=None, rerank_score=None, verdict=None, license_ok=None, preview_uri=None)
 
@@ -4129,13 +4129,13 @@ by `_decode()` — no per-field code needed.
 
 ### *class* foley.CandidateOrigin(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 Whether a candidate was retrieved from the index or freshly generated.
 
 ### *class* foley.Captioner(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Produce one natural-language sentence describing a clip (report 03).
 
@@ -4148,11 +4148,11 @@ Both are `foley[caption]` adapters plugged in behind this protocol.
 Return a one-sentence caption for the clip.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### *class* foley.CatIdResolution(catid=None, category=None, subcategory=None, source=None, confidence=0.0, matched_terms=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The result of resolving free tags/caption/labels to a UCS CatID.
 
@@ -4162,7 +4162,7 @@ ingest, and `ucs_catid` on the query side.
 
 ### *class* foley.ClapEmbedder(model_id='laion/larger_clap_general', , device=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LAION-CLAP text<->audio embedder (the default retrieval engine).
 
@@ -4178,11 +4178,11 @@ The HF checkpoint id.
 
 The embedding dimensionality.
 
-#### *property* device *: str*
+#### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The resolved torch device string (`'cuda'`/`'cpu'`).
 
-#### *property* dim *: int*
+#### *property* dim *: [int](https://docs.python.org/3/builtins/functions.html#int)*
 
 The embedding dimensionality (512 for the default; resolved for others).
 
@@ -4200,7 +4200,7 @@ via [`foley.audio`](_autosummary/foley.audio.html.md#module-foley.audio) before 
 
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`; mono or multichannel).
-  * **sr** (`int`) – The clip’s sample rate in Hz.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 
@@ -4213,7 +4213,7 @@ Embed one or more query strings -> `(n_texts, dim)` L2-normalized.
 
 ### *class* foley.ClapZeroShotTagger(, embedder=None, labels=None, prompt='this is a sound of {label}', threshold=0.0)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Zero-shot tagger: score a clip against a label set via CLAP cosine.
 
@@ -4226,7 +4226,7 @@ subcategory names (foley’s own vocabulary), so tags land in-taxonomy.
 
 The CLAP embedder (injected or the process-wide default).
 
-#### *property* labels *: list[str]*
+#### *property* labels *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[str](https://docs.python.org/3/builtins/stdtypes.html#str)]*
 
 natural UCS `category subcategory` phrases).
 
@@ -4244,7 +4244,7 @@ calibration (thresholds, label curation) is an eval-harness concern (#10).
 Return the top-`k` `(label, cosine)` tags for the clip, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### tag_vector(audio_vec, , top_k=10)
 
@@ -4255,7 +4255,7 @@ sound with this model, so on ingest the retrieval vector is reused here —
 no second CLAP forward pass.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 ### *class* foley.CreditEntry(sound_id, title=None, author=None, author_url=None, source=None, source_url=None, license_id='unknown', license_name=None, license_url=None, modified=False, requires_attribution=False, attribution_text=None, notice_text_required=None, is_ai_generated=False, generator_model=None, disclosure_recommended=False, watermark=None, c2pa_manifest_ref=None)
 
@@ -4279,23 +4279,23 @@ Iterable and sized; renders to `CREDITS.md` via [`markdown`](_autosummary/foley.
 JSON manifest via [`manifest`](_autosummary/foley.html.md#foley.Credits.manifest) (== `to_dict()`). Both are deterministic
 (no timestamps) and diffable.
 
-#### *property* manifest *: dict*
+#### *property* manifest *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)*
 
 The machine-readable JSON manifest (a plain dict).
 
-#### *property* markdown *: str*
+#### *property* markdown *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The rendered `CREDITS.md` document.
 
 ### *class* foley.Decision(action, candidate=None, reason='')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The tiny result of [`decide()`](_autosummary/foley.html.md#foley.decide); `reason` feeds the refine hint + the audit Step.
 
 ### *class* foley.Embedder(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 A joint text<->audio embedding space (CLAP by default).
 
@@ -4321,7 +4321,7 @@ Embed one audio clip.
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`, mono preferred). CLAP expects
     48 kHz; implementations resample as needed.
-  * **sr** (`int`) – The clip’s sample rate in Hz.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -4332,7 +4332,7 @@ Embed one audio clip.
 Embed one or more query strings.
 
 * **Parameters:**
-  **text** (`Union`[`str`, `list`[`str`]]) – A single string or a list of strings.
+  **text** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – A single string or a list of strings.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -4342,7 +4342,7 @@ Embed one or more query strings.
 
 ### *class* foley.FusedHit(id, rrf_score=None, clap_score=None, bm25_score=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One fused retrieval hit: an id plus the scores that produced it.
 
@@ -4370,7 +4370,7 @@ appeared only in the vector list).
 
 ### *exception* foley.GenerationError(message, , report, status)
 
-Bases: `RuntimeError`
+Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
 
 Raised by [`foley.generate()`](_autosummary/foley.html.md#foley.generate) when a backend yields no stored sound.
 
@@ -4400,17 +4400,17 @@ The rolled-up outcome of a folder ingest (JSON-serializable).
 Record a per-file error without aborting the run.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-#### *property* errored *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
 
-#### *property* ingested *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results that were added to the library (`pass` or `warn`).
 
-#### *property* quarantined *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* quarantined *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results rejected by the QC gate.
 
@@ -4419,13 +4419,13 @@ Results rejected by the QC gate.
 Append one [`IngestResult`](_autosummary/foley.html.md#foley.IngestResult).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-#### *property* rights_blocked *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* rights_blocked *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results refused by the fail-closed AI-training/license rights gate.
 
-#### *property* skipped *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* skipped *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results skipped as content-addressed duplicates.
 
@@ -4434,7 +4434,7 @@ Results skipped as content-addressed duplicates.
 A counts dict for a console/CLI summary.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### *class* foley.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
 
@@ -4457,7 +4457,7 @@ What the caller intends to do with a sound; consumed by `keep()`.
 
 ### *class* foley.Judge(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 One rung of the verify ladder: does this candidate match this event? (report 10 §4.2).
 
@@ -4468,7 +4468,7 @@ returned [`Verdict`](_autosummary/foley.html.md#foley.Verdict) carries `level` =
 
 ### *class* foley.KeywordIndex(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 BM25 / full-text index over each sound’s tags + caption.
 
@@ -4481,11 +4481,11 @@ single-file fallback. Same `where` push-down contract as
 Return the top-`k` BM25 matches for `query`, best first.
 
 * **Parameters:**
-  * **query** (`str`) – A natural-language / keyword query.
-  * **k** (`int`) – Number of matches to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A natural-language / keyword query.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of matches to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, bm25_score), ...]` in descending-score order.
 
@@ -4494,11 +4494,11 @@ Return the top-`k` BM25 matches for `query`, best first.
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.LanceIndex(, uri, dim, table_name='sounds')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LanceDB-backed index: one table with a vector column + a native FTS index.
 
@@ -4522,14 +4522,14 @@ keyword-searchable). For a keyword-only library with no embeddings, use
 Native full-text (BM25) search; returns `[(id, score), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### commit()
 
 Flush all staged writes to the LanceDB table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### *property* db
 
@@ -4540,21 +4540,21 @@ The lazily-connected LanceDB database handle.
 Return the stored vector for `id` (staged or persisted), else `None`.
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Stage the searchable text for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 Exact cosine KNN; returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### *property* table
 
@@ -4565,23 +4565,23 @@ The lazily-opened (or created-empty) LanceDB table.
 Stage the vector for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.Layer(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 Mix layer (shared by `SoundEvent` now and `TimelineItem` later).
 
 ### *class* foley.LicenseFlags(commercial_ok=False, embed_in_derivative_ok=False, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The eight derivable flags for one `license_id` (the table row type).
 
 ### *class* foley.LicenseMeta(display_name, url=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Human-facing display metadata for one `license_id` (name + canonical URL).
 
@@ -4614,7 +4614,7 @@ Loudness master target — the delivery spec as data, not code (report 06 §5.2)
 
 ### *class* foley.MemoryIndex(, dim=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 In-memory vector + keyword index (numpy cosine + compact BM25).
 
@@ -4632,46 +4632,46 @@ A compact Okapi BM25 (`k1=1.5`, `b=0.75`) recomputed per query — O(N)
 in the corpus size, which is fine for the in-memory tier’s scale.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### commit()
 
 No-op (writes are immediate); present for interface symmetry.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 Return the `k` cosine-nearest ids to `vector` (most-similar first).
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.PannsTagger(, device='cpu', threshold=0.1)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 PANNs CNN14 supervised tagger over the 527 AudioSet classes (`foley[tag]`).
 
@@ -4684,7 +4684,7 @@ The checkpoint auto-downloads to `~/panns_data` (~327 MB) on the first
 Return the top-`k` `(AudioSet label, score)` tags, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 ### *class* foley.Placement(anchor=Anchor.absolute, ref=None, onset=0.0, pre_roll=0.0, duration=None, loop=False)
 
@@ -4709,7 +4709,7 @@ field is set.
 
 ### *class* foley.QCReport(duration_s, sample_rate, channels, clipped_ratio, clipped_max_run, dc_offset, rms_dbfs, is_silent, needs_edge_fade, has_nan_inf, true_peak_dbtp=None, snr_db=None, loudness_lufs=None, status=QCStatus.pass_, notes=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Per-clip Tier-0 QC result.
 
@@ -4729,17 +4729,17 @@ suspenders over the construction-time `_json_safe()` guard) so no
 field.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### *class* foley.QCStatus(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 Overall verdict for a clip (subclasses `str` so it is JSON-safe).
 
 ### *class* foley.QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 All Tier-0 QC defaults (report 08 §3 table), each an explicit field.
 
@@ -4765,18 +4765,18 @@ trace can be replayed against a fresh index.
 
 ### *class* foley.RuntimeConfig(offline=False, data_egress_allow=<factory>, telemetry=True, redaction_mode='hash', http_resilience=True)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A frozen runtime posture — the local-first / offline contract as data.
 
 * **Parameters:**
-  * **offline** (`bool`) – Whether this posture is offline/local-first.
-  * **data_egress_allow** (`frozenset`[`str`]) – The egress classes a source may use to be available
+  * **offline** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether this posture is offline/local-first.
+  * **data_egress_allow** ([`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The egress classes a source may use to be available
     (`{'local'}` offline; `{'local','external'}` online).
-  * **telemetry** (`bool`) – Whether the obs run-artifact export is on.
-  * **redaction_mode** (`str`) – `'hash'` (default, salted), `'off'` (drop), or `'full'`
+  * **telemetry** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the obs run-artifact export is on.
+  * **redaction_mode** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'hash'` (default, salted), `'off'` (drop), or `'full'`
     (raw — local-debug only).
-  * **http_resilience** (`bool`) – Whether HTTP source adapters are wrapped with the
+  * **http_resilience** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether HTTP source adapters are wrapped with the
     throttle/backoff/circuit-breaker ([`foley.sources.resilience`](_autosummary/foley.sources.resilience.html.md#module-foley.sources.resilience)).
 
 #### allows(data_egress)
@@ -4787,7 +4787,7 @@ An unknown/absent declaration is **rejected** (fail-closed): a source that does
 not say where its data goes is never used offline.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### *classmethod* default()
 
@@ -4826,27 +4826,27 @@ already covers it. See [`foley.provenance.disclosure.scan_prompt()`](_autosummar
 
 ### *class* foley.Salience(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How prominent a sound event is within a passage.
 
 ### *class* foley.ScoreResult(timeline, events, weave=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The output of [`score()`](_autosummary/foley.html.md#foley.score) — the editable plan + per-event rationale (+ mix when woven).
 
-#### *property* n_sounds *: int*
+#### *property* n_sounds *: [int](https://docs.python.org/3/builtins/functions.html#int)*
 
 How many sounds were placed (the restraint check — fewer than one-per-sentence).
 
-#### *property* rationale *: str*
+#### *property* rationale *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 A short, agent/human-readable summary of what was chosen and why.
 
 ### *class* foley.ScoredEvent(segment, query, sound_id, origin, confidence, reason)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One chosen sound placed for a narration event (a JSON-friendly rationale row).
 
@@ -4855,11 +4855,11 @@ One chosen sound placed for a narration event (a JSON-friendly rationale row).
 Plain-dict form (for the MCP projection / a caller’s log).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### *class* foley.SerializableMixin
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Adds `to_dict`/`to_json`/`from_dict`/`from_json` to a dataclass.
 
@@ -4875,7 +4875,7 @@ Unknown keys are ignored (forward-compatible); missing keys fall back
 to field defaults.
 
 * **Parameters:**
-  **d** (`dict`) – A plain dict (typically from `to_dict()` or `json.loads`).
+  **d** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – A plain dict (typically from `to_dict()` or `json.loads`).
 * **Return type:**
   [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -4884,7 +4884,7 @@ to field defaults.
 Reconstruct an instance from a JSON string.
 
 * **Parameters:**
-  **s** (`str`) – A JSON string (typically from `to_json()`).
+  **s** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A JSON string (typically from `to_json()`).
 * **Return type:**
   [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -4897,20 +4897,20 @@ subclasses `str`); nested dataclasses are recursed via
 `dataclasses.asdict`.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### to_json(, indent=None)
 
 Return a JSON string (str-enums serialize to their `.value`).
 
 * **Parameters:**
-  **indent** (`Optional`[`int`]) – Optional pretty-print indent passed to `json.dumps`.
+  **indent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Optional pretty-print indent passed to `json.dumps`.
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### *class* foley.SessionStore(session_id='default', candidates=None, picks=None, rejects=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Three namespaced stores for one audition session (candidates / picks / rejects).
 
@@ -4918,57 +4918,57 @@ Each store defaults to a [`foley.stores.make_session_store()`](_autosummary/fole
 inject plain dicts. All values are JSON-safe dicts.
 
 * **Parameters:**
-  * **session_id** (`str`) – The session namespace.
-  * **rejects** (`Optional`[`dict`]) – Optional injected `MutableMapping` stores.
+  * **session_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The session namespace.
+  * **rejects** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional injected `MutableMapping` stores.
 
 #### add_pick(sound_id, , layer=None, onset=None)
 
 Persist an accepted pick (+ optional layer/onset); return the pick count.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### add_reject(sound_id, , reason=None)
 
 Record a rejected sound (feeds `refine` relevance feedback); return the count.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### cache_candidates(candidates)
 
 Cache each candidate’s full `to_dict()` keyed by sound id; return the count cached.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### drop_pick(sound_id)
 
 Remove a pick (idempotent); return the remaining pick count.
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 #### list_picks()
 
 All persisted picks.
 
 * **Return type:**
-  `list`[`dict`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
 #### list_rejects()
 
 All recorded rejects.
 
 * **Return type:**
-  `list`[`dict`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
 #### picked_ids()
 
 The picked sound ids.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 #### rehydrate(ids)
 
@@ -4978,14 +4978,14 @@ Missing ids are skipped. Uses `Candidate.from_dict` (rebuilds the nested
 `SoundRecord` / `LicenseRecord` / `Verdict`).
 
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 
 #### rejected_ids()
 
 The rejected sound ids.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.SoundDesignTimeline(items=<factory>, run_manifest_ref=None, transcript_ref=None, schema_version=1, narration_ref=None, word_timeline=<factory>, master=<factory>)
 
@@ -5010,7 +5010,7 @@ One salient, physically-audible event decomposed from a passage.
 
 ### *class* foley.SoundLibrary(, sounds=None, meta=None, vindex=None, kindex=None, embedder=None, data_dir=None, candidate_k=50, rrf_k=60)
 
-Bases: `Mapping`
+Bases: [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)
 
 A searchable, license-aware library of sounds (the foley INDEX façade).
 
@@ -5036,16 +5036,16 @@ producing backend-dependent search results).
 * **Parameters:**
   * **record** ([`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)) – The record to add (mutated by `store_sound` with resolved
     storage fields, and stamped with the embedding model/dim).
-  * **data** (`Optional`[`bytes`]) – The archive bytes (required for by-value storage; also the
+  * **data** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The archive bytes (required for by-value storage; also the
     source for computing `vector` when it is not supplied).
-  * **vector** (`Optional`[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
+  * **vector** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
     given, it is computed via the library’s embedder.
 * **Return type:**
   [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)
 * **Returns:**
   The same (persisted, indexed) `record`.
 * **Raises:**
-  **ValueError** – If neither `data` nor `vector` is provided (no way to
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If neither `data` nor `vector` is provided (no way to
       obtain an embedding).
 
 #### array(sound_id, , sr=None, mono=True)
@@ -5053,9 +5053,9 @@ producing backend-dependent search results).
 Decode a sound to a working array (`float32`).
 
 * **Parameters:**
-  * **sound_id** (`str`) – The record id.
-  * **sr** (`Optional`[`int`]) – Target sample rate (default: the working rate, 48 kHz).
-  * **mono** (`bool`) – Down-mix to mono (default `True`).
+  * **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
+  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Target sample rate (default: the working rate, 48 kHz).
+  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Down-mix to mono (default `True`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -5067,17 +5067,17 @@ Return a sound’s archive bytes (by-value from the store, or from a
 local by-reference path).
 
 * **Parameters:**
-  **sound_id** (`str`) – The record id.
+  **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 * **Returns:**
   The raw archive bytes.
 * **Raises:**
-  **LookupError** – If the bytes are neither cached (by-value) nor readable
+  [**LookupError**](https://docs.python.org/3/builtins/exceptions.html#LookupError) – If the bytes are neither cached (by-value) nor readable
       from a local `uri` — a remote by-reference sound needs its
       source adapter (subtask #5) to fetch.
 
-#### *property* data_dir *: Path*
+#### *property* data_dir *: [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path)*
 
 The data root for default stores/index.
 
@@ -5094,7 +5094,7 @@ Accepts the same facet keywords as [`search()`](_autosummary/foley.html.md#foley
 plus any `record_attr=value` equality predicate.
 
 * **Return type:**
-  `list`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
 
 #### *property* kindex
 
@@ -5109,18 +5109,18 @@ The metadata store (`id -> SoundRecord`).
 Hybrid (CLAP vector ⊕ BM25) search for a text query.
 
 * **Parameters:**
-  * **query** (`str`) – The natural-language query.
-  * **k** (`int`) – Number of results to return.
-  * **filters** (`Optional`[`dict`]) – Extra `{record_attr: value}` equality predicates.
-  * **commercial_ok** (`Optional`[`bool`]) – If `True`, keep only commercially-usable sounds.
-  * **ucs_category** (`Optional`[`str`]) – Keep only sounds with this UCS CatID.
-  * **min_snr** (`Optional`[`float`]) – Keep only sounds whose QC `snr_db` is at least this.
-  * **duration_range** (`Optional`[`tuple`[`float`, `float`]]) – Keep only sounds whose `duration_s` is in
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language query.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results to return.
+  * **filters** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Extra `{record_attr: value}` equality predicates.
+  * **commercial_ok** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – If `True`, keep only commercially-usable sounds.
+  * **ucs_category** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Keep only sounds with this UCS CatID.
+  * **min_snr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Keep only sounds whose QC `snr_db` is at least this.
+  * **duration_range** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – Keep only sounds whose `duration_s` is in
     `(min, max)`.
-  * **rerank** (`bool`) – Re-order the shortlist by direct query<->audio cosine
+  * **rerank** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Re-order the shortlist by direct query<->audio cosine
     (fills the CLAP score for keyword-only hits).
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -5135,12 +5135,12 @@ Hybrid (CLAP vector ⊕ BM25) search for a text query.
 Search by a reference audio clip (audio<->audio via CLAP).
 
 * **Parameters:**
-  * **clip** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A working array, or a path/bytes/file decodable by
+  * **clip** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A working array, or a path/bytes/file decodable by
     [`foley.audio.load()`](_autosummary/foley.audio.html.md#foley.audio.load).
-  * **sr** (`Optional`[`int`]) – Sample rate when `clip` is already a working array.
-  * **k** (`int`) – Number of results.
+  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Sample rate when `clip` is already a working array.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results.
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -5158,7 +5158,7 @@ Uses the stored vector (no re-decoding); the query sound itself is
 excluded from the results.
 
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 
 #### *property* sounds
 
@@ -5188,7 +5188,7 @@ so the tree is complete even when the OTel mirror is a total no-op.
 
 ### *class* foley.SqliteVecIndex(, path, dim)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Single-file index: sqlite-vec `vec0` KNN + stdlib FTS5 keyword search.
 
@@ -5206,59 +5206,59 @@ FTS5’s `rank` is more-negative-is-better; it is negated so the returned
 score is larger-is-better (consistent with the other backends).
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### close()
 
 Close the underlying SQLite connection.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### commit()
 
 Commit any pending SQLite transaction (writes auto-commit already).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text for `id` in the FTS5 table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 KNN over `vec0` (cosine); returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector for `id` in the `vec0` table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.StorageMode(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a sound’s bytes are held (DERIVED from `license.cache_bytes_ok`).
 
 ### *class* foley.Tagger(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Map a clip to `(label, score)` pairs against a label vocabulary.
 
@@ -5273,7 +5273,7 @@ working array (`float32`, any sr — the impl resamples to its model’s rate).
 Return the top-`k` `(label, score)` tags for the clip, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 ### *class* foley.TimelineItem(clip_ref, onset=None, gain=0.0, layer=Layer.sfx_fg, loop=False, id=None, placement=None, processing=None, event=None, enabled=True)
 
@@ -5296,7 +5296,7 @@ A [`SafetyRefusal`](_autosummary/foley.html.md#foley.SafetyRefusal) for a prompt
 
 ### *class* foley.VectorIndex(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Approximate-nearest-neighbour store over embedding vectors.
 
@@ -5313,7 +5313,7 @@ Needed by `SoundLibrary.similar` (fetch a sound’s own vector, then run
 [`knn()`](_autosummary/foley.html.md#foley.VectorIndex.knn)) and by the optional CLAP rerank (score keyword-only hits).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### knn(vector, k, , where=None)
 
@@ -5321,10 +5321,10 @@ Return the `k` nearest ids to `vector`, most-similar first.
 
 * **Parameters:**
   * **vector** (`ndarray`) – A `(dim,)` query vector (already L2-normalized).
-  * **k** (`int`) – Number of neighbours to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of neighbours to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, cosine_similarity), ...]` in descending-similarity order.
 
@@ -5333,7 +5333,7 @@ Return the `k` nearest ids to `vector`, most-similar first.
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.Verdict(match, confidence, reason='', level=VerifyLevel.clap)
 
@@ -5343,13 +5343,13 @@ The result of one verification rung for a candidate.
 
 ### *class* foley.VerifyLevel(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 Which rung of the verification ladder produced a `Verdict`.
 
 ### *class* foley.WeaveResult(audio, sr, timeline, credits, captions_vtt, captions_srt, master_report, run_manifest_ref=None, content_credential=None, watermark=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The output of `weave()` — the v1 Definition-of-Done deliverable.
 
@@ -5367,15 +5367,15 @@ is an optional keyword. Each hit is license-gated BEFORE any bytes are fetched
 applies the by-reference storage gate from the sound’s own license.
 
 * **Parameters:**
-  * **source** (`str`) – A registered live-source name (e.g. `'freesound'`).
-  * **query** (`str`) – The natural-language search query.
-  * **license** (`Optional`[`str`]) – License constraint pushed into the source query (default
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A registered live-source name (e.g. `'freesound'`).
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language search query.
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – License constraint pushed into the source query (default
     `'cc0'`). The per-item fail-closed guard enforces the source’s
     accepted-license allowlist regardless.
-  * **limit** (`int`) – Max candidates to request from the source.
+  * **limit** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max candidates to request from the source.
   * **library** – Target [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **intended_use** (`Optional`[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
     `DEFAULT_INTENDED_USE`).
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport
@@ -5398,7 +5398,7 @@ Does NOT touch `rights_verified` — verification is a separate concern.
 
 * **Parameters:**
   * **record** ([`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)) – The [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord) to populate.
-  * **overrides** (`Optional`[`dict`]) – Optional per-source flag overrides (see
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional per-source flag overrides (see
     [`derive_license_flags()`](_autosummary/foley.html.md#foley.derive_license_flags)).
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
@@ -5415,10 +5415,10 @@ otherwise the line is synthesized from Title/Author/Source/License, with a
 
 * **Parameters:**
   * **source** (`Union`[[`CreditEntry`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.CreditEntry), [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – A [`CreditEntry`](_autosummary/foley.html.md#foley.CreditEntry), or any credit input (coerced first).
-  * **fmt** (`str`) – `'markdown'` (hyperlinked list-item body) or `'plain'` (text with
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'markdown'` (hyperlinked list-item body) or `'plain'` (text with
     URLs in parentheses).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The attribution line (no leading bullet / trailing newline).
 
@@ -5427,24 +5427,24 @@ otherwise the line is synthesized from Title/Author/Source/License, with a
 Seed `library` from the selected bulk corpora, returning per-corpus reports.
 
 * **Parameters:**
-  * **rings** (`tuple`[`int`, `...`]) – Which rings to include (default `(0, 1)` — Ring 2 is never
+  * **rings** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`int`](https://docs.python.org/3/builtins/functions.html#int), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Which rings to include (default `(0, 1)` — Ring 2 is never
     default; it is opt-in via `corpora=[...]` + `accept_ai_restricted`).
-  * **corpora** (`Optional`[`list`[`str`]]) – Explicit corpus-name allowlist; overrides `rings` when given.
-  * **data_dir** (`Optional`[`str`]) – Root under which each corpus lives at `data_dir/<name>`
+  * **corpora** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Explicit corpus-name allowlist; overrides `rings` when given.
+  * **data_dir** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Root under which each corpus lives at `data_dir/<name>`
     (default: the library’s data dir / `$FOLEY_DATA_DIR`).
   * **library** – Target [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **roots** (`Optional`[`dict`[`str`, `str`]]) – Optional per-corpus root overrides (`{name: path}`) — for corpora
+  * **roots** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Optional per-corpus root overrides (`{name: path}`) — for corpora
     downloaded somewhere other than `data_dir/<name>`.
-  * **accept_ai_restricted** (`bool`) – Consent gate for Ring-2 / `ai_training_ok=False`
+  * **accept_ai_restricted** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Consent gate for Ring-2 / `ai_training_ok=False`
     corpora. `False` (default) refuses them; `True` records explicit
     operator consent and admits them.
-  * **commercial_only** (`Optional`[`bool`]) – Force the per-clip commercial filter on/off. `None`
+  * **commercial_only** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Force the per-clip commercial filter on/off. `None`
     (default) derives it from the ring (Ring 1 → on, else off).
   * **\*\*ingest_one_kw** – Forwarded to [`foley.index.ingest.ingest_one()`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.ingest_one)
     (`do_supervised`, `do_zeroshot`, `min_status`, `thresholds` …).
 * **Return type:**
-  `dict`[`str`, [`IngestReport`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestReport)]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`IngestReport`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestReport)]
 * **Returns:**
   `{corpus_name: IngestReport}` — inspect each `.summary()`.
 
@@ -5458,11 +5458,11 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
 
 * **Parameters:**
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the shared one).
-  * **session** (`str`) – The default session id.
+  * **session** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The default session id.
   * **runtime** – A [`foley.runtime.RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) (default: the active one).
   * **byte_store** – A `MutableMapping[str, bytes]` for previews / rendered mixes.
-  * **include** (`Optional`[`list`[`str`]]) – Optional subset of tool names to expose.
-  * **name** (`str`) – The MCP server name.
+  * **include** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Optional subset of tool names to expose.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP server name.
 * **Returns:**
   A `fastmcp.FastMCP` server.
 
@@ -5493,7 +5493,7 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 * **Parameters:**
   **runtime** – A [`foley.runtime.RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) (default: the active one).
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   `{keys, extras, system, offline, sources, degraded_tools}` — all JSON-safe.
 
@@ -5502,10 +5502,10 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 Report which optional foley capabilities are available (`{name: is_available}`).
 
 * **Parameters:**
-  * **names** (`tuple`[`str`, `...`] | `None`) – Which requirements to check (default: the full assembled set).
-  * **verbose** (`bool`) – If `True`, print an actionable hint for each missing requirement.
+  * **names** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)] | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Which requirements to check (default: the full assembled set).
+  * **verbose** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, print an actionable hint for each missing requirement.
 * **Return type:**
-  `dict`[`str`, `bool`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
   `{requirement_name: available}`. Everything-absent is fine — foley degrades
   (deterministic fakes, offline mode, in-process DSP); the report just shows what
@@ -5519,10 +5519,10 @@ Using the hash as the key gives free deduplication (identical bytes map to
 the same key) and immutability (a key always names the exact same bytes).
 
 * **Parameters:**
-  * **data** (`bytes`) – The raw bytes to address (e.g. a FLAC archive blob).
-  * **algo** (`str`) – A `hashlib` algorithm name (defaults to `HASH_ALGO`).
+  * **data** ([`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)) – The raw bytes to address (e.g. a FLAC archive blob).
+  * **algo** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A `hashlib` algorithm name (defaults to `HASH_ALGO`).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The lowercase hex digest of `data` under `algo`.
 
@@ -5536,7 +5536,7 @@ never re-derived); `modified` reflects a non-empty `transformations` list.
 * **Parameters:**
   * **record** (`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – A [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate),
     or [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord).
-  * **title** (`Optional`[`str`]) – Explicit title override (else resolved from caption/tags/…).
+  * **title** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Explicit title override (else resolved from caption/tags/…).
 * **Return type:**
   [`CreditEntry`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.CreditEntry)
 
@@ -5552,8 +5552,8 @@ document) / `.manifest` (a JSON-serializable dict) on the result.
   * **sounds** – An iterable of [`SoundRecord`](_autosummary/foley.html.md#foley.SoundRecord) / [`Candidate`](_autosummary/foley.html.md#foley.Candidate) /
     [`LicenseRecord`](_autosummary/foley.html.md#foley.LicenseRecord) (e.g. the result of [`search()`](_autosummary/foley.html.md#foley.search), or the
     sounds placed in a timeline).
-  * **title** (`str`) – The credits heading.
-  * **only_required** (`bool`) – Keep only legally-required attributions (drops CC0 /
+  * **title** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The credits heading.
+  * **only_required** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Keep only legally-required attributions (drops CC0 /
     user-owned courtesy credits). Default credits everything.
   * **write_to** – Optional directory; when given, writes `CREDITS.md` and
     `credits.json` into it (created if missing).
@@ -5565,12 +5565,12 @@ document) / `.manifest` (a JSON-serializable dict) on the result.
 Build the deduplicated [`Credits`](_autosummary/foley.html.md#foley.Credits) for the sounds used in a run.
 
 * **Parameters:**
-  * **sounds** (`Iterable`[`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]]) – An iterable of records / candidates / license records.
-  * **title** (`str`) – The credits heading (also carried in the manifest).
-  * **only_required** (`bool`) – Keep only entries whose license *requires* attribution
+  * **sounds** ([`Iterable`](https://docs.python.org/3/library/typing.html#typing.Iterable)[`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]]) – An iterable of records / candidates / license records.
+  * **title** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The credits heading (also carried in the manifest).
+  * **only_required** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Keep only entries whose license *requires* attribution
     (drops CC0 / user-owned courtesy credits). Default `False` credits
     everything (never-discard-provenance).
-  * **sort** (`str`) – `'appearance'` (default: first-seen order), `'author'`, or
+  * **sort** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'appearance'` (default: first-seen order), `'author'`, or
     `'title'` (case-insensitive alpha).
 * **Return type:**
   [`Credits`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.Credits)
@@ -5583,7 +5583,7 @@ Build the deduplicated [`Credits`](_autosummary/foley.html.md#foley.Credits) for
 Largest per-channel absolute DC offset, `max_c |mean_n x[n, c]|`.
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.decide(event, kept, verified, , tau_retrieve, budget, loop)
 
@@ -5604,11 +5604,11 @@ Policy (report 05 §4):
 >   generation is off, in which case fall back to that best-effort pick.
 * **Parameters:**
   * **event** ([`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)) – The event being resolved.
-  * **kept** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
-  * **verified** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
-  * **tau_retrieve** (`float`) – The confidence threshold for auto-accepting a retrieved clip.
+  * **kept** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
+  * **verified** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
+  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The confidence threshold for auto-accepting a retrieved clip.
   * **budget** ([`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)) – The per-event cost budget.
-  * **loop** (`int`) – The current refine-loop index (for the audit reason).
+  * **loop** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The current refine-loop index (for the audit reason).
 * **Return type:**
   [`Decision`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Decision)
 * **Returns:**
@@ -5623,14 +5623,14 @@ default decomposer when `decomposer` is `None`, calls it, and records the GenAI
 span on the real path (the fake’s `last_response` is `None` → no-op).
 
 * **Parameters:**
-  * **context** (`str`) – The narrative passage.
-  * **max_events** (`int`) – The sparse density cap.
-  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded, else ignored).
-  * **decomposer** (`Optional`[[`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) (the DI seam);
+  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap.
+  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded, else ignored).
+  * **decomposer** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) (the DI seam);
     defaults to `_default_decomposer()`.
   * **\_span** – Internal — the obs span handle `find()` opens for GenAI recording.
 * **Return type:**
-  `list`[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
 
 ### foley.default_embedder()
 
@@ -5652,11 +5652,11 @@ must survive restarts); inject it explicitly for tests/ephemeral use.
 
 * **Parameters:**
   * **data_dir** – The library data root (a `pathlib.Path`-like).
-  * **dim** (`int`) – The embedding dimensionality from the active embedder.
+  * **dim** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The embedding dimensionality from the active embedder.
 * **Returns:**
   A ready index object (both `VectorIndex` and `KeywordIndex`).
 * **Raises:**
-  **RuntimeError** – If no persistent backend is installed/usable.
+  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – If no persistent backend is installed/usable.
 
 ### foley.default_library()
 
@@ -5698,10 +5698,10 @@ unless one is injected. The fixture’s per-clip captions + tags (from its
 * **Parameters:**
   * **library** – Optional target library (tests inject a `FakeEmbedder` one;
     the default builds a memory library with the real CLAP embedder).
-  * **query** (`str`) – The demo search query.
-  * **k** (`int`) – How many hits to request.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The demo search query.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many hits to request.
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   `{"ingested": <summary dict>, "top_hit": <id or None>, "caption": <str>}`.
 
@@ -5711,8 +5711,8 @@ Look up the flag set for a `license_id` (fail-closed fallback), then
 apply per-source overrides.
 
 * **Parameters:**
-  * **license_id** (`str`) – The normalized license id (SPDX or foley-specific token).
-  * **overrides** (`Optional`[`dict`]) – Optional per-source flag overrides — e.g. Freesound forces
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The normalized license id (SPDX or foley-specific token).
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional per-source flag overrides — e.g. Freesound forces
     `cache_bytes_ok=False` on CC0. Keys must be `LicenseFlags` fields.
 * **Return type:**
   [`LicenseFlags`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseFlags)
@@ -5720,7 +5720,7 @@ apply per-source overrides.
   The resolved [`LicenseFlags`](_autosummary/foley.html.md#foley.LicenseFlags) (fallback = all-False
   `UNKNOWN_LICENSE_FLAGS` for unrecognized ids).
 * **Raises:**
-  **ValueError** – If `overrides` contains a key that is not a
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `overrides` contains a key that is not a
       [`LicenseFlags`](_autosummary/foley.html.md#foley.LicenseFlags) field.
 
 ### foley.detect_clipping(samples, , full_scale=0.999, min_run=3)
@@ -5732,10 +5732,10 @@ maximal hot runs of length `>= min_run` count as clip events.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Waveform in `[-1, 1]`.
-  * **full_scale** (`float`) – Absolute level at/above which a sample is full-scale.
-  * **min_run** (`int`) – Minimum consecutive full-scale frames to count as clipping.
+  * **full_scale** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Absolute level at/above which a sample is full-scale.
+  * **min_run** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Minimum consecutive full-scale frames to count as clipping.
 * **Return type:**
-  `tuple`[`float`, `int`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`int`](https://docs.python.org/3/builtins/functions.html#int)]
 * **Returns:**
   `(clipped_ratio, max_run_length)` — the fraction of frames inside
   counting runs, and the longest counting run (`(0.0, 0)` if none).
@@ -5745,7 +5745,7 @@ maximal hot runs of length `>= min_run` count as clip events.
 Clip duration in seconds: `frames / sample_rate`.
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.encode(samples, sample_rate, , fmt='flac', subtype='PCM_24')
 
@@ -5756,11 +5756,11 @@ the FLAC archive form.
 
 * **Parameters:**
   * **samples** (`ndarray`) – The working array to encode.
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **fmt** (`str`) – Container/codec name (case-insensitive).
-  * **subtype** (`str`) – Sample subtype (e.g. `PCM_24`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Container/codec name (case-insensitive).
+  * **subtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Sample subtype (e.g. `PCM_24`).
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 * **Returns:**
   The encoded audio as `bytes`.
 
@@ -5775,14 +5775,14 @@ Mappings: mono -> N by duplication; N -> mono by mean; N -> M (N != M, both
 
 * **Parameters:**
   * **samples** (`ndarray`) – Mono or multichannel working array.
-  * **channels** (`int`) – Target channel count (must be >= 1).
+  * **channels** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Target channel count (must be >= 1).
 * **Return type:**
   `ndarray`
 * **Returns:**
   A `(frames,)` array when `channels == 1`, else a
   `(frames, channels)` array.
 * **Raises:**
-  **ValueError** – If `channels < 1`.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `channels < 1`.
 
 Lazy dependency: `numpy` (only for the up-mix / tile path).
 
@@ -5797,12 +5797,12 @@ an exactly-zero floor returns `inf` and a silent clip returns `-inf`.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Waveform in `[-1, 1]` (down-mixed to mono internally).
-  * **sample_rate** (`int`) – Sample rate in Hz (sizes the frames).
-  * **quiet_percentile** (`float`) – Percent of quietest frames forming the noise floor.
-  * **frame_s** (`float`) – Short-time frame length in seconds.
-  * **hop_s** (`float`) – Hop between frames in seconds.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (sizes the frames).
+  * **quiet_percentile** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Percent of quietest frames forming the noise floor.
+  * **frame_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Short-time frame length in seconds.
+  * **hop_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Hop between frames in seconds.
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   SNR in dB.
 
@@ -5816,7 +5816,7 @@ PR gate asserts on. See [`foley.eval`](_autosummary/foley.eval.html.md#module-fo
 
 * **Parameters:**
   * **golden** – Optional path to a golden-set JSON (default: the frozen seed).
-  * **k** (`int`) – Retrieval cutoff and metric `@k`.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval cutoff and metric `@k`.
 * **Returns:**
   A [`foley.eval.RetrievalReport`](_autosummary/foley.eval.html.md#foley.eval.RetrievalReport).
 
@@ -5842,8 +5842,8 @@ Ring-0 fixture with the deterministic fake judge — no network, key, or heavy d
     else the hermetic [`StringOverlapJudge`](_autosummary/foley.agent.html.md#foley.agent.StringOverlapJudge) fake; the audio-LM
     [`AudioLMJudge`](_autosummary/foley.agent.html.md#foley.agent.AudioLMJudge) is injection-only in this slice).
   * **embedder** – The Ring-0 embedder (default: the CLAP-free `HashingBowEmbedder`).
-  * **seed** (`int`) – The sampling RNG seed.
-  * **k** (`int`) – Retrieval shortlist depth per event.
+  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sampling RNG seed.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval shortlist depth per event.
 * **Returns:**
   A [`foley.eval.FitReport`](_autosummary/foley.eval.html.md#foley.eval.FitReport).
 
@@ -5856,10 +5856,10 @@ out-ramps never overlap on tiny inputs.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono or multichannel).
-  * **sample_rate** (`int`) – Sample rate in Hz (converts the fade durations to samples).
-  * **fade_in_s** (`float`) – Fade-in duration in seconds.
-  * **fade_out_s** (`float`) – Fade-out duration in seconds.
-  * **kind** (`str`) – `'linear'` or `'equal_power'` ramp shape.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (converts the fade durations to samples).
+  * **fade_in_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Fade-in duration in seconds.
+  * **fade_out_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Fade-out duration in seconds.
+  * **kind** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'linear'` or `'equal_power'` ramp shape.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -5877,27 +5877,27 @@ fail-closed license gate FIRST) → place` (report 05 §5). Works out of the box
 deterministic defaults; every model / threshold / seam is an optional keyword.
 
 * **Parameters:**
-  * **context** (`str`) – The narrative passage.
-  * **max_events** (`int`) – The sparse density cap on decomposed events.
-  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded).
-  * **intended_use** (`Optional`[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
+  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap on decomposed events.
+  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded).
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
     [`IntendedUse`](_autosummary/foley.html.md#foley.IntendedUse) — `allow_voice_or_trademark` stays `False`).
-  * **backend** (`str`) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
-  * **verify** (`Union`[`str`, [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
-  * **stream** (`bool`) – If `True`, return a generator yielding one [`Candidate`](_autosummary/foley.html.md#foley.Candidate) per
+  * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
+  * **verify** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
+  * **stream** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, return a generator yielding one [`Candidate`](_autosummary/foley.html.md#foley.Candidate) per
     resolved event; else return the collected `list`.
-  * **k** (`int`) – Retrieval shortlist depth per query.
-  * **tau_retrieve** (`float`) – Confidence threshold to auto-accept a retrieved clip.
-  * **tau_clap** (`float`) – The `clap`-rung gate threshold.
-  * **max_refine_loops** (`int`) – Max refine→re-retrieve passes per event (also the default
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval shortlist depth per query.
+  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Confidence threshold to auto-accept a retrieved clip.
+  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
+  * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
     [`Budget`](_autosummary/foley.html.md#foley.Budget)).
-  * **budget** (`Optional`[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](_autosummary/foley.html.md#foley.Budget) (overrides `max_refine_loops`).
+  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](_autosummary/foley.html.md#foley.Budget) (overrides `max_refine_loops`).
   * **library** – Target [`SoundLibrary`](_autosummary/foley.html.md#foley.SoundLibrary) (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
     each defaults to the hermetic fake when `foley[agent]` is absent.
 * **Return type:**
-  `Union`[`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)], `Iterator`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]]
+  `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]]
 * **Returns:**
   `list[Candidate]` (`stream=False`) or an `Iterator[Candidate]`
   (`stream=True`) — one verified, license-clean candidate per resolved event.
@@ -5907,14 +5907,14 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
 RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.
 
 * **Parameters:**
-  * **vector_hits** (`list`[`tuple`[`str`, `float`]]) – `[(id, cosine_similarity), ...]` best-first (from
+  * **vector_hits** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(id, cosine_similarity), ...]` best-first (from
     [`knn()`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex.knn)).
-  * **keyword_hits** (`list`[`tuple`[`str`, `float`]]) – `[(id, bm25_score), ...]` best-first (from
+  * **keyword_hits** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(id, bm25_score), ...]` best-first (from
     [`bm25()`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.KeywordIndex.bm25)).
-  * **k** (`int`) – Number of fused hits to return.
-  * **rrf_k** (`int`) – The RRF damping constant.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of fused hits to return.
+  * **rrf_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant.
 * **Return type:**
-  `list`[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
 * **Returns:**
   The top-`k` :class:
 
@@ -5939,17 +5939,17 @@ keeps `ai_training_ok=False`, so [`keep()`](_autosummary/foley.html.md#foley.kee
 training uses).
 
 * **Parameters:**
-  * **prompt** (`str`) – The natural-language sound description.
-  * **backend** (`str`) – A registered generate source — `"stable_audio"` (default, local;
+  * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language sound description.
+  * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A registered generate source — `"stable_audio"` (default, local;
     needs `foley[stable-audio]`) or `"elevenlabs"` (hosted;
     `foley[elevenlabs]` + `$ELEVENLABS_API_KEY`).
   * **library** – Target library (default: the process-wide default library).
-  * **store** (`bool`) – If `False`, synthesize + enrich a preview without adding it.
+  * **store** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `False`, synthesize + enrich a preview without adding it.
   * **adapter** – Optional pre-built adapter (the DI seam; production omits it and the
     registry lazily builds one).
   * **watermark** – `True` require an AudioSeal watermark, `False` never, `None`
     (default, auto) watermark iff `foley[provenance]` is installed (#9b).
-  * **on_flagged** (`str`) – `'refuse'` (default, fail-closed) or `'warn'` for a prompt
+  * **on_flagged** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'refuse'` (default, fail-closed) or `'warn'` for a prompt
     that trips the trademarked-audio / recognizable-voice safety gate (#9b).
   * **watermarker** – An injected watermarker (the DI seam; tests pass a fake).
   * **provenance_store** – A `MutableMapping` for content-credential sidecars
@@ -5974,24 +5974,24 @@ training uses).
 Return `True` if any sample is `NaN` or `Inf` (corrupt-clip guard).
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.hybrid_search(query, , embedder, vindex, kindex, k=10, candidate_k=50, rrf_k=60, where=None)
 
 Embed `query`, run the vector + keyword rankers, and RRF-fuse them.
 
 * **Parameters:**
-  * **query** (`str`) – The natural-language query.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language query.
   * **embedder** ([`Embedder`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Embedder)) – Text<->audio embedder (its `embed_text` produces the query
     vector).
   * **vindex** ([`VectorIndex`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex)) – The vector index (CLAP KNN).
   * **kindex** ([`KeywordIndex`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.KeywordIndex)) – The keyword index (BM25).
-  * **k** (`int`) – Number of fused results to return.
-  * **candidate_k** (`int`) – Shortlist depth pulled from each ranker before fusion.
-  * **rrf_k** (`int`) – The RRF damping constant.
-  * **where** (`Optional`[`dict`]) – Optional metadata push-down passed to both rankers.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of fused results to return.
+  * **candidate_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Shortlist depth pulled from each ranker before fusion.
+  * **rrf_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata push-down passed to both rankers.
 * **Return type:**
-  `list`[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
 * **Returns:**
   The top-`k` fused :class:
 
@@ -6013,11 +6013,11 @@ per-file options (`license`, taggers, `min_status`, …).
 * **Parameters:**
   * **path** – A folder (walked) or a single audio file.
   * **library** – Target library (default: the process-wide default library).
-  * **backend** (`str`) – `"local"` ingests filesystem audio; other backends (a source
+  * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `"local"` ingests filesystem audio; other backends (a source
     adapter pull) route through `add_from` (subtask #5) — kept in the
     signature for forward-compat.
-  * **qc** (`bool`) – Run the Tier-0 QC gate (quarantines failing clips).
-  * **recursive** (`bool`) – Recurse into sub-folders.
+  * **qc** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Run the Tier-0 QC gate (quarantines failing clips).
+  * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
   * **\*\*kw** – Forwarded to [`foley.index.ingest_one()`](_autosummary/foley.index.html.md#foley.index.ingest_one).
 
 ### foley.ingest_folder(path, , library=None, recursive=True, exts=('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a'), on_error='collect', \*\*ingest_one_kw)
@@ -6027,9 +6027,9 @@ Ingest every audio file under `path` and return an [`IngestReport`](_autosummary
 * **Parameters:**
   * **path** – A folder (walked) or a single audio file.
   * **library** – Target library (default: the process-wide default).
-  * **recursive** (`bool`) – Recurse into sub-folders.
-  * **exts** (`tuple`[`str`, `...`]) – Audio extensions to ingest.
-  * **on_error** (`str`) – `'collect'` records per-file errors and continues;
+  * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
+  * **exts** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Audio extensions to ingest.
+  * **on_error** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'collect'` records per-file errors and continues;
     `'raise'` re-raises the first error.
   * **\*\*ingest_one_kw** – Forwarded to [`ingest_one()`](_autosummary/foley.html.md#foley.ingest_one) (license, taggers, QC
     flags, …).
@@ -6047,10 +6047,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
 `SoundRecord` -> [`SoundLibrary.add()`](_autosummary/foley.html.md#foley.SoundLibrary.add).
 
 * **Parameters:**
-  * **src** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A path, `bytes`, or file-like audio source.
+  * **src** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A path, `bytes`, or file-like audio source.
   * **library** – Target [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **sound_id** (`Optional`[`str`]) – Optional canonical id override. Defaults to `None` → the
+  * **sound_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional canonical id override. Defaults to `None` → the
     content-hash of the decoded PCM (the local-ingest identity, used as the
     record `id` and dedup key). A live source adapter passes a short,
     case-stable, source-native id (e.g. `'freesound:12345'`) so dedup keys
@@ -6059,29 +6059,29 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     default and is not persisted. Separately, `content_sha256` records the
     hash of the stored FLAC **archive** bytes (set by `store_sound`), which
     is a different byte source from this PCM hash.
-  * **source_uri** (`Optional`[`str`]) – Optional by-reference fetchable URI override. Defaults to
+  * **source_uri** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional by-reference fetchable URI override. Defaults to
     `None` → the resolved local path when `src` is path-like. A live
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](_autosummary/foley.stores.html.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** (`Optional`[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
   * **tagger** – Supervised [`Tagger`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](_autosummary/foley.index.taggers.html.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
     [`default_zeroshot_tagger()`](_autosummary/foley.index.taggers.html.md#foley.index.taggers.default_zeroshot_tagger)).
   * **captioner** – Optional [`Captioner`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Captioner) (default:
     none — the caption stage is off unless one is injected).
-  * **do_qc** (`bool`) – Run the Tier-0 QC gate.
+  * **do_qc** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Run the Tier-0 QC gate.
   * **min_status** ([`QCStatus`](_autosummary/foley.qc.html.md#foley.qc.QCStatus)) – Admission floor — a QC status worse than this is quarantined
     (default `warn`: only `fail` clips are rejected).
-  * **do_caption** (`bool`) – Toggle each enrichment stage.
+  * **do_caption** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Toggle each enrichment stage.
   * **thresholds** ([`QCThresholds`](_autosummary/foley.qc.html.md#foley.qc.QCThresholds)) – QC thresholds.
-  * **store** (`bool`) – If `False`, assemble the record but do not add it to the library
+  * **store** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `False`, assemble the record but do not add it to the library
     (probe/QC/enrich only).
-  * **seed_tags** (`Optional`[`list`]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
+  * **seed_tags** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
     taxonomy) unioned into the record’s `tags` alongside the
     supervised/zero-shot tags — so they feed the BM25 keyword index.
-  * **allow_ai_training_forbidden** (`bool`) – The universal fail-closed rights gate. A
+  * **allow_ai_training_forbidden** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – The universal fail-closed rights gate. A
     sound whose license has `ai_training_ok=False` (e.g. Sonniss,
     BBC RemArc) is refused with status `'rights_blocked'` *before* it is
     embedded or stored — CLAP-embedding-and-persisting is itself a form of
@@ -6108,9 +6108,9 @@ Installs:
 * **Parameters:**
   * **dest** – The target agent-config dir (default `./.claude` in the cwd; pass `~/.claude`
     to install globally for every project).
-  * **overwrite** (`bool`) – Replace existing files/dirs (default: skip what already exists).
+  * **overwrite** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Replace existing files/dirs (default: skip what already exists).
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 * **Returns:**
   The list of installed paths (as strings) — empty entries that already existed are skipped.
 
@@ -6119,7 +6119,7 @@ Installs:
 Whether an offline runtime scope is currently active.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.is_silent(samples, , rms_floor_dbfs=-60.0)
 
@@ -6128,7 +6128,7 @@ Return `True` when whole-clip RMS falls below `rms_floor_dbfs`.
 A zero (exactly silent) clip has RMS `0` -> `-inf` dBFS -> `True`.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.keep(record, intended_use)
 
@@ -6141,7 +6141,7 @@ unverified rights => reject. Any single unmet requirement => reject.
   * **record** ([`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)) – The candidate’s rights record.
   * **intended_use** ([`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)) – The caller’s declared intent.
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 * **Returns:**
   `True` only if every requirement in `intended_use` is satisfied by
   `record`; `False` otherwise (including unverified rights).
@@ -6155,7 +6155,7 @@ Convenience: apply [`keep()`](_autosummary/foley.html.md#foley.keep) to a `Sound
     SSOT consulted).
   * **intended_use** ([`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)) – The caller’s declared intent.
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 * **Returns:**
   The result of `keep(sound_record.license, intended_use)`.
 
@@ -6164,7 +6164,7 @@ Convenience: apply [`keep()`](_autosummary/foley.html.md#foley.keep) to a `Sound
 True if `lancedb` is importable (the `foley[index]` extra is present).
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.license_id_from_cc_url(url)
 
@@ -6193,9 +6193,9 @@ forbid). Only *after* it are `by-nc` / `sampling` tested before the bare
 `by`.
 
 * **Parameters:**
-  **url** (`Optional`[`str`]) – A CC license URL, a CC label string, or `None`.
+  **url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A CC license URL, a CC label string, or `None`.
 * **Return type:**
-  `tuple`[`str`, `bool`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
   `(license_id, rights_verified)` — `('unknown', False)` when
   unrecognized, missing, or a fail-closed ND/SA variant.
@@ -6205,7 +6205,7 @@ forbid). Only *after* it are `by-nc` / `sampling` tested before the bare
 Return the display [`LicenseMeta`](_autosummary/foley.html.md#foley.LicenseMeta) for `license_id` (fail-closed fallback).
 
 * **Parameters:**
-  **license_id** (`str`) – The normalized license id.
+  **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The normalized license id.
 * **Return type:**
   [`LicenseMeta`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseMeta)
 * **Returns:**
@@ -6217,12 +6217,12 @@ Return the display [`LicenseMeta`](_autosummary/foley.html.md#foley.LicenseMeta)
 Return the names of registered live sources (runs discovery first).
 
 * **Parameters:**
-  **egress_allow** (`Optional`[`frozenset`]) – If given, keep only sources whose declared
+  **egress_allow** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)]) – If given, keep only sources whose declared
   `config['data_egress']` is in this set (the local-first / offline
   filter — see [`foley.runtime.RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig)). A source that does
   not declare `data_egress` is **excluded** (fail-closed).
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.load(src, , target_sr=None, mono=False, dtype='float32')
 
@@ -6232,13 +6232,13 @@ Decode audio into a float working array.
 `BytesIO` so nothing touches disk), or any binary file-like object.
 
 * **Parameters:**
-  * **src** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – Path, raw bytes, or file-like object to decode.
-  * **target_sr** (`Optional`[`int`]) – If given, resample the decoded audio to this rate (via
+  * **src** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – Path, raw bytes, or file-like object to decode.
+  * **target_sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – If given, resample the decoded audio to this rate (via
     [`resample()`](_autosummary/foley.html.md#foley.resample)); otherwise the native rate is returned.
-  * **mono** (`bool`) – If `True`, down-mix multichannel audio to mono.
-  * **dtype** (`str`) – NumPy dtype string for the returned array (default `float32`).
+  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, down-mix multichannel audio to mono.
+  * **dtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – NumPy dtype string for the returned array (default `float32`).
 * **Return type:**
-  `tuple`[`ndarray`, `int`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`int`](https://docs.python.org/3/builtins/functions.html#int)]
 * **Returns:**
   A `(samples, sample_rate)` tuple. `samples` has shape `(frames,)`
   (mono) or `(frames, channels)`; `sample_rate` reflects any resample.
@@ -6260,17 +6260,17 @@ raise `ValueError` on (routine for one-shots: clicks, blips, gunshots).
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono or multichannel, time on axis 0 — the layout
     pyloudnorm expects).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **target_lufs** (`float`) – Desired integrated loudness (default = foley’s podcast
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **target_lufs** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Desired integrated loudness (default = foley’s podcast
     target).
-  * **peak_ceiling_dbfs** (`float`) – Sample-peak ceiling (dBFS) applied after loudness
+  * **peak_ceiling_dbfs** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Sample-peak ceiling (dBFS) applied after loudness
     normalization. Note this is a *sample*-peak limit, not an inter-sample
     true-peak (dBTP) limit — see [`foley.qc.true_peak_dbtp()`](_autosummary/foley.qc.html.md#foley.qc.true_peak_dbtp) for the
     oversampled measurement.
-  * **min_block_s** (`float`) – Minimum clip length (seconds) that can be loudness-measured;
+  * **min_block_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Minimum clip length (seconds) that can be loudness-measured;
     shorter clips are returned unchanged with `measured = -inf`.
 * **Return type:**
-  `tuple`[`ndarray`, `float`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 * **Returns:**
   `(normalized, measured_input_lufs)`. When the input is near-silent or
   too short to measure, `normalized` is the unchanged input and
@@ -6289,9 +6289,9 @@ it directly to [`store_sound()`](_autosummary/foley.html.md#foley.store_sound) i
 `store_sound` gate treats `sounds` as an opaque `MutableMapping`.
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the blobs (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the blobs (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, `bytes`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 * **Returns:**
   A `MutableMapping[str, bytes]` keyed by [`content_key()`](_autosummary/foley.html.md#foley.content_key).
 
@@ -6307,14 +6307,14 @@ gunicorn, a parent FastAPI). `py2mcp` / `fastmcp` are imported lazily inside
 [`build_mcp_server()`](_autosummary/foley.html.md#foley.build_mcp_server), so `import foley` stays dol-only.
 
 * **Parameters:**
-  * **auth** (`dict`) – `{'bearer_tokens': [...]}` — required; empty/missing raises (fail-closed).
-  * **path** (`str`) – The MCP HTTP mount path.
-  * **json_response** (`bool`) – Return a single JSON response instead of an SSE stream (simple clients).
-  * **name** (`str`) – As [`build_mcp_server()`](_autosummary/foley.html.md#foley.build_mcp_server).
+  * **auth** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – `{'bearer_tokens': [...]}` — required; empty/missing raises (fail-closed).
+  * **path** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP HTTP mount path.
+  * **json_response** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Return a single JSON response instead of an SSE stream (simple clients).
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – As [`build_mcp_server()`](_autosummary/foley.html.md#foley.build_mcp_server).
 * **Returns:**
   An ASGI application (the bearer-gated MCP HTTP app).
 * **Raises:**
-  **ValueError** – If `auth` carries no bearer tokens (no anonymous HTTP access).
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `auth` carries no bearer tokens (no anonymous HTTP access).
 
 ### foley.make_meta_store(rootdir=PosixPath('/home/runner/.local/share/foley/meta'))
 
@@ -6327,9 +6327,9 @@ bare `sound_id` (invariant #3 — the id is escaped at this boundary so an
 externally-derived id can never escape `rootdir` or collide via `/`/`..`).
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the metadata JSON files (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the metadata JSON files (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
 * **Returns:**
   A `MutableMapping[str, SoundRecord]` keyed by `sound_id`.
 
@@ -6344,9 +6344,9 @@ exposing bare `run_id` keys; values are plain dicts ((de)serialized by
 `dol.JsonFiles`). Local by default; swap in any `dol` Mapping for the cloud.
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the run JSON files (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the run JSON files (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, `dict`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   A `MutableMapping[str, dict]` keyed by `run_id`.
 
@@ -6361,12 +6361,12 @@ exposing bare keys; values are plain dicts. Local by default; swap in any `dol`
 Mapping for the cloud.
 
 * **Parameters:**
-  * **session_id** (`str`) – The session namespace (default `'default'`).
-  * **name** (`str`) – The store namespace within the session (`candidates` / `picks` /
+  * **session_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The session namespace (default `'default'`).
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The store namespace within the session (`candidates` / `picks` /
     `rejects`).
-  * **rootdir** (`Union`[`str`, `PathLike`[`str`], `None`]) – Root sessions directory (default: `DEFAULT_SESSION_DIR`).
+  * **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Root sessions directory (default: `DEFAULT_SESSION_DIR`).
 * **Return type:**
-  `MutableMapping`[`str`, `dict`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   A `MutableMapping[str, dict]` keyed by the bare key.
 
@@ -6380,11 +6380,11 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
 
 * **Parameters:**
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the shared one).
-  * **session** (`str`) – The default session id.
+  * **session** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The default session id.
   * **runtime** – A [`foley.runtime.RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) (default: the active one).
   * **byte_store** – A `MutableMapping[str, bytes]` for previews / rendered mixes.
-  * **include** (`Optional`[`list`[`str`]]) – Optional subset of tool names to expose.
-  * **name** (`str`) – The MCP server name.
+  * **include** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Optional subset of tool names to expose.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP server name.
 * **Returns:**
   A `fastmcp.FastMCP` server.
 
@@ -6398,7 +6398,7 @@ measured loudness is at/below the gate floor (near-silent / unstable — do
 not amplify, just flag).
 
 * **Return type:**
-  `Optional`[`float`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### foley.needs_edge_fade(samples, , rel_peak_dbfs=-40.0)
 
@@ -6407,7 +6407,7 @@ relative to the clip peak — i.e. a nonzero boundary that clicks under
 narration and needs a short fade.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.offline(config=None)
 
@@ -6422,10 +6422,10 @@ its CatID token is unknown (so a wrong subcategory is never emitted).
 
 * **Parameters:**
   * **filename** – A path or filename (only the basename’s token 0 is used).
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
     `default_ucs_table()`).
 * **Return type:**
-  `tuple`[`Optional`[`str`], `Optional`[`str`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 ### foley.plan(candidates, , transcript=None)
 
@@ -6437,8 +6437,8 @@ reserved #8 `plan_ref` slot is filled when called inside an active `foley.obs`
 run scope (`None`-safe otherwise).
 
 * **Parameters:**
-  * **candidates** (`list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The candidates returned by [`find()`](_autosummary/foley.html.md#foley.find).
-  * **transcript** (`Optional`[`str`]) – Optional narration transcript (WEAVE resolves the reference).
+  * **candidates** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]) – The candidates returned by [`find()`](_autosummary/foley.html.md#foley.find).
+  * **transcript** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional narration transcript (WEAVE resolves the reference).
 * **Return type:**
   [`SoundDesignTimeline`](_autosummary/foley.base.html.md#foley.base.SoundDesignTimeline)
 
@@ -6454,11 +6454,11 @@ still let a client fetch it).
 
 * **Parameters:**
   * **candidate_or_id** – A [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate) or a sound id.
-  * **seconds** (`int`) – Audition length.
+  * **seconds** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Audition length.
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the shared one).
   * **byte_store** – A `MutableMapping[str, bytes]` to hold the preview (default: none —
     then `preview_uri` stays `None`).
-  * **session** (`Optional`[[`SessionStore`](_autosummary/foley.agent.session.html.md#foley.agent.session.SessionStore)]) – Optional session (unused here; accepted for a uniform signature).
+  * **session** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`SessionStore`](_autosummary/foley.agent.session.html.md#foley.agent.session.SessionStore)]) – Optional session (unused here; accepted for a uniform signature).
 * **Return type:**
   [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)
 * **Returns:**
@@ -6469,11 +6469,11 @@ still let a client fetch it).
 Fuse several ranked id lists into one, by reciprocal rank.
 
 * **Parameters:**
-  * **ranked_id_lists** (`list`[`list`[`str`]]) – Each element is a list of ids in descending-relevance
+  * **ranked_id_lists** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Each element is a list of ids in descending-relevance
     order (best first). Lists may overlap and may differ in length.
-  * **k** (`int`) – The RRF damping constant (default `RRF_K` = 60).
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant (default `RRF_K` = 60).
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, fused_score), ...]` sorted by fused score descending, ties
   broken by `id` ascending (so the fusion is fully deterministic).
@@ -6488,12 +6488,12 @@ expands the query into paraphrases for recall, gathers neighbours of every pick,
 the rejects, and re-ranks by score.
 
 * **Parameters:**
-  * **session** (`Optional`[[`SessionStore`](_autosummary/foley.agent.session.html.md#foley.agent.session.SessionStore)]) – The audition session (source of picks/rejects when not passed explicitly).
-  * **query** (`Optional`[`str`]) – The base text query to expand (optional).
-  * **rejected_ids** (`tuple`[`str`, `...`]) – Explicit feedback (override the session’s).
-  * **hint** (`Optional`[`str`]) – A steer for the query expansion.
-  * **n** (`int`) – Paraphrases to request.
-  * **k** (`int`) – Result depth.
+  * **session** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`SessionStore`](_autosummary/foley.agent.session.html.md#foley.agent.session.SessionStore)]) – The audition session (source of picks/rejects when not passed explicitly).
+  * **query** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The base text query to expand (optional).
+  * **rejected_ids** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Explicit feedback (override the session’s).
+  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A steer for the query expansion.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Paraphrases to request.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Result depth.
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the shared one).
   * **refiner** – The query-expansion seam (default: the deterministic fake).
 * **Return type:**
@@ -6506,14 +6506,14 @@ the rejects, and re-ranks by score.
 Expand `query` into up to `n` paraphrases for multi-query retrieval.
 
 * **Parameters:**
-  * **query** (`str`) – The event query to expand.
-  * **n** (`int`) – Number of paraphrases.
-  * **hint** (`Optional`[`str`]) – Optional verify-failure reason to steer re-retrieval.
-  * **refiner** (`Optional`[[`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (the DI seam);
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The event query to expand.
+  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of paraphrases.
+  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional verify-failure reason to steer re-retrieval.
+  * **refiner** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (the DI seam);
     defaults to `_default_refiner()`.
   * **\_span** – Internal — the obs span handle for GenAI recording.
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.register_source(name, config, adapter=None)
 
@@ -6525,11 +6525,11 @@ from `config` on first `get_source()` (the source must then be an
 importable `foley.sources.<name>` package).
 
 * **Parameters:**
-  * **name** (`str`) – The source name (the [`add_from()`](_autosummary/foley.html.md#foley.add_from) / `get_source()` key).
-  * **config** (`dict`) – The `SOURCE_CONFIG` declaration.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The source name (the [`add_from()`](_autosummary/foley.html.md#foley.add_from) / `get_source()` key).
+  * **config** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – The `SOURCE_CONFIG` declaration.
   * **adapter** – An optional pre-instantiated adapter (bypasses lazy loading).
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.resample(samples, sample_rate, , target_sr=48000, quality='HQ')
 
@@ -6537,9 +6537,9 @@ Resample `samples` to `target_sr` (a no-op when already there).
 
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono `(frames,)` or `(frames, channels)`).
-  * **sample_rate** (`int`) – The array’s current rate in Hz.
-  * **target_sr** (`int`) – Desired output rate in Hz (default = the working rate).
-  * **quality** (`str`) – soxr quality preset (`QQ`/`LQ`/`MQ`/`HQ`/`VHQ`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The array’s current rate in Hz.
+  * **target_sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Desired output rate in Hz (default = the working rate).
+  * **quality** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – soxr quality preset (`QQ`/`LQ`/`MQ`/`HQ`/`VHQ`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -6553,13 +6553,13 @@ Lazy dependency: `soxr`.
 Resolve inputs to a best UCS CatID by the staged precedence.
 
 * **Parameters:**
-  * **tags** (`Sequence`[`str`]) – Free tags on the sound.
-  * **caption** (`Optional`[`str`]) – Free-text caption/description.
-  * **audioset_labels** (`Sequence`[`str`]) – AudioSet MIDs or names (e.g. from PANNs).
-  * **filename** (`Optional`[`str`]) – Optional UCS-style filename/path (its token-0 CatID wins if
+  * **tags** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free tags on the sound.
+  * **caption** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free-text caption/description.
+  * **audioset_labels** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – AudioSet MIDs or names (e.g. from PANNs).
+  * **filename** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional UCS-style filename/path (its token-0 CatID wins if
     recognized).
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
-  * **audioset_map** (`Optional`[[`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
+  * **audioset_map** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
     [`default_audioset_ucs_map()`](_autosummary/foley.index.taxonomy.audioset.html.md#foley.index.taxonomy.audioset.default_audioset_ucs_map)).
 * **Return type:**
   [`CatIdResolution`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.CatIdResolution)
@@ -6572,14 +6572,14 @@ Resolve inputs to a best UCS CatID by the staged precedence.
 Resolve a master spec (profile name, explicit profile, or `None`) to a `MasterProfile`.
 
 * **Parameters:**
-  **master** (`Union`[`str`, [`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile), `None`]) – A `MASTER_PROFILES` key (e.g. `'podcast'`), an explicit
+  **master** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile), [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – A `MASTER_PROFILES` key (e.g. `'podcast'`), an explicit
   [`MasterProfile`](_autosummary/foley.html.md#foley.MasterProfile), or `None` (-> the podcast default).
 * **Return type:**
   [`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile)
 * **Returns:**
   The resolved [`MasterProfile`](_autosummary/foley.html.md#foley.MasterProfile).
 * **Raises:**
-  **ValueError** – If `master` is an unknown profile name.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `master` is an unknown profile name.
 
 ### foley.run_qc(samples, sample_rate, , thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100))
 
@@ -6603,7 +6603,7 @@ stage).
 
 * **Parameters:**
   * **samples** (`ndarray`) – Waveform in `[-1, 1]` (mono or `(frames, channels)`).
-  * **sample_rate** (`int`) – Sample rate in Hz.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
   * **thresholds** ([`QCThresholds`](_autosummary/foley.qc.html.md#foley.qc.QCThresholds)) – Overridable QC thresholds (defaults to shipped values).
 * **Return type:**
   [`QCReport`](_autosummary/foley.qc.html.md#foley.qc.QCReport)
@@ -6617,12 +6617,12 @@ Write `samples` to `dst` as `fmt`/`subtype` (default = FLAC archive).
 * **Parameters:**
   * **samples** (`ndarray`) – The working array to write (shape `(frames,)` or
     `(frames, channels)`).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **dst** (`Union`[`str`, `PathLike`, `BinaryIO`]) – Destination path or writable binary file-like object.
-  * **fmt** (`str`) – Container/codec name (case-insensitive; passed to libsndfile).
-  * **subtype** (`str`) – Sample subtype (e.g. `PCM_24`, `PCM_16`, `FLOAT`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **dst** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – Destination path or writable binary file-like object.
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Container/codec name (case-insensitive; passed to libsndfile).
+  * **subtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Sample subtype (e.g. `PCM_24`, `PCM_16`, `FLOAT`).
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 Lazy dependency: `soundfile`.
 
@@ -6646,15 +6646,15 @@ editable [`SoundDesignTimeline`](_autosummary/foley.base.html.md#foley.base.Soun
   * **segments** – The narration text — a single string, or a list of segment strings.
   * **audio** – The narration voice audio (path / bytes / ndarray / a library ref). When
     given, the result is woven into a mastered mix (set `weave=False` to skip).
-  * **transcript** (`Optional`[`str`]) – The full narration transcript for alignment (default: the segments joined).
+  * **transcript** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The full narration transcript for alignment (default: the segments joined).
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the process-wide default).
   * **intended_use** – The rights intent (default: a conservative publishing
     [`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse) from `commercial_ok`).
-  * **commercial_ok** (`bool`) – Shorthand for a commercial-publishing intent (the license filter).
-  * **max_events** (`int`) – The sparse density cap **per segment** (restraint).
-  * **verify** (`str`) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
-  * **master** (`str`) – The delivery [`MASTER_PROFILES`](_autosummary/foley.base.html.md#foley.base.MASTER_PROFILES) target (`'podcast'` default).
-  * **weave** (`Optional`[`bool`]) – Force weaving on/off; default auto (`True` iff `audio` is given).
+  * **commercial_ok** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Shorthand for a commercial-publishing intent (the license filter).
+  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap **per segment** (restraint).
+  * **verify** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
+  * **master** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The delivery [`MASTER_PROFILES`](_autosummary/foley.base.html.md#foley.base.MASTER_PROFILES) target (`'podcast'` default).
+  * **weave** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Force weaving on/off; default auto (`True` iff `audio` is given).
   * **\*\*weave_kwargs** – Forwarded to `foley.weave()` (e.g. `sign_cert`, `watermark`).
 * **Return type:**
   [`ScoreResult`](_autosummary/foley.html.md#foley.ScoreResult)
@@ -6676,7 +6676,7 @@ Build and serve the foley MCP tools over authenticated streamable HTTP (blocks).
 Wraps [`make_http_app()`](_autosummary/foley.html.md#foley.make_http_app) and runs it with uvicorn. `auth` is required (fail-closed).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.similar(sound_id, , k=10)
 
@@ -6694,10 +6694,10 @@ audio-to-audio search (`SoundLibrary.search_clip`).
 
 * **Parameters:**
   * **clip_or_candidate** – A sound id, a [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), or a clip.
-  * **k** (`int`) – How many neighbours to return.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many neighbours to return.
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the shared one).
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   A list of [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate).
 
@@ -6716,7 +6716,7 @@ sqlite-vec cannot be used even when
 pip install\`\`ed. This probes both.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.store_sound(record, data=None, , sounds, meta, cache_bytes_ok=None)
 
@@ -6734,19 +6734,19 @@ written, only its fetchable `uri` plus provenance.
     for the storage mode. Mutated in place with the resolved
     `storage_mode` / `uri` / `content_sha256` and written into
     `meta`.
-  * **data** (`Optional`[`bytes`]) – The canonical archive bytes (FLAC). Required for by-value storage;
+  * **data** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The canonical archive bytes (FLAC). Required for by-value storage;
     for by-reference it is optional — if given, its hash is recorded in
     `content_sha256` for provenance but the bytes are NOT stored.
-  * **sounds** (`MutableMapping`[`str`, `bytes`]) – The content-addressed byte store (see [`make_byte_store()`](_autosummary/foley.html.md#foley.make_byte_store)).
-  * **meta** (`MutableMapping`[`str`, [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]) – The metadata store (see [`make_meta_store()`](_autosummary/foley.html.md#foley.make_meta_store)).
-  * **cache_bytes_ok** (`Optional`[`bool`]) – Optional override. `None` (the default) means “use
+  * **sounds** ([`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The content-addressed byte store (see [`make_byte_store()`](_autosummary/foley.html.md#foley.make_byte_store)).
+  * **meta** ([`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]) – The metadata store (see [`make_meta_store()`](_autosummary/foley.html.md#foley.make_meta_store)).
+  * **cache_bytes_ok** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Optional override. `None` (the default) means “use
     `record.license.cache_bytes_ok`”.
 * **Return type:**
   [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)
 * **Returns:**
   The same (mutated) `record`, after it has been written into `meta`.
 * **Raises:**
-  **ValueError** – If `record.id` is empty/non-`str` (checked first, so a bad
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `record.id` is empty/non-`str` (checked first, so a bad
       id never leaves an orphan blob), or if the sound resolves to
       by-reference storage but `record.uri` is empty (a by-reference sound
       must name a fetchable source URL).
@@ -6776,10 +6776,10 @@ check consumes.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Decoded working array (mono or multichannel).
-  * **sample_rate** (`int`) – The array’s current rate in Hz.
-  * **mono** (`bool`) – If `True`, down-mix to mono.
-  * **target_sr** (`int`) – Working sample rate in Hz.
-  * **dtype** (`str`) – Output NumPy dtype string.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The array’s current rate in Hz.
+  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, down-mix to mono.
+  * **target_sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Working sample rate in Hz.
+  * **dtype** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output NumPy dtype string.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -6798,12 +6798,12 @@ axis 0, preserving its channel layout.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Working array (mono or multichannel).
-  * **sample_rate** (`int`) – Sample rate in Hz (kept in the signature for API symmetry;
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (kept in the signature for API symmetry;
     trimming is index-based).
-  * **top_db** (`float`) – A frame is silent when it sits at least this many dB below the
+  * **top_db** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A frame is silent when it sits at least this many dB below the
     reference (peak) level.
 * **Return type:**
-  `tuple`[`ndarray`, `tuple`[`int`, `int`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`int`](https://docs.python.org/3/builtins/functions.html#int), [`int`](https://docs.python.org/3/builtins/functions.html#int)]]
 * **Returns:**
   `(trimmed, (start_sample, end_sample))`. On all-silent (or otherwise
   degenerate) input the original array is returned unchanged with a
@@ -6821,7 +6821,7 @@ peak magnitude is taken across all channels, and converted to dBTP. Returns
 symmetry (FFT interpolation is rate-independent).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.vector_search(qvec, , vindex, k=10, where=None)
 
@@ -6835,10 +6835,10 @@ fusion).
 * **Parameters:**
   * **qvec** (`ndarray`) – An already-L2-normalized `(dim,)` query vector.
   * **vindex** ([`VectorIndex`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex)) – The vector index.
-  * **k** (`int`) – Number of neighbours to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata push-down.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of neighbours to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata push-down.
 * **Return type:**
-  `list`[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
 * **Returns:**
   Up to `k` :class:
 
@@ -6853,7 +6853,7 @@ fusion).
 Return a per-requirement status + guidance report (never runs an installer).
 
 * **Return type:**
-  `dict`[`str`, `dict`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   `{name: {'available', 'purpose', 'install', 'url', 'probe'}}`.
 
@@ -6869,13 +6869,13 @@ escalates to the injected/​default judge for that rung and returns *its* verdi
   * **event** ([`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)) – The wanted [`SoundEvent`](_autosummary/foley.html.md#foley.SoundEvent).
   * **candidate** ([`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)) – A **license-clean** [`Candidate`](_autosummary/foley.html.md#foley.Candidate) — this MUST run after the
     [`gate_candidates()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.gate_candidates) gate (asserted).
-  * **level** (`str` | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
-  * **judge** (`Optional`[[`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the higher rungs
+  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
+  * **judge** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the higher rungs
     (the DI seam; defaults per `_default_judge()`).
-  * **tau_clap** (`float`) – The clap-gate threshold.
+  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The clap-gate threshold.
   * **\_span** – Internal — the obs span handle for GenAI recording on the LLM rung.
 * **Raises:**
-  **AssertionError** – If `candidate.license_ok` is not `True` (verify-before-gate
+  [**AssertionError**](https://docs.python.org/3/builtins/exceptions.html#AssertionError) – If `candidate.license_ok` is not `True` (verify-before-gate
       is a bug — the license gate is the fail-closed first pass).
 * **Return type:**
   [`Verdict`](_autosummary/foley.base.html.md#foley.base.Verdict)
@@ -6937,13 +6937,13 @@ stdlib; the ~1.7 GB checkpoint loads on the first `embed_*` call.
 | [`ClapEmbedder`](_autosummary/foley.index.embedders.html.md#foley.index.embedders.ClapEmbedder)([model_id, device])   | LAION-CLAP text<->audio embedder (the default retrieval engine).   |
 |-------------------------------------------------------------------------------------|--------------------------------------------------------------------|
 
-### foley.index.embedders.CLAP_SAMPLE_RATE *: int* *= 48000*
+### foley.index.embedders.CLAP_SAMPLE_RATE *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 48000*
 
 Sample rate CLAP expects at its audio input (report 04 §1.2).
 
 ### *class* foley.index.embedders.ClapEmbedder(model_id='laion/larger_clap_general', , device=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LAION-CLAP text<->audio embedder (the default retrieval engine).
 
@@ -6959,11 +6959,11 @@ The HF checkpoint id.
 
 The embedding dimensionality.
 
-#### *property* device *: str*
+#### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The resolved torch device string (`'cuda'`/`'cpu'`).
 
-#### *property* dim *: int*
+#### *property* dim *: [int](https://docs.python.org/3/builtins/functions.html#int)*
 
 The embedding dimensionality (512 for the default; resolved for others).
 
@@ -6981,7 +6981,7 @@ via [`foley.audio`](_autosummary/foley.audio.html.md#module-foley.audio) before 
 
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`; mono or multichannel).
-  * **sr** (`int`) – The clip’s sample rate in Hz.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 
@@ -6992,14 +6992,14 @@ Embed one or more query strings -> `(n_texts, dim)` L2-normalized.
 * **Return type:**
   `ndarray`
 
-### foley.index.embedders.DEFAULT_CLAP_DIM *: int* *= 512*
+### foley.index.embedders.DEFAULT_CLAP_DIM *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 512*
 
 `projection_dim=512`).
 
 * **Type:**
   Embedding width for the default checkpoint (verified
 
-### foley.index.embedders.DEFAULT_CLAP_MODEL_ID *: str* *= 'laion/larger_clap_general'*
+### foley.index.embedders.DEFAULT_CLAP_MODEL_ID *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)* *= 'laion/larger_clap_general'*
 
 The default CLAP checkpoint (LAION, Apache-2.0, general/environmental sound).
 
@@ -7071,7 +7071,7 @@ only the stdlib; install the capability you use via the matching extra
 
 ### *class* foley.index.Captioner(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Produce one natural-language sentence describing a clip (report 03).
 
@@ -7084,11 +7084,11 @@ Both are `foley[caption]` adapters plugged in behind this protocol.
 Return a one-sentence caption for the clip.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### *class* foley.index.CatIdResolution(catid=None, category=None, subcategory=None, source=None, confidence=0.0, matched_terms=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The result of resolving free tags/caption/labels to a UCS CatID.
 
@@ -7098,7 +7098,7 @@ ingest, and `ucs_catid` on the query side.
 
 ### *class* foley.index.ClapEmbedder(model_id='laion/larger_clap_general', , device=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LAION-CLAP text<->audio embedder (the default retrieval engine).
 
@@ -7114,11 +7114,11 @@ The HF checkpoint id.
 
 The embedding dimensionality.
 
-#### *property* device *: str*
+#### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The resolved torch device string (`'cuda'`/`'cpu'`).
 
-#### *property* dim *: int*
+#### *property* dim *: [int](https://docs.python.org/3/builtins/functions.html#int)*
 
 The embedding dimensionality (512 for the default; resolved for others).
 
@@ -7136,7 +7136,7 @@ via [`foley.audio`](_autosummary/foley.audio.html.md#module-foley.audio) before 
 
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`; mono or multichannel).
-  * **sr** (`int`) – The clip’s sample rate in Hz.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 
@@ -7149,7 +7149,7 @@ Embed one or more query strings -> `(n_texts, dim)` L2-normalized.
 
 ### *class* foley.index.ClapZeroShotTagger(, embedder=None, labels=None, prompt='this is a sound of {label}', threshold=0.0)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Zero-shot tagger: score a clip against a label set via CLAP cosine.
 
@@ -7162,7 +7162,7 @@ subcategory names (foley’s own vocabulary), so tags land in-taxonomy.
 
 The CLAP embedder (injected or the process-wide default).
 
-#### *property* labels *: list[str]*
+#### *property* labels *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[str](https://docs.python.org/3/builtins/stdtypes.html#str)]*
 
 natural UCS `category subcategory` phrases).
 
@@ -7180,7 +7180,7 @@ calibration (thresholds, label curation) is an eval-harness concern (#10).
 Return the top-`k` `(label, cosine)` tags for the clip, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### tag_vector(audio_vec, , top_k=10)
 
@@ -7191,11 +7191,11 @@ sound with this model, so on ingest the retrieval vector is reused here —
 no second CLAP forward pass.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 ### *class* foley.index.Embedder(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 A joint text<->audio embedding space (CLAP by default).
 
@@ -7221,7 +7221,7 @@ Embed one audio clip.
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`, mono preferred). CLAP expects
     48 kHz; implementations resample as needed.
-  * **sr** (`int`) – The clip’s sample rate in Hz.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -7232,7 +7232,7 @@ Embed one audio clip.
 Embed one or more query strings.
 
 * **Parameters:**
-  **text** (`Union`[`str`, `list`[`str`]]) – A single string or a list of strings.
+  **text** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – A single string or a list of strings.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -7242,7 +7242,7 @@ Embed one or more query strings.
 
 ### *class* foley.index.FusedHit(id, rrf_score=None, clap_score=None, bm25_score=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One fused retrieval hit: an id plus the scores that produced it.
 
@@ -7279,17 +7279,17 @@ The rolled-up outcome of a folder ingest (JSON-serializable).
 Record a per-file error without aborting the run.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-#### *property* errored *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
 
-#### *property* ingested *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results that were added to the library (`pass` or `warn`).
 
-#### *property* quarantined *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* quarantined *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results rejected by the QC gate.
 
@@ -7298,13 +7298,13 @@ Results rejected by the QC gate.
 Append one [`IngestResult`](_autosummary/foley.index.html.md#foley.index.IngestResult).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-#### *property* rights_blocked *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* rights_blocked *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results refused by the fail-closed AI-training/license rights gate.
 
-#### *property* skipped *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* skipped *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results skipped as content-addressed duplicates.
 
@@ -7313,7 +7313,7 @@ Results skipped as content-addressed duplicates.
 A counts dict for a console/CLI summary.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### *class* foley.index.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
 
@@ -7330,7 +7330,7 @@ bootstrap commercial-use / fail-closed license filter), or `'error'`.
 
 ### *class* foley.index.KeywordIndex(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 BM25 / full-text index over each sound’s tags + caption.
 
@@ -7343,11 +7343,11 @@ single-file fallback. Same `where` push-down contract as
 Return the top-`k` BM25 matches for `query`, best first.
 
 * **Parameters:**
-  * **query** (`str`) – A natural-language / keyword query.
-  * **k** (`int`) – Number of matches to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A natural-language / keyword query.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of matches to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, bm25_score), ...]` in descending-score order.
 
@@ -7356,11 +7356,11 @@ Return the top-`k` BM25 matches for `query`, best first.
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.LanceIndex(, uri, dim, table_name='sounds')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LanceDB-backed index: one table with a vector column + a native FTS index.
 
@@ -7384,14 +7384,14 @@ keyword-searchable). For a keyword-only library with no embeddings, use
 Native full-text (BM25) search; returns `[(id, score), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### commit()
 
 Flush all staged writes to the LanceDB table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### *property* db
 
@@ -7402,21 +7402,21 @@ The lazily-connected LanceDB database handle.
 Return the stored vector for `id` (staged or persisted), else `None`.
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Stage the searchable text for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 Exact cosine KNN; returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### *property* table
 
@@ -7427,11 +7427,11 @@ The lazily-opened (or created-empty) LanceDB table.
 Stage the vector for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.MemoryIndex(, dim=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 In-memory vector + keyword index (numpy cosine + compact BM25).
 
@@ -7449,46 +7449,46 @@ A compact Okapi BM25 (`k1=1.5`, `b=0.75`) recomputed per query — O(N)
 in the corpus size, which is fine for the in-memory tier’s scale.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### commit()
 
 No-op (writes are immediate); present for interface symmetry.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 Return the `k` cosine-nearest ids to `vector` (most-similar first).
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.PannsTagger(, device='cpu', threshold=0.1)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 PANNs CNN14 supervised tagger over the 527 AudioSet classes (`foley[tag]`).
 
@@ -7501,11 +7501,11 @@ The checkpoint auto-downloads to `~/panns_data` (~327 MB) on the first
 Return the top-`k` `(AudioSet label, score)` tags, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 ### *class* foley.index.SoundLibrary(, sounds=None, meta=None, vindex=None, kindex=None, embedder=None, data_dir=None, candidate_k=50, rrf_k=60)
 
-Bases: `Mapping`
+Bases: [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)
 
 A searchable, license-aware library of sounds (the foley INDEX façade).
 
@@ -7531,16 +7531,16 @@ producing backend-dependent search results).
 * **Parameters:**
   * **record** ([`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)) – The record to add (mutated by `store_sound` with resolved
     storage fields, and stamped with the embedding model/dim).
-  * **data** (`Optional`[`bytes`]) – The archive bytes (required for by-value storage; also the
+  * **data** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The archive bytes (required for by-value storage; also the
     source for computing `vector` when it is not supplied).
-  * **vector** (`Optional`[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
+  * **vector** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
     given, it is computed via the library’s embedder.
 * **Return type:**
   [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)
 * **Returns:**
   The same (persisted, indexed) `record`.
 * **Raises:**
-  **ValueError** – If neither `data` nor `vector` is provided (no way to
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If neither `data` nor `vector` is provided (no way to
       obtain an embedding).
 
 #### array(sound_id, , sr=None, mono=True)
@@ -7548,9 +7548,9 @@ producing backend-dependent search results).
 Decode a sound to a working array (`float32`).
 
 * **Parameters:**
-  * **sound_id** (`str`) – The record id.
-  * **sr** (`Optional`[`int`]) – Target sample rate (default: the working rate, 48 kHz).
-  * **mono** (`bool`) – Down-mix to mono (default `True`).
+  * **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
+  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Target sample rate (default: the working rate, 48 kHz).
+  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Down-mix to mono (default `True`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -7562,17 +7562,17 @@ Return a sound’s archive bytes (by-value from the store, or from a
 local by-reference path).
 
 * **Parameters:**
-  **sound_id** (`str`) – The record id.
+  **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 * **Returns:**
   The raw archive bytes.
 * **Raises:**
-  **LookupError** – If the bytes are neither cached (by-value) nor readable
+  [**LookupError**](https://docs.python.org/3/builtins/exceptions.html#LookupError) – If the bytes are neither cached (by-value) nor readable
       from a local `uri` — a remote by-reference sound needs its
       source adapter (subtask #5) to fetch.
 
-#### *property* data_dir *: Path*
+#### *property* data_dir *: [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path)*
 
 The data root for default stores/index.
 
@@ -7589,7 +7589,7 @@ Accepts the same facet keywords as [`search()`](_autosummary/foley.index.search.
 plus any `record_attr=value` equality predicate.
 
 * **Return type:**
-  `list`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
 
 #### *property* kindex
 
@@ -7604,18 +7604,18 @@ The metadata store (`id -> SoundRecord`).
 Hybrid (CLAP vector ⊕ BM25) search for a text query.
 
 * **Parameters:**
-  * **query** (`str`) – The natural-language query.
-  * **k** (`int`) – Number of results to return.
-  * **filters** (`Optional`[`dict`]) – Extra `{record_attr: value}` equality predicates.
-  * **commercial_ok** (`Optional`[`bool`]) – If `True`, keep only commercially-usable sounds.
-  * **ucs_category** (`Optional`[`str`]) – Keep only sounds with this UCS CatID.
-  * **min_snr** (`Optional`[`float`]) – Keep only sounds whose QC `snr_db` is at least this.
-  * **duration_range** (`Optional`[`tuple`[`float`, `float`]]) – Keep only sounds whose `duration_s` is in
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language query.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results to return.
+  * **filters** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Extra `{record_attr: value}` equality predicates.
+  * **commercial_ok** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – If `True`, keep only commercially-usable sounds.
+  * **ucs_category** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Keep only sounds with this UCS CatID.
+  * **min_snr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Keep only sounds whose QC `snr_db` is at least this.
+  * **duration_range** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – Keep only sounds whose `duration_s` is in
     `(min, max)`.
-  * **rerank** (`bool`) – Re-order the shortlist by direct query<->audio cosine
+  * **rerank** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Re-order the shortlist by direct query<->audio cosine
     (fills the CLAP score for keyword-only hits).
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -7630,12 +7630,12 @@ Hybrid (CLAP vector ⊕ BM25) search for a text query.
 Search by a reference audio clip (audio<->audio via CLAP).
 
 * **Parameters:**
-  * **clip** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A working array, or a path/bytes/file decodable by
+  * **clip** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A working array, or a path/bytes/file decodable by
     [`foley.audio.load()`](_autosummary/foley.audio.html.md#foley.audio.load).
-  * **sr** (`Optional`[`int`]) – Sample rate when `clip` is already a working array.
-  * **k** (`int`) – Number of results.
+  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Sample rate when `clip` is already a working array.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results.
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -7653,7 +7653,7 @@ Uses the stored vector (no re-decoding); the query sound itself is
 excluded from the results.
 
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 
 #### *property* sounds
 
@@ -7665,7 +7665,7 @@ The vector index.
 
 ### *class* foley.index.SqliteVecIndex(, path, dim)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Single-file index: sqlite-vec `vec0` KNN + stdlib FTS5 keyword search.
 
@@ -7683,53 +7683,53 @@ FTS5’s `rank` is more-negative-is-better; it is negated so the returned
 score is larger-is-better (consistent with the other backends).
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### close()
 
 Close the underlying SQLite connection.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### commit()
 
 Commit any pending SQLite transaction (writes auto-commit already).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text for `id` in the FTS5 table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 KNN over `vec0` (cosine); returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector for `id` in the `vec0` table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.Tagger(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Map a clip to `(label, score)` pairs against a label vocabulary.
 
@@ -7744,11 +7744,11 @@ working array (`float32`, any sr — the impl resamples to its model’s rate).
 Return the top-`k` `(label, score)` tags for the clip, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 ### *class* foley.index.VectorIndex(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Approximate-nearest-neighbour store over embedding vectors.
 
@@ -7765,7 +7765,7 @@ Needed by `SoundLibrary.similar` (fetch a sound’s own vector, then run
 [`knn()`](_autosummary/foley.index.html.md#foley.index.VectorIndex.knn)) and by the optional CLAP rerank (score keyword-only hits).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### knn(vector, k, , where=None)
 
@@ -7773,10 +7773,10 @@ Return the `k` nearest ids to `vector`, most-similar first.
 
 * **Parameters:**
   * **vector** (`ndarray`) – A `(dim,)` query vector (already L2-normalized).
-  * **k** (`int`) – Number of neighbours to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of neighbours to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, cosine_similarity), ...]` in descending-similarity order.
 
@@ -7785,7 +7785,7 @@ Return the `k` nearest ids to `vector`, most-similar first.
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.index.default_embedder()
 
@@ -7807,11 +7807,11 @@ must survive restarts); inject it explicitly for tests/ephemeral use.
 
 * **Parameters:**
   * **data_dir** – The library data root (a `pathlib.Path`-like).
-  * **dim** (`int`) – The embedding dimensionality from the active embedder.
+  * **dim** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The embedding dimensionality from the active embedder.
 * **Returns:**
   A ready index object (both `VectorIndex` and `KeywordIndex`).
 * **Raises:**
-  **RuntimeError** – If no persistent backend is installed/usable.
+  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – If no persistent backend is installed/usable.
 
 ### foley.index.default_library()
 
@@ -7844,14 +7844,14 @@ default embedder.
 RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.
 
 * **Parameters:**
-  * **vector_hits** (`list`[`tuple`[`str`, `float`]]) – `[(id, cosine_similarity), ...]` best-first (from
+  * **vector_hits** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(id, cosine_similarity), ...]` best-first (from
     [`knn()`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex.knn)).
-  * **keyword_hits** (`list`[`tuple`[`str`, `float`]]) – `[(id, bm25_score), ...]` best-first (from
+  * **keyword_hits** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(id, bm25_score), ...]` best-first (from
     [`bm25()`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.KeywordIndex.bm25)).
-  * **k** (`int`) – Number of fused hits to return.
-  * **rrf_k** (`int`) – The RRF damping constant.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of fused hits to return.
+  * **rrf_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant.
 * **Return type:**
-  `list`[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
 * **Returns:**
   The top-`k` :class:
 
@@ -7866,17 +7866,17 @@ RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.
 Embed `query`, run the vector + keyword rankers, and RRF-fuse them.
 
 * **Parameters:**
-  * **query** (`str`) – The natural-language query.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language query.
   * **embedder** ([`Embedder`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Embedder)) – Text<->audio embedder (its `embed_text` produces the query
     vector).
   * **vindex** ([`VectorIndex`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex)) – The vector index (CLAP KNN).
   * **kindex** ([`KeywordIndex`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.KeywordIndex)) – The keyword index (BM25).
-  * **k** (`int`) – Number of fused results to return.
-  * **candidate_k** (`int`) – Shortlist depth pulled from each ranker before fusion.
-  * **rrf_k** (`int`) – The RRF damping constant.
-  * **where** (`Optional`[`dict`]) – Optional metadata push-down passed to both rankers.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of fused results to return.
+  * **candidate_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Shortlist depth pulled from each ranker before fusion.
+  * **rrf_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata push-down passed to both rankers.
 * **Return type:**
-  `list`[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
 * **Returns:**
   The top-`k` fused :class:
 
@@ -7893,9 +7893,9 @@ Ingest every audio file under `path` and return an [`IngestReport`](_autosummary
 * **Parameters:**
   * **path** – A folder (walked) or a single audio file.
   * **library** – Target library (default: the process-wide default).
-  * **recursive** (`bool`) – Recurse into sub-folders.
-  * **exts** (`tuple`[`str`, `...`]) – Audio extensions to ingest.
-  * **on_error** (`str`) – `'collect'` records per-file errors and continues;
+  * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
+  * **exts** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Audio extensions to ingest.
+  * **on_error** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'collect'` records per-file errors and continues;
     `'raise'` re-raises the first error.
   * **\*\*ingest_one_kw** – Forwarded to [`ingest_one()`](_autosummary/foley.index.html.md#foley.index.ingest_one) (license, taggers, QC
     flags, …).
@@ -7913,10 +7913,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
 `SoundRecord` -> [`SoundLibrary.add()`](_autosummary/foley.index.html.md#foley.index.SoundLibrary.add).
 
 * **Parameters:**
-  * **src** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A path, `bytes`, or file-like audio source.
+  * **src** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A path, `bytes`, or file-like audio source.
   * **library** – Target [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **sound_id** (`Optional`[`str`]) – Optional canonical id override. Defaults to `None` → the
+  * **sound_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional canonical id override. Defaults to `None` → the
     content-hash of the decoded PCM (the local-ingest identity, used as the
     record `id` and dedup key). A live source adapter passes a short,
     case-stable, source-native id (e.g. `'freesound:12345'`) so dedup keys
@@ -7925,29 +7925,29 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     default and is not persisted. Separately, `content_sha256` records the
     hash of the stored FLAC **archive** bytes (set by `store_sound`), which
     is a different byte source from this PCM hash.
-  * **source_uri** (`Optional`[`str`]) – Optional by-reference fetchable URI override. Defaults to
+  * **source_uri** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional by-reference fetchable URI override. Defaults to
     `None` → the resolved local path when `src` is path-like. A live
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](_autosummary/foley.stores.html.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** (`Optional`[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
   * **tagger** – Supervised [`Tagger`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](_autosummary/foley.index.taggers.html.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
     [`default_zeroshot_tagger()`](_autosummary/foley.index.taggers.html.md#foley.index.taggers.default_zeroshot_tagger)).
   * **captioner** – Optional [`Captioner`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Captioner) (default:
     none — the caption stage is off unless one is injected).
-  * **do_qc** (`bool`) – Run the Tier-0 QC gate.
+  * **do_qc** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Run the Tier-0 QC gate.
   * **min_status** ([`QCStatus`](_autosummary/foley.qc.html.md#foley.qc.QCStatus)) – Admission floor — a QC status worse than this is quarantined
     (default `warn`: only `fail` clips are rejected).
-  * **do_caption** (`bool`) – Toggle each enrichment stage.
+  * **do_caption** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Toggle each enrichment stage.
   * **thresholds** ([`QCThresholds`](_autosummary/foley.qc.html.md#foley.qc.QCThresholds)) – QC thresholds.
-  * **store** (`bool`) – If `False`, assemble the record but do not add it to the library
+  * **store** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `False`, assemble the record but do not add it to the library
     (probe/QC/enrich only).
-  * **seed_tags** (`Optional`[`list`]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
+  * **seed_tags** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
     taxonomy) unioned into the record’s `tags` alongside the
     supervised/zero-shot tags — so they feed the BM25 keyword index.
-  * **allow_ai_training_forbidden** (`bool`) – The universal fail-closed rights gate. A
+  * **allow_ai_training_forbidden** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – The universal fail-closed rights gate. A
     sound whose license has `ai_training_ok=False` (e.g. Sonniss,
     BBC RemArc) is refused with status `'rights_blocked'` *before* it is
     embedded or stored — CLAP-embedding-and-persisting is itself a form of
@@ -7966,7 +7966,7 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
 True if `lancedb` is importable (the `foley[index]` extra is present).
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.index.parse_ucs_filename(filename, , table=None)
 
@@ -7977,21 +7977,21 @@ its CatID token is unknown (so a wrong subcategory is never emitted).
 
 * **Parameters:**
   * **filename** – A path or filename (only the basename’s token 0 is used).
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
     `default_ucs_table()`).
 * **Return type:**
-  `tuple`[`Optional`[`str`], `Optional`[`str`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 ### foley.index.reciprocal_rank_fusion(ranked_id_lists, , k=60)
 
 Fuse several ranked id lists into one, by reciprocal rank.
 
 * **Parameters:**
-  * **ranked_id_lists** (`list`[`list`[`str`]]) – Each element is a list of ids in descending-relevance
+  * **ranked_id_lists** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Each element is a list of ids in descending-relevance
     order (best first). Lists may overlap and may differ in length.
-  * **k** (`int`) – The RRF damping constant (default `RRF_K` = 60).
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant (default `RRF_K` = 60).
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, fused_score), ...]` sorted by fused score descending, ties
   broken by `id` ascending (so the fusion is fully deterministic).
@@ -8001,13 +8001,13 @@ Fuse several ranked id lists into one, by reciprocal rank.
 Resolve inputs to a best UCS CatID by the staged precedence.
 
 * **Parameters:**
-  * **tags** (`Sequence`[`str`]) – Free tags on the sound.
-  * **caption** (`Optional`[`str`]) – Free-text caption/description.
-  * **audioset_labels** (`Sequence`[`str`]) – AudioSet MIDs or names (e.g. from PANNs).
-  * **filename** (`Optional`[`str`]) – Optional UCS-style filename/path (its token-0 CatID wins if
+  * **tags** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free tags on the sound.
+  * **caption** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free-text caption/description.
+  * **audioset_labels** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – AudioSet MIDs or names (e.g. from PANNs).
+  * **filename** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional UCS-style filename/path (its token-0 CatID wins if
     recognized).
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
-  * **audioset_map** (`Optional`[[`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
+  * **audioset_map** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
     [`default_audioset_ucs_map()`](_autosummary/foley.index.taxonomy.audioset.html.md#foley.index.taxonomy.audioset.default_audioset_ucs_map)).
 * **Return type:**
   [`CatIdResolution`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.CatIdResolution)
@@ -8030,7 +8030,7 @@ sqlite-vec cannot be used even when
 pip install\`\`ed. This probes both.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.index.vector_search(qvec, , vindex, k=10, where=None)
 
@@ -8044,10 +8044,10 @@ fusion).
 * **Parameters:**
   * **qvec** (`ndarray`) – An already-L2-normalized `(dim,)` query vector.
   * **vindex** ([`VectorIndex`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex)) – The vector index.
-  * **k** (`int`) – Number of neighbours to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata push-down.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of neighbours to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata push-down.
 * **Return type:**
-  `list`[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
 * **Returns:**
   Up to `k` :class:
 
@@ -8113,7 +8113,7 @@ one shared RRF, so ranking is identical across backends.
 
 ### *class* foley.index.indexes.LanceIndex(, uri, dim, table_name='sounds')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 LanceDB-backed index: one table with a vector column + a native FTS index.
 
@@ -8137,14 +8137,14 @@ keyword-searchable). For a keyword-only library with no embeddings, use
 Native full-text (BM25) search; returns `[(id, score), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### commit()
 
 Flush all staged writes to the LanceDB table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### *property* db
 
@@ -8155,21 +8155,21 @@ The lazily-connected LanceDB database handle.
 Return the stored vector for `id` (staged or persisted), else `None`.
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Stage the searchable text for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 Exact cosine KNN; returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### *property* table
 
@@ -8180,11 +8180,11 @@ The lazily-opened (or created-empty) LanceDB table.
 Stage the vector for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.indexes.MemoryIndex(, dim=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 In-memory vector + keyword index (numpy cosine + compact BM25).
 
@@ -8202,46 +8202,46 @@ A compact Okapi BM25 (`k1=1.5`, `b=0.75`) recomputed per query — O(N)
 in the corpus size, which is fine for the in-memory tier’s scale.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### commit()
 
 No-op (writes are immediate); present for interface symmetry.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 Return the `k` cosine-nearest ids to `vector` (most-similar first).
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.indexes.SqliteVecIndex(, path, dim)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Single-file index: sqlite-vec `vec0` KNN + stdlib FTS5 keyword search.
 
@@ -8259,49 +8259,49 @@ FTS5’s `rank` is more-negative-is-better; it is negated so the returned
 score is larger-is-better (consistent with the other backends).
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### close()
 
 Close the underlying SQLite connection.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### commit()
 
 Commit any pending SQLite transaction (writes auto-commit already).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text for `id` in the FTS5 table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### knn(vector, k, , where=None)
 
 KNN over `vec0` (cosine); returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector for `id` in the `vec0` table.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.index.indexes.default_index(, data_dir, dim)
 
@@ -8314,18 +8314,18 @@ must survive restarts); inject it explicitly for tests/ephemeral use.
 
 * **Parameters:**
   * **data_dir** – The library data root (a `pathlib.Path`-like).
-  * **dim** (`int`) – The embedding dimensionality from the active embedder.
+  * **dim** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The embedding dimensionality from the active embedder.
 * **Returns:**
   A ready index object (both `VectorIndex` and `KeywordIndex`).
 * **Raises:**
-  **RuntimeError** – If no persistent backend is installed/usable.
+  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – If no persistent backend is installed/usable.
 
 ### foley.index.indexes.lancedb_available()
 
 True if `lancedb` is importable (the `foley[index]` extra is present).
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.index.indexes.sqlite_vec_loadable()
 
@@ -8342,7 +8342,7 @@ sqlite-vec cannot be used even when
 pip install\`\`ed. This probes both.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 
 # _autosummary/foley.index.ingest.html.md
@@ -8389,7 +8389,7 @@ module costs only the stdlib.
 |----------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
 | [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)(id, status[, record, qc, ...]) | The outcome of ingesting one clip.                              |
 
-### foley.index.ingest.AUDIO_EXTS *: tuple[str, ...]* *= ('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a')*
+### foley.index.ingest.AUDIO_EXTS *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), ...]* *= ('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a')*
 
 Audio file extensions the folder walker ingests.
 
@@ -8404,17 +8404,17 @@ The rolled-up outcome of a folder ingest (JSON-serializable).
 Record a per-file error without aborting the run.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-#### *property* errored *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
 
-#### *property* ingested *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results that were added to the library (`pass` or `warn`).
 
-#### *property* quarantined *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* quarantined *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results rejected by the QC gate.
 
@@ -8423,13 +8423,13 @@ Results rejected by the QC gate.
 Append one [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-#### *property* rights_blocked *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* rights_blocked *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results refused by the fail-closed AI-training/license rights gate.
 
-#### *property* skipped *: list[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
+#### *property* skipped *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results skipped as content-addressed duplicates.
 
@@ -8438,7 +8438,7 @@ Results skipped as content-addressed duplicates.
 A counts dict for a console/CLI summary.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### *class* foley.index.ingest.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
 
@@ -8465,7 +8465,7 @@ sets `license.c2pa_manifest_ref` in the same pass — see
 `foley.sources.generate.generate()`). Cheap-ish: it fully decodes `src`.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.index.ingest.ingest_folder(path, , library=None, recursive=True, exts=('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a'), on_error='collect', \*\*ingest_one_kw)
 
@@ -8474,9 +8474,9 @@ Ingest every audio file under `path` and return an [`IngestReport`](_autosummary
 * **Parameters:**
   * **path** – A folder (walked) or a single audio file.
   * **library** – Target library (default: the process-wide default).
-  * **recursive** (`bool`) – Recurse into sub-folders.
-  * **exts** (`tuple`[`str`, `...`]) – Audio extensions to ingest.
-  * **on_error** (`str`) – `'collect'` records per-file errors and continues;
+  * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
+  * **exts** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Audio extensions to ingest.
+  * **on_error** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'collect'` records per-file errors and continues;
     `'raise'` re-raises the first error.
   * **\*\*ingest_one_kw** – Forwarded to [`ingest_one()`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.ingest_one) (license, taggers, QC
     flags, …).
@@ -8494,10 +8494,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
 `SoundRecord` -> `SoundLibrary.add()`.
 
 * **Parameters:**
-  * **src** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A path, `bytes`, or file-like audio source.
+  * **src** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A path, `bytes`, or file-like audio source.
   * **library** – Target [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **sound_id** (`Optional`[`str`]) – Optional canonical id override. Defaults to `None` → the
+  * **sound_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional canonical id override. Defaults to `None` → the
     content-hash of the decoded PCM (the local-ingest identity, used as the
     record `id` and dedup key). A live source adapter passes a short,
     case-stable, source-native id (e.g. `'freesound:12345'`) so dedup keys
@@ -8506,29 +8506,29 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     default and is not persisted. Separately, `content_sha256` records the
     hash of the stored FLAC **archive** bytes (set by `store_sound`), which
     is a different byte source from this PCM hash.
-  * **source_uri** (`Optional`[`str`]) – Optional by-reference fetchable URI override. Defaults to
+  * **source_uri** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional by-reference fetchable URI override. Defaults to
     `None` → the resolved local path when `src` is path-like. A live
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](_autosummary/foley.stores.html.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** (`Optional`[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
   * **tagger** – Supervised [`Tagger`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](_autosummary/foley.index.taggers.html.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
     [`default_zeroshot_tagger()`](_autosummary/foley.index.taggers.html.md#foley.index.taggers.default_zeroshot_tagger)).
   * **captioner** – Optional [`Captioner`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Captioner) (default:
     none — the caption stage is off unless one is injected).
-  * **do_qc** (`bool`) – Run the Tier-0 QC gate.
+  * **do_qc** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Run the Tier-0 QC gate.
   * **min_status** ([`QCStatus`](_autosummary/foley.qc.html.md#foley.qc.QCStatus)) – Admission floor — a QC status worse than this is quarantined
     (default `warn`: only `fail` clips are rejected).
-  * **do_caption** (`bool`) – Toggle each enrichment stage.
+  * **do_caption** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Toggle each enrichment stage.
   * **thresholds** ([`QCThresholds`](_autosummary/foley.qc.html.md#foley.qc.QCThresholds)) – QC thresholds.
-  * **store** (`bool`) – If `False`, assemble the record but do not add it to the library
+  * **store** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `False`, assemble the record but do not add it to the library
     (probe/QC/enrich only).
-  * **seed_tags** (`Optional`[`list`]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
+  * **seed_tags** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
     taxonomy) unioned into the record’s `tags` alongside the
     supervised/zero-shot tags — so they feed the BM25 keyword index.
-  * **allow_ai_training_forbidden** (`bool`) – The universal fail-closed rights gate. A
+  * **allow_ai_training_forbidden** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – The universal fail-closed rights gate. A
     sound whose license has `ai_training_ok=False` (e.g. Sonniss,
     BBC RemArc) is refused with status `'rights_blocked'` *before* it is
     embedded or stored — CLAP-embedding-and-persisting is itself a form of
@@ -8551,12 +8551,12 @@ bulk-corpus adapters in [`foley.sources`](_autosummary/foley.sources.html.md#mod
 
 * **Parameters:**
   * **path** – A folder (walked) or a single audio file.
-  * **recursive** (`bool`) – Recurse into sub-folders.
-  * **exts** (`tuple`[`str`, `...`]) – Audio extensions to include (lowercased suffix match).
+  * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
+  * **exts** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Audio extensions to include (lowercased suffix match).
 * **Yields:**
-  Each matching file as a `pathlib.Path`, in sorted order.
+  Each matching file as a [`pathlib.Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), in sorted order.
 * **Return type:**
-  *Iterator*[*Path*]
+  [*Iterator*](https://docs.python.org/3/library/typing.html#typing.Iterator)[[*Path*](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]
 
 
 # _autosummary/foley.index.library.html.md
@@ -8598,7 +8598,7 @@ in-memory, LanceDB, or sqlite backends, or between local and cloud storage.
 
 ### *class* foley.index.library.SoundLibrary(, sounds=None, meta=None, vindex=None, kindex=None, embedder=None, data_dir=None, candidate_k=50, rrf_k=60)
 
-Bases: `Mapping`
+Bases: [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)
 
 A searchable, license-aware library of sounds (the foley INDEX façade).
 
@@ -8624,16 +8624,16 @@ producing backend-dependent search results).
 * **Parameters:**
   * **record** ([`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)) – The record to add (mutated by `store_sound` with resolved
     storage fields, and stamped with the embedding model/dim).
-  * **data** (`Optional`[`bytes`]) – The archive bytes (required for by-value storage; also the
+  * **data** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The archive bytes (required for by-value storage; also the
     source for computing `vector` when it is not supplied).
-  * **vector** (`Optional`[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
+  * **vector** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
     given, it is computed via the library’s embedder.
 * **Return type:**
   [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)
 * **Returns:**
   The same (persisted, indexed) `record`.
 * **Raises:**
-  **ValueError** – If neither `data` nor `vector` is provided (no way to
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If neither `data` nor `vector` is provided (no way to
       obtain an embedding).
 
 #### array(sound_id, , sr=None, mono=True)
@@ -8641,9 +8641,9 @@ producing backend-dependent search results).
 Decode a sound to a working array (`float32`).
 
 * **Parameters:**
-  * **sound_id** (`str`) – The record id.
-  * **sr** (`Optional`[`int`]) – Target sample rate (default: the working rate, 48 kHz).
-  * **mono** (`bool`) – Down-mix to mono (default `True`).
+  * **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
+  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Target sample rate (default: the working rate, 48 kHz).
+  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Down-mix to mono (default `True`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -8655,17 +8655,17 @@ Return a sound’s archive bytes (by-value from the store, or from a
 local by-reference path).
 
 * **Parameters:**
-  **sound_id** (`str`) – The record id.
+  **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 * **Returns:**
   The raw archive bytes.
 * **Raises:**
-  **LookupError** – If the bytes are neither cached (by-value) nor readable
+  [**LookupError**](https://docs.python.org/3/builtins/exceptions.html#LookupError) – If the bytes are neither cached (by-value) nor readable
       from a local `uri` — a remote by-reference sound needs its
       source adapter (subtask #5) to fetch.
 
-#### *property* data_dir *: Path*
+#### *property* data_dir *: [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path)*
 
 The data root for default stores/index.
 
@@ -8682,7 +8682,7 @@ Accepts the same facet keywords as [`search()`](_autosummary/foley.index.library
 plus any `record_attr=value` equality predicate.
 
 * **Return type:**
-  `list`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
 
 #### *property* kindex
 
@@ -8697,18 +8697,18 @@ The metadata store (`id -> SoundRecord`).
 Hybrid (CLAP vector ⊕ BM25) search for a text query.
 
 * **Parameters:**
-  * **query** (`str`) – The natural-language query.
-  * **k** (`int`) – Number of results to return.
-  * **filters** (`Optional`[`dict`]) – Extra `{record_attr: value}` equality predicates.
-  * **commercial_ok** (`Optional`[`bool`]) – If `True`, keep only commercially-usable sounds.
-  * **ucs_category** (`Optional`[`str`]) – Keep only sounds with this UCS CatID.
-  * **min_snr** (`Optional`[`float`]) – Keep only sounds whose QC `snr_db` is at least this.
-  * **duration_range** (`Optional`[`tuple`[`float`, `float`]]) – Keep only sounds whose `duration_s` is in
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language query.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results to return.
+  * **filters** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Extra `{record_attr: value}` equality predicates.
+  * **commercial_ok** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – If `True`, keep only commercially-usable sounds.
+  * **ucs_category** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Keep only sounds with this UCS CatID.
+  * **min_snr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Keep only sounds whose QC `snr_db` is at least this.
+  * **duration_range** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – Keep only sounds whose `duration_s` is in
     `(min, max)`.
-  * **rerank** (`bool`) – Re-order the shortlist by direct query<->audio cosine
+  * **rerank** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Re-order the shortlist by direct query<->audio cosine
     (fills the CLAP score for keyword-only hits).
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -8723,12 +8723,12 @@ Hybrid (CLAP vector ⊕ BM25) search for a text query.
 Search by a reference audio clip (audio<->audio via CLAP).
 
 * **Parameters:**
-  * **clip** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A working array, or a path/bytes/file decodable by
+  * **clip** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A working array, or a path/bytes/file decodable by
     [`foley.audio.load()`](_autosummary/foley.audio.html.md#foley.audio.load).
-  * **sr** (`Optional`[`int`]) – Sample rate when `clip` is already a working array.
-  * **k** (`int`) – Number of results.
+  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Sample rate when `clip` is already a working array.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results.
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -8746,7 +8746,7 @@ Uses the stored vector (no re-decoding); the query sound itself is
 excluded from the results.
 
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 
 #### *property* sounds
 
@@ -8800,7 +8800,7 @@ under `TYPE_CHECKING` so `import foley.index.protocols` never pulls numpy.
 
 ### *class* foley.index.protocols.Captioner(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Produce one natural-language sentence describing a clip (report 03).
 
@@ -8813,11 +8813,11 @@ Both are `foley[caption]` adapters plugged in behind this protocol.
 Return a one-sentence caption for the clip.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### *class* foley.index.protocols.Embedder(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 A joint text<->audio embedding space (CLAP by default).
 
@@ -8843,7 +8843,7 @@ Embed one audio clip.
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`, mono preferred). CLAP expects
     48 kHz; implementations resample as needed.
-  * **sr** (`int`) – The clip’s sample rate in Hz.
+  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -8854,7 +8854,7 @@ Embed one audio clip.
 Embed one or more query strings.
 
 * **Parameters:**
-  **text** (`Union`[`str`, `list`[`str`]]) – A single string or a list of strings.
+  **text** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – A single string or a list of strings.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -8864,7 +8864,7 @@ Embed one or more query strings.
 
 ### *class* foley.index.protocols.KeywordIndex(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 BM25 / full-text index over each sound’s tags + caption.
 
@@ -8877,11 +8877,11 @@ single-file fallback. Same `where` push-down contract as
 Return the top-`k` BM25 matches for `query`, best first.
 
 * **Parameters:**
-  * **query** (`str`) – A natural-language / keyword query.
-  * **k** (`int`) – Number of matches to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A natural-language / keyword query.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of matches to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, bm25_score), ...]` in descending-score order.
 
@@ -8890,11 +8890,11 @@ Return the top-`k` BM25 matches for `query`, best first.
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* foley.index.protocols.Tagger(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Map a clip to `(label, score)` pairs against a label vocabulary.
 
@@ -8909,11 +8909,11 @@ working array (`float32`, any sr — the impl resamples to its model’s rate).
 Return the top-`k` `(label, score)` tags for the clip, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 ### *class* foley.index.protocols.VectorIndex(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Approximate-nearest-neighbour store over embedding vectors.
 
@@ -8930,7 +8930,7 @@ Needed by `SoundLibrary.similar` (fetch a sound’s own vector, then run
 [`knn()`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex.knn)) and by the optional CLAP rerank (score keyword-only hits).
 
 * **Return type:**
-  `Optional`[`ndarray`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
 
 #### knn(vector, k, , where=None)
 
@@ -8938,10 +8938,10 @@ Return the `k` nearest ids to `vector`, most-similar first.
 
 * **Parameters:**
   * **vector** (`ndarray`) – A `(dim,)` query vector (already L2-normalized).
-  * **k** (`int`) – Number of neighbours to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of neighbours to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, cosine_similarity), ...]` in descending-similarity order.
 
@@ -8950,7 +8950,7 @@ Return the `k` nearest ids to `vector`, most-similar first.
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 
 # _autosummary/foley.index.search.html.md
@@ -9000,7 +9000,7 @@ and gated by the eval harness (report 08) rather than an engine’s internals.
 | [`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)(id[, rrf_score, clap_score, bm25_score])   | One fused retrieval hit: an id plus the scores that produced it.   |
 |------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
 
-### foley.index.search.DEFAULT_CANDIDATE_K *: int* *= 50*
+### foley.index.search.DEFAULT_CANDIDATE_K *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 50*
 
 Per-ranker shortlist depth pulled from each index before fusion. Fusing deeper
 lists than the requested `k` lets a doc ranked mid-list by one ranker but top
@@ -9008,7 +9008,7 @@ by the other still surface.
 
 ### *class* foley.index.search.FusedHit(id, rrf_score=None, clap_score=None, bm25_score=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One fused retrieval hit: an id plus the scores that produced it.
 
@@ -9034,7 +9034,7 @@ appeared only in the keyword list).
 BM25 score from the keyword ranker (`None` if the id
 appeared only in the vector list).
 
-### foley.index.search.RRF_K *: int* *= 60*
+### foley.index.search.RRF_K *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 60*
 
 Standard RRF damping constant (Cormack et al., SIGIR 2009). Larger => flatter.
 
@@ -9043,14 +9043,14 @@ Standard RRF damping constant (Cormack et al., SIGIR 2009). Larger => flatter.
 RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.
 
 * **Parameters:**
-  * **vector_hits** (`list`[`tuple`[`str`, `float`]]) – `[(id, cosine_similarity), ...]` best-first (from
+  * **vector_hits** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(id, cosine_similarity), ...]` best-first (from
     [`knn()`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex.knn)).
-  * **keyword_hits** (`list`[`tuple`[`str`, `float`]]) – `[(id, bm25_score), ...]` best-first (from
+  * **keyword_hits** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(id, bm25_score), ...]` best-first (from
     [`bm25()`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.KeywordIndex.bm25)).
-  * **k** (`int`) – Number of fused hits to return.
-  * **rrf_k** (`int`) – The RRF damping constant.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of fused hits to return.
+  * **rrf_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant.
 * **Return type:**
-  `list`[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
 * **Returns:**
   The top-`k` :class:
 
@@ -9065,17 +9065,17 @@ RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.
 Embed `query`, run the vector + keyword rankers, and RRF-fuse them.
 
 * **Parameters:**
-  * **query** (`str`) – The natural-language query.
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language query.
   * **embedder** ([`Embedder`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Embedder)) – Text<->audio embedder (its `embed_text` produces the query
     vector).
   * **vindex** ([`VectorIndex`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex)) – The vector index (CLAP KNN).
   * **kindex** ([`KeywordIndex`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.KeywordIndex)) – The keyword index (BM25).
-  * **k** (`int`) – Number of fused results to return.
-  * **candidate_k** (`int`) – Shortlist depth pulled from each ranker before fusion.
-  * **rrf_k** (`int`) – The RRF damping constant.
-  * **where** (`Optional`[`dict`]) – Optional metadata push-down passed to both rankers.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of fused results to return.
+  * **candidate_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Shortlist depth pulled from each ranker before fusion.
+  * **rrf_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata push-down passed to both rankers.
 * **Return type:**
-  `list`[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
 * **Returns:**
   The top-`k` fused :class:
 
@@ -9090,11 +9090,11 @@ Embed `query`, run the vector + keyword rankers, and RRF-fuse them.
 Fuse several ranked id lists into one, by reciprocal rank.
 
 * **Parameters:**
-  * **ranked_id_lists** (`list`[`list`[`str`]]) – Each element is a list of ids in descending-relevance
+  * **ranked_id_lists** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Each element is a list of ids in descending-relevance
     order (best first). Lists may overlap and may differ in length.
-  * **k** (`int`) – The RRF damping constant (default [`RRF_K`](_autosummary/foley.index.search.html.md#foley.index.search.RRF_K) = 60).
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant (default [`RRF_K`](_autosummary/foley.index.search.html.md#foley.index.search.RRF_K) = 60).
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `[(id, fused_score), ...]` sorted by fused score descending, ties
   broken by `id` ascending (so the fusion is fully deterministic).
@@ -9111,10 +9111,10 @@ fusion).
 * **Parameters:**
   * **qvec** (`ndarray`) – An already-L2-normalized `(dim,)` query vector.
   * **vindex** ([`VectorIndex`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.VectorIndex)) – The vector index.
-  * **k** (`int`) – Number of neighbours to return.
-  * **where** (`Optional`[`dict`]) – Optional metadata push-down.
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of neighbours to return.
+  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata push-down.
 * **Return type:**
-  `list`[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](_autosummary/foley.index.search.html.md#foley.index.search.FusedHit)]
 * **Returns:**
   Up to `k` :class:
 
@@ -9169,7 +9169,7 @@ importing this module costs only the stdlib.
 
 ### *class* foley.index.taggers.ClapZeroShotTagger(, embedder=None, labels=None, prompt='this is a sound of {label}', threshold=0.0)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Zero-shot tagger: score a clip against a label set via CLAP cosine.
 
@@ -9182,7 +9182,7 @@ subcategory names (foley’s own vocabulary), so tags land in-taxonomy.
 
 The CLAP embedder (injected or the process-wide default).
 
-#### *property* labels *: list[str]*
+#### *property* labels *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[str](https://docs.python.org/3/builtins/stdtypes.html#str)]*
 
 natural UCS `category subcategory` phrases).
 
@@ -9200,7 +9200,7 @@ calibration (thresholds, label curation) is an eval-harness concern (#10).
 Return the top-`k` `(label, cosine)` tags for the clip, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
 #### tag_vector(audio_vec, , top_k=10)
 
@@ -9211,15 +9211,15 @@ sound with this model, so on ingest the retrieval vector is reused here —
 no second CLAP forward pass.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
-### foley.index.taggers.PANNS_SAMPLE_RATE *: int* *= 32000*
+### foley.index.taggers.PANNS_SAMPLE_RATE *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 32000*
 
 PANNs CNN14 expects 32 kHz mono audio.
 
 ### *class* foley.index.taggers.PannsTagger(, device='cpu', threshold=0.1)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 PANNs CNN14 supervised tagger over the 527 AudioSet classes (`foley[tag]`).
 
@@ -9232,9 +9232,9 @@ The checkpoint auto-downloads to `~/panns_data` (~327 MB) on the first
 Return the top-`k` `(AudioSet label, score)` tags, best first.
 
 * **Return type:**
-  `list`[`tuple`[`str`, `float`]]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 
-### foley.index.taggers.ZEROSHOT_PROMPT *: str* *= 'this is a sound of {label}'*
+### foley.index.taggers.ZEROSHOT_PROMPT *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)* *= 'this is a sound of {label}'*
 
 Prompt template for zero-shot CLAP tagging (report 03 Part 2).
 
@@ -9290,15 +9290,15 @@ Build the AudioSet(name|MID) -> UCS-CatID map.
 * **Parameters:**
   * **data_dir** – Directory to look for `audioset_ucs.json` in (defaults to the
     package’s `taxonomy/data/`); merged over the seed when present.
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table every target CatID must exist in (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table every target CatID must exist in (defaults to
     [`default_ucs_table()`](_autosummary/foley.index.taxonomy.ucs.html.md#foley.index.taxonomy.ucs.default_ucs_table)).
-  * **include_seed** (`bool`) – Start from the in-code seed map (default `True`).
+  * **include_seed** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Start from the in-code seed map (default `True`).
 * **Return type:**
   [`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)
 * **Returns:**
   A ready [`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap).
 * **Raises:**
-  **ValueError** – If any entry targets a CatID absent from `table`.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If any entry targets a CatID absent from `table`.
 
 
 # _autosummary/foley.index.taxonomy.html.md
@@ -9348,7 +9348,7 @@ EnvSound-UCS mapping drop in later as JSON under `data/` with no logic change.
 
 ### *class* foley.index.taxonomy.AudioSetUcsMap(by_name=<factory>, by_mid=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 AudioSet-label -> UCS-CatID overlap map (report 04 §5.3).
 
@@ -9361,11 +9361,11 @@ validated against the UCS table at load time (fail-fast on a broken map).
 Map one AudioSet label (a MID or a name) to a UCS CatID (or `None`).
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.index.taxonomy.CatIdResolution(catid=None, category=None, subcategory=None, source=None, confidence=0.0, matched_terms=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The result of resolving free tags/caption/labels to a UCS CatID.
 
@@ -9375,7 +9375,7 @@ ingest, and `ucs_catid` on the query side.
 
 ### *class* foley.index.taxonomy.KeywordResolver(, table=None, audioset_map=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The default stdlib resolver — staged keyword/synonym/AudioSet resolution.
 
@@ -9391,7 +9391,7 @@ Resolve a [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord
 
 ### *class* foley.index.taxonomy.TaxonomyResolver(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Resolve a [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord) to a UCS CatID.
 
@@ -9404,7 +9404,7 @@ Return the CatID resolution for `record`.
 
 ### *class* foley.index.taxonomy.UcsRow(catid, category, subcategory, synonyms=(), confident=False)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One Universal Category System entry.
 
@@ -9417,7 +9417,7 @@ authoritative.
 
 ### *class* foley.index.taxonomy.UcsTable(by_catid=<factory>, order=<factory>, \_ci_index=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A loaded UCS lookup: by CatID (exact + case-insensitive) and by synonym.
 
@@ -9434,7 +9434,7 @@ The CatIDs in stable insertion order (deterministic tie-breaking).
 Look up a row by CatID: exact first, then case-insensitive.
 
 * **Return type:**
-  `Optional`[[`UcsRow`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsRow)]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsRow`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsRow)]
 
 ### foley.index.taxonomy.default_audioset_ucs_map()
 
@@ -9457,15 +9457,15 @@ Build the AudioSet(name|MID) -> UCS-CatID map.
 * **Parameters:**
   * **data_dir** – Directory to look for `audioset_ucs.json` in (defaults to the
     package’s `taxonomy/data/`); merged over the seed when present.
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table every target CatID must exist in (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table every target CatID must exist in (defaults to
     [`default_ucs_table()`](_autosummary/foley.index.taxonomy.ucs.html.md#foley.index.taxonomy.ucs.default_ucs_table)).
-  * **include_seed** (`bool`) – Start from the in-code seed map (default `True`).
+  * **include_seed** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Start from the in-code seed map (default `True`).
 * **Return type:**
   [`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)
 * **Returns:**
   A ready [`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap).
 * **Raises:**
-  **ValueError** – If any entry targets a CatID absent from `table`.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If any entry targets a CatID absent from `table`.
 
 ### foley.index.taxonomy.load_ucs_table(, data_dir=None, include_seed=True)
 
@@ -9475,7 +9475,7 @@ Build the UCS lookup: the seed rows, overridden/extended by a JSON drop.
   * **data_dir** – Directory to look for `ucs_full.json` in (defaults to the
     package’s `taxonomy/data/`). When present, its rows override the
     seed on CatID collision and add the rest of the ~750-row master.
-  * **include_seed** (`bool`) – Start from the in-code seed table (default `True`).
+  * **include_seed** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Start from the in-code seed table (default `True`).
 * **Return type:**
   [`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)
 * **Returns:**
@@ -9489,7 +9489,7 @@ Strips directory and extension; requires at least one `_` (the field
 delimiter). Does not validate the token against the table.
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.index.taxonomy.parse_ucs_filename(filename, , table=None)
 
@@ -9500,23 +9500,23 @@ its CatID token is unknown (so a wrong subcategory is never emitted).
 
 * **Parameters:**
   * **filename** – A path or filename (only the basename’s token 0 is used).
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
     [`default_ucs_table()`](_autosummary/foley.index.taxonomy.html.md#foley.index.taxonomy.default_ucs_table)).
 * **Return type:**
-  `tuple`[`Optional`[`str`], `Optional`[`str`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 ### foley.index.taxonomy.resolve_catid(, tags=(), caption=None, audioset_labels=(), filename=None, table=None, audioset_map=None)
 
 Resolve inputs to a best UCS CatID by the staged precedence.
 
 * **Parameters:**
-  * **tags** (`Sequence`[`str`]) – Free tags on the sound.
-  * **caption** (`Optional`[`str`]) – Free-text caption/description.
-  * **audioset_labels** (`Sequence`[`str`]) – AudioSet MIDs or names (e.g. from PANNs).
-  * **filename** (`Optional`[`str`]) – Optional UCS-style filename/path (its token-0 CatID wins if
+  * **tags** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free tags on the sound.
+  * **caption** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free-text caption/description.
+  * **audioset_labels** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – AudioSet MIDs or names (e.g. from PANNs).
+  * **filename** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional UCS-style filename/path (its token-0 CatID wins if
     recognized).
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to [`default_ucs_table()`](_autosummary/foley.index.taxonomy.html.md#foley.index.taxonomy.default_ucs_table)).
-  * **audioset_map** (`Optional`[[`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to [`default_ucs_table()`](_autosummary/foley.index.taxonomy.html.md#foley.index.taxonomy.default_ucs_table)).
+  * **audioset_map** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
     [`default_audioset_ucs_map()`](_autosummary/foley.index.taxonomy.audioset.html.md#foley.index.taxonomy.audioset.default_audioset_ucs_map)).
 * **Return type:**
   [`CatIdResolution`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.CatIdResolution)
@@ -9556,7 +9556,7 @@ faceting and browse”, the CLAP vector does the heavy retrieval).
 
 ### *class* foley.index.taxonomy.model.AudioSetUcsMap(by_name=<factory>, by_mid=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 AudioSet-label -> UCS-CatID overlap map (report 04 §5.3).
 
@@ -9569,11 +9569,11 @@ validated against the UCS table at load time (fail-fast on a broken map).
 Map one AudioSet label (a MID or a name) to a UCS CatID (or `None`).
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.index.taxonomy.model.CatIdResolution(catid=None, category=None, subcategory=None, source=None, confidence=0.0, matched_terms=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The result of resolving free tags/caption/labels to a UCS CatID.
 
@@ -9583,7 +9583,7 @@ ingest, and `ucs_catid` on the query side.
 
 ### *class* foley.index.taxonomy.model.UcsRow(catid, category, subcategory, synonyms=(), confident=False)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One Universal Category System entry.
 
@@ -9596,7 +9596,7 @@ authoritative.
 
 ### *class* foley.index.taxonomy.model.UcsTable(by_catid=<factory>, order=<factory>, \_ci_index=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A loaded UCS lookup: by CatID (exact + case-insensitive) and by synonym.
 
@@ -9613,7 +9613,7 @@ The CatIDs in stable insertion order (deterministic tie-breaking).
 Look up a row by CatID: exact first, then case-insensitive.
 
 * **Return type:**
-  `Optional`[[`UcsRow`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsRow)]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsRow`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsRow)]
 
 
 # _autosummary/foley.index.taxonomy.resolver.html.md
@@ -9647,7 +9647,7 @@ CLAP zero-shot resolver (embed once, argmax over UCS label prompts, report
 
 ### *class* foley.index.taxonomy.resolver.KeywordResolver(, table=None, audioset_map=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The default stdlib resolver — staged keyword/synonym/AudioSet resolution.
 
@@ -9663,7 +9663,7 @@ Resolve a [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord
 
 ### *class* foley.index.taxonomy.resolver.TaxonomyResolver(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Resolve a [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord) to a UCS CatID.
 
@@ -9679,13 +9679,13 @@ Return the CatID resolution for `record`.
 Resolve inputs to a best UCS CatID by the staged precedence.
 
 * **Parameters:**
-  * **tags** (`Sequence`[`str`]) – Free tags on the sound.
-  * **caption** (`Optional`[`str`]) – Free-text caption/description.
-  * **audioset_labels** (`Sequence`[`str`]) – AudioSet MIDs or names (e.g. from PANNs).
-  * **filename** (`Optional`[`str`]) – Optional UCS-style filename/path (its token-0 CatID wins if
+  * **tags** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free tags on the sound.
+  * **caption** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free-text caption/description.
+  * **audioset_labels** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – AudioSet MIDs or names (e.g. from PANNs).
+  * **filename** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional UCS-style filename/path (its token-0 CatID wins if
     recognized).
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
-  * **audioset_map** (`Optional`[[`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
+  * **audioset_map** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`AudioSetUcsMap`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
     [`default_audioset_ucs_map()`](_autosummary/foley.index.taxonomy.audioset.html.md#foley.index.taxonomy.audioset.default_audioset_ucs_map)).
 * **Return type:**
   [`CatIdResolution`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.CatIdResolution)
@@ -9716,14 +9716,14 @@ NOT the 750-row master.
 |------------------------------------------------------------------------|-------------------------------------------------------------------|
 | [`SEED_AUDIOSET_UCS_MAP`](_autosummary/foley.index.taxonomy.seed.html.md#foley.index.taxonomy.seed.SEED_AUDIOSET_UCS_MAP) | AudioSet label NAME (lowercased) -> UCS CatID.                    |
 
-### foley.index.taxonomy.seed.SEED_AUDIOSET_UCS_MAP *: list[dict]* *= [{'catid': 'DOORWood', 'mid': '/m/02dgv', 'name': 'door'}, {'catid': 'DOORMetal', 'mid': '/m/02y_763', 'name': 'sliding door'}, {'catid': 'WEATHRain', 'mid': '/m/06mb1', 'name': 'rain'}, {'catid': 'WEATHRain', 'mid': '/m/07r10fb', 'name': 'raindrop'}, {'catid': 'WEATHThunder', 'mid': '/m/0ngt1', 'name': 'thunder'}, {'catid': 'WEATHThunder', 'mid': '/m/0jb2l', 'name': 'thunderstorm'}, {'catid': 'WEATHWind', 'mid': '/m/03m9d0z', 'name': 'wind'}, {'catid': 'FOOTConc', 'mid': '/m/07qann', 'name': 'walk, footsteps'}, {'catid': 'FIREGeneral', 'mid': '/m/0jbk', 'name': 'fire'}, {'catid': 'FIREGeneral', 'mid': '/m/07pc8k4', 'name': 'crackle'}, {'catid': 'WATRRun', 'mid': '/m/0838f', 'name': 'water'}, {'catid': 'WATRSplash', 'mid': '/m/07qlwh6', 'name': 'splash, splatter'}, {'catid': 'LIQDPour', 'mid': '/m/07q0yl5', 'name': 'pour'}, {'catid': 'GLASBreak', 'mid': '/m/039jq', 'name': 'glass'}, {'catid': 'GLASBreak', 'mid': '/m/07rjwbb', 'name': 'shatter'}, {'catid': 'EXPLGeneral', 'mid': '/m/014zdl', 'name': 'explosion'}, {'catid': 'GUNHandgun', 'mid': '/m/032s66', 'name': 'gunshot, gunfire'}, {'catid': 'VEHCarExt', 'mid': '/m/07yv9', 'name': 'vehicle'}, {'catid': 'VEHCarExt', 'mid': '/m/0k4j', 'name': 'car'}, {'catid': 'VEHHorn', 'mid': '/m/0912c9', 'name': 'vehicle horn, honk'}, {'catid': 'ANMLDog', 'mid': '/m/0bt9lr', 'name': 'dog'}, {'catid': 'ANMLDog', 'mid': '/m/05tny_', 'name': 'bark'}, {'catid': 'ANMLCat', 'mid': '/m/01yrx', 'name': 'cat'}, {'catid': 'ANMLBird', 'mid': '/m/015p6', 'name': 'bird'}, {'catid': 'COMMPhone', 'mid': '/m/07cx4', 'name': 'telephone'}]*
+### foley.index.taxonomy.seed.SEED_AUDIOSET_UCS_MAP *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)]* *= [{'catid': 'DOORWood', 'mid': '/m/02dgv', 'name': 'door'}, {'catid': 'DOORMetal', 'mid': '/m/02y_763', 'name': 'sliding door'}, {'catid': 'WEATHRain', 'mid': '/m/06mb1', 'name': 'rain'}, {'catid': 'WEATHRain', 'mid': '/m/07r10fb', 'name': 'raindrop'}, {'catid': 'WEATHThunder', 'mid': '/m/0ngt1', 'name': 'thunder'}, {'catid': 'WEATHThunder', 'mid': '/m/0jb2l', 'name': 'thunderstorm'}, {'catid': 'WEATHWind', 'mid': '/m/03m9d0z', 'name': 'wind'}, {'catid': 'FOOTConc', 'mid': '/m/07qann', 'name': 'walk, footsteps'}, {'catid': 'FIREGeneral', 'mid': '/m/0jbk', 'name': 'fire'}, {'catid': 'FIREGeneral', 'mid': '/m/07pc8k4', 'name': 'crackle'}, {'catid': 'WATRRun', 'mid': '/m/0838f', 'name': 'water'}, {'catid': 'WATRSplash', 'mid': '/m/07qlwh6', 'name': 'splash, splatter'}, {'catid': 'LIQDPour', 'mid': '/m/07q0yl5', 'name': 'pour'}, {'catid': 'GLASBreak', 'mid': '/m/039jq', 'name': 'glass'}, {'catid': 'GLASBreak', 'mid': '/m/07rjwbb', 'name': 'shatter'}, {'catid': 'EXPLGeneral', 'mid': '/m/014zdl', 'name': 'explosion'}, {'catid': 'GUNHandgun', 'mid': '/m/032s66', 'name': 'gunshot, gunfire'}, {'catid': 'VEHCarExt', 'mid': '/m/07yv9', 'name': 'vehicle'}, {'catid': 'VEHCarExt', 'mid': '/m/0k4j', 'name': 'car'}, {'catid': 'VEHHorn', 'mid': '/m/0912c9', 'name': 'vehicle horn, honk'}, {'catid': 'ANMLDog', 'mid': '/m/0bt9lr', 'name': 'dog'}, {'catid': 'ANMLDog', 'mid': '/m/05tny_', 'name': 'bark'}, {'catid': 'ANMLCat', 'mid': '/m/01yrx', 'name': 'cat'}, {'catid': 'ANMLBird', 'mid': '/m/015p6', 'name': 'bird'}, {'catid': 'COMMPhone', 'mid': '/m/07cx4', 'name': 'telephone'}]*
 
 AudioSet label NAME (lowercased) -> UCS CatID. `mid` is best-effort (verify
 against `audioset/ontology.json` before trusting). Every `catid` here MUST
 exist in [`SEED_UCS_TABLE`](_autosummary/foley.index.taxonomy.seed.html.md#foley.index.taxonomy.seed.SEED_UCS_TABLE) — [`load_audioset_ucs_map()`](_autosummary/foley.index.taxonomy.audioset.html.md#foley.index.taxonomy.audioset.load_audioset_ucs_map)
 asserts this at load time.
 
-### foley.index.taxonomy.seed.SEED_UCS_TABLE *: list[dict]* *= [{'category': 'DOORS', 'catid': 'DOORWood', 'confident': True, 'subcategory': 'Wood', 'synonyms': ['wooden door', 'oak door', 'door creak', 'door open', 'door close', 'door slam']}, {'category': 'DOORS', 'catid': 'DOORMetal', 'confident': False, 'subcategory': 'Metal', 'synonyms': ['metal door', 'steel door', 'hatch', 'cell door']}, {'category': 'DOORS', 'catid': 'DOORKnob', 'confident': False, 'subcategory': 'Knob', 'synonyms': ['doorknob', 'door handle', 'latch', 'handle turn']}, {'category': 'WEATHER', 'catid': 'WEATHRain', 'confident': True, 'subcategory': 'Rain', 'synonyms': ['rain', 'rainfall', 'raining', 'rain on window', 'downpour', 'drizzle']}, {'category': 'WEATHER', 'catid': 'WEATHWind', 'confident': False, 'subcategory': 'Wind', 'synonyms': ['wind', 'gust', 'breeze', 'howling wind', 'windy']}, {'category': 'WEATHER', 'catid': 'WEATHThunder', 'confident': False, 'subcategory': 'Thunder', 'synonyms': ['thunder', 'thunderclap', 'thunderstorm', 'thunder crack', 'rumble']}, {'category': 'FOOTSTEPS', 'catid': 'FOOTWood', 'confident': False, 'subcategory': 'Wood', 'synonyms': ['footsteps wood', 'walking wood floor', 'footfall wood']}, {'category': 'FOOTSTEPS', 'catid': 'FOOTConc', 'confident': False, 'subcategory': 'Concrete', 'synonyms': ['footsteps concrete', 'walking pavement', 'footsteps sidewalk']}, {'category': 'FOOTSTEPS', 'catid': 'FOOTGravel', 'confident': False, 'subcategory': 'Gravel', 'synonyms': ['footsteps gravel', 'walking gravel', 'crunch gravel']}, {'category': 'IMPACTS', 'catid': 'IMPTGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['impact', 'hit', 'thud', 'bang', 'smash', 'crash']}, {'category': 'DESTRUCTION', 'catid': 'DESTGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['destruction', 'collapse', 'debris', 'rubble', 'demolition']}, {'category': 'GLASS', 'catid': 'GLASBreak', 'confident': False, 'subcategory': 'Break', 'synonyms': ['glass break', 'glass shatter', 'shattering glass', 'broken glass']}, {'category': 'WATER', 'catid': 'WATRRun', 'confident': False, 'subcategory': 'Running', 'synonyms': ['running water', 'stream', 'faucet', 'tap water', 'flowing water']}, {'category': 'WATER', 'catid': 'WATRSplash', 'confident': False, 'subcategory': 'Splash', 'synonyms': ['splash', 'splashing', 'water splash', 'plop']}, {'category': 'LIQUID', 'catid': 'LIQDPour', 'confident': False, 'subcategory': 'Pour', 'synonyms': ['pour', 'pouring', 'glug', 'liquid pour']}, {'category': 'FIRE', 'catid': 'FIREGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['fire', 'flames', 'campfire', 'crackling fire', 'burning']}, {'category': 'FIRE', 'catid': 'FIREWhoosh', 'confident': False, 'subcategory': 'Whoosh', 'synonyms': ['fire whoosh', 'flame burst', 'fireball', 'ignite whoosh']}, {'category': 'VEHICLES', 'catid': 'VEHCarInt', 'confident': False, 'subcategory': 'Car Interior', 'synonyms': ['car interior', 'in car', 'car cabin']}, {'category': 'VEHICLES', 'catid': 'VEHCarExt', 'confident': False, 'subcategory': 'Car Exterior', 'synonyms': ['car pass by', 'car exterior', 'car drive by', 'engine car']}, {'category': 'VEHICLES', 'catid': 'VEHHorn', 'confident': False, 'subcategory': 'Horn', 'synonyms': ['car horn', 'honk', 'vehicle horn', 'beep horn']}, {'category': 'AMBIENCE', 'catid': 'AMBUrban', 'confident': False, 'subcategory': 'Urban', 'synonyms': ['city ambience', 'street ambience', 'urban background', 'traffic ambience']}, {'category': 'AMBIENCE', 'catid': 'AMBNature', 'confident': False, 'subcategory': 'Nature', 'synonyms': ['nature ambience', 'forest ambience', 'outdoor ambience', 'birdsong bed']}, {'category': 'AMBIENCE', 'catid': 'AMBRoom', 'confident': False, 'subcategory': 'Room Tone', 'synonyms': ['room tone', 'roomtone', 'interior ambience', 'quiet room']}, {'category': 'USER INTERFACE', 'catid': 'GUIBeep', 'confident': False, 'subcategory': 'Beep', 'synonyms': ['ui beep', 'button', 'menu click', 'notification', 'ui blip']}, {'category': 'USER INTERFACE', 'catid': 'GUIWhoosh', 'confident': False, 'subcategory': 'Whoosh', 'synonyms': ['ui whoosh', 'swipe', 'ui swipe', 'transition whoosh']}, {'category': 'ANIMALS', 'catid': 'ANMLDog', 'confident': False, 'subcategory': 'Dog', 'synonyms': ['dog', 'bark', 'dog bark', 'growl', 'whine dog']}, {'category': 'ANIMALS', 'catid': 'ANMLCat', 'confident': False, 'subcategory': 'Cat', 'synonyms': ['cat', 'meow', 'purr', 'cat meow']}, {'category': 'ANIMALS', 'catid': 'ANMLBird', 'confident': False, 'subcategory': 'Bird', 'synonyms': ['bird', 'birdsong', 'chirp', 'tweet', 'bird call']}, {'category': 'GUNS', 'catid': 'GUNHandgun', 'confident': False, 'subcategory': 'Handgun', 'synonyms': ['gunshot', 'pistol', 'handgun', 'gun fire', 'shot']}, {'category': 'EXPLOSIONS', 'catid': 'EXPLGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['explosion', 'blast', 'boom', 'detonation', 'explode']}, {'category': 'CLOTH', 'catid': 'CLOTHMove', 'confident': False, 'subcategory': 'Movement', 'synonyms': ['cloth', 'cloth movement', 'fabric', 'clothing rustle', 'cloth rustle']}, {'category': 'PAPER', 'catid': 'PAPRHandle', 'confident': False, 'subcategory': 'Handling', 'synonyms': ['paper', 'paper rustle', 'page turn', 'paper crumple']}, {'category': 'MACHINES', 'catid': 'MACHGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['machine', 'motor', 'mechanism', 'machinery', 'servo']}, {'category': 'ELECTRICITY', 'catid': 'ELECBuzz', 'confident': False, 'subcategory': 'Buzz', 'synonyms': ['electric buzz', 'spark', 'zap', 'electricity', 'arc']}, {'category': 'COMMUNICATIONS', 'catid': 'COMMPhone', 'confident': False, 'subcategory': 'Phone', 'synonyms': ['phone ring', 'telephone', 'ringtone', 'cell phone', 'dial tone']}]*
+### foley.index.taxonomy.seed.SEED_UCS_TABLE *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[dict](https://docs.python.org/3/builtins/stdtypes.html#dict)]* *= [{'category': 'DOORS', 'catid': 'DOORWood', 'confident': True, 'subcategory': 'Wood', 'synonyms': ['wooden door', 'oak door', 'door creak', 'door open', 'door close', 'door slam']}, {'category': 'DOORS', 'catid': 'DOORMetal', 'confident': False, 'subcategory': 'Metal', 'synonyms': ['metal door', 'steel door', 'hatch', 'cell door']}, {'category': 'DOORS', 'catid': 'DOORKnob', 'confident': False, 'subcategory': 'Knob', 'synonyms': ['doorknob', 'door handle', 'latch', 'handle turn']}, {'category': 'WEATHER', 'catid': 'WEATHRain', 'confident': True, 'subcategory': 'Rain', 'synonyms': ['rain', 'rainfall', 'raining', 'rain on window', 'downpour', 'drizzle']}, {'category': 'WEATHER', 'catid': 'WEATHWind', 'confident': False, 'subcategory': 'Wind', 'synonyms': ['wind', 'gust', 'breeze', 'howling wind', 'windy']}, {'category': 'WEATHER', 'catid': 'WEATHThunder', 'confident': False, 'subcategory': 'Thunder', 'synonyms': ['thunder', 'thunderclap', 'thunderstorm', 'thunder crack', 'rumble']}, {'category': 'FOOTSTEPS', 'catid': 'FOOTWood', 'confident': False, 'subcategory': 'Wood', 'synonyms': ['footsteps wood', 'walking wood floor', 'footfall wood']}, {'category': 'FOOTSTEPS', 'catid': 'FOOTConc', 'confident': False, 'subcategory': 'Concrete', 'synonyms': ['footsteps concrete', 'walking pavement', 'footsteps sidewalk']}, {'category': 'FOOTSTEPS', 'catid': 'FOOTGravel', 'confident': False, 'subcategory': 'Gravel', 'synonyms': ['footsteps gravel', 'walking gravel', 'crunch gravel']}, {'category': 'IMPACTS', 'catid': 'IMPTGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['impact', 'hit', 'thud', 'bang', 'smash', 'crash']}, {'category': 'DESTRUCTION', 'catid': 'DESTGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['destruction', 'collapse', 'debris', 'rubble', 'demolition']}, {'category': 'GLASS', 'catid': 'GLASBreak', 'confident': False, 'subcategory': 'Break', 'synonyms': ['glass break', 'glass shatter', 'shattering glass', 'broken glass']}, {'category': 'WATER', 'catid': 'WATRRun', 'confident': False, 'subcategory': 'Running', 'synonyms': ['running water', 'stream', 'faucet', 'tap water', 'flowing water']}, {'category': 'WATER', 'catid': 'WATRSplash', 'confident': False, 'subcategory': 'Splash', 'synonyms': ['splash', 'splashing', 'water splash', 'plop']}, {'category': 'LIQUID', 'catid': 'LIQDPour', 'confident': False, 'subcategory': 'Pour', 'synonyms': ['pour', 'pouring', 'glug', 'liquid pour']}, {'category': 'FIRE', 'catid': 'FIREGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['fire', 'flames', 'campfire', 'crackling fire', 'burning']}, {'category': 'FIRE', 'catid': 'FIREWhoosh', 'confident': False, 'subcategory': 'Whoosh', 'synonyms': ['fire whoosh', 'flame burst', 'fireball', 'ignite whoosh']}, {'category': 'VEHICLES', 'catid': 'VEHCarInt', 'confident': False, 'subcategory': 'Car Interior', 'synonyms': ['car interior', 'in car', 'car cabin']}, {'category': 'VEHICLES', 'catid': 'VEHCarExt', 'confident': False, 'subcategory': 'Car Exterior', 'synonyms': ['car pass by', 'car exterior', 'car drive by', 'engine car']}, {'category': 'VEHICLES', 'catid': 'VEHHorn', 'confident': False, 'subcategory': 'Horn', 'synonyms': ['car horn', 'honk', 'vehicle horn', 'beep horn']}, {'category': 'AMBIENCE', 'catid': 'AMBUrban', 'confident': False, 'subcategory': 'Urban', 'synonyms': ['city ambience', 'street ambience', 'urban background', 'traffic ambience']}, {'category': 'AMBIENCE', 'catid': 'AMBNature', 'confident': False, 'subcategory': 'Nature', 'synonyms': ['nature ambience', 'forest ambience', 'outdoor ambience', 'birdsong bed']}, {'category': 'AMBIENCE', 'catid': 'AMBRoom', 'confident': False, 'subcategory': 'Room Tone', 'synonyms': ['room tone', 'roomtone', 'interior ambience', 'quiet room']}, {'category': 'USER INTERFACE', 'catid': 'GUIBeep', 'confident': False, 'subcategory': 'Beep', 'synonyms': ['ui beep', 'button', 'menu click', 'notification', 'ui blip']}, {'category': 'USER INTERFACE', 'catid': 'GUIWhoosh', 'confident': False, 'subcategory': 'Whoosh', 'synonyms': ['ui whoosh', 'swipe', 'ui swipe', 'transition whoosh']}, {'category': 'ANIMALS', 'catid': 'ANMLDog', 'confident': False, 'subcategory': 'Dog', 'synonyms': ['dog', 'bark', 'dog bark', 'growl', 'whine dog']}, {'category': 'ANIMALS', 'catid': 'ANMLCat', 'confident': False, 'subcategory': 'Cat', 'synonyms': ['cat', 'meow', 'purr', 'cat meow']}, {'category': 'ANIMALS', 'catid': 'ANMLBird', 'confident': False, 'subcategory': 'Bird', 'synonyms': ['bird', 'birdsong', 'chirp', 'tweet', 'bird call']}, {'category': 'GUNS', 'catid': 'GUNHandgun', 'confident': False, 'subcategory': 'Handgun', 'synonyms': ['gunshot', 'pistol', 'handgun', 'gun fire', 'shot']}, {'category': 'EXPLOSIONS', 'catid': 'EXPLGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['explosion', 'blast', 'boom', 'detonation', 'explode']}, {'category': 'CLOTH', 'catid': 'CLOTHMove', 'confident': False, 'subcategory': 'Movement', 'synonyms': ['cloth', 'cloth movement', 'fabric', 'clothing rustle', 'cloth rustle']}, {'category': 'PAPER', 'catid': 'PAPRHandle', 'confident': False, 'subcategory': 'Handling', 'synonyms': ['paper', 'paper rustle', 'page turn', 'paper crumple']}, {'category': 'MACHINES', 'catid': 'MACHGeneral', 'confident': False, 'subcategory': 'General', 'synonyms': ['machine', 'motor', 'mechanism', 'machinery', 'servo']}, {'category': 'ELECTRICITY', 'catid': 'ELECBuzz', 'confident': False, 'subcategory': 'Buzz', 'synonyms': ['electric buzz', 'spark', 'zap', 'electricity', 'arc']}, {'category': 'COMMUNICATIONS', 'catid': 'COMMPhone', 'confident': False, 'subcategory': 'Phone', 'synonyms': ['phone ring', 'telephone', 'ringtone', 'cell phone', 'dial tone']}]*
 
 catid, category, subcategory, synonyms
 (lowercased), confident. `confident=False` => APPROXIMATE CatID.
@@ -9772,7 +9772,7 @@ Build the UCS lookup: the seed rows, overridden/extended by a JSON drop.
   * **data_dir** – Directory to look for `ucs_full.json` in (defaults to the
     package’s `taxonomy/data/`). When present, its rows override the
     seed on CatID collision and add the rest of the ~750-row master.
-  * **include_seed** (`bool`) – Start from the in-code seed table (default `True`).
+  * **include_seed** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Start from the in-code seed table (default `True`).
 * **Return type:**
   [`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)
 * **Returns:**
@@ -9786,7 +9786,7 @@ Strips directory and extension; requires at least one `_` (the field
 delimiter). Does not validate the token against the table.
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.index.taxonomy.ucs.parse_ucs_filename(filename, , table=None)
 
@@ -9797,10 +9797,10 @@ its CatID token is unknown (so a wrong subcategory is never emitted).
 
 * **Parameters:**
   * **filename** – A path or filename (only the basename’s token 0 is used).
-  * **table** (`Optional`[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
     [`default_ucs_table()`](_autosummary/foley.index.taxonomy.ucs.html.md#foley.index.taxonomy.ucs.default_ucs_table)).
 * **Return type:**
-  `tuple`[`Optional`[`str`], `Optional`[`str`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 
 # _autosummary/foley.licensing.html.md
@@ -9848,7 +9848,7 @@ item is redistributable but stored by-reference.
 |---------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 | [`LicenseMeta`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseMeta)(display_name[, url])     | Human-facing display metadata for one `license_id` (name + canonical URL). |
 
-### foley.licensing.LICENSE_FLAGS *: dict[str, [LicenseFlags](_autosummary/foley.licensing.html.md#foley.licensing.LicenseFlags)]* *= {'CC-BY-4.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-4.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-Sampling+-1.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC0-1.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None), 'ElevenLabs-SFX': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'MIT': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'Pixabay-Content': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'RemArc': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'Sonniss-GDC': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'Stability-Community': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=1000000), 'unknown': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=False, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'user-owned': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None)}*
+### foley.licensing.LICENSE_FLAGS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseFlags](_autosummary/foley.licensing.html.md#foley.licensing.LicenseFlags)]* *= {'CC-BY-4.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-4.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-Sampling+-1.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC0-1.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None), 'ElevenLabs-SFX': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'MIT': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'Pixabay-Content': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'RemArc': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'Sonniss-GDC': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'Stability-Community': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=1000000), 'unknown': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=False, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'user-owned': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None)}*
 
 `license_id` -> default flag set (report 07 §8.1 seed table).
 
@@ -9862,7 +9862,7 @@ ai_training, requires_attribution, revenue_cap_usd
 * **Type:**
   SSOT
 
-### foley.licensing.LICENSE_META *: dict[str, [LicenseMeta](_autosummary/foley.licensing.html.md#foley.licensing.LicenseMeta)]* *= {'CC-BY-4.0': LicenseMeta(display_name='CC BY 4.0', url='https://creativecommons.org/licenses/by/4.0/'), 'CC-BY-NC-4.0': LicenseMeta(display_name='CC BY-NC 4.0', url='https://creativecommons.org/licenses/by-nc/4.0/'), 'CC-Sampling+-1.0': LicenseMeta(display_name='CC Sampling+ 1.0', url='https://creativecommons.org/licenses/sampling+/1.0/'), 'CC0-1.0': LicenseMeta(display_name='CC0 1.0 Universal (Public Domain Dedication)', url='https://creativecommons.org/publicdomain/zero/1.0/'), 'ElevenLabs-SFX': LicenseMeta(display_name='ElevenLabs Sound Effects Terms', url='https://elevenlabs.io/terms-of-use'), 'MIT': LicenseMeta(display_name='MIT License', url='https://opensource.org/license/mit'), 'Pixabay-Content': LicenseMeta(display_name='Pixabay Content License', url='https://pixabay.com/service/license-summary/'), 'RemArc': LicenseMeta(display_name='BBC RemArc Licence', url='https://sound-effects.bbcrewind.co.uk/licensing'), 'Sonniss-GDC': LicenseMeta(display_name='Sonniss GDC Game Audio Bundle License', url='https://sonniss.com/gdc-bundle-license'), 'Stability-Community': LicenseMeta(display_name='Stability AI Community License', url='https://stability.ai/community-license-agreement'), 'unknown': LicenseMeta(display_name='Unknown / unverified license', url=None), 'user-owned': LicenseMeta(display_name='User-owned / original work', url=None)}*
+### foley.licensing.LICENSE_META *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseMeta](_autosummary/foley.licensing.html.md#foley.licensing.LicenseMeta)]* *= {'CC-BY-4.0': LicenseMeta(display_name='CC BY 4.0', url='https://creativecommons.org/licenses/by/4.0/'), 'CC-BY-NC-4.0': LicenseMeta(display_name='CC BY-NC 4.0', url='https://creativecommons.org/licenses/by-nc/4.0/'), 'CC-Sampling+-1.0': LicenseMeta(display_name='CC Sampling+ 1.0', url='https://creativecommons.org/licenses/sampling+/1.0/'), 'CC0-1.0': LicenseMeta(display_name='CC0 1.0 Universal (Public Domain Dedication)', url='https://creativecommons.org/publicdomain/zero/1.0/'), 'ElevenLabs-SFX': LicenseMeta(display_name='ElevenLabs Sound Effects Terms', url='https://elevenlabs.io/terms-of-use'), 'MIT': LicenseMeta(display_name='MIT License', url='https://opensource.org/license/mit'), 'Pixabay-Content': LicenseMeta(display_name='Pixabay Content License', url='https://pixabay.com/service/license-summary/'), 'RemArc': LicenseMeta(display_name='BBC RemArc Licence', url='https://sound-effects.bbcrewind.co.uk/licensing'), 'Sonniss-GDC': LicenseMeta(display_name='Sonniss GDC Game Audio Bundle License', url='https://sonniss.com/gdc-bundle-license'), 'Stability-Community': LicenseMeta(display_name='Stability AI Community License', url='https://stability.ai/community-license-agreement'), 'unknown': LicenseMeta(display_name='Unknown / unverified license', url=None), 'user-owned': LicenseMeta(display_name='User-owned / original work', url=None)}*
 
 `license_id` -> display name + canonical URL (one row per
 [`LICENSE_FLAGS`](_autosummary/foley.licensing.html.md#foley.licensing.LICENSE_FLAGS) key). Used only for human-readable credits; never for
@@ -9873,13 +9873,13 @@ permission decisions (those come from [`LICENSE_FLAGS`](_autosummary/foley.licen
 
 ### *class* foley.licensing.LicenseFlags(commercial_ok=False, embed_in_derivative_ok=False, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The eight derivable flags for one `license_id` (the table row type).
 
 ### *class* foley.licensing.LicenseMeta(display_name, url=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Human-facing display metadata for one `license_id` (name + canonical URL).
 
@@ -9907,7 +9907,7 @@ Does NOT touch `rights_verified` — verification is a separate concern.
 
 * **Parameters:**
   * **record** ([`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)) – The [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord) to populate.
-  * **overrides** (`Optional`[`dict`]) – Optional per-source flag overrides (see
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional per-source flag overrides (see
     [`derive_license_flags()`](_autosummary/foley.licensing.html.md#foley.licensing.derive_license_flags)).
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
@@ -9920,8 +9920,8 @@ Look up the flag set for a `license_id` (fail-closed fallback), then
 apply per-source overrides.
 
 * **Parameters:**
-  * **license_id** (`str`) – The normalized license id (SPDX or foley-specific token).
-  * **overrides** (`Optional`[`dict`]) – Optional per-source flag overrides — e.g. Freesound forces
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The normalized license id (SPDX or foley-specific token).
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional per-source flag overrides — e.g. Freesound forces
     `cache_bytes_ok=False` on CC0. Keys must be `LicenseFlags` fields.
 * **Return type:**
   [`LicenseFlags`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseFlags)
@@ -9929,7 +9929,7 @@ apply per-source overrides.
   The resolved [`LicenseFlags`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseFlags) (fallback = all-False
   `UNKNOWN_LICENSE_FLAGS` for unrecognized ids).
 * **Raises:**
-  **ValueError** – If `overrides` contains a key that is not a
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `overrides` contains a key that is not a
       [`LicenseFlags`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseFlags) field.
 
 ### foley.licensing.keep(record, intended_use)
@@ -9943,7 +9943,7 @@ unverified rights => reject. Any single unmet requirement => reject.
   * **record** ([`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)) – The candidate’s rights record.
   * **intended_use** ([`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)) – The caller’s declared intent.
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 * **Returns:**
   `True` only if every requirement in `intended_use` is satisfied by
   `record`; `False` otherwise (including unverified rights).
@@ -9957,7 +9957,7 @@ Convenience: apply [`keep()`](_autosummary/foley.licensing.html.md#foley.licensi
     SSOT consulted).
   * **intended_use** ([`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)) – The caller’s declared intent.
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 * **Returns:**
   The result of `keep(sound_record.license, intended_use)`.
 
@@ -9988,9 +9988,9 @@ forbid). Only *after* it are `by-nc` / `sampling` tested before the bare
 `by`.
 
 * **Parameters:**
-  **url** (`Optional`[`str`]) – A CC license URL, a CC label string, or `None`.
+  **url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A CC license URL, a CC label string, or `None`.
 * **Return type:**
-  `tuple`[`str`, `bool`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
   `(license_id, rights_verified)` — `('unknown', False)` when
   unrecognized, missing, or a fail-closed ND/SA variant.
@@ -10000,7 +10000,7 @@ forbid). Only *after* it are `by-nc` / `sampling` tested before the bare
 Return the display [`LicenseMeta`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseMeta) for `license_id` (fail-closed fallback).
 
 * **Parameters:**
-  **license_id** (`str`) – The normalized license id.
+  **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The normalized license id.
 * **Return type:**
   [`LicenseMeta`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseMeta)
 * **Returns:**
@@ -10063,7 +10063,7 @@ All four submodules are stdlib-only at import; `opentelemetry` loads lazily insi
 
 ### *class* foley.obs.NoOpTracer
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The default [`Tracer`](_autosummary/foley.obs.html.md#foley.obs.Tracer) — yields the shared `_NOOP_SPAN`, zero deps.
 
@@ -10073,7 +10073,7 @@ Yield the no-op span (context-manager protocol; nothing is recorded).
 
 ### *class* foley.obs.ObsConfig(enabled=False, force_disabled=False, redaction_mode=RedactionMode.hash, salt='foley-obs-v1', prefer_otel=True, run_store=None, tracer=None, clock=<built-in function time>, id_factory=<function ObsConfig.<lambda>>, now=<function \_iso_now>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Process-wide observability configuration (flipped by [`enable()`](_autosummary/foley.obs.html.md#foley.obs.enable)/[`disable()`](_autosummary/foley.obs.html.md#foley.obs.disable)).
 
@@ -10089,17 +10089,17 @@ Fractions of a second may be present if the system clock provides them.
 ISO-8601 UTC timestamp (real wall-clock; overridden to `None` in tests).
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.obs.RedactionMode(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a sensitive string is rendered in telemetry (`str`-Enum → serializes cleanly).
 
 ### *class* foley.obs.Redactor(mode=RedactionMode.hash, salt='foley-obs-v1', preview_chars=0, fields=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifests.
 
@@ -10108,7 +10108,7 @@ The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifes
 Redact every sensitive key in a (shallow) attribute/inputs dict.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### redact_error(exc)
 
@@ -10120,7 +10120,7 @@ recorded (safe + still useful); the full `repr` is kept only in
 `full` mode (opt-in local debug).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### redact_manifest(payload)
 
@@ -10146,7 +10146,7 @@ trace can be replayed against a fresh index.
 
 ### *class* foley.obs.RunRecorder(manifest, , tracer, redactor, run_store, clock, id_factory)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Builds one [`RunManifest`](_autosummary/foley.obs.html.md#foley.obs.RunManifest) (span tree + composed shapes), tracer-independent.
 
@@ -10160,21 +10160,21 @@ off `self.manifest.steps` — before any emit — never holds raw narration.
 `seq` is assigned here (append position) when the caller left it `None`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### emit()
 
 Persist the manifest to the run store — swallowing any write failure.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### set_plan_ref(plan_ref)
 
 Fill the reserved #8 `plan_ref` slot (a light join dict — no text).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### span(name, , kind=None, \*\*attributes)
 
@@ -10205,7 +10205,7 @@ catches it). Rehydrated element-wise by `RunManifest.from_dict()` exactly like
 
 ### *class* foley.obs.Tracer(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Starts mirror spans; the DI seam (default no-op, OTel-backed when present).
 
@@ -10214,7 +10214,7 @@ Starts mirror spans; the DI seam (default no-op, OTel-backed when present).
 Apply [`ObsConfig`](_autosummary/foley.obs.html.md#foley.obs.ObsConfig) overrides WITHOUT flipping `enabled` (the test-injection seam).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.current_run()
 
@@ -10225,7 +10225,7 @@ The active [`RunRecorder`](_autosummary/foley.obs.html.md#foley.obs.RunRecorder)
 Turn observability off process-wide (façades revert to a byte-for-byte no-op).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.emit_run_manifest(store, manifest, , redactor=None)
 
@@ -10236,20 +10236,20 @@ belt-and-suspenders redaction sweep (do NOT couple the write to
 auto-serialization). Returns the `run_id`.
 
 * **Parameters:**
-  * **store** (`MutableMapping`) – A `MutableMapping[str, dict]` (default:
+  * **store** ([`MutableMapping`](https://docs.python.org/3/library/typing.html#typing.MutableMapping)) – A `MutableMapping[str, dict]` (default:
     [`foley.stores.make_run_store()`](_autosummary/foley.stores.html.md#foley.stores.make_run_store); a dict in tests).
   * **manifest** ([`RunManifest`](_autosummary/foley.obs.run_artifact.html.md#foley.obs.run_artifact.RunManifest)) – The [`RunManifest`](_autosummary/foley.obs.html.md#foley.obs.RunManifest) to persist.
   * **redactor** – An optional [`Redactor`](_autosummary/foley.obs.redact.html.md#foley.obs.redact.Redactor) applied to the full
     payload before the write (the emit-time net).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.obs.enable(\*\*overrides)
 
 Turn observability on process-wide (and apply any [`ObsConfig`](_autosummary/foley.obs.html.md#foley.obs.ObsConfig) overrides).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.facade_run(op, , inputs=None, params=None)
 
@@ -10264,7 +10264,7 @@ manifest on exit. Disabled → the zero-cost `_NULL_RUN`.
 Return the effective [`Tracer`](_autosummary/foley.obs.html.md#foley.obs.Tracer) (OTel-backed when available, else no-op).
 
 * **Parameters:**
-  **prefer_otel** (`bool`) – When `True` (default) and `opentelemetry` is importable, return
+  **prefer_otel** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – When `True` (default) and `opentelemetry` is importable, return
   an `OTelTracer` (itself a free no-op until the host configures an SDK);
   any construction failure falls back to the no-op. `False` forces the stdlib
   [`NoOpTracer`](_autosummary/foley.obs.html.md#foley.obs.NoOpTracer) — the hermetic-test lever (this dev env may have otel).
@@ -10285,7 +10285,7 @@ leak prompt text into the manifest and duplicate data. Duck-typed over the repor
 (`.summary()` + `.results`) to avoid an obs → index import coupling.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.obs.is_enabled()
 
@@ -10296,7 +10296,7 @@ posture) hard-overrides both — so offline mode’s “nothing leaves the devic
 contract holds even when `$FOLEY_OBS` is exported.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.obs.load_run(store, run_id)
 
@@ -10310,12 +10310,12 @@ Load and typed-rehydrate a [`RunManifest`](_autosummary/foley.obs.html.md#foley.
 Redact one string per `mode`.
 
 * **Parameters:**
-  * **text** (`Optional`[`str`]) – The (possibly sensitive) string, or `None`.
+  * **text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The (possibly sensitive) string, or `None`.
   * **mode** ([`RedactionMode`](_autosummary/foley.obs.redact.html.md#foley.obs.redact.RedactionMode)) – `off` → `None`; `full` → `text` verbatim; `hash` (default) →
     `{"sha256": <salted hex>, "len": <n>}` (+ `"preview"` only if
     `preview_chars > 0`).
-  * **salt** (`str`) – Salt mixed into the hash (injectable; default fixed for diffability).
-  * **preview_chars** (`int`) – If > 0 (hash mode), include a leading `text[:preview_chars]`
+  * **salt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Salt mixed into the hash (injectable; default fixed for diffability).
+  * **preview_chars** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – If > 0 (hash mode), include a leading `text[:preview_chars]`
     preview. Default 0 → **zero content leak**.
 * **Returns:**
   `None`, the raw string, or a hash dict — depending on `mode`.
@@ -10325,7 +10325,7 @@ Redact one string per `mode`.
 Restore the default config (test teardown; clears injected store/tracer/clock).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.run(op='run', , inputs=None, params=None, \*\*overrides)
 
@@ -10389,7 +10389,7 @@ façade — a store-write failure degrades gracefully.
 
 ### *class* foley.obs.recorder.ObsConfig(enabled=False, force_disabled=False, redaction_mode=RedactionMode.hash, salt='foley-obs-v1', prefer_otel=True, run_store=None, tracer=None, clock=<built-in function time>, id_factory=<function ObsConfig.<lambda>>, now=<function \_iso_now>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Process-wide observability configuration (flipped by [`enable()`](_autosummary/foley.obs.recorder.html.md#foley.obs.recorder.enable)/[`disable()`](_autosummary/foley.obs.recorder.html.md#foley.obs.recorder.disable)).
 
@@ -10405,11 +10405,11 @@ Fractions of a second may be present if the system clock provides them.
 ISO-8601 UTC timestamp (real wall-clock; overridden to `None` in tests).
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* foley.obs.recorder.RunRecorder(manifest, , tracer, redactor, run_store, clock, id_factory)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Builds one `RunManifest` (span tree + composed shapes), tracer-independent.
 
@@ -10423,21 +10423,21 @@ off `self.manifest.steps` — before any emit — never holds raw narration.
 `seq` is assigned here (append position) when the caller left it `None`.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### emit()
 
 Persist the manifest to the run store — swallowing any write failure.
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### set_plan_ref(plan_ref)
 
 Fill the reserved #8 `plan_ref` slot (a light join dict — no text).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### span(name, , kind=None, \*\*attributes)
 
@@ -10448,7 +10448,7 @@ Open a span: append a `SpanRecord` (from our own clock/ids) + mirror it.
 Apply [`ObsConfig`](_autosummary/foley.obs.recorder.html.md#foley.obs.recorder.ObsConfig) overrides WITHOUT flipping `enabled` (the test-injection seam).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.recorder.current_run()
 
@@ -10459,14 +10459,14 @@ The active [`RunRecorder`](_autosummary/foley.obs.recorder.html.md#foley.obs.rec
 Turn observability off process-wide (façades revert to a byte-for-byte no-op).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.recorder.enable(\*\*overrides)
 
 Turn observability on process-wide (and apply any [`ObsConfig`](_autosummary/foley.obs.recorder.html.md#foley.obs.recorder.ObsConfig) overrides).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.recorder.facade_run(op, , inputs=None, params=None)
 
@@ -10485,14 +10485,14 @@ posture) hard-overrides both — so offline mode’s “nothing leaves the devic
 contract holds even when `$FOLEY_OBS` is exported.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.obs.recorder.reset()
 
 Restore the default config (test teardown; clears injected store/tracer/clock).
 
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.obs.recorder.run(op='run', , inputs=None, params=None, \*\*overrides)
 
@@ -10546,7 +10546,7 @@ Stdlib-only. Applied at TWO boundaries (belt-and-suspenders, mirroring
 |------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
 | [`Redactor`](_autosummary/foley.obs.redact.html.md#foley.obs.redact.Redactor)([mode, salt, preview_chars, fields]) | The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifests.  |
 
-### foley.obs.redact.REDACT_FIELDS *: frozenset[str]* *= frozenset({'context_text', 'gen_ai.completion', 'gen_ai.prompt', 'generation_prompt', 'narration', 'negative_prompt', 'onset', 'prompt', 'query'})*
+### foley.obs.redact.REDACT_FIELDS *: [frozenset](https://docs.python.org/3/builtins/stdtypes.html#frozenset)[[str](https://docs.python.org/3/builtins/stdtypes.html#str)]* *= frozenset({'context_text', 'gen_ai.completion', 'gen_ai.prompt', 'generation_prompt', 'narration', 'negative_prompt', 'onset', 'prompt', 'query'})*
 
 The attribute / field keys whose string values are sensitive and redacted. The
 narration/prompt/query surfaces report 12 §11 names; `context_text` / `narration`
@@ -10554,13 +10554,13 @@ narration/prompt/query surfaces report 12 §11 names; `context_text` / `narratio
 
 ### *class* foley.obs.redact.RedactionMode(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How a sensitive string is rendered in telemetry (`str`-Enum → serializes cleanly).
 
 ### *class* foley.obs.redact.Redactor(mode=RedactionMode.hash, salt='foley-obs-v1', preview_chars=0, fields=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifests.
 
@@ -10569,7 +10569,7 @@ The SSOT applier: redacts sensitive keys in values, attribute dicts, and manifes
 Redact every sensitive key in a (shallow) attribute/inputs dict.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### redact_error(exc)
 
@@ -10581,7 +10581,7 @@ recorded (safe + still useful); the full `repr` is kept only in
 `full` mode (opt-in local debug).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### redact_manifest(payload)
 
@@ -10599,12 +10599,12 @@ Redact `value` iff `key` is a sensitive field and `value` is a string.
 Redact one string per `mode`.
 
 * **Parameters:**
-  * **text** (`Optional`[`str`]) – The (possibly sensitive) string, or `None`.
+  * **text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The (possibly sensitive) string, or `None`.
   * **mode** ([`RedactionMode`](_autosummary/foley.obs.redact.html.md#foley.obs.redact.RedactionMode)) – `off` → `None`; `full` → `text` verbatim; `hash` (default) →
     `{"sha256": <salted hex>, "len": <n>}` (+ `"preview"` only if
     `preview_chars > 0`).
-  * **salt** (`str`) – Salt mixed into the hash (injectable; default fixed for diffability).
-  * **preview_chars** (`int`) – If > 0 (hash mode), include a leading `text[:preview_chars]`
+  * **salt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Salt mixed into the hash (injectable; default fixed for diffability).
+  * **preview_chars** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – If > 0 (hash mode), include a leading `text[:preview_chars]`
     preview. Default 0 → **zero content leak**.
 * **Returns:**
   `None`, the raw string, or a hash dict — depending on `mode`.
@@ -10689,13 +10689,13 @@ belt-and-suspenders redaction sweep (do NOT couple the write to
 auto-serialization). Returns the `run_id`.
 
 * **Parameters:**
-  * **store** (`MutableMapping`) – A `MutableMapping[str, dict]` (default:
+  * **store** ([`MutableMapping`](https://docs.python.org/3/library/typing.html#typing.MutableMapping)) – A `MutableMapping[str, dict]` (default:
     [`foley.stores.make_run_store()`](_autosummary/foley.stores.html.md#foley.stores.make_run_store); a dict in tests).
   * **manifest** ([`RunManifest`](_autosummary/foley.obs.run_artifact.html.md#foley.obs.run_artifact.RunManifest)) – The [`RunManifest`](_autosummary/foley.obs.run_artifact.html.md#foley.obs.run_artifact.RunManifest) to persist.
   * **redactor** – An optional [`Redactor`](_autosummary/foley.obs.redact.html.md#foley.obs.redact.Redactor) applied to the full
     payload before the write (the emit-time net).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.obs.run_artifact.ingest_digest(report)
 
@@ -10709,7 +10709,7 @@ leak prompt text into the manifest and duplicate data. Duck-typed over the repor
 (`.summary()` + `.results`) to avoid an obs → index import coupling.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.obs.run_artifact.load_run(store, run_id)
 
@@ -10766,13 +10766,13 @@ stability and shift across minor versions. This dict is the single place they ar
 
 ### *class* foley.obs.trace.NoOpSpan
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A zero-cost span: every method does nothing; `trace_id` is always `None`.
 
 ### *class* foley.obs.trace.NoOpTracer
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The default [`Tracer`](_autosummary/foley.obs.trace.html.md#foley.obs.trace.Tracer) — yields the shared `_NOOP_SPAN`, zero deps.
 
@@ -10782,7 +10782,7 @@ Yield the no-op span (context-manager protocol; nothing is recorded).
 
 ### *class* foley.obs.trace.OTelTracer
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 An OpenTelemetry-backed [`Tracer`](_autosummary/foley.obs.trace.html.md#foley.obs.trace.Tracer) (lazy import; requires `foley[obs]`).
 
@@ -10792,13 +10792,13 @@ Open a real OTel span, mapping `kind` to `SpanKind` and yielding a mirror.
 
 ### *class* foley.obs.trace.Span(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 The minimal mirror-span surface foley code calls (structural).
 
 ### *class* foley.obs.trace.Tracer(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Starts mirror spans; the DI seam (default no-op, OTel-backed when present).
 
@@ -10807,7 +10807,7 @@ Starts mirror spans; the DI seam (default no-op, OTel-backed when present).
 Return the effective [`Tracer`](_autosummary/foley.obs.trace.html.md#foley.obs.trace.Tracer) (OTel-backed when available, else no-op).
 
 * **Parameters:**
-  **prefer_otel** (`bool`) – When `True` (default) and `opentelemetry` is importable, return
+  **prefer_otel** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – When `True` (default) and `opentelemetry` is importable, return
   an [`OTelTracer`](_autosummary/foley.obs.trace.html.md#foley.obs.trace.OTelTracer) (itself a free no-op until the host configures an SDK);
   any construction failure falls back to the no-op. `False` forces the stdlib
   [`NoOpTracer`](_autosummary/foley.obs.trace.html.md#foley.obs.trace.NoOpTracer) — the hermetic-test lever (this dev env may have otel).
@@ -10907,11 +10907,11 @@ Iterable and sized; renders to `CREDITS.md` via [`markdown`](_autosummary/foley.
 JSON manifest via [`manifest`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.Credits.manifest) (== `to_dict()`). Both are deterministic
 (no timestamps) and diffable.
 
-#### *property* manifest *: dict*
+#### *property* manifest *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)*
 
 The machine-readable JSON manifest (a plain dict).
 
-#### *property* markdown *: str*
+#### *property* markdown *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The rendered `CREDITS.md` document.
 
@@ -10925,10 +10925,10 @@ otherwise the line is synthesized from Title/Author/Source/License, with a
 
 * **Parameters:**
   * **source** (`Union`[[`CreditEntry`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.CreditEntry), [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – A [`CreditEntry`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.CreditEntry), or any credit input (coerced first).
-  * **fmt** (`str`) – `'markdown'` (hyperlinked list-item body) or `'plain'` (text with
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'markdown'` (hyperlinked list-item body) or `'plain'` (text with
     URLs in parentheses).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The attribution line (no leading bullet / trailing newline).
 
@@ -10942,7 +10942,7 @@ never re-derived); `modified` reflects a non-empty `transformations` list.
 * **Parameters:**
   * **record** (`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – A [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate),
     or [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord).
-  * **title** (`Optional`[`str`]) – Explicit title override (else resolved from caption/tags/…).
+  * **title** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Explicit title override (else resolved from caption/tags/…).
 * **Return type:**
   [`CreditEntry`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.CreditEntry)
 
@@ -10951,12 +10951,12 @@ never re-derived); `modified` reflects a non-empty `transformations` list.
 Build the deduplicated [`Credits`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.Credits) for the sounds used in a run.
 
 * **Parameters:**
-  * **sounds** (`Iterable`[`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]]) – An iterable of records / candidates / license records.
-  * **title** (`str`) – The credits heading (also carried in the manifest).
-  * **only_required** (`bool`) – Keep only entries whose license *requires* attribution
+  * **sounds** ([`Iterable`](https://docs.python.org/3/library/typing.html#typing.Iterable)[`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]]) – An iterable of records / candidates / license records.
+  * **title** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The credits heading (also carried in the manifest).
+  * **only_required** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Keep only entries whose license *requires* attribution
     (drops CC0 / user-owned courtesy credits). Default `False` credits
     everything (never-discard-provenance).
-  * **sort** (`str`) – `'appearance'` (default: first-seen order), `'author'`, or
+  * **sort** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'appearance'` (default: first-seen order), `'author'`, or
     `'title'` (case-insensitive alpha).
 * **Return type:**
   [`Credits`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.Credits)
@@ -10975,7 +10975,7 @@ It carries the full field set, including the `requires_attribution` mark and
 the `watermark` / `c2pa_manifest_ref` pass-throughs (`None` until #9b).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.provenance.credits.render_credits_md(credits, , title=None, heading_level=2)
 
@@ -10983,10 +10983,10 @@ Render `credits` as a deterministic `CREDITS.md` document.
 
 * **Parameters:**
   * **credits** ([`Credits`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.Credits)) – The [`Credits`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.Credits) to render.
-  * **title** (`Optional`[`str`]) – Heading override (default: `credits.title`).
-  * **heading_level** (`int`) – Markdown heading level for the title (default `2` → `##`).
+  * **title** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Heading override (default: `credits.title`).
+  * **heading_level** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Markdown heading level for the title (default `2` → `##`).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The Markdown document (bulleted attribution lines; a placeholder note when
   empty), ending in a single trailing newline.
@@ -11065,7 +11065,7 @@ dependency-light.
 
 ### *class* foley.provenance.disclosure.AudioSealWatermarker(, message=61470)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The default [`Watermarker`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.Watermarker) — Meta AudioSeal, run on CPU, deterministic.
 
@@ -11082,8 +11082,8 @@ signal and the achieved detection probability is recorded in the meta.
 Embed the AudioSeal watermark; return the marked bytes + meta.
 
 * **Parameters:**
-  * **audio_bytes** (`bytes`) – The clip’s container bytes (WAV/FLAC/…).
-  * **message** (`Optional`[`int`]) – The 16-bit id to embed (default [`DEFAULT_WATERMARK_MESSAGE`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE)).
+  * **audio_bytes** ([`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)) – The clip’s container bytes (WAV/FLAC/…).
+  * **message** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The 16-bit id to embed (default [`DEFAULT_WATERMARK_MESSAGE`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE)).
 * **Return type:**
   [`WatermarkResult`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.WatermarkResult)
 * **Returns:**
@@ -11091,11 +11091,11 @@ Embed the AudioSeal watermark; return the marked bytes + meta.
   (float32) — a deterministic PCM round-trip so its content-hash id is
   reproducible — and whose `meta` is the `LicenseRecord.watermark` dict.
 
-#### *property* version *: str*
+#### *property* version *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The installed `audioseal` package version (best-effort).
 
-### foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE *: int* *= 61470*
+### foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 61470*
 
 The FIXED 16-bit foley provenance id embedded by AudioSeal. It MUST be constant
 (no per-call nonce / timestamp): a deterministic watermark keeps the stored
@@ -11109,23 +11109,23 @@ IPTC digitalSourceType vocabulary (C2PA `c2pa.actions` assertion).
 
 ### *class* foley.provenance.disclosure.PromptScan(trademark_hits=(), voice_hits=())
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The result of scanning a generation prompt for safety flags (pure).
 
-#### *property* contains_recognizable_voice *: bool*
+#### *property* contains_recognizable_voice *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 
 True if the prompt matched a recognizable-voice / clone pattern.
 
-#### *property* flagged *: bool*
+#### *property* flagged *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 
 True if the prompt matched any trademark or recognizable-voice pattern.
 
-#### *property* potential_trademark *: bool*
+#### *property* potential_trademark *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
 
 True if the prompt matched a branded-audio-logo entry.
 
-### foley.provenance.disclosure.TRADEMARK_REGISTRY *: tuple[[TrademarkEntry](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'thx', 'deep note'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc chimes', 'nbc three-note', 'nbc chime'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'tudum', 'ta-dum', 'ta dum', 'netflix sound', 'netflix intro', 'netflix chime'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'mgm lion', 'metro-goldwyn-mayer lion', 'mgm roar'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'20th century fox fanfare', 'fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel chime', 'intel bong', 'intel jingle', 'intel inside'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({'homer simpson doh', 'homer doh', "d'oh"})))*
+### foley.provenance.disclosure.TRADEMARK_REGISTRY *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[TrademarkEntry](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'deep note', 'thx'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc chime', 'nbc chimes', 'nbc three-note'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'netflix sound', 'tudum', 'ta dum', 'netflix chime', 'ta-dum', 'netflix intro'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'mgm lion', 'mgm roar', 'metro-goldwyn-mayer lion'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'20th century fox fanfare', 'fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel inside', 'intel chime', 'intel jingle', 'intel bong'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({'homer simpson doh', "d'oh", 'homer doh'})))*
 
 Seed registry of branded audio logos foley must not knowingly generate for
 commercial use (report 07 §7.2). Each entry maps a canonical mark to a set of
@@ -11134,25 +11134,25 @@ legal guarantee.
 
 ### *class* foley.provenance.disclosure.TrademarkEntry(canonical, aliases)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One trademarked audio logo + the casefolded prompt substrings that flag it.
 
 ### *class* foley.provenance.disclosure.WatermarkResult(audio_bytes, meta, detection_prob=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The output of a [`Watermarker`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.Watermarker): the marked bytes + provenance meta.
 
 ### *exception* foley.provenance.disclosure.WatermarkUnavailable
 
-Bases: `RuntimeError`
+Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
 
 Raised when a watermark is explicitly requested but `foley[provenance]` is absent.
 
 ### *class* foley.provenance.disclosure.Watermarker(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Embeds a detectable provenance watermark into audio bytes (the DI seam).
 
@@ -11187,7 +11187,7 @@ rollup over a whole mix is a weave/#8 concern.
   {name: {required, met, detail}},
   “pending”: […], “publish_ready”: bool, “provenance”: {…}}\`\`.
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.provenance.disclosure.build_content_credential(record, , asset_id, asset_hash=None)
 
@@ -11202,10 +11202,10 @@ never fork between the generate-time sidecar and the export-time manifest.
 * **Parameters:**
   * **record** (`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – A [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate),
     or [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord).
-  * **asset_id** (`str`) – The clip’s content-hash id (the sidecar store key / ref).
-  * **asset_hash** (`Optional`[`dict`]) – Optional `{"alg": "sha256", "value": <hex>}` of the asset bytes.
+  * **asset_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The clip’s content-hash id (the sidecar store key / ref).
+  * **asset_hash** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional `{"alg": "sha256", "value": <hex>}` of the asset bytes.
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   A JSON-serializable content-credential dict (`signed`/`embedded` False —
   it is self-asserted until #8 signs it).
@@ -11217,9 +11217,9 @@ Detect a foley watermark in `audio_bytes` (lazy AudioSeal).
 Downmixes to mono + resamples to 16 kHz, then runs the AudioSeal detector.
 
 * **Parameters:**
-  **audio_bytes** (`bytes`) – The clip’s container bytes.
+  **audio_bytes** ([`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)) – The clip’s container bytes.
 * **Return type:**
-  `tuple`[`float`, `Optional`[`int`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]]
 * **Returns:**
   `(probability, recovered_message)` — `probability` in `[0, 1]` that a
   watermark is present, and the recovered 16-bit id (`None` if the
@@ -11232,11 +11232,11 @@ Resolve the effective [`Watermarker`](_autosummary/foley.provenance.disclosure.h
 Progressive disclosure: generation works with or without `foley[provenance]`.
 
 * **Parameters:**
-  * **watermark** (`Optional`[`bool`]) – `True` require a watermark (raise if unavailable), `False`
+  * **watermark** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – `True` require a watermark (raise if unavailable), `False`
     never watermark, `None` (auto) watermark iff `audioseal` is installed.
-  * **watermarker** (`Optional`[[`Watermarker`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.Watermarker)]) – An injected watermarker (the DI seam) — wins over auto-detect.
+  * **watermarker** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Watermarker`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.Watermarker)]) – An injected watermarker (the DI seam) — wins over auto-detect.
 * **Return type:**
-  `Optional`[[`Watermarker`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.Watermarker)]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Watermarker`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.Watermarker)]
 * **Returns:**
   A [`Watermarker`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.Watermarker), or `None` when watermarking is off/unavailable.
 * **Raises:**
@@ -11252,7 +11252,7 @@ Pure and stdlib-only (casefold substring + regex). Returns a
 façade decides (fail-closed refuse by default, or warn-and-flag).
 
 * **Parameters:**
-  **prompt** (`str`) – The natural-language generation prompt.
+  **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language generation prompt.
 * **Return type:**
   [`PromptScan`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.PromptScan)
 * **Returns:**
@@ -11267,7 +11267,7 @@ Write `credential` into `store` keyed by `asset_id`; return `asset_id`.
 cloud `dol` store to move sidecars off-box).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 
 # _autosummary/foley.provenance.html.md
@@ -11326,11 +11326,11 @@ Iterable and sized; renders to `CREDITS.md` via [`markdown`](_autosummary/foley.
 JSON manifest via [`manifest`](_autosummary/foley.provenance.html.md#foley.provenance.Credits.manifest) (== `to_dict()`). Both are deterministic
 (no timestamps) and diffable.
 
-#### *property* manifest *: dict*
+#### *property* manifest *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)*
 
 The machine-readable JSON manifest (a plain dict).
 
-#### *property* markdown *: str*
+#### *property* markdown *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The rendered `CREDITS.md` document.
 
@@ -11344,10 +11344,10 @@ otherwise the line is synthesized from Title/Author/Source/License, with a
 
 * **Parameters:**
   * **source** (`Union`[[`CreditEntry`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.CreditEntry), [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – A [`CreditEntry`](_autosummary/foley.provenance.html.md#foley.provenance.CreditEntry), or any credit input (coerced first).
-  * **fmt** (`str`) – `'markdown'` (hyperlinked list-item body) or `'plain'` (text with
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'markdown'` (hyperlinked list-item body) or `'plain'` (text with
     URLs in parentheses).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The attribution line (no leading bullet / trailing newline).
 
@@ -11361,7 +11361,7 @@ never re-derived); `modified` reflects a non-empty `transformations` list.
 * **Parameters:**
   * **record** (`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – A [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate),
     or [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord).
-  * **title** (`Optional`[`str`]) – Explicit title override (else resolved from caption/tags/…).
+  * **title** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Explicit title override (else resolved from caption/tags/…).
 * **Return type:**
   [`CreditEntry`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.CreditEntry)
 
@@ -11370,12 +11370,12 @@ never re-derived); `modified` reflects a non-empty `transformations` list.
 Build the deduplicated [`Credits`](_autosummary/foley.provenance.html.md#foley.provenance.Credits) for the sounds used in a run.
 
 * **Parameters:**
-  * **sounds** (`Iterable`[`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]]) – An iterable of records / candidates / license records.
-  * **title** (`str`) – The credits heading (also carried in the manifest).
-  * **only_required** (`bool`) – Keep only entries whose license *requires* attribution
+  * **sounds** ([`Iterable`](https://docs.python.org/3/library/typing.html#typing.Iterable)[`Union`[[`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord), [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]]) – An iterable of records / candidates / license records.
+  * **title** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The credits heading (also carried in the manifest).
+  * **only_required** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Keep only entries whose license *requires* attribution
     (drops CC0 / user-owned courtesy credits). Default `False` credits
     everything (never-discard-provenance).
-  * **sort** (`str`) – `'appearance'` (default: first-seen order), `'author'`, or
+  * **sort** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'appearance'` (default: first-seen order), `'author'`, or
     `'title'` (case-insensitive alpha).
 * **Return type:**
   [`Credits`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.Credits)
@@ -11394,7 +11394,7 @@ It carries the full field set, including the `requires_attribution` mark and
 the `watermark` / `c2pa_manifest_ref` pass-throughs (`None` until #9b).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.provenance.render_credits_md(credits, , title=None, heading_level=2)
 
@@ -11402,10 +11402,10 @@ Render `credits` as a deterministic `CREDITS.md` document.
 
 * **Parameters:**
   * **credits** ([`Credits`](_autosummary/foley.provenance.credits.html.md#foley.provenance.credits.Credits)) – The [`Credits`](_autosummary/foley.provenance.html.md#foley.provenance.Credits) to render.
-  * **title** (`Optional`[`str`]) – Heading override (default: `credits.title`).
-  * **heading_level** (`int`) – Markdown heading level for the title (default `2` → `##`).
+  * **title** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Heading override (default: `credits.title`).
+  * **heading_level** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Markdown heading level for the title (default `2` → `##`).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The Markdown document (bulleted attribution lines; a placeholder note when
   empty), ending in a single trailing newline.
@@ -11479,7 +11479,7 @@ sound_record.qc = report.to_dict()   # becomes filterable metadata
 
 The shipped default thresholds; the default for every keyword below.
 
-### foley.qc.LUFS_MIN_BLOCK_S *: float* *= 0.4*
+### foley.qc.LUFS_MIN_BLOCK_S *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.4*
 
 BS.1770 integrated-loudness gating block = 400 ms; a clip shorter than one
 block cannot be measured (`pyloudnorm` raises), so [`measure_lufs()`](_autosummary/foley.qc.html.md#foley.qc.measure_lufs)
@@ -11488,7 +11488,7 @@ tunable QC policy threshold, hence a module constant rather than a field.
 
 ### *class* foley.qc.QCReport(duration_s, sample_rate, channels, clipped_ratio, clipped_max_run, dc_offset, rms_dbfs, is_silent, needs_edge_fade, has_nan_inf, true_peak_dbtp=None, snr_db=None, loudness_lufs=None, status=QCStatus.pass_, notes=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Per-clip Tier-0 QC result.
 
@@ -11508,17 +11508,17 @@ suspenders over the construction-time `_json_safe()` guard) so no
 field.
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### *class* foley.qc.QCStatus(\*values)
 
-Bases: `str`, `Enum`
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 Overall verdict for a clip (subclasses `str` so it is JSON-safe).
 
 ### *class* foley.qc.QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 All Tier-0 QC defaults (report 08 §3 table), each an explicit field.
 
@@ -11530,7 +11530,7 @@ per-check keyword arguments) to override any threshold without editing code.
 Largest per-channel absolute DC offset, `max_c |mean_n x[n, c]|`.
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.qc.detect_clipping(samples, , full_scale=0.999, min_run=3)
 
@@ -11541,10 +11541,10 @@ maximal hot runs of length `>= min_run` count as clip events.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Waveform in `[-1, 1]`.
-  * **full_scale** (`float`) – Absolute level at/above which a sample is full-scale.
-  * **min_run** (`int`) – Minimum consecutive full-scale frames to count as clipping.
+  * **full_scale** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Absolute level at/above which a sample is full-scale.
+  * **min_run** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Minimum consecutive full-scale frames to count as clipping.
 * **Return type:**
-  `tuple`[`float`, `int`]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`int`](https://docs.python.org/3/builtins/functions.html#int)]
 * **Returns:**
   `(clipped_ratio, max_run_length)` — the fraction of frames inside
   counting runs, and the longest counting run (`(0.0, 0)` if none).
@@ -11554,7 +11554,7 @@ maximal hot runs of length `>= min_run` count as clip events.
 Clip duration in seconds: `frames / sample_rate`.
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.qc.estimate_snr(samples, sample_rate, , quiet_percentile=10.0, frame_s=0.025, hop_s=0.01)
 
@@ -11567,12 +11567,12 @@ an exactly-zero floor returns `inf` and a silent clip returns `-inf`.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Waveform in `[-1, 1]` (down-mixed to mono internally).
-  * **sample_rate** (`int`) – Sample rate in Hz (sizes the frames).
-  * **quiet_percentile** (`float`) – Percent of quietest frames forming the noise floor.
-  * **frame_s** (`float`) – Short-time frame length in seconds.
-  * **hop_s** (`float`) – Hop between frames in seconds.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (sizes the frames).
+  * **quiet_percentile** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Percent of quietest frames forming the noise floor.
+  * **frame_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Short-time frame length in seconds.
+  * **hop_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Hop between frames in seconds.
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 * **Returns:**
   SNR in dB.
 
@@ -11581,7 +11581,7 @@ an exactly-zero floor returns `inf` and a silent clip returns `-inf`.
 Return `True` if any sample is `NaN` or `Inf` (corrupt-clip guard).
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.qc.is_silent(samples, , rms_floor_dbfs=-60.0)
 
@@ -11590,7 +11590,7 @@ Return `True` when whole-clip RMS falls below `rms_floor_dbfs`.
 A zero (exactly silent) clip has RMS `0` -> `-inf` dBFS -> `True`.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.qc.measure_lufs(samples, sample_rate, , gate_floor_lufs=-70.0, min_block_s=0.4)
 
@@ -11602,7 +11602,7 @@ measured loudness is at/below the gate floor (near-silent / unstable — do
 not amplify, just flag).
 
 * **Return type:**
-  `Optional`[`float`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### foley.qc.needs_edge_fade(samples, , rel_peak_dbfs=-40.0)
 
@@ -11611,7 +11611,7 @@ relative to the clip peak — i.e. a nonzero boundary that clicks under
 narration and needs a short fade.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.qc.run_qc(samples, sample_rate, , thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100))
 
@@ -11635,7 +11635,7 @@ stage).
 
 * **Parameters:**
   * **samples** (`ndarray`) – Waveform in `[-1, 1]` (mono or `(frames, channels)`).
-  * **sample_rate** (`int`) – Sample rate in Hz.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
   * **thresholds** ([`QCThresholds`](_autosummary/foley.qc.html.md#foley.qc.QCThresholds)) – Overridable QC thresholds (defaults to shipped values).
 * **Return type:**
   [`QCReport`](_autosummary/foley.qc.html.md#foley.qc.QCReport)
@@ -11652,7 +11652,7 @@ peak magnitude is taken across all channels, and converted to dBTP. Returns
 symmetry (FFT interpolation is rate-independent).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 
 # _autosummary/foley.requirements.html.md
@@ -11685,7 +11685,7 @@ dol-only.
 Assemble the full requirement set: system binaries + API keys + importable extras.
 
 * **Return type:**
-  `dict`[`str`, [`Requirement`](_autosummary/foley.weave.requirements.html.md#foley.weave.requirements.Requirement)]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Requirement`](_autosummary/foley.weave.requirements.html.md#foley.weave.requirements.Requirement)]
 
 ### foley.requirements.capability_report(, runtime=None)
 
@@ -11698,7 +11698,7 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 * **Parameters:**
   **runtime** – A [`foley.runtime.RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) (default: the active one).
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   `{keys, extras, system, offline, sources, degraded_tools}` — all JSON-safe.
 
@@ -11707,10 +11707,10 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 Report which optional foley capabilities are available (`{name: is_available}`).
 
 * **Parameters:**
-  * **names** (`tuple`[`str`, `...`] | `None`) – Which requirements to check (default: the full assembled set).
-  * **verbose** (`bool`) – If `True`, print an actionable hint for each missing requirement.
+  * **names** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)] | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Which requirements to check (default: the full assembled set).
+  * **verbose** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, print an actionable hint for each missing requirement.
 * **Return type:**
-  `dict`[`str`, `bool`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
   `{requirement_name: available}`. Everything-absent is fine — foley degrades
   (deterministic fakes, offline mode, in-process DSP); the report just shows what
@@ -11721,7 +11721,7 @@ Report which optional foley capabilities are available (`{name: is_available}`).
 Return a per-requirement status + guidance report (never runs an installer).
 
 * **Return type:**
-  `dict`[`str`, `dict`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   `{name: {'available', 'purpose', 'install', 'url', 'probe'}}`.
 
@@ -11745,7 +11745,7 @@ inspectable value, each a **consumer of an existing SSOT** (no parallel policy):
   in even a local run store.
 
 [`offline()`](_autosummary/foley.runtime.html.md#foley.runtime.offline) (`offline_scope`) applies the posture for the duration of a `with`
-block via a `contextvars.ContextVar` and **restores** the prior obs state on
+block via a [`contextvars.ContextVar`](https://docs.python.org/3/library/contextvars.html#contextvars.ContextVar) and **restores** the prior obs state on
 exit — per-call granularity, not a process-global flip. Stdlib-only, so importing this
 keeps `import foley` dol-only.
 
@@ -11767,24 +11767,24 @@ keeps `import foley` dol-only.
 | [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig)([offline, data_egress_allow, ...])   | A frozen runtime posture — the local-first / offline contract as data.   |
 |-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
 
-### foley.runtime.LOCAL *: str* *= 'local'*
+### foley.runtime.LOCAL *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)* *= 'local'*
 
 The egress classes a source may declare (`config['data_egress']` SSOT).
 
 ### *class* foley.runtime.RuntimeConfig(offline=False, data_egress_allow=<factory>, telemetry=True, redaction_mode='hash', http_resilience=True)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A frozen runtime posture — the local-first / offline contract as data.
 
 * **Parameters:**
-  * **offline** (`bool`) – Whether this posture is offline/local-first.
-  * **data_egress_allow** (`frozenset`[`str`]) – The egress classes a source may use to be available
+  * **offline** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether this posture is offline/local-first.
+  * **data_egress_allow** ([`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The egress classes a source may use to be available
     (`{'local'}` offline; `{'local','external'}` online).
-  * **telemetry** (`bool`) – Whether the obs run-artifact export is on.
-  * **redaction_mode** (`str`) – `'hash'` (default, salted), `'off'` (drop), or `'full'`
+  * **telemetry** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the obs run-artifact export is on.
+  * **redaction_mode** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'hash'` (default, salted), `'off'` (drop), or `'full'`
     (raw — local-debug only).
-  * **http_resilience** (`bool`) – Whether HTTP source adapters are wrapped with the
+  * **http_resilience** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether HTTP source adapters are wrapped with the
     throttle/backoff/circuit-breaker ([`foley.sources.resilience`](_autosummary/foley.sources.resilience.html.md#module-foley.sources.resilience)).
 
 #### allows(data_egress)
@@ -11795,7 +11795,7 @@ An unknown/absent declaration is **rejected** (fail-closed): a source that does
 not say where its data goes is never used offline.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 #### *classmethod* default()
 
@@ -11830,7 +11830,7 @@ The active [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.Ru
 Whether an offline runtime scope is currently active.
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.runtime.offline(config=None)
 
@@ -11845,7 +11845,7 @@ the redaction mode for the scope; the prior obs enabled-state and redaction mode
 captured on entry and restored on exit (so a scope never leaks its posture).
 
 * **Parameters:**
-  **config** ([`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) | `None`) – The posture to apply (default: offline-local).
+  **config** ([`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – The posture to apply (default: offline-local).
 * **Yields:**
   The applied [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig).
 
@@ -11914,13 +11914,13 @@ so the derived permission flags stay single-sourced.
 | [`GeneratedClip`](_autosummary/foley.sources.base.html.md#foley.sources.base.GeneratedClip)(audio_bytes, candidate[, notes]) | One freshly-generated sound: its transient bytes + a provisional candidate.     |
 | [`UniformCorpus`](_autosummary/foley.sources.base.html.md#foley.sources.base.UniformCorpus)(name, ring, ...[, ...])          | A bulk corpus where **every** clip carries the same license.                    |
 
-### foley.sources.base.CORPUS_REGISTRY *: dict[str, [CorpusAdapter](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]* *= {'bbc_remarc': UniformCorpus(name='bbc_remarc', ring=2, default_license_id='RemArc', source='bbc_remarc', rights_verified=True, tag_hints_from_path=False), 'clotho': ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False), 'foleyset': UniformCorpus(name='foleyset', ring=0, default_license_id='CC-BY-4.0', source='foleyset', rights_verified=True, tag_hints_from_path=True), 'fsd50k': <foley.sources.fsd50k.Fsd50kCorpus object>, 'sonniss': UniformCorpus(name='sonniss', ring=2, default_license_id='Sonniss-GDC', source='sonniss', rights_verified=True, tag_hints_from_path=False)}*
+### foley.sources.base.CORPUS_REGISTRY *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [CorpusAdapter](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]* *= {'bbc_remarc': UniformCorpus(name='bbc_remarc', ring=2, default_license_id='RemArc', source='bbc_remarc', rights_verified=True, tag_hints_from_path=False), 'clotho': ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False), 'foleyset': UniformCorpus(name='foleyset', ring=0, default_license_id='CC-BY-4.0', source='foleyset', rights_verified=True, tag_hints_from_path=True), 'fsd50k': <foley.sources.fsd50k.Fsd50kCorpus object>, 'sonniss': UniformCorpus(name='sonniss', ring=2, default_license_id='Sonniss-GDC', source='sonniss', rights_verified=True, tag_hints_from_path=False)}*
 
 Registry of concrete bulk-corpus adapters, keyed by `adapter.name`.
 
 ### *class* foley.sources.base.ClipSpec(path, source_id, meta=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One clip inside a local bulk corpus, described but not yet ingested.
 
@@ -11943,7 +11943,7 @@ hints — e.g. `{"license_id", "creator_name", "source_url",
 
 ### *class* foley.sources.base.CorpusAdapter(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 A downloaded bulk corpus presented as an ingestable stream of clips.
 
@@ -11956,9 +11956,9 @@ two methods below. They perform **no** embedding, storage, or library access.
 The on-disk root for this corpus under `data_dir` (`data_dir/name`).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
-#### default_license_id *: str*
+#### default_license_id *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The corpus compilation license id (a per-clip license may still override).
 
@@ -11967,9 +11967,9 @@ The corpus compilation license id (a per-clip license may still override).
 Yield a [`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec) for every ingestable clip under `root`.
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
 
-#### name *: str*
+#### name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 Registry key / CLI name — `'fsd50k'` | `'clotho'` | `'foleyset'` | …
 
@@ -11980,7 +11980,7 @@ Return the fully-derived rights record for `spec` (licensing SSOT).
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 
-#### ring *: int*
+#### ring *: [int](https://docs.python.org/3/builtins/functions.html#int)*
 
 `0` ship-in-repo, `1` fetch, `2` opt-in/quarantined.
 
@@ -11989,7 +11989,7 @@ Return the fully-derived rights record for `spec` (licensing SSOT).
 
 ### *class* foley.sources.base.GenerateAdapter(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 The generation source contract (report 10 §4.2) — a SIBLING of `SourceAdapter`.
 
@@ -12015,13 +12015,13 @@ Synthesize a sound for `prompt`; return its bytes + provisional candidate.
 * **Return type:**
   [`GeneratedClip`](_autosummary/foley.sources.base.html.md#foley.sources.base.GeneratedClip)
 
-#### name *: str*
+#### name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 Registry / façade key — `'stable_audio'` | `'elevenlabs'` | …
 
 ### *class* foley.sources.base.GeneratedClip(audio_bytes, candidate, notes=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One freshly-generated sound: its transient bytes + a provisional candidate.
 
@@ -12069,7 +12069,7 @@ surface in the run report.
 
 ### *class* foley.sources.base.SourceAdapter(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 The live/HTTP source contract (report 10 §4.2): `search` + `get` + `download`.
 
@@ -12094,7 +12094,7 @@ adapters.
 Return a sound’s bytes (honoring `cache_bytes_ok` at the storage gate).
 
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 
 #### get(source_id)
 
@@ -12108,11 +12108,11 @@ Resolve one source id to a metadata [`SoundRecord`](_autosummary/foley.base.html
 Return ranked candidates for `query` (license filter pushed native).
 
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 
 ### *class* foley.sources.base.UniformCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A bulk corpus where **every** clip carries the same license.
 
@@ -12128,7 +12128,7 @@ fail-closed. Subclass to enrich per-clip `meta` (see
 `data_dir/<name>` — the conventional on-disk root for this corpus.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### iter_clips(root)
 
@@ -12139,7 +12139,7 @@ When `tag_hints_from_path` is set, the clip’s parent folder names
 FoleySet encode a Foley taxonomy in their directory structure.
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
 
 #### resolve_license(spec)
 
@@ -12162,20 +12162,20 @@ caching the bytes even for CC0. `redistribute_standalone_ok` (copyright) and
 `cache_bytes_ok` (TOS) are distinct; only the latter is flipped.
 
 * **Parameters:**
-  * **source** (`str`) – Provenance source tag (e.g. `'freesound'`).
-  * **license_id** (`str`) – The per-item normalized license id (a key of `LICENSE_FLAGS`).
-  * **rights_verified** (`bool`) – `True` only for an authoritatively-recognized license
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'freesound'`).
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The per-item normalized license id (a key of `LICENSE_FLAGS`).
+  * **rights_verified** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – `True` only for an authoritatively-recognized license
     (fail-closed gate input); MUST be `True` for [`foley.keep()`](_autosummary/foley.html.md#foley.keep) to
     admit the sound.
-  * **overrides** (`Optional`[`dict`]) – Per-source flag overrides applied on top of `license_id`’s row
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Per-source flag overrides applied on top of `license_id`’s row
     (e.g. `{'cache_bytes_ok': False}`). Keys must be `LicenseFlags`
     fields (validated by [`derive_license_flags()`](_autosummary/foley.licensing.html.md#foley.licensing.derive_license_flags)).
-  * **source_id** (`Optional`[`str`]) – The source-native id (e.g. a Freesound numeric id), for provenance.
-  * **source_url** (`Optional`[`str`]) – A human-resolvable URL for the item (attribution + the stable
+  * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The source-native id (e.g. a Freesound numeric id), for provenance.
+  * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the item (attribution + the stable
     by-reference re-fetch handle).
-  * **license_url** (`Optional`[`str`]) – The license URL/label exactly as the source served it.
-  * **creator_name** (`Optional`[`str`]) – The uploader/creator (required for CC-BY attribution).
-  * **attribution_text** (`Optional`[`str`]) – A ready-made attribution string, if supplied.
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The license URL/label exactly as the source served it.
+  * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
+  * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if supplied.
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 * **Returns:**
@@ -12191,15 +12191,15 @@ signature is unchanged from #4 — no `overrides` (a downloaded corpus is
 cacheable by-value), so every existing corpus adapter keeps working verbatim.
 
 * **Parameters:**
-  * **source** (`str`) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
-  * **license_id** (`str`) – The normalized license id (a key of `LICENSE_FLAGS`, else it
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The normalized license id (a key of `LICENSE_FLAGS`, else it
     falls back to the all-False `unknown` flags).
-  * **rights_verified** (`bool`) – Whether the license is authoritatively known (fail-closed
+  * **rights_verified** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the license is authoritatively known (fail-closed
     gate input — pass `False` for unrecognized/ambiguous licenses).
-  * **source_id** (`Optional`[`str`]) – The corpus-native clip id, for provenance.
-  * **source_url** (`Optional`[`str`]) – A human-resolvable URL for the clip (attribution/credits).
-  * **creator_name** (`Optional`[`str`]) – The uploader/creator (required for CC-BY attribution).
-  * **attribution_text** (`Optional`[`str`]) – A ready-made attribution string, if the corpus supplies one.
+  * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The corpus-native clip id, for provenance.
+  * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the clip (attribution/credits).
+  * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
+  * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if the corpus supplies one.
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 * **Returns:**
@@ -12210,7 +12210,7 @@ cacheable by-value), so every existing corpus adapter keeps working verbatim.
 Registered adapters whose ring is in `rings` (sorted by name).
 
 * **Return type:**
-  `list`[[`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]
 
 ### foley.sources.base.generated_license(, source, license_id, generator_model, generation_prompt, rights_verified=True, generator_version=None, generation_seed=None, generation_params=None, disclosure_recommended=True, watermark=None, c2pa_manifest_ref=None, overrides=None, source_id=None, source_url=None, license_url=None, creator_name=None, attribution_text=None)
 
@@ -12233,30 +12233,30 @@ but never flips the flag, so [`foley.keep()`](_autosummary/foley.html.md#foley.k
 `revenue_cap_usd=1_000_000` (enforced by [`foley.keep()`](_autosummary/foley.html.md#foley.keep) at select time).
 
 * **Parameters:**
-  * **source** (`str`) – The generator tag (e.g. `'stable_audio'` / `'elevenlabs'`).
-  * **license_id** (`str`) – The generator license id (`'Stability-Community'` /
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The generator tag (e.g. `'stable_audio'` / `'elevenlabs'`).
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The generator license id (`'Stability-Community'` /
     `'ElevenLabs-SFX'` — a key of `LICENSE_FLAGS`).
-  * **generator_model** (`str`) – The model identifier (e.g. `'stable-audio-open-1.0'`,
+  * **generator_model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The model identifier (e.g. `'stable-audio-open-1.0'`,
     `'eleven_text_to_sound_v2'`).
-  * **generation_prompt** (`str`) – The user prompt, verbatim.
-  * **rights_verified** (`bool`) – `True` (a generator license is authoritatively known);
+  * **generation_prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The user prompt, verbatim.
+  * **rights_verified** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – `True` (a generator license is authoritatively known);
     MUST be `True` or [`foley.keep()`](_autosummary/foley.html.md#foley.keep) rejects the sound.
-  * **generator_version** (`Optional`[`str`]) – Optional model/version string.
-  * **generation_seed** (`Optional`[`int`]) – The reproducibility seed (an `int` for a seeded
+  * **generator_version** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional model/version string.
+  * **generation_seed** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The reproducibility seed (an `int` for a seeded
     Stable-Audio-Open run; `None` for a non-deterministic backend).
-  * **generation_params** (`Optional`[`dict`]) – The RESOLVED NATIVE params actually sent to the backend
+  * **generation_params** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The RESOLVED NATIVE params actually sent to the backend
     (e.g. `guidance_scale` — not the unified `prompt_influence` —
     `audio_end_in_s`, …), for reproducibility + audit.
-  * **disclosure_recommended** (`bool`) – EU AI Act Art. 50 hint (default `True`); makes the
+  * **disclosure_recommended** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – EU AI Act Art. 50 hint (default `True`); makes the
     credits AI-disclosure line render immediately (#9a already reads it).
-  * **watermark** (`Optional`[`dict`]) – Pass-through carrier for #9b (AudioSeal); `None` until then.
-  * **c2pa_manifest_ref** (`Optional`[`str`]) – Pass-through carrier for #9b (C2PA); `None` until then.
-  * **overrides** (`Optional`[`dict`]) – Optional per-source flag overrides (rare for generation).
-  * **source_id** (`Optional`[`str`]) – Optional source-native id, for provenance.
-  * **source_url** (`Optional`[`str`]) – Optional human-resolvable URL.
-  * **license_url** (`Optional`[`str`]) – Optional license URL/label.
-  * **creator_name** (`Optional`[`str`]) – Optional creator (usually unset for generation).
-  * **attribution_text** (`Optional`[`str`]) – Optional ready-made attribution string.
+  * **watermark** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Pass-through carrier for #9b (AudioSeal); `None` until then.
+  * **c2pa_manifest_ref** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Pass-through carrier for #9b (C2PA); `None` until then.
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional per-source flag overrides (rare for generation).
+  * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional source-native id, for provenance.
+  * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional human-resolvable URL.
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional license URL/label.
+  * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional creator (usually unset for generation).
+  * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional ready-made attribution string.
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 * **Returns:**
@@ -12268,7 +12268,7 @@ but never flips the flag, so [`foley.keep()`](_autosummary/foley.html.md#foley.k
 Register `adapter` in [`CORPUS_REGISTRY`](_autosummary/foley.sources.base.html.md#foley.sources.base.CORPUS_REGISTRY) (idempotent) and return it.
 
 * **Raises:**
-  **ValueError** – If a *different* adapter is already registered under the name.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If a *different* adapter is already registered under the name.
 * **Return type:**
   [`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)
 
@@ -12277,7 +12277,7 @@ Register `adapter` in [`CORPUS_REGISTRY`](_autosummary/foley.sources.base.html.m
 Return the ring of the registered corpus `name` (raises `KeyError`).
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 ### foley.sources.base.select_corpora(, rings=(0, 1), corpora=None)
 
@@ -12288,9 +12288,9 @@ every registered adapter in the given rings is selected. Ring 2 is never in
 the default `rings` — it is opt-in only.
 
 * **Raises:**
-  **KeyError** – If a name in `corpora` is not registered.
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If a name in `corpora` is not registered.
 * **Return type:**
-  `list`[[`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]
 
 
 # _autosummary/foley.sources.bbc_remarc.html.md
@@ -12359,7 +12359,7 @@ Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.
 Yield clips with their human caption attached in `meta['caption']`.
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
 
 
 # _autosummary/foley.sources.elevenlabs.adapter.html.md
@@ -12407,18 +12407,18 @@ Registry convention (arioso): the loader imports `adapter.Adapter`.
 
 ### *class* foley.sources.elevenlabs.adapter.ElevenLabsAdapter(config=None, , api_key=None, http=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.GenerateAdapter)).
 
 * **Parameters:**
-  * **config** (`Optional`[`dict`]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
+  * **config** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
     by the registry’s lazy loader (the arioso `Adapter(config)` convention).
-  * **api_key** (`Optional`[`str`]) – The ElevenLabs token. Defaults to `$ELEVENLABS_API_KEY`.
-  * **http** (`Optional`[[`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport)]) – The injected [`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport) (defaults to
+  * **api_key** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The ElevenLabs token. Defaults to `$ELEVENLABS_API_KEY`.
+  * **http** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport)]) – The injected [`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport) (defaults to
     [`requests_transport()`](_autosummary/foley.sources.http.html.md#foley.sources.http.requests_transport)); tests pass a fake.
 
-#### *property* api_key *: str*
+#### *property* api_key *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The ElevenLabs token (from the constructor or `$ELEVENLABS_API_KEY`).
 
@@ -12427,16 +12427,16 @@ The ElevenLabs token (from the constructor or `$ELEVENLABS_API_KEY`).
 Generate a sound effect for `prompt`; return its bytes + provisional candidate.
 
 * **Parameters:**
-  * **prompt** (`str`) – The natural-language sound description (required).
-  * **duration** (`Optional`[`float`]) – Seconds (clamped to the native `0.5..30` range). `None`
+  * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language sound description (required).
+  * **duration** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Seconds (clamped to the native `0.5..30` range). `None`
     lets the model auto-determine the length from the prompt.
-  * **prompt_influence** (`float`) – `0..1` (identity map to the native field; higher =
+  * **prompt_influence** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – `0..1` (identity map to the native field; higher =
     closer to the prompt, less variety). Default `0.3`.
-  * **seed** (`Optional`[`int`]) – No ElevenLabs SFX equivalent — a
+  * **seed** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – No ElevenLabs SFX equivalent — a
     non-default value warns-and-drops (recorded in the clip notes);
     `generation_seed` stays `None`.
-  * **loop** (`bool`) – Produce a seamless-loopable clip (native `loop`; v2 default).
-  * **output_format** (`str`) – Coarse foley token (`wav` | `opus` | `mp3`)
+  * **loop** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Produce a seamless-loopable clip (native `loop`; v2 default).
+  * **output_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Coarse foley token (`wav` | `opus` | `mp3`)
     translated to the native enum; `wav` falls back to MP3 (the SFX
     endpoint has no lossless container) and is re-archived to FLAC by
     ingest.
@@ -12568,18 +12568,18 @@ Registry convention (arioso): the loader imports `adapter.Adapter`.
 
 ### *class* foley.sources.freesound.adapter.FreesoundAdapter(config=None, , api_key=None, http=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Live Freesound APIv2 retrieve adapter (a [`SourceAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.SourceAdapter)).
 
 * **Parameters:**
-  * **config** (`Optional`[`dict`]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
+  * **config** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
     by the registry’s lazy loader (the arioso `Adapter(config)` convention).
-  * **api_key** (`Optional`[`str`]) – The Freesound token. Defaults to `$FREESOUND_API_KEY`.
-  * **http** (`Optional`[[`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport)]) – The injected [`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport) (defaults to
+  * **api_key** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The Freesound token. Defaults to `$FREESOUND_API_KEY`.
+  * **http** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport)]) – The injected [`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport) (defaults to
     [`requests_transport()`](_autosummary/foley.sources.http.html.md#foley.sources.http.requests_transport)); tests pass a fake.
 
-#### *property* api_key *: str*
+#### *property* api_key *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The Freesound token (from the constructor or `$FREESOUND_API_KEY`).
 
@@ -12588,24 +12588,24 @@ The Freesound token (from the constructor or `$FREESOUND_API_KEY`).
 Return a sound’s transient preview bytes (token-tier; never cached).
 
 * **Parameters:**
-  * **source_id** (`str`) – The Freesound id (either id form).
-  * **preview_url** (`Optional`[`str`]) – Optional known preview URL (from a prior search hit) — used
+  * **source_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The Freesound id (either id form).
+  * **preview_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional known preview URL (from a prior search hit) — used
     directly to save a round-trip; otherwise the sound instance is
     fetched to resolve it.
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 * **Returns:**
   The preview audio bytes (embedded once, then discarded — see the
   by-reference storage contract).
 * **Raises:**
-  **LookupError** – If the sound exposes no preview.
+  [**LookupError**](https://docs.python.org/3/builtins/exceptions.html#LookupError) – If the sound exposes no preview.
 
 #### get(source_id)
 
 Resolve one Freesound id (`'12345'` or `'freesound:12345'`) to a record.
 
 * **Raises:**
-  **LookupError** – If the sound’s license is not in the accepted allowlist.
+  [**LookupError**](https://docs.python.org/3/builtins/exceptions.html#LookupError) – If the sound’s license is not in the accepted allowlist.
 * **Return type:**
   [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)
 
@@ -12618,15 +12618,15 @@ non-CC0 sounds never leave the server; every returned item is still
 re-checked fail-closed before it becomes a candidate.
 
 * **Parameters:**
-  * **license** (`str`) – License constraint. `'cc0'` (default) sends the CC0 filter;
+  * **license** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – License constraint. `'cc0'` (default) sends the CC0 filter;
     `None` sends none (the per-item guard still enforces the
     `accepted_license_ids` allowlist, so results stay CC0 for #5).
-  * **k** (`int`) – Max results (Freesound caps `page_size` at 150).
-  * **duration_range** (`Optional`[`tuple`[`float`, `float`]]) – Optional `(min_s, max_s)` native duration filter.
-  * **sort** (`Optional`[`str`]) – Optional native sort key (default: Freesound relevance).
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max results (Freesound caps `page_size` at 150).
+  * **duration_range** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – Optional `(min_s, max_s)` native duration filter.
+  * **sort** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional native sort key (default: Freesound relevance).
   * **\*\*kw** – Ignored extra affordances (`on_unsupported_param='warn'`).
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` [`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)s (`origin=retrieved`),
   each carrying a by-reference [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord) and a
@@ -12724,7 +12724,7 @@ The FSD50K Ring-1 adapter.
 
 ### *class* foley.sources.fsd50k.Fsd50kCorpus
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Ring-1 FSD50K adapter with per-clip Freesound license resolution.
 
@@ -12733,7 +12733,7 @@ Ring-1 FSD50K adapter with per-clip Freesound license resolution.
 `data_dir/fsd50k` — the conventional on-disk root.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### iter_clips(root)
 
@@ -12744,7 +12744,7 @@ source_url}` resolved from the FSD50K clips-info JSON (fail-closed when a
 clip is absent from the metadata).
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
 
 #### resolve_license(spec)
 
@@ -12812,7 +12812,7 @@ Three adapter kinds share the one ingest pipeline: the narrow **bulk-corpus**
 
 ### *class* foley.sources.ClipSpec(path, source_id, meta=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One clip inside a local bulk corpus, described but not yet ingested.
 
@@ -12844,11 +12844,11 @@ Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.
 Yield clips with their human caption attached in `meta['caption']`.
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
 
 ### *class* foley.sources.CorpusAdapter(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 A downloaded bulk corpus presented as an ingestable stream of clips.
 
@@ -12861,9 +12861,9 @@ two methods below. They perform **no** embedding, storage, or library access.
 The on-disk root for this corpus under `data_dir` (`data_dir/name`).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
-#### default_license_id *: str*
+#### default_license_id *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The corpus compilation license id (a per-clip license may still override).
 
@@ -12872,9 +12872,9 @@ The corpus compilation license id (a per-clip license may still override).
 Yield a [`ClipSpec`](_autosummary/foley.sources.html.md#foley.sources.ClipSpec) for every ingestable clip under `root`.
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
 
-#### name *: str*
+#### name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 Registry key / CLI name — `'fsd50k'` | `'clotho'` | `'foleyset'` | …
 
@@ -12885,7 +12885,7 @@ Return the fully-derived rights record for `spec` (licensing SSOT).
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 
-#### ring *: int*
+#### ring *: [int](https://docs.python.org/3/builtins/functions.html#int)*
 
 `0` ship-in-repo, `1` fetch, `2` opt-in/quarantined.
 
@@ -12894,7 +12894,7 @@ Return the fully-derived rights record for `spec` (licensing SSOT).
 
 ### *class* foley.sources.Fsd50kCorpus
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Ring-1 FSD50K adapter with per-clip Freesound license resolution.
 
@@ -12903,7 +12903,7 @@ Ring-1 FSD50K adapter with per-clip Freesound license resolution.
 `data_dir/fsd50k` — the conventional on-disk root.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### iter_clips(root)
 
@@ -12914,7 +12914,7 @@ source_url}` resolved from the FSD50K clips-info JSON (fail-closed when a
 clip is absent from the metadata).
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
 
 #### resolve_license(spec)
 
@@ -12925,7 +12925,7 @@ Build the per-clip rights record from the metadata in `spec.meta`.
 
 ### *class* foley.sources.GenerateAdapter(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 The generation source contract (report 10 §4.2) — a SIBLING of `SourceAdapter`.
 
@@ -12951,13 +12951,13 @@ Synthesize a sound for `prompt`; return its bytes + provisional candidate.
 * **Return type:**
   [`GeneratedClip`](_autosummary/foley.sources.base.html.md#foley.sources.base.GeneratedClip)
 
-#### name *: str*
+#### name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 Registry / façade key — `'stable_audio'` | `'elevenlabs'` | …
 
 ### *class* foley.sources.GeneratedClip(audio_bytes, candidate, notes=<factory>)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One freshly-generated sound: its transient bytes + a provisional candidate.
 
@@ -13005,7 +13005,7 @@ surface in the run report.
 
 ### *exception* foley.sources.GenerationError(message, , report, status)
 
-Bases: `RuntimeError`
+Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
 
 Raised by [`foley.generate()`](_autosummary/foley.html.md#foley.generate) when a backend yields no stored sound.
 
@@ -13046,7 +13046,7 @@ already covers it. See [`foley.provenance.disclosure.scan_prompt()`](_autosummar
 
 ### *class* foley.sources.SourceAdapter(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 The live/HTTP source contract (report 10 §4.2): `search` + `get` + `download`.
 
@@ -13071,7 +13071,7 @@ adapters.
 Return a sound’s bytes (honoring `cache_bytes_ok` at the storage gate).
 
 * **Return type:**
-  `bytes`
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
 
 #### get(source_id)
 
@@ -13085,7 +13085,7 @@ Resolve one source id to a metadata [`SoundRecord`](_autosummary/foley.base.html
 Return ranked candidates for `query` (license filter pushed native).
 
 * **Return type:**
-  `list`[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
 
 ### *exception* foley.sources.TrademarkRefusal(message, , hits, report)
 
@@ -13095,7 +13095,7 @@ A [`SafetyRefusal`](_autosummary/foley.sources.html.md#foley.sources.SafetyRefus
 
 ### *class* foley.sources.UniformCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A bulk corpus where **every** clip carries the same license.
 
@@ -13111,7 +13111,7 @@ fail-closed. Subclass to enrich per-clip `meta` (see
 `data_dir/<name>` — the conventional on-disk root for this corpus.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### iter_clips(root)
 
@@ -13122,7 +13122,7 @@ When `tag_hints_from_path` is set, the clip’s parent folder names
 FoleySet encode a Foley taxonomy in their directory structure.
 
 * **Return type:**
-  `Iterator`[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
 
 #### resolve_license(spec)
 
@@ -13142,15 +13142,15 @@ is an optional keyword. Each hit is license-gated BEFORE any bytes are fetched
 applies the by-reference storage gate from the sound’s own license.
 
 * **Parameters:**
-  * **source** (`str`) – A registered live-source name (e.g. `'freesound'`).
-  * **query** (`str`) – The natural-language search query.
-  * **license** (`Optional`[`str`]) – License constraint pushed into the source query (default
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A registered live-source name (e.g. `'freesound'`).
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language search query.
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – License constraint pushed into the source query (default
     `'cc0'`). The per-item fail-closed guard enforces the source’s
     accepted-license allowlist regardless.
-  * **limit** (`int`) – Max candidates to request from the source.
+  * **limit** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max candidates to request from the source.
   * **library** – Target [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **intended_use** (`Optional`[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
     `DEFAULT_INTENDED_USE`).
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport
@@ -13178,20 +13178,20 @@ caching the bytes even for CC0. `redistribute_standalone_ok` (copyright) and
 `cache_bytes_ok` (TOS) are distinct; only the latter is flipped.
 
 * **Parameters:**
-  * **source** (`str`) – Provenance source tag (e.g. `'freesound'`).
-  * **license_id** (`str`) – The per-item normalized license id (a key of `LICENSE_FLAGS`).
-  * **rights_verified** (`bool`) – `True` only for an authoritatively-recognized license
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'freesound'`).
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The per-item normalized license id (a key of `LICENSE_FLAGS`).
+  * **rights_verified** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – `True` only for an authoritatively-recognized license
     (fail-closed gate input); MUST be `True` for [`foley.keep()`](_autosummary/foley.html.md#foley.keep) to
     admit the sound.
-  * **overrides** (`Optional`[`dict`]) – Per-source flag overrides applied on top of `license_id`’s row
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Per-source flag overrides applied on top of `license_id`’s row
     (e.g. `{'cache_bytes_ok': False}`). Keys must be `LicenseFlags`
     fields (validated by [`derive_license_flags()`](_autosummary/foley.licensing.html.md#foley.licensing.derive_license_flags)).
-  * **source_id** (`Optional`[`str`]) – The source-native id (e.g. a Freesound numeric id), for provenance.
-  * **source_url** (`Optional`[`str`]) – A human-resolvable URL for the item (attribution + the stable
+  * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The source-native id (e.g. a Freesound numeric id), for provenance.
+  * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the item (attribution + the stable
     by-reference re-fetch handle).
-  * **license_url** (`Optional`[`str`]) – The license URL/label exactly as the source served it.
-  * **creator_name** (`Optional`[`str`]) – The uploader/creator (required for CC-BY attribution).
-  * **attribution_text** (`Optional`[`str`]) – A ready-made attribution string, if supplied.
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The license URL/label exactly as the source served it.
+  * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
+  * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if supplied.
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 * **Returns:**
@@ -13207,15 +13207,15 @@ signature is unchanged from #4 — no `overrides` (a downloaded corpus is
 cacheable by-value), so every existing corpus adapter keeps working verbatim.
 
 * **Parameters:**
-  * **source** (`str`) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
-  * **license_id** (`str`) – The normalized license id (a key of `LICENSE_FLAGS`, else it
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The normalized license id (a key of `LICENSE_FLAGS`, else it
     falls back to the all-False `unknown` flags).
-  * **rights_verified** (`bool`) – Whether the license is authoritatively known (fail-closed
+  * **rights_verified** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the license is authoritatively known (fail-closed
     gate input — pass `False` for unrecognized/ambiguous licenses).
-  * **source_id** (`Optional`[`str`]) – The corpus-native clip id, for provenance.
-  * **source_url** (`Optional`[`str`]) – A human-resolvable URL for the clip (attribution/credits).
-  * **creator_name** (`Optional`[`str`]) – The uploader/creator (required for CC-BY attribution).
-  * **attribution_text** (`Optional`[`str`]) – A ready-made attribution string, if the corpus supplies one.
+  * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The corpus-native clip id, for provenance.
+  * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the clip (attribution/credits).
+  * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
+  * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if the corpus supplies one.
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 * **Returns:**
@@ -13242,7 +13242,7 @@ The report-10 §4.2 shape: retrieval and generation return the same
 Registered adapters whose ring is in `rings` (sorted by name).
 
 * **Return type:**
-  `list`[[`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]
 
 ### foley.sources.discover_sources()
 
@@ -13256,7 +13256,7 @@ never cross-captures the corpus adapters. Only `config.py` is imported here
 an already-registered name (e.g. a test double) is never overwritten.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 * **Returns:**
   The list of discovered source names.
 
@@ -13287,20 +13287,20 @@ Disclosure/safety (#9b), all optional and degrading gracefully:
   `license.c2pa_manifest_ref` (stdlib; always on).
 
 * **Parameters:**
-  * **prompt** (`str`) – The natural-language sound description.
-  * **backend** (`str`) – A registered generate-source name (`'stable_audio'` (default,
+  * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language sound description.
+  * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A registered generate-source name (`'stable_audio'` (default,
     local) | `'elevenlabs'` (hosted)).
   * **library** – Target [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **store** (`bool`) – If `False`, synthesize + enrich but do not add to the library
+  * **store** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `False`, synthesize + enrich but do not add to the library
     (probe/QC/embed only — a preview; no content-credential sidecar).
   * **adapter** – An optional pre-built adapter (the dependency-injection seam — a
     test passes a fake-transport / fake-pipeline adapter; production omits
     it and the registry lazily builds one).
-  * **watermark** (`Optional`[`bool`]) – `True` require an AudioSeal watermark (error if
+  * **watermark** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – `True` require an AudioSeal watermark (error if
     `foley[provenance]` absent), `False` never watermark, `None`
     (default, auto) watermark iff AudioSeal is installed.
-  * **on_flagged** (`str`) – `'refuse'` (default, fail-closed) raise on a safety-flagged
+  * **on_flagged** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'refuse'` (default, fail-closed) raise on a safety-flagged
     prompt; `'warn'` proceed and flag the record.
   * **watermarker** – An injected [`Watermarker`](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.Watermarker)
     (the DI seam; wins over auto-detect — tests pass a fake).
@@ -13343,30 +13343,30 @@ but never flips the flag, so [`foley.keep()`](_autosummary/foley.html.md#foley.k
 `revenue_cap_usd=1_000_000` (enforced by [`foley.keep()`](_autosummary/foley.html.md#foley.keep) at select time).
 
 * **Parameters:**
-  * **source** (`str`) – The generator tag (e.g. `'stable_audio'` / `'elevenlabs'`).
-  * **license_id** (`str`) – The generator license id (`'Stability-Community'` /
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The generator tag (e.g. `'stable_audio'` / `'elevenlabs'`).
+  * **license_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The generator license id (`'Stability-Community'` /
     `'ElevenLabs-SFX'` — a key of `LICENSE_FLAGS`).
-  * **generator_model** (`str`) – The model identifier (e.g. `'stable-audio-open-1.0'`,
+  * **generator_model** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The model identifier (e.g. `'stable-audio-open-1.0'`,
     `'eleven_text_to_sound_v2'`).
-  * **generation_prompt** (`str`) – The user prompt, verbatim.
-  * **rights_verified** (`bool`) – `True` (a generator license is authoritatively known);
+  * **generation_prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The user prompt, verbatim.
+  * **rights_verified** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – `True` (a generator license is authoritatively known);
     MUST be `True` or [`foley.keep()`](_autosummary/foley.html.md#foley.keep) rejects the sound.
-  * **generator_version** (`Optional`[`str`]) – Optional model/version string.
-  * **generation_seed** (`Optional`[`int`]) – The reproducibility seed (an `int` for a seeded
+  * **generator_version** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional model/version string.
+  * **generation_seed** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The reproducibility seed (an `int` for a seeded
     Stable-Audio-Open run; `None` for a non-deterministic backend).
-  * **generation_params** (`Optional`[`dict`]) – The RESOLVED NATIVE params actually sent to the backend
+  * **generation_params** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The RESOLVED NATIVE params actually sent to the backend
     (e.g. `guidance_scale` — not the unified `prompt_influence` —
     `audio_end_in_s`, …), for reproducibility + audit.
-  * **disclosure_recommended** (`bool`) – EU AI Act Art. 50 hint (default `True`); makes the
+  * **disclosure_recommended** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – EU AI Act Art. 50 hint (default `True`); makes the
     credits AI-disclosure line render immediately (#9a already reads it).
-  * **watermark** (`Optional`[`dict`]) – Pass-through carrier for #9b (AudioSeal); `None` until then.
-  * **c2pa_manifest_ref** (`Optional`[`str`]) – Pass-through carrier for #9b (C2PA); `None` until then.
-  * **overrides** (`Optional`[`dict`]) – Optional per-source flag overrides (rare for generation).
-  * **source_id** (`Optional`[`str`]) – Optional source-native id, for provenance.
-  * **source_url** (`Optional`[`str`]) – Optional human-resolvable URL.
-  * **license_url** (`Optional`[`str`]) – Optional license URL/label.
-  * **creator_name** (`Optional`[`str`]) – Optional creator (usually unset for generation).
-  * **attribution_text** (`Optional`[`str`]) – Optional ready-made attribution string.
+  * **watermark** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Pass-through carrier for #9b (AudioSeal); `None` until then.
+  * **c2pa_manifest_ref** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Pass-through carrier for #9b (C2PA); `None` until then.
+  * **overrides** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional per-source flag overrides (rare for generation).
+  * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional source-native id, for provenance.
+  * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional human-resolvable URL.
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional license URL/label.
+  * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional creator (usually unset for generation).
+  * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional ready-made attribution string.
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 * **Returns:**
@@ -13381,32 +13381,32 @@ Runs a discovery pass if `name` is not yet known, then instantiates the
 adapter on first use (cached in the entry).
 
 * **Parameters:**
-  **name** (`str`) – The source name.
+  **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The source name.
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   The registry entry (`{'config': dict, 'adapter': SourceAdapter, ...}`).
 * **Raises:**
-  **KeyError** – If no such source is registered (after discovery).
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
 
 ### foley.sources.list_sources(, egress_allow=None)
 
 Return the names of registered live sources (runs discovery first).
 
 * **Parameters:**
-  **egress_allow** (`Optional`[`frozenset`]) – If given, keep only sources whose declared
+  **egress_allow** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)]) – If given, keep only sources whose declared
   `config['data_egress']` is in this set (the local-first / offline
   filter — see [`foley.runtime.RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig)). A source that does
   not declare `data_egress` is **excluded** (fail-closed).
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.sources.register_corpus(adapter)
 
 Register `adapter` in `CORPUS_REGISTRY` (idempotent) and return it.
 
 * **Raises:**
-  **ValueError** – If a *different* adapter is already registered under the name.
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If a *different* adapter is already registered under the name.
 * **Return type:**
   [`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)
 
@@ -13420,18 +13420,18 @@ from `config` on first [`get_source()`](_autosummary/foley.sources.html.md#foley
 importable `foley.sources.<name>` package).
 
 * **Parameters:**
-  * **name** (`str`) – The source name (the [`add_from()`](_autosummary/foley.sources.html.md#foley.sources.add_from) / [`get_source()`](_autosummary/foley.sources.html.md#foley.sources.get_source) key).
-  * **config** (`dict`) – The `SOURCE_CONFIG` declaration.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The source name (the [`add_from()`](_autosummary/foley.sources.html.md#foley.sources.add_from) / [`get_source()`](_autosummary/foley.sources.html.md#foley.sources.get_source) key).
+  * **config** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – The `SOURCE_CONFIG` declaration.
   * **adapter** – An optional pre-instantiated adapter (bypasses lazy loading).
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.sources.ring_of(name)
 
 Return the ring of the registered corpus `name` (raises `KeyError`).
 
 * **Return type:**
-  `int`
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
 
 ### foley.sources.select_corpora(, rings=(0, 1), corpora=None)
 
@@ -13442,9 +13442,9 @@ every registered adapter in the given rings is selected. Ring 2 is never in
 the default `rings` — it is opt-in only.
 
 * **Raises:**
-  **KeyError** – If a name in `corpora` is not registered.
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If a name in `corpora` is not registered.
 * **Return type:**
-  `list`[[`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`CorpusAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]
 
 ### Modules
 
@@ -13512,21 +13512,21 @@ Freesound fake transport) is unaffected.
 |---------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
 | [`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport)(\*args, \*\*kwargs)  | A callable performing ONE HTTP request and returning a [`Response`](_autosummary/foley.sources.http.html.md#foley.sources.http.Response). |
 
-### foley.sources.http.DEFAULT_TIMEOUT_S *: int* *= 30*
+### foley.sources.http.DEFAULT_TIMEOUT_S *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 30*
 
 Per-request timeout (seconds) for the default requests transport. A live
 adapter never blocks foley indefinitely on a hung connection.
 
 ### *class* foley.sources.http.Response(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 The minimal HTTP response surface an adapter needs.
 
 A structural subset of `requests.Response` — `requests` satisfies it with
 no wrapper, and a test double is a tiny dataclass with the same three members.
 
-#### content *: bytes*
+#### content *: [bytes](https://docs.python.org/3/builtins/stdtypes.html#bytes)*
 
 Raw response body bytes (used for audio/preview downloads).
 
@@ -13535,15 +13535,15 @@ Raw response body bytes (used for audio/preview downloads).
 Decode the response body as JSON.
 
 * **Return type:**
-  `Any`
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
 
-#### status_code *: int*
+#### status_code *: [int](https://docs.python.org/3/builtins/functions.html#int)*
 
 HTTP status code (200 on success).
 
 ### *class* foley.sources.http.Transport(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 A callable performing ONE HTTP request and returning a [`Response`](_autosummary/foley.sources.http.html.md#foley.sources.http.Response).
 
@@ -13560,11 +13560,11 @@ fake-injection test path never needs an HTTP library at all. The returned
 `requests.Response` structurally satisfies [`Response`](_autosummary/foley.sources.http.html.md#foley.sources.http.Response).
 
 * **Parameters:**
-  * **method** (`str`) – HTTP method (`'GET'` / `'POST'` …).
-  * **url** (`str`) – The full request URL.
-  * **params** (`Optional`[`dict`]) – Optional query-string parameters.
-  * **headers** (`Optional`[`dict`]) – Optional request headers (e.g. the auth token).
-  * **json** (`Optional`[`dict`]) – Optional JSON request body (POST), serialized by `requests`.
+  * **method** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – HTTP method (`'GET'` / `'POST'` …).
+  * **url** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The full request URL.
+  * **params** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional query-string parameters.
+  * **headers** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional request headers (e.g. the auth token).
+  * **json** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional JSON request body (POST), serialized by `requests`.
 * **Return type:**
   [`Response`](_autosummary/foley.sources.http.html.md#foley.sources.http.Response)
 * **Returns:**
@@ -13619,15 +13619,15 @@ is an optional keyword. Each hit is license-gated BEFORE any bytes are fetched
 applies the by-reference storage gate from the sound’s own license.
 
 * **Parameters:**
-  * **source** (`str`) – A registered live-source name (e.g. `'freesound'`).
-  * **query** (`str`) – The natural-language search query.
-  * **license** (`Optional`[`str`]) – License constraint pushed into the source query (default
+  * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A registered live-source name (e.g. `'freesound'`).
+  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language search query.
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – License constraint pushed into the source query (default
     `'cc0'`). The per-item fail-closed guard enforces the source’s
     accepted-license allowlist regardless.
-  * **limit** (`int`) – Max candidates to request from the source.
+  * **limit** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max candidates to request from the source.
   * **library** – Target [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **intended_use** (`Optional`[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
     [`DEFAULT_INTENDED_USE`](_autosummary/foley.sources.pull.html.md#foley.sources.pull.DEFAULT_INTENDED_USE)).
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport
@@ -13698,7 +13698,7 @@ never cross-captures the corpus adapters. Only `config.py` is imported here
 an already-registered name (e.g. a test double) is never overwritten.
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 * **Returns:**
   The list of discovered source names.
 
@@ -13710,32 +13710,32 @@ Runs a discovery pass if `name` is not yet known, then instantiates the
 adapter on first use (cached in the entry).
 
 * **Parameters:**
-  **name** (`str`) – The source name.
+  **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The source name.
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   The registry entry (`{'config': dict, 'adapter': SourceAdapter, ...}`).
 * **Raises:**
-  **KeyError** – If no such source is registered (after discovery).
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
 
 ### foley.sources.registry.list_sources(, egress_allow=None)
 
 Return the names of registered live sources (runs discovery first).
 
 * **Parameters:**
-  **egress_allow** (`Optional`[`frozenset`]) – If given, keep only sources whose declared
+  **egress_allow** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)]) – If given, keep only sources whose declared
   `config['data_egress']` is in this set (the local-first / offline
   filter — see [`foley.runtime.RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig)). A source that does
   not declare `data_egress` is **excluded** (fail-closed).
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.sources.registry.local_sources()
 
 The names of sources that run entirely on-device (`data_egress == 'local'`).
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.sources.registry.register_source(name, config, adapter=None)
 
@@ -13747,18 +13747,18 @@ from `config` on first [`get_source()`](_autosummary/foley.sources.registry.html
 importable `foley.sources.<name>` package).
 
 * **Parameters:**
-  * **name** (`str`) – The source name (the `add_from()` / [`get_source()`](_autosummary/foley.sources.registry.html.md#foley.sources.registry.get_source) key).
-  * **config** (`dict`) – The `SOURCE_CONFIG` declaration.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The source name (the `add_from()` / [`get_source()`](_autosummary/foley.sources.registry.html.md#foley.sources.registry.get_source) key).
+  * **config** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – The `SOURCE_CONFIG` declaration.
   * **adapter** – An optional pre-instantiated adapter (bypasses lazy loading).
 * **Return type:**
-  `None`
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.sources.registry.source_egress(name)
 
 The declared `data_egress` class of source `name` (`None` if undeclared).
 
 * **Return type:**
-  `Optional`[`str`]
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 
 # _autosummary/foley.sources.resilience.html.md
@@ -13806,23 +13806,23 @@ with a fake clock and a no-op sleep — no real network, no real waiting. Stdlib
 
 ### *class* foley.sources.resilience.BreakerPolicy(fail_threshold=5, reset_timeout_s=30.0)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Circuit-breaker thresholds.
 
 ### *class* foley.sources.resilience.RetryPolicy(max_attempts=4, retry_on=(429, 500, 502, 503, 504), base_delay_s=0.5, max_delay_s=30.0, respect_retry_after=True)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Exponential-backoff retry policy for transient HTTP failures.
 
-### foley.sources.resilience.SECONDS_PER_DAY *: float* *= 86400.0*
+### foley.sources.resilience.SECONDS_PER_DAY *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 86400.0*
 
 Seconds in a rolling rate-limit day (the `per_day` window length).
 
 ### *exception* foley.sources.resilience.SourceUnavailable
 
-Bases: `RuntimeError`
+Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
 
 Raised when a source’s circuit breaker is open or its retries are exhausted.
 
@@ -13831,7 +13831,7 @@ Raised when a source’s circuit breaker is open or its retries are exhausted.
 Build a resilient transport from a source `config` (its `rate` drives the throttle).
 
 * **Parameters:**
-  * **config** (`dict`) – A `SOURCE_CONFIG` dict (reads `config['rate']`).
+  * **config** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – A `SOURCE_CONFIG` dict (reads `config['rate']`).
   * **base** – The base transport (default: [`foley.sources.http.requests_transport()`](_autosummary/foley.sources.http.html.md#foley.sources.http.requests_transport)).
   * **\*\*inject** – `retry` / `breaker` / `clock` / `sleep` overrides.
 * **Returns:**
@@ -13843,11 +13843,11 @@ Wrap a [`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.
 
 * **Parameters:**
   * **transport** – The base transport callable `(method, url, *, params, headers, json)`.
-  * **rate** (`Optional`[`dict`]) – The source config’s `rate` dict (`{'per_min':…, 'per_day':…}`).
-  * **retry** (`Optional`[[`RetryPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.RetryPolicy)]) – The [`RetryPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.RetryPolicy) (default: 4 attempts on 429/5xx).
-  * **breaker** (`Optional`[[`BreakerPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.BreakerPolicy)]) – The [`BreakerPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.BreakerPolicy) (default: open after 5 consecutive fails).
-  * **clock** (`Callable`[[], `float`]) – Monotonic time source (injected for tests).
-  * **sleep** (`Callable`[[`float`], `None`]) – Blocking sleep (injected for tests).
+  * **rate** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The source config’s `rate` dict (`{'per_min':…, 'per_day':…}`).
+  * **retry** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`RetryPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.RetryPolicy)]) – The [`RetryPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.RetryPolicy) (default: 4 attempts on 429/5xx).
+  * **breaker** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`BreakerPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.BreakerPolicy)]) – The [`BreakerPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.BreakerPolicy) (default: open after 5 consecutive fails).
+  * **clock** ([`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[], [`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Monotonic time source (injected for tests).
+  * **sleep** ([`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Blocking sleep (injected for tests).
 * **Returns:**
   A transport with the same signature, plus a `.reset()` method. Raises
   [`SourceUnavailable`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.SourceUnavailable) when the breaker is open or retries are exhausted.
@@ -13931,12 +13931,12 @@ Registry convention (arioso): the loader imports `adapter.Adapter`.
 
 ### *class* foley.sources.stable_audio.adapter.StableAudioAdapter(config=None, , pipeline=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Local Stable Audio Open 1.0 generate adapter (a [`GenerateAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.GenerateAdapter)).
 
 * **Parameters:**
-  * **config** (`Optional`[`dict`]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
+  * **config** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
     by the registry’s lazy loader (the arioso `Adapter(config)` convention).
   * **pipeline** – An optional pre-built pipeline (the dependency-injection seam —
     a test injects a fake callable exposing `.vae.sampling_rate` +
@@ -13948,19 +13948,19 @@ Local Stable Audio Open 1.0 generate adapter (a [`GenerateAdapter`](_autosummary
 Generate a sound for `prompt`; return its bytes + provisional candidate.
 
 * **Parameters:**
-  * **prompt** (`str`) – The natural-language sound description (required).
-  * **duration** (`Optional`[`float`]) – Seconds (clamped to the model’s ~47.55 s max). `None` uses a
+  * **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language sound description (required).
+  * **duration** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Seconds (clamped to the model’s ~47.55 s max). `None` uses a
     sane 10 s default (NOT the 47.55 s maximum).
-  * **prompt_influence** (`float`) – `0..1` unified guidance; mapped to the native
+  * **prompt_influence** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – `0..1` unified guidance; mapped to the native
     `guidance_scale` via `1 + prompt_influence * (cfg_max - 1)`.
     Default `0.3` → `guidance_scale ≈ 5.2`.
-  * **negative_prompt** (`Optional`[`str`]) – Content to exclude (ignored by the model when guidance
+  * **negative_prompt** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Content to exclude (ignored by the model when guidance
     ≤ 1).
-  * **steps** (`Optional`[`int`]) – Diffusion steps (native `num_inference_steps`); default 200.
-  * **seed** (`Optional`[`int`]) – Reproducibility seed → a per-device `torch.Generator`; recorded
+  * **steps** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Diffusion steps (native `num_inference_steps`); default 200.
+  * **seed** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Reproducibility seed → a per-device `torch.Generator`; recorded
     in provenance. `None` → non-deterministic (no torch import).
-  * **loop** (`bool`) – No native param (a future WEAVE crossfade) — warn-and-drop.
-  * **output_format** (`str`) – No native param (the audio-write layer) — warn-and-drop;
+  * **loop** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – No native param (a future WEAVE crossfade) — warn-and-drop.
+  * **output_format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – No native param (the audio-write layer) — warn-and-drop;
     the clip is archived as FLAC by ingest regardless.
   * **\*\*kw** – Extra/unknown affordances (warn-and-dropped).
 * **Return type:**
@@ -14129,7 +14129,7 @@ Suffix given to on-disk metadata files (keys stay the bare `sound_id`).
 
 A filesystem location (path or path-like string) for a local store root.
 
-alias of `str` | `os.PathLike[str]`
+alias of [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | `os.PathLike[str]`
 
 ### foley.stores.content_key(data, , algo='sha256')
 
@@ -14139,10 +14139,10 @@ Using the hash as the key gives free deduplication (identical bytes map to
 the same key) and immutability (a key always names the exact same bytes).
 
 * **Parameters:**
-  * **data** (`bytes`) – The raw bytes to address (e.g. a FLAC archive blob).
-  * **algo** (`str`) – A `hashlib` algorithm name (defaults to [`HASH_ALGO`](_autosummary/foley.stores.html.md#foley.stores.HASH_ALGO)).
+  * **data** ([`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)) – The raw bytes to address (e.g. a FLAC archive blob).
+  * **algo** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A `hashlib` algorithm name (defaults to [`HASH_ALGO`](_autosummary/foley.stores.html.md#foley.stores.HASH_ALGO)).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The lowercase hex digest of `data` under `algo`.
 
@@ -14156,9 +14156,9 @@ it directly to [`store_sound()`](_autosummary/foley.stores.html.md#foley.stores.
 `store_sound` gate treats `sounds` as an opaque `MutableMapping`.
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the blobs (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the blobs (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, `bytes`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 * **Returns:**
   A `MutableMapping[str, bytes]` keyed by [`content_key()`](_autosummary/foley.stores.html.md#foley.stores.content_key).
 
@@ -14173,9 +14173,9 @@ bare `sound_id` (invariant #3 — the id is escaped at this boundary so an
 externally-derived id can never escape `rootdir` or collide via `/`/`..`).
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the metadata JSON files (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the metadata JSON files (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]
 * **Returns:**
   A `MutableMapping[str, SoundRecord]` keyed by `sound_id`.
 
@@ -14192,9 +14192,9 @@ C2PA-shaped assertion dict written next to each generated clip; a
 default; swap in any `dol` Mapping to move sidecars to the cloud.
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the credential JSON files (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the credential JSON files (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, `dict`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   A `MutableMapping[str, dict]` keyed by content id.
 
@@ -14209,9 +14209,9 @@ exposing bare `run_id` keys; values are plain dicts ((de)serialized by
 `dol.JsonFiles`). Local by default; swap in any `dol` Mapping for the cloud.
 
 * **Parameters:**
-  **rootdir** (`Union`[`str`, `PathLike`[`str`]]) – Directory that holds the run JSON files (created if missing).
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory that holds the run JSON files (created if missing).
 * **Return type:**
-  `MutableMapping`[`str`, `dict`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   A `MutableMapping[str, dict]` keyed by `run_id`.
 
@@ -14226,12 +14226,12 @@ exposing bare keys; values are plain dicts. Local by default; swap in any `dol`
 Mapping for the cloud.
 
 * **Parameters:**
-  * **session_id** (`str`) – The session namespace (default `'default'`).
-  * **name** (`str`) – The store namespace within the session (`candidates` / `picks` /
+  * **session_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The session namespace (default `'default'`).
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The store namespace within the session (`candidates` / `picks` /
     `rejects`).
-  * **rootdir** (`Union`[`str`, `PathLike`[`str`], `None`]) – Root sessions directory (default: [`DEFAULT_SESSION_DIR`](_autosummary/foley.stores.html.md#foley.stores.DEFAULT_SESSION_DIR)).
+  * **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Root sessions directory (default: [`DEFAULT_SESSION_DIR`](_autosummary/foley.stores.html.md#foley.stores.DEFAULT_SESSION_DIR)).
 * **Return type:**
-  `MutableMapping`[`str`, `dict`]
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   A `MutableMapping[str, dict]` keyed by the bare key.
 
@@ -14251,19 +14251,19 @@ written, only its fetchable `uri` plus provenance.
     for the storage mode. Mutated in place with the resolved
     `storage_mode` / `uri` / `content_sha256` and written into
     `meta`.
-  * **data** (`Optional`[`bytes`]) – The canonical archive bytes (FLAC). Required for by-value storage;
+  * **data** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The canonical archive bytes (FLAC). Required for by-value storage;
     for by-reference it is optional — if given, its hash is recorded in
     `content_sha256` for provenance but the bytes are NOT stored.
-  * **sounds** (`MutableMapping`[`str`, `bytes`]) – The content-addressed byte store (see [`make_byte_store()`](_autosummary/foley.stores.html.md#foley.stores.make_byte_store)).
-  * **meta** (`MutableMapping`[`str`, [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]) – The metadata store (see [`make_meta_store()`](_autosummary/foley.stores.html.md#foley.stores.make_meta_store)).
-  * **cache_bytes_ok** (`Optional`[`bool`]) – Optional override. `None` (the default) means “use
+  * **sounds** ([`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The content-addressed byte store (see [`make_byte_store()`](_autosummary/foley.stores.html.md#foley.stores.make_byte_store)).
+  * **meta** ([`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)]) – The metadata store (see [`make_meta_store()`](_autosummary/foley.stores.html.md#foley.stores.make_meta_store)).
+  * **cache_bytes_ok** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Optional override. `None` (the default) means “use
     `record.license.cache_bytes_ok`”.
 * **Return type:**
   [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)
 * **Returns:**
   The same (mutated) `record`, after it has been written into `meta`.
 * **Raises:**
-  **ValueError** – If `record.id` is empty/non-`str` (checked first, so a bad
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `record.id` is empty/non-`str` (checked first, so a bad
       id never leaves an orphan blob), or if the sound resolves to
       by-reference storage but `record.uri` is empty (a by-reference sound
       must name a fetchable source URL).
@@ -14309,7 +14309,7 @@ else falls back to the fake — the progressive-disclosure rule.
 
 ### *class* foley.weave.align.FakeAligner
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Deterministic, torch-free `Aligner` — evenly spaces the transcript’s words.
 
@@ -14323,13 +14323,13 @@ per whitespace token, spread uniformly across the clip’s duration (or at
 Return an evenly-spaced word timeline for `transcript` over `audio`’s duration.
 
 * **Return type:**
-  `list`[`dict`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
-### foley.weave.align.WHISPERX_SAMPLE_RATE *: int* *= 16000*
+### foley.weave.align.WHISPERX_SAMPLE_RATE *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 16000*
 
 WhisperX runs alignment at 16 kHz mono (its wav2vec2 CTC model’s native rate).
 
-### foley.weave.align.WORDS_PER_SECOND *: float* *= 2.5*
+### foley.weave.align.WORDS_PER_SECOND *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 2.5*
 
 Fallback speaking cadence used only when the clip’s duration is unknown
 (empty audio); otherwise [`FakeAligner`](_autosummary/foley.weave.align.html.md#foley.weave.align.FakeAligner) spreads words across the real
@@ -14337,7 +14337,7 @@ audio duration so its timings are audio-length-aware.
 
 ### *class* foley.weave.align.WhisperXAligner(, model_size='small', device='cpu', batch_size=16)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The real ≈±50 ms `Aligner` (`foley[align]`) — faster-whisper ASR + wav2vec2 CTC.
 
@@ -14345,16 +14345,16 @@ Lazy-imports `whisperx` inside [`word_timeline()`](_autosummary/foley.weave.alig
 stays dol-only. Transcribes (if no transcript) then force-aligns at 16 kHz mono.
 
 * **Parameters:**
-  * **model_size** (`str`) – faster-whisper model name (`tiny`/`base`/`small`/…).
-  * **device** (`str`) – `'cpu'` or `'cuda'`.
-  * **batch_size** (`int`) – Transcription batch size.
+  * **model_size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – faster-whisper model name (`tiny`/`base`/`small`/…).
+  * **device** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'cpu'` or `'cuda'`.
+  * **batch_size** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Transcription batch size.
 
 #### word_timeline(audio, sample_rate, , transcript=None, language='en')
 
 Force-align `audio` to its transcript, returning word-level timestamps.
 
 * **Return type:**
-  `list`[`dict`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
 
 # _autosummary/foley.weave.anchor.html.md
@@ -14391,7 +14391,7 @@ SSOT bridge from SELECT’s sparse `TimelineItem.onset` string to a
 |----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
 | [`resolve_anchor`](_autosummary/foley.weave.anchor.html.md#foley.weave.anchor.resolve_anchor)(placement, word_timeline, \*)      | Resolve a `Placement` to a concrete `(onset_seconds, duration_seconds)`.           |
 
-### foley.weave.anchor.SEGMENT_GAP_S *: float* *= 0.35*
+### foley.weave.anchor.SEGMENT_GAP_S *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.35*
 
 Inter-word gap (seconds) that ends a sentence segment (report 06 §2.4 uses
 `> ~350 ms` as a lightweight sentence segmenter over the aligned transcript).
@@ -14408,9 +14408,9 @@ the start, one-shots sit at `absolute` 0. A bare number (defensive — SELECT is
 told never to emit one) is read as an absolute offset in seconds.
 
 * **Parameters:**
-  * **onset** (`Optional`[`str`]) – The symbolic anchor string (e.g. `"on 'pushed open'"`) or `None`.
+  * **onset** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The symbolic anchor string (e.g. `"on 'pushed open'"`) or `None`.
   * **layer** ([`Layer`](_autosummary/foley.base.html.md#foley.base.Layer)) – The item’s mix layer (selects span/boundary vs word anchoring).
-  * **loop** (`bool`) – Whether the item is a looping bed (span-anchored).
+  * **loop** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the item is a looping bed (span-anchored).
 * **Return type:**
   [`Placement`](_autosummary/foley.base.html.md#foley.base.Placement)
 * **Returns:**
@@ -14429,10 +14429,10 @@ sentence (filling `duration` when unset — beds loop to fill it); `scene` /
 
 * **Parameters:**
   * **placement** ([`Placement`](_autosummary/foley.base.html.md#foley.base.Placement)) – The symbolic placement to resolve.
-  * **word_timeline** (`list`[`dict`]) – The forced-aligned `[{'word','start','end'}, ...]`.
-  * **snap_pauses** (`bool`) – If `True`, snap the resolved onset to the nearest pause.
+  * **word_timeline** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The forced-aligned `[{'word','start','end'}, ...]`.
+  * **snap_pauses** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, snap the resolved onset to the nearest pause.
 * **Return type:**
-  `tuple`[`float`, `Optional`[`float`]]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]]
 * **Returns:**
   `(onset_seconds, duration_seconds_or_None)`. `duration` is filled only
   for a span anchor whose `placement.duration` was unset.
@@ -14478,7 +14478,7 @@ errors, so weaving never depends on it. `ffmpeg` is a WEAVE system requirement (
 
 ### *class* foley.weave.master.MasterReport(target_lufs, input_lufs, output_lufs, true_peak_dbtp, true_peak_ceiling_db, gain_db, limited, engine)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 What the master stage did — a JSON-serialisable audit row for the run-artifact.
 
@@ -14487,7 +14487,7 @@ What the master stage did — a JSON-serialisable audit row for the run-artifact
 Return the plain-dict form (for `WeaveResult.master_report` / obs).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.weave.master.master(mix, sample_rate, profile, , engine='auto')
 
@@ -14495,13 +14495,13 @@ Master `mix` to `profile` — LUFS-normalise then true-peak-limit (report 06 §5
 
 * **Parameters:**
   * **mix** (`ndarray`) – The summed working mix (stereo `(frames, 2)` float32).
-  * **sample_rate** (`int`) – Sample rate in Hz.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
   * **profile** ([`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile)) – The [`MasterProfile`](_autosummary/foley.base.html.md#foley.base.MasterProfile) (target LUFS / true-peak / LRA).
-  * **engine** (`str`) – `'auto'`/`'inprocess'` master in-process (default, portable). `'ffmpeg'`
+  * **engine** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'auto'`/`'inprocess'` master in-process (default, portable). `'ffmpeg'`
     uses the two-pass `ffmpeg loudnorm` “guarantee the numbers” master (report 06
     §5.4) and **fails safe** back to in-process if ffmpeg is unavailable or errors.
 * **Return type:**
-  `tuple`[`ndarray`, [`MasterReport`](_autosummary/foley.weave.master.html.md#foley.weave.master.MasterReport)]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[`ndarray`, [`MasterReport`](_autosummary/foley.weave.master.html.md#foley.weave.master.MasterReport)]
 * **Returns:**
   `(mastered_mix, MasterReport)`. Loudness is measured before and after so the
   report is a faithful audit; when a true-peak limit engages, output LUFS may
@@ -14549,20 +14549,20 @@ later slice behind `foley[weave]`.
 | [`speech_duck_gain`](_autosummary/foley.weave.mix.html.md#foley.weave.mix.speech_duck_gain)(n_samples, sample_rate, ...)      | Build a (linear) gain envelope that dips to `duck_db` during speech spans (report 06 §3.2).     |
 | [`time_stretch`](_autosummary/foley.weave.mix.html.md#foley.weave.mix.time_stretch)(clip, sample_rate, \*, rate)          | Pitch-preserving time-stretch by `rate` via `rubberband` (report 06 §4, optional).              |
 
-### foley.weave.mix.DISTANCE_MAX_ATTEN_DB *: float* *= -12.0*
+### foley.weave.mix.DISTANCE_MAX_ATTEN_DB *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= -12.0*
 
 Attenuation (dB) applied at maximum distance (distance == 1.0); ~inverse-distance.
 
-### foley.weave.mix.DISTANCE_MAX_LP *: float* *= 0.85*
+### foley.weave.mix.DISTANCE_MAX_LP *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.85*
 
 Air-absorption one-pole low-pass coefficient at maximum distance (0 = none, →1 = darkest).
 
-### foley.weave.mix.LAYER_GAIN_DB *: dict[[Layer](_autosummary/foley.base.html.md#foley.base.Layer), float]* *= {Layer.ambience: -21.0, Layer.music: -21.0, Layer.sfx_fg: -9.0, Layer.stinger: -6.0, Layer.voice: 0.0}*
+### foley.weave.mix.LAYER_GAIN_DB *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[Layer](_autosummary/foley.base.html.md#foley.base.Layer), [float](https://docs.python.org/3/builtins/functions.html#float)]* *= {Layer.ambience: -21.0, Layer.music: -21.0, Layer.sfx_fg: -9.0, Layer.stinger: -6.0, Layer.voice: 0.0}*
 
 Base per-layer gain (dB, relative to the voice bus at 0 dB). The render applies
 this before each item’s own `processing.gain_db` so levels have a sane default.
 
-### foley.weave.mix.REVERB_IR_S *: float* *= 0.18*
+### foley.weave.mix.REVERB_IR_S *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.18*
 
 Reverb-send impulse-response length (seconds) and decay time-constant.
 
@@ -14576,8 +14576,8 @@ separately via [`reverb_send()`](_autosummary/foley.weave.mix.html.md#foley.weav
 
 * **Parameters:**
   * **clip** (`ndarray`) – Working array (mono or stereo).
-  * **sample_rate** (`int`) – Sample rate in Hz (kept for API symmetry / future filters).
-  * **distance** (`float`) – 0 (near) .. 1 (far).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (kept for API symmetry / future filters).
+  * **distance** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – 0 (near) .. 1 (far).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -14592,7 +14592,7 @@ Pan a (mono or stereo) clip to a stereo image with a constant-power law (report 
 
 * **Parameters:**
   * **clip** (`ndarray`) – Mono `(frames,)` or stereo `(frames, 2)` working array.
-  * **pan** (`float`) – -1 (hard left) .. 0 (centre) .. +1 (hard right).
+  * **pan** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – -1 (hard left) .. 0 (centre) .. +1 (hard right).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -14611,9 +14611,9 @@ heavy dependency): only *producing* an IR needs an external tool; applying one d
 
 * **Parameters:**
   * **clip** (`ndarray`) – Working array (mono or stereo).
-  * **sample_rate** (`int`) – Sample rate in Hz (kept for API symmetry).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (kept for API symmetry).
   * **ir** (`ndarray`) – The impulse response (mono `(n,)` or stereo `(n, 2)`).
-  * **amount** (`float`) – 0 (dry) .. 1 (fully wet).
+  * **amount** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – 0 (dry) .. 1 (fully wet).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -14624,7 +14624,7 @@ heavy dependency): only *producing* an IR needs an external tool; applying one d
 Convert decibels to a linear amplitude factor (`10 ** (db/20)`).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.weave.mix.declick(clip, sample_rate, , fade_in=0.008, fade_out=0.012)
 
@@ -14646,7 +14646,7 @@ bed loops and ambience swaps.
 * **Parameters:**
   * **a** (`ndarray`) – The leading clip (mono or stereo).
   * **b** (`ndarray`) – The trailing clip (same channel layout as `a`).
-  * **overlap_samples** (`int`) – Crossfade length in samples (clamped to both clip lengths).
+  * **overlap_samples** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Crossfade length in samples (clamped to both clip lengths).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -14665,11 +14665,11 @@ the clip is pitch-preservingly time-stretched to exactly fill `duration` (via
 
 * **Parameters:**
   * **clip** (`ndarray`) – Working array (mono or stereo).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **duration** (`float` | `None`) – Target duration in seconds (`None` = full clip length).
-  * **loop** (`bool`) – Seamless-loop to fill `duration` when shorter.
-  * **crossfade_s** (`float`) – Equal-power crossfade length at each loop seam.
-  * **stretch** (`bool`) – Pitch-preserving time-stretch to fill `duration` (needs `rubberband`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **duration** ([`float`](https://docs.python.org/3/builtins/functions.html#float) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Target duration in seconds (`None` = full clip length).
+  * **loop** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Seamless-loop to fill `duration` when shorter.
+  * **crossfade_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Equal-power crossfade length at each loop seam.
+  * **stretch** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Pitch-preserving time-stretch to fill `duration` (needs `rubberband`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -14685,7 +14685,7 @@ bus length is truncated to fit (the mix length equals the narration length).
 * **Parameters:**
   * **bus** (`ndarray`) – The destination layer bus (stereo `(frames, 2)`).
   * **clip** (`ndarray`) – The (mono or stereo) clip to place.
-  * **onset_samples** (`int`) – Start offset in samples (clamped at 0).
+  * **onset_samples** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Start offset in samples (clamped at 0).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -14702,8 +14702,8 @@ optional `foley[weave]` upgrade. `amount == 0` is a no-op (fully dry).
 
 * **Parameters:**
   * **clip** (`ndarray`) – Working array (mono or stereo).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **amount** (`float`) – 0 (dry) .. 1 (fully wet).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **amount** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – 0 (dry) .. 1 (fully wet).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -14718,12 +14718,12 @@ without clicks. Deterministic and testable — the envelope-follower alternative
 `ffmpeg sidechaincompress`.
 
 * **Parameters:**
-  * **n_samples** (`int`) – Length of the bed bus in samples.
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **speech_spans** (`list`[`tuple`[`float`, `float`]]) – `[(start_s, end_s), ...]` from the word timeline.
-  * **duck_db** (`float`) – Attenuation depth during speech (negative dB).
-  * **attack** (`float`) – Attack time constant (seconds) as the bed drops.
-  * **release** (`float`) – Release time constant (seconds) as the bed recovers.
+  * **n_samples** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Length of the bed bus in samples.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **speech_spans** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(start_s, end_s), ...]` from the word timeline.
+  * **duck_db** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Attenuation depth during speech (negative dB).
+  * **attack** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Attack time constant (seconds) as the bed drops.
+  * **release** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Release time constant (seconds) as the bed recovers.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -14736,7 +14736,7 @@ Pitch-preserving time-stretch by `rate` via `rubberband` (report 06 §4, optiona
 `rate > 1` shortens (plays faster), `< 1` lengthens — so fitting a clip of `n`
 samples to a `target` span uses `rate = n / target`. Lazy: needs `pyrubberband`
 (which shells out to the `rubberband` binary, a WEAVE system requirement); raises
-`RuntimeError` when unavailable so callers (e.g. [`fit_duration()`](_autosummary/foley.weave.mix.html.md#foley.weave.mix.fit_duration)) fall back
+[`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) when unavailable so callers (e.g. [`fit_duration()`](_autosummary/foley.weave.mix.html.md#foley.weave.mix.fit_duration)) fall back
 to loop/trim. Preserves the channel layout.
 
 * **Return type:**
@@ -14749,7 +14749,7 @@ to loop/trim. Preserves the channel layout.
 
 The structural DI seams of the WEAVE stage — `Aligner` / `ApplyStrategy`.
 
-Two `@runtime_checkable` `typing.Protocol`s (PEP 544), each a
+Two `@runtime_checkable` [`typing.Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)s (PEP 544), each a
 behaviour-free, open-closed contract that every implementation (the deterministic
 fake *and* the heavy real impl) satisfies. They are dependency-injected into
 `foley.weave.render()` / `foley.weave.weave()` by keyword
@@ -14769,7 +14769,7 @@ importing this module pulls no heavy dependency and keeps `import foley` and
 
 ### *class* foley.weave.protocols.Aligner(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Narration audio + its transcript → word-level timestamps (forced alignment).
 
@@ -14782,7 +14782,7 @@ is the real ≈±50 ms impl behind `foley[align]`.
 
 ### *class* foley.weave.protocols.ApplyStrategy(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 How ONE hydrated item’s clip is placed onto its layer bus (report 10 §4.2).
 
@@ -14825,14 +14825,14 @@ onboarding. Stdlib-only, so importing it keeps `import foley.weave` dol-only.
 | [`Requirement`](_autosummary/foley.weave.requirements.html.md#foley.weave.requirements.Requirement)(name, purpose, url, install[, probe])   | A single optional dependency: what it is, how to get it, why foley wants it.   |
 |------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
 
-### foley.weave.requirements.REQUIREMENTS *: dict[str, [Requirement](_autosummary/foley.weave.requirements.html.md#foley.weave.requirements.Requirement)]* *= {'ffmpeg': Requirement(name='ffmpeg', purpose="two-pass loudnorm 'guarantee-the-numbers' master (report 06 §5.4)", url='https://ffmpeg.org/download.html', install={'darwin': 'brew install ffmpeg', 'linux': 'sudo apt-get install -y ffmpeg', 'win32': 'winget install --id=Gyan.FFmpeg -e'}, probe='binary'), 'rubberband': Requirement(name='rubberband', purpose='high-quality time-stretch / pitch-shift for loop fitting', url='https://breakfastquay.com/rubberband/', install={'darwin': 'brew install rubberband', 'linux': 'sudo apt-get install -y rubberband-cli', 'win32': 'download from https://breakfastquay.com/rubberband/'}, probe='binary')}*
+### foley.weave.requirements.REQUIREMENTS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Requirement](_autosummary/foley.weave.requirements.html.md#foley.weave.requirements.Requirement)]* *= {'ffmpeg': Requirement(name='ffmpeg', purpose="two-pass loudnorm 'guarantee-the-numbers' master (report 06 §5.4)", url='https://ffmpeg.org/download.html', install={'darwin': 'brew install ffmpeg', 'linux': 'sudo apt-get install -y ffmpeg', 'win32': 'winget install --id=Gyan.FFmpeg -e'}, probe='binary'), 'rubberband': Requirement(name='rubberband', purpose='high-quality time-stretch / pitch-shift for loop fitting', url='https://breakfastquay.com/rubberband/', install={'darwin': 'brew install rubberband', 'linux': 'sudo apt-get install -y rubberband-cli', 'win32': 'download from https://breakfastquay.com/rubberband/'}, probe='binary')}*
 
 The SSOT of WEAVE’s optional system dependencies. Both are opt-in upgrades; the
 bare install renders + masters entirely in-process, so neither is required.
 
 ### *class* foley.weave.requirements.Requirement(name, purpose, url, install, probe='binary')
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A single optional dependency: what it is, how to get it, why foley wants it.
 
@@ -14846,10 +14846,10 @@ generalized [`foley.requirements`](_autosummary/foley.requirements.html.md#modul
 Report which optional WEAVE system binaries are available (`shutil.which`).
 
 * **Parameters:**
-  * **names** (`tuple`[`str`, `...`] | `None`) – Which requirements to check (default: all of [`REQUIREMENTS`](_autosummary/foley.weave.requirements.html.md#foley.weave.requirements.REQUIREMENTS)).
-  * **verbose** (`bool`) – If `True`, print an install hint for each missing binary.
+  * **names** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)] | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Which requirements to check (default: all of [`REQUIREMENTS`](_autosummary/foley.weave.requirements.html.md#foley.weave.requirements.REQUIREMENTS)).
+  * **verbose** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, print an install hint for each missing binary.
 * **Return type:**
-  `dict`[`str`, `bool`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
   `{name: is_available}`. All-absent is fine — WEAVE degrades to its
   in-process path; the report just tells the user what each binary would unlock.
@@ -14862,7 +14862,7 @@ Does **not** run installers (system-binary installs need the user’s consent an
 sudo). Surfaces the exact per-platform command so the user can opt in.
 
 * **Return type:**
-  `dict`[`str`, `dict`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   `{name: {'available': bool, 'purpose': str, 'install': str, 'url': str}}`.
 
@@ -14904,7 +14904,7 @@ stdlib-only (no numpy, no I/O):
 | [`to_webvtt`](_autosummary/foley.weave.timeline.html.md#foley.weave.timeline.to_webvtt)(timeline, \*[, window_s])        | Render the timeline's SFX cues as a WebVTT SDH caption file (report 06 / issue #8). |
 | [`toggle`](_autosummary/foley.weave.timeline.html.md#foley.weave.timeline.toggle)(timeline, item_id, enabled)         | Non-destructively mute/unmute an item — a NEW timeline.                             |
 
-### foley.weave.timeline.DISPLAY_WINDOW_S *: float* *= 2.0*
+### foley.weave.timeline.DISPLAY_WINDOW_S *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 2.0*
 
 How long a one-shot’s caption stays on screen (seconds) when the item has no
 resolved duration of its own.
@@ -14922,7 +14922,7 @@ timeline (the reproducible seed).
 
 * **Parameters:**
   * **timeline** ([`SoundDesignTimeline`](_autosummary/foley.base.html.md#foley.base.SoundDesignTimeline)) – The (sparse or partially-resolved) timeline.
-  * **word_timeline** (`Optional`[`list`]) – The forced alignment; defaults to `timeline.word_timeline`.
+  * **word_timeline** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)]) – The forced alignment; defaults to `timeline.word_timeline`.
 * **Return type:**
   [`SoundDesignTimeline`](_autosummary/foley.base.html.md#foley.base.SoundDesignTimeline)
 * **Returns:**
@@ -14968,7 +14968,7 @@ Swap an item’s clip (keeping its placement/processing) — a NEW timeline.
 Render the timeline’s SFX cues as an SRT SDH caption file (report 06 / issue #8).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.weave.timeline.to_webvtt(timeline, , window_s=2.0)
 
@@ -14977,7 +14977,7 @@ Render the timeline’s SFX cues as a WebVTT SDH caption file (report 06 / issue
 Each enabled, placed item becomes one `[bracketed]` cue at its resolved onset.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.weave.timeline.toggle(timeline, item_id, enabled)
 
@@ -14993,7 +14993,7 @@ Non-destructively mute/unmute an item — a NEW timeline.
 
 # About this build
 
-This documentation was built on **2026-10-03 10:30 UTC** from commit <a href="https://github.com/thorwhalen/foley/commit/e0dd52b1146239fadd57f5a3be628c9f0620d55d"><code>e0dd52b</code></a> on branch <code>main</code>, for **foley 0.0.26** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-03 11:02 UTC** from commit <a href="https://github.com/thorwhalen/foley/commit/0a5d060da4f8196085ef9cd40c2a5b3962164947"><code>0a5d060</code></a> on branch <code>main</code>, for **foley 0.0.27** (from <code>pyproject.toml</code>).
 
 #### NOTE
 Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
@@ -15002,7 +15002,7 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/foley/commit/e0dd52b1146239fadd57f5a3be628c9f0620d55d"><code>e0dd52b1146239fadd57f5a3be628c9f0620d55d</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/foley/commit/0a5d060da4f8196085ef9cd40c2a5b3962164947"><code>0a5d060da4f8196085ef9cd40c2a5b3962164947</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -15013,9 +15013,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/foley</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/foley/actions/runs/37116556406">37116556406</a>     |
+| Run          | <a href="https://github.com/thorwhalen/foley/actions/runs/37118244999">37118244999</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>e0dd52b1146239fadd57f5a3be628c9f0620d55d</code> (in the history of the built commit) |
+| Event commit | <code>0a5d060da4f8196085ef9cd40c2a5b3962164947</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -15040,13 +15040,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/foley/0.0.26/">0.0.26</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/foley/0.0.27/">0.0.27</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/foley && cd foley
-git checkout e0dd52b1146239fadd57f5a3be628c9f0620d55d
+git checkout 0a5d060da4f8196085ef9cd40c2a5b3962164947
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

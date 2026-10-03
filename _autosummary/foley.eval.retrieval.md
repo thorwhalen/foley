@@ -50,7 +50,7 @@ The metrics reported by [`evaluate_run()`](#foley.eval.retrieval.evaluate_run) (
 
 ### *class* foley.eval.retrieval.RetrievalReport(per_query=<factory>, mean=<factory>, ranks=<factory>, k=10)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).
 
@@ -59,14 +59,14 @@ Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).
 A human diff for a failing gate: mean vs baseline + the worst queries.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.eval.retrieval.average_precision_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Average precision (trec_eval `map`: divide by TOTAL relevant, not `min(R,k)`).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.build_run(candidates)
 
@@ -81,7 +81,7 @@ determinism the gate relies on. The doc id is `candidate.sound.id`.
   **candidates** – An ordered `list[Candidate]` from
   [`foley.index.library.SoundLibrary.search()`](foley.index.library.md#foley.index.library.SoundLibrary.search) (best first).
 * **Return type:**
-  `dict`[`str`, `float`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 * **Returns:**
   `{clip_id: score}` with distinct descending scores.
 
@@ -101,32 +101,32 @@ rank of the highest-graded answer (for the failure diff).
 Macro-average of per-query metric values (0.0 for an empty list).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.mrr_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Reciprocal rank of the first relevant doc in the top-`k` (0.0 if none).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.ndcg_at_k(qrels_q, run_q, k=10)
 
 Normalized DCG at `k` with linear gains (0.0 when no graded answer).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.precision_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Fraction of the top-`k` that is relevant (denominator is literal `k`).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.eval.retrieval.recall_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Fraction of ALL relevant docs (grade ≥ `rel_lvl`) retrieved in the top-`k`.
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)

@@ -40,7 +40,7 @@ gate therefore does NOT exercise `ingest_one` (that path is covered by
 
 ### *class* foley.eval.golden.GoldenItem(id, context, expected_events, answer_clip_ids, grade, negatives=<factory>, labeler='llm+human', schema_version=1)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One frozen `(context → expected sounds)` judgment (report 08 §1.3).
 
@@ -107,7 +107,7 @@ clip lands at integer rank 1 (deterministic, cross-platform).
 Load and validate the frozen golden set from `path` (JSON list).
 
 * **Return type:**
-  `list`[[`GoldenItem`](#foley.eval.golden.GoldenItem)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GoldenItem`](#foley.eval.golden.GoldenItem)]
 
 ### foley.eval.golden.run_ring0_retrieval_eval(, k=10, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), embedder=None)
 
@@ -118,7 +118,7 @@ Runs every golden `expected_events[].query` through the real
 resulting runs against the golden qrels.
 
 * **Parameters:**
-  * **k** (`int`) – Retrieval cutoff (and the metric `@k`).
+  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval cutoff (and the metric `@k`).
   * **golden_path** – The golden set JSON.
   * **embedder** – The eval embedder (default: `HashingBowEmbedder`).
 * **Return type:**
@@ -135,4 +135,4 @@ One qrels row per `(item, event)` — `query_id = f"{item.id}::{event_idx}"`
 clip in `answer_clip_ids` carries its `grade`.
 
 * **Return type:**
-  `dict`[`str`, `dict`[`str`, `int`]]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`int`](https://docs.python.org/3/builtins/functions.html#int)]]

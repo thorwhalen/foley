@@ -52,11 +52,11 @@ Iterable and sized; renders to `CREDITS.md` via [`markdown`](#foley.provenance.C
 JSON manifest via [`manifest`](#foley.provenance.Credits.manifest) (== `to_dict()`). Both are deterministic
 (no timestamps) and diffable.
 
-#### *property* manifest *: dict*
+#### *property* manifest *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)*
 
 The machine-readable JSON manifest (a plain dict).
 
-#### *property* markdown *: str*
+#### *property* markdown *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The rendered `CREDITS.md` document.
 
@@ -70,10 +70,10 @@ otherwise the line is synthesized from Title/Author/Source/License, with a
 
 * **Parameters:**
   * **source** (`Union`[[`CreditEntry`](foley.provenance.credits.html.md#foley.provenance.credits.CreditEntry), [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord), [`Candidate`](foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord)]) – A [`CreditEntry`](#foley.provenance.CreditEntry), or any credit input (coerced first).
-  * **fmt** (`str`) – `'markdown'` (hyperlinked list-item body) or `'plain'` (text with
+  * **fmt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'markdown'` (hyperlinked list-item body) or `'plain'` (text with
     URLs in parentheses).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The attribution line (no leading bullet / trailing newline).
 
@@ -87,7 +87,7 @@ never re-derived); `modified` reflects a non-empty `transformations` list.
 * **Parameters:**
   * **record** (`Union`[[`SoundRecord`](foley.base.html.md#foley.base.SoundRecord), [`Candidate`](foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord)]) – A [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord), [`Candidate`](foley.base.html.md#foley.base.Candidate),
     or [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord).
-  * **title** (`Optional`[`str`]) – Explicit title override (else resolved from caption/tags/…).
+  * **title** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Explicit title override (else resolved from caption/tags/…).
 * **Return type:**
   [`CreditEntry`](foley.provenance.credits.html.md#foley.provenance.credits.CreditEntry)
 
@@ -96,12 +96,12 @@ never re-derived); `modified` reflects a non-empty `transformations` list.
 Build the deduplicated [`Credits`](#foley.provenance.Credits) for the sounds used in a run.
 
 * **Parameters:**
-  * **sounds** (`Iterable`[`Union`[[`SoundRecord`](foley.base.html.md#foley.base.SoundRecord), [`Candidate`](foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord)]]) – An iterable of records / candidates / license records.
-  * **title** (`str`) – The credits heading (also carried in the manifest).
-  * **only_required** (`bool`) – Keep only entries whose license *requires* attribution
+  * **sounds** ([`Iterable`](https://docs.python.org/3/library/typing.html#typing.Iterable)[`Union`[[`SoundRecord`](foley.base.html.md#foley.base.SoundRecord), [`Candidate`](foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord)]]) – An iterable of records / candidates / license records.
+  * **title** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The credits heading (also carried in the manifest).
+  * **only_required** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Keep only entries whose license *requires* attribution
     (drops CC0 / user-owned courtesy credits). Default `False` credits
     everything (never-discard-provenance).
-  * **sort** (`str`) – `'appearance'` (default: first-seen order), `'author'`, or
+  * **sort** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'appearance'` (default: first-seen order), `'author'`, or
     `'title'` (case-insensitive alpha).
 * **Return type:**
   [`Credits`](foley.provenance.credits.html.md#foley.provenance.credits.Credits)
@@ -120,7 +120,7 @@ It carries the full field set, including the `requires_attribution` mark and
 the `watermark` / `c2pa_manifest_ref` pass-throughs (`None` until #9b).
 
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.provenance.render_credits_md(credits, , title=None, heading_level=2)
 
@@ -128,10 +128,10 @@ Render `credits` as a deterministic `CREDITS.md` document.
 
 * **Parameters:**
   * **credits** ([`Credits`](foley.provenance.credits.html.md#foley.provenance.credits.Credits)) – The [`Credits`](#foley.provenance.Credits) to render.
-  * **title** (`Optional`[`str`]) – Heading override (default: `credits.title`).
-  * **heading_level** (`int`) – Markdown heading level for the title (default `2` → `##`).
+  * **title** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Heading override (default: `credits.title`).
+  * **heading_level** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Markdown heading level for the title (default `2` → `##`).
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 * **Returns:**
   The Markdown document (bulleted attribution lines; a placeholder note when
   empty), ending in a single trailing newline.

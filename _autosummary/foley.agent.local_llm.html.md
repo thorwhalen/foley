@@ -40,7 +40,7 @@ The default local model id (override per call or via `FOLEY_LLM_MODEL`).
 
 ### *class* foley.agent.local_llm.LocalLLMDecomposer(, client=None, model=None, max_tokens=2000)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 OpenAI-compatible [`Decomposer`](foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) (local endpoint).
 
@@ -49,11 +49,11 @@ OpenAI-compatible [`Decomposer`](foley.agent.protocols.html.md#foley.agent.proto
 Decompose `context` into `<= max_events` events via the local LLM.
 
 * **Return type:**
-  `list`[[`SoundEvent`](foley.base.html.md#foley.base.SoundEvent)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](foley.base.html.md#foley.base.SoundEvent)]
 
 ### *class* foley.agent.local_llm.LocalLLMJudge(, client=None, model=None, max_tokens=500)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 OpenAI-compatible [`Judge`](foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the `judge` rung.
 
@@ -66,7 +66,7 @@ Arbitrate the match via the local LLM; returns a `Verdict` at `level`.
 
 ### *class* foley.agent.local_llm.LocalLLMRefiner(, client=None, model=None, max_tokens=500)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 OpenAI-compatible [`Refiner`](foley.agent.protocols.html.md#foley.agent.protocols.Refiner) (local endpoint).
 
@@ -75,11 +75,11 @@ OpenAI-compatible [`Refiner`](foley.agent.protocols.html.md#foley.agent.protocol
 Return `n` paraphrases via the local LLM (the original `query` always first).
 
 * **Return type:**
-  `list`[`str`]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### foley.agent.local_llm.local_llm_configured()
 
 True iff a local OpenAI-compatible endpoint is configured (`FOLEY_LLM_BASE_URL`).
 
 * **Return type:**
-  `bool`
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)

@@ -26,7 +26,7 @@ dol-only.
 Assemble the full requirement set: system binaries + API keys + importable extras.
 
 * **Return type:**
-  `dict`[`str`, [`Requirement`](foley.weave.requirements.md#foley.weave.requirements.Requirement)]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Requirement`](foley.weave.requirements.md#foley.weave.requirements.Requirement)]
 
 ### foley.requirements.capability_report(, runtime=None)
 
@@ -39,7 +39,7 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 * **Parameters:**
   **runtime** – A [`foley.runtime.RuntimeConfig`](foley.runtime.md#foley.runtime.RuntimeConfig) (default: the active one).
 * **Return type:**
-  `dict`
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
   `{keys, extras, system, offline, sources, degraded_tools}` — all JSON-safe.
 
@@ -48,10 +48,10 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 Report which optional foley capabilities are available (`{name: is_available}`).
 
 * **Parameters:**
-  * **names** (`tuple`[`str`, `...`] | `None`) – Which requirements to check (default: the full assembled set).
-  * **verbose** (`bool`) – If `True`, print an actionable hint for each missing requirement.
+  * **names** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)] | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Which requirements to check (default: the full assembled set).
+  * **verbose** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, print an actionable hint for each missing requirement.
 * **Return type:**
-  `dict`[`str`, `bool`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
   `{requirement_name: available}`. Everything-absent is fine — foley degrades
   (deterministic fakes, offline mode, in-process DSP); the report just shows what
@@ -62,6 +62,6 @@ Report which optional foley capabilities are available (`{name: is_available}`).
 Return a per-requirement status + guidance report (never runs an installer).
 
 * **Return type:**
-  `dict`[`str`, `dict`]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 * **Returns:**
   `{name: {'available', 'purpose', 'install', 'url', 'probe'}}`.

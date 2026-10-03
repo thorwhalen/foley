@@ -33,7 +33,7 @@ stdlib-only (no numpy, no I/O):
 | [`to_webvtt`](#foley.weave.timeline.to_webvtt)(timeline, \*[, window_s])        | Render the timeline's SFX cues as a WebVTT SDH caption file (report 06 / issue #8). |
 | [`toggle`](#foley.weave.timeline.toggle)(timeline, item_id, enabled)         | Non-destructively mute/unmute an item — a NEW timeline.                             |
 
-### foley.weave.timeline.DISPLAY_WINDOW_S *: float* *= 2.0*
+### foley.weave.timeline.DISPLAY_WINDOW_S *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 2.0*
 
 How long a one-shot’s caption stays on screen (seconds) when the item has no
 resolved duration of its own.
@@ -51,7 +51,7 @@ timeline (the reproducible seed).
 
 * **Parameters:**
   * **timeline** ([`SoundDesignTimeline`](foley.base.md#foley.base.SoundDesignTimeline)) – The (sparse or partially-resolved) timeline.
-  * **word_timeline** (`Optional`[`list`]) – The forced alignment; defaults to `timeline.word_timeline`.
+  * **word_timeline** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)]) – The forced alignment; defaults to `timeline.word_timeline`.
 * **Return type:**
   [`SoundDesignTimeline`](foley.base.md#foley.base.SoundDesignTimeline)
 * **Returns:**
@@ -97,7 +97,7 @@ Swap an item’s clip (keeping its placement/processing) — a NEW timeline.
 Render the timeline’s SFX cues as an SRT SDH caption file (report 06 / issue #8).
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.weave.timeline.to_webvtt(timeline, , window_s=2.0)
 
@@ -106,7 +106,7 @@ Render the timeline’s SFX cues as a WebVTT SDH caption file (report 06 / issue
 Each enabled, placed item becomes one `[bracketed]` cue at its resolved onset.
 
 * **Return type:**
-  `str`
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### foley.weave.timeline.toggle(timeline, item_id, enabled)
 

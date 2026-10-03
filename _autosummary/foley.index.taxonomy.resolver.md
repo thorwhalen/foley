@@ -27,7 +27,7 @@ CLAP zero-shot resolver (embed once, argmax over UCS label prompts, report
 
 ### *class* foley.index.taxonomy.resolver.KeywordResolver(, table=None, audioset_map=None)
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 The default stdlib resolver — staged keyword/synonym/AudioSet resolution.
 
@@ -43,7 +43,7 @@ Resolve a [`SoundRecord`](foley.base.md#foley.base.SoundRecord)’s tags/caption
 
 ### *class* foley.index.taxonomy.resolver.TaxonomyResolver(\*args, \*\*kwargs)
 
-Bases: `Protocol`
+Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
 
 Resolve a [`SoundRecord`](foley.base.md#foley.base.SoundRecord) to a UCS CatID.
 
@@ -59,13 +59,13 @@ Return the CatID resolution for `record`.
 Resolve inputs to a best UCS CatID by the staged precedence.
 
 * **Parameters:**
-  * **tags** (`Sequence`[`str`]) – Free tags on the sound.
-  * **caption** (`Optional`[`str`]) – Free-text caption/description.
-  * **audioset_labels** (`Sequence`[`str`]) – AudioSet MIDs or names (e.g. from PANNs).
-  * **filename** (`Optional`[`str`]) – Optional UCS-style filename/path (its token-0 CatID wins if
+  * **tags** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free tags on the sound.
+  * **caption** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free-text caption/description.
+  * **audioset_labels** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – AudioSet MIDs or names (e.g. from PANNs).
+  * **filename** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional UCS-style filename/path (its token-0 CatID wins if
     recognized).
-  * **table** (`Optional`[[`UcsTable`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
-  * **audioset_map** (`Optional`[[`AudioSetUcsMap`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
+  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
+  * **audioset_map** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`AudioSetUcsMap`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
     [`default_audioset_ucs_map()`](foley.index.taxonomy.audioset.md#foley.index.taxonomy.audioset.default_audioset_ucs_map)).
 * **Return type:**
   [`CatIdResolution`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.CatIdResolution)

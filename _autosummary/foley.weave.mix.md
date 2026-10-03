@@ -37,20 +37,20 @@ later slice behind `foley[weave]`.
 | [`speech_duck_gain`](#foley.weave.mix.speech_duck_gain)(n_samples, sample_rate, ...)      | Build a (linear) gain envelope that dips to `duck_db` during speech spans (report 06 §3.2).     |
 | [`time_stretch`](#foley.weave.mix.time_stretch)(clip, sample_rate, \*, rate)          | Pitch-preserving time-stretch by `rate` via `rubberband` (report 06 §4, optional).              |
 
-### foley.weave.mix.DISTANCE_MAX_ATTEN_DB *: float* *= -12.0*
+### foley.weave.mix.DISTANCE_MAX_ATTEN_DB *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= -12.0*
 
 Attenuation (dB) applied at maximum distance (distance == 1.0); ~inverse-distance.
 
-### foley.weave.mix.DISTANCE_MAX_LP *: float* *= 0.85*
+### foley.weave.mix.DISTANCE_MAX_LP *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.85*
 
 Air-absorption one-pole low-pass coefficient at maximum distance (0 = none, →1 = darkest).
 
-### foley.weave.mix.LAYER_GAIN_DB *: dict[[Layer](foley.base.md#foley.base.Layer), float]* *= {Layer.ambience: -21.0, Layer.music: -21.0, Layer.sfx_fg: -9.0, Layer.stinger: -6.0, Layer.voice: 0.0}*
+### foley.weave.mix.LAYER_GAIN_DB *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[Layer](foley.base.md#foley.base.Layer), [float](https://docs.python.org/3/builtins/functions.html#float)]* *= {Layer.ambience: -21.0, Layer.music: -21.0, Layer.sfx_fg: -9.0, Layer.stinger: -6.0, Layer.voice: 0.0}*
 
 Base per-layer gain (dB, relative to the voice bus at 0 dB). The render applies
 this before each item’s own `processing.gain_db` so levels have a sane default.
 
-### foley.weave.mix.REVERB_IR_S *: float* *= 0.18*
+### foley.weave.mix.REVERB_IR_S *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.18*
 
 Reverb-send impulse-response length (seconds) and decay time-constant.
 
@@ -64,8 +64,8 @@ separately via [`reverb_send()`](#foley.weave.mix.reverb_send). `distance == 0` 
 
 * **Parameters:**
   * **clip** (`ndarray`) – Working array (mono or stereo).
-  * **sample_rate** (`int`) – Sample rate in Hz (kept for API symmetry / future filters).
-  * **distance** (`float`) – 0 (near) .. 1 (far).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (kept for API symmetry / future filters).
+  * **distance** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – 0 (near) .. 1 (far).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -80,7 +80,7 @@ Pan a (mono or stereo) clip to a stereo image with a constant-power law (report 
 
 * **Parameters:**
   * **clip** (`ndarray`) – Mono `(frames,)` or stereo `(frames, 2)` working array.
-  * **pan** (`float`) – -1 (hard left) .. 0 (centre) .. +1 (hard right).
+  * **pan** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – -1 (hard left) .. 0 (centre) .. +1 (hard right).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -99,9 +99,9 @@ heavy dependency): only *producing* an IR needs an external tool; applying one d
 
 * **Parameters:**
   * **clip** (`ndarray`) – Working array (mono or stereo).
-  * **sample_rate** (`int`) – Sample rate in Hz (kept for API symmetry).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (kept for API symmetry).
   * **ir** (`ndarray`) – The impulse response (mono `(n,)` or stereo `(n, 2)`).
-  * **amount** (`float`) – 0 (dry) .. 1 (fully wet).
+  * **amount** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – 0 (dry) .. 1 (fully wet).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -112,7 +112,7 @@ heavy dependency): only *producing* an IR needs an external tool; applying one d
 Convert decibels to a linear amplitude factor (`10 ** (db/20)`).
 
 * **Return type:**
-  `float`
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### foley.weave.mix.declick(clip, sample_rate, , fade_in=0.008, fade_out=0.012)
 
@@ -134,7 +134,7 @@ bed loops and ambience swaps.
 * **Parameters:**
   * **a** (`ndarray`) – The leading clip (mono or stereo).
   * **b** (`ndarray`) – The trailing clip (same channel layout as `a`).
-  * **overlap_samples** (`int`) – Crossfade length in samples (clamped to both clip lengths).
+  * **overlap_samples** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Crossfade length in samples (clamped to both clip lengths).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -153,11 +153,11 @@ the clip is pitch-preservingly time-stretched to exactly fill `duration` (via
 
 * **Parameters:**
   * **clip** (`ndarray`) – Working array (mono or stereo).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **duration** (`float` | `None`) – Target duration in seconds (`None` = full clip length).
-  * **loop** (`bool`) – Seamless-loop to fill `duration` when shorter.
-  * **crossfade_s** (`float`) – Equal-power crossfade length at each loop seam.
-  * **stretch** (`bool`) – Pitch-preserving time-stretch to fill `duration` (needs `rubberband`).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **duration** ([`float`](https://docs.python.org/3/builtins/functions.html#float) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – Target duration in seconds (`None` = full clip length).
+  * **loop** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Seamless-loop to fill `duration` when shorter.
+  * **crossfade_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Equal-power crossfade length at each loop seam.
+  * **stretch** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Pitch-preserving time-stretch to fill `duration` (needs `rubberband`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -173,7 +173,7 @@ bus length is truncated to fit (the mix length equals the narration length).
 * **Parameters:**
   * **bus** (`ndarray`) – The destination layer bus (stereo `(frames, 2)`).
   * **clip** (`ndarray`) – The (mono or stereo) clip to place.
-  * **onset_samples** (`int`) – Start offset in samples (clamped at 0).
+  * **onset_samples** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Start offset in samples (clamped at 0).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -190,8 +190,8 @@ optional `foley[weave]` upgrade. `amount == 0` is a no-op (fully dry).
 
 * **Parameters:**
   * **clip** (`ndarray`) – Working array (mono or stereo).
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **amount** (`float`) – 0 (dry) .. 1 (fully wet).
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **amount** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – 0 (dry) .. 1 (fully wet).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -206,12 +206,12 @@ without clicks. Deterministic and testable — the envelope-follower alternative
 `ffmpeg sidechaincompress`.
 
 * **Parameters:**
-  * **n_samples** (`int`) – Length of the bed bus in samples.
-  * **sample_rate** (`int`) – Sample rate in Hz.
-  * **speech_spans** (`list`[`tuple`[`float`, `float`]]) – `[(start_s, end_s), ...]` from the word timeline.
-  * **duck_db** (`float`) – Attenuation depth during speech (negative dB).
-  * **attack** (`float`) – Attack time constant (seconds) as the bed drops.
-  * **release** (`float`) – Release time constant (seconds) as the bed recovers.
+  * **n_samples** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Length of the bed bus in samples.
+  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **speech_spans** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(start_s, end_s), ...]` from the word timeline.
+  * **duck_db** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Attenuation depth during speech (negative dB).
+  * **attack** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Attack time constant (seconds) as the bed drops.
+  * **release** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Release time constant (seconds) as the bed recovers.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -224,7 +224,7 @@ Pitch-preserving time-stretch by `rate` via `rubberband` (report 06 §4, optiona
 `rate > 1` shortens (plays faster), `< 1` lengthens — so fitting a clip of `n`
 samples to a `target` span uses `rate = n / target`. Lazy: needs `pyrubberband`
 (which shells out to the `rubberband` binary, a WEAVE system requirement); raises
-`RuntimeError` when unavailable so callers (e.g. [`fit_duration()`](#foley.weave.mix.fit_duration)) fall back
+[`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) when unavailable so callers (e.g. [`fit_duration()`](#foley.weave.mix.fit_duration)) fall back
 to loop/trim. Preserves the channel layout.
 
 * **Return type:**
