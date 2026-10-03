@@ -39,4 +39,4 @@ Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.
 Yield clips with their human caption attached in `meta['caption']`.
 
 * **Return type:**
-  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](foley.sources.base.md#foley.sources.base.ClipSpec)]
+  `Iterator`[[`ClipSpec`](foley.sources.base.md#foley.sources.base.ClipSpec)]

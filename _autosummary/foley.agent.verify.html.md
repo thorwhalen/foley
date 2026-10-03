@@ -33,7 +33,7 @@ own fit-precision metric; it does not touch retrieval ranking (the [nDCG@10](mai
 
 ### *class* foley.agent.verify.AnthropicJudge(, client=None, model='claude-opus-4-8', max_tokens=500)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 LLM arbiter for the `judge` rung (`foley[agent]`): Claude → a `Verdict`.
 
@@ -49,7 +49,7 @@ Call Claude to arbitrate the match; returns a `Verdict` at `level`.
 
 ### *class* foley.agent.verify.AudioLMJudge(, pipeline=None, model='Qwen/Qwen2-Audio-7B-Instruct', max_tokens=300, tau=0.5)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The audio-LM `listen` rung (`foley[fit]`): Qwen2-Audio “does this contain {event}?”.
 
@@ -68,7 +68,7 @@ Listen to the clip and return the AQAScore `Verdict` (`P(yes) ≥ tau`).
 
 ### *class* foley.agent.verify.ClapJudge
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The zero-config `clap` rung: gate on the retrieval cosine (no ML, no network).
 
@@ -84,7 +84,7 @@ Return the `clap`-rung `Verdict` for `candidate`.
 
 ### *class* foley.agent.verify.StringOverlapJudge(, threshold=0.3)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Deterministic stand-in for the `listen`/`judge` rungs (the hermetic CI fake).
 
@@ -111,13 +111,13 @@ escalates to the injected/​default judge for that rung and returns *its* verdi
   * **event** ([`SoundEvent`](foley.base.html.md#foley.base.SoundEvent)) – The wanted `SoundEvent`.
   * **candidate** ([`Candidate`](foley.base.html.md#foley.base.Candidate)) – A **license-clean** `Candidate` — this MUST run after the
     [`gate_candidates()`](foley.agent.policy.html.md#foley.agent.policy.gate_candidates) gate (asserted).
-  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](foley.base.html.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
-  * **judge** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Judge`](foley.agent.protocols.html.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the higher rungs
+  * **level** (`str` | [`VerifyLevel`](foley.base.html.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
+  * **judge** (`Optional`[[`Judge`](foley.agent.protocols.html.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](foley.agent.protocols.html.md#foley.agent.protocols.Judge) for the higher rungs
     (the DI seam; defaults per `_default_judge()`).
-  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The clap-gate threshold.
+  * **tau_clap** (`float`) – The clap-gate threshold.
   * **\_span** – Internal — the obs span handle for GenAI recording on the LLM rung.
 * **Raises:**
-  [**AssertionError**](https://docs.python.org/3/builtins/exceptions.html#AssertionError) – If `candidate.license_ok` is not `True` (verify-before-gate
+  **AssertionError** – If `candidate.license_ok` is not `True` (verify-before-gate
       is a bug — the license gate is the fail-closed first pass).
 * **Return type:**
   [`Verdict`](foley.base.html.md#foley.base.Verdict)

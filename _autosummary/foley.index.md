@@ -54,7 +54,7 @@ only the stdlib; install the capability you use via the matching extra
 
 ### *class* foley.index.Captioner(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 Produce one natural-language sentence describing a clip (report 03).
 
@@ -67,11 +67,11 @@ Both are `foley[caption]` adapters plugged in behind this protocol.
 Return a one-sentence caption for the clip.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`
 
 ### *class* foley.index.CatIdResolution(catid=None, category=None, subcategory=None, source=None, confidence=0.0, matched_terms=<factory>)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The result of resolving free tags/caption/labels to a UCS CatID.
 
@@ -81,7 +81,7 @@ ingest, and `ucs_catid` on the query side.
 
 ### *class* foley.index.ClapEmbedder(model_id='laion/larger_clap_general', , device=None)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 LAION-CLAP text<->audio embedder (the default retrieval engine).
 
@@ -97,11 +97,11 @@ The HF checkpoint id.
 
 The embedding dimensionality.
 
-#### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+#### *property* device *: str*
 
 The resolved torch device string (`'cuda'`/`'cpu'`).
 
-#### *property* dim *: [int](https://docs.python.org/3/builtins/functions.html#int)*
+#### *property* dim *: int*
 
 The embedding dimensionality (512 for the default; resolved for others).
 
@@ -119,7 +119,7 @@ via [`foley.audio`](foley.audio.md#module-foley.audio) before embedding.
 
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`; mono or multichannel).
-  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
+  * **sr** (`int`) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 
@@ -132,7 +132,7 @@ Embed one or more query strings -> `(n_texts, dim)` L2-normalized.
 
 ### *class* foley.index.ClapZeroShotTagger(, embedder=None, labels=None, prompt='this is a sound of {label}', threshold=0.0)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Zero-shot tagger: score a clip against a label set via CLAP cosine.
 
@@ -145,7 +145,7 @@ subcategory names (foley’s own vocabulary), so tags land in-taxonomy.
 
 The CLAP embedder (injected or the process-wide default).
 
-#### *property* labels *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[str](https://docs.python.org/3/builtins/stdtypes.html#str)]*
+#### *property* labels *: list[str]*
 
 natural UCS `category subcategory` phrases).
 
@@ -163,7 +163,7 @@ calibration (thresholds, label curation) is an eval-harness concern (#10).
 Return the top-`k` `(label, cosine)` tags for the clip, best first.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 #### tag_vector(audio_vec, , top_k=10)
 
@@ -174,11 +174,11 @@ sound with this model, so on ingest the retrieval vector is reused here —
 no second CLAP forward pass.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 ### *class* foley.index.Embedder(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 A joint text<->audio embedding space (CLAP by default).
 
@@ -204,7 +204,7 @@ Embed one audio clip.
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`, mono preferred). CLAP expects
     48 kHz; implementations resample as needed.
-  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
+  * **sr** (`int`) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -215,7 +215,7 @@ Embed one audio clip.
 Embed one or more query strings.
 
 * **Parameters:**
-  **text** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – A single string or a list of strings.
+  **text** (`Union`[`str`, `list`[`str`]]) – A single string or a list of strings.
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -225,7 +225,7 @@ Embed one or more query strings.
 
 ### *class* foley.index.FusedHit(id, rrf_score=None, clap_score=None, bm25_score=None)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 One fused retrieval hit: an id plus the scores that produced it.
 
@@ -262,17 +262,17 @@ The rolled-up outcome of a folder ingest (JSON-serializable).
 Record a per-file error without aborting the run.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
-#### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
+#### *property* errored *: list[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
 
-#### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
+#### *property* ingested *: list[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
 
 Results that were added to the library (`pass` or `warn`).
 
-#### *property* quarantined *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
+#### *property* quarantined *: list[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
 
 Results rejected by the QC gate.
 
@@ -281,13 +281,13 @@ Results rejected by the QC gate.
 Append one [`IngestResult`](#foley.index.IngestResult).
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
-#### *property* rights_blocked *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
+#### *property* rights_blocked *: list[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
 
 Results refused by the fail-closed AI-training/license rights gate.
 
-#### *property* skipped *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
+#### *property* skipped *: list[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
 
 Results skipped as content-addressed duplicates.
 
@@ -296,7 +296,7 @@ Results skipped as content-addressed duplicates.
 A counts dict for a console/CLI summary.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 
 ### *class* foley.index.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
 
@@ -313,7 +313,7 @@ bootstrap commercial-use / fail-closed license filter), or `'error'`.
 
 ### *class* foley.index.KeywordIndex(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 BM25 / full-text index over each sound’s tags + caption.
 
@@ -326,11 +326,11 @@ single-file fallback. Same `where` push-down contract as
 Return the top-`k` BM25 matches for `query`, best first.
 
 * **Parameters:**
-  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A natural-language / keyword query.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of matches to return.
-  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
+  * **query** (`str`) – A natural-language / keyword query.
+  * **k** (`int`) – Number of matches to return.
+  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 * **Returns:**
   `[(id, bm25_score), ...]` in descending-score order.
 
@@ -339,11 +339,11 @@ Return the top-`k` BM25 matches for `query`, best first.
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 ### *class* foley.index.LanceIndex(, uri, dim, table_name='sounds')
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 LanceDB-backed index: one table with a vector column + a native FTS index.
 
@@ -367,14 +367,14 @@ keyword-searchable). For a keyword-only library with no embeddings, use
 Native full-text (BM25) search; returns `[(id, score), ...]`.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 #### commit()
 
 Flush all staged writes to the LanceDB table.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### *property* db
 
@@ -385,21 +385,21 @@ The lazily-connected LanceDB database handle.
 Return the stored vector for `id` (staged or persisted), else `None`.
 
 * **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
+  `Optional`[`ndarray`]
 
 #### index(id, text, meta)
 
 Stage the searchable text for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### knn(vector, k, , where=None)
 
 Exact cosine KNN; returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 #### *property* table
 
@@ -410,11 +410,11 @@ The lazily-opened (or created-empty) LanceDB table.
 Stage the vector for `id` (flushed on the next read/commit).
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 ### *class* foley.index.MemoryIndex(, dim=None)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 In-memory vector + keyword index (numpy cosine + compact BM25).
 
@@ -432,46 +432,46 @@ A compact Okapi BM25 (`k1=1.5`, `b=0.75`) recomputed per query — O(N)
 in the corpus size, which is fine for the in-memory tier’s scale.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 #### commit()
 
 No-op (writes are immediate); present for interface symmetry.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
+  `Optional`[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text (and light metadata) for `id`.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### knn(vector, k, , where=None)
 
 Return the `k` cosine-nearest ids to `vector` (most-similar first).
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 ### *class* foley.index.PannsTagger(, device='cpu', threshold=0.1)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 PANNs CNN14 supervised tagger over the 527 AudioSet classes (`foley[tag]`).
 
@@ -484,11 +484,11 @@ The checkpoint auto-downloads to `~/panns_data` (~327 MB) on the first
 Return the top-`k` `(AudioSet label, score)` tags, best first.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 ### *class* foley.index.SoundLibrary(, sounds=None, meta=None, vindex=None, kindex=None, embedder=None, data_dir=None, candidate_k=50, rrf_k=60)
 
-Bases: [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)
+Bases: `Mapping`
 
 A searchable, license-aware library of sounds (the foley INDEX façade).
 
@@ -514,16 +514,16 @@ producing backend-dependent search results).
 * **Parameters:**
   * **record** ([`SoundRecord`](foley.base.md#foley.base.SoundRecord)) – The record to add (mutated by `store_sound` with resolved
     storage fields, and stamped with the embedding model/dim).
-  * **data** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The archive bytes (required for by-value storage; also the
+  * **data** (`Optional`[`bytes`]) – The archive bytes (required for by-value storage; also the
     source for computing `vector` when it is not supplied).
-  * **vector** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
+  * **vector** (`Optional`[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
     given, it is computed via the library’s embedder.
 * **Return type:**
   [`SoundRecord`](foley.base.md#foley.base.SoundRecord)
 * **Returns:**
   The same (persisted, indexed) `record`.
 * **Raises:**
-  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If neither `data` nor `vector` is provided (no way to
+  **ValueError** – If neither `data` nor `vector` is provided (no way to
       obtain an embedding).
 
 #### array(sound_id, , sr=None, mono=True)
@@ -531,9 +531,9 @@ producing backend-dependent search results).
 Decode a sound to a working array (`float32`).
 
 * **Parameters:**
-  * **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
-  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Target sample rate (default: the working rate, 48 kHz).
-  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Down-mix to mono (default `True`).
+  * **sound_id** (`str`) – The record id.
+  * **sr** (`Optional`[`int`]) – Target sample rate (default: the working rate, 48 kHz).
+  * **mono** (`bool`) – Down-mix to mono (default `True`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -545,17 +545,17 @@ Return a sound’s archive bytes (by-value from the store, or from a
 local by-reference path).
 
 * **Parameters:**
-  **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
+  **sound_id** (`str`) – The record id.
 * **Return type:**
-  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
+  `bytes`
 * **Returns:**
   The raw archive bytes.
 * **Raises:**
-  [**LookupError**](https://docs.python.org/3/builtins/exceptions.html#LookupError) – If the bytes are neither cached (by-value) nor readable
+  **LookupError** – If the bytes are neither cached (by-value) nor readable
       from a local `uri` — a remote by-reference sound needs its
       source adapter (subtask #5) to fetch.
 
-#### *property* data_dir *: [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path)*
+#### *property* data_dir *: Path*
 
 The data root for default stores/index.
 
@@ -572,7 +572,7 @@ Accepts the same facet keywords as [`search()`](foley.index.search.md#module-fol
 plus any `record_attr=value` equality predicate.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundRecord`](foley.base.md#foley.base.SoundRecord)]
+  `list`[[`SoundRecord`](foley.base.md#foley.base.SoundRecord)]
 
 #### *property* kindex
 
@@ -587,18 +587,18 @@ The metadata store (`id -> SoundRecord`).
 Hybrid (CLAP vector ⊕ BM25) search for a text query.
 
 * **Parameters:**
-  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language query.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results to return.
-  * **filters** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Extra `{record_attr: value}` equality predicates.
-  * **commercial_ok** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – If `True`, keep only commercially-usable sounds.
-  * **ucs_category** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Keep only sounds with this UCS CatID.
-  * **min_snr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Keep only sounds whose QC `snr_db` is at least this.
-  * **duration_range** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – Keep only sounds whose `duration_s` is in
+  * **query** (`str`) – The natural-language query.
+  * **k** (`int`) – Number of results to return.
+  * **filters** (`Optional`[`dict`]) – Extra `{record_attr: value}` equality predicates.
+  * **commercial_ok** (`Optional`[`bool`]) – If `True`, keep only commercially-usable sounds.
+  * **ucs_category** (`Optional`[`str`]) – Keep only sounds with this UCS CatID.
+  * **min_snr** (`Optional`[`float`]) – Keep only sounds whose QC `snr_db` is at least this.
+  * **duration_range** (`Optional`[`tuple`[`float`, `float`]]) – Keep only sounds whose `duration_s` is in
     `(min, max)`.
-  * **rerank** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Re-order the shortlist by direct query<->audio cosine
+  * **rerank** (`bool`) – Re-order the shortlist by direct query<->audio cosine
     (fills the CLAP score for keyword-only hits).
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -613,12 +613,12 @@ Hybrid (CLAP vector ⊕ BM25) search for a text query.
 Search by a reference audio clip (audio<->audio via CLAP).
 
 * **Parameters:**
-  * **clip** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A working array, or a path/bytes/file decodable by
+  * **clip** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A working array, or a path/bytes/file decodable by
     [`foley.audio.load()`](foley.audio.md#foley.audio.load).
-  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Sample rate when `clip` is already a working array.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results.
+  * **sr** (`Optional`[`int`]) – Sample rate when `clip` is already a working array.
+  * **k** (`int`) – Number of results.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -636,7 +636,7 @@ Uses the stored vector (no re-decoding); the query sound itself is
 excluded from the results.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
 
 #### *property* sounds
 
@@ -648,7 +648,7 @@ The vector index.
 
 ### *class* foley.index.SqliteVecIndex(, path, dim)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Single-file index: sqlite-vec `vec0` KNN + stdlib FTS5 keyword search.
 
@@ -666,53 +666,53 @@ FTS5’s `rank` is more-negative-is-better; it is negated so the returned
 score is larger-is-better (consistent with the other backends).
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 #### close()
 
 Close the underlying SQLite connection.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### commit()
 
 Commit any pending SQLite transaction (writes auto-commit already).
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### get_vector(id)
 
 Return the stored vector for `id` (or `None`).
 
 * **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
+  `Optional`[`ndarray`]
 
 #### index(id, text, meta)
 
 Insert or replace the searchable text for `id` in the FTS5 table.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### knn(vector, k, , where=None)
 
 KNN over `vec0` (cosine); returns `[(id, cosine_similarity), ...]`.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 #### upsert(id, vector, meta)
 
 Insert or replace the vector for `id` in the `vec0` table.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 ### *class* foley.index.Tagger(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 Map a clip to `(label, score)` pairs against a label vocabulary.
 
@@ -727,11 +727,11 @@ working array (`float32`, any sr — the impl resamples to its model’s rate).
 Return the top-`k` `(label, score)` tags for the clip, best first.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 ### *class* foley.index.VectorIndex(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 Approximate-nearest-neighbour store over embedding vectors.
 
@@ -748,7 +748,7 @@ Needed by `SoundLibrary.similar` (fetch a sound’s own vector, then run
 [`knn()`](#foley.index.VectorIndex.knn)) and by the optional CLAP rerank (score keyword-only hits).
 
 * **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]
+  `Optional`[`ndarray`]
 
 #### knn(vector, k, , where=None)
 
@@ -756,10 +756,10 @@ Return the `k` nearest ids to `vector`, most-similar first.
 
 * **Parameters:**
   * **vector** (`ndarray`) – A `(dim,)` query vector (already L2-normalized).
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of neighbours to return.
-  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata predicates for push-down filtering.
+  * **k** (`int`) – Number of neighbours to return.
+  * **where** (`Optional`[`dict`]) – Optional metadata predicates for push-down filtering.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 * **Returns:**
   `[(id, cosine_similarity), ...]` in descending-similarity order.
 
@@ -768,7 +768,7 @@ Return the `k` nearest ids to `vector`, most-similar first.
 Insert or replace the vector (and light metadata) for `id`.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 ### foley.index.default_embedder()
 
@@ -790,11 +790,11 @@ must survive restarts); inject it explicitly for tests/ephemeral use.
 
 * **Parameters:**
   * **data_dir** – The library data root (a `pathlib.Path`-like).
-  * **dim** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The embedding dimensionality from the active embedder.
+  * **dim** (`int`) – The embedding dimensionality from the active embedder.
 * **Returns:**
   A ready index object (both `VectorIndex` and `KeywordIndex`).
 * **Raises:**
-  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – If no persistent backend is installed/usable.
+  **RuntimeError** – If no persistent backend is installed/usable.
 
 ### foley.index.default_library()
 
@@ -827,14 +827,14 @@ default embedder.
 RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.
 
 * **Parameters:**
-  * **vector_hits** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(id, cosine_similarity), ...]` best-first (from
+  * **vector_hits** (`list`[`tuple`[`str`, `float`]]) – `[(id, cosine_similarity), ...]` best-first (from
     [`knn()`](foley.index.protocols.md#foley.index.protocols.VectorIndex.knn)).
-  * **keyword_hits** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – `[(id, bm25_score), ...]` best-first (from
+  * **keyword_hits** (`list`[`tuple`[`str`, `float`]]) – `[(id, bm25_score), ...]` best-first (from
     [`bm25()`](foley.index.protocols.md#foley.index.protocols.KeywordIndex.bm25)).
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of fused hits to return.
-  * **rrf_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant.
+  * **k** (`int`) – Number of fused hits to return.
+  * **rrf_k** (`int`) – The RRF damping constant.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](foley.index.search.md#foley.index.search.FusedHit)]
+  `list`[[`FusedHit`](foley.index.search.md#foley.index.search.FusedHit)]
 * **Returns:**
   The top-`k` :class:
 
@@ -849,17 +849,17 @@ RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.
 Embed `query`, run the vector + keyword rankers, and RRF-fuse them.
 
 * **Parameters:**
-  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language query.
+  * **query** (`str`) – The natural-language query.
   * **embedder** ([`Embedder`](foley.index.protocols.md#foley.index.protocols.Embedder)) – Text<->audio embedder (its `embed_text` produces the query
     vector).
   * **vindex** ([`VectorIndex`](foley.index.protocols.md#foley.index.protocols.VectorIndex)) – The vector index (CLAP KNN).
   * **kindex** ([`KeywordIndex`](foley.index.protocols.md#foley.index.protocols.KeywordIndex)) – The keyword index (BM25).
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of fused results to return.
-  * **candidate_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Shortlist depth pulled from each ranker before fusion.
-  * **rrf_k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant.
-  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata push-down passed to both rankers.
+  * **k** (`int`) – Number of fused results to return.
+  * **candidate_k** (`int`) – Shortlist depth pulled from each ranker before fusion.
+  * **rrf_k** (`int`) – The RRF damping constant.
+  * **where** (`Optional`[`dict`]) – Optional metadata push-down passed to both rankers.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](foley.index.search.md#foley.index.search.FusedHit)]
+  `list`[[`FusedHit`](foley.index.search.md#foley.index.search.FusedHit)]
 * **Returns:**
   The top-`k` fused :class:
 
@@ -876,9 +876,9 @@ Ingest every audio file under `path` and return an [`IngestReport`](#foley.index
 * **Parameters:**
   * **path** – A folder (walked) or a single audio file.
   * **library** – Target library (default: the process-wide default).
-  * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
-  * **exts** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Audio extensions to ingest.
-  * **on_error** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'collect'` records per-file errors and continues;
+  * **recursive** (`bool`) – Recurse into sub-folders.
+  * **exts** (`tuple`[`str`, `...`]) – Audio extensions to ingest.
+  * **on_error** (`str`) – `'collect'` records per-file errors and continues;
     `'raise'` re-raises the first error.
   * **\*\*ingest_one_kw** – Forwarded to [`ingest_one()`](#foley.index.ingest_one) (license, taggers, QC
     flags, …).
@@ -896,10 +896,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
 `SoundRecord` -> [`SoundLibrary.add()`](#foley.index.SoundLibrary.add).
 
 * **Parameters:**
-  * **src** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A path, `bytes`, or file-like audio source.
+  * **src** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A path, `bytes`, or file-like audio source.
   * **library** – Target [`SoundLibrary`](foley.index.library.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **sound_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional canonical id override. Defaults to `None` → the
+  * **sound_id** (`Optional`[`str`]) – Optional canonical id override. Defaults to `None` → the
     content-hash of the decoded PCM (the local-ingest identity, used as the
     record `id` and dedup key). A live source adapter passes a short,
     case-stable, source-native id (e.g. `'freesound:12345'`) so dedup keys
@@ -908,29 +908,29 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     default and is not persisted. Separately, `content_sha256` records the
     hash of the stored FLAC **archive** bytes (set by `store_sound`), which
     is a different byte source from this PCM hash.
-  * **source_uri** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional by-reference fetchable URI override. Defaults to
+  * **source_uri** (`Optional`[`str`]) – Optional by-reference fetchable URI override. Defaults to
     `None` → the resolved local path when `src` is path-like. A live
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](foley.stores.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** (`Optional`[[`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
   * **tagger** – Supervised [`Tagger`](foley.index.protocols.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](foley.index.taggers.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
     [`default_zeroshot_tagger()`](foley.index.taggers.md#foley.index.taggers.default_zeroshot_tagger)).
   * **captioner** – Optional [`Captioner`](foley.index.protocols.md#foley.index.protocols.Captioner) (default:
     none — the caption stage is off unless one is injected).
-  * **do_qc** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Run the Tier-0 QC gate.
+  * **do_qc** (`bool`) – Run the Tier-0 QC gate.
   * **min_status** ([`QCStatus`](foley.qc.md#foley.qc.QCStatus)) – Admission floor — a QC status worse than this is quarantined
     (default `warn`: only `fail` clips are rejected).
-  * **do_caption** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Toggle each enrichment stage.
+  * **do_caption** (`bool`) – Toggle each enrichment stage.
   * **thresholds** ([`QCThresholds`](foley.qc.md#foley.qc.QCThresholds)) – QC thresholds.
-  * **store** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `False`, assemble the record but do not add it to the library
+  * **store** (`bool`) – If `False`, assemble the record but do not add it to the library
     (probe/QC/enrich only).
-  * **seed_tags** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
+  * **seed_tags** (`Optional`[`list`]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
     taxonomy) unioned into the record’s `tags` alongside the
     supervised/zero-shot tags — so they feed the BM25 keyword index.
-  * **allow_ai_training_forbidden** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – The universal fail-closed rights gate. A
+  * **allow_ai_training_forbidden** (`bool`) – The universal fail-closed rights gate. A
     sound whose license has `ai_training_ok=False` (e.g. Sonniss,
     BBC RemArc) is refused with status `'rights_blocked'` *before* it is
     embedded or stored — CLAP-embedding-and-persisting is itself a form of
@@ -949,7 +949,7 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
 True if `lancedb` is importable (the `foley[index]` extra is present).
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 ### foley.index.parse_ucs_filename(filename, , table=None)
 
@@ -960,21 +960,21 @@ its CatID token is unknown (so a wrong subcategory is never emitted).
 
 * **Parameters:**
   * **filename** – A path or filename (only the basename’s token 0 is used).
-  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
+  * **table** (`Optional`[[`UcsTable`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.UcsTable)]) – The UCS table to resolve against (defaults to
     `default_ucs_table()`).
 * **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
+  `tuple`[`Optional`[`str`], `Optional`[`str`]]
 
 ### foley.index.reciprocal_rank_fusion(ranked_id_lists, , k=60)
 
 Fuse several ranked id lists into one, by reciprocal rank.
 
 * **Parameters:**
-  * **ranked_id_lists** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Each element is a list of ids in descending-relevance
+  * **ranked_id_lists** (`list`[`list`[`str`]]) – Each element is a list of ids in descending-relevance
     order (best first). Lists may overlap and may differ in length.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RRF damping constant (default `RRF_K` = 60).
+  * **k** (`int`) – The RRF damping constant (default `RRF_K` = 60).
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 * **Returns:**
   `[(id, fused_score), ...]` sorted by fused score descending, ties
   broken by `id` ascending (so the fusion is fully deterministic).
@@ -984,13 +984,13 @@ Fuse several ranked id lists into one, by reciprocal rank.
 Resolve inputs to a best UCS CatID by the staged precedence.
 
 * **Parameters:**
-  * **tags** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free tags on the sound.
-  * **caption** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Free-text caption/description.
-  * **audioset_labels** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – AudioSet MIDs or names (e.g. from PANNs).
-  * **filename** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional UCS-style filename/path (its token-0 CatID wins if
+  * **tags** (`Sequence`[`str`]) – Free tags on the sound.
+  * **caption** (`Optional`[`str`]) – Free-text caption/description.
+  * **audioset_labels** (`Sequence`[`str`]) – AudioSet MIDs or names (e.g. from PANNs).
+  * **filename** (`Optional`[`str`]) – Optional UCS-style filename/path (its token-0 CatID wins if
     recognized).
-  * **table** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsTable`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
-  * **audioset_map** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`AudioSetUcsMap`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
+  * **table** (`Optional`[[`UcsTable`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.UcsTable)]) – UCS table (defaults to `default_ucs_table()`).
+  * **audioset_map** (`Optional`[[`AudioSetUcsMap`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.AudioSetUcsMap)]) – AudioSet->UCS map (defaults to
     [`default_audioset_ucs_map()`](foley.index.taxonomy.audioset.md#foley.index.taxonomy.audioset.default_audioset_ucs_map)).
 * **Return type:**
   [`CatIdResolution`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.CatIdResolution)
@@ -1013,7 +1013,7 @@ sqlite-vec cannot be used even when
 pip install\`\`ed. This probes both.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 ### foley.index.vector_search(qvec, , vindex, k=10, where=None)
 
@@ -1027,10 +1027,10 @@ fusion).
 * **Parameters:**
   * **qvec** (`ndarray`) – An already-L2-normalized `(dim,)` query vector.
   * **vindex** ([`VectorIndex`](foley.index.protocols.md#foley.index.protocols.VectorIndex)) – The vector index.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of neighbours to return.
-  * **where** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional metadata push-down.
+  * **k** (`int`) – Number of neighbours to return.
+  * **where** (`Optional`[`dict`]) – Optional metadata push-down.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`FusedHit`](foley.index.search.md#foley.index.search.FusedHit)]
+  `list`[[`FusedHit`](foley.index.search.md#foley.index.search.FusedHit)]
 * **Returns:**
   Up to `k` :class:
 

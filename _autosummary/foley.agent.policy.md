@@ -32,7 +32,7 @@ run away. This module is stdlib-only (imports only [`foley.base`](foley.base.md#
 
 ### *class* foley.agent.policy.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Bounded-cost accounting for the per-event refine/generate loops.
 
@@ -44,14 +44,14 @@ Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](#foley.a
 Whether a generation fallback is allowed and within budget.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 #### refine_ok()
 
 Whether another refine→re-retrieve pass is within budget.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 #### reset()
 
@@ -62,31 +62,31 @@ refine/generate spend never starves later events (the documented per-event
 semantics).
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### spend_gen()
 
 Charge one generation.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### spend_refine()
 
 Charge one refine loop.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 ### *class* foley.agent.policy.DecideAction(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 What [`decide()`](#foley.agent.policy.decide) chose for one event (the single branch’s outcomes).
 
 ### *class* foley.agent.policy.Decision(action, candidate=None, reason='')
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The tiny result of [`decide()`](#foley.agent.policy.decide); `reason` feeds the refine hint + the audit Step.
 
@@ -109,11 +109,11 @@ Policy (report 05 §4):
 >   generation is off, in which case fall back to that best-effort pick.
 * **Parameters:**
   * **event** ([`SoundEvent`](foley.base.md#foley.base.SoundEvent)) – The event being resolved.
-  * **kept** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
-  * **verified** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
-  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The confidence threshold for auto-accepting a retrieved clip.
+  * **kept** (`list`[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
+  * **verified** (`list`[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
+  * **tau_retrieve** (`float`) – The confidence threshold for auto-accepting a retrieved clip.
   * **budget** ([`Budget`](#foley.agent.policy.Budget)) – The per-event cost budget.
-  * **loop** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The current refine-loop index (for the audit reason).
+  * **loop** (`int`) – The current refine-loop index (for the audit reason).
 * **Return type:**
   [`Decision`](#foley.agent.policy.Decision)
 * **Returns:**
@@ -130,9 +130,9 @@ the single rights-rejection point; [`verify_match()`](foley.agent.verify.md#fole
 its survivors are license-clean.
 
 * **Parameters:**
-  * **candidates** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The retrieved shortlist (`license_ok` typically `None`).
+  * **candidates** (`list`[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The retrieved shortlist (`license_ok` typically `None`).
   * **intended_use** ([`IntendedUse`](foley.base.md#foley.base.IntendedUse)) – The caller’s declared rights intent.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
 * **Returns:**
   The license-clean sublist (each with `license_ok is True`), order preserved.

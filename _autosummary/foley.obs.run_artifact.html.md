@@ -75,13 +75,13 @@ belt-and-suspenders redaction sweep (do NOT couple the write to
 auto-serialization). Returns the `run_id`.
 
 * **Parameters:**
-  * **store** ([`MutableMapping`](https://docs.python.org/3/library/typing.html#typing.MutableMapping)) – A `MutableMapping[str, dict]` (default:
+  * **store** (`MutableMapping`) – A `MutableMapping[str, dict]` (default:
     [`foley.stores.make_run_store()`](foley.stores.html.md#foley.stores.make_run_store); a dict in tests).
   * **manifest** ([`RunManifest`](#foley.obs.run_artifact.RunManifest)) – The [`RunManifest`](#foley.obs.run_artifact.RunManifest) to persist.
   * **redactor** – An optional [`Redactor`](foley.obs.redact.html.md#foley.obs.redact.Redactor) applied to the full
     payload before the write (the emit-time net).
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`
 
 ### foley.obs.run_artifact.ingest_digest(report)
 
@@ -95,7 +95,7 @@ leak prompt text into the manifest and duplicate data. Duck-typed over the repor
 (`.summary()` + `.results`) to avoid an obs → index import coupling.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 
 ### foley.obs.run_artifact.load_run(store, run_id)
 

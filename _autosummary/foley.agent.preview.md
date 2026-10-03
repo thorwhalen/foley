@@ -35,13 +35,13 @@ Dol-only core (numpy/soundfile only inside [`preview()`](#foley.agent.preview.pr
 | [`RefineResult`](#foley.agent.preview.RefineResult)(queries, results)   | The output of [`refine()`](#foley.agent.preview.refine): the expanded queries and the re-ranked candidates.   |
 |-----------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 
-### foley.agent.preview.PREVIEW_SECONDS *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 6*
+### foley.agent.preview.PREVIEW_SECONDS *: int* *= 6*
 
 Default audition length (seconds).
 
 ### *class* foley.agent.preview.RefineResult(queries, results)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The output of [`refine()`](#foley.agent.preview.refine): the expanded queries and the re-ranked candidates.
 
@@ -57,11 +57,11 @@ still let a client fetch it).
 
 * **Parameters:**
   * **candidate_or_id** – A [`Candidate`](foley.base.md#foley.base.Candidate) or a sound id.
-  * **seconds** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Audition length.
+  * **seconds** (`int`) – Audition length.
   * **library** – The [`foley.index.SoundLibrary`](foley.index.md#foley.index.SoundLibrary) (default: the shared one).
   * **byte_store** – A `MutableMapping[str, bytes]` to hold the preview (default: none —
     then `preview_uri` stays `None`).
-  * **session** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`SessionStore`](foley.agent.session.md#foley.agent.session.SessionStore)]) – Optional session (unused here; accepted for a uniform signature).
+  * **session** (`Optional`[[`SessionStore`](foley.agent.session.md#foley.agent.session.SessionStore)]) – Optional session (unused here; accepted for a uniform signature).
 * **Return type:**
   [`Candidate`](foley.base.md#foley.base.Candidate)
 * **Returns:**
@@ -77,12 +77,12 @@ expands the query into paraphrases for recall, gathers neighbours of every pick,
 the rejects, and re-ranks by score.
 
 * **Parameters:**
-  * **session** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`SessionStore`](foley.agent.session.md#foley.agent.session.SessionStore)]) – The audition session (source of picks/rejects when not passed explicitly).
-  * **query** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The base text query to expand (optional).
-  * **rejected_ids** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Explicit feedback (override the session’s).
-  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A steer for the query expansion.
-  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Paraphrases to request.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Result depth.
+  * **session** (`Optional`[[`SessionStore`](foley.agent.session.md#foley.agent.session.SessionStore)]) – The audition session (source of picks/rejects when not passed explicitly).
+  * **query** (`Optional`[`str`]) – The base text query to expand (optional).
+  * **rejected_ids** (`tuple`[`str`, `...`]) – Explicit feedback (override the session’s).
+  * **hint** (`Optional`[`str`]) – A steer for the query expansion.
+  * **n** (`int`) – Paraphrases to request.
+  * **k** (`int`) – Result depth.
   * **library** – The [`foley.index.SoundLibrary`](foley.index.md#foley.index.SoundLibrary) (default: the shared one).
   * **refiner** – The query-expansion seam (default: the deterministic fake).
 * **Return type:**
@@ -100,9 +100,9 @@ audio-to-audio search (`SoundLibrary.search_clip`).
 
 * **Parameters:**
   * **clip_or_candidate** – A sound id, a [`Candidate`](foley.base.md#foley.base.Candidate), or a clip.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many neighbours to return.
+  * **k** (`int`) – How many neighbours to return.
   * **library** – The [`foley.index.SoundLibrary`](foley.index.md#foley.index.SoundLibrary) (default: the shared one).
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
 * **Returns:**
   A list of [`Candidate`](foley.base.md#foley.base.Candidate).

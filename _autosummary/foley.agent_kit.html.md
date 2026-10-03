@@ -26,8 +26,8 @@ Installs:
 * **Parameters:**
   * **dest** – The target agent-config dir (default `./.claude` in the cwd; pass `~/.claude`
     to install globally for every project).
-  * **overwrite** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Replace existing files/dirs (default: skip what already exists).
+  * **overwrite** (`bool`) – Replace existing files/dirs (default: skip what already exists).
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+  `list`[`str`]
 * **Returns:**
   The list of installed paths (as strings) — empty entries that already existed are skipped.

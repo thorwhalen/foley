@@ -36,14 +36,14 @@ The regression tolerance from report 08 §5 (Δ [nDCG@10](mailto:nDCG@10) ≥ �
 True if the baseline’s fixture stamps no longer match the fixtures on disk.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 ### foley.eval.baseline.load_baseline(path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/baseline.json'))
 
 Load the committed baseline dict from `path`.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 
 ### foley.eval.baseline.write_baseline(report, , path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/baseline.json'), metric='ndcg@10', tolerance=0.02, seed_path, manifest_path, embedder_model_id='foley-eval/hashing-bow-v1', dim=64, rrf_k=60, updated_at, n_items, revision='gld-v1')
 
@@ -55,6 +55,6 @@ clock) so the caller controls reproducibility. `revision` labels the golden-set
 generation (bumped when the frozen set is regrown).
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 * **Returns:**
   The baseline dict that was written.

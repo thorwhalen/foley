@@ -60,7 +60,7 @@ function-local so `import foley` stays dol-only.
 
 ### *class* foley.eval.AlphaResult(alpha, level, n_units, n_raters, percent_agreement, band, promoted)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 A judge-vs-human calibration record (surfaced as `FitReport.calibration`).
 
@@ -70,13 +70,13 @@ unattended use only once its agreement with the human raters reaches the
 
 ### *class* foley.eval.FidelityResult(metric, value, stamp)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 A stamped set-level fidelity score (attached to `FitReport.fidelity`).
 
 ### *class* foley.eval.FidelityStamp(embedding, toolkit, version, n_ref, n_gen)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Mandatory provenance for a FAD/KAD score — it is meaningless without it.
 
@@ -85,7 +85,7 @@ uninterpretable; this stamp makes the basis of comparison legible.
 
 ### *class* foley.eval.FitReport(per_item=<factory>, fit_precision=0.0, fit_recall=0.0, fit_f1=0.0, fit_score=0.0, auto_accept_rate=0.0, n_accepted=0, n_confirmed=0, strata=<factory>, calibration=None, fidelity=<factory>, judge_model='', embedder_model_id='', seed=0, k=10, schema_version=1)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Tier-2 fit metrics over a stratified golden sample (JSON-friendly, mirrors `RetrievalReport`).
 
@@ -103,7 +103,7 @@ The committed fit-baseline stamp is deferred until real judges produce stable
 numbers; this ships the trend path only.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`
 
 #### gate(min_fit_precision)
 
@@ -113,11 +113,11 @@ Structural guarantee that Tier-2 is never a silent per-PR gate: CI passes no
 floor, so this is always `True`; only the nightly/pre-release runner sets one.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 ### *class* foley.eval.GoldenItem(id, context, expected_events, answer_clip_ids, grade, negatives=<factory>, labeler='llm+human', schema_version=1)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 One frozen `(context → expected sounds)` judgment (report 08 §1.3).
 
@@ -156,7 +156,7 @@ The GoldenItem schema version.
 
 ### *class* foley.eval.HashingBowEmbedder(, dim=64)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Deterministic hashing bag-of-words text embedder (L2-normalized).
 
@@ -171,7 +171,7 @@ Embed `text` (or a list of texts) -> a `(n, dim)` float32 array.
 
 ### *class* foley.eval.RetrievalReport(per_query=<factory>, mean=<factory>, ranks=<factory>, k=10)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).
 
@@ -180,14 +180,14 @@ Per-query + mean Tier-1 metrics over a golden set (JSON-friendly).
 A human diff for a failing gate: mean vs baseline + the worst queries.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`
 
 ### foley.eval.average_precision_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Average precision (trec_eval `map`: divide by TOTAL relevant, not `min(R,k)`).
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.build_eval_library(, embedder=None, manifest_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/corpus.json'))
 
@@ -217,7 +217,7 @@ determinism the gate relies on. The doc id is `candidate.sound.id`.
   **candidates** – An ordered `list[Candidate]` from
   [`foley.index.library.SoundLibrary.search()`](foley.index.library.html.md#foley.index.library.SoundLibrary.search) (best first).
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]
+  `dict`[`str`, `float`]
 * **Returns:**
   `{clip_id: score}` with distinct descending scores.
 
@@ -233,7 +233,7 @@ reliable band — the model judge may then be trusted unattended on that slice.
   * **human_grades** – A 1-D per-unit human grade sequence, or a 2-D `(humans × units)`
     matrix (`nan` = missing).
   * **judge_grades** – The model judge’s 1-D per-unit grades (`nan` = missing).
-  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The measurement level (default `'ordinal'`).
+  * **level** (`str`) – The measurement level (default `'ordinal'`).
 * **Return type:**
   [`AlphaResult`](foley.eval.reliability.html.md#foley.eval.reliability.AlphaResult)
 * **Returns:**
@@ -255,7 +255,7 @@ rank of the highest-graded answer (for the failure diff).
 The harmonic mean of [`fit_precision()`](#foley.eval.fit_precision) and [`fit_recall()`](#foley.eval.fit_recall).
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.fit_precision(matches, relevants)
 
@@ -268,10 +268,10 @@ closed-form, and the decisive correctness oracle (the Ring-0 + fake-judge plumbi
 makes the end-to-end value tautological, so the metric math is tested in isolation).
 
 * **Parameters:**
-  * **matches** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Per-candidate fit-judge `match` booleans.
-  * **relevants** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Per-candidate gold-relevance booleans (grade ≥ 1).
+  * **matches** (`Sequence`[`bool`]) – Per-candidate fit-judge `match` booleans.
+  * **relevants** (`Sequence`[`bool`]) – Per-candidate gold-relevance booleans (grade ≥ 1).
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 * **Returns:**
   The fit precision in `[0, 1]` (`0.0` when nothing was accepted).
 
@@ -280,7 +280,7 @@ makes the end-to-end value tautological, so the metric math is tested in isolati
 `TP / (TP + FN)` — of the gold-relevant candidates, how many the judge confirmed.
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.frechet_distance(x_ref, x_gen)
 
@@ -294,7 +294,7 @@ embeddings for “FAD-P”, or CLAP for a domain-matched FAD.
   * **x_ref** – Reference embeddings `(n_ref, d)`.
   * **x_gen** – Generated embeddings `(n_gen, d)`.
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 * **Returns:**
   The FAD as a `float` (`≥ 0` up to numerical round-off; `~0` for identical
   distributions).
@@ -311,10 +311,10 @@ hashing embedder in CI, PANNs / CLAP (`foley[fit]`) in prod. The embedder’s
   * **ref_wavs** – An iterable of reference waveforms (1-D arrays).
   * **gen_wavs** – An iterable of generated waveforms (1-D arrays).
   * **embedder** – An object with `embed_audio(wav, sr) -> vector` and `model_id`.
-  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sample rate passed to `embed_audio`.
-  * **metric** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'fad'` (default) or `'kad'`.
-  * **toolkit** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance label for the stamp (default `'foley-numpy'`).
-  * **version** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance version for the stamp.
+  * **sr** (`int`) – The sample rate passed to `embed_audio`.
+  * **metric** (`str`) – `'fad'` (default) or `'kad'`.
+  * **toolkit** (`str`) – Provenance label for the stamp (default `'foley-numpy'`).
+  * **version** (`str`) – Provenance version for the stamp.
 * **Return type:**
   [`FidelityResult`](foley.eval.fidelity.html.md#foley.eval.fidelity.FidelityResult)
 * **Returns:**
@@ -325,7 +325,7 @@ hashing embedder in CI, PANNs / CLAP (`foley[fit]`) in prod. The embedder’s
 True if the baseline’s fixture stamps no longer match the fixtures on disk.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 ### foley.eval.kernel_audio_distance(x_ref, x_gen, , bandwidth=None)
 
@@ -339,9 +339,9 @@ negative.
 * **Parameters:**
   * **x_ref** – Reference embeddings `(n_ref, d)`.
   * **x_gen** – Generated embeddings `(n_gen, d)`.
-  * **bandwidth** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – RBF bandwidth σ (default: the median heuristic over the pooled set).
+  * **bandwidth** (`Optional`[`float`]) – RBF bandwidth σ (default: the median heuristic over the pooled set).
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 * **Returns:**
   The unbiased MMD² as a `float`.
 
@@ -355,10 +355,10 @@ tolerated (units with < 2 ratings are dropped, no imputation). Pure numpy.
 
 * **Parameters:**
   * **reliability_data** – A 2-D array-like `(raters × units)`; `nan` = missing.
-  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'ordinal'` (default) | `'nominal'` | `'interval'`.
+  * **level** (`str`) – `'ordinal'` (default) | `'nominal'` | `'interval'`.
   * **value_domain** – Optional explicit value set (for a label unobserved by some rater).
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 * **Returns:**
   α as a bare `float` (`1.0` when there is no expected disagreement, `D_e = 0`).
 
@@ -367,35 +367,35 @@ tolerated (units with < 2 ratings are dropped, no imputation). Pure numpy.
 Load the committed baseline dict from `path`.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 
 ### foley.eval.load_golden(path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'))
 
 Load and validate the frozen golden set from `path` (JSON list).
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`GoldenItem`](foley.eval.golden.html.md#foley.eval.golden.GoldenItem)]
+  `list`[[`GoldenItem`](foley.eval.golden.html.md#foley.eval.golden.GoldenItem)]
 
 ### foley.eval.mean_over_queries(values)
 
 Macro-average of per-query metric values (0.0 for an empty list).
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.mrr_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Reciprocal rank of the first relevant doc in the top-`k` (0.0 if none).
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.ndcg_at_k(qrels_q, run_q, k=10)
 
 Normalized DCG at `k` with linear gains (0.0 when no graded answer).
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.percent_agreement(reliability_data)
 
@@ -407,7 +407,7 @@ On foley’s skewed ‘most candidates irrelevant’ label distribution a chance
 * **Parameters:**
   **reliability_data** – A 2-D array-like `(raters × units)`; `nan` = missing.
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 * **Returns:**
   The fraction of same-unit rater pairs that agree (`0.0` if no pairs).
 
@@ -416,23 +416,23 @@ On foley’s skewed ‘most candidates irrelevant’ label distribution a chance
 Fraction of the top-`k` that is relevant (denominator is literal `k`).
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.recall_at_k(qrels_q, run_q, k=10, , rel_lvl=1)
 
 Fraction of ALL relevant docs (grade ≥ `rel_lvl`) retrieved in the top-`k`.
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.reliability_band(alpha)
 
 Map an α (or κ) to Krippendorff’s benchmark band.
 
 * **Parameters:**
-  **alpha** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A reliability coefficient in `(-∞, 1]`.
+  **alpha** (`float`) – A reliability coefficient in `(-∞, 1]`.
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`
 * **Returns:**
   `'reliable'` (α ≥ 0.8), `'tentative'` (0.667 ≤ α < 0.8), else
   `'revise-rubric'`.
@@ -450,23 +450,23 @@ fit-judge as an independent audit, and aggregates fit-precision/recall/F1 + fit-
 * **Parameters:**
   * **golden** – A pre-loaded golden list (default: load `golden_path`).
   * **golden_path** – The golden JSON (default: the bundled Ring-0 seed set).
-  * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The stratified sample cap (default: the whole set — the cost gate).
+  * **sample** (`Optional`[`int`]) – The stratified sample cap (default: the whole set — the cost gate).
   * **strata_keys** – The stratification axes (default `('family', 'diegetic')`).
   * **fit_judge** – The injected authoritative [`Judge`](foley.agent.protocols.html.md#foley.agent.protocols.Judge)
     (default: `foley.agent.verify._default_fit_judge()` — the hermetic fake
     when no audio-LM / key is available).
   * **embedder** – The Ring-0 text/​audio embedder (default: [`HashingBowEmbedder`](#foley.eval.HashingBowEmbedder)).
-  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](foley.base.html.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
+  * **level** (`str` | [`VerifyLevel`](foley.base.html.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
     (default `VerifyLevel.judge`). `'clap'` is rejected: it never invokes the
     fit-judge (it only re-runs the retrieval clap gate), so it cannot measure fit.
-  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sampling RNG seed.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The retrieval shortlist depth per event.
+  * **seed** (`int`) – The sampling RNG seed.
+  * **k** (`int`) – The retrieval shortlist depth per event.
 * **Return type:**
   [`FitReport`](foley.eval.fit.html.md#foley.eval.fit.FitReport)
 * **Returns:**
   A [`FitReport`](#foley.eval.FitReport). Gating is the caller’s job via [`FitReport.gate()`](#foley.eval.FitReport.gate).
 * **Raises:**
-  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `level` is `'clap'` (fit judging requires a listen/judge rung).
+  **ValueError** – If `level` is `'clap'` (fit judging requires a listen/judge rung).
 
 ### foley.eval.run_ring0_retrieval_eval(, k=10, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), embedder=None)
 
@@ -477,7 +477,7 @@ Runs every golden `expected_events[].query` through the real
 resulting runs against the golden qrels.
 
 * **Parameters:**
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval cutoff (and the metric `@k`).
+  * **k** (`int`) – Retrieval cutoff (and the metric `@k`).
   * **golden_path** – The golden set JSON.
   * **embedder** – The eval embedder (default: [`HashingBowEmbedder`](#foley.eval.HashingBowEmbedder)).
 * **Return type:**
@@ -494,12 +494,12 @@ Round-robins across strata (so an easy family cannot dominate a capped sample);
 event_dict)`.
 
 * **Parameters:**
-  * **units** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)) – The full `(item, ev_idx, ev_dict)` unit list.
+  * **units** (`list`) – The full `(item, ev_idx, ev_dict)` unit list.
   * **strata_keys** – The stratification axes (e.g. `('family', 'diegetic')`).
-  * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The total draw size, or `None` for all.
-  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RNG seed (reproducibility).
+  * **sample** (`Optional`[`int`]) – The total draw size, or `None` for all.
+  * **seed** (`int`) – The RNG seed (reproducibility).
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+  `list`
 
 ### foley.eval.to_qrels(golden)
 
@@ -510,7 +510,7 @@ One qrels row per `(item, event)` — `query_id = f"{item.id}::{event_idx}"`
 clip in `answer_clip_ids` carries its `grade`.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`int`](https://docs.python.org/3/builtins/functions.html#int)]]
+  `dict`[`str`, `dict`[`str`, `int`]]
 
 ### foley.eval.write_baseline(report, , path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/baseline.json'), metric='ndcg@10', tolerance=0.02, seed_path, manifest_path, embedder_model_id='foley-eval/hashing-bow-v1', dim=64, rrf_k=60, updated_at, n_items, revision='gld-v1')
 
@@ -522,7 +522,7 @@ clock) so the caller controls reproducibility. `revision` labels the golden-set
 generation (bumped when the frozen set is regrown).
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 * **Returns:**
   The baseline dict that was written.
 

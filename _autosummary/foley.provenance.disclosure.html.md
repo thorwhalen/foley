@@ -69,7 +69,7 @@ dependency-light.
 
 ### *class* foley.provenance.disclosure.AudioSealWatermarker(, message=61470)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The default [`Watermarker`](#foley.provenance.disclosure.Watermarker) — Meta AudioSeal, run on CPU, deterministic.
 
@@ -86,8 +86,8 @@ signal and the achieved detection probability is recorded in the meta.
 Embed the AudioSeal watermark; return the marked bytes + meta.
 
 * **Parameters:**
-  * **audio_bytes** ([`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)) – The clip’s container bytes (WAV/FLAC/…).
-  * **message** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The 16-bit id to embed (default [`DEFAULT_WATERMARK_MESSAGE`](#foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE)).
+  * **audio_bytes** (`bytes`) – The clip’s container bytes (WAV/FLAC/…).
+  * **message** (`Optional`[`int`]) – The 16-bit id to embed (default [`DEFAULT_WATERMARK_MESSAGE`](#foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE)).
 * **Return type:**
   [`WatermarkResult`](#foley.provenance.disclosure.WatermarkResult)
 * **Returns:**
@@ -95,11 +95,11 @@ Embed the AudioSeal watermark; return the marked bytes + meta.
   (float32) — a deterministic PCM round-trip so its content-hash id is
   reproducible — and whose `meta` is the `LicenseRecord.watermark` dict.
 
-#### *property* version *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+#### *property* version *: str*
 
 The installed `audioseal` package version (best-effort).
 
-### foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 61470*
+### foley.provenance.disclosure.DEFAULT_WATERMARK_MESSAGE *: int* *= 61470*
 
 The FIXED 16-bit foley provenance id embedded by AudioSeal. It MUST be constant
 (no per-call nonce / timestamp): a deterministic watermark keeps the stored
@@ -113,23 +113,23 @@ IPTC digitalSourceType vocabulary (C2PA `c2pa.actions` assertion).
 
 ### *class* foley.provenance.disclosure.PromptScan(trademark_hits=(), voice_hits=())
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The result of scanning a generation prompt for safety flags (pure).
 
-#### *property* contains_recognizable_voice *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
+#### *property* contains_recognizable_voice *: bool*
 
 True if the prompt matched a recognizable-voice / clone pattern.
 
-#### *property* flagged *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
+#### *property* flagged *: bool*
 
 True if the prompt matched any trademark or recognizable-voice pattern.
 
-#### *property* potential_trademark *: [bool](https://docs.python.org/3/builtins/functions.html#bool)*
+#### *property* potential_trademark *: bool*
 
 True if the prompt matched a branded-audio-logo entry.
 
-### foley.provenance.disclosure.TRADEMARK_REGISTRY *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[TrademarkEntry](#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'thx', 'deep note'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc three-note', 'nbc chimes', 'nbc chime'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'netflix intro', 'netflix sound', 'ta dum', 'netflix chime', 'ta-dum', 'tudum'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'mgm lion', 'mgm roar', 'metro-goldwyn-mayer lion'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'fox fanfare', '20th century fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel jingle', 'intel bong', 'intel inside', 'intel chime'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({'homer doh', 'homer simpson doh', "d'oh"})))*
+### foley.provenance.disclosure.TRADEMARK_REGISTRY *: tuple[[TrademarkEntry](#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'thx', 'deep note'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc chimes', 'nbc three-note', 'nbc chime'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'tudum', 'ta-dum', 'ta dum', 'netflix sound', 'netflix intro', 'netflix chime'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'mgm lion', 'metro-goldwyn-mayer lion', 'mgm roar'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'20th century fox fanfare', 'fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel chime', 'intel bong', 'intel jingle', 'intel inside'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({'homer simpson doh', 'homer doh', "d'oh"})))*
 
 Seed registry of branded audio logos foley must not knowingly generate for
 commercial use (report 07 §7.2). Each entry maps a canonical mark to a set of
@@ -138,25 +138,25 @@ legal guarantee.
 
 ### *class* foley.provenance.disclosure.TrademarkEntry(canonical, aliases)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 One trademarked audio logo + the casefolded prompt substrings that flag it.
 
 ### *class* foley.provenance.disclosure.WatermarkResult(audio_bytes, meta, detection_prob=None)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The output of a [`Watermarker`](#foley.provenance.disclosure.Watermarker): the marked bytes + provenance meta.
 
 ### *exception* foley.provenance.disclosure.WatermarkUnavailable
 
-Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
+Bases: `RuntimeError`
 
 Raised when a watermark is explicitly requested but `foley[provenance]` is absent.
 
 ### *class* foley.provenance.disclosure.Watermarker(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 Embeds a detectable provenance watermark into audio bytes (the DI seam).
 
@@ -191,7 +191,7 @@ rollup over a whole mix is a weave/#8 concern.
   {name: {required, met, detail}},
   “pending”: […], “publish_ready”: bool, “provenance”: {…}}\`\`.
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 
 ### foley.provenance.disclosure.build_content_credential(record, , asset_id, asset_hash=None)
 
@@ -206,10 +206,10 @@ never fork between the generate-time sidecar and the export-time manifest.
 * **Parameters:**
   * **record** (`Union`[[`SoundRecord`](foley.base.html.md#foley.base.SoundRecord), [`Candidate`](foley.base.html.md#foley.base.Candidate), [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord)]) – A [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord), [`Candidate`](foley.base.html.md#foley.base.Candidate),
     or [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord).
-  * **asset_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The clip’s content-hash id (the sidecar store key / ref).
-  * **asset_hash** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional `{"alg": "sha256", "value": <hex>}` of the asset bytes.
+  * **asset_id** (`str`) – The clip’s content-hash id (the sidecar store key / ref).
+  * **asset_hash** (`Optional`[`dict`]) – Optional `{"alg": "sha256", "value": <hex>}` of the asset bytes.
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 * **Returns:**
   A JSON-serializable content-credential dict (`signed`/`embedded` False —
   it is self-asserted until #8 signs it).
@@ -221,9 +221,9 @@ Detect a foley watermark in `audio_bytes` (lazy AudioSeal).
 Downmixes to mono + resamples to 16 kHz, then runs the AudioSeal detector.
 
 * **Parameters:**
-  **audio_bytes** ([`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)) – The clip’s container bytes.
+  **audio_bytes** (`bytes`) – The clip’s container bytes.
 * **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]]
+  `tuple`[`float`, `Optional`[`int`]]
 * **Returns:**
   `(probability, recovered_message)` — `probability` in `[0, 1]` that a
   watermark is present, and the recovered 16-bit id (`None` if the
@@ -236,11 +236,11 @@ Resolve the effective [`Watermarker`](#foley.provenance.disclosure.Watermarker) 
 Progressive disclosure: generation works with or without `foley[provenance]`.
 
 * **Parameters:**
-  * **watermark** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – `True` require a watermark (raise if unavailable), `False`
+  * **watermark** (`Optional`[`bool`]) – `True` require a watermark (raise if unavailable), `False`
     never watermark, `None` (auto) watermark iff `audioseal` is installed.
-  * **watermarker** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Watermarker`](#foley.provenance.disclosure.Watermarker)]) – An injected watermarker (the DI seam) — wins over auto-detect.
+  * **watermarker** (`Optional`[[`Watermarker`](#foley.provenance.disclosure.Watermarker)]) – An injected watermarker (the DI seam) — wins over auto-detect.
 * **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Watermarker`](#foley.provenance.disclosure.Watermarker)]
+  `Optional`[[`Watermarker`](#foley.provenance.disclosure.Watermarker)]
 * **Returns:**
   A [`Watermarker`](#foley.provenance.disclosure.Watermarker), or `None` when watermarking is off/unavailable.
 * **Raises:**
@@ -256,7 +256,7 @@ Pure and stdlib-only (casefold substring + regex). Returns a
 façade decides (fail-closed refuse by default, or warn-and-flag).
 
 * **Parameters:**
-  **prompt** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language generation prompt.
+  **prompt** (`str`) – The natural-language generation prompt.
 * **Return type:**
   [`PromptScan`](#foley.provenance.disclosure.PromptScan)
 * **Returns:**
@@ -271,4 +271,4 @@ Write `credential` into `store` keyed by `asset_id`; return `asset_id`.
 cloud `dol` store to move sidecars off-box).
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`

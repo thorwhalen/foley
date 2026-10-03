@@ -18,7 +18,7 @@ faceting and browse”, the CLAP vector does the heavy retrieval).
 
 ### *class* foley.index.taxonomy.model.AudioSetUcsMap(by_name=<factory>, by_mid=<factory>)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 AudioSet-label -> UCS-CatID overlap map (report 04 §5.3).
 
@@ -31,11 +31,11 @@ validated against the UCS table at load time (fail-fast on a broken map).
 Map one AudioSet label (a MID or a name) to a UCS CatID (or `None`).
 
 * **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+  `Optional`[`str`]
 
 ### *class* foley.index.taxonomy.model.CatIdResolution(catid=None, category=None, subcategory=None, source=None, confidence=0.0, matched_terms=<factory>)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The result of resolving free tags/caption/labels to a UCS CatID.
 
@@ -45,7 +45,7 @@ ingest, and `ucs_catid` on the query side.
 
 ### *class* foley.index.taxonomy.model.UcsRow(catid, category, subcategory, synonyms=(), confident=False)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 One Universal Category System entry.
 
@@ -58,7 +58,7 @@ authoritative.
 
 ### *class* foley.index.taxonomy.model.UcsTable(by_catid=<factory>, order=<factory>, \_ci_index=<factory>)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 A loaded UCS lookup: by CatID (exact + case-insensitive) and by synonym.
 
@@ -75,4 +75,4 @@ The CatIDs in stable insertion order (deterministic tie-breaking).
 Look up a row by CatID: exact first, then case-insensitive.
 
 * **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`UcsRow`](#foley.index.taxonomy.model.UcsRow)]
+  `Optional`[[`UcsRow`](#foley.index.taxonomy.model.UcsRow)]

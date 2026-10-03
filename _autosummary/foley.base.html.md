@@ -56,13 +56,13 @@ Serialization contract:
 
 ### *class* foley.base.AcquisitionMethod(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 How a sound entered foley (retrieval channel or origin).
 
 ### *class* foley.base.Affordance(name, type, description, default=None, stage='query')
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Descriptor for a unified parameter affordance (arioso analog).
 
@@ -88,7 +88,7 @@ Default value (`None` = no default / required).
 
 ### *class* foley.base.Anchor(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 How a WEAVE `Placement` binds its symbolic time to the narration (report 06 §2.4).
 
@@ -108,11 +108,11 @@ by `_decode()` — no per-field code needed.
 
 ### *class* foley.base.CandidateOrigin(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 Whether a candidate was retrieved from the index or freshly generated.
 
-### foley.base.GENERATION_AFFORDANCES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Affordance](#foley.base.Affordance)]* *= {'duration': Affordance(name='duration', type=<class 'float'>, description='Seconds; None => backend default', default=None, stage='generate'), 'loop': Affordance(name='loop', type=<class 'bool'>, description='Seamless-loopable clip', default=False, stage='generate'), 'negative_prompt': Affordance(name='negative_prompt', type=<class 'str'>, description='Content to exclude', default=None, stage='generate'), 'output_format': Affordance(name='output_format', type=<class 'str'>, description='wav|opus|mp3', default='wav', stage='generate'), 'prompt': Affordance(name='prompt', type=<class 'str'>, description='Sound description', default=None, stage='generate'), 'prompt_influence': Affordance(name='prompt_influence', type=<class 'float'>, description='0..1 unified guidance', default=0.3, stage='generate'), 'seed': Affordance(name='seed', type=<class 'int'>, description='Reproducibility (capture in provenance)', default=None, stage='generate'), 'steps': Affordance(name='steps', type=<class 'int'>, description='Diffusion/flow steps', default=None, stage='generate')}*
+### foley.base.GENERATION_AFFORDANCES *: dict[str, [Affordance](#foley.base.Affordance)]* *= {'duration': Affordance(name='duration', type=<class 'float'>, description='Seconds; None => backend default', default=None, stage='generate'), 'loop': Affordance(name='loop', type=<class 'bool'>, description='Seamless-loopable clip', default=False, stage='generate'), 'negative_prompt': Affordance(name='negative_prompt', type=<class 'str'>, description='Content to exclude', default=None, stage='generate'), 'output_format': Affordance(name='output_format', type=<class 'str'>, description='wav|opus|mp3', default='wav', stage='generate'), 'prompt': Affordance(name='prompt', type=<class 'str'>, description='Sound description', default=None, stage='generate'), 'prompt_influence': Affordance(name='prompt_influence', type=<class 'float'>, description='0..1 unified guidance', default=0.3, stage='generate'), 'seed': Affordance(name='seed', type=<class 'int'>, description='Reproducibility (capture in provenance)', default=None, stage='generate'), 'steps': Affordance(name='steps', type=<class 'int'>, description='Diffusion/flow steps', default=None, stage='generate')}*
 
 Unified generation-stage parameters (generate backends map onto these).
 
@@ -124,7 +124,7 @@ What the caller intends to do with a sound; consumed by `keep()`.
 
 ### *class* foley.base.Layer(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 Mix layer (shared by `SoundEvent` now and `TimelineItem` later).
 
@@ -142,7 +142,7 @@ is rejected regardless. Populate the flags from the `license_id` via
 `foley.licensing.apply_license_flags` (source overrides win). Never
 hand-set the derived flags — always route through the policy layer.
 
-### foley.base.MASTER_PROFILES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [MasterProfile](#foley.base.MasterProfile)]* *= {'broadcast_atsc': MasterProfile(target_lufs=-24.0, true_peak_db=-2.0, lra=7.0), 'broadcast_ebu': MasterProfile(target_lufs=-23.0, true_peak_db=-1.0, lra=7.0), 'podcast': MasterProfile(target_lufs=-16.0, true_peak_db=-1.0, lra=11.0), 'streaming': MasterProfile(target_lufs=-14.0, true_peak_db=-1.0, lra=11.0)}*
+### foley.base.MASTER_PROFILES *: dict[str, [MasterProfile](#foley.base.MasterProfile)]* *= {'broadcast_atsc': MasterProfile(target_lufs=-24.0, true_peak_db=-2.0, lra=7.0), 'broadcast_ebu': MasterProfile(target_lufs=-23.0, true_peak_db=-1.0, lra=7.0), 'podcast': MasterProfile(target_lufs=-16.0, true_peak_db=-1.0, lra=11.0), 'streaming': MasterProfile(target_lufs=-14.0, true_peak_db=-1.0, lra=11.0)}*
 
 The named delivery targets (report 06 §5.2). [`resolve_master()`](#foley.base.resolve_master) maps a
 profile name to one of these; these values are the SSOT so no LUFS literal
@@ -175,19 +175,19 @@ Every field is a no-op at its default, so a sparse item (no `processing`)
 renders untouched; the mixer departs from dry/centered/full-level only when a
 field is set.
 
-### foley.base.QUERY_AFFORDANCES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Affordance](#foley.base.Affordance)]* *= {'audioset_label': Affordance(name='audioset_label', type=<class 'str'>, description='AudioSet ontology facet (rolls up children)', default=None, stage='query'), 'commercial_ok': Affordance(name='commercial_ok', type=<class 'bool'>, description='License filter shorthand', default=None, stage='query'), 'duration_range': Affordance(name='duration_range', type=<class 'tuple'>, description='(min_s, max_s)', default=None, stage='query'), 'filters': Affordance(name='filters', type=<class 'dict'>, description='Metadata predicates (SQL-style)', default=None, stage='query'), 'k': Affordance(name='k', type=<class 'int'>, description='Number of results', default=10, stage='query'), 'license': Affordance(name='license', type=<class 'str'>, description='Explicit license id constraint', default=None, stage='query'), 'min_snr': Affordance(name='min_snr', type=<class 'float'>, description='QC filter: min SNR dB', default=None, stage='query'), 'rerank': Affordance(name='rerank', type=<class 'bool'>, description='Apply second-stage rerank', default=False, stage='query'), 'semantic_text': Affordance(name='semantic_text', type=<class 'str'>, description='Query for CLAP semantic space', default=None, stage='query'), 'sort': Affordance(name='sort', type=<class 'str'>, description='score|duration|created|downloads', default='score', stage='query'), 'text': Affordance(name='text', type=<class 'str'>, description='Natural-language query', default=None, stage='query'), 'ucs_category': Affordance(name='ucs_category', type=<class 'str'>, description='UCS CatID facet', default=None, stage='query')}*
+### foley.base.QUERY_AFFORDANCES *: dict[str, [Affordance](#foley.base.Affordance)]* *= {'audioset_label': Affordance(name='audioset_label', type=<class 'str'>, description='AudioSet ontology facet (rolls up children)', default=None, stage='query'), 'commercial_ok': Affordance(name='commercial_ok', type=<class 'bool'>, description='License filter shorthand', default=None, stage='query'), 'duration_range': Affordance(name='duration_range', type=<class 'tuple'>, description='(min_s, max_s)', default=None, stage='query'), 'filters': Affordance(name='filters', type=<class 'dict'>, description='Metadata predicates (SQL-style)', default=None, stage='query'), 'k': Affordance(name='k', type=<class 'int'>, description='Number of results', default=10, stage='query'), 'license': Affordance(name='license', type=<class 'str'>, description='Explicit license id constraint', default=None, stage='query'), 'min_snr': Affordance(name='min_snr', type=<class 'float'>, description='QC filter: min SNR dB', default=None, stage='query'), 'rerank': Affordance(name='rerank', type=<class 'bool'>, description='Apply second-stage rerank', default=False, stage='query'), 'semantic_text': Affordance(name='semantic_text', type=<class 'str'>, description='Query for CLAP semantic space', default=None, stage='query'), 'sort': Affordance(name='sort', type=<class 'str'>, description='score|duration|created|downloads', default='score', stage='query'), 'text': Affordance(name='text', type=<class 'str'>, description='Natural-language query', default=None, stage='query'), 'ucs_category': Affordance(name='ucs_category', type=<class 'str'>, description='UCS CatID facet', default=None, stage='query')}*
 
 Unified query-stage parameters (search / find / filter surface).
 
 ### *class* foley.base.Salience(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 How prominent a sound event is within a passage.
 
 ### *class* foley.base.SerializableMixin
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Adds `to_dict`/`to_json`/`from_dict`/`from_json` to a dataclass.
 
@@ -203,7 +203,7 @@ Unknown keys are ignored (forward-compatible); missing keys fall back
 to field defaults.
 
 * **Parameters:**
-  **d** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – A plain dict (typically from `to_dict()` or `json.loads`).
+  **d** (`dict`) – A plain dict (typically from `to_dict()` or `json.loads`).
 * **Return type:**
   [`SerializableMixin`](#foley.base.SerializableMixin)
 
@@ -212,7 +212,7 @@ to field defaults.
 Reconstruct an instance from a JSON string.
 
 * **Parameters:**
-  **s** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A JSON string (typically from `to_json()`).
+  **s** (`str`) – A JSON string (typically from `to_json()`).
 * **Return type:**
   [`SerializableMixin`](#foley.base.SerializableMixin)
 
@@ -225,16 +225,16 @@ subclasses `str`); nested dataclasses are recursed via
 `dataclasses.asdict`.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 
 #### to_json(, indent=None)
 
 Return a JSON string (str-enums serialize to their `.value`).
 
 * **Parameters:**
-  **indent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Optional pretty-print indent passed to `json.dumps`.
+  **indent** (`Optional`[`int`]) – Optional pretty-print indent passed to `json.dumps`.
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`
 
 ### *class* foley.base.SoundDesignTimeline(items=<factory>, run_manifest_ref=None, transcript_ref=None, schema_version=1, narration_ref=None, word_timeline=<factory>, master=<factory>)
 
@@ -268,7 +268,7 @@ record holds a content-hash `uri`, never raw bytes.
 
 ### *class* foley.base.StorageMode(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 How a sound’s bytes are held (DERIVED from `license.cache_bytes_ok`).
 
@@ -293,7 +293,7 @@ The result of one verification rung for a candidate.
 
 ### *class* foley.base.VerifyLevel(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 Which rung of the verification ladder produced a `Verdict`.
 
@@ -302,11 +302,11 @@ Which rung of the verification ladder produced a `Verdict`.
 Resolve a master spec (profile name, explicit profile, or `None`) to a `MasterProfile`.
 
 * **Parameters:**
-  **master** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`MasterProfile`](#foley.base.MasterProfile), [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – A [`MASTER_PROFILES`](#foley.base.MASTER_PROFILES) key (e.g. `'podcast'`), an explicit
+  **master** (`Union`[`str`, [`MasterProfile`](#foley.base.MasterProfile), `None`]) – A [`MASTER_PROFILES`](#foley.base.MASTER_PROFILES) key (e.g. `'podcast'`), an explicit
   [`MasterProfile`](#foley.base.MasterProfile), or `None` (-> the podcast default).
 * **Return type:**
   [`MasterProfile`](#foley.base.MasterProfile)
 * **Returns:**
   The resolved [`MasterProfile`](#foley.base.MasterProfile).
 * **Raises:**
-  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `master` is an unknown profile name.
+  **ValueError** – If `master` is an unknown profile name.

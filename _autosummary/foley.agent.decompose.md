@@ -30,7 +30,7 @@ the real path.
 
 ### *class* foley.agent.decompose.AnthropicDecomposer(, client=None, model='claude-opus-4-8', max_tokens=2000)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 LLM-backed decomposer (`foley[agent]`): Claude → a structured event list.
 
@@ -45,11 +45,11 @@ conventions (`claude-opus-4-8`, adaptive thinking — never `budget_tokens`).
 Call Claude and round-trip each event through `SoundEvent.from_dict()`.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
+  `list`[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
 
 ### *class* foley.agent.decompose.KeywordDecomposer
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Deterministic cue-lexicon decomposer — the zero-dependency default and CI fake.
 
@@ -63,12 +63,12 @@ budget). No RNG, no network, no `anthropic` — same passage → identical list.
 Return `<= max_events` deterministic `SoundEvent`s for `context`.
 
 * **Parameters:**
-  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
-  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap (the salience budget).
-  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Accepted for signature parity (the per-second density window is a
+  * **context** (`str`) – The narrative passage.
+  * **max_events** (`int`) – The sparse density cap (the salience budget).
+  * **seconds** (`Optional`[`float`]) – Accepted for signature parity (the per-second density window is a
     later refinement); ignored here.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
+  `list`[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
 
 ### foley.agent.decompose.decompose_context(context, , max_events=6, seconds=None, decomposer=None, \_span=None)
 
@@ -79,11 +79,11 @@ default decomposer when `decomposer` is `None`, calls it, and records the GenAI
 span on the real path (the fake’s `last_response` is `None` → no-op).
 
 * **Parameters:**
-  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
-  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap.
-  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded, else ignored).
-  * **decomposer** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer) (the DI seam);
+  * **context** (`str`) – The narrative passage.
+  * **max_events** (`int`) – The sparse density cap.
+  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded, else ignored).
+  * **decomposer** (`Optional`[[`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer) (the DI seam);
     defaults to `_default_decomposer()`.
   * **\_span** – Internal — the obs span handle `find()` opens for GenAI recording.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
+  `list`[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]

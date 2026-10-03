@@ -2,7 +2,7 @@
 
 The structural DI seams of the SELECT stage — `Decomposer` / `Judge` / `Refiner`.
 
-Three `@runtime_checkable` [`typing.Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)s (PEP 544), each a
+Three `@runtime_checkable` `typing.Protocol`s (PEP 544), each a
 behaviour-free, open-closed contract that every implementation (the deterministic
 fake *and* the Anthropic-backed real impl) satisfies. They are dependency-injected
 into [`foley.agent.find()`](foley.agent.html.md#foley.agent.find) by keyword (`decomposer=` / `judge=` / `refiner=`),
@@ -21,7 +21,7 @@ keeps `import foley` dol-only.
 
 ### *class* foley.agent.protocols.Decomposer(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 Narrative context → a sparse, salience-ranked, diegetic-tagged event list.
 
@@ -32,7 +32,7 @@ The default is the deterministic [`KeywordDecomposer`](foley.agent.decompose.htm
 
 ### *class* foley.agent.protocols.Judge(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 One rung of the verify ladder: does this candidate match this event? (report 10 §4.2).
 
@@ -43,7 +43,7 @@ returned `Verdict` carries `level` == the rung that produced it. Only the
 
 ### *class* foley.agent.protocols.Refiner(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 One event query → 2–4 paraphrases/expansions (query-expansion for retrieval).
 

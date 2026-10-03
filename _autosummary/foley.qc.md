@@ -58,7 +58,7 @@ sound_record.qc = report.to_dict()   # becomes filterable metadata
 
 The shipped default thresholds; the default for every keyword below.
 
-### foley.qc.LUFS_MIN_BLOCK_S *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.4*
+### foley.qc.LUFS_MIN_BLOCK_S *: float* *= 0.4*
 
 BS.1770 integrated-loudness gating block = 400 ms; a clip shorter than one
 block cannot be measured (`pyloudnorm` raises), so [`measure_lufs()`](#foley.qc.measure_lufs)
@@ -67,7 +67,7 @@ tunable QC policy threshold, hence a module constant rather than a field.
 
 ### *class* foley.qc.QCReport(duration_s, sample_rate, channels, clipped_ratio, clipped_max_run, dc_offset, rms_dbfs, is_silent, needs_edge_fade, has_nan_inf, true_peak_dbtp=None, snr_db=None, loudness_lufs=None, status=QCStatus.pass_, notes=<factory>)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Per-clip Tier-0 QC result.
 
@@ -87,17 +87,17 @@ suspenders over the construction-time `_json_safe()` guard) so no
 field.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 
 ### *class* foley.qc.QCStatus(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 Overall verdict for a clip (subclasses `str` so it is JSON-safe).
 
 ### *class* foley.qc.QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 All Tier-0 QC defaults (report 08 §3 table), each an explicit field.
 
@@ -109,7 +109,7 @@ per-check keyword arguments) to override any threshold without editing code.
 Largest per-channel absolute DC offset, `max_c |mean_n x[n, c]|`.
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.qc.detect_clipping(samples, , full_scale=0.999, min_run=3)
 
@@ -120,10 +120,10 @@ maximal hot runs of length `>= min_run` count as clip events.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Waveform in `[-1, 1]`.
-  * **full_scale** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Absolute level at/above which a sample is full-scale.
-  * **min_run** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Minimum consecutive full-scale frames to count as clipping.
+  * **full_scale** (`float`) – Absolute level at/above which a sample is full-scale.
+  * **min_run** (`int`) – Minimum consecutive full-scale frames to count as clipping.
 * **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`int`](https://docs.python.org/3/builtins/functions.html#int)]
+  `tuple`[`float`, `int`]
 * **Returns:**
   `(clipped_ratio, max_run_length)` — the fraction of frames inside
   counting runs, and the longest counting run (`(0.0, 0)` if none).
@@ -133,7 +133,7 @@ maximal hot runs of length `>= min_run` count as clip events.
 Clip duration in seconds: `frames / sample_rate`.
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.qc.estimate_snr(samples, sample_rate, , quiet_percentile=10.0, frame_s=0.025, hop_s=0.01)
 
@@ -146,12 +146,12 @@ an exactly-zero floor returns `inf` and a silent clip returns `-inf`.
 
 * **Parameters:**
   * **samples** (`ndarray`) – Waveform in `[-1, 1]` (down-mixed to mono internally).
-  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz (sizes the frames).
-  * **quiet_percentile** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Percent of quietest frames forming the noise floor.
-  * **frame_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Short-time frame length in seconds.
-  * **hop_s** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Hop between frames in seconds.
+  * **sample_rate** (`int`) – Sample rate in Hz (sizes the frames).
+  * **quiet_percentile** (`float`) – Percent of quietest frames forming the noise floor.
+  * **frame_s** (`float`) – Short-time frame length in seconds.
+  * **hop_s** (`float`) – Hop between frames in seconds.
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 * **Returns:**
   SNR in dB.
 
@@ -160,7 +160,7 @@ an exactly-zero floor returns `inf` and a silent clip returns `-inf`.
 Return `True` if any sample is `NaN` or `Inf` (corrupt-clip guard).
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 ### foley.qc.is_silent(samples, , rms_floor_dbfs=-60.0)
 
@@ -169,7 +169,7 @@ Return `True` when whole-clip RMS falls below `rms_floor_dbfs`.
 A zero (exactly silent) clip has RMS `0` -> `-inf` dBFS -> `True`.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 ### foley.qc.measure_lufs(samples, sample_rate, , gate_floor_lufs=-70.0, min_block_s=0.4)
 
@@ -181,7 +181,7 @@ measured loudness is at/below the gate floor (near-silent / unstable — do
 not amplify, just flag).
 
 * **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
+  `Optional`[`float`]
 
 ### foley.qc.needs_edge_fade(samples, , rel_peak_dbfs=-40.0)
 
@@ -190,7 +190,7 @@ relative to the clip peak — i.e. a nonzero boundary that clicks under
 narration and needs a short fade.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 ### foley.qc.run_qc(samples, sample_rate, , thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100))
 
@@ -214,7 +214,7 @@ stage).
 
 * **Parameters:**
   * **samples** (`ndarray`) – Waveform in `[-1, 1]` (mono or `(frames, channels)`).
-  * **sample_rate** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Sample rate in Hz.
+  * **sample_rate** (`int`) – Sample rate in Hz.
   * **thresholds** ([`QCThresholds`](#foley.qc.QCThresholds)) – Overridable QC thresholds (defaults to shipped values).
 * **Return type:**
   [`QCReport`](#foley.qc.QCReport)
@@ -231,4 +231,4 @@ peak magnitude is taken across all channels, and converted to dBTP. Returns
 symmetry (FFT interpolation is rate-independent).
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`

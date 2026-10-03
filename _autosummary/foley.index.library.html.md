@@ -35,7 +35,7 @@ in-memory, LanceDB, or sqlite backends, or between local and cloud storage.
 
 ### *class* foley.index.library.SoundLibrary(, sounds=None, meta=None, vindex=None, kindex=None, embedder=None, data_dir=None, candidate_k=50, rrf_k=60)
 
-Bases: [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)
+Bases: `Mapping`
 
 A searchable, license-aware library of sounds (the foley INDEX façade).
 
@@ -61,16 +61,16 @@ producing backend-dependent search results).
 * **Parameters:**
   * **record** ([`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)) – The record to add (mutated by `store_sound` with resolved
     storage fields, and stamped with the embedding model/dim).
-  * **data** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]) – The archive bytes (required for by-value storage; also the
+  * **data** (`Optional`[`bytes`]) – The archive bytes (required for by-value storage; also the
     source for computing `vector` when it is not supplied).
-  * **vector** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
+  * **vector** (`Optional`[`ndarray`]) – A precomputed CLAP embedding; when omitted and `data` is
     given, it is computed via the library’s embedder.
 * **Return type:**
   [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)
 * **Returns:**
   The same (persisted, indexed) `record`.
 * **Raises:**
-  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If neither `data` nor `vector` is provided (no way to
+  **ValueError** – If neither `data` nor `vector` is provided (no way to
       obtain an embedding).
 
 #### array(sound_id, , sr=None, mono=True)
@@ -78,9 +78,9 @@ producing backend-dependent search results).
 Decode a sound to a working array (`float32`).
 
 * **Parameters:**
-  * **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
-  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Target sample rate (default: the working rate, 48 kHz).
-  * **mono** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Down-mix to mono (default `True`).
+  * **sound_id** (`str`) – The record id.
+  * **sr** (`Optional`[`int`]) – Target sample rate (default: the working rate, 48 kHz).
+  * **mono** (`bool`) – Down-mix to mono (default `True`).
 * **Return type:**
   `ndarray`
 * **Returns:**
@@ -92,17 +92,17 @@ Return a sound’s archive bytes (by-value from the store, or from a
 local by-reference path).
 
 * **Parameters:**
-  **sound_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The record id.
+  **sound_id** (`str`) – The record id.
 * **Return type:**
-  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
+  `bytes`
 * **Returns:**
   The raw archive bytes.
 * **Raises:**
-  [**LookupError**](https://docs.python.org/3/builtins/exceptions.html#LookupError) – If the bytes are neither cached (by-value) nor readable
+  **LookupError** – If the bytes are neither cached (by-value) nor readable
       from a local `uri` — a remote by-reference sound needs its
       source adapter (subtask #5) to fetch.
 
-#### *property* data_dir *: [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path)*
+#### *property* data_dir *: Path*
 
 The data root for default stores/index.
 
@@ -119,7 +119,7 @@ Accepts the same facet keywords as [`search()`](#foley.index.library.SoundLibrar
 plus any `record_attr=value` equality predicate.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)]
+  `list`[[`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)]
 
 #### *property* kindex
 
@@ -134,18 +134,18 @@ The metadata store (`id -> SoundRecord`).
 Hybrid (CLAP vector ⊕ BM25) search for a text query.
 
 * **Parameters:**
-  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The natural-language query.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results to return.
-  * **filters** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Extra `{record_attr: value}` equality predicates.
-  * **commercial_ok** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – If `True`, keep only commercially-usable sounds.
-  * **ucs_category** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Keep only sounds with this UCS CatID.
-  * **min_snr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Keep only sounds whose QC `snr_db` is at least this.
-  * **duration_range** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – Keep only sounds whose `duration_s` is in
+  * **query** (`str`) – The natural-language query.
+  * **k** (`int`) – Number of results to return.
+  * **filters** (`Optional`[`dict`]) – Extra `{record_attr: value}` equality predicates.
+  * **commercial_ok** (`Optional`[`bool`]) – If `True`, keep only commercially-usable sounds.
+  * **ucs_category** (`Optional`[`str`]) – Keep only sounds with this UCS CatID.
+  * **min_snr** (`Optional`[`float`]) – Keep only sounds whose QC `snr_db` is at least this.
+  * **duration_range** (`Optional`[`tuple`[`float`, `float`]]) – Keep only sounds whose `duration_s` is in
     `(min, max)`.
-  * **rerank** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Re-order the shortlist by direct query<->audio cosine
+  * **rerank** (`bool`) – Re-order the shortlist by direct query<->audio cosine
     (fills the CLAP score for keyword-only hits).
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.html.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -160,12 +160,12 @@ Hybrid (CLAP vector ⊕ BM25) search for a text query.
 Search by a reference audio clip (audio<->audio via CLAP).
 
 * **Parameters:**
-  * **clip** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A working array, or a path/bytes/file decodable by
+  * **clip** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A working array, or a path/bytes/file decodable by
     [`foley.audio.load()`](foley.audio.html.md#foley.audio.load).
-  * **sr** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Sample rate when `clip` is already a working array.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results.
+  * **sr** (`Optional`[`int`]) – Sample rate when `clip` is already a working array.
+  * **k** (`int`) – Number of results.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.html.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.html.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` :class:
 
@@ -183,7 +183,7 @@ Uses the stored vector (no re-decoding); the query sound itself is
 excluded from the results.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.html.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.html.md#foley.base.Candidate)]
 
 #### *property* sounds
 

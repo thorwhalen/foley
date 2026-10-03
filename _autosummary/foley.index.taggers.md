@@ -40,7 +40,7 @@ importing this module costs only the stdlib.
 
 ### *class* foley.index.taggers.ClapZeroShotTagger(, embedder=None, labels=None, prompt='this is a sound of {label}', threshold=0.0)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Zero-shot tagger: score a clip against a label set via CLAP cosine.
 
@@ -53,7 +53,7 @@ subcategory names (foley’s own vocabulary), so tags land in-taxonomy.
 
 The CLAP embedder (injected or the process-wide default).
 
-#### *property* labels *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[str](https://docs.python.org/3/builtins/stdtypes.html#str)]*
+#### *property* labels *: list[str]*
 
 natural UCS `category subcategory` phrases).
 
@@ -71,7 +71,7 @@ calibration (thresholds, label curation) is an eval-harness concern (#10).
 Return the top-`k` `(label, cosine)` tags for the clip, best first.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
 #### tag_vector(audio_vec, , top_k=10)
 
@@ -82,15 +82,15 @@ sound with this model, so on ingest the retrieval vector is reused here —
 no second CLAP forward pass.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
-### foley.index.taggers.PANNS_SAMPLE_RATE *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 32000*
+### foley.index.taggers.PANNS_SAMPLE_RATE *: int* *= 32000*
 
 PANNs CNN14 expects 32 kHz mono audio.
 
 ### *class* foley.index.taggers.PannsTagger(, device='cpu', threshold=0.1)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 PANNs CNN14 supervised tagger over the 527 AudioSet classes (`foley[tag]`).
 
@@ -103,9 +103,9 @@ The checkpoint auto-downloads to `~/panns_data` (~327 MB) on the first
 Return the top-`k` `(AudioSet label, score)` tags, best first.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+  `list`[`tuple`[`str`, `float`]]
 
-### foley.index.taggers.ZEROSHOT_PROMPT *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)* *= 'this is a sound of {label}'*
+### foley.index.taggers.ZEROSHOT_PROMPT *: str* *= 'this is a sound of {label}'*
 
 Prompt template for zero-shot CLAP tagging (report 03 Part 2).
 

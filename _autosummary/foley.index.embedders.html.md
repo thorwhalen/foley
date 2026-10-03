@@ -32,13 +32,13 @@ stdlib; the ~1.7 GB checkpoint loads on the first `embed_*` call.
 | [`ClapEmbedder`](#foley.index.embedders.ClapEmbedder)([model_id, device])   | LAION-CLAP text<->audio embedder (the default retrieval engine).   |
 |-------------------------------------------------------------------------------------|--------------------------------------------------------------------|
 
-### foley.index.embedders.CLAP_SAMPLE_RATE *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 48000*
+### foley.index.embedders.CLAP_SAMPLE_RATE *: int* *= 48000*
 
 Sample rate CLAP expects at its audio input (report 04 §1.2).
 
 ### *class* foley.index.embedders.ClapEmbedder(model_id='laion/larger_clap_general', , device=None)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 LAION-CLAP text<->audio embedder (the default retrieval engine).
 
@@ -54,11 +54,11 @@ The HF checkpoint id.
 
 The embedding dimensionality.
 
-#### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+#### *property* device *: str*
 
 The resolved torch device string (`'cuda'`/`'cpu'`).
 
-#### *property* dim *: [int](https://docs.python.org/3/builtins/functions.html#int)*
+#### *property* dim *: int*
 
 The embedding dimensionality (512 for the default; resolved for others).
 
@@ -76,7 +76,7 @@ via [`foley.audio`](foley.audio.html.md#module-foley.audio) before embedding.
 
 * **Parameters:**
   * **wav** (`ndarray`) – A working-array clip (`float32`; mono or multichannel).
-  * **sr** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The clip’s sample rate in Hz.
+  * **sr** (`int`) – The clip’s sample rate in Hz.
 * **Return type:**
   `ndarray`
 
@@ -87,14 +87,14 @@ Embed one or more query strings -> `(n_texts, dim)` L2-normalized.
 * **Return type:**
   `ndarray`
 
-### foley.index.embedders.DEFAULT_CLAP_DIM *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 512*
+### foley.index.embedders.DEFAULT_CLAP_DIM *: int* *= 512*
 
 `projection_dim=512`).
 
 * **Type:**
   Embedding width for the default checkpoint (verified
 
-### foley.index.embedders.DEFAULT_CLAP_MODEL_ID *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)* *= 'laion/larger_clap_general'*
+### foley.index.embedders.DEFAULT_CLAP_MODEL_ID *: str* *= 'laion/larger_clap_general'*
 
 The default CLAP checkpoint (LAION, Apache-2.0, general/environmental sound).
 

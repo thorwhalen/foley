@@ -45,18 +45,18 @@ Registry convention (arioso): the loader imports `adapter.Adapter`.
 
 ### *class* foley.sources.freesound.adapter.FreesoundAdapter(config=None, , api_key=None, http=None)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Live Freesound APIv2 retrieve adapter (a [`SourceAdapter`](foley.sources.base.md#foley.sources.base.SourceAdapter)).
 
 * **Parameters:**
-  * **config** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
+  * **config** (`Optional`[`dict`]) – The `SOURCE_CONFIG` (defaults to the module’s). Passed positionally
     by the registry’s lazy loader (the arioso `Adapter(config)` convention).
-  * **api_key** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The Freesound token. Defaults to `$FREESOUND_API_KEY`.
-  * **http** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Transport`](foley.sources.http.md#foley.sources.http.Transport)]) – The injected [`Transport`](foley.sources.http.md#foley.sources.http.Transport) (defaults to
+  * **api_key** (`Optional`[`str`]) – The Freesound token. Defaults to `$FREESOUND_API_KEY`.
+  * **http** (`Optional`[[`Transport`](foley.sources.http.md#foley.sources.http.Transport)]) – The injected [`Transport`](foley.sources.http.md#foley.sources.http.Transport) (defaults to
     [`requests_transport()`](foley.sources.http.md#foley.sources.http.requests_transport)); tests pass a fake.
 
-#### *property* api_key *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+#### *property* api_key *: str*
 
 The Freesound token (from the constructor or `$FREESOUND_API_KEY`).
 
@@ -65,24 +65,24 @@ The Freesound token (from the constructor or `$FREESOUND_API_KEY`).
 Return a sound’s transient preview bytes (token-tier; never cached).
 
 * **Parameters:**
-  * **source_id** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The Freesound id (either id form).
-  * **preview_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional known preview URL (from a prior search hit) — used
+  * **source_id** (`str`) – The Freesound id (either id form).
+  * **preview_url** (`Optional`[`str`]) – Optional known preview URL (from a prior search hit) — used
     directly to save a round-trip; otherwise the sound instance is
     fetched to resolve it.
 * **Return type:**
-  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
+  `bytes`
 * **Returns:**
   The preview audio bytes (embedded once, then discarded — see the
   by-reference storage contract).
 * **Raises:**
-  [**LookupError**](https://docs.python.org/3/builtins/exceptions.html#LookupError) – If the sound exposes no preview.
+  **LookupError** – If the sound exposes no preview.
 
 #### get(source_id)
 
 Resolve one Freesound id (`'12345'` or `'freesound:12345'`) to a record.
 
 * **Raises:**
-  [**LookupError**](https://docs.python.org/3/builtins/exceptions.html#LookupError) – If the sound’s license is not in the accepted allowlist.
+  **LookupError** – If the sound’s license is not in the accepted allowlist.
 * **Return type:**
   [`SoundRecord`](foley.base.md#foley.base.SoundRecord)
 
@@ -95,15 +95,15 @@ non-CC0 sounds never leave the server; every returned item is still
 re-checked fail-closed before it becomes a candidate.
 
 * **Parameters:**
-  * **license** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – License constraint. `'cc0'` (default) sends the CC0 filter;
+  * **license** (`str`) – License constraint. `'cc0'` (default) sends the CC0 filter;
     `None` sends none (the per-item guard still enforces the
     `accepted_license_ids` allowlist, so results stay CC0 for #5).
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max results (Freesound caps `page_size` at 150).
-  * **duration_range** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]) – Optional `(min_s, max_s)` native duration filter.
-  * **sort** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional native sort key (default: Freesound relevance).
+  * **k** (`int`) – Max results (Freesound caps `page_size` at 150).
+  * **duration_range** (`Optional`[`tuple`[`float`, `float`]]) – Optional `(min_s, max_s)` native duration filter.
+  * **sort** (`Optional`[`str`]) – Optional native sort key (default: Freesound relevance).
   * **\*\*kw** – Ignored extra affordances (`on_unsupported_param='warn'`).
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
 * **Returns:**
   Up to `k` [`Candidate`](foley.base.md#foley.base.Candidate)s (`origin=retrieved`),
   each carrying a by-reference [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord) and a

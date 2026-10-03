@@ -32,7 +32,7 @@ else falls back to the fake — the progressive-disclosure rule.
 
 ### *class* foley.weave.align.FakeAligner
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Deterministic, torch-free `Aligner` — evenly spaces the transcript’s words.
 
@@ -46,13 +46,13 @@ per whitespace token, spread uniformly across the clip’s duration (or at
 Return an evenly-spaced word timeline for `transcript` over `audio`’s duration.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  `list`[`dict`]
 
-### foley.weave.align.WHISPERX_SAMPLE_RATE *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 16000*
+### foley.weave.align.WHISPERX_SAMPLE_RATE *: int* *= 16000*
 
 WhisperX runs alignment at 16 kHz mono (its wav2vec2 CTC model’s native rate).
 
-### foley.weave.align.WORDS_PER_SECOND *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 2.5*
+### foley.weave.align.WORDS_PER_SECOND *: float* *= 2.5*
 
 Fallback speaking cadence used only when the clip’s duration is unknown
 (empty audio); otherwise [`FakeAligner`](#foley.weave.align.FakeAligner) spreads words across the real
@@ -60,7 +60,7 @@ audio duration so its timings are audio-length-aware.
 
 ### *class* foley.weave.align.WhisperXAligner(, model_size='small', device='cpu', batch_size=16)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The real ≈±50 ms `Aligner` (`foley[align]`) — faster-whisper ASR + wav2vec2 CTC.
 
@@ -68,13 +68,13 @@ Lazy-imports `whisperx` inside [`word_timeline()`](#foley.weave.align.WhisperXAl
 stays dol-only. Transcribes (if no transcript) then force-aligns at 16 kHz mono.
 
 * **Parameters:**
-  * **model_size** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – faster-whisper model name (`tiny`/`base`/`small`/…).
-  * **device** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'cpu'` or `'cuda'`.
-  * **batch_size** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Transcription batch size.
+  * **model_size** (`str`) – faster-whisper model name (`tiny`/`base`/`small`/…).
+  * **device** (`str`) – `'cpu'` or `'cuda'`.
+  * **batch_size** (`int`) – Transcription batch size.
 
 #### word_timeline(audio, sample_rate, , transcript=None, language='en')
 
 Force-align `audio` to its transcript, returning word-level timestamps.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  `list`[`dict`]

@@ -35,7 +35,7 @@ fail-closed license gate (`verify_match` asserts `candidate.license_ok` is `True
 
 ### *class* foley.eval.fit.FitReport(per_item=<factory>, fit_precision=0.0, fit_recall=0.0, fit_f1=0.0, fit_score=0.0, auto_accept_rate=0.0, n_accepted=0, n_confirmed=0, strata=<factory>, calibration=None, fidelity=<factory>, judge_model='', embedder_model_id='', seed=0, k=10, schema_version=1)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Tier-2 fit metrics over a stratified golden sample (JSON-friendly, mirrors `RetrievalReport`).
 
@@ -53,7 +53,7 @@ The committed fit-baseline stamp is deferred until real judges produce stable
 numbers; this ships the trend path only.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`
 
 #### gate(min_fit_precision)
 
@@ -63,14 +63,14 @@ Structural guarantee that Tier-2 is never a silent per-PR gate: CI passes no
 floor, so this is always `True`; only the nightly/pre-release runner sets one.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 ### foley.eval.fit.fit_f1(matches, relevants)
 
 The harmonic mean of [`fit_precision()`](#foley.eval.fit.fit_precision) and [`fit_recall()`](#foley.eval.fit.fit_recall).
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.fit.fit_precision(matches, relevants)
 
@@ -83,10 +83,10 @@ closed-form, and the decisive correctness oracle (the Ring-0 + fake-judge plumbi
 makes the end-to-end value tautological, so the metric math is tested in isolation).
 
 * **Parameters:**
-  * **matches** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Per-candidate fit-judge `match` booleans.
-  * **relevants** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Per-candidate gold-relevance booleans (grade ≥ 1).
+  * **matches** (`Sequence`[`bool`]) – Per-candidate fit-judge `match` booleans.
+  * **relevants** (`Sequence`[`bool`]) – Per-candidate gold-relevance booleans (grade ≥ 1).
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 * **Returns:**
   The fit precision in `[0, 1]` (`0.0` when nothing was accepted).
 
@@ -95,7 +95,7 @@ makes the end-to-end value tautological, so the metric math is tested in isolati
 `TP / (TP + FN)` — of the gold-relevant candidates, how many the judge confirmed.
 
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 
 ### foley.eval.fit.run_fit_eval(, golden=None, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), sample=None, strata_keys=('family', 'diegetic'), fit_judge=None, embedder=None, level=VerifyLevel.judge, seed=0, k=10)
 
@@ -110,23 +110,23 @@ fit-judge as an independent audit, and aggregates fit-precision/recall/F1 + fit-
 * **Parameters:**
   * **golden** – A pre-loaded golden list (default: load `golden_path`).
   * **golden_path** – The golden JSON (default: the bundled Ring-0 seed set).
-  * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The stratified sample cap (default: the whole set — the cost gate).
+  * **sample** (`Optional`[`int`]) – The stratified sample cap (default: the whole set — the cost gate).
   * **strata_keys** – The stratification axes (default `('family', 'diegetic')`).
   * **fit_judge** – The injected authoritative [`Judge`](foley.agent.protocols.md#foley.agent.protocols.Judge)
     (default: `foley.agent.verify._default_fit_judge()` — the hermetic fake
     when no audio-LM / key is available).
   * **embedder** – The Ring-0 text/​audio embedder (default: `HashingBowEmbedder`).
-  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](foley.base.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
+  * **level** (`str` | [`VerifyLevel`](foley.base.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
     (default `VerifyLevel.judge`). `'clap'` is rejected: it never invokes the
     fit-judge (it only re-runs the retrieval clap gate), so it cannot measure fit.
-  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sampling RNG seed.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The retrieval shortlist depth per event.
+  * **seed** (`int`) – The sampling RNG seed.
+  * **k** (`int`) – The retrieval shortlist depth per event.
 * **Return type:**
   [`FitReport`](#foley.eval.fit.FitReport)
 * **Returns:**
   A [`FitReport`](#foley.eval.fit.FitReport). Gating is the caller’s job via [`FitReport.gate()`](#foley.eval.fit.FitReport.gate).
 * **Raises:**
-  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `level` is `'clap'` (fit judging requires a listen/judge rung).
+  **ValueError** – If `level` is `'clap'` (fit judging requires a listen/judge rung).
 
 ### foley.eval.fit.stratified_sample(units, , strata_keys, sample, seed)
 
@@ -137,9 +137,9 @@ Round-robins across strata (so an easy family cannot dominate a capped sample);
 event_dict)`.
 
 * **Parameters:**
-  * **units** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)) – The full `(item, ev_idx, ev_dict)` unit list.
+  * **units** (`list`) – The full `(item, ev_idx, ev_dict)` unit list.
   * **strata_keys** – The stratification axes (e.g. `('family', 'diegetic')`).
-  * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The total draw size, or `None` for all.
-  * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The RNG seed (reproducibility).
+  * **sample** (`Optional`[`int`]) – The total draw size, or `None` for all.
+  * **seed** (`int`) – The RNG seed (reproducibility).
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+  `list`

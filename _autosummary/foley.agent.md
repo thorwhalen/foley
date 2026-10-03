@@ -53,7 +53,7 @@ verify + generate aggregate into a single reproducible run-manifest.
 
 ### *class* foley.agent.AnthropicDecomposer(, client=None, model='claude-opus-4-8', max_tokens=2000)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 LLM-backed decomposer (`foley[agent]`): Claude → a structured event list.
 
@@ -68,11 +68,11 @@ conventions (`claude-opus-4-8`, adaptive thinking — never `budget_tokens`).
 Call Claude and round-trip each event through `SoundEvent.from_dict()`.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
+  `list`[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
 
 ### *class* foley.agent.AnthropicJudge(, client=None, model='claude-opus-4-8', max_tokens=500)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 LLM arbiter for the `judge` rung (`foley[agent]`): Claude → a `Verdict`.
 
@@ -88,7 +88,7 @@ Call Claude to arbitrate the match; returns a `Verdict` at `level`.
 
 ### *class* foley.agent.AnthropicRefiner(, client=None, model='claude-opus-4-8', max_tokens=500)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 LLM-backed refiner (`foley[agent]`): Claude → a paraphrase list.
 
@@ -100,11 +100,11 @@ LLM-backed refiner (`foley[agent]`): Claude → a paraphrase list.
 Call Claude for `n` paraphrases; the original `query` is always first.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+  `list`[`str`]
 
 ### *class* foley.agent.AudioLMJudge(, pipeline=None, model='Qwen/Qwen2-Audio-7B-Instruct', max_tokens=300, tau=0.5)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The audio-LM `listen` rung (`foley[fit]`): Qwen2-Audio “does this contain {event}?”.
 
@@ -123,7 +123,7 @@ Listen to the clip and return the AQAScore `Verdict` (`P(yes) ≥ tau`).
 
 ### *class* foley.agent.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Bounded-cost accounting for the per-event refine/generate loops.
 
@@ -135,14 +135,14 @@ Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](#foley.a
 Whether a generation fallback is allowed and within budget.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 #### refine_ok()
 
 Whether another refine→re-retrieve pass is within budget.
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+  `bool`
 
 #### reset()
 
@@ -153,25 +153,25 @@ refine/generate spend never starves later events (the documented per-event
 semantics).
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### spend_gen()
 
 Charge one generation.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 #### spend_refine()
 
 Charge one refine loop.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
 ### *class* foley.agent.ClapJudge
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The zero-config `clap` rung: gate on the retrieval cosine (no ML, no network).
 
@@ -187,19 +187,19 @@ Return the `clap`-rung `Verdict` for `candidate`.
 
 ### *class* foley.agent.DecideAction(\*values)
 
-Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+Bases: `str`, `Enum`
 
 What [`decide()`](#foley.agent.decide) chose for one event (the single branch’s outcomes).
 
 ### *class* foley.agent.Decision(action, candidate=None, reason='')
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 The tiny result of [`decide()`](#foley.agent.decide); `reason` feeds the refine hint + the audit Step.
 
 ### *class* foley.agent.Decomposer(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 Narrative context → a sparse, salience-ranked, diegetic-tagged event list.
 
@@ -210,7 +210,7 @@ The default is the deterministic [`KeywordDecomposer`](foley.agent.decompose.md#
 
 ### *class* foley.agent.Judge(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 One rung of the verify ladder: does this candidate match this event? (report 10 §4.2).
 
@@ -221,7 +221,7 @@ returned `Verdict` carries `level` == the rung that produced it. Only the
 
 ### *class* foley.agent.KeywordDecomposer
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Deterministic cue-lexicon decomposer — the zero-dependency default and CI fake.
 
@@ -235,16 +235,16 @@ budget). No RNG, no network, no `anthropic` — same passage → identical list.
 Return `<= max_events` deterministic `SoundEvent`s for `context`.
 
 * **Parameters:**
-  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
-  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap (the salience budget).
-  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Accepted for signature parity (the per-second density window is a
+  * **context** (`str`) – The narrative passage.
+  * **max_events** (`int`) – The sparse density cap (the salience budget).
+  * **seconds** (`Optional`[`float`]) – Accepted for signature parity (the per-second density window is a
     later refinement); ignored here.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
+  `list`[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
 
 ### *class* foley.agent.KeywordRefiner
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Deterministic template-expansion refiner — the default and CI fake.
 
@@ -257,15 +257,15 @@ query → identical paraphrase list.
 Return up to `n` distinct paraphrases of `query` (the first is `query`).
 
 * **Parameters:**
-  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The event query to expand.
-  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – How many paraphrases to return (2–4 is typical).
-  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional verify-failure reason to steer re-retrieval.
+  * **query** (`str`) – The event query to expand.
+  * **n** (`int`) – How many paraphrases to return (2–4 is typical).
+  * **hint** (`Optional`[`str`]) – Optional verify-failure reason to steer re-retrieval.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+  `list`[`str`]
 
 ### *class* foley.agent.Refiner(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 One event query → 2–4 paraphrases/expansions (query-expansion for retrieval).
 
@@ -276,7 +276,7 @@ is a later drop-in behind this same seam). The default is the deterministic
 
 ### *class* foley.agent.StringOverlapJudge(, threshold=0.3)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Deterministic stand-in for the `listen`/`judge` rungs (the hermetic CI fake).
 
@@ -310,11 +310,11 @@ Policy (report 05 §4):
 >   generation is off, in which case fall back to that best-effort pick.
 * **Parameters:**
   * **event** ([`SoundEvent`](foley.base.md#foley.base.SoundEvent)) – The event being resolved.
-  * **kept** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
-  * **verified** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
-  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The confidence threshold for auto-accepting a retrieved clip.
+  * **kept** (`list`[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The license-clean candidates (each `license_ok is True`).
+  * **verified** (`list`[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The subset of `kept` whose verdict matched.
+  * **tau_retrieve** (`float`) – The confidence threshold for auto-accepting a retrieved clip.
   * **budget** ([`Budget`](foley.agent.policy.md#foley.agent.policy.Budget)) – The per-event cost budget.
-  * **loop** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The current refine-loop index (for the audit reason).
+  * **loop** (`int`) – The current refine-loop index (for the audit reason).
 * **Return type:**
   [`Decision`](foley.agent.policy.md#foley.agent.policy.Decision)
 * **Returns:**
@@ -329,14 +329,14 @@ default decomposer when `decomposer` is `None`, calls it, and records the GenAI
 span on the real path (the fake’s `last_response` is `None` → no-op).
 
 * **Parameters:**
-  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
-  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap.
-  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded, else ignored).
-  * **decomposer** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer) (the DI seam);
+  * **context** (`str`) – The narrative passage.
+  * **max_events** (`int`) – The sparse density cap.
+  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded, else ignored).
+  * **decomposer** (`Optional`[[`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer)]) – An injected [`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer) (the DI seam);
     defaults to `_default_decomposer()`.
   * **\_span** – Internal — the obs span handle `find()` opens for GenAI recording.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
+  `list`[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
 
 ### foley.agent.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None)
 
@@ -348,27 +348,27 @@ fail-closed license gate FIRST) → place` (report 05 §5). Works out of the box
 deterministic defaults; every model / threshold / seam is an optional keyword.
 
 * **Parameters:**
-  * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
-  * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap on decomposed events.
-  * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded).
-  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](foley.base.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
+  * **context** (`str`) – The narrative passage.
+  * **max_events** (`int`) – The sparse density cap on decomposed events.
+  * **seconds** (`Optional`[`float`]) – Optional passage duration (density-window hint; forwarded).
+  * **intended_use** (`Optional`[[`IntendedUse`](foley.base.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
     `IntendedUse` — `allow_voice_or_trademark` stays `False`).
-  * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
-  * **verify** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`VerifyLevel`](foley.base.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
-  * **stream** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, return a generator yielding one `Candidate` per
+  * **backend** (`str`) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
+  * **verify** (`Union`[`str`, [`VerifyLevel`](foley.base.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
+  * **stream** (`bool`) – If `True`, return a generator yielding one `Candidate` per
     resolved event; else return the collected `list`.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval shortlist depth per query.
-  * **tau_retrieve** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – Confidence threshold to auto-accept a retrieved clip.
-  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
-  * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
+  * **k** (`int`) – Retrieval shortlist depth per query.
+  * **tau_retrieve** (`float`) – Confidence threshold to auto-accept a retrieved clip.
+  * **tau_clap** (`float`) – The `clap`-rung gate threshold.
+  * **max_refine_loops** (`int`) – Max refine→re-retrieve passes per event (also the default
     [`Budget`](#foley.agent.Budget)).
-  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](foley.agent.policy.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](#foley.agent.Budget) (overrides `max_refine_loops`).
+  * **budget** (`Optional`[[`Budget`](foley.agent.policy.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](#foley.agent.Budget) (overrides `max_refine_loops`).
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
     each defaults to the hermetic fake when `foley[agent]` is absent.
 * **Return type:**
-  `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](foley.base.md#foley.base.Candidate)]]
+  `Union`[`list`[[`Candidate`](foley.base.md#foley.base.Candidate)], `Iterator`[[`Candidate`](foley.base.md#foley.base.Candidate)]]
 * **Returns:**
   `list[Candidate]` (`stream=False`) or an `Iterator[Candidate]`
   (`stream=True`) — one verified, license-clean candidate per resolved event.
@@ -384,10 +384,10 @@ the single rights-rejection point; [`verify_match()`](foley.agent.verify.md#fole
 its survivors are license-clean.
 
 * **Parameters:**
-  * **candidates** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The retrieved shortlist (`license_ok` typically `None`).
+  * **candidates** (`list`[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The retrieved shortlist (`license_ok` typically `None`).
   * **intended_use** ([`IntendedUse`](foley.base.md#foley.base.IntendedUse)) – The caller’s declared rights intent.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
 * **Returns:**
   The license-clean sublist (each with `license_ok is True`), order preserved.
 
@@ -421,8 +421,8 @@ reserved #8 `plan_ref` slot is filled when called inside an active `foley.obs`
 run scope (`None`-safe otherwise).
 
 * **Parameters:**
-  * **candidates** ([`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The candidates returned by [`find()`](#foley.agent.find).
-  * **transcript** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional narration transcript (WEAVE resolves the reference).
+  * **candidates** (`list`[[`Candidate`](foley.base.md#foley.base.Candidate)]) – The candidates returned by [`find()`](#foley.agent.find).
+  * **transcript** (`Optional`[`str`]) – Optional narration transcript (WEAVE resolves the reference).
 * **Return type:**
   [`SoundDesignTimeline`](foley.base.md#foley.base.SoundDesignTimeline)
 
@@ -431,14 +431,14 @@ run scope (`None`-safe otherwise).
 Expand `query` into up to `n` paraphrases for multi-query retrieval.
 
 * **Parameters:**
-  * **query** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The event query to expand.
-  * **n** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of paraphrases.
-  * **hint** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional verify-failure reason to steer re-retrieval.
-  * **refiner** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Refiner`](foley.agent.protocols.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](foley.agent.protocols.md#foley.agent.protocols.Refiner) (the DI seam);
+  * **query** (`str`) – The event query to expand.
+  * **n** (`int`) – Number of paraphrases.
+  * **hint** (`Optional`[`str`]) – Optional verify-failure reason to steer re-retrieval.
+  * **refiner** (`Optional`[[`Refiner`](foley.agent.protocols.md#foley.agent.protocols.Refiner)]) – An injected [`Refiner`](foley.agent.protocols.md#foley.agent.protocols.Refiner) (the DI seam);
     defaults to `_default_refiner()`.
   * **\_span** – Internal — the obs span handle for GenAI recording.
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+  `list`[`str`]
 
 ### foley.agent.search_sounds(queries, , k=10, library=None, filters=None)
 
@@ -450,12 +450,12 @@ and RRF-merges (`k=RRF_K`) — the query-expansion recall lever, exercised only 
 refine pass.
 
 * **Parameters:**
-  * **queries** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – One query string, or a list of paraphrases to merge.
-  * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Number of results.
+  * **queries** (`Union`[`str`, `list`[`str`]]) – One query string, or a list of paraphrases to merge.
+  * **k** (`int`) – Number of results.
   * **library** – Target library (default: the process-wide default).
-  * **filters** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Extra `SoundLibrary.search()` kwargs (e.g. the license prefilter).
+  * **filters** (`Optional`[`dict`]) – Extra `SoundLibrary.search()` kwargs (e.g. the license prefilter).
 * **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)]
+  `list`[[`Candidate`](foley.base.md#foley.base.Candidate)]
 
 ### foley.agent.verify_match(event, candidate, , level=VerifyLevel.clap, judge=None, tau_clap=0.35, \_span=None)
 
@@ -469,13 +469,13 @@ escalates to the injected/​default judge for that rung and returns *its* verdi
   * **event** ([`SoundEvent`](foley.base.md#foley.base.SoundEvent)) – The wanted `SoundEvent`.
   * **candidate** ([`Candidate`](foley.base.md#foley.base.Candidate)) – A **license-clean** `Candidate` — this MUST run after the
     [`gate_candidates()`](foley.agent.policy.md#foley.agent.policy.gate_candidates) gate (asserted).
-  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](foley.base.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
-  * **judge** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Judge`](foley.agent.protocols.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](foley.agent.protocols.md#foley.agent.protocols.Judge) for the higher rungs
+  * **level** (`str` | [`VerifyLevel`](foley.base.md#foley.base.VerifyLevel)) – The max rung to climb (`clap` | `listen` | `judge`).
+  * **judge** (`Optional`[[`Judge`](foley.agent.protocols.md#foley.agent.protocols.Judge)]) – An injected [`Judge`](foley.agent.protocols.md#foley.agent.protocols.Judge) for the higher rungs
     (the DI seam; defaults per `_default_judge()`).
-  * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The clap-gate threshold.
+  * **tau_clap** (`float`) – The clap-gate threshold.
   * **\_span** – Internal — the obs span handle for GenAI recording on the LLM rung.
 * **Raises:**
-  [**AssertionError**](https://docs.python.org/3/builtins/exceptions.html#AssertionError) – If `candidate.license_ok` is not `True` (verify-before-gate
+  **AssertionError** – If `candidate.license_ok` is not `True` (verify-before-gate
       is a bug — the license gate is the fail-closed first pass).
 * **Return type:**
   [`Verdict`](foley.base.md#foley.base.Verdict)

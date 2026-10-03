@@ -40,7 +40,7 @@ module costs only the stdlib.
 |----------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
 | [`IngestResult`](#foley.index.ingest.IngestResult)(id, status[, record, qc, ...]) | The outcome of ingesting one clip.                              |
 
-### foley.index.ingest.AUDIO_EXTS *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), ...]* *= ('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a')*
+### foley.index.ingest.AUDIO_EXTS *: tuple[str, ...]* *= ('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a')*
 
 Audio file extensions the folder walker ingests.
 
@@ -55,17 +55,17 @@ The rolled-up outcome of a folder ingest (JSON-serializable).
 Record a per-file error without aborting the run.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
-#### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](#foley.index.ingest.IngestResult)]*
+#### *property* errored *: list[[IngestResult](#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
 
-#### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](#foley.index.ingest.IngestResult)]*
+#### *property* ingested *: list[[IngestResult](#foley.index.ingest.IngestResult)]*
 
 Results that were added to the library (`pass` or `warn`).
 
-#### *property* quarantined *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](#foley.index.ingest.IngestResult)]*
+#### *property* quarantined *: list[[IngestResult](#foley.index.ingest.IngestResult)]*
 
 Results rejected by the QC gate.
 
@@ -74,13 +74,13 @@ Results rejected by the QC gate.
 Append one [`IngestResult`](#foley.index.ingest.IngestResult).
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+  `None`
 
-#### *property* rights_blocked *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](#foley.index.ingest.IngestResult)]*
+#### *property* rights_blocked *: list[[IngestResult](#foley.index.ingest.IngestResult)]*
 
 Results refused by the fail-closed AI-training/license rights gate.
 
-#### *property* skipped *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](#foley.index.ingest.IngestResult)]*
+#### *property* skipped *: list[[IngestResult](#foley.index.ingest.IngestResult)]*
 
 Results skipped as content-addressed duplicates.
 
@@ -89,7 +89,7 @@ Results skipped as content-addressed duplicates.
 A counts dict for a console/CLI summary.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  `dict`
 
 ### *class* foley.index.ingest.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
 
@@ -116,7 +116,7 @@ sets `license.c2pa_manifest_ref` in the same pass — see
 `foley.sources.generate.generate()`). Cheap-ish: it fully decodes `src`.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`
 
 ### foley.index.ingest.ingest_folder(path, , library=None, recursive=True, exts=('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a'), on_error='collect', \*\*ingest_one_kw)
 
@@ -125,9 +125,9 @@ Ingest every audio file under `path` and return an [`IngestReport`](#foley.index
 * **Parameters:**
   * **path** – A folder (walked) or a single audio file.
   * **library** – Target library (default: the process-wide default).
-  * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
-  * **exts** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Audio extensions to ingest.
-  * **on_error** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'collect'` records per-file errors and continues;
+  * **recursive** (`bool`) – Recurse into sub-folders.
+  * **exts** (`tuple`[`str`, `...`]) – Audio extensions to ingest.
+  * **on_error** (`str`) – `'collect'` records per-file errors and continues;
     `'raise'` re-raises the first error.
   * **\*\*ingest_one_kw** – Forwarded to [`ingest_one()`](#foley.index.ingest.ingest_one) (license, taggers, QC
     flags, …).
@@ -145,10 +145,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
 `SoundRecord` -> `SoundLibrary.add()`.
 
 * **Parameters:**
-  * **src** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes), [`BinaryIO`](https://docs.python.org/3/library/typing.html#typing.BinaryIO)]) – A path, `bytes`, or file-like audio source.
+  * **src** (`Union`[`str`, `PathLike`, `bytes`, `BinaryIO`]) – A path, `bytes`, or file-like audio source.
   * **library** – Target [`SoundLibrary`](foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
-  * **sound_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional canonical id override. Defaults to `None` → the
+  * **sound_id** (`Optional`[`str`]) – Optional canonical id override. Defaults to `None` → the
     content-hash of the decoded PCM (the local-ingest identity, used as the
     record `id` and dedup key). A live source adapter passes a short,
     case-stable, source-native id (e.g. `'freesound:12345'`) so dedup keys
@@ -157,29 +157,29 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     default and is not persisted. Separately, `content_sha256` records the
     hash of the stored FLAC **archive** bytes (set by `store_sound`), which
     is a different byte source from this PCM hash.
-  * **source_uri** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional by-reference fetchable URI override. Defaults to
+  * **source_uri** (`Optional`[`str`]) – Optional by-reference fetchable URI override. Defaults to
     `None` → the resolved local path when `src` is path-like. A live
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](foley.stores.html.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** (`Optional`[[`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
   * **tagger** – Supervised [`Tagger`](foley.index.protocols.html.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](foley.index.taggers.html.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
     [`default_zeroshot_tagger()`](foley.index.taggers.html.md#foley.index.taggers.default_zeroshot_tagger)).
   * **captioner** – Optional [`Captioner`](foley.index.protocols.html.md#foley.index.protocols.Captioner) (default:
     none — the caption stage is off unless one is injected).
-  * **do_qc** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Run the Tier-0 QC gate.
+  * **do_qc** (`bool`) – Run the Tier-0 QC gate.
   * **min_status** ([`QCStatus`](foley.qc.html.md#foley.qc.QCStatus)) – Admission floor — a QC status worse than this is quarantined
     (default `warn`: only `fail` clips are rejected).
-  * **do_caption** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Toggle each enrichment stage.
+  * **do_caption** (`bool`) – Toggle each enrichment stage.
   * **thresholds** ([`QCThresholds`](foley.qc.html.md#foley.qc.QCThresholds)) – QC thresholds.
-  * **store** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `False`, assemble the record but do not add it to the library
+  * **store** (`bool`) – If `False`, assemble the record but do not add it to the library
     (probe/QC/enrich only).
-  * **seed_tags** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
+  * **seed_tags** (`Optional`[`list`]) – Optional caller-supplied tags (e.g. a corpus’s folder-path
     taxonomy) unioned into the record’s `tags` alongside the
     supervised/zero-shot tags — so they feed the BM25 keyword index.
-  * **allow_ai_training_forbidden** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – The universal fail-closed rights gate. A
+  * **allow_ai_training_forbidden** (`bool`) – The universal fail-closed rights gate. A
     sound whose license has `ai_training_ok=False` (e.g. Sonniss,
     BBC RemArc) is refused with status `'rights_blocked'` *before* it is
     embedded or stored — CLAP-embedding-and-persisting is itself a form of
@@ -202,9 +202,9 @@ bulk-corpus adapters in [`foley.sources`](foley.sources.html.md#module-foley.sou
 
 * **Parameters:**
   * **path** – A folder (walked) or a single audio file.
-  * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
-  * **exts** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Audio extensions to include (lowercased suffix match).
+  * **recursive** (`bool`) – Recurse into sub-folders.
+  * **exts** (`tuple`[`str`, `...`]) – Audio extensions to include (lowercased suffix match).
 * **Yields:**
-  Each matching file as a [`pathlib.Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), in sorted order.
+  Each matching file as a `pathlib.Path`, in sorted order.
 * **Return type:**
-  [*Iterator*](https://docs.python.org/3/library/typing.html#typing.Iterator)[[*Path*](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]
+  *Iterator*[*Path*]

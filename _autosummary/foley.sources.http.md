@@ -44,21 +44,21 @@ Freesound fake transport) is unaffected.
 |---------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
 | [`Transport`](#foley.sources.http.Transport)(\*args, \*\*kwargs)  | A callable performing ONE HTTP request and returning a [`Response`](#foley.sources.http.Response). |
 
-### foley.sources.http.DEFAULT_TIMEOUT_S *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 30*
+### foley.sources.http.DEFAULT_TIMEOUT_S *: int* *= 30*
 
 Per-request timeout (seconds) for the default requests transport. A live
 adapter never blocks foley indefinitely on a hung connection.
 
 ### *class* foley.sources.http.Response(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 The minimal HTTP response surface an adapter needs.
 
 A structural subset of `requests.Response` — `requests` satisfies it with
 no wrapper, and a test double is a tiny dataclass with the same three members.
 
-#### content *: [bytes](https://docs.python.org/3/builtins/stdtypes.html#bytes)*
+#### content *: bytes*
 
 Raw response body bytes (used for audio/preview downloads).
 
@@ -67,15 +67,15 @@ Raw response body bytes (used for audio/preview downloads).
 Decode the response body as JSON.
 
 * **Return type:**
-  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+  `Any`
 
-#### status_code *: [int](https://docs.python.org/3/builtins/functions.html#int)*
+#### status_code *: int*
 
 HTTP status code (200 on success).
 
 ### *class* foley.sources.http.Transport(\*args, \*\*kwargs)
 
-Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol)
+Bases: `Protocol`
 
 A callable performing ONE HTTP request and returning a [`Response`](#foley.sources.http.Response).
 
@@ -92,11 +92,11 @@ fake-injection test path never needs an HTTP library at all. The returned
 `requests.Response` structurally satisfies [`Response`](#foley.sources.http.Response).
 
 * **Parameters:**
-  * **method** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – HTTP method (`'GET'` / `'POST'` …).
-  * **url** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The full request URL.
-  * **params** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional query-string parameters.
-  * **headers** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional request headers (e.g. the auth token).
-  * **json** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Optional JSON request body (POST), serialized by `requests`.
+  * **method** (`str`) – HTTP method (`'GET'` / `'POST'` …).
+  * **url** (`str`) – The full request URL.
+  * **params** (`Optional`[`dict`]) – Optional query-string parameters.
+  * **headers** (`Optional`[`dict`]) – Optional request headers (e.g. the auth token).
+  * **json** (`Optional`[`dict`]) – Optional JSON request body (POST), serialized by `requests`.
 * **Return type:**
   [`Response`](#foley.sources.http.Response)
 * **Returns:**

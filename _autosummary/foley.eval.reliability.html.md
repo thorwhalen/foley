@@ -33,13 +33,13 @@ this module keeps `import foley` dol-only (the same discipline as
 | [`AlphaResult`](#foley.eval.reliability.AlphaResult)(alpha, level, n_units, n_raters, ...)   | A judge-vs-human calibration record (surfaced as `FitReport.calibration`).   |
 |------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
 
-### foley.eval.reliability.ALPHA_RELIABLE *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 0.8*
+### foley.eval.reliability.ALPHA_RELIABLE *: float* *= 0.8*
 
 Krippendorff’s benchmark bands for a reliability coefficient (report 08 §2.3).
 
 ### *class* foley.eval.reliability.AlphaResult(alpha, level, n_units, n_raters, percent_agreement, band, promoted)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 A judge-vs-human calibration record (surfaced as `FitReport.calibration`).
 
@@ -59,7 +59,7 @@ reliable band — the model judge may then be trusted unattended on that slice.
   * **human_grades** – A 1-D per-unit human grade sequence, or a 2-D `(humans × units)`
     matrix (`nan` = missing).
   * **judge_grades** – The model judge’s 1-D per-unit grades (`nan` = missing).
-  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The measurement level (default `'ordinal'`).
+  * **level** (`str`) – The measurement level (default `'ordinal'`).
 * **Return type:**
   [`AlphaResult`](#foley.eval.reliability.AlphaResult)
 * **Returns:**
@@ -75,10 +75,10 @@ tolerated (units with < 2 ratings are dropped, no imputation). Pure numpy.
 
 * **Parameters:**
   * **reliability_data** – A 2-D array-like `(raters × units)`; `nan` = missing.
-  * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'ordinal'` (default) | `'nominal'` | `'interval'`.
+  * **level** (`str`) – `'ordinal'` (default) | `'nominal'` | `'interval'`.
   * **value_domain** – Optional explicit value set (for a label unobserved by some rater).
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 * **Returns:**
   α as a bare `float` (`1.0` when there is no expected disagreement, `D_e = 0`).
 
@@ -92,7 +92,7 @@ On foley’s skewed ‘most candidates irrelevant’ label distribution a chance
 * **Parameters:**
   **reliability_data** – A 2-D array-like `(raters × units)`; `nan` = missing.
 * **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+  `float`
 * **Returns:**
   The fraction of same-unit rater pairs that agree (`0.0` if no pairs).
 
@@ -101,9 +101,9 @@ On foley’s skewed ‘most candidates irrelevant’ label distribution a chance
 Map an α (or κ) to Krippendorff’s benchmark band.
 
 * **Parameters:**
-  **alpha** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A reliability coefficient in `(-∞, 1]`.
+  **alpha** (`float`) – A reliability coefficient in `(-∞, 1]`.
 * **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+  `str`
 * **Returns:**
   `'reliable'` (α ≥ 0.8), `'tentative'` (0.667 ≤ α < 0.8), else
   `'revise-rubric'`.

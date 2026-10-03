@@ -32,7 +32,7 @@ Default embedding width (matches the test `FakeEmbedder` for parity).
 
 ### *class* foley.eval.embedder.HashingBowEmbedder(, dim=64)
 
-Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+Bases: `object`
 
 Deterministic hashing bag-of-words text embedder (L2-normalized).
 
