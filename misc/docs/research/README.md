@@ -1,7 +1,7 @@
 # foley — research
 
 This folder is foley's research home (same convention as `arioso`'s `misc/docs/`).
-Twelve cited reports + a prompt library, all following the conventions below.
+Sixteen cited reports (13–16 are the October 2026 update) + a prompt library, all following the conventions below.
 
 ## Start here
 
@@ -30,6 +30,10 @@ Twelve cited reports + a prompt library, all following the conventions below.
 | 10 | [`10-facade-architecture.md`](10-facade-architecture.md) | **Authoritative architecture synthesis** (read first) |
 | 11 | [`11-bootstrap-corpora-benchmarks.md`](11-bootstrap-corpora-benchmarks.md) | Bootstrap corpora, benchmarks, and the golden eval set |
 | 12 | [`12-additional-dimensions.md`](12-additional-dimensions.md) | Meta-scan: the dimensions the other reports under-cover |
+| 13 | [`13-generation-targets-2026-10.md`](13-generation-targets-2026-10.md) | Oct 2026 delta: generation targets (SA3, fal, V2A, Mirelo/Sonilo, open models, procedural), jargon table |
+| 14 | [`14-source-targets-2026-10.md`](14-source-targets-2026-10.md) | Oct 2026 delta: search/library/corpus targets, clients and MCP servers, search + licence + industry jargon |
+| 15 | [`15-facade-audit-2026-10.md`](15-facade-audit-2026-10.md) | Facade audit of v0.0.26 against a 15-item checklist; the hand-off to `an`'s sounds store |
+| 16 | [`16-facade-interface-2026-10.md`](16-facade-interface-2026-10.md) | **Revised interface (Oct 2026)**: common verbs + canonical vocabulary, escape hatches, capability honesty, issue map. Read after 10 |
 
 ## Conventions
 
