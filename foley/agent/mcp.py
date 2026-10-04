@@ -15,6 +15,7 @@ and per-session :class:`foley.agent.session.SessionStore` (both injectable for t
 
 from __future__ import annotations
 
+import threading
 from typing import Optional
 
 from ..licensing import DEFAULT_INTENDED_USE, intended_use_for
@@ -50,6 +51,9 @@ def _configure(
         _STATE["budget"].max_usd = max_usd
 
 
+_BUDGET_LOCK = threading.Lock()
+
+
 def _server_budget():
     """The server's one spend budget: every paid call any tool makes counts against it.
 
@@ -61,10 +65,11 @@ def _server_budget():
     from ..cost import DEFAULT_MAX_USD
     from .policy import Budget
 
-    if _STATE["budget"] is None:
-        cap = _STATE["max_usd"]
-        _STATE["budget"] = Budget(max_usd=DEFAULT_MAX_USD if cap is None else cap)
-    return _STATE["budget"]
+    with _BUDGET_LOCK:  # tools run in a threadpool: one budget, even on a first burst
+        if _STATE["budget"] is None:
+            cap = _STATE["max_usd"]
+            _STATE["budget"] = Budget(max_usd=DEFAULT_MAX_USD if cap is None else cap)
+        return _STATE["budget"]
 
 
 def _lib():

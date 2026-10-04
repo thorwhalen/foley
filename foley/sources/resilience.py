@@ -244,4 +244,8 @@ def make_resilient_transport_from_config(config: dict, *, base=None, **inject):
         base = requests_transport
     paid = (config.get("pricing") or {}).get("unit") != "free"
     inject.setdefault("resend_after_transport_error", not paid)
+    if paid and "retry" not in inject:
+        # A gateway 502 / 504 can come after the provider accepted (and billed) the
+        # request; only answers that mean "not processed" are retried for a paid source.
+        inject["retry"] = RetryPolicy(retry_on=(429, 500, 503))
     return resilient(base, rate=config.get("rate"), **inject)

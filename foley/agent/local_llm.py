@@ -41,10 +41,18 @@ def _make_client(base_url: Optional[str] = None, api_key: Optional[str] = None):
     """Build an OpenAI client pointed at the local endpoint (lazy ``openai`` import)."""
     import openai  # lazy: foley[local-llm]
 
+    from urllib.parse import urlparse
+
+    from .llm import is_loopback_host
+
+    url = base_url or os.environ.get("FOLEY_LLM_BASE_URL")
+    on_device = is_loopback_host(urlparse(url or "").hostname)
     return openai.OpenAI(
-        base_url=base_url or os.environ.get("FOLEY_LLM_BASE_URL"),
+        base_url=url,
         # local servers ignore the key but the client requires a non-empty one
         api_key=api_key or os.environ.get("FOLEY_LLM_API_KEY") or "local",
+        # a remote endpoint may bill: never re-send under one approval
+        max_retries=2 if on_device else 0,
     )
 
 

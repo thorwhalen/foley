@@ -333,8 +333,12 @@ def record_generation_outcome(plan: GenerationPlan, status: str, *, cache=None) 
     cache no more: the next identical request generates anew. Its bytes stay
     retrievable under the content key.
     """
-    if plan.request_key is None or plan.cached is not None:
+    if plan.request_key is None:
         return
+    if plan.cached is not None:
+        if status != "error":
+            return
+        status = "error_on_replay"
     cache = cache if cache is not None else _default_cache()
     try:
         entry = dict(cache.requests[plan.request_key])
@@ -369,12 +373,13 @@ def _store_clip(cache, plan: GenerationPlan, clip) -> None:
     }
 
 
-#: Ingest outcomes after which a cached generation is not replayed: only a QC
-#: rejection, which is about the bytes themselves. An ingest error (a library write,
-#: a credential build) or a rights refusal (decided by the request, which is in the
-#: key) would come out the same — or fail for reasons unrelated to the bytes — so the
-#: paid bytes are replayed rather than paid for again.
-_NOT_REPLAYED = frozenset({"quarantined"})
+#: Ingest outcomes after which a cached generation is not replayed. A QC rejection is
+#: about the bytes. An ingest error may not be (a library write, a credential build),
+#: so the paid bytes get one replay; if the replay fails too (``error_on_replay``),
+#: the bytes themselves are the likely cause (an HTTP 200 with a non-audio body) and
+#: the next identical request generates anew. A rights refusal is decided by the
+#: request (which is in the key), so it replays rather than paying for the same "no".
+_NOT_REPLAYED = frozenset({"quarantined", "error_on_replay"})
 
 
 def _cached_clip(cache, request_key: str, notes: list):

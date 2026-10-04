@@ -202,8 +202,15 @@ def authorize(estimate_usd: Optional[float], *, what: str) -> None:
     budgets = _budgets()
     for budget in budgets:
         budget.check(estimate_usd, what=what)
-    for budget in budgets:
-        budget.reserve(estimate_usd, what=what)
+    reserved = []
+    try:
+        for budget in budgets:
+            budget.reserve(estimate_usd, what=what)  # another thread may have got in
+            reserved.append(budget)
+    except BudgetExceeded:
+        for budget in reserved:  # never leave a half-reservation behind
+            budget.settle(estimate_usd, 0.0)
+        raise
 
 
 def settle(reserved_usd: Optional[float], actual_usd: Optional[float]) -> None:

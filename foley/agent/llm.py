@@ -230,15 +230,21 @@ def metered_create(client, *, sleep=None, **request):
     past its cap; afterwards the reservation becomes the actual cost from
     ``response.usage``. A request the API rejects (429 / 5xx — not billed) is retried
     up to :data:`METERED_ATTEMPTS` times. Anything else (a timeout, a dropped
-    connection) keeps the reservation — it may have been billed — and raises.
-    foley builds its own clients with ``max_retries=0`` so the SDK never re-sends a
-    request behind this accounting; an injected client's own retries are its owner's.
+    connection) keeps the reservation — it may have been billed — and raises. The SDK
+    never re-sends behind this accounting: foley builds its clients with
+    ``max_retries=0``, and an injected client is used through
+    ``with_options(max_retries=0)``. Tokens the API adds itself (structured-output
+    grammar, thinking) are not in the bound; :func:`~foley.cost.settle` records the
+    true cost from ``usage`` afterwards.
     """
     import json
     import time
 
     from ..cost import authorize, settle
 
+    with_options = getattr(client, "with_options", None)
+    if callable(with_options):  # an injected SDK client: no re-sends behind our back
+        client = with_options(max_retries=0)
     model = request.get("model")
     chars = len(json.dumps([request.get("system"), request.get("messages"),
                             request.get("output_config")], default=str))

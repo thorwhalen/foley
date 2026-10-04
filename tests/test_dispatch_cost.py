@@ -598,3 +598,76 @@ def test_an_over_budget_mcp_find_is_a_json_refusal(library, monkeypatch):
     rows = mcp.foley_find(DEMO)
     assert rows == [{"ok": False, "status": "refused", "error": rows[0]["error"]}]
     assert "cap" in rows[0]["error"]
+
+
+# ---------------------------------------------------------------------------
+# third review
+# ---------------------------------------------------------------------------
+
+
+def test_a_refused_reservation_leaves_no_half_reservation(monkeypatch):
+    from foley.cost import authorize, spend_scope
+
+    outer, inner = Budget(max_usd=10.0), Budget(max_usd=1.0)
+    with spend_scope(outer), spend_scope(inner):
+        real_reserve = inner.reserve
+
+        def raced(est, *, what):  # another thread filled the inner budget meanwhile
+            inner.charge(0.9)
+            real_reserve(est, what=what)
+
+        monkeypatch.setattr(inner, "reserve", raced)
+        with pytest.raises(BudgetExceeded):
+            authorize(0.5, what="a call")
+    assert outer.spent_usd == 0.0
+
+
+def test_bad_cached_bytes_are_replayed_at_most_once(library, paid_source,
+                                                    _in_memory_generations_cache, monkeypatch):
+    adapter = paid_source("badbytes", amount=0.05)
+    original = adapter.generate
+
+    def html_body(prompt, **kw):
+        clip = original(prompt, **kw)
+        clip.audio_bytes = b"<html>error</html>"
+        return clip
+
+    adapter.generate = html_body
+    for _ in range(3):
+        with pytest.raises(foley.GenerationError):
+            foley.generate("a door", backend="badbytes", library=library)
+    assert adapter.calls == 2  # paid, replayed once, then generated anew
+
+
+def test_paid_sources_do_not_retry_gateway_errors():
+    from foley.sources.resilience import make_resilient_transport_from_config
+
+    sent = []
+
+    class R:
+        status_code = 504
+        headers = {}
+
+    def gateway(method, url, **kw):
+        sent.append(method)
+        return R()
+
+    paid = make_resilient_transport_from_config(
+        {"rate": None, "pricing": {"unit": "per_call", "amount_usd": 1}},
+        base=gateway, sleep=lambda s: None)
+    paid("POST", "https://api.example/x")
+    assert sent == ["POST"]
+
+
+def test_an_injected_sdk_client_is_used_without_its_retries():
+    from foley.agent.llm import metered_create
+
+    seen = {}
+
+    class Client:
+        def with_options(self, **kw):
+            seen.update(kw)
+            return _fake_anthropic(calls=[])
+
+    metered_create(Client(), model="claude-opus-4-8", max_tokens=10, messages=[])
+    assert seen == {"max_retries": 0}
