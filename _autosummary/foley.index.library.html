@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../_static/documentation_options.js?v=828725f0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.index.ingest" href="foley.index.ingest.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -695,6 +695,22 @@ excluded from the results.</p>
 <dd><p>The content-addressed byte store.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.library.SoundLibrary.update_record">
+<span class="sig-name descname"><span class="pre">update_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/library.html#SoundLibrary.update_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.library.SoundLibrary.update_record" title="Link to this definition">#</a></dt>
+<dd><p>Rewrite a stored record’s metadata and re-index its keyword text.</p>
+<p>For corrections that do not touch the audio (a re-stamped licence, a removed
+caption): the bytes and the CLAP vector stay as they are.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#KeyError" title="(in Python v3.14)"><strong>KeyError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">record.id</span></code> is not in the library.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="foley.base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="foley.index.library.SoundLibrary.vindex">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">vindex</span></span><a class="headerlink" href="#foley.index.library.SoundLibrary.vindex" title="Link to this definition">#</a></dt>
@@ -776,6 +792,7 @@ excluded from the results.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.library.SoundLibrary.search_clip"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.search_clip()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.library.SoundLibrary.similar"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.similar()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.library.SoundLibrary.sounds"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.sounds</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.library.SoundLibrary.update_record"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.update_record()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.library.SoundLibrary.vindex"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.vindex</span></code></a></li>
 </ul>
 </li>

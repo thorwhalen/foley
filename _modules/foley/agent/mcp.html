@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../../../_static/documentation_options.js?v=828725f0"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -732,6 +732,8 @@ window.runMermaid = runMermaid;</script>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_INTENDED_USE</span><span class="p">,</span> <span class="n">intended_use_for</span>
+
 <span class="c1"># ---------------------------------------------------------------------------</span>
 <span class="c1"># injectable shared state (a default library + session factory; overridden in tests)</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -798,16 +800,48 @@ window.runMermaid = runMermaid;</script>
     <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span>
 
 
+<span class="c1">#: The rights fields every MCP candidate row carries (#63): the full TASL attribution</span>
+<span class="c1">#: (title is the row's caption) plus every derived permission flag, so an MCP caller can</span>
+<span class="c1">#: attribute and decide without a second lookup.</span>
+<span class="n">_LICENSE_ROW_FIELDS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"license_id"</span><span class="p">,</span>
+    <span class="s2">"license_name"</span><span class="p">,</span>
+    <span class="s2">"license_url"</span><span class="p">,</span>
+    <span class="s2">"creator_name"</span><span class="p">,</span>
+    <span class="s2">"creator_url"</span><span class="p">,</span>
+    <span class="s2">"source"</span><span class="p">,</span>
+    <span class="s2">"source_id"</span><span class="p">,</span>
+    <span class="s2">"source_url"</span><span class="p">,</span>
+    <span class="s2">"attribution_text"</span><span class="p">,</span>
+    <span class="s2">"requires_attribution"</span><span class="p">,</span>
+    <span class="s2">"commercial_ok"</span><span class="p">,</span>
+    <span class="s2">"embed_in_derivative_ok"</span><span class="p">,</span>
+    <span class="s2">"redistribute_standalone_ok"</span><span class="p">,</span>
+    <span class="s2">"cache_bytes_ok"</span><span class="p">,</span>
+    <span class="s2">"modification_ok"</span><span class="p">,</span>
+    <span class="s2">"ai_training_ok"</span><span class="p">,</span>
+    <span class="s2">"ai_training_scope"</span><span class="p">,</span>
+    <span class="s2">"revenue_cap_usd"</span><span class="p">,</span>
+    <span class="s2">"rights_verified"</span><span class="p">,</span>
+    <span class="s2">"is_ai_generated"</span><span class="p">,</span>
+    <span class="s2">"generator_model"</span><span class="p">,</span>
+    <span class="s2">"disclosure_recommended"</span><span class="p">,</span>
+<span class="p">)</span>
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_license_summary</span><span class="p">(</span><span class="n">lic</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""A compact, JSON-safe license summary (the fields an agent needs to decide)."""</span>
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">"license_id"</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">"license_id"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-        <span class="s2">"commercial_ok"</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">"commercial_ok"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-        <span class="s2">"requires_attribution"</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">"requires_attribution"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-        <span class="s2">"attribution_text"</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">"attribution_text"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-        <span class="s2">"redistribute_standalone_ok"</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">"redistribute_standalone_ok"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-        <span class="s2">"is_ai_generated"</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="s2">"is_ai_generated"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="sd">"""A JSON-safe licence row: full TASL + every derived flag (see ``_LICENSE_ROW_FIELDS``).</span>
+
+<span class="sd">    ``license_name`` / ``license_url`` fall back to the licence table's display row</span>
+<span class="sd">    when the source did not supply them, so attribution always has a deed to link.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">license_meta</span>
+
+    <span class="n">row</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="n">_enum</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_LICENSE_ROW_FIELDS</span><span class="p">}</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">license_meta</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"license_id"</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">"unknown"</span><span class="p">)</span>
+    <span class="n">row</span><span class="p">[</span><span class="s2">"license_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"license_name"</span><span class="p">]</span> <span class="ow">or</span> <span class="n">meta</span><span class="o">.</span><span class="n">display_name</span>
+    <span class="n">row</span><span class="p">[</span><span class="s2">"license_url"</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"license_url"</span><span class="p">]</span> <span class="ow">or</span> <span class="n">meta</span><span class="o">.</span><span class="n">url</span>
+    <span class="k">return</span> <span class="n">row</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_candidate_row</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -882,7 +916,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
     <span class="n">verify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"listen"</span><span class="p">,</span>
-    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_INTENDED_USE</span><span class="o">.</span><span class="n">commercial</span><span class="p">,</span>
     <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
@@ -892,7 +926,6 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    rehydrate them by id. Returns compact candidate rows.</span>
 <span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">find</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntendedUse</span>
 
     <span class="n">cands</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
         <span class="n">find</span><span class="p">(</span>
@@ -900,7 +933,7 @@ window.runMermaid = runMermaid;</script>
             <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span>
             <span class="n">verify</span><span class="o">=</span><span class="n">verify</span><span class="p">,</span>
             <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
-            <span class="n">intended_use</span><span class="o">=</span><span class="n">IntendedUse</span><span class="p">(</span><span class="n">commercial</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">),</span>
+            <span class="n">intended_use</span><span class="o">=</span><span class="n">intended_use_for</span><span class="p">(</span><span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">),</span>
             <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">(),</span>
         <span class="p">)</span>
     <span class="p">)</span>
@@ -914,7 +947,7 @@ window.runMermaid = runMermaid;</script>
 <span class="k">def</span><span class="w"> </span><span class="nf">foley_search</span><span class="p">(</span>
     <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_INTENDED_USE</span><span class="o">.</span><span class="n">commercial</span><span class="p">,</span>
     <span class="n">ucs_category</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">rerank</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
@@ -934,11 +967,20 @@ window.runMermaid = runMermaid;</script>
 
 <div class="viewcode-block" id="foley_similar_to">
 <a class="viewcode-back" href="../../../_autosummary/foley.agent.mcp.html#foley.foley_similar_to">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">foley_similar_to</span><span class="p">(</span><span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">foley_similar_to</span><span class="p">(</span>
+    <span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_INTENDED_USE</span><span class="o">.</span><span class="n">commercial</span><span class="p">,</span>
+    <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">""" "More like this" — the library neighbours of a sound (by id); returns candidate rows."""</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.preview</span><span class="w"> </span><span class="kn">import</span> <span class="n">similar_to</span>
 
     <span class="n">hits</span> <span class="o">=</span> <span class="n">similar_to</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">commercial_ok</span><span class="p">:</span>
+        <span class="n">hits</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">hits</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">commercial_ok</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">rights_verified</span>
+        <span class="p">]</span>
     <span class="n">_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">cache_candidates</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">_candidate_row</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">]</span></div>
 
@@ -1035,7 +1077,7 @@ window.runMermaid = runMermaid;</script>
 <span class="k">def</span><span class="w"> </span><span class="nf">foley_generate</span><span class="p">(</span>
     <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"stable_audio"</span><span class="p">,</span>
-    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_INTENDED_USE</span><span class="o">.</span><span class="n">commercial</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Generate a sound from a text prompt (local backends only when offline)."""</span>
@@ -1069,7 +1111,17 @@ window.runMermaid = runMermaid;</script>
             <span class="s2">"error"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">),</span>
             <span class="s2">"backend"</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span>
         <span class="p">}</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"ok"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"sound_ids"</span><span class="p">:</span> <span class="p">[</span><span class="n">cand</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="s2">"backend"</span><span class="p">:</span> <span class="n">backend</span><span class="p">}</span></div>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">keep</span>
+
+    <span class="n">usable</span> <span class="o">=</span> <span class="n">keep</span><span class="p">(</span><span class="n">cand</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="p">,</span> <span class="n">intended_use_for</span><span class="p">(</span><span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"ok"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"sound_ids"</span><span class="p">:</span> <span class="p">[</span><span class="n">cand</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">id</span><span class="p">],</span>
+        <span class="s2">"backend"</span><span class="p">:</span> <span class="n">backend</span><span class="p">,</span>
+        <span class="s2">"license_ok"</span><span class="p">:</span> <span class="n">usable</span><span class="p">,</span>  <span class="c1"># under this call's commercial_ok intent</span>
+        <span class="s2">"license"</span><span class="p">:</span> <span class="n">_license_summary</span><span class="p">(</span><span class="n">cand</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="p">),</span>
+        <span class="s2">"notes"</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">cand</span><span class="o">.</span><span class="n">notes</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cand</span><span class="p">,</span> <span class="s2">"notes"</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
+    <span class="p">}</span></div>
 
 
 
@@ -1211,7 +1263,7 @@ window.runMermaid = runMermaid;</script>
 <a class="viewcode-back" href="../../../_autosummary/foley.agent.mcp.html#foley.foley_score">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">foley_score</span><span class="p">(</span>
     <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">DEFAULT_INTENDED_USE</span><span class="o">.</span><span class="n">commercial</span><span class="p">,</span>
     <span class="n">verify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"listen"</span><span class="p">,</span>
     <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
@@ -1268,8 +1320,9 @@ window.runMermaid = runMermaid;</script>
 <span class="s2">    `stinger` = a sharp accent on a boundary; keep beds low and duck them under the voice.</span>
 <span class="s2">  - Salience: score a moment only if the sound adds meaning; leave quiet moments quiet.</span>
 <span class="s2">  - Onset: place a spot effect ON its trigger word; a bed spans its sentence.</span>
-<span class="s2">  - Licensing is load-bearing: only `license_ok` candidates are placed; set commercial_ok when the</span>
-<span class="s2">    output is published; check each row's `license` summary (attribution, redistribution).</span>
+<span class="s2">  - Licensing is load-bearing: only `license_ok` candidates are placed. Every tool assumes</span>
+<span class="s2">    commercial publishing (commercial_ok=True); pass commercial_ok=False only for a</span>
+<span class="s2">    non-commercial project. Each row's `license` carries full TASL + every rights flag.</span>
 <span class="s2">  - Loudness: the master profile ('podcast'/'streaming'/'broadcast_ebu') sets the delivery target.</span>
 
 <span class="s2">OFFLINE / SENSITIVE narration: run with the offline posture (foley_status shows it) — external</span>

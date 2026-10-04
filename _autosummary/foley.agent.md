@@ -351,8 +351,9 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
   * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap on decomposed events.
   * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded).
-  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](foley.base.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
-    `IntendedUse` — `allow_voice_or_trademark` stays `False`).
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](foley.base.md#foley.base.IntendedUse)]) – The caller’s rights intent (default:
+    [`foley.licensing.DEFAULT_INTENDED_USE`](foley.licensing.md#foley.licensing.DEFAULT_INTENDED_USE) — commercial publishing;
+    NC / SA material is refused unless you pass a different intent).
   * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
   * **verify** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`VerifyLevel`](foley.base.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
   * **stream** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, return a generator yielding one `Candidate` per

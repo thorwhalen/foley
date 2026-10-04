@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../../_static/documentation_options.js?v=828725f0"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -747,13 +747,12 @@ window.runMermaid = runMermaid;</script>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntendedUse</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.index.ingest</span><span class="w"> </span><span class="kn">import</span> <span class="n">IngestReport</span><span class="p">,</span> <span class="n">IngestResult</span><span class="p">,</span> <span class="n">ingest_one</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">derive_license_flags</span><span class="p">,</span> <span class="n">keep</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.index.ingest</span><span class="w"> </span><span class="kn">import</span> <span class="n">IngestReport</span><span class="p">,</span> <span class="n">IngestResult</span><span class="p">,</span> <span class="n">content_id</span><span class="p">,</span> <span class="n">ingest_one</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_INTENDED_USE</span><span class="p">,</span> <span class="n">derive_license_flags</span><span class="p">,</span> <span class="n">keep</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.sources.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">CorpusAdapter</span><span class="p">,</span> <span class="n">bulk_license</span><span class="p">,</span> <span class="n">select_corpora</span>
 
 <span class="c1">#: The intended use the Ring-1 commercial filter checks each clip against.</span>
-<span class="n">COMMERCIAL_USE</span> <span class="o">=</span> <span class="n">IntendedUse</span><span class="p">(</span><span class="n">commercial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">publish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">can_attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">COMMERCIAL_USE</span> <span class="o">=</span> <span class="n">DEFAULT_INTENDED_USE</span>  <span class="c1"># kept as an alias; the SSOT is foley.licensing</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MetadataCaptioner</span><span class="p">:</span>
@@ -818,19 +817,24 @@ window.runMermaid = runMermaid;</script>
     <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ingest_one_kw</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">min_status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">kw</span><span class="p">[</span><span class="s2">"min_status"</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_status</span>
+    <span class="c1"># Clips an older foley already stored from this corpus get their rights re-derived</span>
+    <span class="c1"># from the corpus metadata on a re-run (dedup alone would leave them as they were).</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">adapter</span><span class="p">,</span> <span class="s2">"source"</span><span class="p">,</span> <span class="n">adapter</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">has_prior</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">source</span> <span class="o">==</span> <span class="n">source</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">library</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
     <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">adapter</span><span class="o">.</span><span class="n">iter_clips</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
         <span class="n">lic</span> <span class="o">=</span> <span class="n">adapter</span><span class="o">.</span><span class="n">resolve_license</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
         <span class="c1"># Ring commercial filter: drop non-commercial / unverified clips fail-closed</span>
         <span class="c1"># BEFORE they are embedded (report only their provenance).</span>
-        <span class="k">if</span> <span class="n">commercial</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">keep</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="n">COMMERCIAL_USE</span><span class="p">):</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
-                <span class="n">IngestResult</span><span class="p">(</span>
-                    <span class="nb">id</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">source_id</span><span class="p">,</span>
-                    <span class="n">status</span><span class="o">=</span><span class="s2">"skipped_license"</span><span class="p">,</span>
-                    <span class="n">notes</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">"dropped: </span><span class="si">{</span><span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="si">}</span><span class="s2"> not commercial-use-clean"</span><span class="p">],</span>
-                <span class="p">)</span>
+        <span class="k">if</span> <span class="n">commercial</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">keep</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="n">DEFAULT_INTENDED_USE</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">IngestResult</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">source_id</span><span class="p">,</span>
+                <span class="n">status</span><span class="o">=</span><span class="s2">"skipped_license"</span><span class="p">,</span>
+                <span class="n">notes</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">"dropped: </span><span class="si">{</span><span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="si">}</span><span class="s2"> not commercial-use-clean"</span><span class="p">],</span>
             <span class="p">)</span>
+            <span class="k">if</span> <span class="n">has_prior</span><span class="p">:</span>
+                <span class="n">_repair_stored</span><span class="p">(</span><span class="n">library</span><span class="p">,</span> <span class="n">content_id</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="n">lic</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
             <span class="k">continue</span>
         <span class="n">captioner</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">MetadataCaptioner</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">"caption"</span><span class="p">])</span>
@@ -850,8 +854,41 @@ window.runMermaid = runMermaid;</script>
             <span class="n">res</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="s2">"AI-training restriction acknowledged by operator (consent recorded)"</span>
             <span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">"skipped_dup"</span><span class="p">:</span>
+            <span class="n">_repair_stored</span><span class="p">(</span><span class="n">library</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">lic</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
         <span class="n">report</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">report</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_repair_stored</span><span class="p">(</span><span class="n">library</span><span class="p">,</span> <span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lic</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">res</span><span class="p">:</span> <span class="n">IngestResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Re-stamp an already-stored clip from the corpus metadata (the #56 / #68 repair).</span>
+
+<span class="sd">    Libraries built before October 2026 hold Clotho clips as CC-BY-4.0 (some are</span>
+<span class="sd">    CC BY-NC 3.0), CC versions collapsed to 4.0, and the Public Domain Mark as verified</span>
+<span class="sd">    CC0; content dedup alone would keep them so. The corpus is the authority on its own</span>
+<span class="sd">    clips, so a re-run replaces the stored licence with the freshly resolved one and</span>
+<span class="sd">    removes a caption the corpus now withholds (Clotho's non-commercial captions).</span>
+<span class="sd">    """</span>
+    <span class="n">rec</span> <span class="o">=</span> <span class="n">library</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sound_id</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">library</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="s2">"get"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">old</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">license</span>
+    <span class="n">changes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">old</span><span class="o">.</span><span class="n">license_id</span><span class="p">,</span> <span class="n">old</span><span class="o">.</span><span class="n">rights_verified</span><span class="p">,</span> <span class="n">old</span><span class="o">.</span><span class="n">license_url</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span>
+        <span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="p">,</span>
+        <span class="n">lic</span><span class="o">.</span><span class="n">rights_verified</span><span class="p">,</span>
+        <span class="n">lic</span><span class="o">.</span><span class="n">license_url</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">lic</span><span class="o">.</span><span class="n">transformations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">old</span><span class="o">.</span><span class="n">transformations</span><span class="p">)</span>
+        <span class="n">rec</span><span class="o">.</span><span class="n">license</span> <span class="o">=</span> <span class="n">lic</span>
+        <span class="n">changes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"licence </span><span class="si">{</span><span class="n">old</span><span class="o">.</span><span class="n">license_id</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">withheld</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"withheld_caption"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">withheld</span> <span class="ow">and</span> <span class="n">rec</span><span class="o">.</span><span class="n">caption</span> <span class="o">==</span> <span class="n">withheld</span><span class="p">:</span>
+        <span class="n">rec</span><span class="o">.</span><span class="n">caption</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">changes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"non-commercial caption removed from the index"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">changes</span><span class="p">:</span>
+        <span class="n">library</span><span class="o">.</span><span class="n">update_record</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"re-stamped from corpus metadata: "</span> <span class="o">+</span> <span class="s2">"; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">changes</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="bootstrap">

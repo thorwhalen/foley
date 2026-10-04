@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../../../_static/documentation_options.js?v=828725f0"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -746,7 +746,12 @@ window.runMermaid = runMermaid;</script>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">ARCHIVE_FORMAT</span><span class="p">,</span> <span class="n">WORKING_SAMPLE_RATE</span><span class="p">,</span> <span class="n">encode</span><span class="p">,</span> <span class="n">load</span><span class="p">,</span> <span class="n">to_working</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AcquisitionMethod</span><span class="p">,</span> <span class="n">LicenseRecord</span><span class="p">,</span> <span class="n">SerializableMixin</span><span class="p">,</span> <span class="n">SoundRecord</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">apply_license_flags</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DEFAULT_INTENDED_USE</span><span class="p">,</span>
+    <span class="n">LICENSE_FLAGS</span><span class="p">,</span>
+    <span class="n">ai_use_permitted</span><span class="p">,</span>
+    <span class="n">apply_license_flags</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..qc</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_QC_THRESHOLDS</span><span class="p">,</span> <span class="n">QCStatus</span><span class="p">,</span> <span class="n">QCThresholds</span><span class="p">,</span> <span class="n">run_qc</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">content_key</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.taxonomy</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_catid</span>
@@ -972,21 +977,72 @@ window.runMermaid = runMermaid;</script>
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_default_user_license</span><span class="p">(</span><span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""The default license for a local ingest: user-owned =&gt; cacheable (by-value).</span>
+<span class="c1">#: Licence ids that can never be *asserted* as verified: ``unknown`` by definition,</span>
+<span class="c1">#: ``PDM-1.0`` (a claim about the work, not a grant — verify it by building the</span>
+<span class="c1">#: ``LicenseRecord`` yourself), and the legacy ``ElevenLabs-SFX`` row (say the plan).</span>
+<span class="n">UNASSERTABLE_LICENSE_IDS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"unknown"</span><span class="p">,</span> <span class="s2">"PDM-1.0"</span><span class="p">,</span> <span class="s2">"ElevenLabs-SFX"</span><span class="p">})</span>
 
-<span class="sd">    Routes through the ``license_id -&gt; flags`` SSOT (``'user-owned'``), so the</span>
-<span class="sd">    storage mode is derived, not hand-set. ``rights_verified=True`` because the</span>
-<span class="sd">    user is asserting ownership by ingesting their own files.</span>
+<span class="c1">#: The ids a caller may assert on ingest / restamp (``foley ingest --license``).</span>
+<span class="n">ASSERTABLE_LICENSE_IDS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">LICENSE_FLAGS</span><span class="p">)</span> <span class="o">-</span> <span class="n">UNASSERTABLE_LICENSE_IDS</span>
+
+<span class="c1">#: The note on every clip ingested without a licence (#55).</span>
+<span class="n">_UNKNOWN_LOCAL_NOTE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"rights unknown (no license given): indexed for local search only; foley.keep() "</span>
+    <span class="s2">"refuses it for every use until rights are asserted, e.g. "</span>
+    <span class="s2">"foley.ingest(path, license='user-owned') or `foley ingest PATH --license user-owned`"</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_now_iso</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">timespec</span><span class="o">=</span><span class="s2">"seconds"</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="resolve_ingest_license">
+<a class="viewcode-back" href="../../../_autosummary/foley.index.ingest.html#foley.resolve_ingest_license">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_ingest_license</span><span class="p">(</span>
+    <span class="n">license</span><span class="p">:</span> <span class="s2">"LicenseRecord | str | None"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The rights record for a local ingest: fail-closed unless rights are asserted (#55).</span>
+
+<span class="sd">    * ``None`` (no licence given) → ``license_id='unknown'``, ``rights_verified=False``:</span>
+<span class="sd">      :func:`foley.keep` refuses it for every use. The bytes are still kept locally</span>
+<span class="sd">      (``cache_bytes_ok=True``: it is the user's own disk, no terms of service apply),</span>
+<span class="sd">      so the clip is searchable and can be re-stamped later without re-ingesting.</span>
+<span class="sd">    * a ``str`` → that ``license_id``, which must be a :data:`LICENSE_FLAGS` row, with</span>
+<span class="sd">      ``rights_verified=True`` (the caller is asserting it) and ``verified_at`` set —</span>
+<span class="sd">      e.g. ``'user-owned'`` for the user's own recordings.</span>
+<span class="sd">    * a :class:`~foley.base.LicenseRecord` → used as given.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If a ``str`` licence id has no :data:`LICENSE_FLAGS` row.</span>
 <span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">license</span><span class="p">,</span> <span class="n">LicenseRecord</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">license</span>
+    <span class="k">if</span> <span class="n">license</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lic</span> <span class="o">=</span> <span class="n">LicenseRecord</span><span class="p">(</span>
+            <span class="n">source</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span>
+            <span class="n">source_url</span><span class="o">=</span><span class="n">source_url</span><span class="p">,</span>
+            <span class="n">license_id</span><span class="o">=</span><span class="s2">"unknown"</span><span class="p">,</span>
+            <span class="n">acquisition_method</span><span class="o">=</span><span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">rights_verified</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">apply_license_flags</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="p">{</span><span class="s2">"cache_bytes_ok"</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">license</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ASSERTABLE_LICENSE_IDS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"unknown license id </span><span class="si">{</span><span class="n">license</span><span class="si">!r}</span><span class="s2">; expected one of </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">ASSERTABLE_LICENSE_IDS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
     <span class="n">lic</span> <span class="o">=</span> <span class="n">LicenseRecord</span><span class="p">(</span>
         <span class="n">source</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span>
         <span class="n">source_url</span><span class="o">=</span><span class="n">source_url</span><span class="p">,</span>
-        <span class="n">license_id</span><span class="o">=</span><span class="s2">"user-owned"</span><span class="p">,</span>
+        <span class="n">license_id</span><span class="o">=</span><span class="n">license</span><span class="p">,</span>
         <span class="n">acquisition_method</span><span class="o">=</span><span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
         <span class="n">rights_verified</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">verified_at</span><span class="o">=</span><span class="n">_now_iso</span><span class="p">(),</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">apply_license_flags</span><span class="p">(</span><span class="n">lic</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">apply_license_flags</span><span class="p">(</span><span class="n">lic</span><span class="p">)</span></div>
+
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -1013,6 +1069,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">store</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">allow_ai_training_forbidden</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">seed_tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">commercial</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IngestResult</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Ingest one clip into ``library`` and return an :class:`IngestResult`.</span>
 
@@ -1038,7 +1095,10 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">            adapter passes the stable source page URL (e.g.</span>
 <span class="sd">            ``'https://freesound.org/s/12345/'``) that :func:`foley.stores.store_sound`</span>
 <span class="sd">            requires for a by-reference sound.</span>
-<span class="sd">        license: Rights record (default: a user-owned, cacheable license).</span>
+<span class="sd">        license: Rights record, or a ``license_id`` string the caller asserts</span>
+<span class="sd">            (``'user-owned'``), or ``None`` (default): rights **unknown**, so the clip</span>
+<span class="sd">            is indexed but :func:`foley.keep` refuses it (#55). See</span>
+<span class="sd">            :func:`resolve_ingest_license`.</span>
 <span class="sd">        tagger: Supervised :class:`~foley.index.protocols.Tagger` (default: PANNs</span>
 <span class="sd">            via :func:`~foley.index.taggers.default_tagger`).</span>
 <span class="sd">        zeroshot_tagger: Zero-shot tagger (default: CLAP via</span>
@@ -1063,6 +1123,9 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">            consent and admit it anyway (see :func:`foley.bootstrap.bootstrap`'s</span>
 <span class="sd">            ``accept_ai_restricted``). Protects every ingest path, not just</span>
 <span class="sd">            bootstrap.</span>
+<span class="sd">        commercial: Whether the AI use is for a commercial purpose (decides a</span>
+<span class="sd">            ``nc_open_source_only`` scope, #69). ``None`` (default) means</span>
+<span class="sd">            :data:`~foley.licensing.DEFAULT_INTENDED_USE`'s (commercial).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        An :class:`IngestResult`; its ``record`` is ``None`` when quarantined, a</span>
@@ -1111,14 +1174,26 @@ window.runMermaid = runMermaid;</script>
     <span class="c1"># unless the caller passes explicit consent. Guards every path into the</span>
     <span class="c1"># library, not just bootstrap (report 07; invariant #3 of foley-dev-implement).</span>
     <span class="n">ref_uri</span> <span class="o">=</span> <span class="n">source_uri</span> <span class="k">if</span> <span class="n">source_uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_reference_uri</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-    <span class="n">lic</span> <span class="o">=</span> <span class="n">license</span> <span class="k">if</span> <span class="n">license</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_default_user_license</span><span class="p">(</span><span class="n">ref_uri</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_ai_training_forbidden</span><span class="p">:</span>
+    <span class="n">local_default</span> <span class="o">=</span> <span class="n">license</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="n">lic</span> <span class="o">=</span> <span class="n">resolve_ingest_license</span><span class="p">(</span><span class="n">license</span><span class="p">,</span> <span class="n">source_url</span><span class="o">=</span><span class="n">ref_uri</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">local_default</span><span class="p">:</span>
+        <span class="n">notes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_UNKNOWN_LOCAL_NOTE</span><span class="p">)</span>
+    <span class="n">ai_ok</span> <span class="o">=</span> <span class="n">ai_use_permitted</span><span class="p">(</span>
+        <span class="n">lic</span><span class="p">,</span>
+        <span class="n">open_source_model</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">lib</span><span class="o">.</span><span class="n">embedder</span><span class="p">,</span> <span class="s2">"open_source"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+        <span class="n">commercial</span><span class="o">=</span><span class="n">DEFAULT_INTENDED_USE</span><span class="o">.</span><span class="n">commercial</span> <span class="k">if</span> <span class="n">commercial</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">commercial</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># A local file ingested without a licence is the user's own disk: indexing it for</span>
+    <span class="c1"># local search is not a use anyone has forbidden, so it proceeds — but keep()</span>
+    <span class="c1"># refuses it for every use, because its rights are unknown (#55).</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ai_ok</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">allow_ai_training_forbidden</span> <span class="ow">or</span> <span class="n">local_default</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">IngestResult</span><span class="p">(</span>
             <span class="nb">id</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span>
             <span class="n">status</span><span class="o">=</span><span class="s2">"rights_blocked"</span><span class="p">,</span>
             <span class="n">notes</span><span class="o">=</span><span class="p">[</span>
-                <span class="sa">f</span><span class="s2">"license </span><span class="si">{</span><span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="si">!r}</span><span class="s2"> forbids AI training; embed + persist "</span>
-                <span class="s2">"refused (set allow_ai_training_forbidden=True to consent)"</span>
+                <span class="sa">f</span><span class="s2">"license </span><span class="si">{</span><span class="n">lic</span><span class="o">.</span><span class="n">license_id</span><span class="si">!r}</span><span class="s2"> does not allow AI use here "</span>
+                <span class="sa">f</span><span class="s2">"(ai_training_ok=</span><span class="si">{</span><span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span><span class="si">}</span><span class="s2">, scope=</span><span class="si">{</span><span class="n">lic</span><span class="o">.</span><span class="n">ai_training_scope</span><span class="si">!r}</span><span class="s2">); "</span>
+                <span class="s2">"embed + persist refused (set allow_ai_training_forbidden=True to consent)"</span>
             <span class="p">],</span>
         <span class="p">)</span>
 
@@ -1335,6 +1410,210 @@ window.runMermaid = runMermaid;</script>
                 <span class="n">report</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
         <span class="n">run</span><span class="o">.</span><span class="n">set_ingest_report</span><span class="p">(</span><span class="n">ingest_digest</span><span class="p">(</span><span class="n">report</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">report</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Re-stamping stored rights (the migration for #55 / #56)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="is_legacy_default_user_owned">
+<a class="viewcode-back" href="../../../_autosummary/foley.index.ingest.html#foley.is_legacy_default_user_owned">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_legacy_default_user_owned</span><span class="p">(</span><span class="n">lic</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether ``lic`` is the ``user-owned`` stamp foley used to put on any unlicensed ingest.</span>
+
+<span class="sd">    Before #55, ``foley.ingest(path)`` with no licence stamped every file</span>
+<span class="sd">    ``user-owned`` + verified. An explicit assertion now also records ``verified_at``;</span>
+<span class="sd">    the old default never did, which is what tells them apart.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">lic</span><span class="o">.</span><span class="n">license_id</span> <span class="o">==</span> <span class="s2">"user-owned"</span>
+        <span class="ow">and</span> <span class="n">lic</span><span class="o">.</span><span class="n">source</span> <span class="o">==</span> <span class="s2">"user"</span>
+        <span class="ow">and</span> <span class="n">lic</span><span class="o">.</span><span class="n">acquisition_method</span> <span class="o">==</span> <span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">user</span>
+        <span class="ow">and</span> <span class="n">lic</span><span class="o">.</span><span class="n">verified_at</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="has_license_url">
+<a class="viewcode-back" href="../../../_autosummary/foley.index.ingest.html#foley.has_license_url">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">has_license_url</span><span class="p">(</span><span class="n">lic</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether ``lic`` kept the licence string its source served (re-derivable)."""</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">license_url</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="is_legacy_elevenlabs">
+<a class="viewcode-back" href="../../../_autosummary/foley.index.ingest.html#foley.is_legacy_elevenlabs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_legacy_elevenlabs</span><span class="p">(</span><span class="n">lic</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether ``lic`` is an ElevenLabs generation stamped before the plan was explicit (#56)."""</span>
+    <span class="k">return</span> <span class="n">lic</span><span class="o">.</span><span class="n">license_id</span> <span class="o">==</span> <span class="s2">"ElevenLabs-SFX"</span></div>
+
+
+
+<span class="c1">#: Named selections for :func:`restamp_rights` (``foley restamp-rights --select NAME``).</span>
+<span class="n">LEGACY_SELECTORS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"legacy-user-owned"</span><span class="p">:</span> <span class="n">is_legacy_default_user_owned</span><span class="p">,</span>
+    <span class="s2">"legacy-elevenlabs"</span><span class="p">:</span> <span class="n">is_legacy_elevenlabs</span><span class="p">,</span>
+    <span class="s2">"has-license-url"</span><span class="p">:</span> <span class="n">has_license_url</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1">#: ``restamp_rights(license=FROM_LICENSE_URL)``: re-derive each record's id from the</span>
+<span class="c1">#: licence URL / label its source served (kept in ``license_url``).</span>
+<span class="n">FROM_LICENSE_URL</span> <span class="o">=</span> <span class="s2">"from-url"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_source_overrides</span><span class="p">(</span><span class="n">lic</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">,</span> <span class="n">new_license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The flags that are facts about the SOURCE, so moving ``lic`` to a new id keeps them.</span>
+
+<span class="sd">    ``cache_bytes_ok`` is a terms-of-service fact (and the bytes are already stored or</span>
+<span class="sd">    referenced accordingly). An API source's ``ai_training_ok`` may carry the rights</span>
+<span class="sd">    holder's stated AI preference (Freesound ``gen_ai_preference``), so it can only be</span>
+<span class="sd">    kept or narrowed: it is the AND of the stored flag, the preference, and the new row.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AcquisitionMethod</span> <span class="k">as</span> <span class="n">_AM</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ai_scope_from_gen_ai_preference</span><span class="p">,</span> <span class="n">derive_license_flags</span>
+
+    <span class="n">overrides</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"cache_bytes_ok"</span><span class="p">:</span> <span class="n">lic</span><span class="o">.</span><span class="n">cache_bytes_ok</span><span class="p">}</span>
+    <span class="n">ai_ok</span><span class="p">,</span> <span class="n">_scope</span> <span class="o">=</span> <span class="n">ai_scope_from_gen_ai_preference</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">gen_ai_preference</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ai_ok</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">lic</span><span class="o">.</span><span class="n">acquisition_method</span> <span class="o">==</span> <span class="n">_AM</span><span class="o">.</span><span class="n">api</span><span class="p">:</span>
+        <span class="n">overrides</span><span class="p">[</span><span class="s2">"ai_training_ok"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">bool</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">ai_training_ok</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">ai_ok</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span>
+            <span class="ow">and</span> <span class="n">derive_license_flags</span><span class="p">(</span><span class="n">new_license_id</span><span class="p">)</span><span class="o">.</span><span class="n">ai_training_ok</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">overrides</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_restamped</span><span class="p">(</span><span class="n">lic</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">,</span> <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""A copy of ``lic`` under ``license_id``: flags re-derived, provenance + storage kept.</span>
+
+<span class="sd">    Source facts survive (:func:`_source_overrides`). ``rights_verified`` becomes</span>
+<span class="sd">    ``True`` with a ``verified_at`` stamp only for an assertable id</span>
+<span class="sd">    (:data:`ASSERTABLE_LICENSE_IDS`); ``unknown`` and ``PDM-1.0`` are unverified. When</span>
+<span class="sd">    the id changes, the old deed link and name are dropped (the credit then uses the</span>
+<span class="sd">    new id's row) and a source-declared attribution line for the new id is applied.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">replace</span>
+
+    <span class="n">changed</span> <span class="o">=</span> <span class="n">license_id</span> <span class="o">!=</span> <span class="n">lic</span><span class="o">.</span><span class="n">license_id</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="n">license_id</span><span class="o">=</span><span class="n">license_id</span><span class="p">,</span> <span class="n">transformations</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">transformations</span><span class="p">))</span>
+    <span class="n">apply_license_flags</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="n">_source_overrides</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="n">license_id</span><span class="p">))</span>
+    <span class="n">new</span><span class="o">.</span><span class="n">rights_verified</span> <span class="o">=</span> <span class="n">license_id</span> <span class="ow">in</span> <span class="n">ASSERTABLE_LICENSE_IDS</span>
+    <span class="n">new</span><span class="o">.</span><span class="n">verified_at</span> <span class="o">=</span> <span class="n">_now_iso</span><span class="p">()</span> <span class="k">if</span> <span class="n">new</span><span class="o">.</span><span class="n">rights_verified</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">changed</span><span class="p">:</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">license_url</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">license_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">new</span><span class="o">.</span><span class="n">attribution_text</span> <span class="o">=</span> <span class="n">_declared_attribution</span><span class="p">(</span><span class="n">license_id</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="kc">None</span> <span class="k">if</span> <span class="n">lic</span><span class="o">.</span><span class="n">requires_attribution</span> <span class="k">else</span> <span class="n">lic</span><span class="o">.</span><span class="n">attribution_text</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">new</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_declared_attribution</span><span class="p">(</span><span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""A credit line a source config declares for ``license_id`` (ElevenLabs free plan)."""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOURCE_REGISTRY</span><span class="p">,</span> <span class="n">discover_sources</span>
+
+    <span class="n">discover_sources</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">SOURCE_REGISTRY</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="p">((</span><span class="n">entry</span><span class="p">[</span><span class="s2">"config"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"license"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"plan_attribution"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">license_id</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">line</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_rederived_from_url</span><span class="p">(</span><span class="n">lic</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""``lic`` re-derived from its own ``license_url`` (the string its source served)."""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">replace</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">license_id_from_cc_url</span>
+
+    <span class="n">license_id</span><span class="p">,</span> <span class="n">verified</span> <span class="o">=</span> <span class="n">license_id_from_cc_url</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">license_url</span><span class="p">)</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="n">license_id</span><span class="o">=</span><span class="n">license_id</span><span class="p">,</span> <span class="n">transformations</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">lic</span><span class="o">.</span><span class="n">transformations</span><span class="p">))</span>
+    <span class="n">apply_license_flags</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="n">_source_overrides</span><span class="p">(</span><span class="n">lic</span><span class="p">,</span> <span class="n">license_id</span><span class="p">))</span>
+    <span class="n">new</span><span class="o">.</span><span class="n">rights_verified</span> <span class="o">=</span> <span class="n">verified</span>
+    <span class="k">return</span> <span class="n">new</span>
+
+
+<div class="viewcode-block" id="restamp_rights">
+<a class="viewcode-back" href="../../../_autosummary/foley.index.ingest.html#foley.restamp_rights">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">restamp_rights</span><span class="p">(</span>
+    <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">license</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"unknown"</span><span class="p">,</span>
+    <span class="n">ids</span><span class="p">:</span> <span class="s2">"Optional[list[str]]"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">where</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">select</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"legacy-user-owned"</span><span class="p">,</span>
+    <span class="n">apply</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"list[str]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Re-stamp the licence of stored sounds; a dry run unless ``apply=True``.</span>
+
+<span class="sd">    The migration for libraries built before #55 / #56. A re-ingest does not do it</span>
+<span class="sd">    (content-addressed dedup skips files already stored), so this rewrites the stored</span>
+<span class="sd">    records in place:</span>
+
+<span class="sd">    * ``foley restamp-rights --apply`` — every sound an older foley stamped</span>
+<span class="sd">      ``user-owned`` without being told becomes ``unknown`` (fail closed);</span>
+<span class="sd">    * ``foley restamp-rights --license user-owned --apply`` — the same sounds, but you</span>
+<span class="sd">      assert that you own them (now recorded with a ``verified_at`` timestamp);</span>
+<span class="sd">    * ``foley restamp-rights --select legacy-elevenlabs --license elevenlabs-paid-plan</span>
+<span class="sd">      --apply`` — ElevenLabs generations made before the plan was explicit;</span>
+<span class="sd">    * ``foley restamp-rights --select has-license-url --license from-url --apply`` —</span>
+<span class="sd">      every record that kept its source's licence string (Freesound pulls) is</span>
+<span class="sd">      re-derived by today's mapper (CC versions, PDM, NC spellings);</span>
+<span class="sd">    * corpus clips (Clotho, FSD50K) are repaired by re-running ``foley bootstrap``,</span>
+<span class="sd">      which re-stamps already-stored clips from the corpus metadata.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        library: The :class:`~foley.index.library.SoundLibrary` (default: the default one).</span>
+<span class="sd">        license: The ``license_id`` to stamp (a ``LICENSE_FLAGS`` row; default</span>
+<span class="sd">            ``'unknown'``), or :data:`FROM_LICENSE_URL` to re-derive each record from</span>
+<span class="sd">            its own ``license_url``.</span>
+<span class="sd">        ids: Re-stamp exactly these sound ids (overrides ``where`` / ``select``).</span>
+<span class="sd">        where: A predicate ``LicenseRecord -&gt; bool`` choosing the records (overrides</span>
+<span class="sd">            ``select``).</span>
+<span class="sd">        select: A :data:`LEGACY_SELECTORS` name (default ``'legacy-user-owned'``).</span>
+<span class="sd">        apply: Write the change. ``False`` (default) only reports what would change.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The ids that were (or, in a dry run, would be) re-stamped.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If ``license`` or ``select`` is unknown.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.library</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_library</span>
+
+    <span class="k">if</span> <span class="n">license</span> <span class="o">!=</span> <span class="n">FROM_LICENSE_URL</span> <span class="ow">and</span> <span class="n">license</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">LICENSE_FLAGS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown license id </span><span class="si">{</span><span class="n">license</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">where</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">select</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">LEGACY_SELECTORS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"select must be one of </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">LEGACY_SELECTORS</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">where</span> <span class="o">=</span> <span class="n">LEGACY_SELECTORS</span><span class="p">[</span><span class="n">select</span><span class="p">]</span>
+    <span class="n">lib</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
+    <span class="n">wanted</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="k">if</span> <span class="n">ids</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">changed</span><span class="p">:</span> <span class="s2">"list[str]"</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sid</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">lib</span><span class="o">.</span><span class="n">meta</span><span class="p">):</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">wanted</span><span class="p">)</span> <span class="k">if</span> <span class="n">wanted</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="ow">not</span> <span class="n">where</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">license</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">license</span> <span class="o">==</span> <span class="n">FROM_LICENSE_URL</span><span class="p">:</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="n">_rederived_from_url</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">license</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">new</span><span class="o">.</span><span class="n">license_id</span><span class="p">,</span> <span class="n">new</span><span class="o">.</span><span class="n">rights_verified</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span>
+                <span class="n">rec</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">license_id</span><span class="p">,</span>
+                <span class="n">rec</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">rights_verified</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="k">continue</span>  <span class="c1"># already what today's mapper says</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="n">_restamped</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">license</span><span class="p">,</span> <span class="n">license</span><span class="p">)</span>
+        <span class="n">changed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">apply</span><span class="p">:</span>
+            <span class="n">rec</span><span class="o">.</span><span class="n">license</span> <span class="o">=</span> <span class="n">new</span>
+            <span class="n">lib</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="n">rec</span>
+    <span class="k">return</span> <span class="n">changed</span></div>
 
 </pre></div>
 

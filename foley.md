@@ -1,4 +1,4 @@
-> built 2026-10-04 08:01 UTC from c6ab799 (main) · foley 0.0.28. Details: build_info.json
+> built 2026-10-04 08:24 UTC from 51e53f4 (main) · foley 0.0.29. Details: build_info.json
 
 # index.html.md
 
@@ -34,13 +34,13 @@ import foley
 candidates = foley.find("She pushed open the heavy oak door; rain hammered outside.")
 
 # Direct hybrid search of your library (text query or a reference clip)
-hits = foley.search("distant thunder rumble", k=10, commercial_ok=True)
+hits = foley.search("distant thunder rumble", k=10)  # commercial use is the default
 
 # Generate a sound when nothing fits (arioso-style; pluggable backends)
 clip = foley.generate("a single wooden door creak", backend="stable_audio", duration=3)
 
 # Grow the library — ingest auto-tags, captions, and embeds every file
-foley.ingest("~/my_sounds/")
+foley.ingest("~/my_sounds/", license="user-owned")  # omit it and rights stay unknown
 foley.add_from("freesound", query="ocean waves", license="cc0")
 
 # Compose: place the sounds under the narration (find → plan → weave)
@@ -589,8 +589,9 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
   * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap on decomposed events.
   * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded).
-  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
-    `IntendedUse` — `allow_voice_or_trademark` stays `False`).
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default:
+    [`foley.licensing.DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE) — commercial publishing;
+    NC / SA material is refused unless you pass a different intent).
   * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
   * **verify** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
   * **stream** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, return a generator yielding one `Candidate` per
@@ -979,7 +980,7 @@ and per-session [`foley.agent.session.SessionStore`](_autosummary/foley.agent.se
 | [`foley_search`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.foley_search)(query[, k, commercial_ok, ...])     | Hybrid (CLAP + keyword) search of the library for a text query; returns candidate rows.   |
 | [`foley_set_gain`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.foley_set_gain)(timeline, item_id, gain_db)       | Set a timeline item's gain (dB); returns the new timeline.                                |
 | [`foley_set_master`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.foley_set_master)(timeline[, target_lufs, ...])   | Set the timeline's master target (LUFS / true-peak); returns the new timeline.            |
-| [`foley_similar_to`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.foley_similar_to)(sound_id[, k, session])         | "More like this" — the library neighbours of a sound (by id); returns candidate rows.     |
+| [`foley_similar_to`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.foley_similar_to)(sound_id[, k, ...])             | "More like this" — the library neighbours of a sound (by id); returns candidate rows.     |
 | [`foley_status`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.foley_status)([session])                          | The current runtime posture + this session's pick/reject counts.                          |
 | [`foley_swap_clip`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.foley_swap_clip)(timeline, item_id, sound_id)     | Swap a timeline item's clip; returns the new timeline.                                    |
 | [`foley_timeline_captions`](_autosummary/foley.agent.mcp.html.md#foley.agent.mcp.foley_timeline_captions)(timeline[, fmt])         | Export SDH captions for a timeline (`fmt='vtt'` | `'srt'`).                               |
@@ -1025,7 +1026,7 @@ Remove a previously-picked sound from the session.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### foley.agent.mcp.foley_find(context, max_events=6, verify='listen', commercial_ok=False, k=10, session='default')
+### foley.agent.mcp.foley_find(context, max_events=6, verify='listen', commercial_ok=True, k=10, session='default')
 
 Find verified, license-clean sound candidates for a narrative passage.
 
@@ -1035,7 +1036,7 @@ rehydrate them by id. Returns compact candidate rows.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
-### foley.agent.mcp.foley_generate(prompt, backend='stable_audio', commercial_ok=False, session='default')
+### foley.agent.mcp.foley_generate(prompt, backend='stable_audio', commercial_ok=True, session='default')
 
 Generate a sound from a text prompt (local backends only when offline).
 
@@ -1106,7 +1107,7 @@ Reject a sound (feeds `foley_refine` relevance feedback).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### foley.agent.mcp.foley_score(context, commercial_ok=False, verify='listen', max_events=6, session='default')
+### foley.agent.mcp.foley_score(context, commercial_ok=True, verify='listen', max_events=6, session='default')
 
 Score a narration passage → an editable sound-design timeline + a per-event rationale.
 
@@ -1118,7 +1119,7 @@ clip, nudge an onset, drop a cue — before committing to a render.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### foley.agent.mcp.foley_search(query, k=10, commercial_ok=False, ucs_category=None, rerank=False, session='default')
+### foley.agent.mcp.foley_search(query, k=10, commercial_ok=True, ucs_category=None, rerank=False, session='default')
 
 Hybrid (CLAP + keyword) search of the library for a text query; returns candidate rows.
 
@@ -1142,7 +1143,7 @@ that field (so `peak_dbfs=-2.0` alone tightens only the true-peak ceiling).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### foley.agent.mcp.foley_similar_to(sound_id, k=10, session='default')
+### foley.agent.mcp.foley_similar_to(sound_id, k=10, commercial_ok=True, session='default')
 
 “More like this” — the library neighbours of a sound (by id); returns candidate rows.
 
@@ -1761,8 +1762,9 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
   * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap on decomposed events.
   * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded).
-  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
-    `IntendedUse` — `allow_voice_or_trademark` stays `False`).
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default:
+    [`foley.licensing.DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE) — commercial publishing;
+    NC / SA material is refused unless you pass a different intent).
   * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
   * **verify** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
   * **stream** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, return a generator yielding one `Candidate` per
@@ -2404,7 +2406,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Mix layer (shared by `SoundEvent` now and `TimelineItem` later).
 
-### *class* foley.base.LicenseRecord(source, source_id=None, source_url=None, acquisition_method=AcquisitionMethod.user, retrieved_at=None, adapter_version=None, content_sha256=None, license_id='unknown', license_name=None, license_version=None, license_url=None, rights_holder=None, creator_name=None, creator_url=None, commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, revenue_cap_usd=None, requires_attribution=False, attribution_text=None, notice_text_required=None, transformations=<factory>, is_ai_generated=False, generator_model=None, generator_version=None, generation_prompt=None, generation_seed=None, generation_params=<factory>, watermark=None, c2pa_manifest_ref=None, contains_recognizable_voice=False, potential_trademark=False, disclosure_recommended=False, rights_verified=False, verified_at=None, schema_version=1)
+### *class* foley.base.LicenseRecord(source, source_id=None, source_url=None, acquisition_method=AcquisitionMethod.user, retrieved_at=None, adapter_version=None, content_sha256=None, license_id='unknown', license_name=None, license_version=None, license_url=None, rights_holder=None, creator_name=None, creator_url=None, commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, ai_training_scope=None, gen_ai_preference=None, revenue_cap_usd=None, requires_attribution=False, attribution_text=None, notice_text_required=None, transformations=<factory>, is_ai_generated=False, generator_model=None, generator_version=None, generation_prompt=None, generation_seed=None, generation_params=<factory>, watermark=None, c2pa_manifest_ref=None, contains_recognizable_voice=False, potential_trademark=False, disclosure_recommended=False, rights_verified=False, verified_at=None, schema_version=1)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -4029,7 +4031,7 @@ lazy-imported inside the audio/QC functions that need them (install via the
 | [`to_working`](_autosummary/foley.html.md#foley.to_working)(samples, sample_rate, \*[, mono, ...])   | Produce the canonical CLAP/QC working array from an arbitrary clip.                                                                                                            |
 | [`default_library`](_autosummary/foley.html.md#foley.default_library)()                                   | The process-wide default library (local stores + CLAP + best index).                                                                                                           |
 | [`search`](_autosummary/foley.html.md#foley.search)(query, \*[, k, filters, ...])                | Hybrid (CLAP vector ⊕ BM25) search of the default library.                                                                                                                     |
-| [`similar`](_autosummary/foley.html.md#foley.similar)(sound_id, \*[, k])                          | Find sounds similar to a stored sound (audio<->audio) in the default library.                                                                                                  |
+| [`similar`](_autosummary/foley.html.md#foley.similar)(sound_id, \*[, k, commercial_ok])           | Find sounds similar to a stored sound (audio<->audio) in the default library.                                                                                                  |
 | [`default_embedder`](_autosummary/foley.html.md#foley.default_embedder)()                                  | Return a process-wide default [`ClapEmbedder`](_autosummary/foley.html.md#foley.ClapEmbedder) (loaded once, reused).                                                             |
 | [`default_index`](_autosummary/foley.html.md#foley.default_index)(\*, data_dir, dim)                    | Build the best available persistent index for a library.                                                                                                                       |
 | [`lancedb_available`](_autosummary/foley.html.md#foley.lancedb_available)()                                 | True if `lancedb` is importable (the `foley[index]` extra is present).                                                                                                         |
@@ -4043,6 +4045,7 @@ lazy-imported inside the audio/QC functions that need them (install via the
 | [`default_tagger`](_autosummary/foley.html.md#foley.default_tagger)()                                    | The default supervised tagger (PANNs CNN14; `foley[tag]`).                                                                                                                     |
 | [`default_zeroshot_tagger`](_autosummary/foley.html.md#foley.default_zeroshot_tagger)([embedder])                 | The default zero-shot tagger (CLAP vs UCS subcategories; `foley[clap]`).                                                                                                       |
 | [`ingest`](_autosummary/foley.html.md#foley.ingest)(path, \*[, library, backend, qc, ...])       | Ingest a folder (or single file) of sounds into the default library.                                                                                                           |
+| [`restamp_rights`](_autosummary/foley.html.md#foley.restamp_rights)([library, license, ids, ...])        | Re-stamp the licence of stored sounds; a dry run unless `apply=True`.                                                                                                          |
 | [`ingest_one`](_autosummary/foley.html.md#foley.ingest_one)(src, \*[, library, sound_id, ...])       | Ingest one clip into `library` and return an [`IngestResult`](_autosummary/foley.html.md#foley.IngestResult).                                                                    |
 | [`ingest_folder`](_autosummary/foley.html.md#foley.ingest_folder)(path, \*[, library, recursive, ...])  | Ingest every audio file under `path` and return an [`IngestReport`](_autosummary/foley.html.md#foley.IngestReport).                                                              |
 | [`bootstrap`](_autosummary/foley.html.md#foley.bootstrap)(\*[, rings, corpora, data_dir, ...])      | Seed `library` from the selected bulk corpora, returning per-corpus reports.                                                                                                   |
@@ -4297,6 +4300,12 @@ The HF checkpoint id.
 #### dim
 
 The embedding dimensionality.
+
+#### open_source
+
+Whether the checkpoint is an open-source model (the LAION
+releases are). Read by the ingest AI-use gate for sounds whose rights
+holder allows only open-source models (#69).
 
 #### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -4712,7 +4721,7 @@ the *permission* row consulted by [`keep()`](_autosummary/foley.html.md#foley.ke
 license authority; a record’s own `license_name` / `license_url` (when a
 source populated them) take precedence over this default.
 
-### *class* foley.LicenseRecord(source, source_id=None, source_url=None, acquisition_method=AcquisitionMethod.user, retrieved_at=None, adapter_version=None, content_sha256=None, license_id='unknown', license_name=None, license_version=None, license_url=None, rights_holder=None, creator_name=None, creator_url=None, commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, revenue_cap_usd=None, requires_attribution=False, attribution_text=None, notice_text_required=None, transformations=<factory>, is_ai_generated=False, generator_model=None, generator_version=None, generation_prompt=None, generation_seed=None, generation_params=<factory>, watermark=None, c2pa_manifest_ref=None, contains_recognizable_voice=False, potential_trademark=False, disclosure_recommended=False, rights_verified=False, verified_at=None, schema_version=1)
+### *class* foley.LicenseRecord(source, source_id=None, source_url=None, acquisition_method=AcquisitionMethod.user, retrieved_at=None, adapter_version=None, content_sha256=None, license_id='unknown', license_name=None, license_version=None, license_url=None, rights_holder=None, creator_name=None, creator_url=None, commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, ai_training_scope=None, gen_ai_preference=None, revenue_cap_usd=None, requires_attribution=False, attribution_text=None, notice_text_required=None, transformations=<factory>, is_ai_generated=False, generator_model=None, generator_version=None, generation_prompt=None, generation_seed=None, generation_params=<factory>, watermark=None, c2pa_manifest_ref=None, contains_recognizable_voice=False, potential_trademark=False, disclosure_recommended=False, rights_verified=False, verified_at=None, schema_version=1)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -5283,6 +5292,18 @@ excluded from the results.
 #### *property* sounds
 
 The content-addressed byte store.
+
+#### update_record(record)
+
+Rewrite a stored record’s metadata and re-index its keyword text.
+
+For corrections that do not touch the audio (a re-stamped licence, a removed
+caption): the bytes and the CLAP vector stay as they are.
+
+* **Raises:**
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If `record.id` is not in the library.
+* **Return type:**
+  [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)
 
 #### *property* vindex
 
@@ -6004,8 +6025,9 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **context** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The narrative passage.
   * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap on decomposed events.
   * **seconds** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Optional passage duration (density-window hint; forwarded).
-  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default: a conservative
-    [`IntendedUse`](_autosummary/foley.html.md#foley.IntendedUse) — `allow_voice_or_trademark` stays `False`).
+  * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The caller’s rights intent (default:
+    [`foley.licensing.DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE) — commercial publishing;
+    NC / SA material is refused unless you pass a different intent).
   * **backend** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Generation backend for the fallback (`'auto'` → `foley.generate`’s default).
   * **verify** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)]) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
   * **stream** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If `True`, return a generator yielding one [`Candidate`](_autosummary/foley.html.md#foley.Candidate) per
@@ -6146,7 +6168,10 @@ per-file options (`license`, taggers, `min_status`, …).
     signature for forward-compat.
   * **qc** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Run the Tier-0 QC gate (quarantines failing clips).
   * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
-  * **\*\*kw** – Forwarded to [`foley.index.ingest_one()`](_autosummary/foley.index.html.md#foley.index.ingest_one).
+  * **\*\*kw** – Forwarded to [`foley.index.ingest_one()`](_autosummary/foley.index.html.md#foley.index.ingest_one) — notably `license`:
+    omit it and the files’ rights are **unknown** (indexed, but
+    [`keep()`](_autosummary/foley.html.md#foley.keep) refuses them for every use); pass `license="user-owned"`
+    to assert you own them (#55).
 
 ### foley.ingest_folder(path, , library=None, recursive=True, exts=('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a'), on_error='collect', \*\*ingest_one_kw)
 
@@ -6166,7 +6191,7 @@ Ingest every audio file under `path` and return an [`IngestReport`](_autosummary
 * **Returns:**
   An [`IngestReport`](_autosummary/foley.html.md#foley.IngestReport) (with `.summary()` counts and per-file results).
 
-### foley.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None)
+### foley.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None, commercial=None)
 
 Ingest one clip into `library` and return an [`IngestResult`](_autosummary/foley.html.md#foley.IngestResult).
 
@@ -6192,7 +6217,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](_autosummary/foley.stores.html.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record, or a `license_id` string the caller asserts
+    (`'user-owned'`), or `None` (default): rights **unknown**, so the clip
+    is indexed but [`foley.keep()`](_autosummary/foley.html.md#foley.keep) refuses it (#55). See
+    `resolve_ingest_license()`.
   * **tagger** – Supervised [`Tagger`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](_autosummary/foley.index.taggers.html.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
@@ -6217,6 +6245,9 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     consent and admit it anyway (see `foley.bootstrap.bootstrap()`’s
     `accept_ai_restricted`). Protects every ingest path, not just
     bootstrap.
+  * **commercial** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Whether the AI use is for a commercial purpose (decides a
+    `nc_open_source_only` scope, #69). `None` (default) means
+    [`DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE)’s (commercial).
 * **Return type:**
   [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)
 * **Returns:**
@@ -6299,34 +6330,30 @@ True if `lancedb` is importable (the `foley[index]` extra is present).
 Map a Creative-Commons license URL **or label** to `(license_id, verified)`.
 
 The single SSOT for turning an external source’s license string into a foley
-`license_id` (used by the FSD50K bulk adapter and the Freesound API adapter).
-Recognized CC families map to their foley `license_id` with
-`rights_verified=True`; anything unknown/missing fails closed to
-`('unknown', False)` so [`keep()`](_autosummary/foley.html.md#foley.keep) drops it while its provenance is still
-recorded.
+`license_id` (FSD50K, Clotho, the Freesound API, …). It **never widens rights**:
+the string is split into tokens, and
 
-Both representations Freesound uses are handled: the CC **URL** form
-(`http://creativecommons.org/publicdomain/zero/1.0/`) and the plain **label**
-the search API returns (`"Creative Commons 0"`, `"Attribution"`,
-`"Attribution NonCommercial"`).
-
-**Fail-closed for NoDerivatives / ShareAlike.** Any `-nd` / `-sa` variant —
-including the `by-nc-nd` and `by-nc-sa` compounds — has NO foley
-`LICENSE_FLAGS` row: its extra restrictions (no derivatives / share-alike) are
-not expressible by any row we have, so it maps to `('unknown', False)` and is
-rejected everywhere. This check runs first, so `by-nc-nd` / `by-nc-sa` are
-NOT mis-mapped to plain `CC-BY-NC-4.0` (which would fail-open by granting the
-modification / derivative / standalone-redistribution rights those licenses
-forbid). Only *after* it are `by-nc` / `sampling` tested before the bare
-`by`.
+* any NoDerivatives / ShareAlike sign (`nd`, `sa`, `no derivatives`,
+  `share alike`, `sharealike`) → `('unknown', False)`: foley has no row
+  expressing those restrictions, so the sound is refused everywhere;
+* the Public Domain Mark → `('PDM-1.0', False)`: a claim about the work, not a
+  licence anyone granted, so never auto-verified (#56);
+* CC0 (`publicdomain/zero`, `cc0`, `creative commons 0`) → `CC0-1.0`;
+* Sampling+ → `CC-Sampling+-1.0`;
+* `by` / `attribution` with any mention of commercial use (`nc`,
+  `noncommercial`, `non commercial`, `no commercial use`) → `CC-BY-NC-<v>`,
+  else `CC-BY-<v>`. **The version is kept** (`/by/3.0/` → `CC-BY-3.0`); a
+  versionless label gets `DEFAULT_CC_VERSION`; a version foley has no row
+  for (a `2.1/jp` port) fails closed;
+* anything else — including a string with a token this parser does not know —
+  → `('unknown', False)`.
 
 * **Parameters:**
   **url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A CC license URL, a CC label string, or `None`.
 * **Return type:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
-  `(license_id, rights_verified)` — `('unknown', False)` when
-  unrecognized, missing, or a fail-closed ND/SA variant.
+  `(license_id, rights_verified)`.
 
 ### foley.license_meta(license_id)
 
@@ -6709,6 +6736,43 @@ Resolve a master spec (profile name, explicit profile, or `None`) to a `MasterPr
 * **Raises:**
   [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `master` is an unknown profile name.
 
+### foley.restamp_rights(library=None, , license='unknown', ids=None, where=None, select='legacy-user-owned', apply=False)
+
+Re-stamp the licence of stored sounds; a dry run unless `apply=True`.
+
+The migration for libraries built before #55 / #56. A re-ingest does not do it
+(content-addressed dedup skips files already stored), so this rewrites the stored
+records in place:
+
+* `foley restamp-rights --apply` — every sound an older foley stamped
+  `user-owned` without being told becomes `unknown` (fail closed);
+* `foley restamp-rights --license user-owned --apply` — the same sounds, but you
+  assert that you own them (now recorded with a `verified_at` timestamp);
+* `foley restamp-rights --select legacy-elevenlabs --license elevenlabs-paid-plan
+  --apply` — ElevenLabs generations made before the plan was explicit;
+* `foley restamp-rights --select has-license-url --license from-url --apply` —
+  every record that kept its source’s licence string (Freesound pulls) is
+  re-derived by today’s mapper (CC versions, PDM, NC spellings);
+* corpus clips (Clotho, FSD50K) are repaired by re-running `foley bootstrap`,
+  which re-stamps already-stored clips from the corpus metadata.
+
+* **Parameters:**
+  * **library** – The [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the default one).
+  * **license** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The `license_id` to stamp (a `LICENSE_FLAGS` row; default
+    `'unknown'`), or `FROM_LICENSE_URL` to re-derive each record from
+    its own `license_url`.
+  * **ids** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Re-stamp exactly these sound ids (overrides `where` / `select`).
+  * **where** – A predicate `LicenseRecord -> bool` choosing the records (overrides
+    `select`).
+  * **select** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A `LEGACY_SELECTORS` name (default `'legacy-user-owned'`).
+  * **apply** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Write the change. `False` (default) only reports what would change.
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+* **Returns:**
+  The ids that were (or, in a dry run, would be) re-stamped.
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `license` or `select` is unknown.
+
 ### foley.run_qc(samples, sample_rate, , thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100))
 
 Run every Tier-0 check and fold the results into a [`QCReport`](_autosummary/foley.html.md#foley.QCReport).
@@ -6754,7 +6818,7 @@ Write `samples` to `dst` as `fmt`/`subtype` (default = FLAC archive).
 
 Lazy dependency: `soundfile`.
 
-### foley.score(segments, , audio=None, transcript=None, library=None, intended_use=None, commercial_ok=False, max_events=6, verify='listen', master='podcast', weave=None, llm=None, \*\*weave_kwargs)
+### foley.score(segments, , audio=None, transcript=None, library=None, intended_use=None, commercial_ok=None, max_events=6, verify='listen', master='podcast', weave=None, llm=None, \*\*weave_kwargs)
 
 Choose sounds for narration text and (optionally) weave them into the narration audio.
 
@@ -6776,9 +6840,11 @@ editable [`SoundDesignTimeline`](_autosummary/foley.base.html.md#foley.base.Soun
     given, the result is woven into a mastered mix (set `weave=False` to skip).
   * **transcript** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The full narration transcript for alignment (default: the segments joined).
   * **library** – The [`foley.index.SoundLibrary`](_autosummary/foley.index.html.md#foley.index.SoundLibrary) (default: the process-wide default).
-  * **intended_use** – The rights intent (default: a conservative publishing
-    [`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse) from `commercial_ok`).
-  * **commercial_ok** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Shorthand for a commercial-publishing intent (the license filter).
+  * **intended_use** – The rights intent (default:
+    [`foley.licensing.DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE) — commercial publishing, the
+    same default as [`foley.find()`](_autosummary/foley.html.md#foley.find) and every MCP tool).
+  * **commercial_ok** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Shorthand override of the default intent’s `commercial`;
+    `False` explicitly admits non-commercial material.
   * **max_events** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sparse density cap **per segment** (restraint).
   * **verify** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
   * **master** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The delivery [`MASTER_PROFILES`](_autosummary/foley.base.html.md#foley.base.MASTER_PROFILES) target (`'podcast'` default).
@@ -6799,6 +6865,10 @@ Convenience wrapper over `foley.library.search(...)` — see
 [`foley.index.SoundLibrary.search()`](_autosummary/foley.index.html.md#foley.index.SoundLibrary.search). Constructs the process-wide default
 library (local stores + CLAP + best available index) on first use.
 
+`commercial_ok` defaults to the one rights intent every verb shares
+([`foley.licensing.DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE): commercial), so only commercially
+usable sounds come back; pass `commercial_ok=False` to include the rest.
+
 ### foley.serve_http(, host='127.0.0.1', port=8000, auth, path='/mcp', \*\*kwargs)
 
 Build and serve the foley MCP tools over authenticated streamable HTTP (blocks).
@@ -6808,11 +6878,13 @@ Wraps [`make_http_app()`](_autosummary/foley.html.md#foley.make_http_app) and ru
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-### foley.similar(sound_id, , k=10)
+### foley.similar(sound_id, , k=10, commercial_ok=None)
 
 Find sounds similar to a stored sound (audio<->audio) in the default library.
 
-See [`foley.index.SoundLibrary.similar()`](_autosummary/foley.index.html.md#foley.index.SoundLibrary.similar).
+See [`foley.index.SoundLibrary.similar()`](_autosummary/foley.index.html.md#foley.index.SoundLibrary.similar). Like [`search()`](_autosummary/foley.html.md#foley.search), only sounds
+cleared for the default (commercial) intent are returned unless
+`commercial_ok=False`.
 
 ### foley.similar_to(clip_or_candidate, , k=10, library=None)
 
@@ -7089,6 +7161,12 @@ The HF checkpoint id.
 
 The embedding dimensionality.
 
+#### open_source
+
+Whether the checkpoint is an open-source model (the LAION
+releases are). Read by the ingest AI-use gate for sounds whose rights
+holder allows only open-source models (#69).
+
 #### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The resolved torch device string (`'cuda'`/`'cpu'`).
@@ -7168,6 +7246,8 @@ only the stdlib; install the capability you use via the matching extra
 | [`default_zeroshot_tagger`](_autosummary/foley.index.html.md#foley.index.default_zeroshot_tagger)([embedder])                | The default zero-shot tagger (CLAP vs UCS subcategories; `foley[clap]`).                                             |
 | [`ingest_one`](_autosummary/foley.index.html.md#foley.index.ingest_one)(src, \*[, library, sound_id, ...])      | Ingest one clip into `library` and return an [`IngestResult`](_autosummary/foley.index.html.md#foley.index.IngestResult).          |
 | [`ingest_folder`](_autosummary/foley.index.html.md#foley.index.ingest_folder)(path, \*[, library, recursive, ...]) | Ingest every audio file under `path` and return an [`IngestReport`](_autosummary/foley.index.html.md#foley.index.IngestReport).    |
+| [`resolve_ingest_license`](_autosummary/foley.index.html.md#foley.index.resolve_ingest_license)(license, \*[, source_url])  | The rights record for a local ingest: fail-closed unless rights are asserted (#55).                                  |
+| [`restamp_rights`](_autosummary/foley.index.html.md#foley.index.restamp_rights)([library, license, ids, ...])       | Re-stamp the licence of stored sounds; a dry run unless `apply=True`.                                                |
 | [`default_index`](_autosummary/foley.index.html.md#foley.index.default_index)(\*, data_dir, dim)                   | Build the best available persistent index for a library.                                                             |
 | [`lancedb_available`](_autosummary/foley.index.html.md#foley.index.lancedb_available)()                                | True if `lancedb` is importable (the `foley[index]` extra is present).                                               |
 | [`sqlite_vec_loadable`](_autosummary/foley.index.html.md#foley.index.sqlite_vec_loadable)()                              | True if `sqlite_vec` is installed AND this interpreter can load it.                                                  |
@@ -7243,6 +7323,12 @@ The HF checkpoint id.
 #### dim
 
 The embedding dimensionality.
+
+#### open_source
+
+Whether the checkpoint is an open-source model (the LAION
+releases are). Read by the ingest AI-use gate for sounds whose rights
+holder allows only open-source models (#69).
 
 #### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -7789,6 +7875,18 @@ excluded from the results.
 
 The content-addressed byte store.
 
+#### update_record(record)
+
+Rewrite a stored record’s metadata and re-index its keyword text.
+
+For corrections that do not touch the audio (a re-stamped licence, a removed
+caption): the bytes and the CLAP vector stay as they are.
+
+* **Raises:**
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If `record.id` is not in the library.
+* **Return type:**
+  [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)
+
 #### *property* vindex
 
 The vector index.
@@ -8034,7 +8132,7 @@ Ingest every audio file under `path` and return an [`IngestReport`](_autosummary
 * **Returns:**
   An [`IngestReport`](_autosummary/foley.index.html.md#foley.index.IngestReport) (with `.summary()` counts and per-file results).
 
-### foley.index.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None)
+### foley.index.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None, commercial=None)
 
 Ingest one clip into `library` and return an [`IngestResult`](_autosummary/foley.index.html.md#foley.index.IngestResult).
 
@@ -8060,7 +8158,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](_autosummary/foley.stores.html.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record, or a `license_id` string the caller asserts
+    (`'user-owned'`), or `None` (default): rights **unknown**, so the clip
+    is indexed but [`foley.keep()`](_autosummary/foley.html.md#foley.keep) refuses it (#55). See
+    [`resolve_ingest_license()`](_autosummary/foley.index.html.md#foley.index.resolve_ingest_license).
   * **tagger** – Supervised [`Tagger`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](_autosummary/foley.index.taggers.html.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
@@ -8085,6 +8186,9 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     consent and admit it anyway (see `foley.bootstrap.bootstrap()`’s
     `accept_ai_restricted`). Protects every ingest path, not just
     bootstrap.
+  * **commercial** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Whether the AI use is for a commercial purpose (decides a
+    `nc_open_source_only` scope, #69). `None` (default) means
+    [`DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE)’s (commercial).
 * **Return type:**
   [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)
 * **Returns:**
@@ -8144,6 +8248,61 @@ Resolve inputs to a best UCS CatID by the staged precedence.
 * **Returns:**
   A [`CatIdResolution`](_autosummary/foley.index.taxonomy.model.html.md#foley.index.taxonomy.model.CatIdResolution) (falsy when
   nothing resolved).
+
+### foley.index.resolve_ingest_license(license, , source_url=None)
+
+The rights record for a local ingest: fail-closed unless rights are asserted (#55).
+
+* `None` (no licence given) → `license_id='unknown'`, `rights_verified=False`:
+  [`foley.keep()`](_autosummary/foley.html.md#foley.keep) refuses it for every use. The bytes are still kept locally
+  > (`cache_bytes_ok=True`: it is the user’s own disk, no terms of service apply),
+  > so the clip is searchable and can be re-stamped later without re-ingesting.
+* a `str` → that `license_id`, which must be a `LICENSE_FLAGS` row, with
+  `rights_verified=True` (the caller is asserting it) and `verified_at` set —
+  e.g. `'user-owned'` for the user’s own recordings.
+* a [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord) → used as given.
+
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If a `str` licence id has no `LICENSE_FLAGS` row.
+* **Return type:**
+  [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
+
+### foley.index.restamp_rights(library=None, , license='unknown', ids=None, where=None, select='legacy-user-owned', apply=False)
+
+Re-stamp the licence of stored sounds; a dry run unless `apply=True`.
+
+The migration for libraries built before #55 / #56. A re-ingest does not do it
+(content-addressed dedup skips files already stored), so this rewrites the stored
+records in place:
+
+* `foley restamp-rights --apply` — every sound an older foley stamped
+  `user-owned` without being told becomes `unknown` (fail closed);
+* `foley restamp-rights --license user-owned --apply` — the same sounds, but you
+  assert that you own them (now recorded with a `verified_at` timestamp);
+* `foley restamp-rights --select legacy-elevenlabs --license elevenlabs-paid-plan
+  --apply` — ElevenLabs generations made before the plan was explicit;
+* `foley restamp-rights --select has-license-url --license from-url --apply` —
+  every record that kept its source’s licence string (Freesound pulls) is
+  re-derived by today’s mapper (CC versions, PDM, NC spellings);
+* corpus clips (Clotho, FSD50K) are repaired by re-running `foley bootstrap`,
+  which re-stamps already-stored clips from the corpus metadata.
+
+* **Parameters:**
+  * **library** – The [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the default one).
+  * **license** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The `license_id` to stamp (a `LICENSE_FLAGS` row; default
+    `'unknown'`), or `FROM_LICENSE_URL` to re-derive each record from
+    its own `license_url`.
+  * **ids** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Re-stamp exactly these sound ids (overrides `where` / `select`).
+  * **where** – A predicate `LicenseRecord -> bool` choosing the records (overrides
+    `select`).
+  * **select** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A `LEGACY_SELECTORS` name (default `'legacy-user-owned'`).
+  * **apply** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Write the change. `False` (default) only reports what would change.
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+* **Returns:**
+  The ids that were (or, in a dry run, would be) re-stamped.
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `license` or `select` is unknown.
 
 ### foley.index.sqlite_vec_loadable()
 
@@ -8502,16 +8661,25 @@ module costs only the stdlib.
 
 ### Module Attributes
 
-| [`AUDIO_EXTS`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.AUDIO_EXTS)   | Audio file extensions the folder walker ingests.   |
-|---------------------------------------------------------------|----------------------------------------------------|
+| [`AUDIO_EXTS`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.AUDIO_EXTS)               | Audio file extensions the folder walker ingests.                                                                                                                                   |
+|---------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`UNASSERTABLE_LICENSE_IDS`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.UNASSERTABLE_LICENSE_IDS) | `unknown` by definition, `PDM-1.0` (a claim about the work, not a grant — verify it by building the `LicenseRecord` yourself), and the legacy `ElevenLabs-SFX` row (say the plan). |
+| [`ASSERTABLE_LICENSE_IDS`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.ASSERTABLE_LICENSE_IDS)   | The ids a caller may assert on ingest / restamp (`foley ingest --license`).                                                                                                        |
+| [`LEGACY_SELECTORS`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.LEGACY_SELECTORS)         | Named selections for [`restamp_rights()`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.restamp_rights) (`foley restamp-rights --select NAME`).                                                     |
+| [`FROM_LICENSE_URL`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.FROM_LICENSE_URL)         | re-derive each record's id from the licence URL / label its source served (kept in `license_url`).                                                                                 |
 
 ### Functions
 
 | [`content_id`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.content_id)(src)                                    | Return the reproducible content-hash id foley assigns to `src`.                                                   |
 |-----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| [`has_license_url`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.has_license_url)(lic)                               | Whether `lic` kept the licence string its source served (re-derivable).                                           |
 | [`ingest_folder`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.ingest_folder)(path, \*[, library, recursive, ...]) | Ingest every audio file under `path` and return an [`IngestReport`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestReport). |
 | [`ingest_one`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.ingest_one)(src, \*[, library, sound_id, ...])      | Ingest one clip into `library` and return an [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult).       |
+| [`is_legacy_default_user_owned`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.is_legacy_default_user_owned)(lic)                  | Whether `lic` is the `user-owned` stamp foley used to put on any unlicensed ingest.                               |
+| [`is_legacy_elevenlabs`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.is_legacy_elevenlabs)(lic)                          | Whether `lic` is an ElevenLabs generation stamped before the plan was explicit (#56).                             |
 | [`iter_audio_files`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.iter_audio_files)(path, \*[, recursive, exts])      | Yield the audio files under `path` (or `path` itself if it is a file).                                            |
+| [`resolve_ingest_license`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.resolve_ingest_license)(license, \*[, source_url])  | The rights record for a local ingest: fail-closed unless rights are asserted (#55).                               |
+| [`restamp_rights`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.restamp_rights)([library, license, ids, ...])       | Re-stamp the licence of stored sounds; a dry run unless `apply=True`.                                             |
 
 ### Classes
 
@@ -8519,9 +8687,21 @@ module costs only the stdlib.
 |----------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
 | [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)(id, status[, record, qc, ...]) | The outcome of ingesting one clip.                              |
 
+### foley.index.ingest.ASSERTABLE_LICENSE_IDS *= frozenset({'CC-BY-2.0', 'CC-BY-2.5', 'CC-BY-3.0', 'CC-BY-4.0', 'CC-BY-NC-2.0', 'CC-BY-NC-2.5', 'CC-BY-NC-3.0', 'CC-BY-NC-4.0', 'CC-Sampling+-1.0', 'CC0-1.0', 'MIT', 'Pixabay-Content', 'RemArc', 'Sonniss-GDC', 'Stability-Community', 'elevenlabs-free-plan', 'elevenlabs-paid-plan', 'user-owned'})*
+
+The ids a caller may assert on ingest / restamp (`foley ingest --license`).
+
 ### foley.index.ingest.AUDIO_EXTS *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), ...]* *= ('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a')*
 
 Audio file extensions the folder walker ingests.
+
+### foley.index.ingest.FROM_LICENSE_URL *= 'from-url'*
+
+re-derive each record’s id from the
+licence URL / label its source served (kept in `license_url`).
+
+* **Type:**
+  `restamp_rights(license=FROM_LICENSE_URL)`
 
 ### *class* foley.index.ingest.IngestReport(root, results=<factory>)
 
@@ -8583,6 +8763,19 @@ embed — see [`ingest_one()`](_autosummary/foley.index.ingest.html.md#foley.ind
 bootstrap commercial-use / fail-closed license filter), or `'error'`.
 `record` is present only when the clip was ingested.
 
+### foley.index.ingest.LEGACY_SELECTORS *= {'has-license-url': <function has_license_url>, 'legacy-elevenlabs': <function is_legacy_elevenlabs>, 'legacy-user-owned': <function is_legacy_default_user_owned>}*
+
+Named selections for [`restamp_rights()`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.restamp_rights) (`foley restamp-rights --select NAME`).
+
+### foley.index.ingest.UNASSERTABLE_LICENSE_IDS *= frozenset({'ElevenLabs-SFX', 'PDM-1.0', 'unknown'})*
+
+`unknown` by definition,
+`PDM-1.0` (a claim about the work, not a grant — verify it by building the
+`LicenseRecord` yourself), and the legacy `ElevenLabs-SFX` row (say the plan).
+
+* **Type:**
+  Licence ids that can never be *asserted* as verified
+
 ### foley.index.ingest.content_id(src)
 
 Return the reproducible content-hash id foley assigns to `src`.
@@ -8596,6 +8789,13 @@ sets `license.c2pa_manifest_ref` in the same pass — see
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### foley.index.ingest.has_license_url(lic)
+
+Whether `lic` kept the licence string its source served (re-derivable).
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.index.ingest.ingest_folder(path, , library=None, recursive=True, exts=('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a'), on_error='collect', \*\*ingest_one_kw)
 
@@ -8615,7 +8815,7 @@ Ingest every audio file under `path` and return an [`IngestReport`](_autosummary
 * **Returns:**
   An [`IngestReport`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestReport) (with `.summary()` counts and per-file results).
 
-### foley.index.ingest.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None)
+### foley.index.ingest.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None, commercial=None)
 
 Ingest one clip into `library` and return an [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult).
 
@@ -8641,7 +8841,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](_autosummary/foley.stores.html.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)]) – Rights record, or a `license_id` string the caller asserts
+    (`'user-owned'`), or `None` (default): rights **unknown**, so the clip
+    is indexed but [`foley.keep()`](_autosummary/foley.html.md#foley.keep) refuses it (#55). See
+    [`resolve_ingest_license()`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.resolve_ingest_license).
   * **tagger** – Supervised [`Tagger`](_autosummary/foley.index.protocols.html.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](_autosummary/foley.index.taggers.html.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
@@ -8666,11 +8869,32 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     consent and admit it anyway (see `foley.bootstrap.bootstrap()`’s
     `accept_ai_restricted`). Protects every ingest path, not just
     bootstrap.
+  * **commercial** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Whether the AI use is for a commercial purpose (decides a
+    `nc_open_source_only` scope, #69). `None` (default) means
+    [`DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE)’s (commercial).
 * **Return type:**
   [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)
 * **Returns:**
   An [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult); its `record` is `None` when quarantined, a
   duplicate, or rights-blocked.
+
+### foley.index.ingest.is_legacy_default_user_owned(lic)
+
+Whether `lic` is the `user-owned` stamp foley used to put on any unlicensed ingest.
+
+Before #55, `foley.ingest(path)` with no licence stamped every file
+`user-owned` + verified. An explicit assertion now also records `verified_at`;
+the old default never did, which is what tells them apart.
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+### foley.index.ingest.is_legacy_elevenlabs(lic)
+
+Whether `lic` is an ElevenLabs generation stamped before the plan was explicit (#56).
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.index.ingest.iter_audio_files(path, , recursive=True, exts=('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a'))
 
@@ -8687,6 +8911,61 @@ bulk-corpus adapters in [`foley.sources`](_autosummary/foley.sources.html.md#mod
   Each matching file as a [`pathlib.Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), in sorted order.
 * **Return type:**
   [*Iterator*](https://docs.python.org/3/library/typing.html#typing.Iterator)[[*Path*](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]
+
+### foley.index.ingest.resolve_ingest_license(license, , source_url=None)
+
+The rights record for a local ingest: fail-closed unless rights are asserted (#55).
+
+* `None` (no licence given) → `license_id='unknown'`, `rights_verified=False`:
+  [`foley.keep()`](_autosummary/foley.html.md#foley.keep) refuses it for every use. The bytes are still kept locally
+  > (`cache_bytes_ok=True`: it is the user’s own disk, no terms of service apply),
+  > so the clip is searchable and can be re-stamped later without re-ingesting.
+* a `str` → that `license_id`, which must be a `LICENSE_FLAGS` row, with
+  `rights_verified=True` (the caller is asserting it) and `verified_at` set —
+  e.g. `'user-owned'` for the user’s own recordings.
+* a [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord) → used as given.
+
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If a `str` licence id has no `LICENSE_FLAGS` row.
+* **Return type:**
+  [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
+
+### foley.index.ingest.restamp_rights(library=None, , license='unknown', ids=None, where=None, select='legacy-user-owned', apply=False)
+
+Re-stamp the licence of stored sounds; a dry run unless `apply=True`.
+
+The migration for libraries built before #55 / #56. A re-ingest does not do it
+(content-addressed dedup skips files already stored), so this rewrites the stored
+records in place:
+
+* `foley restamp-rights --apply` — every sound an older foley stamped
+  `user-owned` without being told becomes `unknown` (fail closed);
+* `foley restamp-rights --license user-owned --apply` — the same sounds, but you
+  assert that you own them (now recorded with a `verified_at` timestamp);
+* `foley restamp-rights --select legacy-elevenlabs --license elevenlabs-paid-plan
+  --apply` — ElevenLabs generations made before the plan was explicit;
+* `foley restamp-rights --select has-license-url --license from-url --apply` —
+  every record that kept its source’s licence string (Freesound pulls) is
+  re-derived by today’s mapper (CC versions, PDM, NC spellings);
+* corpus clips (Clotho, FSD50K) are repaired by re-running `foley bootstrap`,
+  which re-stamps already-stored clips from the corpus metadata.
+
+* **Parameters:**
+  * **library** – The [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the default one).
+  * **license** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The `license_id` to stamp (a `LICENSE_FLAGS` row; default
+    `'unknown'`), or [`FROM_LICENSE_URL`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.FROM_LICENSE_URL) to re-derive each record from
+    its own `license_url`.
+  * **ids** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Re-stamp exactly these sound ids (overrides `where` / `select`).
+  * **where** – A predicate `LicenseRecord -> bool` choosing the records (overrides
+    `select`).
+  * **select** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A [`LEGACY_SELECTORS`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.LEGACY_SELECTORS) name (default `'legacy-user-owned'`).
+  * **apply** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Write the change. `False` (default) only reports what would change.
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+* **Returns:**
+  The ids that were (or, in a dry run, would be) re-stamped.
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `license` or `select` is unknown.
 
 
 # _autosummary/foley.index.library.html.md
@@ -8881,6 +9160,18 @@ excluded from the results.
 #### *property* sounds
 
 The content-addressed byte store.
+
+#### update_record(record)
+
+Rewrite a stored record’s metadata and re-index its keyword text.
+
+For corrections that do not touch the audio (a re-stamped licence, a removed
+caption): the bytes and the CLAP vector stay as they are.
+
+* **Raises:**
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If `record.id` is not in the library.
+* **Return type:**
+  [`SoundRecord`](_autosummary/foley.base.html.md#foley.base.SoundRecord)
 
 #### *property* vindex
 
@@ -9956,17 +10247,25 @@ item is redistributable but stored by-reference.
 
 ### Module Attributes
 
-| [`UNKNOWN_LICENSE_FLAGS`](_autosummary/foley.licensing.html.md#foley.licensing.UNKNOWN_LICENSE_FLAGS)   | Fail-closed fallback for unknown / `Proprietary-*` license ids (all False, cap None).                                          |
-|--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| [`LICENSE_FLAGS`](_autosummary/foley.licensing.html.md#foley.licensing.LICENSE_FLAGS)           | `license_id` -> default flag set (report 07 §8.1 seed table).                                                                  |
-| [`UNKNOWN_LICENSE_META`](_autosummary/foley.licensing.html.md#foley.licensing.UNKNOWN_LICENSE_META)    | Fail-closed display fallback for unknown / `Proprietary-*` license ids.                                                        |
-| [`LICENSE_META`](_autosummary/foley.licensing.html.md#foley.licensing.LICENSE_META)            | `license_id` -> display name + canonical URL (one row per [`LICENSE_FLAGS`](_autosummary/foley.licensing.html.md#foley.licensing.LICENSE_FLAGS) key). |
+| [`DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE)     | The ONE rights intent every verb and surface defaults to (#63, maintainer decision 2026-10-03): commercial publishing, attributable.   |
+|---------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| [`UNKNOWN_LICENSE_FLAGS`](_autosummary/foley.licensing.html.md#foley.licensing.UNKNOWN_LICENSE_FLAGS)    | Fail-closed fallback for unknown / `Proprietary-*` license ids (all False, cap None).                                                  |
+| [`LICENSE_FLAGS`](_autosummary/foley.licensing.html.md#foley.licensing.LICENSE_FLAGS)            | `license_id` -> default flag set (report 07 §8.1 seed table).                                                                          |
+| [`CC_VERSIONS`](_autosummary/foley.licensing.html.md#foley.licensing.CC_VERSIONS)              | The CC versions foley has rows for (Freesound, FSD50K, Clotho and Wikimedia use these).                                                |
+| [`DEFAULT_CC_VERSION`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_CC_VERSION)       | The version assumed when a source gives a CC family with no version at all (Freesound's search labels: `"Attribution"`).               |
+| [`UNKNOWN_LICENSE_META`](_autosummary/foley.licensing.html.md#foley.licensing.UNKNOWN_LICENSE_META)     | Fail-closed display fallback for unknown / `Proprietary-*` license ids.                                                                |
+| [`LICENSE_META`](_autosummary/foley.licensing.html.md#foley.licensing.LICENSE_META)             | `license_id` -> display name + canonical URL (one row per [`LICENSE_FLAGS`](_autosummary/foley.licensing.html.md#foley.licensing.LICENSE_FLAGS) key).         |
+| [`AI_TRAINING_SCOPES`](_autosummary/foley.licensing.html.md#foley.licensing.AI_TRAINING_SCOPES)       | The `ai_training_scope` values (`None` = no narrowing beyond `ai_training_ok`).                                                        |
+| [`GEN_AI_PREFERENCE_SCOPES`](_autosummary/foley.licensing.html.md#foley.licensing.GEN_AI_PREFERENCE_SCOPES) | Freesound `gen_ai_preference` -> `(ai_training_ok override, ai_training_scope)`.                                                       |
 
 ### Functions
 
-| [`apply_license_flags`](_autosummary/foley.licensing.html.md#foley.licensing.apply_license_flags)(record, \*[, overrides])      | Populate `record`'s eight derived flags from its `license_id` (+ overrides), in place, and return it.                    |
+| [`ai_scope_from_gen_ai_preference`](_autosummary/foley.licensing.html.md#foley.licensing.ai_scope_from_gen_ai_preference)(preference)       | Map a Freesound `gen_ai_preference` to `(ai_training_ok override, scope)`.                                               |
 |----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| [`ai_use_permitted`](_autosummary/foley.licensing.html.md#foley.licensing.ai_use_permitted)(record, \*, ...)                 | Whether AI use of the sound (CLAP-embedding it counts) is allowed here.                                                  |
+| [`apply_license_flags`](_autosummary/foley.licensing.html.md#foley.licensing.apply_license_flags)(record, \*[, overrides])      | Populate `record`'s eight derived flags from its `license_id` (+ overrides), in place, and return it.                    |
 | [`derive_license_flags`](_autosummary/foley.licensing.html.md#foley.licensing.derive_license_flags)(license_id, \*[, overrides]) | Look up the flag set for a `license_id` (fail-closed fallback), then apply per-source overrides.                         |
+| [`intended_use_for`](_autosummary/foley.licensing.html.md#foley.licensing.intended_use_for)([intended_use, commercial_ok])   | The rights intent a verb runs under — every verb and surface resolves it here (#63).                                     |
 | [`keep`](_autosummary/foley.licensing.html.md#foley.licensing.keep)(record, intended_use)                        | Fail-closed candidate license gate (report 07 §8.2).                                                                     |
 | [`keep_sound`](_autosummary/foley.licensing.html.md#foley.licensing.keep_sound)(sound_record, intended_use)            | Convenience: apply [`keep()`](_autosummary/foley.licensing.html.md#foley.licensing.keep) to a `SoundRecord`'s nested license.          |
 | [`license_id_from_cc_url`](_autosummary/foley.licensing.html.md#foley.licensing.license_id_from_cc_url)(url)                       | Map a Creative-Commons license URL **or label** to `(license_id, verified)`.                                             |
@@ -9978,7 +10277,34 @@ item is redistributable but stored by-reference.
 |---------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 | [`LicenseMeta`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseMeta)(display_name[, url])     | Human-facing display metadata for one `license_id` (name + canonical URL). |
 
-### foley.licensing.LICENSE_FLAGS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseFlags](_autosummary/foley.licensing.html.md#foley.licensing.LicenseFlags)]* *= {'CC-BY-4.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-4.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-Sampling+-1.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC0-1.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None), 'ElevenLabs-SFX': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'MIT': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'Pixabay-Content': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'RemArc': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'Sonniss-GDC': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'Stability-Community': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=1000000), 'unknown': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=False, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'user-owned': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None)}*
+### foley.licensing.AI_TRAINING_SCOPES *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), ...]* *= ('none', 'open_source_only', 'nc_open_source_only')*
+
+The `ai_training_scope` values (`None` = no narrowing beyond `ai_training_ok`).
+
+### foley.licensing.CC_VERSIONS *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), ...]* *= ('2.0', '2.5', '3.0', '4.0')*
+
+The CC versions foley has rows for (Freesound, FSD50K, Clotho and Wikimedia use these).
+
+### foley.licensing.DEFAULT_CC_VERSION *= '4.0'*
+
+The version assumed when a source gives a CC family with no version at all
+(Freesound’s search labels: `"Attribution"`). Rights are the same across versions;
+only the credit’s version is a guess, so the record keeps the label it was given.
+
+### foley.licensing.DEFAULT_INTENDED_USE *= IntendedUse(commercial=True, publish=True, redistribute_standalone=False, will_train=False, can_attribute=True, revenue_usd=0, allow_voice_or_trademark=False)*
+
+The ONE rights intent every verb and surface defaults to (#63, maintainer decision
+2026-10-03): commercial publishing, attributable. NC and SA material is refused
+unless a caller explicitly passes a different [`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse) (or
+`commercial_ok=False`). Treat it as read-only; copy with `dataclasses.replace`.
+
+### foley.licensing.GEN_AI_PREFERENCE_SCOPES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[bool](https://docs.python.org/3/builtins/functions.html#bool) | [None](https://docs.python.org/3/builtins/constants.html#None), [str](https://docs.python.org/3/builtins/stdtypes.html#str) | [None](https://docs.python.org/3/builtins/constants.html#None)]]* *= {'no-additional-preferences': (None, None), 'no-gen-ai': (False, 'none'), 'noncommercial-open-source-models': (None, 'nc_open_source_only'), 'open-source-models': (None, 'open_source_only')}*
+
+Freesound `gen_ai_preference` -> `(ai_training_ok override, ai_training_scope)`.
+`None` as the override leaves the CC row’s flag alone. An unlisted value fails
+closed (see [`ai_scope_from_gen_ai_preference()`](_autosummary/foley.licensing.html.md#foley.licensing.ai_scope_from_gen_ai_preference)).
+
+### foley.licensing.LICENSE_FLAGS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseFlags](_autosummary/foley.licensing.html.md#foley.licensing.LicenseFlags)]* *= {'CC-BY-2.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-2.5': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-3.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-4.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-2.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-2.5': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-3.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-4.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-Sampling+-1.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC0-1.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None), 'ElevenLabs-SFX': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'MIT': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'PDM-1.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None), 'Pixabay-Content': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'RemArc': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'Sonniss-GDC': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'Stability-Community': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=1000000), 'elevenlabs-free-plan': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'elevenlabs-paid-plan': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'unknown': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=False, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'user-owned': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None)}*
 
 `license_id` -> default flag set (report 07 §8.1 seed table).
 
@@ -9992,7 +10318,7 @@ ai_training, requires_attribution, revenue_cap_usd
 * **Type:**
   SSOT
 
-### foley.licensing.LICENSE_META *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseMeta](_autosummary/foley.licensing.html.md#foley.licensing.LicenseMeta)]* *= {'CC-BY-4.0': LicenseMeta(display_name='CC BY 4.0', url='https://creativecommons.org/licenses/by/4.0/'), 'CC-BY-NC-4.0': LicenseMeta(display_name='CC BY-NC 4.0', url='https://creativecommons.org/licenses/by-nc/4.0/'), 'CC-Sampling+-1.0': LicenseMeta(display_name='CC Sampling+ 1.0', url='https://creativecommons.org/licenses/sampling+/1.0/'), 'CC0-1.0': LicenseMeta(display_name='CC0 1.0 Universal (Public Domain Dedication)', url='https://creativecommons.org/publicdomain/zero/1.0/'), 'ElevenLabs-SFX': LicenseMeta(display_name='ElevenLabs Sound Effects Terms', url='https://elevenlabs.io/terms-of-use'), 'MIT': LicenseMeta(display_name='MIT License', url='https://opensource.org/license/mit'), 'Pixabay-Content': LicenseMeta(display_name='Pixabay Content License', url='https://pixabay.com/service/license-summary/'), 'RemArc': LicenseMeta(display_name='BBC RemArc Licence', url='https://sound-effects.bbcrewind.co.uk/licensing'), 'Sonniss-GDC': LicenseMeta(display_name='Sonniss GDC Game Audio Bundle License', url='https://sonniss.com/gdc-bundle-license'), 'Stability-Community': LicenseMeta(display_name='Stability AI Community License', url='https://stability.ai/community-license-agreement'), 'unknown': LicenseMeta(display_name='Unknown / unverified license', url=None), 'user-owned': LicenseMeta(display_name='User-owned / original work', url=None)}*
+### foley.licensing.LICENSE_META *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseMeta](_autosummary/foley.licensing.html.md#foley.licensing.LicenseMeta)]* *= {'CC-BY-2.0': LicenseMeta(display_name='CC BY 2.0', url='https://creativecommons.org/licenses/by/2.0/'), 'CC-BY-2.5': LicenseMeta(display_name='CC BY 2.5', url='https://creativecommons.org/licenses/by/2.5/'), 'CC-BY-3.0': LicenseMeta(display_name='CC BY 3.0', url='https://creativecommons.org/licenses/by/3.0/'), 'CC-BY-4.0': LicenseMeta(display_name='CC BY 4.0', url='https://creativecommons.org/licenses/by/4.0/'), 'CC-BY-NC-2.0': LicenseMeta(display_name='CC BY-NC 2.0', url='https://creativecommons.org/licenses/by-nc/2.0/'), 'CC-BY-NC-2.5': LicenseMeta(display_name='CC BY-NC 2.5', url='https://creativecommons.org/licenses/by-nc/2.5/'), 'CC-BY-NC-3.0': LicenseMeta(display_name='CC BY-NC 3.0', url='https://creativecommons.org/licenses/by-nc/3.0/'), 'CC-BY-NC-4.0': LicenseMeta(display_name='CC BY-NC 4.0', url='https://creativecommons.org/licenses/by-nc/4.0/'), 'CC-Sampling+-1.0': LicenseMeta(display_name='CC Sampling+ 1.0', url='https://creativecommons.org/licenses/sampling+/1.0/'), 'CC0-1.0': LicenseMeta(display_name='CC0 1.0 Universal (Public Domain Dedication)', url='https://creativecommons.org/publicdomain/zero/1.0/'), 'ElevenLabs-SFX': LicenseMeta(display_name='ElevenLabs Sound Effects Terms (legacy: paid plan assumed)', url='https://elevenlabs.io/terms-of-use'), 'MIT': LicenseMeta(display_name='MIT License', url='https://opensource.org/license/mit'), 'PDM-1.0': LicenseMeta(display_name='Public Domain Mark 1.0 (unverified claim)', url='https://creativecommons.org/publicdomain/mark/1.0/'), 'Pixabay-Content': LicenseMeta(display_name='Pixabay Content License', url='https://pixabay.com/service/license-summary/'), 'RemArc': LicenseMeta(display_name='BBC RemArc Licence', url='https://sound-effects.bbcrewind.co.uk/licensing'), 'Sonniss-GDC': LicenseMeta(display_name='Sonniss GDC Game Audio Bundle License', url='https://sonniss.com/gdc-bundle-license'), 'Stability-Community': LicenseMeta(display_name='Stability AI Community License', url='https://stability.ai/community-license-agreement'), 'elevenlabs-free-plan': LicenseMeta(display_name='ElevenLabs Terms (free plan: non-commercial, attribution required)', url='https://elevenlabs.io/terms-of-use'), 'elevenlabs-paid-plan': LicenseMeta(display_name='ElevenLabs Terms (paid plan)', url='https://elevenlabs.io/terms-of-use'), 'unknown': LicenseMeta(display_name='Unknown / unverified license', url=None), 'user-owned': LicenseMeta(display_name='User-owned / original work', url=None)}*
 
 `license_id` -> display name + canonical URL (one row per
 [`LICENSE_FLAGS`](_autosummary/foley.licensing.html.md#foley.licensing.LICENSE_FLAGS) key). Used only for human-readable credits; never for
@@ -10028,6 +10354,32 @@ Fail-closed fallback for unknown / `Proprietary-*` license ids (all False, cap N
 
 Fail-closed display fallback for unknown / `Proprietary-*` license ids.
 
+### foley.licensing.ai_scope_from_gen_ai_preference(preference)
+
+Map a Freesound `gen_ai_preference` to `(ai_training_ok override, scope)`.
+
+All four published values are honoured (only `no-gen-ai` was before #69). A
+missing value means no stated preference; an unrecognised one fails closed.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)], [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
+
+### foley.licensing.ai_use_permitted(record, , open_source_model, commercial)
+
+Whether AI use of the sound (CLAP-embedding it counts) is allowed here.
+
+`ai_training_ok` must hold, and the record’s `ai_training_scope` must admit
+this use: `open_source_only` needs an open-source model, `nc_open_source_only`
+also needs a non-commercial purpose, `none` admits nothing.
+
+* **Parameters:**
+  * **record** ([`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)) – The rights record.
+  * **open_source_model** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the model using the audio is open source (the
+    embedder’s `open_source` attribute; LAION-CLAP is).
+  * **commercial** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the purpose is commercial (foley’s default intent).
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 ### foley.licensing.apply_license_flags(record, , overrides=None)
 
 Populate `record`’s eight derived flags from its `license_id`
@@ -10061,6 +10413,19 @@ apply per-source overrides.
 * **Raises:**
   [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `overrides` contains a key that is not a
       [`LicenseFlags`](_autosummary/foley.licensing.html.md#foley.licensing.LicenseFlags) field.
+
+### foley.licensing.intended_use_for(intended_use=None, , commercial_ok=None)
+
+The rights intent a verb runs under — every verb and surface resolves it here (#63).
+
+An explicit `intended_use` wins; else [`DEFAULT_INTENDED_USE`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_INTENDED_USE), with
+`commercial` overridden when `commercial_ok` is given (`False` is the explicit
+opt-in to non-commercial material). Always a fresh copy, so callers may mutate it.
+
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If both are given and disagree on `commercial`.
+* **Return type:**
+  [`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)
 
 ### foley.licensing.keep(record, intended_use)
 
@@ -10096,34 +10461,30 @@ Convenience: apply [`keep()`](_autosummary/foley.licensing.html.md#foley.licensi
 Map a Creative-Commons license URL **or label** to `(license_id, verified)`.
 
 The single SSOT for turning an external source’s license string into a foley
-`license_id` (used by the FSD50K bulk adapter and the Freesound API adapter).
-Recognized CC families map to their foley `license_id` with
-`rights_verified=True`; anything unknown/missing fails closed to
-`('unknown', False)` so [`keep()`](_autosummary/foley.licensing.html.md#foley.licensing.keep) drops it while its provenance is still
-recorded.
+`license_id` (FSD50K, Clotho, the Freesound API, …). It **never widens rights**:
+the string is split into tokens, and
 
-Both representations Freesound uses are handled: the CC **URL** form
-(`http://creativecommons.org/publicdomain/zero/1.0/`) and the plain **label**
-the search API returns (`"Creative Commons 0"`, `"Attribution"`,
-`"Attribution NonCommercial"`).
-
-**Fail-closed for NoDerivatives / ShareAlike.** Any `-nd` / `-sa` variant —
-including the `by-nc-nd` and `by-nc-sa` compounds — has NO foley
-`LICENSE_FLAGS` row: its extra restrictions (no derivatives / share-alike) are
-not expressible by any row we have, so it maps to `('unknown', False)` and is
-rejected everywhere. This check runs first, so `by-nc-nd` / `by-nc-sa` are
-NOT mis-mapped to plain `CC-BY-NC-4.0` (which would fail-open by granting the
-modification / derivative / standalone-redistribution rights those licenses
-forbid). Only *after* it are `by-nc` / `sampling` tested before the bare
-`by`.
+* any NoDerivatives / ShareAlike sign (`nd`, `sa`, `no derivatives`,
+  `share alike`, `sharealike`) → `('unknown', False)`: foley has no row
+  expressing those restrictions, so the sound is refused everywhere;
+* the Public Domain Mark → `('PDM-1.0', False)`: a claim about the work, not a
+  licence anyone granted, so never auto-verified (#56);
+* CC0 (`publicdomain/zero`, `cc0`, `creative commons 0`) → `CC0-1.0`;
+* Sampling+ → `CC-Sampling+-1.0`;
+* `by` / `attribution` with any mention of commercial use (`nc`,
+  `noncommercial`, `non commercial`, `no commercial use`) → `CC-BY-NC-<v>`,
+  else `CC-BY-<v>`. **The version is kept** (`/by/3.0/` → `CC-BY-3.0`); a
+  versionless label gets [`DEFAULT_CC_VERSION`](_autosummary/foley.licensing.html.md#foley.licensing.DEFAULT_CC_VERSION); a version foley has no row
+  for (a `2.1/jp` port) fails closed;
+* anything else — including a string with a token this parser does not know —
+  → `('unknown', False)`.
 
 * **Parameters:**
   **url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A CC license URL, a CC label string, or `None`.
 * **Return type:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
-  `(license_id, rights_verified)` — `('unknown', False)` when
-  unrecognized, missing, or a fail-closed ND/SA variant.
+  `(license_id, rights_verified)`.
 
 ### foley.licensing.license_meta(license_id)
 
@@ -11257,7 +11618,7 @@ True if the prompt matched any trademark or recognizable-voice pattern.
 
 True if the prompt matched a branded-audio-logo entry.
 
-### foley.provenance.disclosure.TRADEMARK_REGISTRY *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[TrademarkEntry](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'thx', 'deep note'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc chimes', 'nbc three-note', 'nbc chime'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'tudum', 'netflix sound', 'ta-dum', 'ta dum', 'netflix intro', 'netflix chime'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'metro-goldwyn-mayer lion', 'mgm roar', 'mgm lion'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'fox fanfare', '20th century fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel jingle', 'intel bong', 'intel chime', 'intel inside'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({"d'oh", 'homer doh', 'homer simpson doh'})))*
+### foley.provenance.disclosure.TRADEMARK_REGISTRY *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[TrademarkEntry](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'deep note', 'thx'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc three-note', 'nbc chime', 'nbc chimes'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'tudum', 'ta dum', 'netflix intro', 'ta-dum', 'netflix sound', 'netflix chime'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'mgm roar', 'metro-goldwyn-mayer lion', 'mgm lion'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'20th century fox fanfare', 'fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel jingle', 'intel bong', 'intel chime', 'intel inside'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({"d'oh", 'homer doh', 'homer simpson doh'})))*
 
 Seed registry of branded audio logos foley must not knowingly generate for
 commercial use (report 07 §7.2). Each entry maps a canonical mark to a set of
@@ -12072,6 +12433,8 @@ so the derived permission flags stay single-sourced.
 
 | [`bulk_license`](_autosummary/foley.sources.base.html.md#foley.sources.base.bulk_license)(\*, source, license_id, ...[, ...])   | Build a bulk-acquisition [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord), flags derived.                   |
 |-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`per_clip_license_meta`](_autosummary/foley.sources.base.html.md#foley.sources.base.per_clip_license_meta)(license_url, \*[, ...])      | The `ClipSpec.meta` rights fields for a clip that carries its own CC licence.                                                                      |
+| [`license_from_clip_meta`](_autosummary/foley.sources.base.html.md#foley.sources.base.license_from_clip_meta)(source, spec)               | Build a clip's rights record from [`per_clip_license_meta()`](_autosummary/foley.sources.base.html.md#foley.sources.base.per_clip_license_meta) fields (fail-closed).                   |
 | [`api_license`](_autosummary/foley.sources.base.html.md#foley.sources.base.api_license)(\*, source, license_id, ...[, ...])    | Build an API-acquisition [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord), flags derived.                   |
 | [`generated_license`](_autosummary/foley.sources.base.html.md#foley.sources.base.generated_license)(\*, source, license_id, ...)     | Build an AI-generated [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord), flags derived + provenance stamped. |
 | [`register_corpus`](_autosummary/foley.sources.base.html.md#foley.sources.base.register_corpus)(adapter)                           | Register `adapter` in [`CORPUS_REGISTRY`](_autosummary/foley.sources.base.html.md#foley.sources.base.CORPUS_REGISTRY) (idempotent) and return it.                                 |
@@ -12089,7 +12452,7 @@ so the derived permission flags stay single-sourced.
 | [`GeneratedClip`](_autosummary/foley.sources.base.html.md#foley.sources.base.GeneratedClip)(audio_bytes, candidate[, notes]) | One freshly-generated sound: its transient bytes + a provisional candidate.     |
 | [`UniformCorpus`](_autosummary/foley.sources.base.html.md#foley.sources.base.UniformCorpus)(name, ring, ...[, ...])          | A bulk corpus where **every** clip carries the same license.                    |
 
-### foley.sources.base.CORPUS_REGISTRY *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [CorpusAdapter](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]* *= {'bbc_remarc': UniformCorpus(name='bbc_remarc', ring=2, default_license_id='RemArc', source='bbc_remarc', rights_verified=True, tag_hints_from_path=False), 'clotho': ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False), 'foleyset': UniformCorpus(name='foleyset', ring=0, default_license_id='CC-BY-4.0', source='foleyset', rights_verified=True, tag_hints_from_path=True), 'fsd50k': <foley.sources.fsd50k.Fsd50kCorpus object>, 'sonniss': UniformCorpus(name='sonniss', ring=2, default_license_id='Sonniss-GDC', source='sonniss', rights_verified=True, tag_hints_from_path=False)}*
+### foley.sources.base.CORPUS_REGISTRY *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [CorpusAdapter](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]* *= {'bbc_remarc': UniformCorpus(name='bbc_remarc', ring=2, default_license_id='RemArc', source='bbc_remarc', rights_verified=True, tag_hints_from_path=False), 'clotho': ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False, include_captions=False), 'foleyset': UniformCorpus(name='foleyset', ring=0, default_license_id='CC-BY-4.0', source='foleyset', rights_verified=True, tag_hints_from_path=True), 'fsd50k': <foley.sources.fsd50k.Fsd50kCorpus object>, 'sonniss': UniformCorpus(name='sonniss', ring=2, default_license_id='Sonniss-GDC', source='sonniss', rights_verified=True, tag_hints_from_path=False)}*
 
 Registry of concrete bulk-corpus adapters, keyed by `adapter.name`.
 
@@ -12356,14 +12719,13 @@ caching the bytes even for CC0. `redistribute_standalone_ok` (copyright) and
 * **Returns:**
   A populated `LicenseRecord` with its derived flags (+ overrides) applied.
 
-### foley.sources.base.bulk_license(, source, license_id, rights_verified, source_id=None, source_url=None, creator_name=None, attribution_text=None)
+### foley.sources.base.bulk_license(, source, license_id, rights_verified, source_id=None, source_url=None, license_url=None, creator_name=None, attribution_text=None)
 
 Build a bulk-acquisition [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord), flags derived.
 
 The SSOT license builder every **bulk-corpus** adapter routes through
 (`acquisition_method=bulk`); a thin wrapper over `_build_license()`. Its
-signature is unchanged from #4 — no `overrides` (a downloaded corpus is
-cacheable by-value), so every existing corpus adapter keeps working verbatim.
+signature has no `overrides` (a downloaded corpus is cacheable by-value).
 
 * **Parameters:**
   * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
@@ -12373,6 +12735,8 @@ cacheable by-value), so every existing corpus adapter keeps working verbatim.
     gate input — pass `False` for unrecognized/ambiguous licenses).
   * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The corpus-native clip id, for provenance.
   * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the clip (attribution/credits).
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The licence URL/label exactly as the corpus served it (kept so the
+    credit links the deed the clip was actually released under).
   * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
   * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if the corpus supplies one.
 * **Return type:**
@@ -12438,6 +12802,26 @@ but never flips the flag, so [`foley.keep()`](_autosummary/foley.html.md#foley.k
   A populated `LicenseRecord` with derived flags applied AND
   `is_ai_generated=True` plus the full generation-provenance block.
 
+### foley.sources.base.license_from_clip_meta(source, spec)
+
+Build a clip’s rights record from [`per_clip_license_meta()`](_autosummary/foley.sources.base.html.md#foley.sources.base.per_clip_license_meta) fields (fail-closed).
+
+* **Return type:**
+  [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
+
+### foley.sources.base.per_clip_license_meta(license_url, , creator_name=None, source_url=None)
+
+The `ClipSpec.meta` rights fields for a clip that carries its own CC licence.
+
+Shared by the corpora whose clips each keep their Freesound licence (FSD50K,
+Clotho): the licence string goes through the one CC mapper
+([`license_id_from_cc_url()`](_autosummary/foley.licensing.html.md#foley.licensing.license_id_from_cc_url) — version kept, unknown fails
+closed), and the string itself is kept as `license_url` so the credit links the
+deed the clip was released under. Read back by [`license_from_clip_meta()`](_autosummary/foley.sources.base.html.md#foley.sources.base.license_from_clip_meta).
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
 ### foley.sources.base.register_corpus(adapter)
 
 Register `adapter` in [`CORPUS_REGISTRY`](_autosummary/foley.sources.base.html.md#foley.sources.base.CORPUS_REGISTRY) (idempotent) and return it.
@@ -12498,43 +12882,69 @@ The BBC RemArc Ring-2 adapter (non-commercial AND ai_training_ok=False).
 Clotho-eval — a captioned Ring-0 corpus that doubles as a retrieval fixture.
 
 Clotho (report 11 §1.2 / §2.1) is an audio-captioning benchmark built from a
-redistributable Freesound subset; its *evaluation* split is a clean Ring-0 seed
-corpus **and** the retrieval regression fixture #10a scores against. Each clip
-ships five human captions — real descriptive text — which this adapter injects so
-they flow through the normal ingest pipeline into the BM25 keyword index (no
-special-casing).
+Freesound subset; its *evaluation* split is a Ring-0 seed corpus and a retrieval
+fixture. Audio must be downloaded locally; this adapter only enumerates, licenses
+and (optionally) captions it.
 
-Licensing is uniform `CC-BY-4.0` (a conservative, attributable stamp over the
-redistributable-subset guarantee — if a clip is actually CC0 we merely
-over-attribute, never under-attribute). Audio must be downloaded locally; this
-adapter only enumerates + captions + licenses it.
+Rights are **per clip and per asset** (#68, report 14 §3.11):
+
+* **Audio** keeps each file’s own Freesound licence, read from the `license`
+  column of `clotho_metadata_*.csv` with its CC version (CC0, CC BY 3.0,
+  CC BY-NC 3.0, Sampling+ in the eval split). A clip absent from the metadata, or
+  under an unrecognised licence, fails closed (`unknown`, unverified). So no
+  non-commercial clip passes [`foley.keep()`](_autosummary/foley.html.md#foley.keep) under commercial intent.
+* **Captions** are licensed by Tampere University for **non-commercial use only**
+  (not CC-BY 4.0, as report 11 said). They are therefore **not** put into the
+  library’s keyword index by default: an index is not intent-aware at query time,
+  and foley’s default intent is commercial. A non-commercial / eval-only library can
+  opt in: `register_corpus(dataclasses.replace(CLOTHO, include_captions=True))`.
 
 ### Module Attributes
 
-| [`CLOTHO`](_autosummary/foley.sources.clotho.html.md#foley.sources.clotho.CLOTHO)   | The Clotho-eval Ring-0 adapter.   |
-|-----------------------------------------------------------|-----------------------------------|
+| [`CAPTION_LICENSE`](_autosummary/foley.sources.clotho.html.md#foley.sources.clotho.CAPTION_LICENSE)   | it is never a sound's licence, only the reason captions stay out of a commercial index).   |
+|--------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| [`CLOTHO`](_autosummary/foley.sources.clotho.html.md#foley.sources.clotho.CLOTHO)            | The Clotho-eval Ring-0 adapter (audio licensed per clip; captions excluded).               |
 
 ### Classes
 
-| [`ClothoEvalCorpus`](_autosummary/foley.sources.clotho.html.md#foley.sources.clotho.ClothoEvalCorpus)(name, ring, ...[, ...])   | Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.   |
-|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| [`ClothoEvalCorpus`](_autosummary/foley.sources.clotho.html.md#foley.sources.clotho.ClothoEvalCorpus)(name, ring, ...[, ...])   | Ring-0 Clotho-eval adapter: per-clip Freesound licences; captions opt-in (NC).   |
+|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
 
-### foley.sources.clotho.CLOTHO *= ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False)*
+### foley.sources.clotho.CAPTION_LICENSE *= 'Tampere-University-Clotho-captions (non-commercial only)'*
 
-The Clotho-eval Ring-0 adapter.
+it is never a
+sound’s licence, only the reason captions stay out of a commercial index).
 
-### *class* foley.sources.clotho.ClothoEvalCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False)
+* **Type:**
+  What the caption text is licensed under (not a LICENSE_FLAGS row
+
+### foley.sources.clotho.CLOTHO *= ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False, include_captions=False)*
+
+The Clotho-eval Ring-0 adapter (audio licensed per clip; captions excluded).
+
+### *class* foley.sources.clotho.ClothoEvalCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False, include_captions=False)
 
 Bases: [`UniformCorpus`](_autosummary/foley.sources.base.html.md#foley.sources.base.UniformCorpus)
 
-Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.
+Ring-0 Clotho-eval adapter: per-clip Freesound licences; captions opt-in (NC).
+
+#### include_captions *: [bool](https://docs.python.org/3/builtins/functions.html#bool)* *= False*
+
+Put the (non-commercial) human captions into the keyword index. Off by default.
 
 #### iter_clips(root)
 
-Yield clips with their human caption attached in `meta['caption']`.
+Yield clips carrying their per-file licence (and caption, when opted in).
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+
+#### resolve_license(spec)
+
+The clip’s own licence from its metadata row (`unknown` when absent).
+
+* **Return type:**
+  [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 
 
 # _autosummary/foley.sources.elevenlabs.adapter.html.md
@@ -12572,15 +12982,15 @@ shared ingest pipeline.
 
 ### Classes
 
-| [`Adapter`](_autosummary/foley.sources.elevenlabs.adapter.html.md#foley.sources.elevenlabs.adapter.Adapter)                                    | Registry convention (arioso): the loader imports `adapter.Adapter`.                                                                                |
-|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`ElevenLabsAdapter`](_autosummary/foley.sources.elevenlabs.adapter.html.md#foley.sources.elevenlabs.adapter.ElevenLabsAdapter)([config, api_key, http]) | ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.GenerateAdapter)). |
+| [`Adapter`](_autosummary/foley.sources.elevenlabs.adapter.html.md#foley.sources.elevenlabs.adapter.Adapter)                                          | Registry convention (arioso): the loader imports `adapter.Adapter`.                                                                                |
+|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`ElevenLabsAdapter`](_autosummary/foley.sources.elevenlabs.adapter.html.md#foley.sources.elevenlabs.adapter.ElevenLabsAdapter)([config, api_key, http, plan]) | ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.GenerateAdapter)). |
 
 ### foley.sources.elevenlabs.adapter.Adapter
 
 Registry convention (arioso): the loader imports `adapter.Adapter`.
 
-### *class* foley.sources.elevenlabs.adapter.ElevenLabsAdapter(config=None, , api_key=None, http=None)
+### *class* foley.sources.elevenlabs.adapter.ElevenLabsAdapter(config=None, , api_key=None, http=None, plan=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -12592,6 +13002,10 @@ ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](_autosummary/fo
   * **api_key** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The ElevenLabs token. Defaults to `$ELEVENLABS_API_KEY`.
   * **http** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport)]) – The injected [`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport) (defaults to
     [`requests_transport()`](_autosummary/foley.sources.http.html.md#foley.sources.http.requests_transport)); tests pass a fake.
+  * **plan** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The ElevenLabs account plan (`'elevenlabs-paid-plan'` |
+    `'elevenlabs-free-plan'`), which decides the generated sound’s licence.
+    Defaults to `$FOLEY_ELEVENLABS_PLAN`; with neither, `generate` refuses
+    before calling the API (#56).
 
 #### *property* api_key *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -12620,7 +13034,13 @@ Generate a sound effect for `prompt`; return its bytes + provisional candidate.
   [`GeneratedClip`](_autosummary/foley.sources.base.html.md#foley.sources.base.GeneratedClip)
 * **Returns:**
   A [`GeneratedClip`](_autosummary/foley.sources.base.html.md#foley.sources.base.GeneratedClip) (`origin=generated`,
-  `license_id='ElevenLabs-SFX'`, `is_ai_generated=True`).
+  `license_id` = the account plan, `is_ai_generated=True`).
+* **Raises:**
+  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – If the plan is unknown (before any API call).
+
+#### *property* plan *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+
+The account plan = the generated sound’s `license_id` (fail-closed when unknown).
 
 
 # _autosummary/foley.sources.elevenlabs.config.html.md
@@ -12634,15 +13054,18 @@ Stdlib-only and declarative — imports nothing heavy, so
 only `config.py`; the adapter + `requests` load lazily). It declares the hosted
 Text-to-SFX v2 endpoint, the `xi-api-key` token auth, maps foley’s unified
 [`GENERATION_AFFORDANCES`](_autosummary/foley.base.html.md#foley.base.GENERATION_AFFORDANCES) onto the native request fields, and — as
-required for every source — the **license block**: `default_license_id='ElevenLabs-SFX'`
-with `cache_bytes_ok=True` (generated audio is stored **by-value** — the opposite
-of Freesound).
+required for every source — the **license block**, with `cache_bytes_ok=True`
+(generated audio is stored **by-value** — the opposite of Freesound).
 
-License note (report 07): the `ElevenLabs-SFX` row assumes a **paid** plan
-(SFX royalty-free, embeddable in derivative works, no attribution). Free-tier
-outputs are non-commercial + attribution-required — hence `tier_assumption`. The
-Prohibited-Use policy forbids standalone redistribution of the raw SFX, which is
-why the `LICENSE_FLAGS` row sets `redistribute_standalone_ok=False`.
+License note (report 07, #56): what a generation may be used for depends on the
+**account’s plan**, which foley cannot see. A paid plan’s SFX are royalty-free and
+embeddable without attribution; a free plan’s are non-commercial and need
+attribution. So the plan is never assumed: it comes from the adapter’s `plan=` or
+`$FOLEY_ELEVENLABS_PLAN` (`elevenlabs-paid-plan` | `elevenlabs-free-plan`, the
+same codes as `an`), each value being its own `LICENSE_FLAGS` row, and an unknown
+plan refuses to generate (no paid call is made). The Prohibited-Use policy forbids
+standalone redistribution of the raw SFX, which is why both rows set
+`redistribute_standalone_ok=False`.
 
 
 # _autosummary/foley.sources.elevenlabs.html.md
@@ -12659,9 +13082,9 @@ at `import foley` or during discovery — via the module `__getattr__` below.
 
 ### Classes
 
-| `Adapter`                                    |                                                                                                                                                    |
-|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ElevenLabsAdapter`([config, api_key, http]) | ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.GenerateAdapter)). |
+| `Adapter`                                          |                                                                                                                                                    |
+|----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ElevenLabsAdapter`([config, api_key, http, plan]) | ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](_autosummary/foley.sources.base.html.md#foley.sources.base.GenerateAdapter)). |
 
 ### Modules
 
@@ -12971,7 +13394,7 @@ Three adapter kinds share the one ingest pipeline: the narrow **bulk-corpus**
 |-------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
 | [`CorpusAdapter`](_autosummary/foley.sources.html.md#foley.sources.CorpusAdapter)(\*args, \*\*kwargs)              | A downloaded bulk corpus presented as an ingestable stream of clips.            |
 | [`UniformCorpus`](_autosummary/foley.sources.html.md#foley.sources.UniformCorpus)(name, ring, ...[, ...])          | A bulk corpus where **every** clip carries the same license.                    |
-| [`ClothoEvalCorpus`](_autosummary/foley.sources.html.md#foley.sources.ClothoEvalCorpus)(name, ring, ...[, ...])       | Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.            |
+| [`ClothoEvalCorpus`](_autosummary/foley.sources.html.md#foley.sources.ClothoEvalCorpus)(name, ring, ...[, ...])       | Ring-0 Clotho-eval adapter: per-clip Freesound licences; captions opt-in (NC).  |
 | [`Fsd50kCorpus`](_autosummary/foley.sources.html.md#foley.sources.Fsd50kCorpus)()                                 | Ring-1 FSD50K adapter with per-clip Freesound license resolution.               |
 | [`SourceAdapter`](_autosummary/foley.sources.html.md#foley.sources.SourceAdapter)(\*args, \*\*kwargs)              | The live/HTTP source contract (report 10 §4.2): `search` + `get` + `download`.  |
 | [`GenerateAdapter`](_autosummary/foley.sources.html.md#foley.sources.GenerateAdapter)(\*args, \*\*kwargs)            | The generation source contract (report 10 §4.2) — a SIBLING of `SourceAdapter`. |
@@ -13008,18 +13431,29 @@ Free-form per-clip metadata the adapter carries to
 hints — e.g. `{"license_id", "creator_name", "source_url",
 "caption", "tag_hints"}`.
 
-### *class* foley.sources.ClothoEvalCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False)
+### *class* foley.sources.ClothoEvalCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False, include_captions=False)
 
 Bases: [`UniformCorpus`](_autosummary/foley.sources.base.html.md#foley.sources.base.UniformCorpus)
 
-Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.
+Ring-0 Clotho-eval adapter: per-clip Freesound licences; captions opt-in (NC).
+
+#### include_captions *: [bool](https://docs.python.org/3/builtins/functions.html#bool)* *= False*
+
+Put the (non-commercial) human captions into the keyword index. Off by default.
 
 #### iter_clips(root)
 
-Yield clips with their human caption attached in `meta['caption']`.
+Yield clips carrying their per-file licence (and caption, when opted in).
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](_autosummary/foley.sources.base.html.md#foley.sources.base.ClipSpec)]
+
+#### resolve_license(spec)
+
+The clip’s own licence from its metadata row (`unknown` when absent).
+
+* **Return type:**
+  [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 
 ### *class* foley.sources.CorpusAdapter(\*args, \*\*kwargs)
 
@@ -13372,14 +13806,13 @@ caching the bytes even for CC0. `redistribute_standalone_ok` (copyright) and
 * **Returns:**
   A populated `LicenseRecord` with its derived flags (+ overrides) applied.
 
-### foley.sources.bulk_license(, source, license_id, rights_verified, source_id=None, source_url=None, creator_name=None, attribution_text=None)
+### foley.sources.bulk_license(, source, license_id, rights_verified, source_id=None, source_url=None, license_url=None, creator_name=None, attribution_text=None)
 
 Build a bulk-acquisition [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord), flags derived.
 
 The SSOT license builder every **bulk-corpus** adapter routes through
 (`acquisition_method=bulk`); a thin wrapper over `_build_license()`. Its
-signature is unchanged from #4 — no `overrides` (a downloaded corpus is
-cacheable by-value), so every existing corpus adapter keeps working verbatim.
+signature has no `overrides` (a downloaded corpus is cacheable by-value).
 
 * **Parameters:**
   * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
@@ -13389,6 +13822,8 @@ cacheable by-value), so every existing corpus adapter keeps working verbatim.
     gate input — pass `False` for unrecognized/ambiguous licenses).
   * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The corpus-native clip id, for provenance.
   * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the clip (attribution/credits).
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The licence URL/label exactly as the corpus served it (kept so the
+    credit links the deed the clip was actually released under).
   * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
   * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if the corpus supplies one.
 * **Return type:**
@@ -13767,23 +14202,10 @@ provenance + the CLAP vector persist. The audio is re-fetched on demand via the
 adapter (there is no local blob to serve — `library.audio(id)` raises for a
 remote by-reference sound; that is the contract).
 
-### Module Attributes
-
-| [`DEFAULT_INTENDED_USE`](_autosummary/foley.sources.pull.html.md#foley.sources.pull.DEFAULT_INTENDED_USE)   | a publishable, commercial, attributable use — the same fail-closed bar `foley.bootstrap.bootstrap()`'s Ring-1 filter applies.   |
-|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-
 ### Functions
 
 | [`add_from`](_autosummary/foley.sources.pull.html.md#foley.sources.pull.add_from)(source, \*, query[, license, limit, ...])   | Search a live `source` and ingest its license-clean hits into `library`.   |
 |-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-
-### foley.sources.pull.DEFAULT_INTENDED_USE *= IntendedUse(commercial=True, publish=True, redistribute_standalone=False, will_train=False, can_attribute=True, revenue_usd=0, allow_voice_or_trademark=False)*
-
-a publishable, commercial, attributable use — the
-same fail-closed bar `foley.bootstrap.bootstrap()`’s Ring-1 filter applies.
-
-* **Type:**
-  Default intent for a pull
 
 ### foley.sources.pull.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, \*\*affordances)
 
@@ -13805,7 +14227,7 @@ applies the by-reference storage gate from the sound’s own license.
   * **library** – Target [`SoundLibrary`](_autosummary/foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
   * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](_autosummary/foley.base.html.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
-    [`DEFAULT_INTENDED_USE`](_autosummary/foley.sources.pull.html.md#foley.sources.pull.DEFAULT_INTENDED_USE)).
+    `DEFAULT_INTENDED_USE`).
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport
     adapter; production omits it and the registry lazily builds one).
@@ -15185,16 +15607,18 @@ Non-destructively mute/unmute an item — a NEW timeline.
 
 # About this build
 
-This documentation was built on **2026-10-04 08:01 UTC** from commit <a href="https://github.com/thorwhalen/foley/commit/c6ab79941eaa91a2683707369ec46a52ca2ec705"><code>c6ab799</code></a> on branch <code>main</code>, for **foley 0.0.28** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-04 08:24 UTC** from commit <a href="https://github.com/thorwhalen/foley/commit/51e53f48444aa9f0a6f91a25de9985e748f55b21"><code>51e53f4</code></a> on branch <code>main</code>, for **foley 0.0.29** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.29) is behind the latest release on PyPI (0.0.30): `pip install foley` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/foley/commit/c6ab79941eaa91a2683707369ec46a52ca2ec705"><code>c6ab79941eaa91a2683707369ec46a52ca2ec705</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/foley/commit/51e53f48444aa9f0a6f91a25de9985e748f55b21"><code>51e53f48444aa9f0a6f91a25de9985e748f55b21</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -15205,9 +15629,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/foley</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/foley/actions/runs/37187500697">37187500697</a>     |
+| Run          | <a href="https://github.com/thorwhalen/foley/actions/runs/37188669964">37188669964</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>c6ab79941eaa91a2683707369ec46a52ca2ec705</code> (in the history of the built commit) |
+| Event commit | <code>51e53f48444aa9f0a6f91a25de9985e748f55b21</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -15232,13 +15656,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/foley/0.0.28/">0.0.28</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/foley/0.0.30/">0.0.30</a>, newer than the documented version (0.0.29).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/foley && cd foley
-git checkout c6ab79941eaa91a2683707369ec46a52ca2ec705
+git checkout 51e53f48444aa9f0a6f91a25de9985e748f55b21
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../_static/documentation_options.js?v=828725f0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.audio" href="foley.audio.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -486,6 +486,12 @@ only the stdlib; install the capability you use via the matching extra
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.index.ingest_folder" title="foley.index.ingest_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ingest_folder</span></code></a>(path, *[, library, recursive, ...])</p></td>
 <td><p>Ingest every audio file under <code class="docutils literal notranslate"><span class="pre">path</span></code> and return an <a class="reference internal" href="#foley.index.IngestReport" title="foley.index.IngestReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestReport</span></code></a>.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.index.resolve_ingest_license" title="foley.index.resolve_ingest_license"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_ingest_license</span></code></a>(license, *[, source_url])</p></td>
+<td><p>The rights record for a local ingest: fail-closed unless rights are asserted (#55).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.index.restamp_rights" title="foley.index.restamp_rights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restamp_rights</span></code></a>([library, license, ids, ...])</p></td>
+<td><p>Re-stamp the licence of stored sounds; a dry run unless <code class="docutils literal notranslate"><span class="pre">apply=True</span></code>.</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.index.default_index" title="foley.index.default_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">default_index</span></code></a>(*, data_dir, dim)</p></td>
 <td><p>Build the best available persistent index for a library.</p></td>
 </tr>
@@ -626,6 +632,14 @@ cosine similarity. <code class="docutils literal notranslate"><span class="pre">
 <dt class="sig sig-object py" id="foley.index.ClapEmbedder.dim">
 <span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#foley.index.ClapEmbedder.dim" title="Link to this definition">#</a></dt>
 <dd><p>The embedding dimensionality.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.index.ClapEmbedder.open_source">
+<span class="sig-name descname"><span class="pre">open_source</span></span><a class="headerlink" href="#foley.index.ClapEmbedder.open_source" title="Link to this definition">#</a></dt>
+<dd><p>Whether the checkpoint is an open-source model (the LAION
+releases are). Read by the ingest AI-use gate for sounds whose rights
+holder allows only open-source models (#69).</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1371,6 +1385,22 @@ excluded from the results.</p>
 <dd><p>The content-addressed byte store.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.index.SoundLibrary.update_record">
+<span class="sig-name descname"><span class="pre">update_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/library.html#SoundLibrary.update_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.SoundLibrary.update_record" title="Link to this definition">#</a></dt>
+<dd><p>Rewrite a stored record’s metadata and re-index its keyword text.</p>
+<p>For corrections that do not touch the audio (a re-stamped licence, a removed
+caption): the bytes and the CLAP vector stay as they are.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#KeyError" title="(in Python v3.14)"><strong>KeyError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">record.id</span></code> is not in the library.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="foley.base.html#foley.base.SoundRecord" title="foley.base.SoundRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundRecord</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="foley.index.SoundLibrary.vindex">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">vindex</span></span><a class="headerlink" href="#foley.index.SoundLibrary.vindex" title="Link to this definition">#</a></dt>
@@ -1703,7 +1733,7 @@ flags, …).</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="foley.index.ingest_one">
-<span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">ingest_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_uri</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeroshot_tagger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captioner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_qc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">QCStatus.warn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_supervised</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_zeroshot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_caption</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">QCThresholds(clip_full_scale=0.999,</span> <span class="pre">clip_min_run=3,</span> <span class="pre">clip_reject_ratio=0.0001,</span> <span class="pre">clip_reject_run=10,</span> <span class="pre">true_peak_max_dbtp=-1.0,</span> <span class="pre">true_peak_oversample=4,</span> <span class="pre">dc_offset_fail=0.01,</span> <span class="pre">dc_offset_warn=0.001,</span> <span class="pre">silence_rms_dbfs=-60.0,</span> <span class="pre">snr_clean_db=20.0,</span> <span class="pre">snr_quiet_percentile=10.0,</span> <span class="pre">snr_frame_s=0.025,</span> <span class="pre">snr_hop_s=0.01,</span> <span class="pre">edge_rel_peak_dbfs=-40.0,</span> <span class="pre">edge_fade_s=0.01,</span> <span class="pre">lufs_gate_floor=-70.0,</span> <span class="pre">lufs_outlier_lu=6.0,</span> <span class="pre">duration_min_s=0.1,</span> <span class="pre">deliver_min_sample_rate=44100)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_ai_training_forbidden</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/ingest.html#ingest_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest_one" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">ingest_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sound_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_uri</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeroshot_tagger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captioner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_qc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">QCStatus.warn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_supervised</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_zeroshot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_caption</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">QCThresholds(clip_full_scale=0.999,</span> <span class="pre">clip_min_run=3,</span> <span class="pre">clip_reject_ratio=0.0001,</span> <span class="pre">clip_reject_run=10,</span> <span class="pre">true_peak_max_dbtp=-1.0,</span> <span class="pre">true_peak_oversample=4,</span> <span class="pre">dc_offset_fail=0.01,</span> <span class="pre">dc_offset_warn=0.001,</span> <span class="pre">silence_rms_dbfs=-60.0,</span> <span class="pre">snr_clean_db=20.0,</span> <span class="pre">snr_quiet_percentile=10.0,</span> <span class="pre">snr_frame_s=0.025,</span> <span class="pre">snr_hop_s=0.01,</span> <span class="pre">edge_rel_peak_dbfs=-40.0,</span> <span class="pre">edge_fade_s=0.01,</span> <span class="pre">lufs_gate_floor=-70.0,</span> <span class="pre">lufs_outlier_lu=6.0,</span> <span class="pre">duration_min_s=0.1,</span> <span class="pre">deliver_min_sample_rate=44100)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_ai_training_forbidden</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed_tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commercial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/ingest.html#ingest_one"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest_one" title="Link to this definition">#</a></dt>
 <dd><p>Ingest one clip into <code class="docutils literal notranslate"><span class="pre">library</span></code> and return an <a class="reference internal" href="#foley.index.IngestResult" title="foley.index.IngestResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">IngestResult</span></code></a>.</p>
 <p>Pipeline: probe + decode-once -&gt; content-address dedup -&gt; QC gate -&gt; embed
 (once) -&gt; supervised + zero-shot tags -&gt; caption -&gt; resolve UCS -&gt; assemble
@@ -1728,7 +1758,10 @@ is a different byte source from this PCM hash.</p></li>
 adapter passes the stable source page URL (e.g.
 <code class="docutils literal notranslate"><span class="pre">'https://freesound.org/s/12345/'</span></code>) that <a class="reference internal" href="foley.stores.html#foley.stores.store_sound" title="foley.stores.store_sound"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.stores.store_sound()</span></code></a>
 requires for a by-reference sound.</p></li>
-<li><p><strong>license</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="foley.base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a>]</span>) – Rights record (default: a user-owned, cacheable license).</p></li>
+<li><p><strong>license</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="foley.base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a>]</span>) – Rights record, or a <code class="docutils literal notranslate"><span class="pre">license_id</span></code> string the caller asserts
+(<code class="docutils literal notranslate"><span class="pre">'user-owned'</span></code>), or <code class="docutils literal notranslate"><span class="pre">None</span></code> (default): rights <strong>unknown</strong>, so the clip
+is indexed but <a class="reference internal" href="foley.html#foley.keep" title="foley.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.keep()</span></code></a> refuses it (#55). See
+<a class="reference internal" href="#foley.index.resolve_ingest_license" title="foley.index.resolve_ingest_license"><code class="xref py py-func docutils literal notranslate"><span class="pre">resolve_ingest_license()</span></code></a>.</p></li>
 <li><p><strong>tagger</strong> – Supervised <a class="reference internal" href="foley.index.protocols.html#foley.index.protocols.Tagger" title="foley.index.protocols.Tagger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tagger</span></code></a> (default: PANNs
 via <a class="reference internal" href="foley.index.taggers.html#foley.index.taggers.default_tagger" title="foley.index.taggers.default_tagger"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_tagger()</span></code></a>).</p></li>
 <li><p><strong>zeroshot_tagger</strong> – Zero-shot tagger (default: CLAP via
@@ -1753,6 +1786,9 @@ AI training on the corpus. Pass <code class="docutils literal notranslate"><span
 consent and admit it anyway (see <code class="xref py py-func docutils literal notranslate"><span class="pre">foley.bootstrap.bootstrap()</span></code>’s
 <code class="docutils literal notranslate"><span class="pre">accept_ai_restricted</span></code>). Protects every ingest path, not just
 bootstrap.</p></li>
+<li><p><strong>commercial</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</span>) – Whether the AI use is for a commercial purpose (decides a
+<code class="docutils literal notranslate"><span class="pre">nc_open_source_only</span></code> scope, #69). <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) means
+<a class="reference internal" href="foley.licensing.html#foley.licensing.DEFAULT_INTENDED_USE" title="foley.licensing.DEFAULT_INTENDED_USE"><code class="xref py py-data docutils literal notranslate"><span class="pre">DEFAULT_INTENDED_USE</span></code></a>’s (commercial).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -1841,6 +1877,79 @@ recognized).</p></li>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A <a class="reference internal" href="foley.index.taxonomy.model.html#foley.index.taxonomy.model.CatIdResolution" title="foley.index.taxonomy.model.CatIdResolution"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatIdResolution</span></code></a> (falsy when
 nothing resolved).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.resolve_ingest_license">
+<span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">resolve_ingest_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">license</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/ingest.html#resolve_ingest_license"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.resolve_ingest_license" title="Link to this definition">#</a></dt>
+<dd><p>The rights record for a local ingest: fail-closed unless rights are asserted (#55).</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> (no licence given) → <code class="docutils literal notranslate"><span class="pre">license_id='unknown'</span></code>, <code class="docutils literal notranslate"><span class="pre">rights_verified=False</span></code>:
+<a class="reference internal" href="foley.html#foley.keep" title="foley.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.keep()</span></code></a> refuses it for every use. The bytes are still kept locally</p>
+<blockquote>
+<div><p>(<code class="docutils literal notranslate"><span class="pre">cache_bytes_ok=True</span></code>: it is the user’s own disk, no terms of service apply),
+so the clip is searchable and can be re-stamped later without re-ingesting.</p>
+</div></blockquote>
+</li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">str</span></code> → that <code class="docutils literal notranslate"><span class="pre">license_id</span></code>, which must be a <code class="xref py py-data docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code> row, with
+<code class="docutils literal notranslate"><span class="pre">rights_verified=True</span></code> (the caller is asserting it) and <code class="docutils literal notranslate"><span class="pre">verified_at</span></code> set —
+e.g. <code class="docutils literal notranslate"><span class="pre">'user-owned'</span></code> for the user’s own recordings.</p></li>
+<li><p>a <a class="reference internal" href="foley.base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a> → used as given.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If a <code class="docutils literal notranslate"><span class="pre">str</span></code> licence id has no <code class="xref py py-data docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code> row.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="foley.base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.index.restamp_rights">
+<span class="sig-prename descclassname"><span class="pre">foley.index.</span></span><span class="sig-name descname"><span class="pre">restamp_rights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">license</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'unknown'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'legacy-user-owned'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/ingest.html#restamp_rights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.restamp_rights" title="Link to this definition">#</a></dt>
+<dd><p>Re-stamp the licence of stored sounds; a dry run unless <code class="docutils literal notranslate"><span class="pre">apply=True</span></code>.</p>
+<p>The migration for libraries built before #55 / #56. A re-ingest does not do it
+(content-addressed dedup skips files already stored), so this rewrites the stored
+records in place:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">foley</span> <span class="pre">restamp-rights</span> <span class="pre">--apply</span></code> — every sound an older foley stamped
+<code class="docutils literal notranslate"><span class="pre">user-owned</span></code> without being told becomes <code class="docutils literal notranslate"><span class="pre">unknown</span></code> (fail closed);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">foley</span> <span class="pre">restamp-rights</span> <span class="pre">--license</span> <span class="pre">user-owned</span> <span class="pre">--apply</span></code> — the same sounds, but you
+assert that you own them (now recorded with a <code class="docutils literal notranslate"><span class="pre">verified_at</span></code> timestamp);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">foley</span> <span class="pre">restamp-rights</span> <span class="pre">--select</span> <span class="pre">legacy-elevenlabs</span> <span class="pre">--license</span> <span class="pre">elevenlabs-paid-plan</span>
+<span class="pre">--apply</span></code> — ElevenLabs generations made before the plan was explicit;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">foley</span> <span class="pre">restamp-rights</span> <span class="pre">--select</span> <span class="pre">has-license-url</span> <span class="pre">--license</span> <span class="pre">from-url</span> <span class="pre">--apply</span></code> —
+every record that kept its source’s licence string (Freesound pulls) is
+re-derived by today’s mapper (CC versions, PDM, NC spellings);</p></li>
+<li><p>corpus clips (Clotho, FSD50K) are repaired by re-running <code class="docutils literal notranslate"><span class="pre">foley</span> <span class="pre">bootstrap</span></code>,
+which re-stamps already-stored clips from the corpus metadata.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>library</strong> – The <a class="reference internal" href="foley.index.library.html#foley.index.library.SoundLibrary" title="foley.index.library.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundLibrary</span></code></a> (default: the default one).</p></li>
+<li><p><strong>license</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The <code class="docutils literal notranslate"><span class="pre">license_id</span></code> to stamp (a <code class="docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code> row; default
+<code class="docutils literal notranslate"><span class="pre">'unknown'</span></code>), or <code class="xref py py-data docutils literal notranslate"><span class="pre">FROM_LICENSE_URL</span></code> to re-derive each record from
+its own <code class="docutils literal notranslate"><span class="pre">license_url</span></code>.</p></li>
+<li><p><strong>ids</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – Re-stamp exactly these sound ids (overrides <code class="docutils literal notranslate"><span class="pre">where</span></code> / <code class="docutils literal notranslate"><span class="pre">select</span></code>).</p></li>
+<li><p><strong>where</strong> – A predicate <code class="docutils literal notranslate"><span class="pre">LicenseRecord</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code> choosing the records (overrides
+<code class="docutils literal notranslate"><span class="pre">select</span></code>).</p></li>
+<li><p><strong>select</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – A <code class="xref py py-data docutils literal notranslate"><span class="pre">LEGACY_SELECTORS</span></code> name (default <code class="docutils literal notranslate"><span class="pre">'legacy-user-owned'</span></code>).</p></li>
+<li><p><strong>apply</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Write the change. <code class="docutils literal notranslate"><span class="pre">False</span></code> (default) only reports what would change.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The ids that were (or, in a dry run, would be) re-stamped.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If <code class="docutils literal notranslate"><span class="pre">license</span></code> or <code class="docutils literal notranslate"><span class="pre">select</span></code> is unknown.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1972,6 +2081,7 @@ fusion).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ClapEmbedder"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ClapEmbedder.model_id"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.model_id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ClapEmbedder.dim"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.dim</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ClapEmbedder.open_source"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.open_source</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ClapEmbedder.device"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.device</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id0"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.dim</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ClapEmbedder.embed_audio"><code class="docutils literal notranslate"><span class="pre">ClapEmbedder.embed_audio()</span></code></a></li>
@@ -2053,6 +2163,7 @@ fusion).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.SoundLibrary.search_clip"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.search_clip()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.SoundLibrary.similar"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.similar()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.SoundLibrary.sounds"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.sounds</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.SoundLibrary.update_record"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.update_record()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.SoundLibrary.vindex"><code class="docutils literal notranslate"><span class="pre">SoundLibrary.vindex</span></code></a></li>
 </ul>
 </li>
@@ -2089,6 +2200,8 @@ fusion).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.parse_ucs_filename"><code class="docutils literal notranslate"><span class="pre">parse_ucs_filename()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.reciprocal_rank_fusion"><code class="docutils literal notranslate"><span class="pre">reciprocal_rank_fusion()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.resolve_catid"><code class="docutils literal notranslate"><span class="pre">resolve_catid()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.resolve_ingest_license"><code class="docutils literal notranslate"><span class="pre">resolve_ingest_license()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.restamp_rights"><code class="docutils literal notranslate"><span class="pre">restamp_rights()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.sqlite_vec_loadable"><code class="docutils literal notranslate"><span class="pre">sqlite_vec_loadable()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.vector_search"><code class="docutils literal notranslate"><span class="pre">vector_search()</span></code></a></li>
 </ul>

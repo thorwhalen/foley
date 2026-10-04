@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../_static/documentation_options.js?v=828725f0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.sources.bbc_remarc" href="foley.sources.bbc_remarc.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -463,20 +463,30 @@
 <span id="foley-sources-clotho"></span><h1>foley.sources.clotho<a class="headerlink" href="#module-foley.sources.clotho" title="Link to this heading">#</a></h1>
 <p>Clotho-eval — a captioned Ring-0 corpus that doubles as a retrieval fixture.</p>
 <p>Clotho (report 11 §1.2 / §2.1) is an audio-captioning benchmark built from a
-redistributable Freesound subset; its <em>evaluation</em> split is a clean Ring-0 seed
-corpus <strong>and</strong> the retrieval regression fixture #10a scores against. Each clip
-ships five human captions — real descriptive text — which this adapter injects so
-they flow through the normal ingest pipeline into the BM25 keyword index (no
-special-casing).</p>
-<p>Licensing is uniform <code class="docutils literal notranslate"><span class="pre">CC-BY-4.0</span></code> (a conservative, attributable stamp over the
-redistributable-subset guarantee — if a clip is actually CC0 we merely
-over-attribute, never under-attribute). Audio must be downloaded locally; this
-adapter only enumerates + captions + licenses it.</p>
+Freesound subset; its <em>evaluation</em> split is a Ring-0 seed corpus and a retrieval
+fixture. Audio must be downloaded locally; this adapter only enumerates, licenses
+and (optionally) captions it.</p>
+<p>Rights are <strong>per clip and per asset</strong> (#68, report 14 §3.11):</p>
+<ul class="simple">
+<li><p><strong>Audio</strong> keeps each file’s own Freesound licence, read from the <code class="docutils literal notranslate"><span class="pre">license</span></code>
+column of <code class="docutils literal notranslate"><span class="pre">clotho_metadata_*.csv</span></code> with its CC version (CC0, CC BY 3.0,
+CC BY-NC 3.0, Sampling+ in the eval split). A clip absent from the metadata, or
+under an unrecognised licence, fails closed (<code class="docutils literal notranslate"><span class="pre">unknown</span></code>, unverified). So no
+non-commercial clip passes <a class="reference internal" href="foley.html#foley.keep" title="foley.keep"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.keep()</span></code></a> under commercial intent.</p></li>
+<li><p><strong>Captions</strong> are licensed by Tampere University for <strong>non-commercial use only</strong>
+(not CC-BY 4.0, as report 11 said). They are therefore <strong>not</strong> put into the
+library’s keyword index by default: an index is not intent-aware at query time,
+and foley’s default intent is commercial. A non-commercial / eval-only library can
+opt in: <code class="docutils literal notranslate"><span class="pre">register_corpus(dataclasses.replace(CLOTHO,</span> <span class="pre">include_captions=True))</span></code>.</p></li>
+</ul>
 <p class="rubric">Module Attributes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#foley.sources.clotho.CLOTHO" title="foley.sources.clotho.CLOTHO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLOTHO</span></code></a></p></td>
-<td><p>The Clotho-eval Ring-0 adapter.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.sources.clotho.CAPTION_LICENSE" title="foley.sources.clotho.CAPTION_LICENSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CAPTION_LICENSE</span></code></a></p></td>
+<td><p>it is never a sound's licence, only the reason captions stay out of a commercial index).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.sources.clotho.CLOTHO" title="foley.sources.clotho.CLOTHO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CLOTHO</span></code></a></p></td>
+<td><p>The Clotho-eval Ring-0 adapter (audio licensed per clip; captions excluded).</p></td>
 </tr>
 </tbody>
 </table>
@@ -485,31 +495,60 @@ adapter only enumerates + captions + licenses it.</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.sources.clotho.ClothoEvalCorpus" title="foley.sources.clotho.ClothoEvalCorpus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ClothoEvalCorpus</span></code></a>(name, ring, ...[, ...])</p></td>
-<td><p>Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.</p></td>
+<td><p>Ring-0 Clotho-eval adapter: per-clip Freesound licences; captions opt-in (NC).</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <dl class="py data">
+<dt class="sig sig-object py" id="foley.sources.clotho.CAPTION_LICENSE">
+<span class="sig-prename descclassname"><span class="pre">foley.sources.clotho.</span></span><span class="sig-name descname"><span class="pre">CAPTION_LICENSE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Tampere-University-Clotho-captions</span> <span class="pre">(non-commercial</span> <span class="pre">only)'</span></span><a class="headerlink" href="#foley.sources.clotho.CAPTION_LICENSE" title="Link to this definition">#</a></dt>
+<dd><p>it is never a
+sound’s licence, only the reason captions stay out of a commercial index).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>What the caption text is licensed under (not a LICENSE_FLAGS row</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
 <dt class="sig sig-object py" id="foley.sources.clotho.CLOTHO">
-<span class="sig-prename descclassname"><span class="pre">foley.sources.clotho.</span></span><span class="sig-name descname"><span class="pre">CLOTHO</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">ClothoEvalCorpus(name='clotho',</span> <span class="pre">ring=0,</span> <span class="pre">default_license_id='CC-BY-4.0',</span> <span class="pre">source='clotho',</span> <span class="pre">rights_verified=True,</span> <span class="pre">tag_hints_from_path=False)</span></span><a class="headerlink" href="#foley.sources.clotho.CLOTHO" title="Link to this definition">#</a></dt>
-<dd><p>The Clotho-eval Ring-0 adapter.</p>
+<span class="sig-prename descclassname"><span class="pre">foley.sources.clotho.</span></span><span class="sig-name descname"><span class="pre">CLOTHO</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">ClothoEvalCorpus(name='clotho',</span> <span class="pre">ring=0,</span> <span class="pre">default_license_id='CC-BY-4.0',</span> <span class="pre">source='clotho',</span> <span class="pre">rights_verified=True,</span> <span class="pre">tag_hints_from_path=False,</span> <span class="pre">include_captions=False)</span></span><a class="headerlink" href="#foley.sources.clotho.CLOTHO" title="Link to this definition">#</a></dt>
+<dd><p>The Clotho-eval Ring-0 adapter (audio licensed per clip; captions excluded).</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.sources.clotho.ClothoEvalCorpus">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.sources.clotho.</span></span><span class="sig-name descname"><span class="pre">ClothoEvalCorpus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_license_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rights_verified</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_hints_from_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/clotho.html#ClothoEvalCorpus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.clotho.ClothoEvalCorpus" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.sources.clotho.</span></span><span class="sig-name descname"><span class="pre">ClothoEvalCorpus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_license_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rights_verified</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_hints_from_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_captions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/clotho.html#ClothoEvalCorpus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.clotho.ClothoEvalCorpus" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="foley.sources.base.html#foley.sources.base.UniformCorpus" title="foley.sources.base.UniformCorpus"><code class="xref py py-class docutils literal notranslate"><span class="pre">UniformCorpus</span></code></a></p>
-<p>Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.</p>
+<p>Ring-0 Clotho-eval adapter: per-clip Freesound licences; captions opt-in (NC).</p>
 <dl class="field-list simple">
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.sources.clotho.ClothoEvalCorpus.include_captions">
+<span class="sig-name descname"><span class="pre">include_captions</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#foley.sources.clotho.ClothoEvalCorpus.include_captions" title="Link to this definition">#</a></dt>
+<dd><p>Put the (non-commercial) human captions into the keyword index. Off by default.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="foley.sources.clotho.ClothoEvalCorpus.iter_clips">
 <span class="sig-name descname"><span class="pre">iter_clips</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/clotho.html#ClothoEvalCorpus.iter_clips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.clotho.ClothoEvalCorpus.iter_clips" title="Link to this definition">#</a></dt>
-<dd><p>Yield clips with their human caption attached in <code class="docutils literal notranslate"><span class="pre">meta['caption']</span></code>.</p>
+<dd><p>Yield clips carrying their per-file licence (and caption, when opted in).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference internal" href="foley.sources.base.html#foley.sources.base.ClipSpec" title="foley.sources.base.ClipSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClipSpec</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.sources.clotho.ClothoEvalCorpus.resolve_license">
+<span class="sig-name descname"><span class="pre">resolve_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/clotho.html#ClothoEvalCorpus.resolve_license"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.clotho.ClothoEvalCorpus.resolve_license" title="Link to this definition">#</a></dt>
+<dd><p>The clip’s own licence from its metadata row (<code class="docutils literal notranslate"><span class="pre">unknown</span></code> when absent).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="foley.base.html#foley.base.LicenseRecord" title="foley.base.LicenseRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseRecord</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -565,9 +604,12 @@ adapter only enumerates + captions + licenses it.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.clotho.CAPTION_LICENSE"><code class="docutils literal notranslate"><span class="pre">CAPTION_LICENSE</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.clotho.CLOTHO"><code class="docutils literal notranslate"><span class="pre">CLOTHO</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.clotho.ClothoEvalCorpus"><code class="docutils literal notranslate"><span class="pre">ClothoEvalCorpus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.clotho.ClothoEvalCorpus.include_captions"><code class="docutils literal notranslate"><span class="pre">ClothoEvalCorpus.include_captions</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.clotho.ClothoEvalCorpus.iter_clips"><code class="docutils literal notranslate"><span class="pre">ClothoEvalCorpus.iter_clips()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.clotho.ClothoEvalCorpus.resolve_license"><code class="docutils literal notranslate"><span class="pre">ClothoEvalCorpus.resolve_license()</span></code></a></li>
 </ul>
 </li>
 </ul>

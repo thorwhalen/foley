@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../_static/documentation_options.js?v=828725f0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.sources.elevenlabs.adapter" href="foley.sources.elevenlabs.adapter.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -470,14 +470,17 @@
 only <code class="docutils literal notranslate"><span class="pre">config.py</span></code>; the adapter + <code class="docutils literal notranslate"><span class="pre">requests</span></code> load lazily). It declares the hosted
 Text-to-SFX v2 endpoint, the <code class="docutils literal notranslate"><span class="pre">xi-api-key</span></code> token auth, maps foley’s unified
 <a class="reference internal" href="foley.base.html#foley.base.GENERATION_AFFORDANCES" title="foley.base.GENERATION_AFFORDANCES"><code class="xref py py-data docutils literal notranslate"><span class="pre">GENERATION_AFFORDANCES</span></code></a> onto the native request fields, and — as
-required for every source — the <strong>license block</strong>: <code class="docutils literal notranslate"><span class="pre">default_license_id='ElevenLabs-SFX'</span></code>
-with <code class="docutils literal notranslate"><span class="pre">cache_bytes_ok=True</span></code> (generated audio is stored <strong>by-value</strong> — the opposite
-of Freesound).</p>
-<p>License note (report 07): the <code class="docutils literal notranslate"><span class="pre">ElevenLabs-SFX</span></code> row assumes a <strong>paid</strong> plan
-(SFX royalty-free, embeddable in derivative works, no attribution). Free-tier
-outputs are non-commercial + attribution-required — hence <code class="docutils literal notranslate"><span class="pre">tier_assumption</span></code>. The
-Prohibited-Use policy forbids standalone redistribution of the raw SFX, which is
-why the <code class="docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code> row sets <code class="docutils literal notranslate"><span class="pre">redistribute_standalone_ok=False</span></code>.</p>
+required for every source — the <strong>license block</strong>, with <code class="docutils literal notranslate"><span class="pre">cache_bytes_ok=True</span></code>
+(generated audio is stored <strong>by-value</strong> — the opposite of Freesound).</p>
+<p>License note (report 07, #56): what a generation may be used for depends on the
+<strong>account’s plan</strong>, which foley cannot see. A paid plan’s SFX are royalty-free and
+embeddable without attribution; a free plan’s are non-commercial and need
+attribution. So the plan is never assumed: it comes from the adapter’s <code class="docutils literal notranslate"><span class="pre">plan=</span></code> or
+<code class="docutils literal notranslate"><span class="pre">$FOLEY_ELEVENLABS_PLAN</span></code> (<code class="docutils literal notranslate"><span class="pre">elevenlabs-paid-plan</span></code> | <code class="docutils literal notranslate"><span class="pre">elevenlabs-free-plan</span></code>, the
+same codes as <code class="docutils literal notranslate"><span class="pre">an</span></code>), each value being its own <code class="docutils literal notranslate"><span class="pre">LICENSE_FLAGS</span></code> row, and an unknown
+plan refuses to generate (no paid call is made). The Prohibited-Use policy forbids
+standalone redistribution of the raw SFX, which is why both rows set
+<code class="docutils literal notranslate"><span class="pre">redistribute_standalone_ok=False</span></code>.</p>
 </section>
 
 

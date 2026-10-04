@@ -39,7 +39,7 @@ and per-session [`foley.agent.session.SessionStore`](foley.agent.session.md#fole
 | [`foley_search`](#foley.agent.mcp.foley_search)(query[, k, commercial_ok, ...])     | Hybrid (CLAP + keyword) search of the library for a text query; returns candidate rows.   |
 | [`foley_set_gain`](#foley.agent.mcp.foley_set_gain)(timeline, item_id, gain_db)       | Set a timeline item's gain (dB); returns the new timeline.                                |
 | [`foley_set_master`](#foley.agent.mcp.foley_set_master)(timeline[, target_lufs, ...])   | Set the timeline's master target (LUFS / true-peak); returns the new timeline.            |
-| [`foley_similar_to`](#foley.agent.mcp.foley_similar_to)(sound_id[, k, session])         | "More like this" — the library neighbours of a sound (by id); returns candidate rows.     |
+| [`foley_similar_to`](#foley.agent.mcp.foley_similar_to)(sound_id[, k, ...])             | "More like this" — the library neighbours of a sound (by id); returns candidate rows.     |
 | [`foley_status`](#foley.agent.mcp.foley_status)([session])                          | The current runtime posture + this session's pick/reject counts.                          |
 | [`foley_swap_clip`](#foley.agent.mcp.foley_swap_clip)(timeline, item_id, sound_id)     | Swap a timeline item's clip; returns the new timeline.                                    |
 | [`foley_timeline_captions`](#foley.agent.mcp.foley_timeline_captions)(timeline[, fmt])         | Export SDH captions for a timeline (`fmt='vtt'` | `'srt'`).                               |
@@ -85,7 +85,7 @@ Remove a previously-picked sound from the session.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### foley.agent.mcp.foley_find(context, max_events=6, verify='listen', commercial_ok=False, k=10, session='default')
+### foley.agent.mcp.foley_find(context, max_events=6, verify='listen', commercial_ok=True, k=10, session='default')
 
 Find verified, license-clean sound candidates for a narrative passage.
 
@@ -95,7 +95,7 @@ rehydrate them by id. Returns compact candidate rows.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
 
-### foley.agent.mcp.foley_generate(prompt, backend='stable_audio', commercial_ok=False, session='default')
+### foley.agent.mcp.foley_generate(prompt, backend='stable_audio', commercial_ok=True, session='default')
 
 Generate a sound from a text prompt (local backends only when offline).
 
@@ -166,7 +166,7 @@ Reject a sound (feeds `foley_refine` relevance feedback).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### foley.agent.mcp.foley_score(context, commercial_ok=False, verify='listen', max_events=6, session='default')
+### foley.agent.mcp.foley_score(context, commercial_ok=True, verify='listen', max_events=6, session='default')
 
 Score a narration passage → an editable sound-design timeline + a per-event rationale.
 
@@ -178,7 +178,7 @@ clip, nudge an onset, drop a cue — before committing to a render.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### foley.agent.mcp.foley_search(query, k=10, commercial_ok=False, ucs_category=None, rerank=False, session='default')
+### foley.agent.mcp.foley_search(query, k=10, commercial_ok=True, ucs_category=None, rerank=False, session='default')
 
 Hybrid (CLAP + keyword) search of the library for a text query; returns candidate rows.
 
@@ -202,7 +202,7 @@ that field (so `peak_dbfs=-2.0` alone tightens only the true-peak ceiling).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### foley.agent.mcp.foley_similar_to(sound_id, k=10, session='default')
+### foley.agent.mcp.foley_similar_to(sound_id, k=10, commercial_ok=True, session='default')
 
 “More like this” — the library neighbours of a sound (by id); returns candidate rows.
 

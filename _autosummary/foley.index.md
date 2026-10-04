@@ -21,6 +21,8 @@ only the stdlib; install the capability you use via the matching extra
 | [`default_zeroshot_tagger`](#foley.index.default_zeroshot_tagger)([embedder])                | The default zero-shot tagger (CLAP vs UCS subcategories; `foley[clap]`).                                             |
 | [`ingest_one`](#foley.index.ingest_one)(src, \*[, library, sound_id, ...])      | Ingest one clip into `library` and return an [`IngestResult`](#foley.index.IngestResult).          |
 | [`ingest_folder`](#foley.index.ingest_folder)(path, \*[, library, recursive, ...]) | Ingest every audio file under `path` and return an [`IngestReport`](#foley.index.IngestReport).    |
+| [`resolve_ingest_license`](#foley.index.resolve_ingest_license)(license, \*[, source_url])  | The rights record for a local ingest: fail-closed unless rights are asserted (#55).                                  |
+| [`restamp_rights`](#foley.index.restamp_rights)([library, license, ids, ...])       | Re-stamp the licence of stored sounds; a dry run unless `apply=True`.                                                |
 | [`default_index`](#foley.index.default_index)(\*, data_dir, dim)                   | Build the best available persistent index for a library.                                                             |
 | [`lancedb_available`](#foley.index.lancedb_available)()                                | True if `lancedb` is importable (the `foley[index]` extra is present).                                               |
 | [`sqlite_vec_loadable`](#foley.index.sqlite_vec_loadable)()                              | True if `sqlite_vec` is installed AND this interpreter can load it.                                                  |
@@ -96,6 +98,12 @@ The HF checkpoint id.
 #### dim
 
 The embedding dimensionality.
+
+#### open_source
+
+Whether the checkpoint is an open-source model (the LAION
+releases are). Read by the ingest AI-use gate for sounds whose rights
+holder allows only open-source models (#69).
 
 #### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -642,6 +650,18 @@ excluded from the results.
 
 The content-addressed byte store.
 
+#### update_record(record)
+
+Rewrite a stored record’s metadata and re-index its keyword text.
+
+For corrections that do not touch the audio (a re-stamped licence, a removed
+caption): the bytes and the CLAP vector stay as they are.
+
+* **Raises:**
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If `record.id` is not in the library.
+* **Return type:**
+  [`SoundRecord`](foley.base.md#foley.base.SoundRecord)
+
 #### *property* vindex
 
 The vector index.
@@ -887,7 +907,7 @@ Ingest every audio file under `path` and return an [`IngestReport`](#foley.index
 * **Returns:**
   An [`IngestReport`](#foley.index.IngestReport) (with `.summary()` counts and per-file results).
 
-### foley.index.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None)
+### foley.index.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None, commercial=None)
 
 Ingest one clip into `library` and return an [`IngestResult`](#foley.index.IngestResult).
 
@@ -913,7 +933,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](foley.stores.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)]) – Rights record, or a `license_id` string the caller asserts
+    (`'user-owned'`), or `None` (default): rights **unknown**, so the clip
+    is indexed but [`foley.keep()`](foley.md#foley.keep) refuses it (#55). See
+    [`resolve_ingest_license()`](#foley.index.resolve_ingest_license).
   * **tagger** – Supervised [`Tagger`](foley.index.protocols.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](foley.index.taggers.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
@@ -938,6 +961,9 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     consent and admit it anyway (see `foley.bootstrap.bootstrap()`’s
     `accept_ai_restricted`). Protects every ingest path, not just
     bootstrap.
+  * **commercial** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Whether the AI use is for a commercial purpose (decides a
+    `nc_open_source_only` scope, #69). `None` (default) means
+    [`DEFAULT_INTENDED_USE`](foley.licensing.md#foley.licensing.DEFAULT_INTENDED_USE)’s (commercial).
 * **Return type:**
   [`IngestResult`](foley.index.ingest.md#foley.index.ingest.IngestResult)
 * **Returns:**
@@ -997,6 +1023,61 @@ Resolve inputs to a best UCS CatID by the staged precedence.
 * **Returns:**
   A [`CatIdResolution`](foley.index.taxonomy.model.md#foley.index.taxonomy.model.CatIdResolution) (falsy when
   nothing resolved).
+
+### foley.index.resolve_ingest_license(license, , source_url=None)
+
+The rights record for a local ingest: fail-closed unless rights are asserted (#55).
+
+* `None` (no licence given) → `license_id='unknown'`, `rights_verified=False`:
+  [`foley.keep()`](foley.md#foley.keep) refuses it for every use. The bytes are still kept locally
+  > (`cache_bytes_ok=True`: it is the user’s own disk, no terms of service apply),
+  > so the clip is searchable and can be re-stamped later without re-ingesting.
+* a `str` → that `license_id`, which must be a `LICENSE_FLAGS` row, with
+  `rights_verified=True` (the caller is asserting it) and `verified_at` set —
+  e.g. `'user-owned'` for the user’s own recordings.
+* a [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord) → used as given.
+
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If a `str` licence id has no `LICENSE_FLAGS` row.
+* **Return type:**
+  [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)
+
+### foley.index.restamp_rights(library=None, , license='unknown', ids=None, where=None, select='legacy-user-owned', apply=False)
+
+Re-stamp the licence of stored sounds; a dry run unless `apply=True`.
+
+The migration for libraries built before #55 / #56. A re-ingest does not do it
+(content-addressed dedup skips files already stored), so this rewrites the stored
+records in place:
+
+* `foley restamp-rights --apply` — every sound an older foley stamped
+  `user-owned` without being told becomes `unknown` (fail closed);
+* `foley restamp-rights --license user-owned --apply` — the same sounds, but you
+  assert that you own them (now recorded with a `verified_at` timestamp);
+* `foley restamp-rights --select legacy-elevenlabs --license elevenlabs-paid-plan
+  --apply` — ElevenLabs generations made before the plan was explicit;
+* `foley restamp-rights --select has-license-url --license from-url --apply` —
+  every record that kept its source’s licence string (Freesound pulls) is
+  re-derived by today’s mapper (CC versions, PDM, NC spellings);
+* corpus clips (Clotho, FSD50K) are repaired by re-running `foley bootstrap`,
+  which re-stamps already-stored clips from the corpus metadata.
+
+* **Parameters:**
+  * **library** – The [`SoundLibrary`](foley.index.library.md#foley.index.library.SoundLibrary) (default: the default one).
+  * **license** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The `license_id` to stamp (a `LICENSE_FLAGS` row; default
+    `'unknown'`), or `FROM_LICENSE_URL` to re-derive each record from
+    its own `license_url`.
+  * **ids** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Re-stamp exactly these sound ids (overrides `where` / `select`).
+  * **where** – A predicate `LicenseRecord -> bool` choosing the records (overrides
+    `select`).
+  * **select** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A `LEGACY_SELECTORS` name (default `'legacy-user-owned'`).
+  * **apply** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Write the change. `False` (default) only reports what would change.
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+* **Returns:**
+  The ids that were (or, in a dry run, would be) re-stamped.
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `license` or `select` is unknown.
 
 ### foley.index.sqlite_vec_loadable()
 

@@ -7,12 +7,15 @@ Stdlib-only and declarative — imports nothing heavy, so
 only `config.py`; the adapter + `requests` load lazily). It declares the hosted
 Text-to-SFX v2 endpoint, the `xi-api-key` token auth, maps foley’s unified
 [`GENERATION_AFFORDANCES`](foley.base.md#foley.base.GENERATION_AFFORDANCES) onto the native request fields, and — as
-required for every source — the **license block**: `default_license_id='ElevenLabs-SFX'`
-with `cache_bytes_ok=True` (generated audio is stored **by-value** — the opposite
-of Freesound).
+required for every source — the **license block**, with `cache_bytes_ok=True`
+(generated audio is stored **by-value** — the opposite of Freesound).
 
-License note (report 07): the `ElevenLabs-SFX` row assumes a **paid** plan
-(SFX royalty-free, embeddable in derivative works, no attribution). Free-tier
-outputs are non-commercial + attribution-required — hence `tier_assumption`. The
-Prohibited-Use policy forbids standalone redistribution of the raw SFX, which is
-why the `LICENSE_FLAGS` row sets `redistribute_standalone_ok=False`.
+License note (report 07, #56): what a generation may be used for depends on the
+**account’s plan**, which foley cannot see. A paid plan’s SFX are royalty-free and
+embeddable without attribution; a free plan’s are non-commercial and need
+attribution. So the plan is never assumed: it comes from the adapter’s `plan=` or
+`$FOLEY_ELEVENLABS_PLAN` (`elevenlabs-paid-plan` | `elevenlabs-free-plan`, the
+same codes as `an`), each value being its own `LICENSE_FLAGS` row, and an unknown
+plan refuses to generate (no paid call is made). The Prohibited-Use policy forbids
+standalone redistribution of the raw SFX, which is why both rows set
+`redistribute_standalone_ok=False`.

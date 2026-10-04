@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../../../_static/documentation_options.js?v=828725f0"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -716,29 +716,79 @@ window.runMermaid = runMermaid;</script>
 <span></span><span class="sd">"""Clotho-eval — a captioned Ring-0 corpus that doubles as a retrieval fixture.</span>
 
 <span class="sd">Clotho (report 11 §1.2 / §2.1) is an audio-captioning benchmark built from a</span>
-<span class="sd">redistributable Freesound subset; its *evaluation* split is a clean Ring-0 seed</span>
-<span class="sd">corpus **and** the retrieval regression fixture #10a scores against. Each clip</span>
-<span class="sd">ships five human captions — real descriptive text — which this adapter injects so</span>
-<span class="sd">they flow through the normal ingest pipeline into the BM25 keyword index (no</span>
-<span class="sd">special-casing).</span>
+<span class="sd">Freesound subset; its *evaluation* split is a Ring-0 seed corpus and a retrieval</span>
+<span class="sd">fixture. Audio must be downloaded locally; this adapter only enumerates, licenses</span>
+<span class="sd">and (optionally) captions it.</span>
 
-<span class="sd">Licensing is uniform ``CC-BY-4.0`` (a conservative, attributable stamp over the</span>
-<span class="sd">redistributable-subset guarantee — if a clip is actually CC0 we merely</span>
-<span class="sd">over-attribute, never under-attribute). Audio must be downloaded locally; this</span>
-<span class="sd">adapter only enumerates + captions + licenses it.</span>
+<span class="sd">Rights are **per clip and per asset** (#68, report 14 §3.11):</span>
+
+<span class="sd">* **Audio** keeps each file's own Freesound licence, read from the ``license``</span>
+<span class="sd">  column of ``clotho_metadata_*.csv`` with its CC version (CC0, CC BY 3.0,</span>
+<span class="sd">  CC BY-NC 3.0, Sampling+ in the eval split). A clip absent from the metadata, or</span>
+<span class="sd">  under an unrecognised licence, fails closed (``unknown``, unverified). So no</span>
+<span class="sd">  non-commercial clip passes :func:`foley.keep` under commercial intent.</span>
+<span class="sd">* **Captions** are licensed by Tampere University for **non-commercial use only**</span>
+<span class="sd">  (not CC-BY 4.0, as report 11 said). They are therefore **not** put into the</span>
+<span class="sd">  library's keyword index by default: an index is not intent-aware at query time,</span>
+<span class="sd">  and foley's default intent is commercial. A non-commercial / eval-only library can</span>
+<span class="sd">  opt in: ``register_corpus(dataclasses.replace(CLOTHO, include_captions=True))``.</span>
 <span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClipSpec</span><span class="p">,</span> <span class="n">UniformCorpus</span><span class="p">,</span> <span class="n">register_corpus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">LicenseRecord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ClipSpec</span><span class="p">,</span>
+    <span class="n">UniformCorpus</span><span class="p">,</span>
+    <span class="n">license_from_clip_meta</span><span class="p">,</span>
+    <span class="n">per_clip_license_meta</span><span class="p">,</span>
+    <span class="n">register_corpus</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1">#: Filename column + the first caption column in a Clotho captions CSV.</span>
 <span class="n">_FILE_COL</span> <span class="o">=</span> <span class="s2">"file_name"</span>
 <span class="n">_CAPTION_COLS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"caption_1"</span><span class="p">,</span> <span class="s2">"caption_2"</span><span class="p">,</span> <span class="s2">"caption_3"</span><span class="p">,</span> <span class="s2">"caption_4"</span><span class="p">,</span> <span class="s2">"caption_5"</span><span class="p">)</span>
+
+<span class="c1">#: The per-file licence / provenance columns of ``clotho_metadata_*.csv``.</span>
+<span class="n">_LICENSE_COL</span> <span class="o">=</span> <span class="s2">"license"</span>
+<span class="n">_LINK_COL</span> <span class="o">=</span> <span class="s2">"sound_link"</span>
+<span class="n">_CREATOR_COL</span> <span class="o">=</span> <span class="s2">"manufacturer"</span>
+
+<span class="c1">#: What the caption text is licensed under (not a LICENSE_FLAGS row: it is never a</span>
+<span class="c1">#: sound's licence, only the reason captions stay out of a commercial index).</span>
+<span class="n">CAPTION_LICENSE</span> <span class="o">=</span> <span class="s2">"Tampere-University-Clotho-captions (non-commercial only)"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_csv_rows</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Iterator[dict]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Rows of a Clotho CSV, tolerant of a BOM and of a non-UTF-8 export."""</span>
+    <span class="c1"># utf-8-sig strips a BOM (else the first header cell reads as "\ufefffile_name"</span>
+    <span class="c1"># and every lookup misses); errors="replace" keeps a non-UTF-8 export</span>
+    <span class="c1"># (Excel/cp1252) from raising UnicodeDecodeError and aborting the ingest.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+        <span class="k">yield from</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_metadata</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"dict[str, dict]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Map ``file_name -&gt; metadata row`` from any ``*metadata*.csv`` under ``root``.</span>
+
+<span class="sd">    A missing or malformed CSV yields no rows, so the clips it would have described</span>
+<span class="sd">    fail closed (``unknown`` licence) rather than inheriting a guessed one.</span>
+<span class="sd">    """</span>
+    <span class="n">rows</span><span class="p">:</span> <span class="s2">"dict[str, dict]"</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">csv_path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*metadata*.csv"</span><span class="p">)):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">_read_csv_rows</span><span class="p">(</span><span class="n">csv_path</span><span class="p">):</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_FILE_COL</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="n">rows</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">csv</span><span class="o">.</span><span class="n">Error</span><span class="p">):</span>
+            <span class="k">continue</span>
+    <span class="k">return</span> <span class="n">rows</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_load_captions</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"dict[str, str]"</span><span class="p">:</span>
@@ -750,20 +800,13 @@ window.runMermaid = runMermaid;</script>
     <span class="n">captions</span><span class="p">:</span> <span class="s2">"dict[str, str]"</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">csv_path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*caption*.csv"</span><span class="p">)):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># utf-8-sig strips a BOM (else the first header cell reads as</span>
-            <span class="c1"># "﻿file_name" and every lookup misses); errors="replace" keeps a</span>
-            <span class="c1"># non-UTF-8 export (Excel/cp1252) from raising UnicodeDecodeError —</span>
-            <span class="c1"># which is a ValueError, NOT caught below — and aborting the ingest.</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
-                <span class="n">csv_path</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span>
-            <span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">fh</span><span class="p">):</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_FILE_COL</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
-                        <span class="k">continue</span>
-                    <span class="n">caption</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">row</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">_CAPTION_COLS</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">c</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">caption</span><span class="p">:</span>
-                        <span class="n">captions</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">caption</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">_read_csv_rows</span><span class="p">(</span><span class="n">csv_path</span><span class="p">):</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_FILE_COL</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">caption</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">row</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">_CAPTION_COLS</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">c</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">caption</span><span class="p">:</span>
+                    <span class="n">captions</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">caption</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">csv</span><span class="o">.</span><span class="n">Error</span><span class="p">):</span>
             <span class="k">continue</span>
     <span class="k">return</span> <span class="n">captions</span>
@@ -771,29 +814,56 @@ window.runMermaid = runMermaid;</script>
 
 <div class="viewcode-block" id="ClothoEvalCorpus">
 <a class="viewcode-back" href="../../../_autosummary/foley.sources.clotho.html#foley.sources.ClothoEvalCorpus">[docs]</a>
+<span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ClothoEvalCorpus</span><span class="p">(</span><span class="n">UniformCorpus</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions."""</span>
+<span class="w">    </span><span class="sd">"""Ring-0 Clotho-eval adapter: per-clip Freesound licences; captions opt-in (NC)."""</span>
+
+    <span class="c1">#: Put the (non-commercial) human captions into the keyword index. Off by default.</span>
+    <span class="n">include_captions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="ClothoEvalCorpus.iter_clips">
 <a class="viewcode-back" href="../../../_autosummary/foley.sources.clotho.html#foley.sources.ClothoEvalCorpus.iter_clips">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">iter_clips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ClipSpec</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">"""Yield clips with their human caption attached in ``meta['caption']``."""</span>
-        <span class="n">captions</span> <span class="o">=</span> <span class="n">_load_captions</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+<span class="w">        </span><span class="sd">"""Yield clips carrying their per-file licence (and caption, when opted in)."""</span>
+        <span class="n">root_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">_load_metadata</span><span class="p">(</span><span class="n">root_path</span><span class="p">)</span>
+        <span class="n">captions</span> <span class="o">=</span> <span class="n">_load_captions</span><span class="p">(</span><span class="n">root_path</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">iter_clips</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
-            <span class="n">caption</span> <span class="o">=</span> <span class="n">captions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">caption</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">per_clip_license_meta</span><span class="p">(</span>
+                    <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_LICENSE_COL</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">creator_name</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_CREATOR_COL</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">source_url</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_LINK_COL</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">caption</span> <span class="o">=</span> <span class="n">captions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">caption</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">include_captions</span><span class="p">:</span>
                 <span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">"caption"</span><span class="p">]</span> <span class="o">=</span> <span class="n">caption</span>
+                <span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">"caption_license"</span><span class="p">]</span> <span class="o">=</span> <span class="n">CAPTION_LICENSE</span>
+            <span class="k">elif</span> <span class="n">caption</span><span class="p">:</span>
+                <span class="c1"># Not indexed; carried only so a re-run bootstrap can remove it from</span>
+                <span class="c1"># a library an older foley built with it (see foley.bootstrap).</span>
+                <span class="n">spec</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">"withheld_caption"</span><span class="p">]</span> <span class="o">=</span> <span class="n">caption</span>
             <span class="k">yield</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="ClothoEvalCorpus.resolve_license">
+<a class="viewcode-back" href="../../../_autosummary/foley.sources.clotho.html#foley.sources.ClothoEvalCorpus.resolve_license">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_license</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">ClipSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""The clip's own licence from its metadata row (``unknown`` when absent)."""</span>
+        <span class="k">return</span> <span class="n">license_from_clip_meta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">spec</span><span class="p">)</span></div>
 </div>
 
 
 
-<span class="c1">#: The Clotho-eval Ring-0 adapter.</span>
+<span class="c1">#: The Clotho-eval Ring-0 adapter (audio licensed per clip; captions excluded).</span>
 <span class="n">CLOTHO</span> <span class="o">=</span> <span class="n">register_corpus</span><span class="p">(</span>
     <span class="n">ClothoEvalCorpus</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">"clotho"</span><span class="p">,</span>
         <span class="n">ring</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">default_license_id</span><span class="o">=</span><span class="s2">"CC-BY-4.0"</span><span class="p">,</span>
+        <span class="n">default_license_id</span><span class="o">=</span><span class="s2">"CC-BY-4.0"</span><span class="p">,</span>  <span class="c1"># the compilation; each clip overrides it</span>
         <span class="n">source</span><span class="o">=</span><span class="s2">"clotho"</span><span class="p">,</span>
         <span class="n">rights_verified</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>

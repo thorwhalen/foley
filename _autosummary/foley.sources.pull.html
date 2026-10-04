@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../_static/documentation_options.js?v=828725f0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.sources.http" href="foley.sources.http.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -473,15 +473,6 @@ transient preview bytes are embedded once, then discarded; only the stable URI +
 provenance + the CLAP vector persist. The audio is re-fetched on demand via the
 adapter (there is no local blob to serve — <code class="docutils literal notranslate"><span class="pre">library.audio(id)</span></code> raises for a
 remote by-reference sound; that is the contract).</p>
-<p class="rubric">Module Attributes</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#foley.sources.pull.DEFAULT_INTENDED_USE" title="foley.sources.pull.DEFAULT_INTENDED_USE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_INTENDED_USE</span></code></a></p></td>
-<td><p>a publishable, commercial, attributable use — the same fail-closed bar <code class="xref py py-func docutils literal notranslate"><span class="pre">foley.bootstrap.bootstrap()</span></code>'s Ring-1 filter applies.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
@@ -491,18 +482,6 @@ remote by-reference sound; that is the contract).</p>
 </tbody>
 </table>
 </div>
-<dl class="py data">
-<dt class="sig sig-object py" id="foley.sources.pull.DEFAULT_INTENDED_USE">
-<span class="sig-prename descclassname"><span class="pre">foley.sources.pull.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_INTENDED_USE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">IntendedUse(commercial=True,</span> <span class="pre">publish=True,</span> <span class="pre">redistribute_standalone=False,</span> <span class="pre">will_train=False,</span> <span class="pre">can_attribute=True,</span> <span class="pre">revenue_usd=0,</span> <span class="pre">allow_voice_or_trademark=False)</span></span><a class="headerlink" href="#foley.sources.pull.DEFAULT_INTENDED_USE" title="Link to this definition">#</a></dt>
-<dd><p>a publishable, commercial, attributable use — the
-same fail-closed bar <code class="xref py py-func docutils literal notranslate"><span class="pre">foley.bootstrap.bootstrap()</span></code>’s Ring-1 filter applies.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Default intent for a pull</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="foley.sources.pull.add_from">
 <span class="sig-prename descclassname"><span class="pre">foley.sources.pull.</span></span><span class="sig-name descname"><span class="pre">add_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cc0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intended_use</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">affordances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/pull.html#add_from"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.pull.add_from" title="Link to this definition">#</a></dt>
@@ -524,7 +503,7 @@ accepted-license allowlist regardless.</p></li>
 <li><p><strong>library</strong> – Target <a class="reference internal" href="foley.index.library.html#foley.index.library.SoundLibrary" title="foley.index.library.SoundLibrary"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoundLibrary</span></code></a> (default: the
 process-wide default library).</p></li>
 <li><p><strong>intended_use</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="foley.base.html#foley.base.IntendedUse" title="foley.base.IntendedUse"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntendedUse</span></code></a>]</span>) – The rights intent each candidate is gated against (default:
-<a class="reference internal" href="#foley.sources.pull.DEFAULT_INTENDED_USE" title="foley.sources.pull.DEFAULT_INTENDED_USE"><code class="xref py py-data docutils literal notranslate"><span class="pre">DEFAULT_INTENDED_USE</span></code></a>).</p></li>
+<code class="xref py py-data docutils literal notranslate"><span class="pre">DEFAULT_INTENDED_USE</span></code>).</p></li>
 <li><p><strong>adapter</strong> – An optional pre-built adapter to use instead of the registry’s
 (the dependency-injection seam — a test passes a fake-transport
 adapter; production omits it and the registry lazily builds one).</p></li>
@@ -592,7 +571,6 @@ stored records (each <code class="docutils literal notranslate"><span class="pre
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.pull.DEFAULT_INTENDED_USE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_INTENDED_USE</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.pull.add_from"><code class="docutils literal notranslate"><span class="pre">add_from()</span></code></a></li>
 </ul>
   </nav></div>

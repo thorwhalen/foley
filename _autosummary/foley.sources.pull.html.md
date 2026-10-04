@@ -15,23 +15,10 @@ provenance + the CLAP vector persist. The audio is re-fetched on demand via the
 adapter (there is no local blob to serve — `library.audio(id)` raises for a
 remote by-reference sound; that is the contract).
 
-### Module Attributes
-
-| [`DEFAULT_INTENDED_USE`](#foley.sources.pull.DEFAULT_INTENDED_USE)   | a publishable, commercial, attributable use — the same fail-closed bar `foley.bootstrap.bootstrap()`'s Ring-1 filter applies.   |
-|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-
 ### Functions
 
 | [`add_from`](#foley.sources.pull.add_from)(source, \*, query[, license, limit, ...])   | Search a live `source` and ingest its license-clean hits into `library`.   |
 |-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
-
-### foley.sources.pull.DEFAULT_INTENDED_USE *= IntendedUse(commercial=True, publish=True, redistribute_standalone=False, will_train=False, can_attribute=True, revenue_usd=0, allow_voice_or_trademark=False)*
-
-a publishable, commercial, attributable use — the
-same fail-closed bar `foley.bootstrap.bootstrap()`’s Ring-1 filter applies.
-
-* **Type:**
-  Default intent for a pull
 
 ### foley.sources.pull.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, \*\*affordances)
 
@@ -53,7 +40,7 @@ applies the by-reference storage gate from the sound’s own license.
   * **library** – Target [`SoundLibrary`](foley.index.library.html.md#foley.index.library.SoundLibrary) (default: the
     process-wide default library).
   * **intended_use** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`IntendedUse`](foley.base.html.md#foley.base.IntendedUse)]) – The rights intent each candidate is gated against (default:
-    [`DEFAULT_INTENDED_USE`](#foley.sources.pull.DEFAULT_INTENDED_USE)).
+    `DEFAULT_INTENDED_USE`).
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport
     adapter; production omits it and the registry lazily builds one).

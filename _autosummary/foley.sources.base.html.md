@@ -43,6 +43,8 @@ so the derived permission flags stay single-sourced.
 
 | [`bulk_license`](#foley.sources.base.bulk_license)(\*, source, license_id, ...[, ...])   | Build a bulk-acquisition [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord), flags derived.                   |
 |-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`per_clip_license_meta`](#foley.sources.base.per_clip_license_meta)(license_url, \*[, ...])      | The `ClipSpec.meta` rights fields for a clip that carries its own CC licence.                                                                      |
+| [`license_from_clip_meta`](#foley.sources.base.license_from_clip_meta)(source, spec)               | Build a clip's rights record from [`per_clip_license_meta()`](#foley.sources.base.per_clip_license_meta) fields (fail-closed).                   |
 | [`api_license`](#foley.sources.base.api_license)(\*, source, license_id, ...[, ...])    | Build an API-acquisition [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord), flags derived.                   |
 | [`generated_license`](#foley.sources.base.generated_license)(\*, source, license_id, ...)     | Build an AI-generated [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord), flags derived + provenance stamped. |
 | [`register_corpus`](#foley.sources.base.register_corpus)(adapter)                           | Register `adapter` in [`CORPUS_REGISTRY`](#foley.sources.base.CORPUS_REGISTRY) (idempotent) and return it.                                 |
@@ -60,7 +62,7 @@ so the derived permission flags stay single-sourced.
 | [`GeneratedClip`](#foley.sources.base.GeneratedClip)(audio_bytes, candidate[, notes]) | One freshly-generated sound: its transient bytes + a provisional candidate.     |
 | [`UniformCorpus`](#foley.sources.base.UniformCorpus)(name, ring, ...[, ...])          | A bulk corpus where **every** clip carries the same license.                    |
 
-### foley.sources.base.CORPUS_REGISTRY *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [CorpusAdapter](#foley.sources.base.CorpusAdapter)]* *= {'bbc_remarc': UniformCorpus(name='bbc_remarc', ring=2, default_license_id='RemArc', source='bbc_remarc', rights_verified=True, tag_hints_from_path=False), 'clotho': ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False), 'foleyset': UniformCorpus(name='foleyset', ring=0, default_license_id='CC-BY-4.0', source='foleyset', rights_verified=True, tag_hints_from_path=True), 'fsd50k': <foley.sources.fsd50k.Fsd50kCorpus object>, 'sonniss': UniformCorpus(name='sonniss', ring=2, default_license_id='Sonniss-GDC', source='sonniss', rights_verified=True, tag_hints_from_path=False)}*
+### foley.sources.base.CORPUS_REGISTRY *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [CorpusAdapter](#foley.sources.base.CorpusAdapter)]* *= {'bbc_remarc': UniformCorpus(name='bbc_remarc', ring=2, default_license_id='RemArc', source='bbc_remarc', rights_verified=True, tag_hints_from_path=False), 'clotho': ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False, include_captions=False), 'foleyset': UniformCorpus(name='foleyset', ring=0, default_license_id='CC-BY-4.0', source='foleyset', rights_verified=True, tag_hints_from_path=True), 'fsd50k': <foley.sources.fsd50k.Fsd50kCorpus object>, 'sonniss': UniformCorpus(name='sonniss', ring=2, default_license_id='Sonniss-GDC', source='sonniss', rights_verified=True, tag_hints_from_path=False)}*
 
 Registry of concrete bulk-corpus adapters, keyed by `adapter.name`.
 
@@ -327,14 +329,13 @@ caching the bytes even for CC0. `redistribute_standalone_ok` (copyright) and
 * **Returns:**
   A populated `LicenseRecord` with its derived flags (+ overrides) applied.
 
-### foley.sources.base.bulk_license(, source, license_id, rights_verified, source_id=None, source_url=None, creator_name=None, attribution_text=None)
+### foley.sources.base.bulk_license(, source, license_id, rights_verified, source_id=None, source_url=None, license_url=None, creator_name=None, attribution_text=None)
 
 Build a bulk-acquisition [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord), flags derived.
 
 The SSOT license builder every **bulk-corpus** adapter routes through
 (`acquisition_method=bulk`); a thin wrapper over `_build_license()`. Its
-signature is unchanged from #4 — no `overrides` (a downloaded corpus is
-cacheable by-value), so every existing corpus adapter keeps working verbatim.
+signature has no `overrides` (a downloaded corpus is cacheable by-value).
 
 * **Parameters:**
   * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
@@ -344,6 +345,8 @@ cacheable by-value), so every existing corpus adapter keeps working verbatim.
     gate input — pass `False` for unrecognized/ambiguous licenses).
   * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The corpus-native clip id, for provenance.
   * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the clip (attribution/credits).
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The licence URL/label exactly as the corpus served it (kept so the
+    credit links the deed the clip was actually released under).
   * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
   * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if the corpus supplies one.
 * **Return type:**
@@ -408,6 +411,26 @@ but never flips the flag, so [`foley.keep()`](foley.html.md#foley.keep) still re
 * **Returns:**
   A populated `LicenseRecord` with derived flags applied AND
   `is_ai_generated=True` plus the full generation-provenance block.
+
+### foley.sources.base.license_from_clip_meta(source, spec)
+
+Build a clip’s rights record from [`per_clip_license_meta()`](#foley.sources.base.per_clip_license_meta) fields (fail-closed).
+
+* **Return type:**
+  [`LicenseRecord`](foley.base.html.md#foley.base.LicenseRecord)
+
+### foley.sources.base.per_clip_license_meta(license_url, , creator_name=None, source_url=None)
+
+The `ClipSpec.meta` rights fields for a clip that carries its own CC licence.
+
+Shared by the corpora whose clips each keep their Freesound licence (FSD50K,
+Clotho): the licence string goes through the one CC mapper
+([`license_id_from_cc_url()`](foley.licensing.html.md#foley.licensing.license_id_from_cc_url) — version kept, unknown fails
+closed), and the string itself is kept as `license_url` so the credit links the
+deed the clip was released under. Read back by [`license_from_clip_meta()`](#foley.sources.base.license_from_clip_meta).
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### foley.sources.base.register_corpus(adapter)
 

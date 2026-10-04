@@ -31,15 +31,15 @@ shared ingest pipeline.
 
 ### Classes
 
-| [`Adapter`](#foley.sources.elevenlabs.adapter.Adapter)                                    | Registry convention (arioso): the loader imports `adapter.Adapter`.                                                                                |
-|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`ElevenLabsAdapter`](#foley.sources.elevenlabs.adapter.ElevenLabsAdapter)([config, api_key, http]) | ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](foley.sources.base.md#foley.sources.base.GenerateAdapter)). |
+| [`Adapter`](#foley.sources.elevenlabs.adapter.Adapter)                                          | Registry convention (arioso): the loader imports `adapter.Adapter`.                                                                                |
+|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`ElevenLabsAdapter`](#foley.sources.elevenlabs.adapter.ElevenLabsAdapter)([config, api_key, http, plan]) | ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](foley.sources.base.md#foley.sources.base.GenerateAdapter)). |
 
 ### foley.sources.elevenlabs.adapter.Adapter
 
 Registry convention (arioso): the loader imports `adapter.Adapter`.
 
-### *class* foley.sources.elevenlabs.adapter.ElevenLabsAdapter(config=None, , api_key=None, http=None)
+### *class* foley.sources.elevenlabs.adapter.ElevenLabsAdapter(config=None, , api_key=None, http=None, plan=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -51,6 +51,10 @@ ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](foley.sources.b
   * **api_key** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The ElevenLabs token. Defaults to `$ELEVENLABS_API_KEY`.
   * **http** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Transport`](foley.sources.http.md#foley.sources.http.Transport)]) – The injected [`Transport`](foley.sources.http.md#foley.sources.http.Transport) (defaults to
     [`requests_transport()`](foley.sources.http.md#foley.sources.http.requests_transport)); tests pass a fake.
+  * **plan** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The ElevenLabs account plan (`'elevenlabs-paid-plan'` |
+    `'elevenlabs-free-plan'`), which decides the generated sound’s licence.
+    Defaults to `$FOLEY_ELEVENLABS_PLAN`; with neither, `generate` refuses
+    before calling the API (#56).
 
 #### *property* api_key *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
@@ -79,4 +83,10 @@ Generate a sound effect for `prompt`; return its bytes + provisional candidate.
   [`GeneratedClip`](foley.sources.base.md#foley.sources.base.GeneratedClip)
 * **Returns:**
   A [`GeneratedClip`](foley.sources.base.md#foley.sources.base.GeneratedClip) (`origin=generated`,
-  `license_id='ElevenLabs-SFX'`, `is_ai_generated=True`).
+  `license_id` = the account plan, `is_ai_generated=True`).
+* **Raises:**
+  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – If the plan is unknown (before any API call).
+
+#### *property* plan *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+
+The account plan = the generated sound’s `license_id` (fail-closed when unknown).

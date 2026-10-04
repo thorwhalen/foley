@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../../_static/documentation_options.js?v=828725f0"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -809,7 +809,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">transcript</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">intended_use</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">commercial_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">commercial_ok</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
     <span class="n">verify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"listen"</span><span class="p">,</span>
     <span class="n">master</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"podcast"</span><span class="p">,</span>
@@ -835,9 +835,11 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">            given, the result is woven into a mastered mix (set ``weave=False`` to skip).</span>
 <span class="sd">        transcript: The full narration transcript for alignment (default: the segments joined).</span>
 <span class="sd">        library: The :class:`foley.index.SoundLibrary` (default: the process-wide default).</span>
-<span class="sd">        intended_use: The rights intent (default: a conservative publishing</span>
-<span class="sd">            :class:`~foley.base.IntendedUse` from ``commercial_ok``).</span>
-<span class="sd">        commercial_ok: Shorthand for a commercial-publishing intent (the license filter).</span>
+<span class="sd">        intended_use: The rights intent (default:</span>
+<span class="sd">            :data:`foley.licensing.DEFAULT_INTENDED_USE` — commercial publishing, the</span>
+<span class="sd">            same default as :func:`foley.find` and every MCP tool).</span>
+<span class="sd">        commercial_ok: Shorthand override of the default intent's ``commercial``;</span>
+<span class="sd">            ``False`` explicitly admits non-commercial material.</span>
 <span class="sd">        max_events: The sparse density cap **per segment** (restraint).</span>
 <span class="sd">        verify: The max verify rung — ``'clap'`` | ``'listen'`` | ``'judge'``.</span>
 <span class="sd">        master: The delivery :data:`~foley.base.MASTER_PROFILES` target (``'podcast'`` default).</span>
@@ -851,10 +853,10 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">find</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">plan</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">weave</span> <span class="k">as</span> <span class="n">_weave</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntendedUse</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">intended_use_for</span>
 
     <span class="n">segs</span> <span class="o">=</span> <span class="p">[</span><span class="n">segments</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
-    <span class="n">use</span> <span class="o">=</span> <span class="n">intended_use</span> <span class="ow">or</span> <span class="n">IntendedUse</span><span class="p">(</span><span class="n">commercial</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">,</span> <span class="n">publish</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">use</span> <span class="o">=</span> <span class="n">intended_use_for</span><span class="p">(</span><span class="n">intended_use</span><span class="p">,</span> <span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">)</span>
     <span class="n">full_transcript</span> <span class="o">=</span> <span class="n">transcript</span> <span class="ow">or</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span>
     <span class="n">do_weave</span> <span class="o">=</span> <span class="p">(</span><span class="n">audio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">weave</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">bool</span><span class="p">(</span><span class="n">weave</span><span class="p">)</span>
 

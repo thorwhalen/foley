@@ -19,17 +19,25 @@ item is redistributable but stored by-reference.
 
 ### Module Attributes
 
-| [`UNKNOWN_LICENSE_FLAGS`](#foley.licensing.UNKNOWN_LICENSE_FLAGS)   | Fail-closed fallback for unknown / `Proprietary-*` license ids (all False, cap None).                                          |
-|--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| [`LICENSE_FLAGS`](#foley.licensing.LICENSE_FLAGS)           | `license_id` -> default flag set (report 07 §8.1 seed table).                                                                  |
-| [`UNKNOWN_LICENSE_META`](#foley.licensing.UNKNOWN_LICENSE_META)    | Fail-closed display fallback for unknown / `Proprietary-*` license ids.                                                        |
-| [`LICENSE_META`](#foley.licensing.LICENSE_META)            | `license_id` -> display name + canonical URL (one row per [`LICENSE_FLAGS`](#foley.licensing.LICENSE_FLAGS) key). |
+| [`DEFAULT_INTENDED_USE`](#foley.licensing.DEFAULT_INTENDED_USE)     | The ONE rights intent every verb and surface defaults to (#63, maintainer decision 2026-10-03): commercial publishing, attributable.   |
+|---------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| [`UNKNOWN_LICENSE_FLAGS`](#foley.licensing.UNKNOWN_LICENSE_FLAGS)    | Fail-closed fallback for unknown / `Proprietary-*` license ids (all False, cap None).                                                  |
+| [`LICENSE_FLAGS`](#foley.licensing.LICENSE_FLAGS)            | `license_id` -> default flag set (report 07 §8.1 seed table).                                                                          |
+| [`CC_VERSIONS`](#foley.licensing.CC_VERSIONS)              | The CC versions foley has rows for (Freesound, FSD50K, Clotho and Wikimedia use these).                                                |
+| [`DEFAULT_CC_VERSION`](#foley.licensing.DEFAULT_CC_VERSION)       | The version assumed when a source gives a CC family with no version at all (Freesound's search labels: `"Attribution"`).               |
+| [`UNKNOWN_LICENSE_META`](#foley.licensing.UNKNOWN_LICENSE_META)     | Fail-closed display fallback for unknown / `Proprietary-*` license ids.                                                                |
+| [`LICENSE_META`](#foley.licensing.LICENSE_META)             | `license_id` -> display name + canonical URL (one row per [`LICENSE_FLAGS`](#foley.licensing.LICENSE_FLAGS) key).         |
+| [`AI_TRAINING_SCOPES`](#foley.licensing.AI_TRAINING_SCOPES)       | The `ai_training_scope` values (`None` = no narrowing beyond `ai_training_ok`).                                                        |
+| [`GEN_AI_PREFERENCE_SCOPES`](#foley.licensing.GEN_AI_PREFERENCE_SCOPES) | Freesound `gen_ai_preference` -> `(ai_training_ok override, ai_training_scope)`.                                                       |
 
 ### Functions
 
-| [`apply_license_flags`](#foley.licensing.apply_license_flags)(record, \*[, overrides])      | Populate `record`'s eight derived flags from its `license_id` (+ overrides), in place, and return it.                    |
+| [`ai_scope_from_gen_ai_preference`](#foley.licensing.ai_scope_from_gen_ai_preference)(preference)       | Map a Freesound `gen_ai_preference` to `(ai_training_ok override, scope)`.                                               |
 |----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| [`ai_use_permitted`](#foley.licensing.ai_use_permitted)(record, \*, ...)                 | Whether AI use of the sound (CLAP-embedding it counts) is allowed here.                                                  |
+| [`apply_license_flags`](#foley.licensing.apply_license_flags)(record, \*[, overrides])      | Populate `record`'s eight derived flags from its `license_id` (+ overrides), in place, and return it.                    |
 | [`derive_license_flags`](#foley.licensing.derive_license_flags)(license_id, \*[, overrides]) | Look up the flag set for a `license_id` (fail-closed fallback), then apply per-source overrides.                         |
+| [`intended_use_for`](#foley.licensing.intended_use_for)([intended_use, commercial_ok])   | The rights intent a verb runs under — every verb and surface resolves it here (#63).                                     |
 | [`keep`](#foley.licensing.keep)(record, intended_use)                        | Fail-closed candidate license gate (report 07 §8.2).                                                                     |
 | [`keep_sound`](#foley.licensing.keep_sound)(sound_record, intended_use)            | Convenience: apply [`keep()`](#foley.licensing.keep) to a `SoundRecord`'s nested license.          |
 | [`license_id_from_cc_url`](#foley.licensing.license_id_from_cc_url)(url)                       | Map a Creative-Commons license URL **or label** to `(license_id, verified)`.                                             |
@@ -41,7 +49,34 @@ item is redistributable but stored by-reference.
 |---------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 | [`LicenseMeta`](#foley.licensing.LicenseMeta)(display_name[, url])     | Human-facing display metadata for one `license_id` (name + canonical URL). |
 
-### foley.licensing.LICENSE_FLAGS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseFlags](#foley.licensing.LicenseFlags)]* *= {'CC-BY-4.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-4.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-Sampling+-1.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC0-1.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None), 'ElevenLabs-SFX': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'MIT': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'Pixabay-Content': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'RemArc': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'Sonniss-GDC': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'Stability-Community': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=1000000), 'unknown': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=False, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'user-owned': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None)}*
+### foley.licensing.AI_TRAINING_SCOPES *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), ...]* *= ('none', 'open_source_only', 'nc_open_source_only')*
+
+The `ai_training_scope` values (`None` = no narrowing beyond `ai_training_ok`).
+
+### foley.licensing.CC_VERSIONS *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), ...]* *= ('2.0', '2.5', '3.0', '4.0')*
+
+The CC versions foley has rows for (Freesound, FSD50K, Clotho and Wikimedia use these).
+
+### foley.licensing.DEFAULT_CC_VERSION *= '4.0'*
+
+The version assumed when a source gives a CC family with no version at all
+(Freesound’s search labels: `"Attribution"`). Rights are the same across versions;
+only the credit’s version is a guess, so the record keeps the label it was given.
+
+### foley.licensing.DEFAULT_INTENDED_USE *= IntendedUse(commercial=True, publish=True, redistribute_standalone=False, will_train=False, can_attribute=True, revenue_usd=0, allow_voice_or_trademark=False)*
+
+The ONE rights intent every verb and surface defaults to (#63, maintainer decision
+2026-10-03): commercial publishing, attributable. NC and SA material is refused
+unless a caller explicitly passes a different [`IntendedUse`](foley.base.md#foley.base.IntendedUse) (or
+`commercial_ok=False`). Treat it as read-only; copy with `dataclasses.replace`.
+
+### foley.licensing.GEN_AI_PREFERENCE_SCOPES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[bool](https://docs.python.org/3/builtins/functions.html#bool) | [None](https://docs.python.org/3/builtins/constants.html#None), [str](https://docs.python.org/3/builtins/stdtypes.html#str) | [None](https://docs.python.org/3/builtins/constants.html#None)]]* *= {'no-additional-preferences': (None, None), 'no-gen-ai': (False, 'none'), 'noncommercial-open-source-models': (None, 'nc_open_source_only'), 'open-source-models': (None, 'open_source_only')}*
+
+Freesound `gen_ai_preference` -> `(ai_training_ok override, ai_training_scope)`.
+`None` as the override leaves the CC row’s flag alone. An unlisted value fails
+closed (see [`ai_scope_from_gen_ai_preference()`](#foley.licensing.ai_scope_from_gen_ai_preference)).
+
+### foley.licensing.LICENSE_FLAGS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseFlags](#foley.licensing.LicenseFlags)]* *= {'CC-BY-2.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-2.5': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-3.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-4.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-2.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-2.5': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-3.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-BY-NC-4.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC-Sampling+-1.0': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'CC0-1.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None), 'ElevenLabs-SFX': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'MIT': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=True, revenue_cap_usd=None), 'PDM-1.0': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None), 'Pixabay-Content': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'RemArc': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'Sonniss-GDC': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'Stability-Community': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=1000000), 'elevenlabs-free-plan': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=True, revenue_cap_usd=None), 'elevenlabs-paid-plan': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=False, cache_bytes_ok=True, modification_ok=True, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'unknown': LicenseFlags(commercial_ok=False, embed_in_derivative_ok=False, redistribute_standalone_ok=False, cache_bytes_ok=False, modification_ok=False, ai_training_ok=False, requires_attribution=False, revenue_cap_usd=None), 'user-owned': LicenseFlags(commercial_ok=True, embed_in_derivative_ok=True, redistribute_standalone_ok=True, cache_bytes_ok=True, modification_ok=True, ai_training_ok=True, requires_attribution=False, revenue_cap_usd=None)}*
 
 `license_id` -> default flag set (report 07 §8.1 seed table).
 
@@ -55,7 +90,7 @@ ai_training, requires_attribution, revenue_cap_usd
 * **Type:**
   SSOT
 
-### foley.licensing.LICENSE_META *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseMeta](#foley.licensing.LicenseMeta)]* *= {'CC-BY-4.0': LicenseMeta(display_name='CC BY 4.0', url='https://creativecommons.org/licenses/by/4.0/'), 'CC-BY-NC-4.0': LicenseMeta(display_name='CC BY-NC 4.0', url='https://creativecommons.org/licenses/by-nc/4.0/'), 'CC-Sampling+-1.0': LicenseMeta(display_name='CC Sampling+ 1.0', url='https://creativecommons.org/licenses/sampling+/1.0/'), 'CC0-1.0': LicenseMeta(display_name='CC0 1.0 Universal (Public Domain Dedication)', url='https://creativecommons.org/publicdomain/zero/1.0/'), 'ElevenLabs-SFX': LicenseMeta(display_name='ElevenLabs Sound Effects Terms', url='https://elevenlabs.io/terms-of-use'), 'MIT': LicenseMeta(display_name='MIT License', url='https://opensource.org/license/mit'), 'Pixabay-Content': LicenseMeta(display_name='Pixabay Content License', url='https://pixabay.com/service/license-summary/'), 'RemArc': LicenseMeta(display_name='BBC RemArc Licence', url='https://sound-effects.bbcrewind.co.uk/licensing'), 'Sonniss-GDC': LicenseMeta(display_name='Sonniss GDC Game Audio Bundle License', url='https://sonniss.com/gdc-bundle-license'), 'Stability-Community': LicenseMeta(display_name='Stability AI Community License', url='https://stability.ai/community-license-agreement'), 'unknown': LicenseMeta(display_name='Unknown / unverified license', url=None), 'user-owned': LicenseMeta(display_name='User-owned / original work', url=None)}*
+### foley.licensing.LICENSE_META *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [LicenseMeta](#foley.licensing.LicenseMeta)]* *= {'CC-BY-2.0': LicenseMeta(display_name='CC BY 2.0', url='https://creativecommons.org/licenses/by/2.0/'), 'CC-BY-2.5': LicenseMeta(display_name='CC BY 2.5', url='https://creativecommons.org/licenses/by/2.5/'), 'CC-BY-3.0': LicenseMeta(display_name='CC BY 3.0', url='https://creativecommons.org/licenses/by/3.0/'), 'CC-BY-4.0': LicenseMeta(display_name='CC BY 4.0', url='https://creativecommons.org/licenses/by/4.0/'), 'CC-BY-NC-2.0': LicenseMeta(display_name='CC BY-NC 2.0', url='https://creativecommons.org/licenses/by-nc/2.0/'), 'CC-BY-NC-2.5': LicenseMeta(display_name='CC BY-NC 2.5', url='https://creativecommons.org/licenses/by-nc/2.5/'), 'CC-BY-NC-3.0': LicenseMeta(display_name='CC BY-NC 3.0', url='https://creativecommons.org/licenses/by-nc/3.0/'), 'CC-BY-NC-4.0': LicenseMeta(display_name='CC BY-NC 4.0', url='https://creativecommons.org/licenses/by-nc/4.0/'), 'CC-Sampling+-1.0': LicenseMeta(display_name='CC Sampling+ 1.0', url='https://creativecommons.org/licenses/sampling+/1.0/'), 'CC0-1.0': LicenseMeta(display_name='CC0 1.0 Universal (Public Domain Dedication)', url='https://creativecommons.org/publicdomain/zero/1.0/'), 'ElevenLabs-SFX': LicenseMeta(display_name='ElevenLabs Sound Effects Terms (legacy: paid plan assumed)', url='https://elevenlabs.io/terms-of-use'), 'MIT': LicenseMeta(display_name='MIT License', url='https://opensource.org/license/mit'), 'PDM-1.0': LicenseMeta(display_name='Public Domain Mark 1.0 (unverified claim)', url='https://creativecommons.org/publicdomain/mark/1.0/'), 'Pixabay-Content': LicenseMeta(display_name='Pixabay Content License', url='https://pixabay.com/service/license-summary/'), 'RemArc': LicenseMeta(display_name='BBC RemArc Licence', url='https://sound-effects.bbcrewind.co.uk/licensing'), 'Sonniss-GDC': LicenseMeta(display_name='Sonniss GDC Game Audio Bundle License', url='https://sonniss.com/gdc-bundle-license'), 'Stability-Community': LicenseMeta(display_name='Stability AI Community License', url='https://stability.ai/community-license-agreement'), 'elevenlabs-free-plan': LicenseMeta(display_name='ElevenLabs Terms (free plan: non-commercial, attribution required)', url='https://elevenlabs.io/terms-of-use'), 'elevenlabs-paid-plan': LicenseMeta(display_name='ElevenLabs Terms (paid plan)', url='https://elevenlabs.io/terms-of-use'), 'unknown': LicenseMeta(display_name='Unknown / unverified license', url=None), 'user-owned': LicenseMeta(display_name='User-owned / original work', url=None)}*
 
 `license_id` -> display name + canonical URL (one row per
 [`LICENSE_FLAGS`](#foley.licensing.LICENSE_FLAGS) key). Used only for human-readable credits; never for
@@ -91,6 +126,32 @@ Fail-closed fallback for unknown / `Proprietary-*` license ids (all False, cap N
 
 Fail-closed display fallback for unknown / `Proprietary-*` license ids.
 
+### foley.licensing.ai_scope_from_gen_ai_preference(preference)
+
+Map a Freesound `gen_ai_preference` to `(ai_training_ok override, scope)`.
+
+All four published values are honoured (only `no-gen-ai` was before #69). A
+missing value means no stated preference; an unrecognised one fails closed.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)], [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
+
+### foley.licensing.ai_use_permitted(record, , open_source_model, commercial)
+
+Whether AI use of the sound (CLAP-embedding it counts) is allowed here.
+
+`ai_training_ok` must hold, and the record’s `ai_training_scope` must admit
+this use: `open_source_only` needs an open-source model, `nc_open_source_only`
+also needs a non-commercial purpose, `none` admits nothing.
+
+* **Parameters:**
+  * **record** ([`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)) – The rights record.
+  * **open_source_model** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the model using the audio is open source (the
+    embedder’s `open_source` attribute; LAION-CLAP is).
+  * **commercial** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the purpose is commercial (foley’s default intent).
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
 ### foley.licensing.apply_license_flags(record, , overrides=None)
 
 Populate `record`’s eight derived flags from its `license_id`
@@ -124,6 +185,19 @@ apply per-source overrides.
 * **Raises:**
   [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `overrides` contains a key that is not a
       [`LicenseFlags`](#foley.licensing.LicenseFlags) field.
+
+### foley.licensing.intended_use_for(intended_use=None, , commercial_ok=None)
+
+The rights intent a verb runs under — every verb and surface resolves it here (#63).
+
+An explicit `intended_use` wins; else [`DEFAULT_INTENDED_USE`](#foley.licensing.DEFAULT_INTENDED_USE), with
+`commercial` overridden when `commercial_ok` is given (`False` is the explicit
+opt-in to non-commercial material). Always a fresh copy, so callers may mutate it.
+
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If both are given and disagree on `commercial`.
+* **Return type:**
+  [`IntendedUse`](foley.base.md#foley.base.IntendedUse)
 
 ### foley.licensing.keep(record, intended_use)
 
@@ -159,34 +233,30 @@ Convenience: apply [`keep()`](#foley.licensing.keep) to a `SoundRecord`’s nest
 Map a Creative-Commons license URL **or label** to `(license_id, verified)`.
 
 The single SSOT for turning an external source’s license string into a foley
-`license_id` (used by the FSD50K bulk adapter and the Freesound API adapter).
-Recognized CC families map to their foley `license_id` with
-`rights_verified=True`; anything unknown/missing fails closed to
-`('unknown', False)` so [`keep()`](#foley.licensing.keep) drops it while its provenance is still
-recorded.
+`license_id` (FSD50K, Clotho, the Freesound API, …). It **never widens rights**:
+the string is split into tokens, and
 
-Both representations Freesound uses are handled: the CC **URL** form
-(`http://creativecommons.org/publicdomain/zero/1.0/`) and the plain **label**
-the search API returns (`"Creative Commons 0"`, `"Attribution"`,
-`"Attribution NonCommercial"`).
-
-**Fail-closed for NoDerivatives / ShareAlike.** Any `-nd` / `-sa` variant —
-including the `by-nc-nd` and `by-nc-sa` compounds — has NO foley
-`LICENSE_FLAGS` row: its extra restrictions (no derivatives / share-alike) are
-not expressible by any row we have, so it maps to `('unknown', False)` and is
-rejected everywhere. This check runs first, so `by-nc-nd` / `by-nc-sa` are
-NOT mis-mapped to plain `CC-BY-NC-4.0` (which would fail-open by granting the
-modification / derivative / standalone-redistribution rights those licenses
-forbid). Only *after* it are `by-nc` / `sampling` tested before the bare
-`by`.
+* any NoDerivatives / ShareAlike sign (`nd`, `sa`, `no derivatives`,
+  `share alike`, `sharealike`) → `('unknown', False)`: foley has no row
+  expressing those restrictions, so the sound is refused everywhere;
+* the Public Domain Mark → `('PDM-1.0', False)`: a claim about the work, not a
+  licence anyone granted, so never auto-verified (#56);
+* CC0 (`publicdomain/zero`, `cc0`, `creative commons 0`) → `CC0-1.0`;
+* Sampling+ → `CC-Sampling+-1.0`;
+* `by` / `attribution` with any mention of commercial use (`nc`,
+  `noncommercial`, `non commercial`, `no commercial use`) → `CC-BY-NC-<v>`,
+  else `CC-BY-<v>`. **The version is kept** (`/by/3.0/` → `CC-BY-3.0`); a
+  versionless label gets [`DEFAULT_CC_VERSION`](#foley.licensing.DEFAULT_CC_VERSION); a version foley has no row
+  for (a `2.1/jp` port) fails closed;
+* anything else — including a string with a token this parser does not know —
+  → `('unknown', False)`.
 
 * **Parameters:**
   **url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A CC license URL, a CC label string, or `None`.
 * **Return type:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
 * **Returns:**
-  `(license_id, rights_verified)` — `('unknown', False)` when
-  unrecognized, missing, or a fail-closed ND/SA variant.
+  `(license_id, rights_verified)`.
 
 ### foley.licensing.license_meta(license_id)
 

@@ -10,9 +10,9 @@ at `import foley` or during discovery — via the module `__getattr__` below.
 
 ### Classes
 
-| `Adapter`                                    |                                                                                                                                                    |
-|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ElevenLabsAdapter`([config, api_key, http]) | ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](foley.sources.base.md#foley.sources.base.GenerateAdapter)). |
+| `Adapter`                                          |                                                                                                                                                    |
+|----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ElevenLabsAdapter`([config, api_key, http, plan]) | ElevenLabs Sound Effects generate adapter (a [`GenerateAdapter`](foley.sources.base.md#foley.sources.base.GenerateAdapter)). |
 
 ### Modules
 

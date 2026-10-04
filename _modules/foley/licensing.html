@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../../_static/documentation_options.js?v=828725f0"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -733,10 +733,44 @@ window.runMermaid = runMermaid;</script>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntendedUse</span><span class="p">,</span> <span class="n">LicenseRecord</span>
+
+<span class="c1">#: The ONE rights intent every verb and surface defaults to (#63, maintainer decision</span>
+<span class="c1">#: 2026-10-03): commercial publishing, attributable. NC and SA material is refused</span>
+<span class="c1">#: unless a caller explicitly passes a different :class:`~foley.base.IntendedUse` (or</span>
+<span class="c1">#: ``commercial_ok=False``). Treat it as read-only; copy with ``dataclasses.replace``.</span>
+<span class="n">DEFAULT_INTENDED_USE</span> <span class="o">=</span> <span class="n">IntendedUse</span><span class="p">(</span><span class="n">commercial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">publish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">can_attribute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="intended_use_for">
+<a class="viewcode-back" href="../../_autosummary/foley.licensing.html#foley.intended_use_for">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">intended_use_for</span><span class="p">(</span>
+    <span class="n">intended_use</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IntendedUse</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">commercial_ok</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntendedUse</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The rights intent a verb runs under — every verb and surface resolves it here (#63).</span>
+
+<span class="sd">    An explicit ``intended_use`` wins; else :data:`DEFAULT_INTENDED_USE`, with</span>
+<span class="sd">    ``commercial`` overridden when ``commercial_ok`` is given (``False`` is the explicit</span>
+<span class="sd">    opt-in to non-commercial material). Always a fresh copy, so callers may mutate it.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If both are given and disagree on ``commercial``.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">intended_use</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">commercial_ok</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">commercial_ok</span><span class="p">)</span> <span class="o">!=</span> <span class="n">intended_use</span><span class="o">.</span><span class="n">commercial</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"commercial_ok=</span><span class="si">{</span><span class="n">commercial_ok</span><span class="si">!r}</span><span class="s2"> contradicts intended_use.commercial="</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">intended_use</span><span class="o">.</span><span class="n">commercial</span><span class="si">!r}</span><span class="s2">; pass one of them"</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">intended_use</span>
+    <span class="k">if</span> <span class="n">commercial_ok</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">DEFAULT_INTENDED_USE</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">DEFAULT_INTENDED_USE</span><span class="p">,</span> <span class="n">commercial</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">commercial_ok</span><span class="p">))</span></div>
+
 
 
 <div class="viewcode-block" id="LicenseFlags">
@@ -767,14 +801,29 @@ window.runMermaid = runMermaid;</script>
 <span class="c1">#:     ai_training, requires_attribution, revenue_cap_usd</span>
 <span class="n">LICENSE_FLAGS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">LicenseFlags</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"CC0-1.0"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="s2">"CC-BY-4.0"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="s2">"CC-BY-NC-4.0"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="c1"># The Public Domain Mark is a LABEL ("believed free of copyright"), not a grant:</span>
+    <span class="c1"># its flags are permissive, but license_id_from_cc_url never marks it verified, so</span>
+    <span class="c1"># keep() refuses it until a human has checked the claim (#56).</span>
+    <span class="s2">"PDM-1.0"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="c1"># CC-BY / CC-BY-NC rows exist per version (rights do not differ across versions,</span>
+    <span class="c1"># the credit does): see _CC_VERSIONED below, merged into this table after it.</span>
     <span class="c1"># commercial only as a transformed sample -&gt; default-exclude</span>
     <span class="s2">"CC-Sampling+-1.0"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">"RemArc"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">"Sonniss-GDC"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">"Pixabay-Content"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="c1"># paid tier</span>
+    <span class="c1"># ElevenLabs, by the account's plan (the same codes as `an`'s PROVIDER_TERMS). The</span>
+    <span class="c1"># plan is never assumed: the adapter reads it from plan= / $FOLEY_ELEVENLABS_PLAN</span>
+    <span class="c1"># and refuses to generate when it is unknown (#56).</span>
+    <span class="s2">"elevenlabs-paid-plan"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span>
+        <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="p">),</span>
+    <span class="c1"># free plan: non-commercial, attribution required</span>
+    <span class="s2">"elevenlabs-free-plan"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="p">),</span>
+    <span class="c1"># LEGACY (records made before the plan was explicit): a paid plan was assumed.</span>
+    <span class="c1"># Re-stamp them with foley.restamp_rights (see the CHANGELOG / PR for #56).</span>
     <span class="s2">"ElevenLabs-SFX"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">"Stability-Community"</span><span class="p">:</span> <span class="n">LicenseFlags</span><span class="p">(</span>
         <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">1_000_000</span>
@@ -792,19 +841,62 @@ window.runMermaid = runMermaid;</script>
     <span class="s2">"unknown"</span><span class="p">:</span> <span class="n">UNKNOWN_LICENSE_FLAGS</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="c1">#: Creative-Commons URL / label substrings, checked in order (NC and Sampling+</span>
-<span class="c1">#: BEFORE the bare ``by`` so a compound license never mis-maps to plain CC-BY).</span>
-<span class="c1">#: Each entry is ``(needle, license_id)``; a match sets ``rights_verified=True``.</span>
-<span class="n">_CC_URL_MARKERS</span><span class="p">:</span> <span class="s2">"tuple[tuple[tuple[str, ...], str], ...]"</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">((</span><span class="s2">"zero"</span><span class="p">,</span> <span class="s2">"publicdomain"</span><span class="p">,</span> <span class="s2">"creative commons 0"</span><span class="p">,</span> <span class="s2">"cc0"</span><span class="p">),</span> <span class="s2">"CC0-1.0"</span><span class="p">),</span>
-    <span class="c1"># ``noncommercial`` subsumes the spaced label ("attribution noncommercial") AND the</span>
-    <span class="c1"># hyphenated/bare forms ("Attribution-NonCommercial", "noncommercial"), so no NC work</span>
-    <span class="c1"># slips through to the plain-CC-BY fallback below (which would fail OPEN by granting</span>
-    <span class="c1"># commercial rights). Checked AFTER the -nd/-sa guard, so by-nc-nd/by-nc-sa still fail</span>
-    <span class="c1"># closed. Mirrors the generic ND/SA needles.</span>
-    <span class="p">((</span><span class="s2">"by-nc"</span><span class="p">,</span> <span class="s2">"noncommercial"</span><span class="p">),</span> <span class="s2">"CC-BY-NC-4.0"</span><span class="p">),</span>
-    <span class="p">((</span><span class="s2">"sampling"</span><span class="p">,),</span> <span class="s2">"CC-Sampling+-1.0"</span><span class="p">),</span>
+<span class="c1">#: The CC versions foley has rows for (Freesound, FSD50K, Clotho and Wikimedia use these).</span>
+<span class="n">CC_VERSIONS</span><span class="p">:</span> <span class="s2">"tuple[str, ...]"</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"2.0"</span><span class="p">,</span> <span class="s2">"2.5"</span><span class="p">,</span> <span class="s2">"3.0"</span><span class="p">,</span> <span class="s2">"4.0"</span><span class="p">)</span>
+
+<span class="c1">#: ``(family id prefix, URL path segment, display label, flags)`` for versioned CC families.</span>
+<span class="n">_CC_VERSIONED</span><span class="p">:</span> <span class="s2">"tuple[tuple[str, str, str, LicenseFlags], ...]"</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s2">"CC-BY"</span><span class="p">,</span> <span class="s2">"by"</span><span class="p">,</span> <span class="s2">"CC BY"</span><span class="p">,</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span>
+    <span class="p">(</span>
+        <span class="s2">"CC-BY-NC"</span><span class="p">,</span>
+        <span class="s2">"by-nc"</span><span class="p">,</span>
+        <span class="s2">"CC BY-NC"</span><span class="p">,</span>
+        <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">),</span>
 <span class="p">)</span>
+
+<span class="n">LICENSE_FLAGS</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="n">flags</span>
+        <span class="k">for</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">_seg</span><span class="p">,</span> <span class="n">_label</span><span class="p">,</span> <span class="n">flags</span> <span class="ow">in</span> <span class="n">_CC_VERSIONED</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">CC_VERSIONS</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1">#: A CC version token (``3.0``, ``2.5``) in a URL path or a label.</span>
+<span class="n">_CC_VERSION_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^\d\.\d$"</span><span class="p">)</span>
+
+<span class="c1">#: The version assumed when a source gives a CC family with no version at all</span>
+<span class="c1">#: (Freesound's search labels: ``"Attribution"``). Rights are the same across versions;</span>
+<span class="c1">#: only the credit's version is a guess, so the record keeps the label it was given.</span>
+<span class="n">DEFAULT_CC_VERSION</span> <span class="o">=</span> <span class="s2">"4.0"</span>
+
+<span class="c1">#: Tokens that say nothing about the rights (URL scaffolding, the word "licence", …).</span>
+<span class="c1">#: A string with any OTHER unrecognised token fails closed: foley cannot tell what it</span>
+<span class="c1">#: adds (a jurisdiction port, "required", "no commercial use", …).</span>
+<span class="n">_NEUTRAL_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"http"</span><span class="p">,</span> <span class="s2">"https"</span><span class="p">,</span> <span class="s2">"www"</span><span class="p">,</span> <span class="s2">"creativecommons.org"</span><span class="p">,</span> <span class="s2">"creativecommons"</span><span class="p">,</span> <span class="s2">"org"</span><span class="p">,</span>
+        <span class="s2">"licenses"</span><span class="p">,</span> <span class="s2">"licence"</span><span class="p">,</span> <span class="s2">"license"</span><span class="p">,</span> <span class="s2">"legalcode"</span><span class="p">,</span> <span class="s2">"deed"</span><span class="p">,</span> <span class="s2">"deed.en"</span><span class="p">,</span> <span class="s2">"en"</span><span class="p">,</span>
+        <span class="s2">"cc"</span><span class="p">,</span> <span class="s2">"creative"</span><span class="p">,</span> <span class="s2">"commons"</span><span class="p">,</span> <span class="s2">"international"</span><span class="p">,</span> <span class="s2">"unported"</span><span class="p">,</span> <span class="s2">"generic"</span><span class="p">,</span>
+        <span class="s2">"public"</span><span class="p">,</span> <span class="s2">"version"</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>  <span class="c1"># fmt: skip</span>
+
+<span class="n">_ND_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"nd"</span><span class="p">,</span> <span class="s2">"noderivs"</span><span class="p">,</span> <span class="s2">"noderivatives"</span><span class="p">,</span> <span class="s2">"noderiv"</span><span class="p">})</span>
+<span class="n">_SA_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"sa"</span><span class="p">,</span> <span class="s2">"sharealike"</span><span class="p">})</span>
+<span class="n">_NC_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"nc"</span><span class="p">,</span> <span class="s2">"noncommercial"</span><span class="p">,</span> <span class="s2">"commercial"</span><span class="p">})</span>  <span class="c1"># any mention restricts</span>
+<span class="n">_BY_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"by"</span><span class="p">,</span> <span class="s2">"attribution"</span><span class="p">})</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cc_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"list[str]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Lower-case word tokens of a CC URL or label (``by-nc/3.0`` → ``by nc 3.0``)."""</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[a-z0-9.+]+"</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"creativecommons.org"</span><span class="p">,</span> <span class="s2">" "</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">:</span> <span class="s2">"list[str]"</span><span class="p">,</span> <span class="o">*</span><span class="n">phrase</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phrase</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">])</span> <span class="o">==</span> <span class="n">phrase</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">-</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="license_id_from_cc_url">
@@ -813,49 +905,83 @@ window.runMermaid = runMermaid;</script>
 <span class="w">    </span><span class="sd">"""Map a Creative-Commons license URL **or label** to ``(license_id, verified)``.</span>
 
 <span class="sd">    The single SSOT for turning an external source's license string into a foley</span>
-<span class="sd">    ``license_id`` (used by the FSD50K bulk adapter and the Freesound API adapter).</span>
-<span class="sd">    Recognized CC families map to their foley ``license_id`` with</span>
-<span class="sd">    ``rights_verified=True``; anything unknown/missing fails closed to</span>
-<span class="sd">    ``('unknown', False)`` so :func:`keep` drops it while its provenance is still</span>
-<span class="sd">    recorded.</span>
+<span class="sd">    ``license_id`` (FSD50K, Clotho, the Freesound API, …). It **never widens rights**:</span>
+<span class="sd">    the string is split into tokens, and</span>
 
-<span class="sd">    Both representations Freesound uses are handled: the CC **URL** form</span>
-<span class="sd">    (``http://creativecommons.org/publicdomain/zero/1.0/``) and the plain **label**</span>
-<span class="sd">    the search API returns (``"Creative Commons 0"``, ``"Attribution"``,</span>
-<span class="sd">    ``"Attribution NonCommercial"``).</span>
-
-<span class="sd">    **Fail-closed for NoDerivatives / ShareAlike.** Any ``-nd`` / ``-sa`` variant —</span>
-<span class="sd">    including the ``by-nc-nd`` and ``by-nc-sa`` compounds — has NO foley</span>
-<span class="sd">    ``LICENSE_FLAGS`` row: its extra restrictions (no derivatives / share-alike) are</span>
-<span class="sd">    not expressible by any row we have, so it maps to ``('unknown', False)`` and is</span>
-<span class="sd">    rejected everywhere. This check runs first, so ``by-nc-nd`` / ``by-nc-sa`` are</span>
-<span class="sd">    NOT mis-mapped to plain ``CC-BY-NC-4.0`` (which would fail-open by granting the</span>
-<span class="sd">    modification / derivative / standalone-redistribution rights those licenses</span>
-<span class="sd">    forbid). Only *after* it are ``by-nc`` / ``sampling`` tested before the bare</span>
-<span class="sd">    ``by``.</span>
+<span class="sd">    * any NoDerivatives / ShareAlike sign (``nd``, ``sa``, ``no derivatives``,</span>
+<span class="sd">      ``share alike``, ``sharealike``) → ``('unknown', False)``: foley has no row</span>
+<span class="sd">      expressing those restrictions, so the sound is refused everywhere;</span>
+<span class="sd">    * the Public Domain Mark → ``('PDM-1.0', False)``: a claim about the work, not a</span>
+<span class="sd">      licence anyone granted, so never auto-verified (#56);</span>
+<span class="sd">    * CC0 (``publicdomain/zero``, ``cc0``, ``creative commons 0``) → ``CC0-1.0``;</span>
+<span class="sd">    * Sampling+ → ``CC-Sampling+-1.0``;</span>
+<span class="sd">    * ``by`` / ``attribution`` with any mention of commercial use (``nc``,</span>
+<span class="sd">      ``noncommercial``, ``non commercial``, ``no commercial use``) → ``CC-BY-NC-&lt;v&gt;``,</span>
+<span class="sd">      else ``CC-BY-&lt;v&gt;``. **The version is kept** (``/by/3.0/`` → ``CC-BY-3.0``); a</span>
+<span class="sd">      versionless label gets :data:`DEFAULT_CC_VERSION`; a version foley has no row</span>
+<span class="sd">      for (a ``2.1/jp`` port) fails closed;</span>
+<span class="sd">    * anything else — including a string with a token this parser does not know —</span>
+<span class="sd">      → ``('unknown', False)``.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        url: A CC license URL, a CC label string, or ``None``.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        ``(license_id, rights_verified)`` — ``('unknown', False)`` when</span>
-<span class="sd">        unrecognized, missing, or a fail-closed ND/SA variant.</span>
+<span class="sd">        ``(license_id, rights_verified)``.</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">"unknown"</span><span class="p">,</span> <span class="kc">False</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="c1"># NoDerivatives / ShareAlike (and the nc-nd / nc-sa compounds) fail closed —</span>
-    <span class="c1"># BEFORE the by-nc marker, which would otherwise substring-match 'by-nc-nd' /</span>
-    <span class="c1"># 'by-nc-sa' and mis-map a stricter license to plain CC-BY-NC (fail-open).</span>
-    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">marker</span> <span class="ow">in</span> <span class="n">u</span> <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"-nd"</span><span class="p">,</span> <span class="s2">"-sa"</span><span class="p">,</span> <span class="s2">"noderiv"</span><span class="p">,</span> <span class="s2">"sharealike"</span><span class="p">)):</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">_cc_tokens</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">toks</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">toks</span> <span class="o">&amp;</span> <span class="n">_ND_TOKENS</span>
+        <span class="ow">or</span> <span class="n">toks</span> <span class="o">&amp;</span> <span class="n">_SA_TOKENS</span>
+        <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"derivatives"</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"derivs"</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="s2">"share"</span><span class="p">,</span> <span class="s2">"alike"</span><span class="p">)</span>
+    <span class="p">):</span>
         <span class="k">return</span> <span class="s2">"unknown"</span><span class="p">,</span> <span class="kc">False</span>
-    <span class="k">for</span> <span class="n">needles</span><span class="p">,</span> <span class="n">license_id</span> <span class="ow">in</span> <span class="n">_CC_URL_MARKERS</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">n</span> <span class="ow">in</span> <span class="n">u</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">needles</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">license_id</span><span class="p">,</span> <span class="kc">True</span>
-    <span class="k">if</span> <span class="s2">"/by/"</span> <span class="ow">in</span> <span class="n">u</span> <span class="ow">or</span> <span class="n">u</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"/by"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"attribution"</span> <span class="ow">in</span> <span class="n">u</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"CC-BY-4.0"</span><span class="p">,</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="s2">"publicdomain"</span> <span class="ow">in</span> <span class="n">toks</span> <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="s2">"public"</span><span class="p">,</span> <span class="s2">"domain"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">"zero"</span> <span class="ow">in</span> <span class="n">toks</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="p">{</span><span class="s2">"publicdomain"</span><span class="p">,</span> <span class="s2">"zero"</span><span class="p">,</span> <span class="s2">"public"</span><span class="p">,</span> <span class="s2">"domain"</span><span class="p">},</span> <span class="s2">"CC0-1.0"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">"PDM-1.0"</span><span class="p">,</span> <span class="kc">False</span>  <span class="c1"># 'mark' or a bare public-domain claim</span>
+    <span class="k">if</span> <span class="s2">"cc0"</span> <span class="ow">in</span> <span class="n">toks</span> <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="s2">"creative"</span><span class="p">,</span> <span class="s2">"commons"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span>
+        <span class="n">tokens</span><span class="p">,</span> <span class="s2">"creative"</span><span class="p">,</span> <span class="s2">"commons"</span><span class="p">,</span> <span class="s2">"zero"</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="p">{</span><span class="s2">"cc0"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">,</span> <span class="s2">"zero"</span><span class="p">},</span> <span class="s2">"CC0-1.0"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">toks</span> <span class="o">&amp;</span> <span class="p">{</span><span class="s2">"sampling"</span><span class="p">,</span> <span class="s2">"sampling+"</span><span class="p">}:</span>
+        <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="p">{</span><span class="s2">"sampling"</span><span class="p">,</span> <span class="s2">"sampling+"</span><span class="p">,</span> <span class="s2">"plus"</span><span class="p">},</span> <span class="s2">"CC-Sampling+-1.0"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">toks</span> <span class="o">&amp;</span> <span class="n">_BY_TOKENS</span><span class="p">:</span>
+        <span class="n">nc</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">toks</span> <span class="o">&amp;</span> <span class="n">_NC_TOKENS</span><span class="p">)</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"non"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"use"</span><span class="p">}</span> <span class="k">if</span> <span class="n">nc</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">family</span> <span class="o">=</span> <span class="s2">"CC-BY-NC"</span> <span class="k">if</span> <span class="n">nc</span> <span class="k">else</span> <span class="s2">"CC-BY"</span>
+        <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">_BY_TOKENS</span> <span class="o">|</span> <span class="n">_NC_TOKENS</span> <span class="o">|</span> <span class="n">extra</span><span class="p">,</span> <span class="n">family</span><span class="p">,</span> <span class="n">versioned</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="s2">"unknown"</span><span class="p">,</span> <span class="kc">False</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_only_known</span><span class="p">(</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="s2">"list[str]"</span><span class="p">,</span> <span class="n">allowed</span><span class="p">:</span> <span class="s2">"set[str]"</span><span class="p">,</span> <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">versioned</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"tuple[str, bool]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""``(license_id, True)`` if every token is accounted for, else fail closed.</span>
+
+<span class="sd">    Version tokens are allowed; for a ``versioned`` family the version picks the row</span>
+<span class="sd">    (``CC-BY-3.0``), and a version with no row fails closed. Unversioned families</span>
+<span class="sd">    (CC0 1.0, Sampling+ 1.0) accept their one version.</span>
+<span class="sd">    """</span>
+    <span class="n">versions</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">_CC_VERSION_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span>
+    <span class="n">leftover</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span> <span class="ow">and</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_NEUTRAL_TOKENS</span> <span class="ow">and</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">versions</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">leftover</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">versions</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"unknown"</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">versioned</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">license_id</span><span class="p">,</span> <span class="kc">True</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">versions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">versions</span> <span class="k">else</span> <span class="n">DEFAULT_CC_VERSION</span>
+    <span class="n">versioned_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">license_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">if</span> <span class="n">versioned_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">LICENSE_FLAGS</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"unknown"</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">versioned_id</span><span class="p">,</span> <span class="kc">True</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -893,11 +1019,9 @@ window.runMermaid = runMermaid;</script>
         <span class="s2">"CC0 1.0 Universal (Public Domain Dedication)"</span><span class="p">,</span>
         <span class="s2">"https://creativecommons.org/publicdomain/zero/1.0/"</span><span class="p">,</span>
     <span class="p">),</span>
-    <span class="s2">"CC-BY-4.0"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
-        <span class="s2">"CC BY 4.0"</span><span class="p">,</span> <span class="s2">"https://creativecommons.org/licenses/by/4.0/"</span>
-    <span class="p">),</span>
-    <span class="s2">"CC-BY-NC-4.0"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
-        <span class="s2">"CC BY-NC 4.0"</span><span class="p">,</span> <span class="s2">"https://creativecommons.org/licenses/by-nc/4.0/"</span>
+    <span class="s2">"PDM-1.0"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">"Public Domain Mark 1.0 (unverified claim)"</span><span class="p">,</span>
+        <span class="s2">"https://creativecommons.org/publicdomain/mark/1.0/"</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="s2">"CC-Sampling+-1.0"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
         <span class="s2">"CC Sampling+ 1.0"</span><span class="p">,</span> <span class="s2">"https://creativecommons.org/licenses/sampling+/1.0/"</span>
@@ -912,8 +1036,16 @@ window.runMermaid = runMermaid;</script>
     <span class="s2">"Pixabay-Content"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
         <span class="s2">"Pixabay Content License"</span><span class="p">,</span> <span class="s2">"https://pixabay.com/service/license-summary/"</span>
     <span class="p">),</span>
+    <span class="s2">"elevenlabs-paid-plan"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">"ElevenLabs Terms (paid plan)"</span><span class="p">,</span> <span class="s2">"https://elevenlabs.io/terms-of-use"</span>
+    <span class="p">),</span>
+    <span class="s2">"elevenlabs-free-plan"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+        <span class="s2">"ElevenLabs Terms (free plan: non-commercial, attribution required)"</span><span class="p">,</span>
+        <span class="s2">"https://elevenlabs.io/terms-of-use"</span><span class="p">,</span>
+    <span class="p">),</span>
     <span class="s2">"ElevenLabs-SFX"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
-        <span class="s2">"ElevenLabs Sound Effects Terms"</span><span class="p">,</span> <span class="s2">"https://elevenlabs.io/terms-of-use"</span>
+        <span class="s2">"ElevenLabs Sound Effects Terms (legacy: paid plan assumed)"</span><span class="p">,</span>
+        <span class="s2">"https://elevenlabs.io/terms-of-use"</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="s2">"Stability-Community"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
         <span class="s2">"Stability AI Community License"</span><span class="p">,</span>
@@ -923,6 +1055,16 @@ window.runMermaid = runMermaid;</script>
     <span class="s2">"user-owned"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span><span class="s2">"User-owned / original work"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
     <span class="s2">"unknown"</span><span class="p">:</span> <span class="n">UNKNOWN_LICENSE_META</span><span class="p">,</span>
 <span class="p">}</span>
+
+<span class="n">LICENSE_META</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="n">LicenseMeta</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"https://creativecommons.org/licenses/</span><span class="si">{</span><span class="n">seg</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">/"</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">seg</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">_flags</span> <span class="ow">in</span> <span class="n">_CC_VERSIONED</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">CC_VERSIONS</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="license_meta">
@@ -1004,6 +1146,74 @@ window.runMermaid = runMermaid;</script>
 
 
 
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># AI-use scope (Freesound's gen_ai_preference, #69)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1">#: The ``ai_training_scope`` values (``None`` = no narrowing beyond ``ai_training_ok``).</span>
+<span class="n">AI_TRAINING_SCOPES</span><span class="p">:</span> <span class="s2">"tuple[str, ...]"</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"none"</span><span class="p">,</span>
+    <span class="s2">"open_source_only"</span><span class="p">,</span>
+    <span class="s2">"nc_open_source_only"</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1">#: Freesound ``gen_ai_preference`` -&gt; ``(ai_training_ok override, ai_training_scope)``.</span>
+<span class="c1">#: ``None`` as the override leaves the CC row's flag alone. An unlisted value fails</span>
+<span class="c1">#: closed (see :func:`ai_scope_from_gen_ai_preference`).</span>
+<span class="n">GEN_AI_PREFERENCE_SCOPES</span><span class="p">:</span> <span class="s2">"dict[str, tuple[Optional[bool], Optional[str]]]"</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"no-additional-preferences"</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">"open-source-models"</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">"open_source_only"</span><span class="p">),</span>
+    <span class="s2">"noncommercial-open-source-models"</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">"nc_open_source_only"</span><span class="p">),</span>
+    <span class="s2">"no-gen-ai"</span><span class="p">:</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">"none"</span><span class="p">),</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="ai_scope_from_gen_ai_preference">
+<a class="viewcode-back" href="../../_autosummary/foley.licensing.html#foley.ai_scope_from_gen_ai_preference">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ai_scope_from_gen_ai_preference</span><span class="p">(</span>
+    <span class="n">preference</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"tuple[Optional[bool], Optional[str]]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Map a Freesound ``gen_ai_preference`` to ``(ai_training_ok override, scope)``.</span>
+
+<span class="sd">    All four published values are honoured (only ``no-gen-ai`` was before #69). A</span>
+<span class="sd">    missing value means no stated preference; an unrecognised one fails closed.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">preference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">GEN_AI_PREFERENCE_SCOPES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">preference</span><span class="p">,</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">"none"</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="ai_use_permitted">
+<a class="viewcode-back" href="../../_autosummary/foley.licensing.html#foley.ai_use_permitted">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ai_use_permitted</span><span class="p">(</span>
+    <span class="n">record</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">open_source_model</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">commercial</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether AI use of the sound (CLAP-embedding it counts) is allowed here.</span>
+
+<span class="sd">    ``ai_training_ok`` must hold, and the record's ``ai_training_scope`` must admit</span>
+<span class="sd">    this use: ``open_source_only`` needs an open-source model, ``nc_open_source_only``</span>
+<span class="sd">    also needs a non-commercial purpose, ``none`` admits nothing.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        record: The rights record.</span>
+<span class="sd">        open_source_model: Whether the model using the audio is open source (the</span>
+<span class="sd">            embedder's ``open_source`` attribute; LAION-CLAP is).</span>
+<span class="sd">        commercial: Whether the purpose is commercial (foley's default intent).</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">ai_training_ok</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">scope</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">ai_training_scope</span>
+    <span class="k">if</span> <span class="n">scope</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">scope</span> <span class="o">==</span> <span class="s2">"open_source_only"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">open_source_model</span>
+    <span class="k">if</span> <span class="n">scope</span> <span class="o">==</span> <span class="s2">"nc_open_source_only"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">open_source_model</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">commercial</span>
+    <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># 'none' or an unrecognised scope: fail closed</span></div>
+
+
+
 <div class="viewcode-block" id="keep">
 <a class="viewcode-back" href="../../_autosummary/foley.licensing.html#foley.keep">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">keep</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">LicenseRecord</span><span class="p">,</span> <span class="n">intended_use</span><span class="p">:</span> <span class="n">IntendedUse</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1028,8 +1238,10 @@ window.runMermaid = runMermaid;</script>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">intended_use</span><span class="o">.</span><span class="n">redistribute_standalone</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">redistribute_standalone_ok</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="n">intended_use</span><span class="o">.</span><span class="n">will_train</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">ai_training_ok</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">intended_use</span><span class="o">.</span><span class="n">will_train</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ai_use_permitted</span><span class="p">(</span>
+        <span class="n">record</span><span class="p">,</span> <span class="n">open_source_model</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">commercial</span><span class="o">=</span><span class="n">intended_use</span><span class="o">.</span><span class="n">commercial</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># the trainer's model is unknown here, so a scoped grant fails closed</span>
     <span class="n">cap</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">revenue_cap_usd</span>
     <span class="k">if</span> <span class="n">cap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">intended_use</span><span class="o">.</span><span class="n">revenue_usd</span> <span class="o">&gt;=</span> <span class="n">cap</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>

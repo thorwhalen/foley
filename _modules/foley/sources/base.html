@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../../../_static/documentation_options.js?v=828725f0"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -767,6 +767,8 @@ window.runMermaid = runMermaid;</script>
     <span class="s2">"GeneratedClip"</span><span class="p">,</span>
     <span class="s2">"UniformCorpus"</span><span class="p">,</span>
     <span class="s2">"bulk_license"</span><span class="p">,</span>
+    <span class="s2">"per_clip_license_meta"</span><span class="p">,</span>
+    <span class="s2">"license_from_clip_meta"</span><span class="p">,</span>
     <span class="s2">"api_license"</span><span class="p">,</span>
     <span class="s2">"generated_license"</span><span class="p">,</span>
     <span class="s2">"CORPUS_REGISTRY"</span><span class="p">,</span>
@@ -1018,6 +1020,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">rights_verified</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">source_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">license_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">creator_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">attribution_text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
@@ -1025,8 +1028,7 @@ window.runMermaid = runMermaid;</script>
 
 <span class="sd">    The SSOT license builder every **bulk-corpus** adapter routes through</span>
 <span class="sd">    (``acquisition_method=bulk``); a thin wrapper over :func:`_build_license`. Its</span>
-<span class="sd">    signature is unchanged from #4 — no ``overrides`` (a downloaded corpus is</span>
-<span class="sd">    cacheable by-value), so every existing corpus adapter keeps working verbatim.</span>
+<span class="sd">    signature has no ``overrides`` (a downloaded corpus is cacheable by-value).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        source: Provenance source tag (e.g. ``'fsd50k'``, ``'foleyset'``).</span>
@@ -1036,6 +1038,8 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">            gate input — pass ``False`` for unrecognized/ambiguous licenses).</span>
 <span class="sd">        source_id: The corpus-native clip id, for provenance.</span>
 <span class="sd">        source_url: A human-resolvable URL for the clip (attribution/credits).</span>
+<span class="sd">        license_url: The licence URL/label exactly as the corpus served it (kept so the</span>
+<span class="sd">            credit links the deed the clip was actually released under).</span>
 <span class="sd">        creator_name: The uploader/creator (required for CC-BY attribution).</span>
 <span class="sd">        attribution_text: A ready-made attribution string, if the corpus supplies one.</span>
 
@@ -1049,6 +1053,7 @@ window.runMermaid = runMermaid;</script>
         <span class="n">acquisition_method</span><span class="o">=</span><span class="n">AcquisitionMethod</span><span class="o">.</span><span class="n">bulk</span><span class="p">,</span>
         <span class="n">source_id</span><span class="o">=</span><span class="n">source_id</span><span class="p">,</span>
         <span class="n">source_url</span><span class="o">=</span><span class="n">source_url</span><span class="p">,</span>
+        <span class="n">license_url</span><span class="o">=</span><span class="n">license_url</span><span class="p">,</span>
         <span class="n">creator_name</span><span class="o">=</span><span class="n">creator_name</span><span class="p">,</span>
         <span class="n">attribution_text</span><span class="o">=</span><span class="n">attribution_text</span><span class="p">,</span>
     <span class="p">)</span></div>
@@ -1208,6 +1213,52 @@ window.runMermaid = runMermaid;</script>
     <span class="n">record</span><span class="o">.</span><span class="n">watermark</span> <span class="o">=</span> <span class="n">watermark</span>
     <span class="n">record</span><span class="o">.</span><span class="n">c2pa_manifest_ref</span> <span class="o">=</span> <span class="n">c2pa_manifest_ref</span>
     <span class="k">return</span> <span class="n">record</span></div>
+
+
+
+<div class="viewcode-block" id="per_clip_license_meta">
+<a class="viewcode-back" href="../../../_autosummary/foley.sources.base.html#foley.sources.per_clip_license_meta">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">per_clip_license_meta</span><span class="p">(</span>
+    <span class="n">license_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">creator_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">source_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The ``ClipSpec.meta`` rights fields for a clip that carries its own CC licence.</span>
+
+<span class="sd">    Shared by the corpora whose clips each keep their Freesound licence (FSD50K,</span>
+<span class="sd">    Clotho): the licence string goes through the one CC mapper</span>
+<span class="sd">    (:func:`~foley.licensing.license_id_from_cc_url` — version kept, unknown fails</span>
+<span class="sd">    closed), and the string itself is kept as ``license_url`` so the credit links the</span>
+<span class="sd">    deed the clip was released under. Read back by :func:`license_from_clip_meta`.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">license_id_from_cc_url</span>
+
+    <span class="n">license_id</span><span class="p">,</span> <span class="n">verified</span> <span class="o">=</span> <span class="n">license_id_from_cc_url</span><span class="p">(</span><span class="n">license_url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"license_id"</span><span class="p">:</span> <span class="n">license_id</span><span class="p">,</span>
+        <span class="s2">"rights_verified"</span><span class="p">:</span> <span class="n">verified</span><span class="p">,</span>
+        <span class="s2">"license_url"</span><span class="p">:</span> <span class="n">license_url</span><span class="p">,</span>
+        <span class="s2">"creator_name"</span><span class="p">:</span> <span class="n">creator_name</span><span class="p">,</span>
+        <span class="s2">"source_url"</span><span class="p">:</span> <span class="n">source_url</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="license_from_clip_meta">
+<a class="viewcode-back" href="../../../_autosummary/foley.sources.base.html#foley.sources.license_from_clip_meta">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">license_from_clip_meta</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="s2">"ClipSpec"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LicenseRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Build a clip's rights record from :func:`per_clip_license_meta` fields (fail-closed)."""</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">meta</span>
+    <span class="k">return</span> <span class="n">bulk_license</span><span class="p">(</span>
+        <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+        <span class="n">license_id</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"license_id"</span><span class="p">,</span> <span class="s2">"unknown"</span><span class="p">),</span>
+        <span class="n">rights_verified</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"rights_verified"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+        <span class="n">source_id</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">source_id</span><span class="p">,</span>
+        <span class="n">source_url</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"source_url"</span><span class="p">),</span>
+        <span class="n">license_url</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"license_url"</span><span class="p">),</span>
+        <span class="n">creator_name</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"creator_name"</span><span class="p">),</span>
+    <span class="p">)</span></div>
 
 
 

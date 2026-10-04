@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../../../../_static/documentation_options.js?v=828725f0"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../../../../_static/searchtools.js"></script>
@@ -748,7 +748,7 @@ window.runMermaid = runMermaid;</script>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">...base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candidate</span><span class="p">,</span> <span class="n">CandidateOrigin</span><span class="p">,</span> <span class="n">SoundRecord</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">...licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">license_id_from_cc_url</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ai_scope_from_gen_ai_preference</span><span class="p">,</span> <span class="n">license_id_from_cc_url</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">api_license</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..http</span><span class="w"> </span><span class="kn">import</span> <span class="n">Transport</span><span class="p">,</span> <span class="n">requests_transport</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOURCE_CONFIG</span>
@@ -983,11 +983,13 @@ window.runMermaid = runMermaid;</script>
             <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># fail-closed: never index a non-accepted-license sound</span>
 
         <span class="n">overrides</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"cache_bytes_ok"</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>  <span class="c1"># TOS: by-reference even for CC0</span>
-        <span class="c1"># Honor the uploader's AI-training preference: CLAP-embedding + persisting</span>
-        <span class="c1"># IS a form of training, so a 'no-gen-ai' sound is marked ai_training_ok</span>
-        <span class="c1"># False and then refused by ingest_one's fail-closed gate.</span>
-        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"gen_ai_preference"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"no-gen-ai"</span><span class="p">:</span>
-            <span class="n">overrides</span><span class="p">[</span><span class="s2">"ai_training_ok"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># Honor the uploader's AI-use preference (all four values, #69): CLAP-</span>
+        <span class="c1"># embedding + persisting IS AI use, so ingest_one's gate reads the scope</span>
+        <span class="c1"># (ai_use_permitted) and 'no-gen-ai' also clears ai_training_ok.</span>
+        <span class="n">preference</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"gen_ai_preference"</span><span class="p">)</span>
+        <span class="n">ai_ok</span><span class="p">,</span> <span class="n">ai_scope</span> <span class="o">=</span> <span class="n">ai_scope_from_gen_ai_preference</span><span class="p">(</span><span class="n">preference</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ai_ok</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">overrides</span><span class="p">[</span><span class="s2">"ai_training_ok"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ai_ok</span>
 
         <span class="n">page</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">"https://freesound.org/s/</span><span class="si">{</span><span class="n">raw_id</span><span class="si">}</span><span class="s2">/"</span>
         <span class="n">lic</span> <span class="o">=</span> <span class="n">api_license</span><span class="p">(</span>
@@ -1000,6 +1002,8 @@ window.runMermaid = runMermaid;</script>
             <span class="n">creator_name</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"username"</span><span class="p">),</span>
             <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="n">lic</span><span class="o">.</span><span class="n">gen_ai_preference</span> <span class="o">=</span> <span class="n">preference</span>
+        <span class="n">lic</span><span class="o">.</span><span class="n">ai_training_scope</span> <span class="o">=</span> <span class="n">ai_scope</span>
         <span class="n">record</span> <span class="o">=</span> <span class="n">SoundRecord</span><span class="p">(</span>
             <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">"freesound:</span><span class="si">{</span><span class="n">raw_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>  <span class="c1"># short, case-stable, no URL</span>
             <span class="n">uri</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>

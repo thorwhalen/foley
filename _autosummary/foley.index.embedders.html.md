@@ -54,6 +54,12 @@ The HF checkpoint id.
 
 The embedding dimensionality.
 
+#### open_source
+
+Whether the checkpoint is an open-source model (the LAION
+releases are). Read by the ingest AI-use gate for sounds whose rights
+holder allows only open-source models (#69).
+
 #### *property* device *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The resolved torch device string (`'cuda'`/`'cpu'`).

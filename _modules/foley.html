@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../_static/documentation_options.js?v=828725f0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -878,6 +878,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">hybrid_search</span><span class="p">,</span>
     <span class="n">ingest_folder</span><span class="p">,</span>
     <span class="n">ingest_one</span><span class="p">,</span>
+    <span class="n">restamp_rights</span><span class="p">,</span>
     <span class="n">lancedb_available</span><span class="p">,</span>
     <span class="n">parse_ucs_filename</span><span class="p">,</span>
     <span class="n">reciprocal_rank_fusion</span><span class="p">,</span>
@@ -1092,6 +1093,7 @@ window.runMermaid = runMermaid;</script>
     <span class="s2">"default_tagger"</span><span class="p">,</span>
     <span class="s2">"default_zeroshot_tagger"</span><span class="p">,</span>
     <span class="s2">"ingest"</span><span class="p">,</span>
+    <span class="s2">"restamp_rights"</span><span class="p">,</span>
     <span class="s2">"ingest_one"</span><span class="p">,</span>
     <span class="s2">"ingest_folder"</span><span class="p">,</span>
     <span class="s2">"IngestResult"</span><span class="p">,</span>
@@ -1305,29 +1307,64 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    Convenience wrapper over ``foley.library.search(...)`` — see</span>
 <span class="sd">    :meth:`foley.index.SoundLibrary.search`. Constructs the process-wide default</span>
 <span class="sd">    library (local stores + CLAP + best available index) on first use.</span>
+
+<span class="sd">    ``commercial_ok`` defaults to the one rights intent every verb shares</span>
+<span class="sd">    (:data:`foley.licensing.DEFAULT_INTENDED_USE`: commercial), so only commercially</span>
+<span class="sd">    usable sounds come back; pass ``commercial_ok=False`` to include the rest.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">default_library</span><span class="p">()</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-        <span class="n">query</span><span class="p">,</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">intended_use_for</span>
+
+    <span class="n">commercial</span> <span class="o">=</span> <span class="n">intended_use_for</span><span class="p">(</span><span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">)</span><span class="o">.</span><span class="n">commercial</span>
+    <span class="n">lib</span> <span class="o">=</span> <span class="n">default_library</span><span class="p">()</span>
+    <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
         <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
-        <span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">,</span>
         <span class="n">ucs_category</span><span class="o">=</span><span class="n">ucs_category</span><span class="p">,</span>
         <span class="n">min_snr</span><span class="o">=</span><span class="n">min_snr</span><span class="p">,</span>
         <span class="n">duration_range</span><span class="o">=</span><span class="n">duration_range</span><span class="p">,</span>
         <span class="n">rerank</span><span class="o">=</span><span class="n">rerank</span><span class="p">,</span>
-    <span class="p">)</span></div>
+    <span class="p">)</span>
+    <span class="n">hits</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">commercial</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">hits</span><span class="p">:</span>
+        <span class="n">_warn_if_hidden</span><span class="p">(</span><span class="n">lib</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">commercial_ok</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">hits</span></div>
 
 
 
 <div class="viewcode-block" id="similar">
 <a class="viewcode-back" href="../_autosummary/foley.html#foley.similar">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">similar</span><span class="p">(</span><span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">similar</span><span class="p">(</span><span class="n">sound_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">commercial_ok</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Find sounds similar to a stored sound (audio&lt;-&gt;audio) in the default library.</span>
 
-<span class="sd">    See :meth:`foley.index.SoundLibrary.similar`.</span>
+<span class="sd">    See :meth:`foley.index.SoundLibrary.similar`. Like :func:`search`, only sounds</span>
+<span class="sd">    cleared for the default (commercial) intent are returned unless</span>
+<span class="sd">    ``commercial_ok=False``.</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">default_library</span><span class="p">()</span><span class="o">.</span><span class="n">similar</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span></div>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.licensing</span><span class="w"> </span><span class="kn">import</span> <span class="n">intended_use_for</span>
 
+    <span class="n">hits</span> <span class="o">=</span> <span class="n">default_library</span><span class="p">()</span><span class="o">.</span><span class="n">similar</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">intended_use_for</span><span class="p">(</span><span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">)</span><span class="o">.</span><span class="n">commercial</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">hits</span>
+    <span class="n">kept</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">hits</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">commercial_ok</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">rights_verified</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">kept</span><span class="p">:</span>
+        <span class="n">_warn_if_hidden</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">kept</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_warn_if_hidden</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Say why a commercial-default search came back empty when it did not have to."""</span>
+    <span class="k">if</span> <span class="n">hidden</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span><span class="si">}</span><span class="s2"> match(es) hidden: not cleared for commercial use (unverified "</span>
+            <span class="s2">"or non-commercial rights — e.g. files ingested without a licence). Pass "</span>
+            <span class="s2">"commercial_ok=False to see them, or assert rights with "</span>
+            <span class="s2">"foley.ingest(path, license='user-owned') / foley restamp-rights."</span><span class="p">,</span>
+            <span class="ne">UserWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="p">)</span>
 
 
 <div class="viewcode-block" id="generate">
@@ -1449,13 +1486,20 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">            signature for forward-compat.</span>
 <span class="sd">        qc: Run the Tier-0 QC gate (quarantines failing clips).</span>
 <span class="sd">        recursive: Recurse into sub-folders.</span>
-<span class="sd">        **kw: Forwarded to :func:`foley.index.ingest_one`.</span>
+<span class="sd">        **kw: Forwarded to :func:`foley.index.ingest_one` — notably ``license``:</span>
+<span class="sd">            omit it and the files' rights are **unknown** (indexed, but</span>
+<span class="sd">            :func:`keep` refuses them for every use); pass ``license="user-owned"``</span>
+<span class="sd">            to assert you own them (#55).</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">backend</span> <span class="o">!=</span> <span class="s2">"local"</span><span class="p">:</span>
         <span class="c1"># A non-local backend names a live source adapter (#5): treat ``path`` as</span>
         <span class="c1"># the query and route through the add_from pull facade (search -&gt; license</span>
         <span class="c1"># gate -&gt; download -&gt; the shared ingest_one pipeline).</span>
         <span class="k">return</span> <span class="n">add_from</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"license"</span><span class="p">),</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.index.ingest</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_ingest_license</span>
+
+        <span class="n">resolve_ingest_license</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s2">"license"</span><span class="p">])</span>  <span class="c1"># an unknown id fails before any file is read</span>
     <span class="k">return</span> <span class="n">ingest_folder</span><span class="p">(</span>
         <span class="n">path</span><span class="p">,</span>
         <span class="n">library</span><span class="o">=</span><span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">(),</span>

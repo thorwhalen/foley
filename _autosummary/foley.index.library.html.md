@@ -189,6 +189,18 @@ excluded from the results.
 
 The content-addressed byte store.
 
+#### update_record(record)
+
+Rewrite a stored record’s metadata and re-index its keyword text.
+
+For corrections that do not touch the audio (a re-stamped licence, a removed
+caption): the bytes and the CLAP vector stay as they are.
+
+* **Raises:**
+  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If `record.id` is not in the library.
+* **Return type:**
+  [`SoundRecord`](foley.base.html.md#foley.base.SoundRecord)
+
 #### *property* vindex
 
 The vector index.

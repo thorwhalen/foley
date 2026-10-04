@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="_static/documentation_options.js?v=828725f0"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
     <link rel="next" title="API reference" href="api.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -360,13 +360,13 @@ for what’s next. Follow along in <a class="reference internal" href="#misc/doc
 <span class="n">candidates</span> <span class="o">=</span> <span class="n">foley</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"She pushed open the heavy oak door; rain hammered outside."</span><span class="p">)</span>
 
 <span class="c1"># Direct hybrid search of your library (text query or a reference clip)</span>
-<span class="n">hits</span> <span class="o">=</span> <span class="n">foley</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"distant thunder rumble"</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">commercial_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">hits</span> <span class="o">=</span> <span class="n">foley</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"distant thunder rumble"</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># commercial use is the default</span>
 
 <span class="c1"># Generate a sound when nothing fits (arioso-style; pluggable backends)</span>
 <span class="n">clip</span> <span class="o">=</span> <span class="n">foley</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="s2">"a single wooden door creak"</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">"stable_audio"</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="c1"># Grow the library — ingest auto-tags, captions, and embeds every file</span>
-<span class="n">foley</span><span class="o">.</span><span class="n">ingest</span><span class="p">(</span><span class="s2">"~/my_sounds/"</span><span class="p">)</span>
+<span class="n">foley</span><span class="o">.</span><span class="n">ingest</span><span class="p">(</span><span class="s2">"~/my_sounds/"</span><span class="p">,</span> <span class="n">license</span><span class="o">=</span><span class="s2">"user-owned"</span><span class="p">)</span>  <span class="c1"># omit it and rights stay unknown</span>
 <span class="n">foley</span><span class="o">.</span><span class="n">add_from</span><span class="p">(</span><span class="s2">"freesound"</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="s2">"ocean waves"</span><span class="p">,</span> <span class="n">license</span><span class="o">=</span><span class="s2">"cc0"</span><span class="p">)</span>
 
 <span class="c1"># Compose: place the sounds under the narration (find → plan → weave)</span>
@@ -504,7 +504,7 @@ what’s degraded. Full docs: <strong><a class="reference external" href="https:
 </section>
 </section>
 
-<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-04 08:01 UTC from <a href="https://github.com/thorwhalen/foley/commit/c6ab79941eaa91a2683707369ec46a52ca2ec705">c6ab799</a> (main) · foley 0.0.28 · <a href="about-this-build.html">about this build</a></p>
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-04 08:24 UTC from <a href="https://github.com/thorwhalen/foley/commit/51e53f48444aa9f0a6f91a25de9985e748f55b21">51e53f4</a> (main) · foley 0.0.29 · <a href="about-this-build.html">about this build</a></p>
 
                 </article>
               

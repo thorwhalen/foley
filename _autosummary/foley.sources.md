@@ -38,7 +38,7 @@ Three adapter kinds share the one ingest pipeline: the narrow **bulk-corpus**
 |-------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
 | [`CorpusAdapter`](#foley.sources.CorpusAdapter)(\*args, \*\*kwargs)              | A downloaded bulk corpus presented as an ingestable stream of clips.            |
 | [`UniformCorpus`](#foley.sources.UniformCorpus)(name, ring, ...[, ...])          | A bulk corpus where **every** clip carries the same license.                    |
-| [`ClothoEvalCorpus`](#foley.sources.ClothoEvalCorpus)(name, ring, ...[, ...])       | Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.            |
+| [`ClothoEvalCorpus`](#foley.sources.ClothoEvalCorpus)(name, ring, ...[, ...])       | Ring-0 Clotho-eval adapter: per-clip Freesound licences; captions opt-in (NC).  |
 | [`Fsd50kCorpus`](#foley.sources.Fsd50kCorpus)()                                 | Ring-1 FSD50K adapter with per-clip Freesound license resolution.               |
 | [`SourceAdapter`](#foley.sources.SourceAdapter)(\*args, \*\*kwargs)              | The live/HTTP source contract (report 10 §4.2): `search` + `get` + `download`.  |
 | [`GenerateAdapter`](#foley.sources.GenerateAdapter)(\*args, \*\*kwargs)            | The generation source contract (report 10 §4.2) — a SIBLING of `SourceAdapter`. |
@@ -75,18 +75,29 @@ Free-form per-clip metadata the adapter carries to
 hints — e.g. `{"license_id", "creator_name", "source_url",
 "caption", "tag_hints"}`.
 
-### *class* foley.sources.ClothoEvalCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False)
+### *class* foley.sources.ClothoEvalCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False, include_captions=False)
 
 Bases: [`UniformCorpus`](foley.sources.base.md#foley.sources.base.UniformCorpus)
 
-Ring-0 Clotho-eval adapter: uniform CC-BY + injected human captions.
+Ring-0 Clotho-eval adapter: per-clip Freesound licences; captions opt-in (NC).
+
+#### include_captions *: [bool](https://docs.python.org/3/builtins/functions.html#bool)* *= False*
+
+Put the (non-commercial) human captions into the keyword index. Off by default.
 
 #### iter_clips(root)
 
-Yield clips with their human caption attached in `meta['caption']`.
+Yield clips carrying their per-file licence (and caption, when opted in).
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`ClipSpec`](foley.sources.base.md#foley.sources.base.ClipSpec)]
+
+#### resolve_license(spec)
+
+The clip’s own licence from its metadata row (`unknown` when absent).
+
+* **Return type:**
+  [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)
 
 ### *class* foley.sources.CorpusAdapter(\*args, \*\*kwargs)
 
@@ -439,14 +450,13 @@ caching the bytes even for CC0. `redistribute_standalone_ok` (copyright) and
 * **Returns:**
   A populated `LicenseRecord` with its derived flags (+ overrides) applied.
 
-### foley.sources.bulk_license(, source, license_id, rights_verified, source_id=None, source_url=None, creator_name=None, attribution_text=None)
+### foley.sources.bulk_license(, source, license_id, rights_verified, source_id=None, source_url=None, license_url=None, creator_name=None, attribution_text=None)
 
 Build a bulk-acquisition [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord), flags derived.
 
 The SSOT license builder every **bulk-corpus** adapter routes through
 (`acquisition_method=bulk`); a thin wrapper over `_build_license()`. Its
-signature is unchanged from #4 — no `overrides` (a downloaded corpus is
-cacheable by-value), so every existing corpus adapter keeps working verbatim.
+signature has no `overrides` (a downloaded corpus is cacheable by-value).
 
 * **Parameters:**
   * **source** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Provenance source tag (e.g. `'fsd50k'`, `'foleyset'`).
@@ -456,6 +466,8 @@ cacheable by-value), so every existing corpus adapter keeps working verbatim.
     gate input — pass `False` for unrecognized/ambiguous licenses).
   * **source_id** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The corpus-native clip id, for provenance.
   * **source_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A human-resolvable URL for the clip (attribution/credits).
+  * **license_url** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The licence URL/label exactly as the corpus served it (kept so the
+    credit links the deed the clip was actually released under).
   * **creator_name** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The uploader/creator (required for CC-BY attribution).
   * **attribution_text** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A ready-made attribution string, if the corpus supplies one.
 * **Return type:**

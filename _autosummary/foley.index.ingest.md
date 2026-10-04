@@ -23,16 +23,25 @@ module costs only the stdlib.
 
 ### Module Attributes
 
-| [`AUDIO_EXTS`](#foley.index.ingest.AUDIO_EXTS)   | Audio file extensions the folder walker ingests.   |
-|---------------------------------------------------------------|----------------------------------------------------|
+| [`AUDIO_EXTS`](#foley.index.ingest.AUDIO_EXTS)               | Audio file extensions the folder walker ingests.                                                                                                                                   |
+|---------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`UNASSERTABLE_LICENSE_IDS`](#foley.index.ingest.UNASSERTABLE_LICENSE_IDS) | `unknown` by definition, `PDM-1.0` (a claim about the work, not a grant — verify it by building the `LicenseRecord` yourself), and the legacy `ElevenLabs-SFX` row (say the plan). |
+| [`ASSERTABLE_LICENSE_IDS`](#foley.index.ingest.ASSERTABLE_LICENSE_IDS)   | The ids a caller may assert on ingest / restamp (`foley ingest --license`).                                                                                                        |
+| [`LEGACY_SELECTORS`](#foley.index.ingest.LEGACY_SELECTORS)         | Named selections for [`restamp_rights()`](#foley.index.ingest.restamp_rights) (`foley restamp-rights --select NAME`).                                                     |
+| [`FROM_LICENSE_URL`](#foley.index.ingest.FROM_LICENSE_URL)         | re-derive each record's id from the licence URL / label its source served (kept in `license_url`).                                                                                 |
 
 ### Functions
 
 | [`content_id`](#foley.index.ingest.content_id)(src)                                    | Return the reproducible content-hash id foley assigns to `src`.                                                   |
 |-----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| [`has_license_url`](#foley.index.ingest.has_license_url)(lic)                               | Whether `lic` kept the licence string its source served (re-derivable).                                           |
 | [`ingest_folder`](#foley.index.ingest.ingest_folder)(path, \*[, library, recursive, ...]) | Ingest every audio file under `path` and return an [`IngestReport`](#foley.index.ingest.IngestReport). |
 | [`ingest_one`](#foley.index.ingest.ingest_one)(src, \*[, library, sound_id, ...])      | Ingest one clip into `library` and return an [`IngestResult`](#foley.index.ingest.IngestResult).       |
+| [`is_legacy_default_user_owned`](#foley.index.ingest.is_legacy_default_user_owned)(lic)                  | Whether `lic` is the `user-owned` stamp foley used to put on any unlicensed ingest.                               |
+| [`is_legacy_elevenlabs`](#foley.index.ingest.is_legacy_elevenlabs)(lic)                          | Whether `lic` is an ElevenLabs generation stamped before the plan was explicit (#56).                             |
 | [`iter_audio_files`](#foley.index.ingest.iter_audio_files)(path, \*[, recursive, exts])      | Yield the audio files under `path` (or `path` itself if it is a file).                                            |
+| [`resolve_ingest_license`](#foley.index.ingest.resolve_ingest_license)(license, \*[, source_url])  | The rights record for a local ingest: fail-closed unless rights are asserted (#55).                               |
+| [`restamp_rights`](#foley.index.ingest.restamp_rights)([library, license, ids, ...])       | Re-stamp the licence of stored sounds; a dry run unless `apply=True`.                                             |
 
 ### Classes
 
@@ -40,9 +49,21 @@ module costs only the stdlib.
 |----------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
 | [`IngestResult`](#foley.index.ingest.IngestResult)(id, status[, record, qc, ...]) | The outcome of ingesting one clip.                              |
 
+### foley.index.ingest.ASSERTABLE_LICENSE_IDS *= frozenset({'CC-BY-2.0', 'CC-BY-2.5', 'CC-BY-3.0', 'CC-BY-4.0', 'CC-BY-NC-2.0', 'CC-BY-NC-2.5', 'CC-BY-NC-3.0', 'CC-BY-NC-4.0', 'CC-Sampling+-1.0', 'CC0-1.0', 'MIT', 'Pixabay-Content', 'RemArc', 'Sonniss-GDC', 'Stability-Community', 'elevenlabs-free-plan', 'elevenlabs-paid-plan', 'user-owned'})*
+
+The ids a caller may assert on ingest / restamp (`foley ingest --license`).
+
 ### foley.index.ingest.AUDIO_EXTS *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), ...]* *= ('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a')*
 
 Audio file extensions the folder walker ingests.
+
+### foley.index.ingest.FROM_LICENSE_URL *= 'from-url'*
+
+re-derive each record’s id from the
+licence URL / label its source served (kept in `license_url`).
+
+* **Type:**
+  `restamp_rights(license=FROM_LICENSE_URL)`
 
 ### *class* foley.index.ingest.IngestReport(root, results=<factory>)
 
@@ -104,6 +125,19 @@ embed — see [`ingest_one()`](#foley.index.ingest.ingest_one)), `'skipped_licen
 bootstrap commercial-use / fail-closed license filter), or `'error'`.
 `record` is present only when the clip was ingested.
 
+### foley.index.ingest.LEGACY_SELECTORS *= {'has-license-url': <function has_license_url>, 'legacy-elevenlabs': <function is_legacy_elevenlabs>, 'legacy-user-owned': <function is_legacy_default_user_owned>}*
+
+Named selections for [`restamp_rights()`](#foley.index.ingest.restamp_rights) (`foley restamp-rights --select NAME`).
+
+### foley.index.ingest.UNASSERTABLE_LICENSE_IDS *= frozenset({'ElevenLabs-SFX', 'PDM-1.0', 'unknown'})*
+
+`unknown` by definition,
+`PDM-1.0` (a claim about the work, not a grant — verify it by building the
+`LicenseRecord` yourself), and the legacy `ElevenLabs-SFX` row (say the plan).
+
+* **Type:**
+  Licence ids that can never be *asserted* as verified
+
 ### foley.index.ingest.content_id(src)
 
 Return the reproducible content-hash id foley assigns to `src`.
@@ -117,6 +151,13 @@ sets `license.c2pa_manifest_ref` in the same pass — see
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### foley.index.ingest.has_license_url(lic)
+
+Whether `lic` kept the licence string its source served (re-derivable).
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.index.ingest.ingest_folder(path, , library=None, recursive=True, exts=('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a'), on_error='collect', \*\*ingest_one_kw)
 
@@ -136,7 +177,7 @@ Ingest every audio file under `path` and return an [`IngestReport`](#foley.index
 * **Returns:**
   An [`IngestReport`](#foley.index.ingest.IngestReport) (with `.summary()` counts and per-file results).
 
-### foley.index.ingest.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None)
+### foley.index.ingest.ingest_one(src, , library=None, sound_id=None, source_uri=None, license=None, tagger=None, zeroshot_tagger=None, captioner=None, do_qc=True, min_status=QCStatus.warn, do_supervised=True, do_zeroshot=True, do_caption=True, thresholds=QCThresholds(clip_full_scale=0.999, clip_min_run=3, clip_reject_ratio=0.0001, clip_reject_run=10, true_peak_max_dbtp=-1.0, true_peak_oversample=4, dc_offset_fail=0.01, dc_offset_warn=0.001, silence_rms_dbfs=-60.0, snr_clean_db=20.0, snr_quiet_percentile=10.0, snr_frame_s=0.025, snr_hop_s=0.01, edge_rel_peak_dbfs=-40.0, edge_fade_s=0.01, lufs_gate_floor=-70.0, lufs_outlier_lu=6.0, duration_min_s=0.1, deliver_min_sample_rate=44100), store=True, allow_ai_training_forbidden=False, seed_tags=None, commercial=None)
 
 Ingest one clip into `library` and return an [`IngestResult`](#foley.index.ingest.IngestResult).
 
@@ -162,7 +203,10 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     adapter passes the stable source page URL (e.g.
     `'https://freesound.org/s/12345/'`) that [`foley.stores.store_sound()`](foley.stores.md#foley.stores.store_sound)
     requires for a by-reference sound.
-  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)]) – Rights record (default: a user-owned, cacheable license).
+  * **license** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)]) – Rights record, or a `license_id` string the caller asserts
+    (`'user-owned'`), or `None` (default): rights **unknown**, so the clip
+    is indexed but [`foley.keep()`](foley.md#foley.keep) refuses it (#55). See
+    [`resolve_ingest_license()`](#foley.index.ingest.resolve_ingest_license).
   * **tagger** – Supervised [`Tagger`](foley.index.protocols.md#foley.index.protocols.Tagger) (default: PANNs
     via [`default_tagger()`](foley.index.taggers.md#foley.index.taggers.default_tagger)).
   * **zeroshot_tagger** – Zero-shot tagger (default: CLAP via
@@ -187,11 +231,32 @@ Pipeline: probe + decode-once -> content-address dedup -> QC gate -> embed
     consent and admit it anyway (see `foley.bootstrap.bootstrap()`’s
     `accept_ai_restricted`). Protects every ingest path, not just
     bootstrap.
+  * **commercial** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Whether the AI use is for a commercial purpose (decides a
+    `nc_open_source_only` scope, #69). `None` (default) means
+    [`DEFAULT_INTENDED_USE`](foley.licensing.md#foley.licensing.DEFAULT_INTENDED_USE)’s (commercial).
 * **Return type:**
   [`IngestResult`](#foley.index.ingest.IngestResult)
 * **Returns:**
   An [`IngestResult`](#foley.index.ingest.IngestResult); its `record` is `None` when quarantined, a
   duplicate, or rights-blocked.
+
+### foley.index.ingest.is_legacy_default_user_owned(lic)
+
+Whether `lic` is the `user-owned` stamp foley used to put on any unlicensed ingest.
+
+Before #55, `foley.ingest(path)` with no licence stamped every file
+`user-owned` + verified. An explicit assertion now also records `verified_at`;
+the old default never did, which is what tells them apart.
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+### foley.index.ingest.is_legacy_elevenlabs(lic)
+
+Whether `lic` is an ElevenLabs generation stamped before the plan was explicit (#56).
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### foley.index.ingest.iter_audio_files(path, , recursive=True, exts=('.wav', '.flac', '.aiff', '.aif', '.ogg', '.mp3', '.opus', '.m4a'))
 
@@ -208,3 +273,58 @@ bulk-corpus adapters in [`foley.sources`](foley.sources.md#module-foley.sources)
   Each matching file as a [`pathlib.Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), in sorted order.
 * **Return type:**
   [*Iterator*](https://docs.python.org/3/library/typing.html#typing.Iterator)[[*Path*](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]
+
+### foley.index.ingest.resolve_ingest_license(license, , source_url=None)
+
+The rights record for a local ingest: fail-closed unless rights are asserted (#55).
+
+* `None` (no licence given) → `license_id='unknown'`, `rights_verified=False`:
+  [`foley.keep()`](foley.md#foley.keep) refuses it for every use. The bytes are still kept locally
+  > (`cache_bytes_ok=True`: it is the user’s own disk, no terms of service apply),
+  > so the clip is searchable and can be re-stamped later without re-ingesting.
+* a `str` → that `license_id`, which must be a `LICENSE_FLAGS` row, with
+  `rights_verified=True` (the caller is asserting it) and `verified_at` set —
+  e.g. `'user-owned'` for the user’s own recordings.
+* a [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord) → used as given.
+
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If a `str` licence id has no `LICENSE_FLAGS` row.
+* **Return type:**
+  [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)
+
+### foley.index.ingest.restamp_rights(library=None, , license='unknown', ids=None, where=None, select='legacy-user-owned', apply=False)
+
+Re-stamp the licence of stored sounds; a dry run unless `apply=True`.
+
+The migration for libraries built before #55 / #56. A re-ingest does not do it
+(content-addressed dedup skips files already stored), so this rewrites the stored
+records in place:
+
+* `foley restamp-rights --apply` — every sound an older foley stamped
+  `user-owned` without being told becomes `unknown` (fail closed);
+* `foley restamp-rights --license user-owned --apply` — the same sounds, but you
+  assert that you own them (now recorded with a `verified_at` timestamp);
+* `foley restamp-rights --select legacy-elevenlabs --license elevenlabs-paid-plan
+  --apply` — ElevenLabs generations made before the plan was explicit;
+* `foley restamp-rights --select has-license-url --license from-url --apply` —
+  every record that kept its source’s licence string (Freesound pulls) is
+  re-derived by today’s mapper (CC versions, PDM, NC spellings);
+* corpus clips (Clotho, FSD50K) are repaired by re-running `foley bootstrap`,
+  which re-stamps already-stored clips from the corpus metadata.
+
+* **Parameters:**
+  * **library** – The [`SoundLibrary`](foley.index.library.md#foley.index.library.SoundLibrary) (default: the default one).
+  * **license** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The `license_id` to stamp (a `LICENSE_FLAGS` row; default
+    `'unknown'`), or [`FROM_LICENSE_URL`](#foley.index.ingest.FROM_LICENSE_URL) to re-derive each record from
+    its own `license_url`.
+  * **ids** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Re-stamp exactly these sound ids (overrides `where` / `select`).
+  * **where** – A predicate `LicenseRecord -> bool` choosing the records (overrides
+    `select`).
+  * **select** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A [`LEGACY_SELECTORS`](#foley.index.ingest.LEGACY_SELECTORS) name (default `'legacy-user-owned'`).
+  * **apply** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Write the change. `False` (default) only reports what would change.
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+* **Returns:**
+  The ids that were (or, in a dry run, would be) re-stamped.
+* **Raises:**
+  [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `license` or `select` is unknown.
