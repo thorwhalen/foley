@@ -119,6 +119,8 @@ lazily, so a bare install stays light. What each adds:
 | `align` · `weave` · `provenance` · `c2pa` | forced alignment, OTIO/rubberband, watermarking, signed C2PA |
 | `mcp` · `obs` | the MCP server · OpenTelemetry export |
 
+**Nothing paid runs unless you ask for it.** Having `ANTHROPIC_API_KEY` set does not switch the SELECT rungs to Claude: pass `llm="anthropic"` to `find()` / `score()` or set `FOLEY_LLM=anthropic` (`llm="local"` uses `FOLEY_LLM_BASE_URL`). By default they run the free deterministic fakes, or your local endpoint if one is configured. `with foley.offline():` (or `FOLEY_OFFLINE=1`) blocks every external source and LLM call foley makes, on every surface, raising `foley.runtime.EgressBlocked` (model-weight downloads from Hugging Face are not covered yet).
+
 `foley.check_requirements()` (and the `foley_capabilities` MCP tool) report what's installed and
 what's degraded. Full docs: **[thorwhalen.github.io/foley](https://thorwhalen.github.io/foley)**.
 

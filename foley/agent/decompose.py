@@ -200,6 +200,9 @@ class AnthropicDecomposer:
         """Call Claude and round-trip each event through :meth:`SoundEvent.from_dict`."""
         import json
 
+        from .llm import require_llm_egress
+
+        require_llm_egress("anthropic")  # call-time: holds for an injected rung too
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path, behind foley[agent]
@@ -230,8 +233,9 @@ class AnthropicDecomposer:
 def _anthropic_available() -> bool:
     """True iff the ``anthropic`` SDK is importable AND a credential is configured.
 
-    Mirrors foley's progressive-disclosure rule: auto-upgrade to the LLM path only when
-    it can actually run (``foley[agent]`` installed + a key), else the hermetic fake.
+    A capability probe only (``check_requirements`` / status reporting). It never
+    selects a provider: a key being present does not opt anyone in to paid calls —
+    :func:`foley.agent.llm.resolve_llm` does that, from ``llm=`` or ``$FOLEY_LLM``.
     """
     import importlib.util
     import os
@@ -243,13 +247,11 @@ def _anthropic_available() -> bool:
     )
 
 
-def _default_decomposer() -> Decomposer:
-    """The zero-config decomposer: local LLM if configured, else Anthropic, else the fake."""
-    from .local_llm import LocalLLMDecomposer, local_llm_configured
+def _default_decomposer(llm: Optional[str] = None) -> Decomposer:
+    """The decomposer for ``llm`` (see :func:`foley.agent.llm.resolve_llm`; free by default)."""
+    from .llm import make_rung
 
-    if local_llm_configured():
-        return LocalLLMDecomposer()
-    return AnthropicDecomposer() if _anthropic_available() else KeywordDecomposer()
+    return make_rung("decomposer", llm)
 
 
 def decompose_context(

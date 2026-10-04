@@ -59,3 +59,91 @@ def fake_embedder():
     if np is None:  # pragma: no cover
         pytest.skip("numpy required")
     return FakeEmbedder()
+
+
+# ---------------------------------------------------------------------------
+# Spend + network isolation (#58): no test may reach a paid API by accident
+# ---------------------------------------------------------------------------
+
+#: Opt-in for tests that really call a provider (also needs the key itself).
+LIVE_API_TESTS_ENV = "FOLEY_LIVE_API_TESTS"
+
+#: foley's own env switches that change which provider or posture a default resolves to.
+_FOLEY_POSTURE_ENV = ("FOLEY_LLM", "FOLEY_LLM_BASE_URL", "FOLEY_LLM_API_KEY", "FOLEY_OFFLINE")
+
+#: Marker for the (few) tests that trip the network guard on purpose.
+NETWORK_TRIP_MARKER = "network_trip_expected"
+
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", f"{NETWORK_TRIP_MARKER}: the test deliberately trips the socket guard"
+    )
+
+
+def live_api_tests_enabled() -> bool:
+    """Whether the developer opted in to live-API tests (``FOLEY_LIVE_API_TESTS=1``)."""
+    import os
+
+    return os.environ.get(LIVE_API_TESTS_ENV, "").lower() in ("1", "true", "yes")
+
+
+class NetworkBlocked(RuntimeError):
+    """Raised by the test-suite socket guard when a test opens a non-loopback connection."""
+
+
+@pytest.fixture(scope="session")
+def _provider_key_env_vars():
+    from foley.requirements import provider_key_env_vars
+
+    return provider_key_env_vars()
+
+
+@pytest.fixture(autouse=True)
+def _isolate_from_paid_apis(monkeypatch, request, _provider_key_env_vars):
+    """Scrub every provider key + posture switch and fail any test that opens a socket.
+
+    Unless ``FOLEY_LIVE_API_TESTS=1``: the keys come from
+    :func:`foley.requirements.provider_key_env_vars` (the sources' ``auth`` SSOT), so a
+    new paid source is covered without editing this file. A test that needs a key sets
+    it with ``monkeypatch.setenv`` after this fixture has run.
+
+    A blocked connection raises :class:`NetworkBlocked` *and* fails the test at teardown,
+    so a code path that swallows the error (``except Exception``) cannot hide a network
+    attempt. Tests that trip the guard on purpose carry ``@pytest.mark.network_trip_expected``.
+    """
+    if live_api_tests_enabled():
+        yield
+        return
+    import socket
+
+    from foley.agent.llm import is_loopback_host
+
+    for name in (*_provider_key_env_vars, *_FOLEY_POSTURE_ENV):
+        monkeypatch.delenv(name, raising=False)
+
+    trips: list = []
+
+    def _allowed(sock, address) -> bool:
+        if getattr(socket, "AF_UNIX", None) is not None and sock.family == socket.AF_UNIX:
+            return True
+        host = address[0] if isinstance(address, tuple) else address
+        return is_loopback_host(host)
+
+    def _guard(real):
+        def guarded(self, address):
+            if not _allowed(self, address):
+                trips.append(address)
+                raise NetworkBlocked(
+                    f"test tried to connect to {address!r}; set {LIVE_API_TESTS_ENV}=1 "
+                    "to allow live-API tests"
+                )
+            return real(self, address)
+
+        return guarded
+
+    monkeypatch.setattr(socket.socket, "connect", _guard(socket.socket.connect))
+    monkeypatch.setattr(socket.socket, "connect_ex", _guard(socket.socket.connect_ex))
+    yield
+    if trips and request.node.get_closest_marker(NETWORK_TRIP_MARKER) is None:
+        pytest.fail(f"test attempted network connection(s): {trips}")

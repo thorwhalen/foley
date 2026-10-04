@@ -214,6 +214,7 @@ def _generate_and_reverify(
     judge,
     level: VerifyLevel,
     library,
+    llm: "Optional[str]" = None,
 ) -> "Optional[Candidate]":
     """Generate a clip, then RE-GATE + RE-VERIFY it before acceptance (the flywheel admission gate).
 
@@ -225,11 +226,14 @@ def _generate_and_reverify(
     Handles the ``skipped_dup`` byte-twin (a bare ``Candidate`` with event/verdict/​license
     unset — still gated + verified here, never assumed pre-vetted).
     """
+    from ..runtime import EgressBlocked
     from ..sources import GenerationError  # lazy: keeps import foley dol-only
 
     try:
         gc = generate_sound(event.query, backend=backend, library=library)
-    except GenerationError:
+    except (GenerationError, EgressBlocked):
+        # Refused, failed, or an external backend under offline(): skip generation;
+        # the caller falls back to the best verified retrieval.
         return None
     gc.event = event  # (origin is already 'generated' from foley.generate)
     if not gate_candidates([gc], intended_use):
@@ -242,7 +246,7 @@ def _generate_and_reverify(
     if level == VerifyLevel.clap:
         reverify_level, reverify_judge = (
             VerifyLevel.listen,
-            _default_judge(VerifyLevel.listen),
+            _default_judge(VerifyLevel.listen, llm),
         )
     else:
         reverify_level, reverify_judge = level, judge
@@ -274,6 +278,7 @@ def find(
     decomposer=None,
     judge=None,
     refiner=None,
+    llm: "Optional[str]" = None,
 ) -> "Union[list[Candidate], Iterator[Candidate]]":
     """The headline: a narrative context → verified, license-clean sound candidates.
 
@@ -301,7 +306,11 @@ def find(
         library: Target :class:`SoundLibrary` (default: the process-wide default).
         decomposer / judge / refiner: Injected DI seams
             (:class:`~foley.agent.protocols.Decomposer` / ``Judge`` / ``Refiner``);
-            each defaults to the hermetic fake when ``foley[agent]`` is absent.
+            each defaults to the ``llm`` provider's implementation.
+        llm: Which LLM the decompose / refine / judge rungs use when not injected —
+            ``'fake'`` | ``'local'`` | ``'anthropic'``. ``None`` reads ``$FOLEY_LLM``,
+            then falls back to the free default (a configured local endpoint, else the
+            deterministic fake). A key being present never opts in to paid calls.
 
     Returns:
         ``list[Candidate]`` (``stream=False``) or an ``Iterator[Candidate]``
@@ -323,6 +332,7 @@ def find(
         decomposer=decomposer,
         judge=judge,
         refiner=refiner,
+        llm=llm,
     )
     return gen if stream else list(gen)
 
@@ -344,15 +354,16 @@ def _find_stream(
     decomposer,
     judge,
     refiner,
+    llm=None,
 ) -> "Iterator[Candidate]":
     """The streaming body of :func:`find` (``find(stream=False)`` == ``list(_find_stream(...))``)."""
     use = intended_use or IntendedUse()
     budget = budget or Budget(max_refine_loops=max_refine_loops)
     library = library if library is not None else default_library()
-    decomposer = decomposer or _default_decomposer()
+    decomposer = decomposer or _default_decomposer(llm)
     max_level = VerifyLevel(verify)
-    judge = judge or _default_judge(max_level)
-    refiner = refiner or _default_refiner()
+    judge = judge or _default_judge(max_level, llm)
+    refiner = refiner or _default_refiner(llm)
     prefilter = _license_prefilter(use)
 
     with _obs_run(
@@ -477,6 +488,7 @@ def _find_stream(
                         judge=judge,
                         level=max_level,
                         library=library,
+                        llm=llm,
                     )
                     if chosen is None and verified:
                         # Generation yielded nothing (backend unavailable/offline,

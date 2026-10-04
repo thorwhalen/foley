@@ -101,6 +101,9 @@ class AnthropicRefiner:
         """Call Claude for ``n`` paraphrases; the original ``query`` is always first."""
         import json
 
+        from .llm import require_llm_egress
+
+        require_llm_egress("anthropic")  # call-time: holds for an injected rung too
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path
@@ -126,14 +129,11 @@ class AnthropicRefiner:
         return out[: max(1, n)]
 
 
-def _default_refiner() -> Refiner:
-    """The zero-config refiner: local LLM if configured, else Anthropic, else the fake."""
-    from .decompose import _anthropic_available
-    from .local_llm import LocalLLMRefiner, local_llm_configured
+def _default_refiner(llm: "str | None" = None) -> Refiner:
+    """The refiner for ``llm`` (see :func:`foley.agent.llm.resolve_llm`; free by default)."""
+    from .llm import make_rung
 
-    if local_llm_configured():
-        return LocalLLMRefiner()
-    return AnthropicRefiner() if _anthropic_available() else KeywordRefiner()
+    return make_rung("refiner", llm)
 
 
 def refine_query(

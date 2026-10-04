@@ -295,11 +295,14 @@ def foley_generate(
     session: str = "default",
 ) -> dict:
     """Generate a sound from a text prompt (local backends only when offline)."""
-    from ..runtime import EXTERNAL, LOCAL
+    from ..runtime import EXTERNAL, EgressBlocked
     from ..sources.registry import source_egress
 
-    egress = source_egress(backend) or LOCAL
-    if _runtime().offline and egress == EXTERNAL:
+    # The bound server runtime may differ from the call's context (a server built with
+    # runtime= but not run under offline_scope), so check it here too; undeclared
+    # egress counts as external (fail-closed), as in the registry.
+    egress = source_egress(backend) or EXTERNAL
+    if not _runtime().allows(egress):
         return {
             "ok": False,
             "error": f"backend {backend!r} is external and disallowed in offline mode",
@@ -313,6 +316,8 @@ def foley_generate(
     # escaping exception, on failure — honoring the module's JSON-in/JSON-out contract.
     try:
         cand = generate(prompt, backend=backend, library=_lib())
+    except EgressBlocked as exc:
+        return {"ok": False, "error": str(exc), "backend": backend}
     except GenerationError as exc:
         return {
             "ok": False,

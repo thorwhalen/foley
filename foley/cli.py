@@ -150,6 +150,7 @@ def _cmd_eval_fit(args) -> int:
         sample=args.sample,
         level=args.level,
         seed=args.seed,
+        llm=args.llm,
     )
     if args.json:
         import dataclasses
@@ -259,6 +260,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--level", default="judge", choices=["listen", "judge"], help="fit-judge rung"
     )
     p_eval_fit.add_argument("--seed", type=int, default=0)
+    p_eval_fit.add_argument(
+        "--llm",
+        default=None,
+        choices=["fake", "local", "anthropic"],
+        help="fit-judge provider (default: $FOLEY_LLM, else the deterministic fake)",
+    )
     p_eval_fit.add_argument(
         "--min-fit-precision",
         type=float,

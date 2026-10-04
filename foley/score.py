@@ -88,6 +88,7 @@ def score(
     verify: str = "listen",
     master: str = "podcast",
     weave: Optional[bool] = None,
+    llm: Optional[str] = None,
     **weave_kwargs,
 ) -> ScoreResult:
     """Choose sounds for narration text and (optionally) weave them into the narration audio.
@@ -115,6 +116,8 @@ def score(
         verify: The max verify rung — ``'clap'`` | ``'listen'`` | ``'judge'``.
         master: The delivery :data:`~foley.base.MASTER_PROFILES` target (``'podcast'`` default).
         weave: Force weaving on/off; default auto (``True`` iff ``audio`` is given).
+        llm: Which LLM the SELECT rungs use (``'fake'`` | ``'local'`` | ``'anthropic'``;
+            ``None`` reads ``$FOLEY_LLM``, else the free default) — see :func:`foley.find`.
         **weave_kwargs: Forwarded to :func:`foley.weave` (e.g. ``sign_cert``, ``watermark``).
 
     Returns:
@@ -129,7 +132,12 @@ def score(
     full_transcript = transcript or " ".join(segs)
     do_weave = (audio is not None) if weave is None else bool(weave)
 
-    find_kw = {"max_events": max_events, "verify": verify, "intended_use": use}
+    find_kw = {
+        "max_events": max_events,
+        "verify": verify,
+        "intended_use": use,
+        "llm": llm,
+    }
     if library is not None:
         find_kw["library"] = library
 
