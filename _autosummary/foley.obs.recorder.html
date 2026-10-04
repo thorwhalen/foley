@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.obs" href="foley.obs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -339,6 +339,7 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="foley.agent.html">foley.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.llm.html">foley.agent.llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.local_llm.html">foley.agent.local_llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.policy.html">foley.agent.policy</a></li>
@@ -652,8 +653,9 @@ manifest on exit. Disabled → the zero-cost <code class="xref py py-data docuti
 <span class="sig-prename descclassname"><span class="pre">foley.obs.recorder.</span></span><span class="sig-name descname"><span class="pre">is_enabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/obs/recorder.html#is_enabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.obs.recorder.is_enabled" title="Link to this definition">#</a></dt>
 <dd><p>Whether observability is on (via <a class="reference internal" href="#foley.obs.recorder.enable" title="foley.obs.recorder.enable"><code class="xref py py-func docutils literal notranslate"><span class="pre">enable()</span></code></a> or <code class="docutils literal notranslate"><span class="pre">$FOLEY_OBS</span></code> in {1,true,yes}).</p>
 <p><code class="docutils literal notranslate"><span class="pre">force_disabled</span></code> (set by <a class="reference internal" href="foley.runtime.html#foley.runtime.offline_scope" title="foley.runtime.offline_scope"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.runtime.offline_scope()</span></code></a> for a telemetry-off
-posture) hard-overrides both — so offline mode’s “nothing leaves the device”
-contract holds even when <code class="docutils literal notranslate"><span class="pre">$FOLEY_OBS</span></code> is exported.</p>
+posture) and a telemetry-off runtime (<code class="docutils literal notranslate"><span class="pre">$FOLEY_OFFLINE</span></code>) hard-override both — so
+offline mode’s “nothing leaves the device” contract holds even when <code class="docutils literal notranslate"><span class="pre">$FOLEY_OBS</span></code>
+is exported.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>

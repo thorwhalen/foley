@@ -128,8 +128,9 @@ manifest on exit. Disabled → the zero-cost `_NULL_RUN`.
 Whether observability is on (via [`enable()`](#foley.obs.recorder.enable) or `$FOLEY_OBS` in {1,true,yes}).
 
 `force_disabled` (set by [`foley.runtime.offline_scope()`](foley.runtime.html.md#foley.runtime.offline_scope) for a telemetry-off
-posture) hard-overrides both — so offline mode’s “nothing leaves the device”
-contract holds even when `$FOLEY_OBS` is exported.
+posture) and a telemetry-off runtime (`$FOLEY_OFFLINE`) hard-override both — so
+offline mode’s “nothing leaves the device” contract holds even when `$FOLEY_OBS`
+is exported.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)

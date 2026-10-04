@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../../../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -871,6 +871,9 @@ window.runMermaid = runMermaid;</script>
 <span class="w">        </span><span class="sd">"""Call Claude to arbitrate the match; returns a :class:`Verdict` at ``level``."""</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">require_llm_egress</span>
+
+        <span class="n">require_llm_egress</span><span class="p">(</span><span class="s2">"anthropic"</span><span class="p">)</span>  <span class="c1"># call-time: holds for an injected rung too</span>
         <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span>
         <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">anthropic</span>  <span class="c1"># lazy — only on the real path</span>
@@ -904,17 +907,17 @@ window.runMermaid = runMermaid;</script>
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_default_judge</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="s2">"str | VerifyLevel"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Judge</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""The zero-config judge for a rung: ClapJudge for ``clap``; else Anthropic or the fake."""</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_judge</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="s2">"str | VerifyLevel"</span><span class="p">,</span> <span class="n">llm</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Judge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The judge for a rung: ClapJudge for ``clap``; else the ``llm`` provider's judge.</span>
+
+<span class="sd">    ``llm`` is resolved by :func:`foley.agent.llm.resolve_llm` (free by default).</span>
+<span class="sd">    """</span>
     <span class="n">level</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ClapJudge</span><span class="p">()</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.decompose</span><span class="w"> </span><span class="kn">import</span> <span class="n">_anthropic_available</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.local_llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalLLMJudge</span><span class="p">,</span> <span class="n">local_llm_configured</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_rung</span>
 
-    <span class="k">if</span> <span class="n">local_llm_configured</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">LocalLLMJudge</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">AnthropicJudge</span><span class="p">()</span> <span class="k">if</span> <span class="n">_anthropic_available</span><span class="p">()</span> <span class="k">else</span> <span class="n">StringOverlapJudge</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">make_rung</span><span class="p">(</span><span class="s2">"judge"</span><span class="p">,</span> <span class="n">llm</span><span class="p">)</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -1021,24 +1024,25 @@ window.runMermaid = runMermaid;</script>
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_default_fit_judge</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="s2">"str | VerifyLevel"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Judge</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""The zero-config Tier-2 fit-judge: the LLM arbiter when a key is configured, else the fake.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_fit_judge</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="s2">"str | VerifyLevel"</span><span class="p">,</span> <span class="n">llm</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Judge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The Tier-2 fit-judge for ``llm`` (see :func:`foley.agent.llm.resolve_llm`).</span>
 
-<span class="sd">    Auto-upgrades to :class:`AnthropicJudge` when ``anthropic`` + a key are present (the</span>
-<span class="sd">    nightly/pre-release path); in CI (no key) it resolves to the deterministic</span>
-<span class="sd">    :class:`StringOverlapJudge`, so ``foley.evaluate_fit()`` is hermetic out of the box.</span>
+<span class="sd">    The nightly / pre-release path opts in with ``llm='anthropic'`` (or</span>
+<span class="sd">    ``FOLEY_LLM=anthropic``); by default it is the deterministic</span>
+<span class="sd">    :class:`StringOverlapJudge`, so ``foley.evaluate_fit()`` is hermetic and free out of</span>
+<span class="sd">    the box whatever keys are set.</span>
 
 <span class="sd">    :class:`AudioLMJudge` (the audio-LM ``listen`` rung) is **injection-only** in this</span>
 <span class="sd">    slice: its real Qwen2-Audio pipeline is a deferred #10b follow-up, so the resolver</span>
 <span class="sd">    does not auto-select it (it would need ``foley[fit]`` *and* a built pipeline). Pass</span>
 <span class="sd">    ``fit_judge=AudioLMJudge(pipeline=...)`` explicitly to use it. Tests inject explicitly.</span>
 <span class="sd">    """</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.decompose</span><span class="w"> </span><span class="kn">import</span> <span class="n">_anthropic_available</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_rung</span>
 
     <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>  <span class="c1"># validate the rung</span>
-    <span class="k">if</span> <span class="n">_anthropic_available</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">AnthropicJudge</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">StringOverlapJudge</span><span class="p">()</span>
+    <span class="c1"># implicit_local=False: a running local endpoint must not make the eval</span>
+    <span class="c1"># non-deterministic; only an explicit llm= / $FOLEY_LLM picks a real judge.</span>
+    <span class="k">return</span> <span class="n">make_rung</span><span class="p">(</span><span class="s2">"judge"</span><span class="p">,</span> <span class="n">llm</span><span class="p">,</span> <span class="n">implicit_local</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="verify_match">

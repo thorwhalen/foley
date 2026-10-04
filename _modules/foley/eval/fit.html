@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../../../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -1019,6 +1019,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">level</span><span class="p">:</span> <span class="s2">"str | VerifyLevel"</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">judge</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">llm</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FitReport</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Run the Tier-2 fit eval over a stratified golden sample → a :class:`FitReport`.</span>
 
@@ -1033,8 +1034,8 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        sample: The stratified sample cap (default: the whole set — the cost gate).</span>
 <span class="sd">        strata_keys: The stratification axes (default ``('family', 'diegetic')``).</span>
 <span class="sd">        fit_judge: The injected authoritative :class:`~foley.agent.protocols.Judge`</span>
-<span class="sd">            (default: :func:`foley.agent.verify._default_fit_judge` — the hermetic fake</span>
-<span class="sd">            when no audio-LM / key is available).</span>
+<span class="sd">            (default: :func:`foley.agent.verify._default_fit_judge` for ``llm`` — the</span>
+<span class="sd">            hermetic fake unless ``llm`` / ``$FOLEY_LLM`` opts in).</span>
 <span class="sd">        embedder: The Ring-0 text/​audio embedder (default: :class:`HashingBowEmbedder`).</span>
 <span class="sd">        level: The verify rung the fit-judge audits at — ``'listen'`` or ``'judge'``</span>
 <span class="sd">            (default ``VerifyLevel.judge``). ``'clap'`` is rejected: it never invokes the</span>
@@ -1058,7 +1059,7 @@ window.runMermaid = runMermaid;</script>
         <span class="p">)</span>
     <span class="n">golden</span> <span class="o">=</span> <span class="n">golden</span> <span class="k">if</span> <span class="n">golden</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">load_golden</span><span class="p">(</span><span class="n">golden_path</span><span class="p">)</span>
     <span class="n">embedder</span> <span class="o">=</span> <span class="n">embedder</span> <span class="k">if</span> <span class="n">embedder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">HashingBowEmbedder</span><span class="p">()</span>
-    <span class="n">fit_judge</span> <span class="o">=</span> <span class="n">fit_judge</span> <span class="k">if</span> <span class="n">fit_judge</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_default_fit_judge</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+    <span class="n">fit_judge</span> <span class="o">=</span> <span class="n">fit_judge</span> <span class="k">if</span> <span class="n">fit_judge</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_default_fit_judge</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">llm</span><span class="p">)</span>
 
     <span class="n">units</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">ev</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">golden</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ev</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">expected_events</span><span class="p">)</span>

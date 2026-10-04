@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.sources.pull" href="foley.sources.pull.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -339,6 +339,7 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="foley.agent.html">foley.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.llm.html">foley.agent.llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.local_llm.html">foley.agent.local_llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.policy.html">foley.agent.policy</a></li>
@@ -505,7 +506,10 @@ modules (<code class="docutils literal notranslate"><span class="pre">fsd50k.py<
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.sources.registry.register_source" title="foley.sources.registry.register_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_source</span></code></a>(name, config[, adapter])</p></td>
 <td><p>Register a live source directly (out-of-tree plugin or a test double).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#foley.sources.registry.source_egress" title="foley.sources.registry.source_egress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source_egress</span></code></a>(name)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.sources.registry.require_source_egress" title="foley.sources.registry.require_source_egress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require_source_egress</span></code></a>(name[, config])</p></td>
+<td><p>Raise <a class="reference internal" href="foley.runtime.html#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-class docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a> if source <code class="docutils literal notranslate"><span class="pre">name</span></code> may not run now.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.sources.registry.source_egress" title="foley.sources.registry.source_egress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">source_egress</span></code></a>(name)</p></td>
 <td><p>The declared <code class="docutils literal notranslate"><span class="pre">data_egress</span></code> class of source <code class="docutils literal notranslate"><span class="pre">name</span></code> (<code class="docutils literal notranslate"><span class="pre">None</span></code> if undeclared).</p></td>
 </tr>
 </tbody>
@@ -554,7 +558,11 @@ adapter on first use (cached in the entry).</p>
 <dd class="field-odd"><p>The registry entry (<code class="docutils literal notranslate"><span class="pre">{'config':</span> <span class="pre">dict,</span> <span class="pre">'adapter':</span> <span class="pre">SourceAdapter,</span> <span class="pre">...}</span></code>).</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#KeyError" title="(in Python v3.14)"><strong>KeyError</strong></a> – If no such source is registered (after discovery).</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#KeyError" title="(in Python v3.14)"><strong>KeyError</strong></a> – If no such source is registered (after discovery).</p></li>
+<li><p><a class="reference internal" href="foley.runtime.html#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><strong>EgressBlocked</strong></a> – If the source sends data off the device and an offline scope
+    is active (<a class="reference internal" href="foley.html#foley.offline" title="foley.offline"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.offline()</span></code></a> / <code class="docutils literal notranslate"><span class="pre">$FOLEY_OFFLINE</span></code>).</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -605,6 +613,21 @@ importable <code class="docutils literal notranslate"><span class="pre">foley.so
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.sources.registry.require_source_egress">
+<span class="sig-prename descclassname"><span class="pre">foley.sources.registry.</span></span><span class="sig-name descname"><span class="pre">require_source_egress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/sources/registry.html#require_source_egress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.registry.require_source_egress" title="Link to this definition">#</a></dt>
+<dd><p>Raise <a class="reference internal" href="foley.runtime.html#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-class docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a> if source <code class="docutils literal notranslate"><span class="pre">name</span></code> may not run now.</p>
+<p>The one offline check every source path goes through: <a class="reference internal" href="#foley.sources.registry.get_source" title="foley.sources.registry.get_source"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_source()</span></code></a>, and the
+generate / pull façades when an adapter is injected. The egress class comes from
+<code class="docutils literal notranslate"><span class="pre">config['data_egress']</span></code> (the passed config, else the registered one); a source
+that declares none is treated as external (fail-closed), so it is refused offline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -675,6 +698,7 @@ importable <code class="docutils literal notranslate"><span class="pre">foley.so
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.registry.list_sources"><code class="docutils literal notranslate"><span class="pre">list_sources()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.registry.local_sources"><code class="docutils literal notranslate"><span class="pre">local_sources()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.registry.register_source"><code class="docutils literal notranslate"><span class="pre">register_source()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.registry.require_source_egress"><code class="docutils literal notranslate"><span class="pre">require_source_egress()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.registry.source_egress"><code class="docutils literal notranslate"><span class="pre">source_egress()</span></code></a></li>
 </ul>
   </nav></div>

@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.requirements" href="foley.requirements.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -339,6 +339,7 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="foley.agent.html">foley.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.llm.html">foley.agent.llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.local_llm.html">foley.agent.local_llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.policy.html">foley.agent.policy</a></li>
@@ -487,7 +488,7 @@ keeps <code class="docutils literal notranslate"><span class="pre">import</span>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.runtime.current_runtime" title="foley.runtime.current_runtime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">current_runtime</span></code></a>()</p></td>
-<td><p>The active <a class="reference internal" href="#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a>, or the online default outside any scope.</p></td>
+<td><p>The active <a class="reference internal" href="#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a>; outside any scope, the one <code class="docutils literal notranslate"><span class="pre">$FOLEY_OFFLINE</span></code> selects.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.runtime.is_offline" title="foley.runtime.is_offline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_offline</span></code></a>()</p></td>
 <td><p>Whether an offline runtime scope is currently active.</p></td>
@@ -497,6 +498,9 @@ keeps <code class="docutils literal notranslate"><span class="pre">import</span>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.runtime.offline_scope" title="foley.runtime.offline_scope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">offline_scope</span></code></a>([config])</p></td>
 <td><p>Apply a <a class="reference internal" href="#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a> for the <code class="docutils literal notranslate"><span class="pre">with</span></code> block, restoring obs state on exit.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.runtime.require_egress" title="foley.runtime.require_egress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require_egress</span></code></a>(data_egress, *, what)</p></td>
+<td><p>Raise <a class="reference internal" href="#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-class docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a> unless the active runtime allows <code class="docutils literal notranslate"><span class="pre">data_egress</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -510,6 +514,26 @@ keeps <code class="docutils literal notranslate"><span class="pre">import</span>
 </tbody>
 </table>
 </div>
+<p class="rubric">Exceptions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a></p></td>
+<td><p>Raised when a call would send data off the device under an offline posture.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py exception">
+<dt class="sig sig-object py" id="foley.runtime.EgressBlocked">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">EgressBlocked</span></span><a class="reference internal" href="../_modules/foley/runtime.html#EgressBlocked"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.runtime.EgressBlocked" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#PermissionError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PermissionError</span></code></a></p>
+<p>Raised when a call would send data off the device under an offline posture.</p>
+<p>Every external path checks the active <a class="reference internal" href="#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a> through
+<a class="reference internal" href="#foley.runtime.require_egress" title="foley.runtime.require_egress"><code class="xref py py-func docutils literal notranslate"><span class="pre">require_egress()</span></code></a> — the source registry, the generate and pull façades, and
+the LLM resolver — so <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">foley.offline():</span></code> holds on every surface, not only
+in the MCP tools.</p>
+</dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="foley.runtime.LOCAL">
 <span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">LOCAL</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'local'</span></span><a class="headerlink" href="#foley.runtime.LOCAL" title="Link to this definition">#</a></dt>
@@ -586,7 +610,7 @@ not say where its data goes is never used offline.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="foley.runtime.current_runtime">
 <span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">current_runtime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/runtime.html#current_runtime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.runtime.current_runtime" title="Link to this definition">#</a></dt>
-<dd><p>The active <a class="reference internal" href="#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a>, or the online default outside any scope.</p>
+<dd><p>The active <a class="reference internal" href="#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a>; outside any scope, the one <code class="docutils literal notranslate"><span class="pre">$FOLEY_OFFLINE</span></code> selects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a></span></p>
@@ -626,6 +650,25 @@ captured on entry and restored on exit (so a scope never leaks its posture).</p>
 </dd>
 <dt class="field-even">Yields<span class="colon">:</span></dt>
 <dd class="field-even"><p>The applied <a class="reference internal" href="#foley.runtime.RuntimeConfig" title="foley.runtime.RuntimeConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.runtime.require_egress">
+<span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">require_egress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_egress</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/runtime.html#require_egress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.runtime.require_egress" title="Link to this definition">#</a></dt>
+<dd><p>Raise <a class="reference internal" href="#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-class docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a> unless the active runtime allows <code class="docutils literal notranslate"><span class="pre">data_egress</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_egress</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – The egress class the call needs (<code class="docutils literal notranslate"><span class="pre">'local'</span></code> | <code class="docutils literal notranslate"><span class="pre">'external'</span></code>);
+<code class="docutils literal notranslate"><span class="pre">None</span></code> (undeclared) is always refused — callers that read a source’s
+declaration map a missing one to <code class="docutils literal notranslate"><span class="pre">'external'</span></code> first.</p></li>
+<li><p><strong>what</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – A short description for the error (<code class="docutils literal notranslate"><span class="pre">&quot;source</span> <span class="pre">'elevenlabs'&quot;</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -679,6 +722,7 @@ captured on entry and restored on exit (so a scope never leaks its posture).</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.EgressBlocked"><code class="docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.LOCAL"><code class="docutils literal notranslate"><span class="pre">LOCAL</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.RuntimeConfig"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.RuntimeConfig.allows"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig.allows()</span></code></a></li>
@@ -691,6 +735,7 @@ captured on entry and restored on exit (so a scope never leaks its posture).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.is_offline"><code class="docutils literal notranslate"><span class="pre">is_offline()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.offline"><code class="docutils literal notranslate"><span class="pre">offline()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.offline_scope"><code class="docutils literal notranslate"><span class="pre">offline_scope()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.require_egress"><code class="docutils literal notranslate"><span class="pre">require_egress()</span></code></a></li>
 </ul>
   </nav></div>
 

@@ -26,7 +26,7 @@ generation-error hierarchy are imported lazily inside the functions that call th
 | [`plan`](#foley.agent.tools.plan)(candidates, \*[, transcript])                | Fold verified candidates into the SPARSE `SoundDesignTimeline` (the SELECT→WEAVE bridge). |
 | [`search_sounds`](#foley.agent.tools.search_sounds)(queries, \*[, k, library, filters]) | Hybrid search for one query, or a multi-query RRF-merge (the SELECT retrieval tool).      |
 
-### foley.agent.tools.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None)
+### foley.agent.tools.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None, llm=None)
 
 The headline: a narrative context → verified, license-clean sound candidates.
 
@@ -54,7 +54,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
-    each defaults to the hermetic fake when `foley[agent]` is absent.
+    each defaults to the `llm` provider’s implementation.
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which LLM the decompose / refine / judge rungs use when not injected —
+    `'fake'` | `'local'` | `'anthropic'`. `None` reads `$FOLEY_LLM`,
+    then falls back to the free default (a configured local endpoint, else the
+    deterministic fake). A key being present never opts in to paid calls.
 * **Return type:**
   `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](foley.base.md#foley.base.Candidate)]]
 * **Returns:**

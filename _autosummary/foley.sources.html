@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.runtime" href="foley.runtime.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -339,6 +339,7 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="foley.agent.html">foley.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.llm.html">foley.agent.llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.local_llm.html">foley.agent.local_llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.policy.html">foley.agent.policy</a></li>
@@ -1292,7 +1293,11 @@ adapter on first use (cached in the entry).</p>
 <dd class="field-odd"><p>The registry entry (<code class="docutils literal notranslate"><span class="pre">{'config':</span> <span class="pre">dict,</span> <span class="pre">'adapter':</span> <span class="pre">SourceAdapter,</span> <span class="pre">...}</span></code>).</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#KeyError" title="(in Python v3.14)"><strong>KeyError</strong></a> – If no such source is registered (after discovery).</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#KeyError" title="(in Python v3.14)"><strong>KeyError</strong></a> – If no such source is registered (after discovery).</p></li>
+<li><p><a class="reference internal" href="foley.runtime.html#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><strong>EgressBlocked</strong></a> – If the source sends data off the device and an offline scope
+    is active (<a class="reference internal" href="foley.html#foley.offline" title="foley.offline"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.offline()</span></code></a> / <code class="docutils literal notranslate"><span class="pre">$FOLEY_OFFLINE</span></code>).</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

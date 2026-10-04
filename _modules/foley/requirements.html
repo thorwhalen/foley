@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -804,6 +804,24 @@ window.runMermaid = runMermaid;</script>
 
 
 
+<span class="c1">#: Credential env vars that are aliases of a listed key (same provider, other auth form).</span>
+<span class="n">_KEY_ALIASES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"ANTHROPIC_AUTH_TOKEN"</span><span class="p">,)</span>
+
+
+<div class="viewcode-block" id="provider_key_env_vars">
+<a class="viewcode-back" href="../../_autosummary/foley.requirements.html#foley.provider_key_env_vars">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">provider_key_env_vars</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">"tuple[str, ...]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Every env var that holds a provider credential (the sources' keys + Anthropic's).</span>
+
+<span class="sd">    Derived from the same SSOT as :func:`check_requirements` (each source's</span>
+<span class="sd">    ``config['auth']``), so a newly added paid source is covered automatically — the</span>
+<span class="sd">    test suite scrubs exactly these so no test can spend money by accident.</span>
+<span class="sd">    """</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">build_requirements</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">probe</span> <span class="o">==</span> <span class="s2">"env"</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">_KEY_ALIASES</span><span class="p">)))</span></div>
+
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_available</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">Requirement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Whether ``req`` is satisfied, dispatching on its ``probe``."""</span>
     <span class="k">return</span> <span class="n">_PROBES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">probe</span><span class="p">,</span> <span class="n">_PROBES</span><span class="p">[</span><span class="s2">"binary"</span><span class="p">])(</span><span class="n">req</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -876,7 +894,9 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        runtime: A :class:`foley.runtime.RuntimeConfig` (default: the active one).</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        ``{keys, extras, system, offline, sources, degraded_tools}`` — all JSON-safe.</span>
+<span class="sd">        ``{keys, extras, system, offline, sources, llm, degraded_tools}`` — all</span>
+<span class="sd">        JSON-safe. ``llm`` is the provider the SELECT rungs resolve to right now</span>
+<span class="sd">        (see :func:`foley.agent.llm.resolve_llm`), or the reason it cannot resolve.</span>
 <span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_runtime</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_sources</span>
@@ -896,9 +916,24 @@ window.runMermaid = runMermaid;</script>
         <span class="s2">"system"</span><span class="p">:</span> <span class="n">groups</span><span class="p">[</span><span class="s2">"binary"</span><span class="p">],</span>
         <span class="s2">"offline"</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">offline</span><span class="p">,</span>
         <span class="s2">"sources"</span><span class="p">:</span> <span class="n">list_sources</span><span class="p">(</span><span class="n">egress_allow</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">data_egress_allow</span><span class="p">),</span>
+        <span class="s2">"llm"</span><span class="p">:</span> <span class="n">_resolved_llm</span><span class="p">(),</span>
         <span class="s2">"degraded_tools"</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">degraded</span><span class="p">),</span>
     <span class="p">}</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolved_llm</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The SELECT LLM provider as it resolves now, or ``'error: …'`` (never raises)."""</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.agent.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_llm</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">resolve_llm</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 - a status report must not raise</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span>
 </pre></div>
 
                 </article>

@@ -34,6 +34,7 @@ Out-of-tree plugins — and test doubles — register directly via
 | [`list_sources`](#foley.sources.registry.list_sources)(\*[, egress_allow])         | Return the names of registered live sources (runs discovery first).                                                                              |
 | [`local_sources`](#foley.sources.registry.local_sources)()                          | The names of sources that run entirely on-device (`data_egress == 'local'`).                                                                     |
 | [`register_source`](#foley.sources.registry.register_source)(name, config[, adapter]) | Register a live source directly (out-of-tree plugin or a test double).                                                                           |
+| [`require_source_egress`](#foley.sources.registry.require_source_egress)(name[, config])    | Raise [`EgressBlocked`](foley.runtime.html.md#foley.runtime.EgressBlocked) if source `name` may not run now.               |
 | [`source_egress`](#foley.sources.registry.source_egress)(name)                      | The declared `data_egress` class of source `name` (`None` if undeclared).                                                                        |
 
 ### foley.sources.registry.SOURCE_REGISTRY *= {}*
@@ -70,7 +71,9 @@ adapter on first use (cached in the entry).
 * **Returns:**
   The registry entry (`{'config': dict, 'adapter': SourceAdapter, ...}`).
 * **Raises:**
-  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
+  * [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
+  * [**EgressBlocked**](foley.runtime.html.md#foley.runtime.EgressBlocked) – If the source sends data off the device and an offline scope
+        is active ([`foley.offline()`](foley.html.md#foley.offline) / `$FOLEY_OFFLINE`).
 
 ### foley.sources.registry.list_sources(, egress_allow=None)
 
@@ -104,6 +107,18 @@ importable `foley.sources.<name>` package).
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The source name (the `add_from()` / [`get_source()`](#foley.sources.registry.get_source) key).
   * **config** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – The `SOURCE_CONFIG` declaration.
   * **adapter** – An optional pre-instantiated adapter (bypasses lazy loading).
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+### foley.sources.registry.require_source_egress(name, config=None)
+
+Raise [`EgressBlocked`](foley.runtime.html.md#foley.runtime.EgressBlocked) if source `name` may not run now.
+
+The one offline check every source path goes through: [`get_source()`](#foley.sources.registry.get_source), and the
+generate / pull façades when an adapter is injected. The egress class comes from
+`config['data_egress']` (the passed config, else the registered one); a source
+that declares none is treated as external (fail-closed), so it is refused offline.
+
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
 

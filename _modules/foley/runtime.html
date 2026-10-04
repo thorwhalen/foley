@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -818,11 +818,45 @@ window.runMermaid = runMermaid;</script>
 
 
 
+<div class="viewcode-block" id="EgressBlocked">
+<a class="viewcode-back" href="../../_autosummary/foley.runtime.html#foley.EgressBlocked">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EgressBlocked</span><span class="p">(</span><span class="ne">PermissionError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Raised when a call would send data off the device under an offline posture.</span>
+
+<span class="sd">    Every external path checks the active :class:`RuntimeConfig` through</span>
+<span class="sd">    :func:`require_egress` — the source registry, the generate and pull façades, and</span>
+<span class="sd">    the LLM resolver — so ``with foley.offline():`` holds on every surface, not only</span>
+<span class="sd">    in the MCP tools.</span>
+<span class="sd">    """</span></div>
+
+
+
+<div class="viewcode-block" id="require_egress">
+<a class="viewcode-back" href="../../_autosummary/foley.runtime.html#foley.require_egress">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">require_egress</span><span class="p">(</span><span class="n">data_egress</span><span class="p">:</span> <span class="s2">"str | None"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">what</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Raise :class:`EgressBlocked` unless the active runtime allows ``data_egress``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_egress: The egress class the call needs (``'local'`` | ``'external'``);</span>
+<span class="sd">            ``None`` (undeclared) is always refused — callers that read a source's</span>
+<span class="sd">            declaration map a missing one to ``'external'`` first.</span>
+<span class="sd">        what: A short description for the error (``"source 'elevenlabs'"``).</span>
+<span class="sd">    """</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">current_runtime</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cfg</span><span class="o">.</span><span class="n">allows</span><span class="p">(</span><span class="n">data_egress</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">EgressBlocked</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> needs data_egress=</span><span class="si">{</span><span class="n">data_egress</span><span class="si">!r}</span><span class="s2">, which the current runtime "</span>
+            <span class="sa">f</span><span class="s2">"forbids (allowed: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">data_egress_allow</span><span class="p">)</span><span class="si">}</span><span class="s2">). It is blocked "</span>
+            <span class="s2">"because an offline scope is active (foley.offline() or $FOLEY_OFFLINE)."</span>
+        <span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="current_runtime">
 <a class="viewcode-back" href="../../_autosummary/foley.runtime.html#foley.current_runtime">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">current_runtime</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">RuntimeConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""The active :class:`RuntimeConfig`, or the online default outside any scope."""</span>
-    <span class="k">return</span> <span class="n">_CURRENT_RUNTIME</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="ow">or</span> <span class="n">RuntimeConfig</span><span class="o">.</span><span class="n">default</span><span class="p">()</span></div>
+<span class="w">    </span><span class="sd">"""The active :class:`RuntimeConfig`; outside any scope, the one ``$FOLEY_OFFLINE`` selects."""</span>
+    <span class="k">return</span> <span class="n">_CURRENT_RUNTIME</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="ow">or</span> <span class="n">RuntimeConfig</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span></div>
 
 
 

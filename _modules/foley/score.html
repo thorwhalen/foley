@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -814,6 +814,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">verify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"listen"</span><span class="p">,</span>
     <span class="n">master</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"podcast"</span><span class="p">,</span>
     <span class="n">weave</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">llm</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">weave_kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ScoreResult</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Choose sounds for narration text and (optionally) weave them into the narration audio.</span>
@@ -841,6 +842,8 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        verify: The max verify rung — ``'clap'`` | ``'listen'`` | ``'judge'``.</span>
 <span class="sd">        master: The delivery :data:`~foley.base.MASTER_PROFILES` target (``'podcast'`` default).</span>
 <span class="sd">        weave: Force weaving on/off; default auto (``True`` iff ``audio`` is given).</span>
+<span class="sd">        llm: Which LLM the SELECT rungs use (``'fake'`` | ``'local'`` | ``'anthropic'``;</span>
+<span class="sd">            ``None`` reads ``$FOLEY_LLM``, else the free default) — see :func:`foley.find`.</span>
 <span class="sd">        **weave_kwargs: Forwarded to :func:`foley.weave` (e.g. ``sign_cert``, ``watermark``).</span>
 
 <span class="sd">    Returns:</span>
@@ -855,7 +858,12 @@ window.runMermaid = runMermaid;</script>
     <span class="n">full_transcript</span> <span class="o">=</span> <span class="n">transcript</span> <span class="ow">or</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span>
     <span class="n">do_weave</span> <span class="o">=</span> <span class="p">(</span><span class="n">audio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">weave</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">bool</span><span class="p">(</span><span class="n">weave</span><span class="p">)</span>
 
-    <span class="n">find_kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"max_events"</span><span class="p">:</span> <span class="n">max_events</span><span class="p">,</span> <span class="s2">"verify"</span><span class="p">:</span> <span class="n">verify</span><span class="p">,</span> <span class="s2">"intended_use"</span><span class="p">:</span> <span class="n">use</span><span class="p">}</span>
+    <span class="n">find_kw</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"max_events"</span><span class="p">:</span> <span class="n">max_events</span><span class="p">,</span>
+        <span class="s2">"verify"</span><span class="p">:</span> <span class="n">verify</span><span class="p">,</span>
+        <span class="s2">"intended_use"</span><span class="p">:</span> <span class="n">use</span><span class="p">,</span>
+        <span class="s2">"llm"</span><span class="p">:</span> <span class="n">llm</span><span class="p">,</span>
+    <span class="p">}</span>
     <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">find_kw</span><span class="p">[</span><span class="s2">"library"</span><span class="p">]</span> <span class="o">=</span> <span class="n">library</span>
 

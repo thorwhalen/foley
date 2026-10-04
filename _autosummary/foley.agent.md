@@ -338,7 +338,7 @@ span on the real path (the fake’s `last_response` is `None` → no-op).
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](foley.base.md#foley.base.SoundEvent)]
 
-### foley.agent.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None)
+### foley.agent.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None, llm=None)
 
 The headline: a narrative context → verified, license-clean sound candidates.
 
@@ -366,7 +366,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](foley.agent.protocols.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
-    each defaults to the hermetic fake when `foley[agent]` is absent.
+    each defaults to the `llm` provider’s implementation.
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which LLM the decompose / refine / judge rungs use when not injected —
+    `'fake'` | `'local'` | `'anthropic'`. `None` reads `$FOLEY_LLM`,
+    then falls back to the free default (a configured local endpoint, else the
+    deterministic fake). A key being present never opts in to paid calls.
 * **Return type:**
   `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](foley.base.md#foley.base.Candidate)]]
 * **Returns:**
@@ -484,6 +488,7 @@ escalates to the injected/​default judge for that rung and returns *its* verdi
 
 | [`decompose`](foley.agent.decompose.md#module-foley.agent.decompose)   | `decompose_context` — narrative passage → a sparse, salience-ranked event list.           |
 |-------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| [`llm`](foley.agent.llm.md#module-foley.agent.llm)               | Which LLM the SELECT rungs use — one explicit, spend-safe resolver (the `llm=` seam).     |
 | [`local_llm`](foley.agent.local_llm.md#module-foley.agent.local_llm)   | Offline / local-LLM SELECT rungs — OpenAI-compatible `Decomposer` / `Judge` / `Refiner`.  |
 | [`mcp`](foley.agent.mcp.md#module-foley.agent.mcp)               | The MCP surface — foley's façade as agent-callable tools (py2mcp, #12, report 05/10).     |
 | [`policy`](foley.agent.policy.md#module-foley.agent.policy)         | The SELECT policy: the fail-closed rights gate + the single generate-vs-retrieve branch.  |

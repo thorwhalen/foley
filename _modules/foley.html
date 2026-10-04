@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -1204,6 +1204,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">embedder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">llm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Run the Tier-2 **fit** eval over the golden set — "does the accepted clip fit?" (#10b).</span>
 
@@ -1220,13 +1221,15 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        sample: Optional stratified sample cap (default: the whole set — the cost gate).</span>
 <span class="sd">        level: The verify rung the fit-judge audits at — ``'listen'`` or ``'judge'``</span>
 <span class="sd">            (default ``VerifyLevel.judge``); ``'clap'`` is rejected.</span>
-<span class="sd">        fit_judge: An injected authoritative judge (default: the auto-resolved fit-judge —</span>
-<span class="sd">            the LLM arbiter :class:`~foley.agent.AnthropicJudge` when a key is configured,</span>
-<span class="sd">            else the hermetic :class:`~foley.agent.StringOverlapJudge` fake; the audio-LM</span>
-<span class="sd">            :class:`~foley.agent.AudioLMJudge` is injection-only in this slice).</span>
+<span class="sd">        fit_judge: An injected authoritative judge (default: the ``llm`` provider's judge</span>
+<span class="sd">            — the hermetic :class:`~foley.agent.StringOverlapJudge` fake unless ``llm``</span>
+<span class="sd">            opts in; the audio-LM :class:`~foley.agent.AudioLMJudge` is injection-only).</span>
 <span class="sd">        embedder: The Ring-0 embedder (default: the CLAP-free ``HashingBowEmbedder``).</span>
 <span class="sd">        seed: The sampling RNG seed.</span>
 <span class="sd">        k: Retrieval shortlist depth per event.</span>
+<span class="sd">        llm: The fit-judge's provider when ``fit_judge`` is not given —</span>
+<span class="sd">            ``'anthropic'`` for the nightly arbiter (or ``$FOLEY_LLM``); ``None``</span>
+<span class="sd">            keeps the deterministic fake (a local endpoint is never picked implicitly).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A :class:`foley.eval.FitReport`.</span>
@@ -1240,6 +1243,7 @@ window.runMermaid = runMermaid;</script>
         <span class="n">embedder</span><span class="o">=</span><span class="n">embedder</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
         <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">golden</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">kw</span><span class="p">[</span><span class="s2">"golden_path"</span><span class="p">]</span> <span class="o">=</span> <span class="n">golden</span>

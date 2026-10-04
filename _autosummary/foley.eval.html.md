@@ -437,7 +437,7 @@ Map an α (or κ) to Krippendorff’s benchmark band.
   `'reliable'` (α ≥ 0.8), `'tentative'` (0.667 ≤ α < 0.8), else
   `'revise-rubric'`.
 
-### foley.eval.run_fit_eval(, golden=None, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), sample=None, strata_keys=('family', 'diegetic'), fit_judge=None, embedder=None, level=VerifyLevel.judge, seed=0, k=10)
+### foley.eval.run_fit_eval(, golden=None, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), sample=None, strata_keys=('family', 'diegetic'), fit_judge=None, embedder=None, level=VerifyLevel.judge, seed=0, k=10, llm=None)
 
 Run the Tier-2 fit eval over a stratified golden sample → a [`FitReport`](#foley.eval.FitReport).
 
@@ -453,8 +453,8 @@ fit-judge as an independent audit, and aggregates fit-precision/recall/F1 + fit-
   * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The stratified sample cap (default: the whole set — the cost gate).
   * **strata_keys** – The stratification axes (default `('family', 'diegetic')`).
   * **fit_judge** – The injected authoritative [`Judge`](foley.agent.protocols.html.md#foley.agent.protocols.Judge)
-    (default: `foley.agent.verify._default_fit_judge()` — the hermetic fake
-    when no audio-LM / key is available).
+    (default: `foley.agent.verify._default_fit_judge()` for `llm` — the
+    hermetic fake unless `llm` / `$FOLEY_LLM` opts in).
   * **embedder** – The Ring-0 text/​audio embedder (default: [`HashingBowEmbedder`](#foley.eval.HashingBowEmbedder)).
   * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](foley.base.html.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
     (default `VerifyLevel.judge`). `'clap'` is rejected: it never invokes the

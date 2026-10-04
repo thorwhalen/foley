@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../../../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -1039,11 +1039,14 @@ window.runMermaid = runMermaid;</script>
     <span class="n">session</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"default"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Generate a sound from a text prompt (local backends only when offline)."""</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">EXTERNAL</span><span class="p">,</span> <span class="n">LOCAL</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">EXTERNAL</span><span class="p">,</span> <span class="n">EgressBlocked</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">source_egress</span>
 
-    <span class="n">egress</span> <span class="o">=</span> <span class="n">source_egress</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span> <span class="ow">or</span> <span class="n">LOCAL</span>
-    <span class="k">if</span> <span class="n">_runtime</span><span class="p">()</span><span class="o">.</span><span class="n">offline</span> <span class="ow">and</span> <span class="n">egress</span> <span class="o">==</span> <span class="n">EXTERNAL</span><span class="p">:</span>
+    <span class="c1"># The bound server runtime may differ from the call's context (a server built with</span>
+    <span class="c1"># runtime= but not run under offline_scope), so check it here too; undeclared</span>
+    <span class="c1"># egress counts as external (fail-closed), as in the registry.</span>
+    <span class="n">egress</span> <span class="o">=</span> <span class="n">source_egress</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span> <span class="ow">or</span> <span class="n">EXTERNAL</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_runtime</span><span class="p">()</span><span class="o">.</span><span class="n">allows</span><span class="p">(</span><span class="n">egress</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">"ok"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="s2">"error"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"backend </span><span class="si">{</span><span class="n">backend</span><span class="si">!r}</span><span class="s2"> is external and disallowed in offline mode"</span><span class="p">,</span>
@@ -1057,6 +1060,8 @@ window.runMermaid = runMermaid;</script>
     <span class="c1"># escaping exception, on failure — honoring the module's JSON-in/JSON-out contract.</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">cand</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">())</span>
+    <span class="k">except</span> <span class="n">EgressBlocked</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"ok"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"error"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">),</span> <span class="s2">"backend"</span><span class="p">:</span> <span class="n">backend</span><span class="p">}</span>
     <span class="k">except</span> <span class="n">GenerationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">"ok"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>

@@ -629,7 +629,9 @@ adapter on first use (cached in the entry).
 * **Returns:**
   The registry entry (`{'config': dict, 'adapter': SourceAdapter, ...}`).
 * **Raises:**
-  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
+  * [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
+  * [**EgressBlocked**](foley.runtime.md#foley.runtime.EgressBlocked) – If the source sends data off the device and an offline scope
+        is active ([`foley.offline()`](foley.md#foley.offline) / `$FOLEY_OFFLINE`).
 
 ### foley.sources.list_sources(, egress_allow=None)
 

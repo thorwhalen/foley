@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.qc" href="foley.qc.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -339,6 +339,7 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="foley.agent.html">foley.agent</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.decompose.html">foley.agent.decompose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="foley.agent.llm.html">foley.agent.llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.local_llm.html">foley.agent.local_llm</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.mcp.html">foley.agent.mcp</a></li>
 <li class="toctree-l3"><a class="reference internal" href="foley.agent.policy.html">foley.agent.policy</a></li>
@@ -480,7 +481,10 @@ dol-only.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.requirements.check_requirements" title="foley.requirements.check_requirements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_requirements</span></code></a>(*[, names, verbose])</p></td>
 <td><p>Report which optional foley capabilities are available (<code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">is_available}</span></code>).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#foley.requirements.verify_and_setup" title="foley.requirements.verify_and_setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_and_setup</span></code></a>(*[, names])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.requirements.provider_key_env_vars" title="foley.requirements.provider_key_env_vars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">provider_key_env_vars</span></code></a>()</p></td>
+<td><p>Every env var that holds a provider credential (the sources' keys + Anthropic's).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.requirements.verify_and_setup" title="foley.requirements.verify_and_setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_and_setup</span></code></a>(*[, names])</p></td>
 <td><p>Return a per-requirement status + guidance report (never runs an installer).</p></td>
 </tr>
 </tbody>
@@ -512,7 +516,9 @@ lists <code class="docutils literal notranslate"><span class="pre">degraded_tool
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">{keys,</span> <span class="pre">extras,</span> <span class="pre">system,</span> <span class="pre">offline,</span> <span class="pre">sources,</span> <span class="pre">degraded_tools}</span></code> — all JSON-safe.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">{keys,</span> <span class="pre">extras,</span> <span class="pre">system,</span> <span class="pre">offline,</span> <span class="pre">sources,</span> <span class="pre">llm,</span> <span class="pre">degraded_tools}</span></code> — all
+JSON-safe. <code class="docutils literal notranslate"><span class="pre">llm</span></code> is the provider the SELECT rungs resolve to right now
+(see <a class="reference internal" href="foley.agent.llm.html#foley.agent.llm.resolve_llm" title="foley.agent.llm.resolve_llm"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.agent.llm.resolve_llm()</span></code></a>), or the reason it cannot resolve.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -535,6 +541,20 @@ lists <code class="docutils literal notranslate"><span class="pre">degraded_tool
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">{requirement_name:</span> <span class="pre">available}</span></code>. Everything-absent is fine — foley degrades
 (deterministic fakes, offline mode, in-process DSP); the report just shows what
 each capability would unlock.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.requirements.provider_key_env_vars">
+<span class="sig-prename descclassname"><span class="pre">foley.requirements.</span></span><span class="sig-name descname"><span class="pre">provider_key_env_vars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/requirements.html#provider_key_env_vars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.requirements.provider_key_env_vars" title="Link to this definition">#</a></dt>
+<dd><p>Every env var that holds a provider credential (the sources’ keys + Anthropic’s).</p>
+<p>Derived from the same SSOT as <a class="reference internal" href="#foley.requirements.check_requirements" title="foley.requirements.check_requirements"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_requirements()</span></code></a> (each source’s
+<code class="docutils literal notranslate"><span class="pre">config['auth']</span></code>), so a newly added paid source is covered automatically — the
+test suite scrubs exactly these so no test can spend money by accident.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#Ellipsis" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -605,6 +625,7 @@ each capability would unlock.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.requirements.build_requirements"><code class="docutils literal notranslate"><span class="pre">build_requirements()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.requirements.capability_report"><code class="docutils literal notranslate"><span class="pre">capability_report()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.requirements.check_requirements"><code class="docutils literal notranslate"><span class="pre">check_requirements()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.requirements.provider_key_env_vars"><code class="docutils literal notranslate"><span class="pre">provider_key_env_vars()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.requirements.verify_and_setup"><code class="docutils literal notranslate"><span class="pre">verify_and_setup()</span></code></a></li>
 </ul>
   </nav></div>

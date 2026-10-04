@@ -1,4 +1,4 @@
-> built 2026-10-03 11:02 UTC from 0a5d060 (main) · foley 0.0.27. Details: build_info.json
+> built 2026-10-04 08:01 UTC from c6ab799 (main) · foley 0.0.28. Details: build_info.json
 
 # index.html.md
 
@@ -124,6 +124,8 @@ lazily, so a bare install stays light. What each adds:
 | `agent` · `local-llm`                       | the SELECT LLM rungs (Claude / a local OpenAI-compatible endpoint) |
 | `align` · `weave` · `provenance` · `c2pa`   | forced alignment, OTIO/rubberband, watermarking, signed C2PA       |
 | `mcp` · `obs`                               | the MCP server · OpenTelemetry export                              |
+
+**Nothing paid runs unless you ask for it.** Having `ANTHROPIC_API_KEY` set does not switch the SELECT rungs to Claude: pass `llm="anthropic"` to `find()` / `score()` or set `FOLEY_LLM=anthropic` (`llm="local"` uses `FOLEY_LLM_BASE_URL`). By default they run the free deterministic fakes, or your local endpoint if one is configured. `with foley.offline():` (or `FOLEY_OFFLINE=1`) blocks every external source and LLM call foley makes, on every surface, raising `foley.runtime.EgressBlocked` (model-weight downloads from Hugging Face are not covered yet).
 
 `foley.check_requirements()` (and the `foley_capabilities` MCP tool) report what’s installed and
 what’s degraded. Full docs: **[thorwhalen.github.io/foley](https://thorwhalen.github.io/foley)**.
@@ -574,7 +576,7 @@ span on the real path (the fake’s `last_response` is `None` → no-op).
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SoundEvent`](_autosummary/foley.base.html.md#foley.base.SoundEvent)]
 
-### foley.agent.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None)
+### foley.agent.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None, llm=None)
 
 The headline: a narrative context → verified, license-clean sound candidates.
 
@@ -602,7 +604,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
-    each defaults to the hermetic fake when `foley[agent]` is absent.
+    each defaults to the `llm` provider’s implementation.
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which LLM the decompose / refine / judge rungs use when not injected —
+    `'fake'` | `'local'` | `'anthropic'`. `None` reads `$FOLEY_LLM`,
+    then falls back to the free default (a configured local endpoint, else the
+    deterministic fake). A key being present never opts in to paid calls.
 * **Return type:**
   `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]]
 * **Returns:**
@@ -720,6 +726,7 @@ escalates to the injected/​default judge for that rung and returns *its* verdi
 
 | [`decompose`](_autosummary/foley.agent.decompose.html.md#module-foley.agent.decompose)   | `decompose_context` — narrative passage → a sparse, salience-ranked event list.           |
 |-------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| [`llm`](_autosummary/foley.agent.llm.html.md#module-foley.agent.llm)               | Which LLM the SELECT rungs use — one explicit, spend-safe resolver (the `llm=` seam).     |
 | [`local_llm`](_autosummary/foley.agent.local_llm.html.md#module-foley.agent.local_llm)   | Offline / local-LLM SELECT rungs — OpenAI-compatible `Decomposer` / `Judge` / `Refiner`.  |
 | [`mcp`](_autosummary/foley.agent.mcp.html.md#module-foley.agent.mcp)               | The MCP surface — foley's façade as agent-callable tools (py2mcp, #12, report 05/10).     |
 | [`policy`](_autosummary/foley.agent.policy.html.md#module-foley.agent.policy)         | The SELECT policy: the fail-closed rights gate + the single generate-vs-retrieve branch.  |
@@ -729,6 +736,115 @@ escalates to the injected/​default judge for that rung and returns *its* verdi
 | [`session`](_autosummary/foley.agent.session.html.md#module-foley.agent.session)       | Session-scoped audition state — cached candidates, picks, and rejects (#12).              |
 | [`tools`](_autosummary/foley.agent.tools.html.md#module-foley.agent.tools)           | The SELECT orchestration: `find()` / `plan()` + the small pure tool wrappers.             |
 | [`verify`](_autosummary/foley.agent.verify.html.md#module-foley.agent.verify)         | `verify_match` — the retrieve→verify ladder (clap → listen → judge) + `Judge` impls.      |
+
+
+# _autosummary/foley.agent.llm.html.md
+
+# foley.agent.llm
+
+Which LLM the SELECT rungs use — one explicit, spend-safe resolver (the `llm=` seam).
+
+The decomposer, refiner and judges each have a hermetic fake and two real
+implementations (a local OpenAI-compatible endpoint and Anthropic). Which one runs
+used to depend on whether an API key happened to be in the environment, so a machine
+with `ANTHROPIC_API_KEY` set turned every `find()` — and the test suite — into
+paid calls. This module is the single place that choice is made, and a paid or remote
+provider is never chosen implicitly:
+
+1. the explicit `llm=` argument (`'fake'` | `'local'` | `'anthropic'`), else
+2. the `$FOLEY_LLM` environment variable (same values), else
+3. the free default: `'local'` when `$FOLEY_LLM_BASE_URL` is a loopback endpoint
+   (Ollama, llama.cpp on this machine), otherwise `'fake'`. A remote endpoint (an
+   OpenAI-compatible cloud API) may cost money, so it needs `llm='local'`.
+
+A key being present never upgrades anything. Asking for a provider that cannot run
+(no SDK, no key, no endpoint) raises an error naming what is missing. Under
+[`foley.offline()`](_autosummary/foley.html.md#foley.offline) a provider that sends data off the device raises
+[`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) — at resolution time *and* when a real rung is
+called ([`require_llm_egress()`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.require_llm_egress)), so an injected `AnthropicJudge()` is covered too.
+
+[`PROVIDERS`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.PROVIDERS) is the provider table: each provider’s rung classes. It is the one
+place a new provider, or per-provider cost data, is added.
+
+### Module Attributes
+
+| [`LLM_ENV_VAR`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.LLM_ENV_VAR)   | The environment variable that opts in to a provider when `llm=` is not passed.          |
+|----------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| [`PROVIDERS`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.PROVIDERS)     | provider -> rung kind -> `"module:Class"` (imported lazily; the real ones need extras). |
+| [`LLM_CHOICES`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.LLM_CHOICES)   | The accepted providers.                                                                 |
+
+### Functions
+
+| [`resolve_llm`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm)([llm, implicit_local])     | Resolve which LLM provider the SELECT rungs use (see the module docstring).                                                             |
+|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| [`make_rung`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.make_rung)(kind[, llm, implicit_local]) | Build the `kind` rung (`'decomposer'` | `'refiner'` | `'judge'`) for `llm`.                                                             |
+| [`llm_egress`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.llm_egress)(provider)                   | The `data_egress` class (`'local'` | `'external'`) of an LLM provider.                                                                  |
+| [`require_llm_egress`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.require_llm_egress)(provider)           | Raise [`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) if the runtime forbids `provider` now. |
+| [`is_loopback_host`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.is_loopback_host)(host)                 | Whether `host` is this machine (`localhost`, `127.*`, `::1`, `0.0.0.0`).                                                                |
+
+### foley.agent.llm.LLM_CHOICES *= ('fake', 'local', 'anthropic')*
+
+The accepted providers. `'fake'` is deterministic and free; the other two are real.
+
+### foley.agent.llm.LLM_ENV_VAR *= 'FOLEY_LLM'*
+
+The environment variable that opts in to a provider when `llm=` is not passed.
+
+### foley.agent.llm.PROVIDERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [str](https://docs.python.org/3/builtins/stdtypes.html#str)]]* *= {'anthropic': {'decomposer': 'foley.agent.decompose:AnthropicDecomposer', 'judge': 'foley.agent.verify:AnthropicJudge', 'refiner': 'foley.agent.refine:AnthropicRefiner'}, 'fake': {'decomposer': 'foley.agent.decompose:KeywordDecomposer', 'judge': 'foley.agent.verify:StringOverlapJudge', 'refiner': 'foley.agent.refine:KeywordRefiner'}, 'local': {'decomposer': 'foley.agent.local_llm:LocalLLMDecomposer', 'judge': 'foley.agent.local_llm:LocalLLMJudge', 'refiner': 'foley.agent.local_llm:LocalLLMRefiner'}}*
+
+provider -> rung kind -> `"module:Class"` (imported lazily; the real ones need extras).
+
+### foley.agent.llm.is_loopback_host(host)
+
+Whether `host` is this machine (`localhost`, `127.*`, `::1`, `0.0.0.0`).
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+### foley.agent.llm.llm_egress(provider)
+
+The `data_egress` class (`'local'` | `'external'`) of an LLM provider.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### foley.agent.llm.make_rung(kind, llm=None, , implicit_local=True, \*\*kwargs)
+
+Build the `kind` rung (`'decomposer'` | `'refiner'` | `'judge'`) for `llm`.
+
+* **Parameters:**
+  * **kind** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The rung kind (a key of each [`PROVIDERS`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.PROVIDERS) row).
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The provider (see [`resolve_llm()`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm)).
+  * **implicit_local** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Forwarded to [`resolve_llm()`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm).
+  * **\*\*kwargs** – Passed to the rung’s constructor.
+
+### foley.agent.llm.require_llm_egress(provider)
+
+Raise [`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) if the runtime forbids `provider` now.
+
+Called by [`resolve_llm()`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm) and again by each real rung right before it calls its
+model, so a rung built online and called inside [`foley.offline()`](_autosummary/foley.html.md#foley.offline) is refused.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+### foley.agent.llm.resolve_llm(llm=None, , implicit_local=True)
+
+Resolve which LLM provider the SELECT rungs use (see the module docstring).
+
+* **Parameters:**
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – `'fake'` | `'local'` | `'anthropic'`, or `None` to read
+    `$FOLEY_LLM` and then fall back to the free default.
+  * **implicit_local** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether the free default may be a loopback local endpoint.
+    `False` keeps the default the deterministic fake (the hermetic eval).
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+* **Returns:**
+  One of [`LLM_CHOICES`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.LLM_CHOICES).
+* **Raises:**
+  * [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – If `llm` (or `$FOLEY_LLM`) is not one of [`LLM_CHOICES`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.LLM_CHOICES).
+  * [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – If the requested provider cannot run (SDK, key or endpoint missing).
+  * [**EgressBlocked**](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) – If the provider sends data off the device under [`foley.offline()`](_autosummary/foley.html.md#foley.offline).
 
 
 # _autosummary/foley.agent.local_llm.html.md
@@ -1632,7 +1748,7 @@ generation-error hierarchy are imported lazily inside the functions that call th
 | [`plan`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.plan)(candidates, \*[, transcript])                | Fold verified candidates into the SPARSE `SoundDesignTimeline` (the SELECT→WEAVE bridge). |
 | [`search_sounds`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.search_sounds)(queries, \*[, k, library, filters]) | Hybrid search for one query, or a multi-query RRF-merge (the SELECT retrieval tool).      |
 
-### foley.agent.tools.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None)
+### foley.agent.tools.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None, llm=None)
 
 The headline: a narrative context → verified, license-clean sound candidates.
 
@@ -1660,7 +1776,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
-    each defaults to the hermetic fake when `foley[agent]` is absent.
+    each defaults to the `llm` provider’s implementation.
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which LLM the decompose / refine / judge rungs use when not injected —
+    `'fake'` | `'local'` | `'anthropic'`. `None` reads `$FOLEY_LLM`,
+    then falls back to the free default (a configured local endpoint, else the
+    deterministic fake). A key being present never opts in to paid calls.
 * **Return type:**
   `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]]
 * **Returns:**
@@ -2830,7 +2950,7 @@ makes the end-to-end value tautological, so the metric math is tested in isolati
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### foley.eval.fit.run_fit_eval(, golden=None, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), sample=None, strata_keys=('family', 'diegetic'), fit_judge=None, embedder=None, level=VerifyLevel.judge, seed=0, k=10)
+### foley.eval.fit.run_fit_eval(, golden=None, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), sample=None, strata_keys=('family', 'diegetic'), fit_judge=None, embedder=None, level=VerifyLevel.judge, seed=0, k=10, llm=None)
 
 Run the Tier-2 fit eval over a stratified golden sample → a [`FitReport`](_autosummary/foley.eval.fit.html.md#foley.eval.fit.FitReport).
 
@@ -2846,8 +2966,8 @@ fit-judge as an independent audit, and aggregates fit-precision/recall/F1 + fit-
   * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The stratified sample cap (default: the whole set — the cost gate).
   * **strata_keys** – The stratification axes (default `('family', 'diegetic')`).
   * **fit_judge** – The injected authoritative [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)
-    (default: `foley.agent.verify._default_fit_judge()` — the hermetic fake
-    when no audio-LM / key is available).
+    (default: `foley.agent.verify._default_fit_judge()` for `llm` — the
+    hermetic fake unless `llm` / `$FOLEY_LLM` opts in).
   * **embedder** – The Ring-0 text/​audio embedder (default: `HashingBowEmbedder`).
   * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
     (default `VerifyLevel.judge`). `'clap'` is rejected: it never invokes the
@@ -3461,7 +3581,7 @@ Map an α (or κ) to Krippendorff’s benchmark band.
   `'reliable'` (α ≥ 0.8), `'tentative'` (0.667 ≤ α < 0.8), else
   `'revise-rubric'`.
 
-### foley.eval.run_fit_eval(, golden=None, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), sample=None, strata_keys=('family', 'diegetic'), fit_judge=None, embedder=None, level=VerifyLevel.judge, seed=0, k=10)
+### foley.eval.run_fit_eval(, golden=None, golden_path=PosixPath('/home/runner/work/foley/foley/foley/data/golden/seed.json'), sample=None, strata_keys=('family', 'diegetic'), fit_judge=None, embedder=None, level=VerifyLevel.judge, seed=0, k=10, llm=None)
 
 Run the Tier-2 fit eval over a stratified golden sample → a [`FitReport`](_autosummary/foley.eval.html.md#foley.eval.FitReport).
 
@@ -3477,8 +3597,8 @@ fit-judge as an independent audit, and aggregates fit-precision/recall/F1 + fit-
   * **sample** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – The stratified sample cap (default: the whole set — the cost gate).
   * **strata_keys** – The stratification axes (default `('family', 'diegetic')`).
   * **fit_judge** – The injected authoritative [`Judge`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Judge)
-    (default: `foley.agent.verify._default_fit_judge()` — the hermetic fake
-    when no audio-LM / key is available).
+    (default: `foley.agent.verify._default_fit_judge()` for `llm` — the
+    hermetic fake unless `llm` / `$FOLEY_LLM` opts in).
   * **embedder** – The Ring-0 text/​audio embedder (default: [`HashingBowEmbedder`](_autosummary/foley.eval.html.md#foley.eval.HashingBowEmbedder)).
   * **level** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`VerifyLevel`](_autosummary/foley.base.html.md#foley.base.VerifyLevel)) – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
     (default `VerifyLevel.judge`). `'clap'` is rejected: it never invokes the
@@ -5495,7 +5615,9 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
-  `{keys, extras, system, offline, sources, degraded_tools}` — all JSON-safe.
+  `{keys, extras, system, offline, sources, llm, degraded_tools}` — all
+  JSON-safe. `llm` is the provider the SELECT rungs resolve to right now
+  (see [`foley.agent.llm.resolve_llm()`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm)), or the reason it cannot resolve.
 
 ### foley.check_requirements(, names=None, verbose=False)
 
@@ -5820,7 +5942,7 @@ PR gate asserts on. See [`foley.eval`](_autosummary/foley.eval.html.md#module-fo
 * **Returns:**
   A [`foley.eval.RetrievalReport`](_autosummary/foley.eval.html.md#foley.eval.RetrievalReport).
 
-### foley.evaluate_fit(, golden=None, sample=None, level=VerifyLevel.judge, fit_judge=None, embedder=None, seed=0, k=10)
+### foley.evaluate_fit(, golden=None, sample=None, level=VerifyLevel.judge, fit_judge=None, embedder=None, seed=0, k=10, llm=None)
 
 Run the Tier-2 **fit** eval over the golden set — “does the accepted clip fit?” (#10b).
 
@@ -5837,13 +5959,15 @@ Ring-0 fixture with the deterministic fake judge — no network, key, or heavy d
   * **sample** – Optional stratified sample cap (default: the whole set — the cost gate).
   * **level** – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
     (default `VerifyLevel.judge`); `'clap'` is rejected.
-  * **fit_judge** – An injected authoritative judge (default: the auto-resolved fit-judge —
-    the LLM arbiter [`AnthropicJudge`](_autosummary/foley.agent.html.md#foley.agent.AnthropicJudge) when a key is configured,
-    else the hermetic [`StringOverlapJudge`](_autosummary/foley.agent.html.md#foley.agent.StringOverlapJudge) fake; the audio-LM
-    [`AudioLMJudge`](_autosummary/foley.agent.html.md#foley.agent.AudioLMJudge) is injection-only in this slice).
+  * **fit_judge** – An injected authoritative judge (default: the `llm` provider’s judge
+    — the hermetic [`StringOverlapJudge`](_autosummary/foley.agent.html.md#foley.agent.StringOverlapJudge) fake unless `llm`
+    opts in; the audio-LM [`AudioLMJudge`](_autosummary/foley.agent.html.md#foley.agent.AudioLMJudge) is injection-only).
   * **embedder** – The Ring-0 embedder (default: the CLAP-free `HashingBowEmbedder`).
   * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sampling RNG seed.
   * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval shortlist depth per event.
+  * **llm** – The fit-judge’s provider when `fit_judge` is not given —
+    `'anthropic'` for the nightly arbiter (or `$FOLEY_LLM`); `None`
+    keeps the deterministic fake (a local endpoint is never picked implicitly).
 * **Returns:**
   A [`foley.eval.FitReport`](_autosummary/foley.eval.html.md#foley.eval.FitReport).
 
@@ -5867,7 +5991,7 @@ out-ramps never overlap on tiny inputs.
 
 Lazy dependency: `numpy`.
 
-### foley.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None)
+### foley.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None, llm=None)
 
 The headline: a narrative context → verified, license-clean sound candidates.
 
@@ -5895,7 +6019,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **library** – Target [`SoundLibrary`](_autosummary/foley.html.md#foley.SoundLibrary) (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
-    each defaults to the hermetic fake when `foley[agent]` is absent.
+    each defaults to the `llm` provider’s implementation.
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which LLM the decompose / refine / judge rungs use when not injected —
+    `'fake'` | `'local'` | `'anthropic'`. `None` reads `$FOLEY_LLM`,
+    then falls back to the free default (a configured local endpoint, else the
+    deterministic fake). A key being present never opts in to paid calls.
 * **Return type:**
   `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]]
 * **Returns:**
@@ -6626,7 +6754,7 @@ Write `samples` to `dst` as `fmt`/`subtype` (default = FLAC archive).
 
 Lazy dependency: `soundfile`.
 
-### foley.score(segments, , audio=None, transcript=None, library=None, intended_use=None, commercial_ok=False, max_events=6, verify='listen', master='podcast', weave=None, \*\*weave_kwargs)
+### foley.score(segments, , audio=None, transcript=None, library=None, intended_use=None, commercial_ok=False, max_events=6, verify='listen', master='podcast', weave=None, llm=None, \*\*weave_kwargs)
 
 Choose sounds for narration text and (optionally) weave them into the narration audio.
 
@@ -6655,6 +6783,8 @@ editable [`SoundDesignTimeline`](_autosummary/foley.base.html.md#foley.base.Soun
   * **verify** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
   * **master** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The delivery [`MASTER_PROFILES`](_autosummary/foley.base.html.md#foley.base.MASTER_PROFILES) target (`'podcast'` default).
   * **weave** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Force weaving on/off; default auto (`True` iff `audio` is given).
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which LLM the SELECT rungs use (`'fake'` | `'local'` | `'anthropic'`;
+    `None` reads `$FOLEY_LLM`, else the free default) — see [`foley.find()`](_autosummary/foley.html.md#foley.find).
   * **\*\*weave_kwargs** – Forwarded to `foley.weave()` (e.g. `sign_cert`, `watermark`).
 * **Return type:**
   [`ScoreResult`](_autosummary/foley.html.md#foley.ScoreResult)
@@ -10292,8 +10422,9 @@ leak prompt text into the manifest and duplicate data. Duck-typed over the repor
 Whether observability is on (via [`enable()`](_autosummary/foley.obs.html.md#foley.obs.enable) or `$FOLEY_OBS` in {1,true,yes}).
 
 `force_disabled` (set by [`foley.runtime.offline_scope()`](_autosummary/foley.runtime.html.md#foley.runtime.offline_scope) for a telemetry-off
-posture) hard-overrides both — so offline mode’s “nothing leaves the device”
-contract holds even when `$FOLEY_OBS` is exported.
+posture) and a telemetry-off runtime (`$FOLEY_OFFLINE`) hard-override both — so
+offline mode’s “nothing leaves the device” contract holds even when `$FOLEY_OBS`
+is exported.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
@@ -10481,8 +10612,9 @@ manifest on exit. Disabled → the zero-cost `_NULL_RUN`.
 Whether observability is on (via [`enable()`](_autosummary/foley.obs.recorder.html.md#foley.obs.recorder.enable) or `$FOLEY_OBS` in {1,true,yes}).
 
 `force_disabled` (set by [`foley.runtime.offline_scope()`](_autosummary/foley.runtime.html.md#foley.runtime.offline_scope) for a telemetry-off
-posture) hard-overrides both — so offline mode’s “nothing leaves the device”
-contract holds even when `$FOLEY_OBS` is exported.
+posture) and a telemetry-off runtime (`$FOLEY_OFFLINE`) hard-override both — so
+offline mode’s “nothing leaves the device” contract holds even when `$FOLEY_OBS`
+is exported.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
@@ -11125,7 +11257,7 @@ True if the prompt matched any trademark or recognizable-voice pattern.
 
 True if the prompt matched a branded-audio-logo entry.
 
-### foley.provenance.disclosure.TRADEMARK_REGISTRY *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[TrademarkEntry](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'deep note', 'thx'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc chime', 'nbc chimes', 'nbc three-note'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'netflix sound', 'tudum', 'ta dum', 'netflix chime', 'ta-dum', 'netflix intro'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'mgm lion', 'mgm roar', 'metro-goldwyn-mayer lion'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'20th century fox fanfare', 'fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel inside', 'intel chime', 'intel jingle', 'intel bong'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({'homer simpson doh', "d'oh", 'homer doh'})))*
+### foley.provenance.disclosure.TRADEMARK_REGISTRY *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[TrademarkEntry](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'thx', 'deep note'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc chimes', 'nbc three-note', 'nbc chime'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'tudum', 'netflix sound', 'ta-dum', 'ta dum', 'netflix intro', 'netflix chime'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'metro-goldwyn-mayer lion', 'mgm roar', 'mgm lion'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'fox fanfare', '20th century fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel jingle', 'intel bong', 'intel chime', 'intel inside'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({"d'oh", 'homer doh', 'homer simpson doh'})))*
 
 Seed registry of branded audio logos foley must not knowingly generate for
 commercial use (report 07 §7.2). Each entry maps a canonical mark to a set of
@@ -11678,6 +11810,7 @@ dol-only.
 |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
 | [`capability_report`](_autosummary/foley.requirements.html.md#foley.requirements.capability_report)(\*[, runtime])         | A JSON-safe capability + posture snapshot for the CLI, docs, and the MCP tool.       |
 | [`check_requirements`](_autosummary/foley.requirements.html.md#foley.requirements.check_requirements)(\*[, names, verbose]) | Report which optional foley capabilities are available (`{name: is_available}`).     |
+| [`provider_key_env_vars`](_autosummary/foley.requirements.html.md#foley.requirements.provider_key_env_vars)()                  | Every env var that holds a provider credential (the sources' keys + Anthropic's).    |
 | [`verify_and_setup`](_autosummary/foley.requirements.html.md#foley.requirements.verify_and_setup)(\*[, names])            | Return a per-requirement status + guidance report (never runs an installer).         |
 
 ### foley.requirements.build_requirements()
@@ -11700,7 +11833,9 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
-  `{keys, extras, system, offline, sources, degraded_tools}` — all JSON-safe.
+  `{keys, extras, system, offline, sources, llm, degraded_tools}` — all
+  JSON-safe. `llm` is the provider the SELECT rungs resolve to right now
+  (see [`foley.agent.llm.resolve_llm()`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm)), or the reason it cannot resolve.
 
 ### foley.requirements.check_requirements(, names=None, verbose=False)
 
@@ -11715,6 +11850,17 @@ Report which optional foley capabilities are available (`{name: is_available}`).
   `{requirement_name: available}`. Everything-absent is fine — foley degrades
   (deterministic fakes, offline mode, in-process DSP); the report just shows what
   each capability would unlock.
+
+### foley.requirements.provider_key_env_vars()
+
+Every env var that holds a provider credential (the sources’ keys + Anthropic’s).
+
+Derived from the same SSOT as [`check_requirements()`](_autosummary/foley.requirements.html.md#foley.requirements.check_requirements) (each source’s
+`config['auth']`), so a newly added paid source is covered automatically — the
+test suite scrubs exactly these so no test can spend money by accident.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 ### foley.requirements.verify_and_setup(, names=None)
 
@@ -11756,16 +11902,33 @@ keeps `import foley` dol-only.
 
 ### Functions
 
-| [`current_runtime`](_autosummary/foley.runtime.html.md#foley.runtime.current_runtime)()       | The active [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig), or the online default outside any scope.           |
-|--------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| [`is_offline`](_autosummary/foley.runtime.html.md#foley.runtime.is_offline)()            | Whether an offline runtime scope is currently active.                                                                         |
-| [`offline`](_autosummary/foley.runtime.html.md#foley.runtime.offline)([config])       | Alias of [`offline_scope()`](_autosummary/foley.runtime.html.md#foley.runtime.offline_scope) — `with foley.offline(): ...` for local-first runs. |
-| [`offline_scope`](_autosummary/foley.runtime.html.md#foley.runtime.offline_scope)([config]) | Apply a [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) for the `with` block, restoring obs state on exit.     |
+| [`current_runtime`](_autosummary/foley.runtime.html.md#foley.runtime.current_runtime)()                     | The active [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig); outside any scope, the one `$FOLEY_OFFLINE` selects.   |
+|----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| [`is_offline`](_autosummary/foley.runtime.html.md#foley.runtime.is_offline)()                          | Whether an offline runtime scope is currently active.                                                                             |
+| [`offline`](_autosummary/foley.runtime.html.md#foley.runtime.offline)([config])                     | Alias of [`offline_scope()`](_autosummary/foley.runtime.html.md#foley.runtime.offline_scope) — `with foley.offline(): ...` for local-first runs.     |
+| [`offline_scope`](_autosummary/foley.runtime.html.md#foley.runtime.offline_scope)([config])               | Apply a [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) for the `with` block, restoring obs state on exit.         |
+| [`require_egress`](_autosummary/foley.runtime.html.md#foley.runtime.require_egress)(data_egress, \*, what) | Raise [`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) unless the active runtime allows `data_egress`.              |
 
 ### Classes
 
 | [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig)([offline, data_egress_allow, ...])   | A frozen runtime posture — the local-first / offline contract as data.   |
 |-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+
+### Exceptions
+
+| [`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked)   | Raised when a call would send data off the device under an offline posture.   |
+|------------------------------------------------------------------|-------------------------------------------------------------------------------|
+
+### *exception* foley.runtime.EgressBlocked
+
+Bases: [`PermissionError`](https://docs.python.org/3/builtins/exceptions.html#PermissionError)
+
+Raised when a call would send data off the device under an offline posture.
+
+Every external path checks the active [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) through
+[`require_egress()`](_autosummary/foley.runtime.html.md#foley.runtime.require_egress) — the source registry, the generate and pull façades, and
+the LLM resolver — so `with foley.offline():` holds on every surface, not only
+in the MCP tools.
 
 ### foley.runtime.LOCAL *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)* *= 'local'*
 
@@ -11820,7 +11983,7 @@ The local-first offline posture: local-only egress, telemetry off, hashed redact
 
 ### foley.runtime.current_runtime()
 
-The active [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig), or the online default outside any scope.
+The active [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig); outside any scope, the one `$FOLEY_OFFLINE` selects.
 
 * **Return type:**
   [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig)
@@ -11848,6 +12011,18 @@ captured on entry and restored on exit (so a scope never leaks its posture).
   **config** ([`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – The posture to apply (default: offline-local).
 * **Yields:**
   The applied [`RuntimeConfig`](_autosummary/foley.runtime.html.md#foley.runtime.RuntimeConfig).
+
+### foley.runtime.require_egress(data_egress, , what)
+
+Raise [`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) unless the active runtime allows `data_egress`.
+
+* **Parameters:**
+  * **data_egress** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – The egress class the call needs (`'local'` | `'external'`);
+    `None` (undeclared) is always refused — callers that read a source’s
+    declaration map a missing one to `'external'` first.
+  * **what** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A short description for the error (`"source 'elevenlabs'"`).
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 
 # _autosummary/foley.sources.base.html.md
@@ -13387,7 +13562,9 @@ adapter on first use (cached in the entry).
 * **Returns:**
   The registry entry (`{'config': dict, 'adapter': SourceAdapter, ...}`).
 * **Raises:**
-  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
+  * [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
+  * [**EgressBlocked**](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) – If the source sends data off the device and an offline scope
+        is active ([`foley.offline()`](_autosummary/foley.html.md#foley.offline) / `$FOLEY_OFFLINE`).
 
 ### foley.sources.list_sources(, egress_allow=None)
 
@@ -13680,6 +13857,7 @@ Out-of-tree plugins — and test doubles — register directly via
 | [`list_sources`](_autosummary/foley.sources.registry.html.md#foley.sources.registry.list_sources)(\*[, egress_allow])         | Return the names of registered live sources (runs discovery first).                                                                              |
 | [`local_sources`](_autosummary/foley.sources.registry.html.md#foley.sources.registry.local_sources)()                          | The names of sources that run entirely on-device (`data_egress == 'local'`).                                                                     |
 | [`register_source`](_autosummary/foley.sources.registry.html.md#foley.sources.registry.register_source)(name, config[, adapter]) | Register a live source directly (out-of-tree plugin or a test double).                                                                           |
+| [`require_source_egress`](_autosummary/foley.sources.registry.html.md#foley.sources.registry.require_source_egress)(name[, config])    | Raise [`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) if source `name` may not run now.               |
 | [`source_egress`](_autosummary/foley.sources.registry.html.md#foley.sources.registry.source_egress)(name)                      | The declared `data_egress` class of source `name` (`None` if undeclared).                                                                        |
 
 ### foley.sources.registry.SOURCE_REGISTRY *= {}*
@@ -13716,7 +13894,9 @@ adapter on first use (cached in the entry).
 * **Returns:**
   The registry entry (`{'config': dict, 'adapter': SourceAdapter, ...}`).
 * **Raises:**
-  [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
+  * [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – If no such source is registered (after discovery).
+  * [**EgressBlocked**](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) – If the source sends data off the device and an offline scope
+        is active ([`foley.offline()`](_autosummary/foley.html.md#foley.offline) / `$FOLEY_OFFLINE`).
 
 ### foley.sources.registry.list_sources(, egress_allow=None)
 
@@ -13750,6 +13930,18 @@ importable `foley.sources.<name>` package).
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The source name (the `add_from()` / [`get_source()`](_autosummary/foley.sources.registry.html.md#foley.sources.registry.get_source) key).
   * **config** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – The `SOURCE_CONFIG` declaration.
   * **adapter** – An optional pre-instantiated adapter (bypasses lazy loading).
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+### foley.sources.registry.require_source_egress(name, config=None)
+
+Raise [`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) if source `name` may not run now.
+
+The one offline check every source path goes through: [`get_source()`](_autosummary/foley.sources.registry.html.md#foley.sources.registry.get_source), and the
+generate / pull façades when an adapter is injected. The egress class comes from
+`config['data_egress']` (the passed config, else the registered one); a source
+that declares none is treated as external (fail-closed), so it is refused offline.
+
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
@@ -14993,7 +15185,7 @@ Non-destructively mute/unmute an item — a NEW timeline.
 
 # About this build
 
-This documentation was built on **2026-10-03 11:02 UTC** from commit <a href="https://github.com/thorwhalen/foley/commit/0a5d060da4f8196085ef9cd40c2a5b3962164947"><code>0a5d060</code></a> on branch <code>main</code>, for **foley 0.0.27** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-04 08:01 UTC** from commit <a href="https://github.com/thorwhalen/foley/commit/c6ab79941eaa91a2683707369ec46a52ca2ec705"><code>c6ab799</code></a> on branch <code>main</code>, for **foley 0.0.28** (from <code>pyproject.toml</code>).
 
 #### NOTE
 Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
@@ -15002,7 +15194,7 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/foley/commit/0a5d060da4f8196085ef9cd40c2a5b3962164947"><code>0a5d060da4f8196085ef9cd40c2a5b3962164947</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/foley/commit/c6ab79941eaa91a2683707369ec46a52ca2ec705"><code>c6ab79941eaa91a2683707369ec46a52ca2ec705</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -15013,9 +15205,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/foley</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/foley/actions/runs/37118244999">37118244999</a>     |
+| Run          | <a href="https://github.com/thorwhalen/foley/actions/runs/37187500697">37187500697</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>0a5d060da4f8196085ef9cd40c2a5b3962164947</code> (in the history of the built commit) |
+| Event commit | <code>c6ab79941eaa91a2683707369ec46a52ca2ec705</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -15040,13 +15232,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/foley/0.0.27/">0.0.27</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/foley/0.0.28/">0.0.28</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/foley && cd foley
-git checkout 0a5d060da4f8196085ef9cd40c2a5b3962164947
+git checkout c6ab79941eaa91a2683707369ec46a52ca2ec705
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

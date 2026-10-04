@@ -1680,7 +1680,9 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
-  `{keys, extras, system, offline, sources, degraded_tools}` — all JSON-safe.
+  `{keys, extras, system, offline, sources, llm, degraded_tools}` — all
+  JSON-safe. `llm` is the provider the SELECT rungs resolve to right now
+  (see [`foley.agent.llm.resolve_llm()`](foley.agent.llm.html.md#foley.agent.llm.resolve_llm)), or the reason it cannot resolve.
 
 ### foley.check_requirements(, names=None, verbose=False)
 
@@ -2005,7 +2007,7 @@ PR gate asserts on. See [`foley.eval`](foley.eval.html.md#module-foley.eval).
 * **Returns:**
   A [`foley.eval.RetrievalReport`](foley.eval.html.md#foley.eval.RetrievalReport).
 
-### foley.evaluate_fit(, golden=None, sample=None, level=VerifyLevel.judge, fit_judge=None, embedder=None, seed=0, k=10)
+### foley.evaluate_fit(, golden=None, sample=None, level=VerifyLevel.judge, fit_judge=None, embedder=None, seed=0, k=10, llm=None)
 
 Run the Tier-2 **fit** eval over the golden set — “does the accepted clip fit?” (#10b).
 
@@ -2022,13 +2024,15 @@ Ring-0 fixture with the deterministic fake judge — no network, key, or heavy d
   * **sample** – Optional stratified sample cap (default: the whole set — the cost gate).
   * **level** – The verify rung the fit-judge audits at — `'listen'` or `'judge'`
     (default `VerifyLevel.judge`); `'clap'` is rejected.
-  * **fit_judge** – An injected authoritative judge (default: the auto-resolved fit-judge —
-    the LLM arbiter [`AnthropicJudge`](foley.agent.html.md#foley.agent.AnthropicJudge) when a key is configured,
-    else the hermetic [`StringOverlapJudge`](foley.agent.html.md#foley.agent.StringOverlapJudge) fake; the audio-LM
-    [`AudioLMJudge`](foley.agent.html.md#foley.agent.AudioLMJudge) is injection-only in this slice).
+  * **fit_judge** – An injected authoritative judge (default: the `llm` provider’s judge
+    — the hermetic [`StringOverlapJudge`](foley.agent.html.md#foley.agent.StringOverlapJudge) fake unless `llm`
+    opts in; the audio-LM [`AudioLMJudge`](foley.agent.html.md#foley.agent.AudioLMJudge) is injection-only).
   * **embedder** – The Ring-0 embedder (default: the CLAP-free `HashingBowEmbedder`).
   * **seed** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – The sampling RNG seed.
   * **k** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Retrieval shortlist depth per event.
+  * **llm** – The fit-judge’s provider when `fit_judge` is not given —
+    `'anthropic'` for the nightly arbiter (or `$FOLEY_LLM`); `None`
+    keeps the deterministic fake (a local endpoint is never picked implicitly).
 * **Returns:**
   A [`foley.eval.FitReport`](foley.eval.html.md#foley.eval.FitReport).
 
@@ -2052,7 +2056,7 @@ out-ramps never overlap on tiny inputs.
 
 Lazy dependency: `numpy`.
 
-### foley.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None)
+### foley.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None, llm=None)
 
 The headline: a narrative context → verified, license-clean sound candidates.
 
@@ -2080,7 +2084,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **library** – Target [`SoundLibrary`](#foley.SoundLibrary) (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
-    each defaults to the hermetic fake when `foley[agent]` is absent.
+    each defaults to the `llm` provider’s implementation.
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which LLM the decompose / refine / judge rungs use when not injected —
+    `'fake'` | `'local'` | `'anthropic'`. `None` reads `$FOLEY_LLM`,
+    then falls back to the free default (a configured local endpoint, else the
+    deterministic fake). A key being present never opts in to paid calls.
 * **Return type:**
   `Union`[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](foley.base.html.md#foley.base.Candidate)], [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Candidate`](foley.base.html.md#foley.base.Candidate)]]
 * **Returns:**
@@ -2811,7 +2819,7 @@ Write `samples` to `dst` as `fmt`/`subtype` (default = FLAC archive).
 
 Lazy dependency: `soundfile`.
 
-### foley.score(segments, , audio=None, transcript=None, library=None, intended_use=None, commercial_ok=False, max_events=6, verify='listen', master='podcast', weave=None, \*\*weave_kwargs)
+### foley.score(segments, , audio=None, transcript=None, library=None, intended_use=None, commercial_ok=False, max_events=6, verify='listen', master='podcast', weave=None, llm=None, \*\*weave_kwargs)
 
 Choose sounds for narration text and (optionally) weave them into the narration audio.
 
@@ -2840,6 +2848,8 @@ editable [`SoundDesignTimeline`](foley.base.html.md#foley.base.SoundDesignTimeli
   * **verify** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The max verify rung — `'clap'` | `'listen'` | `'judge'`.
   * **master** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The delivery [`MASTER_PROFILES`](foley.base.html.md#foley.base.MASTER_PROFILES) target (`'podcast'` default).
   * **weave** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Force weaving on/off; default auto (`True` iff `audio` is given).
+  * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which LLM the SELECT rungs use (`'fake'` | `'local'` | `'anthropic'`;
+    `None` reads `$FOLEY_LLM`, else the free default) — see [`foley.find()`](#foley.find).
   * **\*\*weave_kwargs** – Forwarded to `foley.weave()` (e.g. `sign_cert`, `watermark`).
 * **Return type:**
   [`ScoreResult`](#foley.ScoreResult)

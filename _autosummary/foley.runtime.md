@@ -26,16 +26,33 @@ keeps `import foley` dol-only.
 
 ### Functions
 
-| [`current_runtime`](#foley.runtime.current_runtime)()       | The active [`RuntimeConfig`](#foley.runtime.RuntimeConfig), or the online default outside any scope.           |
-|--------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| [`is_offline`](#foley.runtime.is_offline)()            | Whether an offline runtime scope is currently active.                                                                         |
-| [`offline`](#foley.runtime.offline)([config])       | Alias of [`offline_scope()`](#foley.runtime.offline_scope) — `with foley.offline(): ...` for local-first runs. |
-| [`offline_scope`](#foley.runtime.offline_scope)([config]) | Apply a [`RuntimeConfig`](#foley.runtime.RuntimeConfig) for the `with` block, restoring obs state on exit.     |
+| [`current_runtime`](#foley.runtime.current_runtime)()                     | The active [`RuntimeConfig`](#foley.runtime.RuntimeConfig); outside any scope, the one `$FOLEY_OFFLINE` selects.   |
+|----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| [`is_offline`](#foley.runtime.is_offline)()                          | Whether an offline runtime scope is currently active.                                                                             |
+| [`offline`](#foley.runtime.offline)([config])                     | Alias of [`offline_scope()`](#foley.runtime.offline_scope) — `with foley.offline(): ...` for local-first runs.     |
+| [`offline_scope`](#foley.runtime.offline_scope)([config])               | Apply a [`RuntimeConfig`](#foley.runtime.RuntimeConfig) for the `with` block, restoring obs state on exit.         |
+| [`require_egress`](#foley.runtime.require_egress)(data_egress, \*, what) | Raise [`EgressBlocked`](#foley.runtime.EgressBlocked) unless the active runtime allows `data_egress`.              |
 
 ### Classes
 
 | [`RuntimeConfig`](#foley.runtime.RuntimeConfig)([offline, data_egress_allow, ...])   | A frozen runtime posture — the local-first / offline contract as data.   |
 |-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+
+### Exceptions
+
+| [`EgressBlocked`](#foley.runtime.EgressBlocked)   | Raised when a call would send data off the device under an offline posture.   |
+|------------------------------------------------------------------|-------------------------------------------------------------------------------|
+
+### *exception* foley.runtime.EgressBlocked
+
+Bases: [`PermissionError`](https://docs.python.org/3/builtins/exceptions.html#PermissionError)
+
+Raised when a call would send data off the device under an offline posture.
+
+Every external path checks the active [`RuntimeConfig`](#foley.runtime.RuntimeConfig) through
+[`require_egress()`](#foley.runtime.require_egress) — the source registry, the generate and pull façades, and
+the LLM resolver — so `with foley.offline():` holds on every surface, not only
+in the MCP tools.
 
 ### foley.runtime.LOCAL *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)* *= 'local'*
 
@@ -90,7 +107,7 @@ The local-first offline posture: local-only egress, telemetry off, hashed redact
 
 ### foley.runtime.current_runtime()
 
-The active [`RuntimeConfig`](#foley.runtime.RuntimeConfig), or the online default outside any scope.
+The active [`RuntimeConfig`](#foley.runtime.RuntimeConfig); outside any scope, the one `$FOLEY_OFFLINE` selects.
 
 * **Return type:**
   [`RuntimeConfig`](#foley.runtime.RuntimeConfig)
@@ -118,3 +135,15 @@ captured on entry and restored on exit (so a scope never leaks its posture).
   **config** ([`RuntimeConfig`](#foley.runtime.RuntimeConfig) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – The posture to apply (default: offline-local).
 * **Yields:**
   The applied [`RuntimeConfig`](#foley.runtime.RuntimeConfig).
+
+### foley.runtime.require_egress(data_egress, , what)
+
+Raise [`EgressBlocked`](#foley.runtime.EgressBlocked) unless the active runtime allows `data_egress`.
+
+* **Parameters:**
+  * **data_egress** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)) – The egress class the call needs (`'local'` | `'external'`);
+    `None` (undeclared) is always refused — callers that read a source’s
+    declaration map a missing one to `'external'` first.
+  * **what** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – A short description for the error (`"source 'elevenlabs'"`).
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)

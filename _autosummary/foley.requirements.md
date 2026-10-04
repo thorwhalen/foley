@@ -19,6 +19,7 @@ dol-only.
 |-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
 | [`capability_report`](#foley.requirements.capability_report)(\*[, runtime])         | A JSON-safe capability + posture snapshot for the CLI, docs, and the MCP tool.       |
 | [`check_requirements`](#foley.requirements.check_requirements)(\*[, names, verbose]) | Report which optional foley capabilities are available (`{name: is_available}`).     |
+| [`provider_key_env_vars`](#foley.requirements.provider_key_env_vars)()                  | Every env var that holds a provider credential (the sources' keys + Anthropic's).    |
 | [`verify_and_setup`](#foley.requirements.verify_and_setup)(\*[, names])            | Return a per-requirement status + guidance report (never runs an installer).         |
 
 ### foley.requirements.build_requirements()
@@ -41,7 +42,9 @@ lists `degraded_tools` — capabilities whose requirement is unmet.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 * **Returns:**
-  `{keys, extras, system, offline, sources, degraded_tools}` — all JSON-safe.
+  `{keys, extras, system, offline, sources, llm, degraded_tools}` — all
+  JSON-safe. `llm` is the provider the SELECT rungs resolve to right now
+  (see [`foley.agent.llm.resolve_llm()`](foley.agent.llm.md#foley.agent.llm.resolve_llm)), or the reason it cannot resolve.
 
 ### foley.requirements.check_requirements(, names=None, verbose=False)
 
@@ -56,6 +59,17 @@ Report which optional foley capabilities are available (`{name: is_available}`).
   `{requirement_name: available}`. Everything-absent is fine — foley degrades
   (deterministic fakes, offline mode, in-process DSP); the report just shows what
   each capability would unlock.
+
+### foley.requirements.provider_key_env_vars()
+
+Every env var that holds a provider credential (the sources’ keys + Anthropic’s).
+
+Derived from the same SSOT as [`check_requirements()`](#foley.requirements.check_requirements) (each source’s
+`config['auth']`), so a newly added paid source is covered automatically — the
+test suite scrubs exactly these so no test can spend money by accident.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]
 
 ### foley.requirements.verify_and_setup(, names=None)
 
