@@ -165,7 +165,9 @@ def capability_report(*, runtime=None) -> dict:
         runtime: A :class:`foley.runtime.RuntimeConfig` (default: the active one).
 
     Returns:
-        ``{keys, extras, system, offline, sources, degraded_tools}`` — all JSON-safe.
+        ``{keys, extras, system, offline, sources, llm, degraded_tools}`` — all
+        JSON-safe. ``llm`` is the provider the SELECT rungs resolve to right now
+        (see :func:`foley.agent.llm.resolve_llm`), or the reason it cannot resolve.
     """
     from .runtime import current_runtime
     from .sources.registry import list_sources
@@ -185,5 +187,20 @@ def capability_report(*, runtime=None) -> dict:
         "system": groups["binary"],
         "offline": cfg.offline,
         "sources": list_sources(egress_allow=cfg.data_egress_allow),
+        "llm": _resolved_llm(),
         "degraded_tools": sorted(degraded),
     }
+
+
+def _resolved_llm() -> str:
+    """The SELECT LLM provider as it resolves now, or ``'error: …'`` (never raises)."""
+    import warnings
+
+    from .agent.llm import resolve_llm
+
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            return resolve_llm()
+    except Exception as exc:  # noqa: BLE001 - a status report must not raise
+        return f"error: {exc}"

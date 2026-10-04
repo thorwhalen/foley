@@ -200,6 +200,9 @@ class AnthropicDecomposer:
         """Call Claude and round-trip each event through :meth:`SoundEvent.from_dict`."""
         import json
 
+        from .llm import require_llm_egress
+
+        require_llm_egress("anthropic")  # call-time: holds for an injected rung too
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path, behind foley[agent]
@@ -246,15 +249,9 @@ def _anthropic_available() -> bool:
 
 def _default_decomposer(llm: Optional[str] = None) -> Decomposer:
     """The decomposer for ``llm`` (see :func:`foley.agent.llm.resolve_llm`; free by default)."""
-    from .llm import resolve_llm
-    from .local_llm import LocalLLMDecomposer
+    from .llm import make_rung
 
-    provider = resolve_llm(llm)
-    if provider == "local":
-        return LocalLLMDecomposer()
-    if provider == "anthropic":
-        return AnthropicDecomposer()
-    return KeywordDecomposer()
+    return make_rung("decomposer", llm)
 
 
 def decompose_context(

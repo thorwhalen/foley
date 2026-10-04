@@ -226,11 +226,14 @@ def _generate_and_reverify(
     Handles the ``skipped_dup`` byte-twin (a bare ``Candidate`` with event/verdict/​license
     unset — still gated + verified here, never assumed pre-vetted).
     """
+    from ..runtime import EgressBlocked
     from ..sources import GenerationError  # lazy: keeps import foley dol-only
 
     try:
         gc = generate_sound(event.query, backend=backend, library=library)
-    except GenerationError:
+    except (GenerationError, EgressBlocked):
+        # Refused, failed, or an external backend under offline(): skip generation;
+        # the caller falls back to the best verified retrieval.
         return None
     gc.event = event  # (origin is already 'generated' from foley.generate)
     if not gate_candidates([gc], intended_use):

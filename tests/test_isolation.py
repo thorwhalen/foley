@@ -86,6 +86,7 @@ def test_find_and_score_make_no_network_call_with_every_key_set(every_key_set):
     assert result.timeline.items
 
 
+@pytest.mark.network_trip_expected
 def test_socket_guard_blocks_outbound_connections():
     with pytest.raises(RuntimeError, match="FOLEY_LIVE_API_TESTS"):
         socket.create_connection(("192.0.2.1", 443), timeout=0.01)
@@ -107,7 +108,39 @@ def test_local_llm_needs_an_endpoint(monkeypatch):
     with pytest.raises(RuntimeError, match="FOLEY_LLM_BASE_URL"):
         resolve_llm("local")
     monkeypatch.setenv("FOLEY_LLM_BASE_URL", "http://localhost:11434/v1")
-    assert resolve_llm() == "local"  # a configured local endpoint is the free default
+    assert resolve_llm() == "local"  # a loopback endpoint is the free default
+
+
+def test_a_remote_openai_compatible_endpoint_is_never_implicit(monkeypatch):
+    """A cloud endpoint may bill: it needs llm='local' even online."""
+    monkeypatch.setenv("FOLEY_LLM_BASE_URL", "https://api.openai.com/v1")
+    assert resolve_llm() == "fake"
+    assert resolve_llm("local") == "local"
+
+
+def test_fit_eval_stays_deterministic_with_a_local_endpoint(monkeypatch):
+    from foley.agent.verify import StringOverlapJudge, _default_fit_judge
+
+    monkeypatch.setenv("FOLEY_LLM_BASE_URL", "http://localhost:11434/v1")
+    assert isinstance(_default_fit_judge("judge"), StringOverlapJudge)
+
+
+def test_an_unused_key_warns_once(monkeypatch):
+    import foley.agent.llm as llm_mod
+
+    monkeypatch.setattr(llm_mod, "_warned_unused_key", False)
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+    with pytest.warns(UserWarning, match="no longer opts in"):
+        resolve_llm()
+    import warnings
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        resolve_llm()  # second time: silent
+
+
+def test_capability_report_names_the_resolved_llm(every_key_set):
+    assert foley.requirements.capability_report()["llm"] == "fake"
 
 
 # ---------------------------------------------------------------------------
@@ -145,17 +178,43 @@ def test_offline_blocks_the_paid_llm(every_key_set, monkeypatch):
         with pytest.raises(EgressBlocked, match="anthropic"):
             foley.find(DEMO, library=_library(), llm="anthropic")
         monkeypatch.setenv("FOLEY_LLM_BASE_URL", "http://llm.example.com/v1")
+        assert resolve_llm() == "fake"  # a remote endpoint is never the implicit default
         with pytest.raises(EgressBlocked, match="local"):
-            resolve_llm()  # a remote "local" endpoint is external too
+            resolve_llm("local")  # and asked for explicitly, it is external
         monkeypatch.setenv("FOLEY_LLM_BASE_URL", "http://127.0.0.1:11434/v1")
         assert resolve_llm() == "local"  # a loopback endpoint stays allowed
 
 
 def test_offline_env_var_applies_without_a_scope(monkeypatch, every_key_set):
     monkeypatch.setenv("FOLEY_OFFLINE", "1")
+    monkeypatch.setenv("FOLEY_OBS", "1")
     assert foley.runtime.is_offline()
+    assert not foley.obs.is_enabled()  # telemetry off too, not only egress
     with pytest.raises(EgressBlocked):
         foley.generate("a door creaks", backend="elevenlabs", library=_library())
+
+
+def test_an_injected_paid_rung_is_refused_offline(every_key_set):
+    """The check runs when the rung is called, not only when a default is resolved."""
+    from foley.agent.verify import AnthropicJudge
+
+    class _Boom:
+        class messages:  # noqa: N801 - mimics the SDK attribute
+            @staticmethod
+            def create(**kw):  # pragma: no cover - the gate fires first
+                raise AssertionError("model called under offline()")
+
+    judge = AnthropicJudge(client=_Boom())
+    with foley.offline():
+        with pytest.raises(EgressBlocked, match="anthropic"):
+            foley.find(DEMO, library=_library(), judge=judge, verify="judge")
+
+
+def test_find_degrades_offline_with_an_external_generator(every_key_set):
+    """An external fallback backend under offline() is skipped, not a crash."""
+    with foley.offline():
+        hits = foley.find(DEMO, library=_library(), backend="elevenlabs")
+    assert isinstance(hits, list)
 
 
 def test_local_sources_still_run_offline():

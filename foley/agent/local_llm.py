@@ -59,6 +59,9 @@ def _chat_json(
     """
     import json
 
+    from .llm import require_llm_egress
+
+    require_llm_egress("local")  # call-time: a remote endpoint is refused offline
     sys_prompt = (
         system + "\n\nReturn ONLY a single JSON object conforming to this JSON Schema "
         "(no prose, no markdown fences):\n" + json.dumps(schema)

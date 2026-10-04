@@ -140,6 +140,9 @@ class AnthropicJudge:
         """Call Claude to arbitrate the match; returns a :class:`Verdict` at ``level``."""
         import json
 
+        from .llm import require_llm_egress
+
+        require_llm_egress("anthropic")  # call-time: holds for an injected rung too
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path
@@ -179,15 +182,9 @@ def _default_judge(level: "str | VerifyLevel", llm: "str | None" = None) -> Judg
     level = VerifyLevel(level)
     if level == VerifyLevel.clap:
         return ClapJudge()
-    from .llm import resolve_llm
-    from .local_llm import LocalLLMJudge
+    from .llm import make_rung
 
-    provider = resolve_llm(llm)
-    if provider == "local":
-        return LocalLLMJudge()
-    if provider == "anthropic":
-        return AnthropicJudge()
-    return StringOverlapJudge()
+    return make_rung("judge", llm)
 
 
 # ---------------------------------------------------------------------------
@@ -301,16 +298,12 @@ def _default_fit_judge(level: "str | VerifyLevel", llm: "str | None" = None) -> 
     does not auto-select it (it would need ``foley[fit]`` *and* a built pipeline). Pass
     ``fit_judge=AudioLMJudge(pipeline=...)`` explicitly to use it. Tests inject explicitly.
     """
-    from .llm import resolve_llm
-    from .local_llm import LocalLLMJudge
+    from .llm import make_rung
 
     VerifyLevel(level)  # validate the rung
-    provider = resolve_llm(llm)
-    if provider == "anthropic":
-        return AnthropicJudge()
-    if provider == "local":
-        return LocalLLMJudge()
-    return StringOverlapJudge()
+    # implicit_local=False: a running local endpoint must not make the eval
+    # non-deterministic; only an explicit llm= / $FOLEY_LLM picks a real judge.
+    return make_rung("judge", llm, implicit_local=False)
 
 
 def verify_match(

@@ -281,6 +281,7 @@ def run_fit_eval(
     level: "str | VerifyLevel" = VerifyLevel.judge,
     seed: int = 0,
     k: int = 10,
+    llm: Optional[str] = None,
 ) -> FitReport:
     """Run the Tier-2 fit eval over a stratified golden sample → a :class:`FitReport`.
 
@@ -295,8 +296,8 @@ def run_fit_eval(
         sample: The stratified sample cap (default: the whole set — the cost gate).
         strata_keys: The stratification axes (default ``('family', 'diegetic')``).
         fit_judge: The injected authoritative :class:`~foley.agent.protocols.Judge`
-            (default: :func:`foley.agent.verify._default_fit_judge` — the hermetic fake
-            when no audio-LM / key is available).
+            (default: :func:`foley.agent.verify._default_fit_judge` for ``llm`` — the
+            hermetic fake unless ``llm`` / ``$FOLEY_LLM`` opts in).
         embedder: The Ring-0 text/​audio embedder (default: :class:`HashingBowEmbedder`).
         level: The verify rung the fit-judge audits at — ``'listen'`` or ``'judge'``
             (default ``VerifyLevel.judge``). ``'clap'`` is rejected: it never invokes the
@@ -320,7 +321,7 @@ def run_fit_eval(
         )
     golden = golden if golden is not None else load_golden(golden_path)
     embedder = embedder if embedder is not None else HashingBowEmbedder()
-    fit_judge = fit_judge if fit_judge is not None else _default_fit_judge(level)
+    fit_judge = fit_judge if fit_judge is not None else _default_fit_judge(level, llm)
 
     units = [
         (item, i, ev) for item in golden for i, ev in enumerate(item.expected_events)

@@ -487,6 +487,7 @@ def evaluate_fit(
     embedder=None,
     seed: int = 0,
     k: int = 10,
+    llm=None,
 ):
     """Run the Tier-2 **fit** eval over the golden set — "does the accepted clip fit?" (#10b).
 
@@ -503,13 +504,15 @@ def evaluate_fit(
         sample: Optional stratified sample cap (default: the whole set — the cost gate).
         level: The verify rung the fit-judge audits at — ``'listen'`` or ``'judge'``
             (default ``VerifyLevel.judge``); ``'clap'`` is rejected.
-        fit_judge: An injected authoritative judge (default: the auto-resolved fit-judge —
-            the LLM arbiter :class:`~foley.agent.AnthropicJudge` when a key is configured,
-            else the hermetic :class:`~foley.agent.StringOverlapJudge` fake; the audio-LM
-            :class:`~foley.agent.AudioLMJudge` is injection-only in this slice).
+        fit_judge: An injected authoritative judge (default: the ``llm`` provider's judge
+            — the hermetic :class:`~foley.agent.StringOverlapJudge` fake unless ``llm``
+            opts in; the audio-LM :class:`~foley.agent.AudioLMJudge` is injection-only).
         embedder: The Ring-0 embedder (default: the CLAP-free ``HashingBowEmbedder``).
         seed: The sampling RNG seed.
         k: Retrieval shortlist depth per event.
+        llm: The fit-judge's provider when ``fit_judge`` is not given —
+            ``'anthropic'`` for the nightly arbiter (or ``$FOLEY_LLM``); ``None``
+            keeps the deterministic fake (a local endpoint is never picked implicitly).
 
     Returns:
         A :class:`foley.eval.FitReport`.
@@ -523,6 +526,7 @@ def evaluate_fit(
         embedder=embedder,
         seed=seed,
         k=k,
+        llm=llm,
     )
     if golden is not None:
         kw["golden_path"] = golden

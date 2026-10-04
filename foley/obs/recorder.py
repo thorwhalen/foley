@@ -66,14 +66,27 @@ _CURRENT_RUN: "ContextVar[Optional[RunRecorder]]" = ContextVar(
 )
 
 
+def _hard_off(config: "ObsConfig") -> bool:
+    """Whether telemetry is forbidden: ``force_disabled``, or a telemetry-off runtime.
+
+    The runtime check makes ``$FOLEY_OFFLINE`` hold outside an explicit
+    :func:`foley.runtime.offline_scope` too (the scope sets ``force_disabled``; the env
+    var alone only changes :func:`foley.runtime.current_runtime`).
+    """
+    from ..runtime import current_runtime  # stdlib-only; lazy to keep obs import-light
+
+    return config.force_disabled or not current_runtime().telemetry
+
+
 def is_enabled() -> bool:
     """Whether observability is on (via :func:`enable` or ``$FOLEY_OBS`` in {1,true,yes}).
 
     ``force_disabled`` (set by :func:`foley.runtime.offline_scope` for a telemetry-off
-    posture) hard-overrides both — so offline mode's "nothing leaves the device"
-    contract holds even when ``$FOLEY_OBS`` is exported.
+    posture) and a telemetry-off runtime (``$FOLEY_OFFLINE``) hard-override both — so
+    offline mode's "nothing leaves the device" contract holds even when ``$FOLEY_OBS``
+    is exported.
     """
-    if _CONFIG.force_disabled:
+    if _hard_off(_CONFIG):
         return False
     return _CONFIG.enabled or os.environ.get("FOLEY_OBS", "").lower() in (
         "1",
@@ -415,7 +428,7 @@ def run(op: str = "run", *, inputs=None, params=None, **overrides):
             yield active
         return
     config = replace(_CONFIG, **overrides) if overrides else _CONFIG
-    if config.force_disabled:
+    if _hard_off(config):
         # Hard-off (offline posture) dominates run()'s force-on: no recorder, no OTel
         # tracer, no manifest — so `with foley.offline(): foley.find(...)` leaks nothing.
         yield _NULL_RUN

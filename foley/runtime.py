@@ -103,7 +103,8 @@ def require_egress(data_egress: "str | None", *, what: str) -> None:
 
     Args:
         data_egress: The egress class the call needs (``'local'`` | ``'external'``);
-            ``None`` (undeclared) is refused under any posture that restricts egress.
+            ``None`` (undeclared) is always refused — callers that read a source's
+            declaration map a missing one to ``'external'`` first.
         what: A short description for the error (``"source 'elevenlabs'"``).
     """
     cfg = current_runtime()
