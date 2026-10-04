@@ -85,7 +85,8 @@ class _FakeClient:
         self.chat = type("Chat", (), {"completions": type("Cmp", (), {"create": staticmethod(create)})()})()
 
 
-def test_local_llm_decomposer_parses_events():
+def test_local_llm_decomposer_parses_events(monkeypatch):
+    monkeypatch.setenv("FOLEY_APPROVE_UNKNOWN_COST", "1")  # a real rung: cost unknown (#57)
     from foley.agent.local_llm import LocalLLMDecomposer
 
     client = _FakeClient(
@@ -102,7 +103,8 @@ def test_local_llm_decomposer_parses_events():
     assert [e.query for e in events] == ["rain", "door"]
 
 
-def test_local_llm_judge_and_refiner():
+def test_local_llm_judge_and_refiner(monkeypatch):
+    monkeypatch.setenv("FOLEY_APPROVE_UNKNOWN_COST", "1")  # a real rung: cost unknown (#57)
     from foley.agent.local_llm import LocalLLMJudge, LocalLLMRefiner
     from foley.base import Candidate, LicenseRecord, SoundEvent, SoundRecord, VerifyLevel
 

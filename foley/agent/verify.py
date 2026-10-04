@@ -23,6 +23,7 @@ import re
 from typing import Optional
 
 from ..base import Candidate, SoundEvent, Verdict, VerifyLevel
+from .llm import RUNG_MAX_TOKENS
 from ._genai import DEFAULT_AGENT_MODEL, record_genai
 from .protocols import Judge
 
@@ -123,7 +124,11 @@ class AnthropicJudge:
     """
 
     def __init__(
-        self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = 500
+        self,
+        *,
+        client=None,
+        model: str = DEFAULT_AGENT_MODEL,
+        max_tokens: int = RUNG_MAX_TOKENS["judge"],
     ):
         self._client = client
         self.model = model
@@ -140,20 +145,23 @@ class AnthropicJudge:
         """Call Claude to arbitrate the match; returns a :class:`Verdict` at ``level``."""
         import json
 
-        from .llm import require_llm_egress
+        from .llm import guard_llm_call, metered_create
 
-        require_llm_egress("anthropic")  # call-time: holds for an injected rung too
+        guard_llm_call(
+            "anthropic"
+        )  # call-time egress check (holds for an injected rung)
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path
 
-            client = anthropic.Anthropic()
+            client = anthropic.Anthropic(max_retries=0)  # metered_create retries
         sound = candidate.sound
         desc = sound.caption or ""
         if sound.tags:
             desc += " [tags: " + ", ".join(sound.tags) + "]"
         user = f"Wanted event: {event.query}\nCandidate clip: {desc}"
-        resp = client.messages.create(
+        resp = metered_create(
+            client,
             model=self.model,
             max_tokens=self.max_tokens,
             thinking={"type": "adaptive"},

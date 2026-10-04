@@ -29,7 +29,7 @@ import os
 from typing import Optional
 
 from ...base import Candidate, CandidateOrigin, SoundRecord
-from ..base import GeneratedClip, generated_license
+from ..base import GeneratedClip, SourceConfigurationError, generated_license
 from ..http import Transport, requests_transport
 from .config import SOURCE_CONFIG
 
@@ -85,12 +85,16 @@ class ElevenLabsAdapter:
         plan = self._plan if self._plan is not None else os.environ.get(env_var)
         if plan not in lic_cfg["plans"]:
             got = "unset" if plan is None else repr(plan)
-            raise RuntimeError(
+            raise SourceConfigurationError(
                 f"ElevenLabs plan is {got}: set ${env_var} (or pass plan=) to one of "
                 f"{list(lic_cfg['plans'])}. The plan decides whether the sound may be "
                 "used commercially, so foley does not assume it; nothing was generated."
             )
         return plan
+
+    def request_salt(self) -> str:
+        """What besides the request decides the result: the plan (it decides the licence)."""
+        return self.plan
 
     # -- auth / http helpers ------------------------------------------------
 
@@ -100,7 +104,7 @@ class ElevenLabsAdapter:
         env_var = self.config["auth"]["env_var"]
         key = self._api_key if self._api_key is not None else os.environ.get(env_var)
         if not key:
-            raise RuntimeError(
+            raise SourceConfigurationError(
                 f"ElevenLabs needs an API token: set ${env_var} or pass api_key=. "
                 f"Get one at {self.config['auth'].get('apply_url', 'https://elevenlabs.io')}."
             )

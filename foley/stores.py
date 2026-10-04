@@ -41,6 +41,7 @@ Invariants wired here (see the skill):
 import hashlib
 import os
 from collections.abc import MutableMapping
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, Union
 from urllib.parse import quote, unquote
@@ -68,6 +69,8 @@ DEFAULT_PROVENANCE_DIR = FOLEY_DATA_DIR / "provenance"
 DEFAULT_RUN_DIR = FOLEY_DATA_DIR / "runs"
 #: Per-session audition state (#12): ``sessions/{id}/{candidates,picks,rejects}/``.
 DEFAULT_SESSION_DIR = FOLEY_DATA_DIR / "sessions"
+#: Every paid generation's bytes + the request that produced them (#59).
+DEFAULT_GENERATIONS_DIR = FOLEY_DATA_DIR / "generations"
 
 #: A filesystem location (path or path-like string) for a local store root.
 Rootdir = Union[str, "os.PathLike[str]"]
@@ -241,6 +244,58 @@ def make_session_store(
     root = (Path(rootdir) if rootdir else DEFAULT_SESSION_DIR) / session_id / name
     json_store = mk_dirs_if_missing(JsonFiles(str(root)))
     return wrap_kvs(json_store, id_of_key=_meta_filename, key_of_id=_meta_key)
+
+
+@dataclass
+class GenerationsCache:
+    """Where paid generations are kept, so a paid response is never lost or paid twice (#59).
+
+    Two ``dol`` mappings:
+
+    * :attr:`audio` — ``content_key -> bytes``: every paid response, written **before**
+      QC or ingest, so a quarantined or undecodable generation is still retrievable.
+    * :attr:`requests` — ``request digest -> dict``: the canonical request (backend,
+      prompt, the affordances sent, the model version) mapped to the content key plus
+      the licence and notes it was generated under. An identical request is served from
+      here instead of calling the provider again.
+    """
+
+    audio: MutableMapping[str, bytes]
+    requests: MutableMapping[str, dict]
+
+    def evict(self, request_key: str, *, keep_audio: bool = False) -> None:
+        """Forget a cached request (so the next identical one generates anew).
+
+        Args:
+            request_key: The request digest (noted on the result that cached it).
+            keep_audio: Keep the bytes (default: delete them too, unless another
+                request still points at them).
+        """
+        entry = self.requests.pop(request_key, None)
+        if not entry or keep_audio:
+            return
+        key = entry.get("content_key")
+        still_used = any(e.get("content_key") == key for e in self.requests.values())
+        if key and not still_used and key in self.audio:
+            del self.audio[key]
+
+
+def make_generations_store(
+    rootdir: Rootdir = DEFAULT_GENERATIONS_DIR,
+) -> GenerationsCache:
+    """Build the paid-generations cache (local files by default; any ``dol`` pair works).
+
+    Args:
+        rootdir: Directory holding ``audio/`` (bytes) and ``requests/`` (JSON).
+
+    Returns:
+        A :class:`GenerationsCache`.
+    """
+    root = Path(rootdir)
+    return GenerationsCache(
+        audio=make_byte_store(root / "audio"),
+        requests=make_provenance_store(root / "requests"),
+    )
 
 
 def store_sound(

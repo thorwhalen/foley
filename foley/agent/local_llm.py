@@ -41,10 +41,18 @@ def _make_client(base_url: Optional[str] = None, api_key: Optional[str] = None):
     """Build an OpenAI client pointed at the local endpoint (lazy ``openai`` import)."""
     import openai  # lazy: foley[local-llm]
 
+    from urllib.parse import urlparse
+
+    from .llm import is_loopback_host
+
+    url = base_url or os.environ.get("FOLEY_LLM_BASE_URL")
+    on_device = is_loopback_host(urlparse(url or "").hostname)
     return openai.OpenAI(
-        base_url=base_url or os.environ.get("FOLEY_LLM_BASE_URL"),
+        base_url=url,
         # local servers ignore the key but the client requires a non-empty one
         api_key=api_key or os.environ.get("FOLEY_LLM_API_KEY") or "local",
+        # a remote endpoint may bill: never re-send under one approval
+        max_retries=2 if on_device else 0,
     )
 
 
@@ -59,13 +67,17 @@ def _chat_json(
     """
     import json
 
-    from .llm import require_llm_egress
+    from ..cost import authorize, settle
+    from .llm import guard_llm_call, llm_call_estimate
 
-    require_llm_egress("local")  # call-time: a remote endpoint is refused offline
+    guard_llm_call("local")  # call-time egress check (a remote endpoint is external)
     sys_prompt = (
         system + "\n\nReturn ONLY a single JSON object conforming to this JSON Schema "
         "(no prose, no markdown fences):\n" + json.dumps(schema)
     )
+    est = llm_call_estimate("local", input_chars=len(sys_prompt) + len(user))
+    if est != 0.0:
+        authorize(est, what="an LLM call via a remote OpenAI-compatible endpoint")
     resp = client.chat.completions.create(
         model=model,
         messages=[
@@ -76,6 +88,7 @@ def _chat_json(
         temperature=0,
         max_tokens=max_tokens,
     )
+    settle(est, None)  # the price of a remote endpoint is unknown: keep the reservation
     return json.loads(resp.choices[0].message.content)
 
 

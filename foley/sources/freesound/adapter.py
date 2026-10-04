@@ -34,7 +34,7 @@ from typing import Optional
 
 from ...base import Candidate, CandidateOrigin, SoundRecord
 from ...licensing import ai_scope_from_gen_ai_preference, license_id_from_cc_url
-from ..base import api_license
+from ..base import SourceConfigurationError, api_license
 from ..http import Transport, requests_transport
 from .config import SOURCE_CONFIG
 
@@ -107,7 +107,7 @@ class FreesoundAdapter:
         env_var = self.config["auth"]["env_var"]
         key = self._api_key if self._api_key is not None else os.environ.get(env_var)
         if not key:
-            raise RuntimeError(
+            raise SourceConfigurationError(
                 f"Freesound needs an API token: set ${env_var} or pass api_key=. "
                 f"Get one at {self.config['auth'].get('apply_url', 'https://freesound.org/apiv2/apply/')}."
             )

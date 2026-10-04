@@ -39,6 +39,10 @@ __all__ = [
     "make_rung",
     "llm_egress",
     "require_llm_egress",
+    "llm_call_estimate",
+    "guard_llm_call",
+    "metered_create",
+    "RUNG_MAX_TOKENS",
     "is_loopback_host",
 ]
 
@@ -76,7 +80,15 @@ def is_loopback_host(host: Optional[str]) -> bool:
     """Whether ``host`` is this machine (``localhost``, ``127.*``, ``::1``, ``0.0.0.0``)."""
     if not host:
         return False
-    return host in ("localhost", "::1", "0.0.0.0") or host.startswith("127.")
+    if host == "localhost":
+        return True
+    import ipaddress
+
+    try:
+        addr = ipaddress.ip_address(host.strip("[]"))
+    except ValueError:
+        return False  # a name like "127.example.com" is not this machine
+    return addr.is_loopback or addr.is_unspecified
 
 
 def _local_endpoint_is_loopback() -> bool:
@@ -103,6 +115,155 @@ def require_llm_egress(provider: str) -> None:
     from ..runtime import require_egress
 
     require_egress(llm_egress(provider), what=f"LLM provider {provider!r}")
+
+
+#: Anthropic first-party prices, USD per million tokens ``(input, output)``. Source: the
+#: Claude API model table (claude-api reference, cached 2026-09-25). A model not listed
+#: here has an unknown price, so its calls need the run's approval.
+ANTHROPIC_PRICES_PER_MTOK: "dict[str, tuple[float, float]]" = {
+    "claude-opus-4-8": (5.0, 25.0),
+    "claude-opus-5": (5.0, 25.0),
+    "claude-opus-5-5": (4.0, 20.0),
+    "claude-sonnet-5-5": (2.0, 10.0),
+    "claude-haiku-4-5": (1.0, 5.0),
+}
+PRICES_SEEN = "2026-09-25"
+
+#: A floor on characters per token, so ``chars / CHARS_PER_TOKEN_FLOOR`` bounds the
+#: input tokens of any prompt (English runs ~4 chars/token; 2 leaves room for code,
+#: numbers and other scripts). Input bounds are computed from the real prompt.
+CHARS_PER_TOKEN_FLOOR = 2
+
+#: The variable part of a rung's prompt beyond its fixed system prompt and schema,
+#: for the pre-flight (before the prompt exists): a query + a candidate's caption and
+#: tags (judge), a query + a failure hint (refiner). The decomposer's is the passage.
+RUNG_VARIABLE_CHARS = {"decomposer": 0, "refiner": 1_000, "judge": 2_000}
+
+#: Default ``max_tokens`` of each rung (the classes read these, so estimates match).
+RUNG_MAX_TOKENS = {"decomposer": 2000, "refiner": 500, "judge": 500}
+
+#: Attempts a metered Anthropic call makes on a *rejected* request (429 / 5xx), which
+#: is not billed. A timeout or dropped connection is never retried: it may have been.
+METERED_ATTEMPTS = 3
+
+
+def _rung_fixed_chars(kind: str) -> int:
+    """Characters of a rung's fixed prompt: its system prompt plus its JSON schema."""
+    import json
+
+    if kind == "decomposer":
+        from .decompose import _DECOMPOSE_SYSTEM as system, _EVENT_JSON_SCHEMA as schema
+    elif kind == "refiner":
+        from .refine import _REFINE_JSON_SCHEMA as schema, _REFINE_SYSTEM as system
+    else:
+        from .verify import _JUDGE_JSON_SCHEMA as schema, _JUDGE_SYSTEM as system
+    return len(system) + len(json.dumps(schema))
+
+
+def llm_call_estimate(
+    provider: str,
+    *,
+    model: Optional[str] = None,
+    max_tokens: Optional[int] = None,
+    kind: Optional[str] = None,
+    input_chars: int = 0,
+) -> Optional[float]:
+    """An upper bound on one rung call's USD cost, or ``None`` when it is unknown.
+
+    ``0.0`` for the fake and an on-device endpoint. For Anthropic: the input-token
+    bound (``chars / CHARS_PER_TOKEN_FLOOR`` of the prompt — the rung's fixed prompt
+    and allowance when ``kind`` is given, plus ``input_chars``) × the input price, plus
+    ``max_tokens`` × the output price (thinking counts toward ``max_tokens``). A remote
+    endpoint, or an Anthropic model with no listed price, is ``None``.
+    """
+    if provider == "fake" or (provider == "local" and _local_endpoint_is_loopback()):
+        return 0.0
+    if provider != "anthropic":
+        return None
+    from ._genai import DEFAULT_AGENT_MODEL
+
+    prices = ANTHROPIC_PRICES_PER_MTOK.get(model or DEFAULT_AGENT_MODEL)
+    if prices is None:
+        return None
+    chars = input_chars
+    if kind is not None:
+        chars += _rung_fixed_chars(kind) + RUNG_VARIABLE_CHARS[kind]
+    tokens_in = -(-chars // CHARS_PER_TOKEN_FLOOR)
+    tokens_out = max_tokens if max_tokens is not None else max(RUNG_MAX_TOKENS.values())
+    return (tokens_in * prices[0] + tokens_out * prices[1]) / 1e6
+
+
+def _usage_cost(model: Optional[str], response) -> Optional[float]:
+    """The actual USD cost of an Anthropic response from its ``usage``, if priceable."""
+    from ._genai import DEFAULT_AGENT_MODEL
+
+    usage = getattr(response, "usage", None)
+    prices = ANTHROPIC_PRICES_PER_MTOK.get(model or DEFAULT_AGENT_MODEL)
+    tin = getattr(usage, "input_tokens", None)
+    tout = getattr(usage, "output_tokens", None)
+    if prices is None or not isinstance(tin, int) or not isinstance(tout, int):
+        return None
+    return (tin * prices[0] + tout * prices[1]) / 1e6
+
+
+def guard_llm_call(provider: str) -> None:
+    """The call-time egress check every real rung runs before calling its model."""
+    require_llm_egress(provider)
+
+
+def _is_rejection(exc: BaseException) -> bool:
+    """A 429 / 5xx answer from the API: the request was refused, so it was not billed."""
+    try:
+        import anthropic
+    except ImportError:  # pragma: no cover - a fake client without the SDK
+        return False
+    if isinstance(exc, anthropic.RateLimitError):
+        return True
+    return isinstance(exc, anthropic.APIStatusError) and getattr(exc, "status_code", 0) >= 500
+
+
+def metered_create(client, *, sleep=None, **request):
+    """``client.messages.create(**request)``, priced, capped and charged (#57).
+
+    The bound for *this* request (its real prompt length and ``max_tokens``) is
+    reserved on every budget in force before it is sent, so it can never take a run
+    past its cap; afterwards the reservation becomes the actual cost from
+    ``response.usage``. A request the API rejects (429 / 5xx — not billed) is retried
+    up to :data:`METERED_ATTEMPTS` times. Anything else (a timeout, a dropped
+    connection) keeps the reservation — it may have been billed — and raises. The SDK
+    never re-sends behind this accounting: foley builds its clients with
+    ``max_retries=0``, and an injected client is used through
+    ``with_options(max_retries=0)``. Tokens the API adds itself (structured-output
+    grammar, thinking) are not in the bound; :func:`~foley.cost.settle` records the
+    true cost from ``usage`` afterwards.
+    """
+    import json
+    import time
+
+    from ..cost import authorize, settle
+
+    with_options = getattr(client, "with_options", None)
+    if callable(with_options):  # an injected SDK client: no re-sends behind our back
+        client = with_options(max_retries=0)
+    model = request.get("model")
+    chars = len(json.dumps([request.get("system"), request.get("messages"),
+                            request.get("output_config")], default=str))
+    estimate = llm_call_estimate(
+        "anthropic", model=model, max_tokens=request.get("max_tokens"), input_chars=chars
+    )
+    authorize(estimate, what="an LLM call via 'anthropic'")
+    sleep = sleep or time.sleep
+    for attempt in range(METERED_ATTEMPTS):
+        try:
+            response = client.messages.create(**request)
+        except Exception as exc:
+            if _is_rejection(exc) and attempt + 1 < METERED_ATTEMPTS:
+                sleep(min(2.0**attempt, 8.0))
+                continue
+            raise
+        settle(estimate, _usage_cost(model, response))
+        return response
+    raise RuntimeError("unreachable")  # pragma: no cover
 
 
 def resolve_llm(llm: Optional[str] = None, *, implicit_local: bool = True) -> str:

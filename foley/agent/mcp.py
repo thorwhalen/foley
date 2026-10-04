@@ -15,6 +15,7 @@ and per-session :class:`foley.agent.session.SessionStore` (both injectable for t
 
 from __future__ import annotations
 
+import threading
 from typing import Optional
 
 from ..licensing import DEFAULT_INTENDED_USE, intended_use_for
@@ -28,19 +29,47 @@ _STATE: dict = {
     "session_factory": None,
     "byte_store": None,
     "runtime": None,
+    "max_usd": None,  # the server's spend cap; None -> foley.cost.DEFAULT_MAX_USD
+    "budget": None,  # ONE budget for the server's lifetime: every paid tool call (#57)
 }
 
 
-def _configure(*, library=None, session_factory=None, byte_store=None, runtime=None):
-    """Set the shared library / session-factory / byte-store / runtime (test + server seam)."""
+def _configure(
+    *, library=None, session_factory=None, byte_store=None, runtime=None, max_usd=None
+):
+    """Set the shared library / session-factory / byte-store / runtime / spend cap (seam)."""
     for key, val in (
         ("library", library),
         ("session_factory", session_factory),
         ("byte_store", byte_store),
         ("runtime", runtime),
+        ("max_usd", max_usd),
     ):
         if val is not None:
             _STATE[key] = val
+    if max_usd is not None and _STATE["budget"] is not None:
+        _STATE["budget"].max_usd = max_usd
+
+
+_BUDGET_LOCK = threading.Lock()
+
+
+def _server_budget():
+    """The server's one spend budget: every paid call any tool makes counts against it.
+
+    Keyed on the server, not on the ``session`` argument (which the calling agent
+    chooses, so a per-session cap could be dodged by inventing session ids). The cap
+    is set by whoever starts the server (``build_mcp_server(max_usd=...)``) and lasts
+    for the server's lifetime; restart the server to reset it.
+    """
+    from ..cost import DEFAULT_MAX_USD
+    from .policy import Budget
+
+    with _BUDGET_LOCK:  # tools run in a threadpool: one budget, even on a first burst
+        if _STATE["budget"] is None:
+            cap = _STATE["max_usd"]
+            _STATE["budget"] = Budget(max_usd=DEFAULT_MAX_USD if cap is None else cap)
+        return _STATE["budget"]
 
 
 def _lib():
@@ -209,17 +238,23 @@ def foley_find(
     rehydrate them by id. Returns compact candidate rows.
     """
     from .. import find
+    from ..cost import BudgetExceeded, spend_scope
 
-    cands = list(
-        find(
-            context,
-            max_events=max_events,
-            verify=verify,
-            k=k,
-            intended_use=intended_use_for(commercial_ok=commercial_ok),
-            library=_lib(),
-        )
-    )
+    try:
+        with spend_scope(_server_budget()):
+            cands = list(
+                find(
+                    context,
+                    max_events=max_events,
+                    verify=verify,
+                    k=k,
+                    intended_use=intended_use_for(commercial_ok=commercial_ok),
+                    library=_lib(),
+                )
+            )
+    except BudgetExceeded as exc:
+        # Refused before any paid call: say why, as a JSON row (like foley_generate).
+        return [{"ok": False, "status": "refused", "error": str(exc)}]
     _session(session).cache_candidates(cands)
     return [_candidate_row(c) for c in cands]
 
@@ -358,10 +393,18 @@ def foley_generate(
     # rights-blocked, safety-refused, or an empty result). Surface both as JSON so the
     # agent gets the real generated id on success — and a structured error, never an
     # escaping exception, on failure — honoring the module's JSON-in/JSON-out contract.
+    from ..cost import BudgetExceeded
+    from ..sources._dispatch import UnsupportedParameter
+    from ..sources.base import SourceConfigurationError
+
+    from ..cost import spend_scope
+
     try:
-        cand = generate(prompt, backend=backend, library=_lib())
-    except EgressBlocked as exc:
-        return {"ok": False, "error": str(exc), "backend": backend}
+        with spend_scope(_server_budget()):
+            cand = generate(prompt, backend=backend, library=_lib())
+    except (EgressBlocked, BudgetExceeded, SourceConfigurationError, UnsupportedParameter) as exc:
+        # Refused before any provider call: say why, as JSON.
+        return {"ok": False, "status": "refused", "error": str(exc), "backend": backend}
     except GenerationError as exc:
         return {
             "ok": False,
@@ -378,7 +421,10 @@ def foley_generate(
         "backend": backend,
         "license_ok": usable,  # under this call's commercial_ok intent
         "license": _license_summary(cand.sound.license),
-        "notes": list(cand.notes) if hasattr(cand, "notes") else [],
+        "notes": list(cand.notes),
+        "cost_estimate_usd": cand.cost_estimate_usd,
+        "cost_actual_usd": cand.cost_actual_usd,
+        "session_spent_usd": _server_budget().spent_usd,
     }
 
 
@@ -507,15 +553,17 @@ def foley_score(
     clip, nudge an onset, drop a cue — before committing to a render.
     """
     from .. import score
+    from ..cost import spend_scope
 
-    res = score(
-        context,
-        library=_lib(),
-        commercial_ok=commercial_ok,
-        verify=verify,
-        max_events=max_events,
-        weave=False,
-    )
+    with spend_scope(_server_budget()):
+        res = score(
+            context,
+            library=_lib(),
+            commercial_ok=commercial_ok,
+            verify=verify,
+            max_events=max_events,
+            weave=False,
+        )
     return {
         "timeline": res.timeline.to_dict(),
         "events": [e.to_dict() for e in res.events],
@@ -592,6 +640,8 @@ def foley_status(session: str = "default") -> dict:
         # The *effective* recorder redaction mode (not the aspirational RuntimeConfig
         # value), so status can never affirmatively misstate the real posture.
         "redaction_mode": _enum(_obs_recorder._CONFIG.redaction_mode),
+        "spent_usd": _server_budget().spent_usd,
+        "max_usd": _server_budget().max_usd,
         "n_picks": len(sess.list_picks()),
         "n_rejects": len(sess.list_rejects()),
     }
@@ -640,6 +690,7 @@ def build_mcp_server(
     byte_store=None,
     include: "Optional[list[str]]" = None,
     name: str = "foley",
+    max_usd: "Optional[float]" = None,
 ):
     """Build the foley MCP server (lazy ``py2mcp``); registers the JSON-safe tool surface.
 
@@ -654,6 +705,8 @@ def build_mcp_server(
         byte_store: A ``MutableMapping[str, bytes]`` for previews / rendered mixes.
         include: Optional subset of tool names to expose.
         name: The MCP server name.
+        max_usd: The server's cumulative spend cap across every paid tool call, for
+            its lifetime (default :data:`foley.cost.DEFAULT_MAX_USD`, $1).
 
     Returns:
         A ``fastmcp.FastMCP`` server.
@@ -661,7 +714,7 @@ def build_mcp_server(
     from ..sources.registry import _validate_egress
 
     _validate_egress()
-    _configure(library=library, runtime=runtime, byte_store=byte_store)
+    _configure(library=library, runtime=runtime, byte_store=byte_store, max_usd=max_usd)
     _STATE["default_session"] = session
     from py2mcp import mk_mcp_server  # lazy: foley[mcp]
 

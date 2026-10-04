@@ -22,7 +22,9 @@ from typing import Optional
 from ..base import IntendedUse
 from ..index.ingest import IngestReport, IngestResult, ingest_one
 from ..licensing import DEFAULT_INTENDED_USE, keep
-from .registry import get_source, require_source_egress
+from ._dispatch import plan_search
+from .base import SourceConfigurationError
+from .registry import get_source
 
 
 def _add_from(
@@ -34,6 +36,7 @@ def _add_from(
     library=None,
     intended_use: Optional[IntendedUse] = None,
     adapter=None,
+    on_unsupported: Optional[str] = None,
     **affordances,
 ) -> IngestReport:
     """Search a live ``source`` and ingest its license-clean hits into ``library``.
@@ -58,6 +61,9 @@ def _add_from(
         adapter: An optional pre-built adapter to use instead of the registry's
             (the dependency-injection seam — a test passes a fake-transport
             adapter; production omits it and the registry lazily builds one).
+        on_unsupported: A search parameter the source cannot honour: ``None``
+            (default) drops it with a note in ``report.notes``; ``'raise'`` raises
+            (see :func:`foley.sources._dispatch.translate_affordances`).
         **affordances: Extra unified affordances forwarded to the adapter's
             ``search`` (e.g. ``duration_range``, ``sort``).
 
@@ -72,27 +78,41 @@ def _add_from(
     from ..index.library import default_library
 
     lib = library if library is not None else default_library()
-    if adapter is not None:
-        require_source_egress(source, getattr(adapter, "config", None))
     src_adapter = adapter if adapter is not None else get_source(source)["adapter"]
     use = intended_use if intended_use is not None else DEFAULT_INTENDED_USE
+    config = getattr(src_adapter, "config", None) or {}
+    # The one dispatch path (#53): call-time egress check + the unsupported-parameter
+    # policy over the extra search affordances; every drop is a report note.
+    search_kw, search_notes = plan_search(
+        source, config, affordances, on_unsupported=on_unsupported
+    )
 
     from ..obs.recorder import current_run
     from ..obs.trace import GENAI
 
-    report = IngestReport(root=f"{source}:{query}")
-    # A batch-level search failure (rate-limit 429 / 5xx / auth) yields an
-    # inspectable report with one error entry, never an unhandled exception.
+    report = IngestReport(root=f"{source}:{query}", notes=list(search_notes))
+    # A batch-level search failure (rate-limit 429 / 5xx) yields an inspectable report
+    # with one error entry; a configuration error (missing key) propagates (#64).
     try:
         # Retrieval child span (no-op unless obs is enabled, #11).
         with current_run().span("adapter.search", **{GENAI["data_source_id"]: source}):
             candidates = src_adapter.search(
-                query, license=license, k=limit, **affordances
+                query, license=license, k=limit, **search_kw
             )
+    except SourceConfigurationError:
+        raise
+    except ImportError as exc:
+        raise SourceConfigurationError(
+            f"{source!r} needs an optional dependency that is not installed "
+            f"({exc.name or exc}): pip install 'foley[{source.replace('_', '-')}]'"
+        ) from exc
     except Exception as exc:
         report.record(
-            IngestResult(id=f"{source}:search", status="error", error=repr(exc))
+            IngestResult(
+                id=f"{source}:search", status="error", error=f"{type(exc).__name__}: {exc}"
+            )
         )
+        report.exception = exc
         return report
 
     for cand in candidates:
@@ -126,6 +146,8 @@ def _add_from(
                 seed_tags=rec.tags,
                 commercial=use.commercial,  # the AI-use scope is judged under this intent
             )
+        except SourceConfigurationError:
+            raise
         except (
             Exception
         ) as exc:  # transient fetch/decode failure never aborts the batch

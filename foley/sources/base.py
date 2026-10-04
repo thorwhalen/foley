@@ -45,6 +45,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from ..base import Candidate, SoundRecord
 
 __all__ = [
+    "SourceConfigurationError",
     "ClipSpec",
     "CorpusAdapter",
     "SourceAdapter",
@@ -62,6 +63,15 @@ __all__ = [
     "corpora_in_rings",
     "select_corpora",
 ]
+
+
+class SourceConfigurationError(RuntimeError):
+    """A source cannot run until the user configures it: a missing key, plan or endpoint.
+
+    Not transient, so it is never recorded as one failed hit among many: the generate
+    and pull façades let it propagate, and its message names what to set (the env var
+    and, for a key, its sign-up URL) (#64).
+    """
 
 
 @dataclass

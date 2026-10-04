@@ -89,6 +89,7 @@ def score(
     master: str = "podcast",
     weave: Optional[bool] = None,
     llm: Optional[str] = None,
+    budget=None,
     **weave_kwargs,
 ) -> ScoreResult:
     """Choose sounds for narration text and (optionally) weave them into the narration audio.
@@ -120,6 +121,8 @@ def score(
         weave: Force weaving on/off; default auto (``True`` iff ``audio`` is given).
         llm: Which LLM the SELECT rungs use (``'fake'`` | ``'local'`` | ``'anthropic'``;
             ``None`` reads ``$FOLEY_LLM``, else the free default) — see :func:`foley.find`.
+        budget: The run's :class:`~foley.agent.policy.Budget` — one spend cap
+            (``max_usd``, default $1) across every segment's paid calls (#57).
         **weave_kwargs: Forwarded to :func:`foley.weave` (e.g. ``sign_cert``, ``watermark``).
 
     Returns:
@@ -140,12 +143,18 @@ def score(
         "intended_use": use,
         "llm": llm,
     }
+    if budget is not None:
+        find_kw["budget"] = budget  # its loop counts and its cap, for every segment
     if library is not None:
         find_kw["library"] = library
 
     all_candidates = []
     events: "list[ScoredEvent]" = []
-    with obs.run("score", params={"n_segments": len(segs), "verify": str(verify)}):
+    from .cost import spend_scope
+
+    with obs.run("score", params={"n_segments": len(segs), "verify": str(verify)}), spend_scope(
+        budget
+    ):
         for i, seg in enumerate(segs):
             for c in find(seg, **find_kw):
                 all_candidates.append(c)
