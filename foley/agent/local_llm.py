@@ -59,9 +59,9 @@ def _chat_json(
     """
     import json
 
-    from .llm import guard_llm_call
+    from .llm import charge_llm_call, guard_llm_call
 
-    guard_llm_call("local")  # call-time egress + cost (a remote endpoint is unknown cost)
+    est = guard_llm_call("local")  # call-time egress + cost (a remote endpoint: unknown)
     sys_prompt = (
         system + "\n\nReturn ONLY a single JSON object conforming to this JSON Schema "
         "(no prose, no markdown fences):\n" + json.dumps(schema)
@@ -76,6 +76,7 @@ def _chat_json(
         temperature=0,
         max_tokens=max_tokens,
     )
+    charge_llm_call(est)
     return json.loads(resp.choices[0].message.content)
 
 

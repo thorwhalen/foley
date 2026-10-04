@@ -31,6 +31,7 @@ __all__ = [
     "CostApprovalRequired",
     "estimate_call",
     "spend_scope",
+    "scoped_iter",
     "active_budget",
     "authorize",
     "charge",
@@ -42,7 +43,8 @@ DEFAULT_MAX_USD: float = 1.0
 #: Set to 1 to approve calls whose cost is unknown, for every run that does not say.
 APPROVE_UNKNOWN_COST_ENV = "FOLEY_APPROVE_UNKNOWN_COST"
 
-_ACTIVE_BUDGET: "ContextVar[object | None]" = ContextVar("foley_budget", default=None)
+#: The budgets in force, outermost first (see :func:`spend_scope`).
+_ACTIVE_BUDGET: "ContextVar[tuple]" = ContextVar("foley_budget", default=())
 
 
 class BudgetExceeded(RuntimeError):
@@ -87,58 +89,95 @@ def estimate_call(config: dict, **affordances) -> Optional[float]:
     return None
 
 
+def _stack() -> tuple:
+    return _ACTIVE_BUDGET.get() or ()
+
+
 def active_budget():
-    """The :class:`~foley.agent.policy.Budget` of the current run, or ``None``."""
-    return _ACTIVE_BUDGET.get()
+    """The innermost :class:`~foley.agent.policy.Budget` of the current run, or ``None``."""
+    stack = _stack()
+    return stack[-1] if stack else None
 
 
 @contextmanager
 def spend_scope(budget=None):
-    """Make ``budget`` the active one for the block (nested scopes keep the outer one).
+    """Put ``budget`` in force for the block; every enclosing budget stays in force too.
 
-    A ``find`` that generates opens one scope; the ``generate`` calls inside it charge
-    the same budget, so the cap is cumulative across the whole run. With no
-    ``budget`` and no active one, a fresh default :class:`~foley.agent.policy.Budget`
-    is used.
+    Budgets stack: a paid call must fit **every** budget in force (so an explicit,
+    stricter ``budget`` inside a ``find`` / ``score`` run still applies) and is charged
+    to each of them once. With no ``budget``: inside a run, nothing changes; outside
+    one, a fresh default :class:`~foley.agent.policy.Budget` is used ($1).
 
     Yields:
-        The budget in force.
+        The innermost budget in force.
     """
-    outer = _ACTIVE_BUDGET.get()
-    if outer is not None:
-        yield outer
+    stack = _stack()
+    if budget is None and stack:
+        yield stack[-1]
         return
     if budget is None:
         from .agent.policy import Budget
 
         budget = Budget()
-    token = _ACTIVE_BUDGET.set(budget)
+    if any(b is budget for b in stack):
+        yield budget
+        return
+    token = _ACTIVE_BUDGET.set((*stack, budget))
     try:
         yield budget
     finally:
         _ACTIVE_BUDGET.reset(token)
 
 
-def authorize(estimate_usd: Optional[float], *, what: str) -> None:
-    """Refuse a paid call before it is made if the active run cannot afford it.
+def scoped_iter(iterator_factory, budget=None):
+    """Iterate ``iterator_factory()`` with ``budget`` in force only while it runs.
 
-    No active budget means a fresh default one (this single call is the run).
+    A generator that holds a :func:`spend_scope` across ``yield`` would leave its
+    budget active in the caller's context between items (so the caller's own calls, or
+    another interleaved stream, would charge it). This re-enters the scope for each
+    step and leaves it before handing the item out.
+    """
+    stack = _stack()
+    if budget is None:
+        if stack:
+            budget = stack[-1]
+        else:
+            from .agent.policy import Budget
+
+            budget = Budget()
+    iterator = None
+    while True:
+        with spend_scope(budget):
+            if iterator is None:
+                iterator = iter(iterator_factory())
+            try:
+                item = next(iterator)
+            except StopIteration:
+                return
+        yield item
+
+
+def authorize(estimate_usd: Optional[float], *, what: str) -> None:
+    """Refuse a paid call before it is made if any budget in force cannot afford it.
+
+    With no budget in force, a fresh default one (this single call is the run).
 
     Raises:
-        CostApprovalRequired: If ``estimate_usd`` is ``None`` and unknown costs are not
-            approved (``Budget.approve_unknown_cost`` or ``$FOLEY_APPROVE_UNKNOWN_COST``).
-        BudgetExceeded: If the run's spend plus ``estimate_usd`` exceeds ``max_usd``.
+        CostApprovalRequired: If ``estimate_usd`` is ``None`` and a budget in force has
+            not approved unknown costs (``Budget.approve_unknown_cost`` /
+            ``$FOLEY_APPROVE_UNKNOWN_COST``).
+        BudgetExceeded: If a budget's spend plus ``estimate_usd`` exceeds its ``max_usd``.
     """
-    budget = _ACTIVE_BUDGET.get()
-    if budget is None:
+    stack = _stack()
+    if not stack:
         from .agent.policy import Budget
 
-        budget = Budget()
-    budget.authorize(estimate_usd, what=what)
+        stack = (Budget(),)
+    for budget in stack:
+        budget.authorize(estimate_usd, what=what)
 
 
 def charge(usd: Optional[float]) -> None:
-    """Record ``usd`` against the active run's budget (a no-op with no active run)."""
-    budget = _ACTIVE_BUDGET.get()
-    if budget is not None:
+    """Record ``usd`` against every budget in force (a no-op outside any run)."""
+    for budget in _stack():
         budget.charge(usd)

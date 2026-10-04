@@ -42,7 +42,7 @@ from typing import Optional
 
 from ..base import Candidate, CandidateOrigin
 from ..index.ingest import IngestReport, IngestResult, ingest_one
-from ._dispatch import plan_generation, run_generation
+from ._dispatch import plan_generation, record_generation_outcome, run_generation
 from .base import SourceConfigurationError
 from .registry import get_source
 
@@ -345,7 +345,10 @@ def _generate(
             )
         )
         report.exception = exc
+        record_generation_outcome(plan, "error", cache=generations_cache)
         return report
+
+    record_generation_outcome(plan, res.status, cache=generations_cache)
 
     # Write the content-credential sidecar ONLY for a freshly stored clip — a
     # quarantined (QC-failed), duplicate, or errored generation was never added to the

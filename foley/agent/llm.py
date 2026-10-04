@@ -41,6 +41,8 @@ __all__ = [
     "require_llm_egress",
     "llm_call_estimate",
     "guard_llm_call",
+    "charge_llm_call",
+    "RUNG_MAX_TOKENS",
     "is_loopback_host",
 ]
 
@@ -107,31 +109,91 @@ def require_llm_egress(provider: str) -> None:
     require_egress(llm_egress(provider), what=f"LLM provider {provider!r}")
 
 
-def llm_call_estimate(provider: str) -> Optional[float]:
-    """The USD cost of one rung call: ``0.0`` for the fake and an on-device endpoint.
+#: Anthropic first-party prices, USD per million tokens ``(input, output)``. Source: the
+#: Claude API model table (claude-api reference, cached 2026-09-25). A model not listed
+#: here has an unknown price, so its calls need the run's approval.
+ANTHROPIC_PRICES_PER_MTOK: "dict[str, tuple[float, float]]" = {
+    "claude-opus-4-8": (5.0, 25.0),
+    "claude-opus-5": (5.0, 25.0),
+    "claude-opus-5-5": (4.0, 20.0),
+    "claude-sonnet-5-5": (2.0, 10.0),
+    "claude-haiku-4-5": (1.0, 5.0),
+}
+PRICES_SEEN = "2026-09-25"
 
-    Anthropic's (and a remote endpoint's) per-call cost depends on tokens foley does not
-    know in advance, so it is ``None`` — unknown — and needs the run's approval (#57).
+#: The input-token bound assumed for one rung call (system prompt + schema + passage).
+#: The rungs send short prompts; this is a deliberately generous ceiling.
+INPUT_TOKEN_BOUND = 4000
+
+#: Default ``max_tokens`` of each rung (the classes read these, so estimates match).
+RUNG_MAX_TOKENS = {"decomposer": 2000, "refiner": 500, "judge": 500}
+
+
+def llm_call_estimate(
+    provider: str, *, model: Optional[str] = None, max_tokens: Optional[int] = None
+) -> Optional[float]:
+    """An upper bound on one rung call's USD cost, or ``None`` when it is unknown.
+
+    ``0.0`` for the fake and an on-device endpoint. For Anthropic:
+    ``INPUT_TOKEN_BOUND`` × input price + ``max_tokens`` × output price (thinking
+    tokens count toward ``max_tokens``, so the bound holds). A remote endpoint, or an
+    Anthropic model with no listed price, is ``None``.
     """
     if provider == "fake" or (provider == "local" and _local_endpoint_is_loopback()):
         return 0.0
-    return None
+    if provider != "anthropic":
+        return None
+    from ._genai import DEFAULT_AGENT_MODEL
+
+    prices = ANTHROPIC_PRICES_PER_MTOK.get(model or DEFAULT_AGENT_MODEL)
+    if prices is None:
+        return None
+    tokens_out = max_tokens if max_tokens is not None else max(RUNG_MAX_TOKENS.values())
+    return (INPUT_TOKEN_BOUND * prices[0] + tokens_out * prices[1]) / 1e6
 
 
-def guard_llm_call(provider: str) -> None:
+def _usage_cost(model: Optional[str], response) -> Optional[float]:
+    """The actual USD cost of an Anthropic response from its ``usage``, if priceable."""
+    from ._genai import DEFAULT_AGENT_MODEL
+
+    usage = getattr(response, "usage", None)
+    prices = ANTHROPIC_PRICES_PER_MTOK.get(model or DEFAULT_AGENT_MODEL)
+    tin = getattr(usage, "input_tokens", None)
+    tout = getattr(usage, "output_tokens", None)
+    if prices is None or not isinstance(tin, int) or not isinstance(tout, int):
+        return None
+    return (tin * prices[0] + tout * prices[1]) / 1e6
+
+
+def guard_llm_call(
+    provider: str, *, model: Optional[str] = None, max_tokens: Optional[int] = None
+) -> Optional[float]:
     """The call-time check every real rung runs before calling its model.
 
-    Egress (:func:`require_llm_egress`), then cost: the call is authorized against the
-    active run's budget (:func:`foley.cost.authorize`) and charged. An unknown cost
-    raises :class:`~foley.cost.CostApprovalRequired` unless the run approves it.
+    Egress (:func:`require_llm_egress`), then cost: the call's upper bound
+    (:func:`llm_call_estimate`) is authorized against every budget in force
+    (:func:`foley.cost.authorize`) — so paid LLM calls count toward the run's
+    ``max_usd`` — and an unknown cost needs approval. Call :func:`charge_llm_call`
+    after the response.
+
+    Returns:
+        The estimate (pass it to :func:`charge_llm_call`).
     """
-    from ..cost import authorize, charge
+    from ..cost import authorize
 
     require_llm_egress(provider)
-    estimate = llm_call_estimate(provider)
+    estimate = llm_call_estimate(provider, model=model, max_tokens=max_tokens)
     if estimate != 0.0:
         authorize(estimate, what=f"an LLM call via {provider!r}")
-    charge(estimate)
+    return estimate
+
+
+def charge_llm_call(estimate: Optional[float], *, model=None, response=None) -> None:
+    """Charge a rung call: its actual cost from ``response.usage`` when priceable, else the estimate."""
+    from ..cost import charge
+
+    actual = _usage_cost(model, response) if response is not None else None
+    charge(actual if actual is not None else estimate)
 
 
 def resolve_llm(llm: Optional[str] = None, *, implicit_local: bool = True) -> str:

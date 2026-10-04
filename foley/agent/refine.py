@@ -17,6 +17,7 @@ from __future__ import annotations
 import re
 from typing import Optional
 
+from .llm import RUNG_MAX_TOKENS
 from ._genai import DEFAULT_AGENT_MODEL, record_genai
 from .protocols import Refiner
 
@@ -88,7 +89,7 @@ class AnthropicRefiner:
     """
 
     def __init__(
-        self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = 500
+        self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = RUNG_MAX_TOKENS["refiner"]
     ):
         self._client = client
         self.model = model
@@ -101,9 +102,10 @@ class AnthropicRefiner:
         """Call Claude for ``n`` paraphrases; the original ``query`` is always first."""
         import json
 
-        from .llm import guard_llm_call
+        from .llm import charge_llm_call, guard_llm_call
 
-        guard_llm_call("anthropic")  # call-time egress + cost: holds for an injected rung
+        # call-time egress + cost (holds for an injected rung too)
+        est = guard_llm_call("anthropic", model=self.model, max_tokens=self.max_tokens)
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path
@@ -122,6 +124,7 @@ class AnthropicRefiner:
                 "format": {"type": "json_schema", "schema": _REFINE_JSON_SCHEMA}
             },
         )
+        charge_llm_call(est, model=self.model, response=resp)
         self.last_response = resp
         text = next(b.text for b in resp.content if getattr(b, "type", None) == "text")
         paraphrases = json.loads(text).get("paraphrases", [])

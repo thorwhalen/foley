@@ -263,6 +263,22 @@ class GenerationsCache:
     audio: MutableMapping[str, bytes]
     requests: MutableMapping[str, dict]
 
+    def evict(self, request_key: str, *, keep_audio: bool = False) -> None:
+        """Forget a cached request (so the next identical one generates anew).
+
+        Args:
+            request_key: The request digest (noted on the result that cached it).
+            keep_audio: Keep the bytes (default: delete them too, unless another
+                request still points at them).
+        """
+        entry = self.requests.pop(request_key, None)
+        if not entry or keep_audio:
+            return
+        key = entry.get("content_key")
+        still_used = any(e.get("content_key") == key for e in self.requests.values())
+        if key and not still_used and key in self.audio:
+            del self.audio[key]
+
 
 def make_generations_store(
     rootdir: Rootdir = DEFAULT_GENERATIONS_DIR,

@@ -101,6 +101,11 @@ def _add_from(
             )
     except SourceConfigurationError:
         raise
+    except ImportError as exc:
+        raise SourceConfigurationError(
+            f"{source!r} needs an optional dependency that is not installed "
+            f"({exc.name or exc}): pip install 'foley[{source.replace('_', '-')}]'"
+        ) from exc
     except Exception as exc:
         report.record(
             IngestResult(

@@ -821,14 +821,15 @@ def ingest(
 def estimate(verb: str, **kwargs):
     """What a call would cost in USD before making it — ``None`` when it cannot be known (#57).
 
-    ``None`` is never "free": it means the price is unknown (no pricing declared, or a
-    paid LLM whose token use is not known in advance), and such a call needs the run's
-    approval (``Budget(approve_unknown_cost=True)``).
+    ``None`` is never "free": it means the price is unknown (no pricing declared, a
+    remote LLM endpoint, an unlisted model), and such a call needs the run's approval
+    (``Budget(approve_unknown_cost=True)``). Paid amounts are upper bounds.
 
     Args:
-        verb: ``'generate'`` (``backend=``, plus the generation affordances, e.g.
-            ``duration``); ``'find'`` / ``'score'`` (an upper bound: ``max_events``
-            generations through ``backend`` plus the LLM rungs of ``llm``);
+        verb: ``'generate'`` (``backend=``, plus the generation affordances — priced
+            exactly as the call would be: same drops, same clamp); ``'find'`` /
+            ``'score'`` (the run's upper bound: every generation and LLM call it could
+            make — what ``find`` checks against its budget before the first paid call);
             ``'search'`` / ``'similar'`` / ``'ingest'`` (local: ``0.0``);
             ``'add_from'`` (``source=``).
         **kwargs: The same keywords the verb takes.
@@ -837,33 +838,25 @@ def estimate(verb: str, **kwargs):
         ValueError: For an unknown verb.
         KeyError: For an unknown backend / source.
     """
-    from .agent.llm import llm_call_estimate, resolve_llm
+    from .agent.tools import estimate_find_usd
     from .cost import estimate_call
-    from .sources.registry import get_source as _get
-
-    def _config(name):
-        from .sources.registry import SOURCE_REGISTRY, discover_sources
-
-        discover_sources()
-        if name not in SOURCE_REGISTRY:
-            _get(name)  # raises the informative KeyError
-        return SOURCE_REGISTRY[name]["config"]
+    from .sources._dispatch import estimate_generation
+    from .sources.registry import SOURCE_REGISTRY, discover_sources, get_source as _get
 
     if verb in ("search", "similar", "ingest"):
         return 0.0
     if verb == "add_from":
-        return estimate_call(_config(kwargs["source"]))
+        discover_sources()
+        name = kwargs["source"]
+        if name not in SOURCE_REGISTRY:
+            _get(name)
+        return estimate_call(SOURCE_REGISTRY[name]["config"])
     if verb == "generate":
         backend = kwargs.pop("backend", None) or "stable_audio"
-        return estimate_call(_config(backend), **kwargs)
+        return estimate_generation(backend, **kwargs)
     if verb in ("find", "score"):
-        backend = kwargs.get("backend") or "auto"
-        backend = "stable_audio" if backend == "auto" else backend
-        per_gen = estimate_call(_config(backend), **{"duration": kwargs.get("duration")})
-        llm_cost = llm_call_estimate(resolve_llm(kwargs.get("llm")))
-        if per_gen is None or llm_cost is None:
-            return None
-        return float(kwargs.get("max_events", 6)) * per_gen + llm_cost
+        keys = ("max_events", "backend", "llm", "k", "verify", "max_refine_loops")
+        return estimate_find_usd(**{key: kwargs[key] for key in keys if key in kwargs})
     raise ValueError(
         f"estimate() knows generate, find, score, search, similar, ingest, add_from; got {verb!r}"
     )

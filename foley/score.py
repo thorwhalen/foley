@@ -143,6 +143,8 @@ def score(
         "intended_use": use,
         "llm": llm,
     }
+    if budget is not None:
+        find_kw["budget"] = budget  # its loop counts and its cap, for every segment
     if library is not None:
         find_kw["library"] = library
 

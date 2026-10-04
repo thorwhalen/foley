@@ -46,6 +46,8 @@ __all__ = [
     "plan_generation",
     "run_generation",
     "plan_search",
+    "estimate_generation",
+    "record_generation_outcome",
 ]
 
 #: How a parameter the source cannot honour is handled (``None`` = the source's default).
@@ -158,11 +160,33 @@ def request_digest(backend: str, prompt: str, config: dict, affordances: dict, s
         "backend": backend,
         "model": nd.get("generator_version") or nd.get("model_id"),
         "prompt": prompt,
-        "affordances": affordances,
+        "affordances": _canonical_affordances(config, affordances),
         "salt": salt,
     }
     blob = json.dumps(payload, sort_keys=True, default=str, separators=(",", ":"))
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def _canonical_affordances(config: dict, affordances: dict) -> dict:
+    """``affordances`` with each supported default filled in and numbers as floats.
+
+    So ``duration=2`` and ``duration=2.0``, or an omitted ``prompt_influence`` and its
+    default ``0.3``, are the same request and hit the same cache entry.
+    """
+    out = {}
+    for name in config.get("supported_affordances") or ():
+        aff = GENERATION_AFFORDANCES.get(name)
+        if name in affordances:
+            out[name] = affordances[name]
+        elif aff is not None and aff.default is not None:
+            out[name] = aff.default
+    for name, value in affordances.items():
+        out.setdefault(name, value)
+    return {
+        k: (float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else v)
+        for k, v in out.items()
+        if v is not None
+    }
 
 
 def _is_paid(config: dict) -> bool:
@@ -222,7 +246,6 @@ def plan_generation(
         config = getattr(adapter, "config", None) or SOURCE_REGISTRY.get(backend, {}).get(
             "config", {}
         )
-    require_source_egress(backend, config)
     kept, notes = translate_affordances(config, affordances, on_unsupported=on_unsupported)
     plan = GenerationPlan(
         backend=backend,
@@ -232,17 +255,25 @@ def plan_generation(
         notes=notes,
         estimate_usd=estimate_call(config, **kept),
     )
-    if not _is_paid(config):
-        return plan
-    salt_fn = getattr(adapter, "request_salt", None)
-    salt = salt_fn() if callable(salt_fn) else None  # may raise SourceConfigurationError
-    plan.request_key = request_digest(backend, prompt, config, kept, salt)
-    cache = cache if cache is not None else _default_cache()
-    if reuse_cached:
-        plan.cached = _cached_clip(cache, plan.request_key)
-        if plan.cached is not None:
-            return plan
-    authorize(plan.estimate_usd, what=f"generate via {backend!r}")
+    if _is_paid(config):
+        from .base import SourceConfigurationError
+
+        salt_fn = getattr(adapter, "request_salt", None)
+        try:
+            salt = salt_fn() if callable(salt_fn) else None
+        except SourceConfigurationError:
+            require_source_egress(backend, config)  # offline wins over a missing plan
+            raise
+        plan.request_key = request_digest(backend, prompt, config, kept, salt)
+        if reuse_cached:
+            # A paid sound already on this disk needs no egress and no spend.
+            cache = cache if cache is not None else _default_cache()
+            plan.cached = _cached_clip(cache, plan.request_key, plan.notes)
+            if plan.cached is not None:
+                return plan
+    require_source_egress(backend, config)
+    if _is_paid(config):
+        authorize(plan.estimate_usd, what=f"generate via {backend!r}")
     return plan
 
 
@@ -257,6 +288,7 @@ def run_generation(plan: GenerationPlan, adapter, *, cache=None):
         plan's, and ``candidate.cost_estimate_usd`` / ``cost_actual_usd`` set.
     """
     from ..cost import charge
+    from .base import SourceConfigurationError
 
     if plan.cached is not None:
         clip = plan.cached
@@ -264,15 +296,52 @@ def run_generation(plan: GenerationPlan, adapter, *, cache=None):
         clip.candidate.cost_actual_usd = 0.0
         clip.notes = [*plan.notes, *clip.notes]
         return clip
-    clip = adapter.generate(plan.prompt, **plan.affordances)
+    try:
+        clip = adapter.generate(plan.prompt, **plan.affordances)
+    except SourceConfigurationError:
+        raise  # refused before any request was sent: nothing to charge
+    except ImportError as exc:
+        raise SourceConfigurationError(
+            f"{plan.backend!r} needs an optional dependency that is not installed "
+            f"({exc.name or exc}): pip install 'foley[{plan.backend.replace('_', '-')}]'"
+        ) from exc
+    except Exception:
+        # The request may have been sent and billed even though it failed (a read
+        # timeout after the server accepted it): count it.
+        charge(plan.estimate_usd)
+        raise
     charge(plan.estimate_usd)
     clip.notes = [*plan.notes, *clip.notes]
     clip.candidate.cost_estimate_usd = plan.estimate_usd
     if plan.request_key is not None:
         cache = cache if cache is not None else _default_cache()
-        _store_clip(cache, plan, clip)
-        clip.notes.append(f"paid generation kept in the generations cache: {plan.request_key}")
+        try:
+            _store_clip(cache, plan, clip)
+        except Exception as exc:  # noqa: BLE001 - never lose paid bytes over a cache write
+            clip.notes.append(f"could not keep the paid generation in the cache: {exc!r}")
+        else:
+            clip.notes.append(
+                f"paid generation kept in the generations cache: {plan.request_key}"
+            )
     return clip
+
+
+def record_generation_outcome(plan: GenerationPlan, status: str, *, cache=None) -> None:
+    """Remember how a paid generation's ingest ended, so a bad result is not replayed.
+
+    A request whose bytes were quarantined (or failed to ingest) is served from the
+    cache no more: the next identical request generates anew. Its bytes stay
+    retrievable under the content key.
+    """
+    if plan.request_key is None or plan.cached is not None:
+        return
+    cache = cache if cache is not None else _default_cache()
+    try:
+        entry = dict(cache.requests[plan.request_key])
+        entry["status"] = status
+        cache.requests[plan.request_key] = entry
+    except Exception:  # noqa: BLE001 - bookkeeping only
+        return
 
 
 def _default_cache():
@@ -295,30 +364,76 @@ def _store_clip(cache, plan: GenerationPlan, clip) -> None:
         "license": sound.license.to_dict(),
         "caption": sound.caption,
         "tags": list(sound.tags or []),
-        "notes": list(clip.notes),
+        "notes": [n for n in clip.notes if n not in plan.notes],  # the adapter's own
         "estimate_usd": plan.estimate_usd,
     }
 
 
-def _cached_clip(cache, request_key: str):
-    """Rebuild the :class:`GeneratedClip` of a cached request, or ``None``."""
+#: Ingest outcomes after which a cached generation is not replayed.
+_NOT_REPLAYED = frozenset({"quarantined", "error", "rights_blocked"})
+
+
+def _cached_clip(cache, request_key: str, notes: list):
+    """Rebuild the :class:`GeneratedClip` of a cached request, or ``None`` (a miss).
+
+    A corrupt or out-of-date entry, or one whose earlier ingest failed, is a miss with
+    a note: it never raises. The licence's flags are re-derived from its id, so a
+    correction to the licence table reaches cached sounds.
+    """
     from ..base import Candidate, CandidateOrigin, LicenseRecord, SoundRecord
+    from ..licensing import apply_license_flags
     from .base import GeneratedClip
 
-    entry = cache.requests.get(request_key) if hasattr(cache.requests, "get") else None
-    if not entry or entry.get("content_key") not in cache.audio:
+    try:
+        entry = cache.requests.get(request_key) if hasattr(cache.requests, "get") else None
+        if not entry:
+            return None
+        if entry.get("status") in _NOT_REPLAYED:
+            notes.append(
+                f"the cached result of this request was {entry['status']}; generating anew"
+            )
+            return None
+        if entry.get("content_key") not in cache.audio:
+            return None
+        lic = LicenseRecord.from_dict(entry["license"])
+        apply_license_flags(lic, overrides={"cache_bytes_ok": lic.cache_bytes_ok})
+        record = SoundRecord(
+            id=f"{entry['backend']}:pending",
+            license=lic,
+            caption=entry.get("caption"),
+            tags=list(entry.get("tags") or []),
+        )
+        audio = cache.audio[entry["content_key"]]
+    except Exception as exc:  # noqa: BLE001 - a bad cache entry is a miss, not a crash
+        notes.append(f"generations cache entry {request_key} unreadable ({exc!r}); ignored")
         return None
-    record = SoundRecord(
-        id=f"{entry['backend']}:pending",
-        license=LicenseRecord.from_dict(entry["license"]),
-        caption=entry.get("caption"),
-        tags=list(entry.get("tags") or []),
-    )
     return GeneratedClip(
-        audio_bytes=cache.audio[entry["content_key"]],
+        audio_bytes=audio,
         candidate=Candidate(sound=record, origin=CandidateOrigin.generated),
-        notes=[f"served from the generations cache ({request_key}); no paid call"],
+        notes=[
+            *list(entry.get("notes") or []),
+            f"served from the generations cache ({request_key}); no paid call",
+        ],
     )
+
+
+def estimate_generation(backend: str, **affordances) -> Optional[float]:
+    """What :func:`plan_generation` would price this call at (same translation and clamp).
+
+    Unsupported parameters are dropped silently here (an estimate never raises for
+    them); the real call still applies the policy.
+    """
+    from ..cost import estimate_call
+    from .registry import SOURCE_REGISTRY, discover_sources, get_source
+
+    discover_sources()
+    if backend not in SOURCE_REGISTRY:
+        get_source(backend)  # raises the informative KeyError
+    config = SOURCE_REGISTRY[backend]["config"]
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        kept, _ = translate_affordances(config, affordances, on_unsupported="note")
+    return estimate_call(config, **kept)
 
 
 def plan_search(

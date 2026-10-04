@@ -190,26 +190,107 @@ def test_find_stops_before_the_first_paid_call_over_budget(paid_source, fake_emb
     """The acceptance line: a find whose estimate exceeds the budget never pays."""
     idx = MemoryIndex(dim=fake_embedder.dim)
     empty = SoundLibrary(sounds={}, meta={}, vindex=idx, kindex=idx, embedder=fake_embedder)
-    adapter = paid_source("pricey2", amount=2.0)
-    hits = foley.find(DEMO, library=empty, backend="pricey2", budget=Budget(max_usd=1.0))
-    assert adapter.calls == 0 and hits == []
+    adapter = paid_source("pricey2", amount=0.30)  # 6 events x $0.30 = $1.80 > $1
+    assert foley.estimate("find", backend="pricey2") == pytest.approx(1.80)
+    with pytest.raises(BudgetExceeded, match="upper bound"):
+        foley.find(DEMO, library=empty, backend="pricey2", budget=Budget(max_usd=1.0))
+    assert adapter.calls == 0
+    foley.find(DEMO, library=empty, backend="pricey2", budget=Budget(max_usd=2.0))
+    assert adapter.calls >= 1  # within budget, it does generate
 
 
-def test_the_cap_is_cumulative_across_events(paid_source, fake_embedder):
-    idx = MemoryIndex(dim=fake_embedder.dim)
-    empty = SoundLibrary(sounds={}, meta={}, vindex=idx, kindex=idx, embedder=fake_embedder)
+def test_the_cap_is_cumulative_across_calls_in_one_run(paid_source, library):
+    from foley.cost import spend_scope
+
     adapter = paid_source("sixty", amount=0.60)
-    budget = Budget(max_usd=1.0)
-    foley.find(DEMO, library=empty, backend="sixty", budget=budget, verify="clap")
-    assert adapter.calls == 1  # a second $0.60 generation would pass $1
-    assert budget.spent_usd == pytest.approx(0.60)
+    with spend_scope(Budget(max_usd=1.0)) as budget:
+        foley.generate("a door creaks", backend="sixty", library=library)
+        with pytest.raises(BudgetExceeded):
+            foley.generate("rain on a roof", backend="sixty", library=library)
+    assert adapter.calls == 1 and budget.spent_usd == pytest.approx(0.60)
 
 
-def test_a_paid_llm_rung_needs_approval(monkeypatch, library):
+def test_a_stricter_inner_budget_still_applies(paid_source, library):
+    from foley.cost import spend_scope
+
+    adapter = paid_source("fifty", amount=0.50)
+    with spend_scope(Budget(max_usd=10.0)):
+        with pytest.raises(BudgetExceeded):
+            foley.generate("a door", backend="fifty", library=library,
+                           budget=Budget(max_usd=0.10))
+    assert adapter.calls == 0
+
+
+def test_paid_llm_calls_count_toward_the_cap(monkeypatch, library):
+    """'$1 per run, LLM calls included': Anthropic calls are priced, so they are capped."""
     pytest.importorskip("anthropic")
+    from foley.agent.llm import llm_call_estimate
+
     monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
-    with pytest.raises(CostApprovalRequired, match="LLM"):
+    assert llm_call_estimate("anthropic", max_tokens=500) > 0
+    assert foley.estimate("find", llm="anthropic") > 1.0  # 6 events x 10 judge calls ...
+    with pytest.raises(BudgetExceeded, match="upper bound"):
         foley.find(DEMO, library=library, llm="anthropic")
+
+
+def test_a_paid_rung_is_charged_its_actual_usage(monkeypatch):
+    from types import SimpleNamespace
+
+    from foley.agent.verify import AnthropicJudge
+    from foley.base import SoundEvent
+    from foley.cost import spend_scope
+
+    class _Client:
+        class messages:  # noqa: N801
+            @staticmethod
+            def create(**kw):
+                text = SimpleNamespace(type="text", text='{"match": true, "confidence": 0.9, "reason": "ok"}')
+                return SimpleNamespace(content=[text], model="claude-opus-4-8", stop_reason="end_turn",
+                                       usage=SimpleNamespace(input_tokens=1000, output_tokens=100))
+
+    cand = Candidate(sound=SoundRecord(id="x", caption="door"))
+    with spend_scope(Budget(max_usd=1.0)) as budget:
+        AnthropicJudge(client=_Client()).judge(SoundEvent(query="door"), cand)
+    assert budget.spent_usd == pytest.approx((1000 * 5 + 100 * 25) / 1e6)
+
+
+def test_a_failed_call_that_may_have_billed_is_still_charged(paid_source, library):
+    from foley.cost import spend_scope
+
+    adapter = paid_source("timeout", amount=0.40)
+
+    def boom(prompt, **kw):
+        raise TimeoutError("read timeout after the request was accepted")
+
+    adapter.generate = boom
+    with spend_scope(Budget(max_usd=1.0)) as budget:
+        for _ in range(2):
+            with pytest.raises(foley.GenerationError):
+                foley.generate("a door", backend="timeout", library=library)
+        with pytest.raises(BudgetExceeded):
+            foley.generate("a door", backend="timeout", library=library)
+    assert budget.spent_usd == pytest.approx(0.80)
+
+
+def test_a_stream_does_not_lend_its_budget_to_the_caller(paid_source, library, fake_embedder):
+    from foley.cost import active_budget
+
+    stream = foley.find(DEMO, library=library, stream=True, budget=Budget(max_usd=5.0))
+    next(stream, None)
+    assert active_budget() is None  # between items, the stream's budget is not in force
+
+
+def test_an_mcp_session_is_one_run_for_the_cap(paid_source, library):
+    from foley.agent import mcp
+
+    adapter = paid_source("mcpgen", amount=0.40)
+    mcp._configure(library=library)
+    mcp._STATE["budgets"].clear()
+    results = [mcp.foley_generate(f"door {i}", backend="mcpgen", session="s1") for i in range(4)]
+    assert [r["ok"] for r in results] == [True, True, False, False]
+    assert adapter.calls == 2 and "cap" in results[2]["error"]
+    assert mcp.foley_status(session="s1")["spent_usd"] == pytest.approx(0.80)
+    mcp._STATE["budgets"].clear()
 
 
 # ---------------------------------------------------------------------------
@@ -278,3 +359,72 @@ def test_a_backend_failure_is_chained_into_generation_error(library, paid_source
     with pytest.raises(foley.GenerationError, match="upstream 503") as exc:
         foley.generate("a door creaks", backend="flaky", library=library)
     assert isinstance(exc.value.__cause__, RuntimeError)
+
+
+def test_a_quarantined_request_is_not_replayed(library, paid_source):
+    adapter = paid_source("silent2", amount=0.05, silent=True)
+    for _ in range(2):
+        with pytest.raises(foley.GenerationError):
+            foley.generate("a door creaks", backend="silent2", library=library)
+    assert adapter.calls == 2  # the bad result is kept, not served again
+
+
+def test_a_corrupt_cache_entry_is_a_miss(library, paid_source, _in_memory_generations_cache):
+    adapter = paid_source("corrupt", amount=0.05)
+    foley.generate("a door creaks", backend="corrupt", library=library)
+    for key in _in_memory_generations_cache.requests:
+        _in_memory_generations_cache.requests[key] = {"content_key": None, "license": {}}
+    cand = foley.generate("a door creaks", backend="corrupt", library=library)
+    assert adapter.calls == 2 and cand.sound.id
+
+
+def test_a_failed_cache_write_keeps_the_paid_sound(library, paid_source, monkeypatch):
+    from foley.sources import _dispatch
+    from foley.stores import GenerationsCache
+
+    class Full(dict):
+        def __setitem__(self, k, v):
+            raise OSError("disk full")
+
+    monkeypatch.setattr(_dispatch, "_default_cache", lambda: GenerationsCache(Full(), {}))
+    paid_source("fullgen", amount=0.05)
+    cand = foley.generate("a door creaks", backend="fullgen", library=library)
+    assert cand.sound.id in library.meta
+    assert any("could not keep" in n for n in cand.notes)
+
+
+def test_a_cache_hit_keeps_the_adapters_notes(library, paid_source):
+    adapter = paid_source("noted", amount=0.05)
+    original = adapter.generate
+
+    def with_note(prompt, **kw):
+        clip = original(prompt, **kw)
+        clip.notes.append("output_format substituted: flac -> mp3")
+        return clip
+
+    adapter.generate = with_note
+    foley.generate("a door", backend="noted", library=library)
+    second = foley.generate("a door", backend="noted", library=library)
+    assert any("substituted" in n for n in second.notes)
+
+
+def test_an_identical_request_spelled_differently_is_one_cache_entry(library, paid_source):
+    adapter = paid_source("spelled", amount=0.05)
+    foley.generate("a door", backend="spelled", library=library, duration=2)
+    foley.generate("a door", backend="spelled", library=library, duration=2.0)
+    assert adapter.calls == 1
+
+
+def test_a_missing_extra_is_a_configuration_error(library, paid_source):
+    adapter = paid_source("noextra", amount=0.05)
+
+    def needs_torch(prompt, **kw):
+        raise ModuleNotFoundError("No module named 'torch'", name="torch")
+
+    adapter.generate = needs_torch
+    with pytest.raises(SourceConfigurationError, match="pip install"):
+        foley.generate("a door", backend="noextra", library=library)
+
+
+def test_estimate_prices_the_call_as_it_would_be_made():
+    assert foley.estimate("generate", backend="elevenlabs", duration=60) == pytest.approx(0.06)

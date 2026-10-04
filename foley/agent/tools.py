@@ -231,12 +231,21 @@ def _generate_and_reverify(
     from ..runtime import EgressBlocked
     from ..sources import GenerationError  # lazy: keeps import foley dol-only
 
+    from ..sources.base import SourceConfigurationError
+
     try:
         gc = generate_sound(event.query, backend=backend, library=library)
-    except (GenerationError, EgressBlocked, BudgetExceeded):
-        # Refused, failed, an external backend under offline(), or a paid call the
-        # run's budget does not allow (nothing was called): skip generation; the
-        # caller falls back to the best verified retrieval.
+    except (BudgetExceeded, SourceConfigurationError) as exc:
+        # Generation is find's optional fallback: an exhausted enclosing budget, or a
+        # backend that is not set up (no key, no plan, extra not installed), skips it —
+        # loudly, since nothing was generated — and find falls back to retrieval.
+        import warnings
+
+        warnings.warn(f"generation skipped: {exc}", UserWarning, stacklevel=2)
+        return None
+    except (GenerationError, EgressBlocked):
+        # Refused, failed, or an external backend under offline(): skip generation;
+        # the caller falls back to the best verified retrieval.
         return None
     gc.event = event  # (origin is already 'generated' from foley.generate)
     if not gate_candidates([gc], intended_use):
@@ -365,12 +374,32 @@ def _find_stream(
     llm=None,
 ) -> "Iterator[Candidate]":
     """The streaming body of :func:`find` (``find(stream=False)`` == ``list(_find_stream(...))``)."""
+    from ..cost import authorize, scoped_iter
+
     use = intended_use_for(intended_use)
     budget = budget or Budget(max_refine_loops=max_refine_loops)
-    from ..cost import spend_scope
 
-    with spend_scope(budget):
-        yield from _find_events(
+    def run():
+        # Before the first paid call: the whole run's upper bound must fit every
+        # budget in force (#57's acceptance), else nothing is spent.
+        authorize(
+            estimate_find_usd(
+                max_events=max_events,
+                backend=backend,
+                llm=llm,
+                k=k,
+                verify=verify,
+                max_refine_loops=budget.max_refine_loops,
+                max_generations=budget.max_generations if budget.allow_generate else 0,
+                injected={
+                    "decomposer": decomposer is not None,
+                    "refiner": refiner is not None,
+                    "judge": judge is not None,
+                },
+            ),
+            what=f"this find run (upper bound for {max_events} events)",
+        )
+        return _find_events(
             context,
             use=use,
             budget=budget,
@@ -387,6 +416,59 @@ def _find_stream(
             refiner=refiner,
             llm=llm,
         )
+
+    # The budget is in force only while the stream runs, never between items.
+    yield from scoped_iter(run, budget)
+
+
+def estimate_find_usd(
+    *,
+    max_events: int = 6,
+    backend: str = "auto",
+    llm: "Optional[str]" = None,
+    k: int = 10,
+    verify: str = "listen",
+    max_refine_loops: int = 1,
+    max_generations: int = 1,
+    injected: "Optional[dict]" = None,
+) -> "Optional[float]":
+    """An upper bound on what one :func:`find` run can spend, or ``None`` if unknown.
+
+    Every generation (``max_generations`` per event through ``backend``) plus every
+    LLM call the default rungs could make: one decomposition, ``max_refine_loops``
+    refinements per event, ``k`` judge calls per retrieval pass above the ``clap``
+    rung, and one re-verification per generation. Injected rungs are the caller's to
+    meter (their real calls are still checked one by one).
+    """
+    from ..sources._dispatch import estimate_generation
+    from .llm import RUNG_MAX_TOKENS, llm_call_estimate, resolve_llm
+
+    injected = injected or {}
+    provider = resolve_llm(llm)
+    per_gen = 0.0
+    if max_generations:
+        name = "stable_audio" if backend == "auto" else backend
+        per_gen = estimate_generation(name)
+    calls = {
+        "decomposer": 0 if injected.get("decomposer") else 1,
+        "refiner": 0 if injected.get("refiner") else max_events * max_refine_loops,
+        "judge": 0
+        if injected.get("judge")
+        else max_events
+        * ((max_refine_loops + 1) * (k if VerifyLevel(verify) != VerifyLevel.clap else 0)
+           + max_generations),
+    }
+    total = 0.0 if per_gen is None else max_events * max_generations * per_gen
+    if per_gen is None:
+        return None
+    for kind, n in calls.items():
+        if not n:
+            continue
+        each = llm_call_estimate(provider, max_tokens=RUNG_MAX_TOKENS[kind])
+        if each is None:
+            return None
+        total += n * each
+    return total
 
 
 def _find_events(
