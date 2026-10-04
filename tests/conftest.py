@@ -59,3 +59,65 @@ def fake_embedder():
     if np is None:  # pragma: no cover
         pytest.skip("numpy required")
     return FakeEmbedder()
+
+
+# ---------------------------------------------------------------------------
+# Spend + network isolation (#58): no test may reach a paid API by accident
+# ---------------------------------------------------------------------------
+
+#: Opt-in for tests that really call a provider (also needs the key itself).
+LIVE_API_TESTS_ENV = "FOLEY_LIVE_API_TESTS"
+
+#: foley's own env switches that change which provider or posture a default resolves to.
+_FOLEY_POSTURE_ENV = ("FOLEY_LLM", "FOLEY_LLM_BASE_URL", "FOLEY_OFFLINE")
+
+
+def live_api_tests_enabled() -> bool:
+    """Whether the developer opted in to live-API tests (``FOLEY_LIVE_API_TESTS=1``)."""
+    import os
+
+    return os.environ.get(LIVE_API_TESTS_ENV, "").lower() in ("1", "true", "yes")
+
+
+class NetworkBlocked(RuntimeError):
+    """Raised by the test-suite socket guard when a test opens a non-loopback connection."""
+
+
+def _is_loopback(address) -> bool:
+    host = address[0] if isinstance(address, tuple) else address
+    return isinstance(host, str) and (
+        host in ("localhost", "::1", "0.0.0.0") or host.startswith("127.")
+    )
+
+
+@pytest.fixture(autouse=True)
+def _isolate_from_paid_apis(monkeypatch):
+    """Scrub every provider key + posture switch and block outbound sockets.
+
+    Unless ``FOLEY_LIVE_API_TESTS=1``: the keys come from
+    :func:`foley.requirements.provider_key_env_vars` (the sources' ``auth`` SSOT), so a
+    new paid source is covered without editing this file. A test that needs a key sets
+    it with ``monkeypatch.setenv`` after this fixture has run.
+    """
+    if live_api_tests_enabled():
+        yield
+        return
+    import socket
+
+    from foley.requirements import provider_key_env_vars
+
+    for name in (*provider_key_env_vars(), *_FOLEY_POSTURE_ENV):
+        monkeypatch.delenv(name, raising=False)
+
+    real_connect = socket.socket.connect
+
+    def guarded_connect(self, address):
+        if not _is_loopback(address):
+            raise NetworkBlocked(
+                f"test tried to connect to {address!r}; set {LIVE_API_TESTS_ENV}=1 "
+                "to allow live-API tests"
+            )
+        return real_connect(self, address)
+
+    monkeypatch.setattr(socket.socket, "connect", guarded_connect)
+    yield

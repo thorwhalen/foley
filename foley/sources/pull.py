@@ -22,7 +22,7 @@ from typing import Optional
 from ..base import IntendedUse
 from ..index.ingest import IngestReport, IngestResult, ingest_one
 from ..licensing import keep
-from .registry import get_source
+from .registry import get_source, require_source_egress
 
 #: Default intent for a pull: a publishable, commercial, attributable use — the
 #: same fail-closed bar :func:`foley.bootstrap.bootstrap`'s Ring-1 filter applies.
@@ -76,6 +76,8 @@ def _add_from(
     from ..index.library import default_library
 
     lib = library if library is not None else default_library()
+    if adapter is not None:
+        require_source_egress(source, getattr(adapter, "config", None))
     src_adapter = adapter if adapter is not None else get_source(source)["adapter"]
     use = intended_use if intended_use is not None else DEFAULT_INTENDED_USE
 

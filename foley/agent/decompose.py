@@ -230,8 +230,9 @@ class AnthropicDecomposer:
 def _anthropic_available() -> bool:
     """True iff the ``anthropic`` SDK is importable AND a credential is configured.
 
-    Mirrors foley's progressive-disclosure rule: auto-upgrade to the LLM path only when
-    it can actually run (``foley[agent]`` installed + a key), else the hermetic fake.
+    A capability probe only (``check_requirements`` / status reporting). It never
+    selects a provider: a key being present does not opt anyone in to paid calls —
+    :func:`foley.agent.llm.resolve_llm` does that, from ``llm=`` or ``$FOLEY_LLM``.
     """
     import importlib.util
     import os
@@ -243,13 +244,17 @@ def _anthropic_available() -> bool:
     )
 
 
-def _default_decomposer() -> Decomposer:
-    """The zero-config decomposer: local LLM if configured, else Anthropic, else the fake."""
-    from .local_llm import LocalLLMDecomposer, local_llm_configured
+def _default_decomposer(llm: Optional[str] = None) -> Decomposer:
+    """The decomposer for ``llm`` (see :func:`foley.agent.llm.resolve_llm`; free by default)."""
+    from .llm import resolve_llm
+    from .local_llm import LocalLLMDecomposer
 
-    if local_llm_configured():
+    provider = resolve_llm(llm)
+    if provider == "local":
         return LocalLLMDecomposer()
-    return AnthropicDecomposer() if _anthropic_available() else KeywordDecomposer()
+    if provider == "anthropic":
+        return AnthropicDecomposer()
+    return KeywordDecomposer()
 
 
 def decompose_context(

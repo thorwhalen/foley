@@ -42,7 +42,7 @@ from typing import Optional
 
 from ..base import Candidate, CandidateOrigin
 from ..index.ingest import IngestReport, IngestResult, ingest_one
-from .registry import get_source
+from .registry import get_source, require_source_egress
 
 #: The consent note stamped on a stored generation whose license forbids AI
 #: training (mirrors :func:`foley.bootstrap.bootstrap`'s Ring-2 acknowledgement).
@@ -214,6 +214,8 @@ def _generate(
     wm = disclosure.resolve_watermarker(watermark, watermarker)
 
     lib = library if library is not None else default_library()
+    if adapter is not None:
+        require_source_egress(backend, getattr(adapter, "config", None))
     gen = adapter if adapter is not None else get_source(backend)["adapter"]
 
     report = IngestReport(root=f"{backend}:{prompt}")

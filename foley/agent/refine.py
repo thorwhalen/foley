@@ -126,14 +126,17 @@ class AnthropicRefiner:
         return out[: max(1, n)]
 
 
-def _default_refiner() -> Refiner:
-    """The zero-config refiner: local LLM if configured, else Anthropic, else the fake."""
-    from .decompose import _anthropic_available
-    from .local_llm import LocalLLMRefiner, local_llm_configured
+def _default_refiner(llm: "str | None" = None) -> Refiner:
+    """The refiner for ``llm`` (see :func:`foley.agent.llm.resolve_llm`; free by default)."""
+    from .llm import resolve_llm
+    from .local_llm import LocalLLMRefiner
 
-    if local_llm_configured():
+    provider = resolve_llm(llm)
+    if provider == "local":
         return LocalLLMRefiner()
-    return AnthropicRefiner() if _anthropic_available() else KeywordRefiner()
+    if provider == "anthropic":
+        return AnthropicRefiner()
+    return KeywordRefiner()
 
 
 def refine_query(

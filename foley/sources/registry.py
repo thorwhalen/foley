@@ -95,6 +95,8 @@ def get_source(name: str) -> dict:
 
     Raises:
         KeyError: If no such source is registered (after discovery).
+        EgressBlocked: If the source sends data off the device and an offline scope
+            is active (:func:`foley.offline` / ``$FOLEY_OFFLINE``).
     """
     if name not in _SOURCE_REGISTRY:
         discover_sources()
@@ -104,9 +106,27 @@ def get_source(name: str) -> dict:
             "Register out-of-tree sources with register_source(name, config, adapter)."
         )
     entry = _SOURCE_REGISTRY[name]
+    require_source_egress(name, entry["config"])
     if entry.get("adapter") is None:
         entry["adapter"] = _load_adapter(entry.get("module") or name, entry["config"])
     return entry
+
+
+def require_source_egress(name: str, config: "Optional[dict]" = None) -> None:
+    """Raise :class:`~foley.runtime.EgressBlocked` if source ``name`` may not run now.
+
+    The one offline check every source path goes through: :func:`get_source`, and the
+    generate / pull façades when an adapter is injected. The egress class comes from
+    ``config['data_egress']`` (the passed config, else the registered one); a source
+    that declares none is treated as external (fail-closed), so it is refused offline.
+    """
+    from ..runtime import EXTERNAL, require_egress
+
+    if config is None:
+        discover_sources()
+        entry = _SOURCE_REGISTRY.get(name)
+        config = entry["config"] if entry else {}
+    require_egress(config.get("data_egress") or EXTERNAL, what=f"source {name!r}")
 
 
 def list_sources(*, egress_allow: "Optional[frozenset]" = None) -> "list[str]":

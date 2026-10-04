@@ -70,13 +70,13 @@ def test_audiolm_judge_parses_text_output(tmp_path):
 
 
 def test_default_fit_judge_resolution(monkeypatch):
-    """The resolver never auto-selects AudioLMJudge (injection-only); LLM only with a key."""
-    monkeypatch.setattr("foley.agent.decompose._anthropic_available", lambda: False)
+    """The resolver never auto-selects AudioLMJudge (injection-only); the LLM only on opt-in (#58)."""
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")  # a key alone opts in to nothing
     for level in ("clap", "listen", "judge"):
         j = V._default_fit_judge(level)
         assert isinstance(j, StringOverlapJudge) and not isinstance(j, AudioLMJudge)
-    monkeypatch.setattr("foley.agent.decompose._anthropic_available", lambda: True)
-    assert isinstance(V._default_fit_judge("judge"), AnthropicJudge)
+    pytest.importorskip("anthropic")
+    assert isinstance(V._default_fit_judge("judge", llm="anthropic"), AnthropicJudge)
 
 
 def test_audiolm_available_is_bool():

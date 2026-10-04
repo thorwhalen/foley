@@ -171,17 +171,23 @@ class AnthropicJudge:
         )
 
 
-def _default_judge(level: "str | VerifyLevel") -> Judge:
-    """The zero-config judge for a rung: ClapJudge for ``clap``; else Anthropic or the fake."""
+def _default_judge(level: "str | VerifyLevel", llm: "str | None" = None) -> Judge:
+    """The judge for a rung: ClapJudge for ``clap``; else the ``llm`` provider's judge.
+
+    ``llm`` is resolved by :func:`foley.agent.llm.resolve_llm` (free by default).
+    """
     level = VerifyLevel(level)
     if level == VerifyLevel.clap:
         return ClapJudge()
-    from .decompose import _anthropic_available
-    from .local_llm import LocalLLMJudge, local_llm_configured
+    from .llm import resolve_llm
+    from .local_llm import LocalLLMJudge
 
-    if local_llm_configured():
+    provider = resolve_llm(llm)
+    if provider == "local":
         return LocalLLMJudge()
-    return AnthropicJudge() if _anthropic_available() else StringOverlapJudge()
+    if provider == "anthropic":
+        return AnthropicJudge()
+    return StringOverlapJudge()
 
 
 # ---------------------------------------------------------------------------
@@ -282,23 +288,28 @@ class AudioLMJudge:
         )
 
 
-def _default_fit_judge(level: "str | VerifyLevel") -> Judge:
-    """The zero-config Tier-2 fit-judge: the LLM arbiter when a key is configured, else the fake.
+def _default_fit_judge(level: "str | VerifyLevel", llm: "str | None" = None) -> Judge:
+    """The Tier-2 fit-judge for ``llm`` (see :func:`foley.agent.llm.resolve_llm`).
 
-    Auto-upgrades to :class:`AnthropicJudge` when ``anthropic`` + a key are present (the
-    nightly/pre-release path); in CI (no key) it resolves to the deterministic
-    :class:`StringOverlapJudge`, so ``foley.evaluate_fit()`` is hermetic out of the box.
+    The nightly / pre-release path opts in with ``llm='anthropic'`` (or
+    ``FOLEY_LLM=anthropic``); by default it is the deterministic
+    :class:`StringOverlapJudge`, so ``foley.evaluate_fit()`` is hermetic and free out of
+    the box whatever keys are set.
 
     :class:`AudioLMJudge` (the audio-LM ``listen`` rung) is **injection-only** in this
     slice: its real Qwen2-Audio pipeline is a deferred #10b follow-up, so the resolver
     does not auto-select it (it would need ``foley[fit]`` *and* a built pipeline). Pass
     ``fit_judge=AudioLMJudge(pipeline=...)`` explicitly to use it. Tests inject explicitly.
     """
-    from .decompose import _anthropic_available
+    from .llm import resolve_llm
+    from .local_llm import LocalLLMJudge
 
     VerifyLevel(level)  # validate the rung
-    if _anthropic_available():
+    provider = resolve_llm(llm)
+    if provider == "anthropic":
         return AnthropicJudge()
+    if provider == "local":
+        return LocalLLMJudge()
     return StringOverlapJudge()
 
 

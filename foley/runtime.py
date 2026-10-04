@@ -88,9 +88,36 @@ class RuntimeConfig:
         return data_egress in self.data_egress_allow
 
 
+class EgressBlocked(PermissionError):
+    """Raised when a call would send data off the device under an offline posture.
+
+    Every external path checks the active :class:`RuntimeConfig` through
+    :func:`require_egress` — the source registry, the generate and pull façades, and
+    the LLM resolver — so ``with foley.offline():`` holds on every surface, not only
+    in the MCP tools.
+    """
+
+
+def require_egress(data_egress: "str | None", *, what: str) -> None:
+    """Raise :class:`EgressBlocked` unless the active runtime allows ``data_egress``.
+
+    Args:
+        data_egress: The egress class the call needs (``'local'`` | ``'external'``);
+            ``None`` (undeclared) is refused under any posture that restricts egress.
+        what: A short description for the error (``"source 'elevenlabs'"``).
+    """
+    cfg = current_runtime()
+    if not cfg.allows(data_egress):
+        raise EgressBlocked(
+            f"{what} needs data_egress={data_egress!r}, which the current runtime "
+            f"forbids (allowed: {sorted(cfg.data_egress_allow)}). It is blocked "
+            "because an offline scope is active (foley.offline() or $FOLEY_OFFLINE)."
+        )
+
+
 def current_runtime() -> RuntimeConfig:
-    """The active :class:`RuntimeConfig`, or the online default outside any scope."""
-    return _CURRENT_RUNTIME.get() or RuntimeConfig.default()
+    """The active :class:`RuntimeConfig`; outside any scope, the one ``$FOLEY_OFFLINE`` selects."""
+    return _CURRENT_RUNTIME.get() or RuntimeConfig.from_env()
 
 
 def is_offline() -> bool:

@@ -86,6 +86,21 @@ def build_requirements() -> "dict[str, Requirement]":
     return reqs
 
 
+#: Credential env vars that are aliases of a listed key (same provider, other auth form).
+_KEY_ALIASES = ("ANTHROPIC_AUTH_TOKEN",)
+
+
+def provider_key_env_vars() -> "tuple[str, ...]":
+    """Every env var that holds a provider credential (the sources' keys + Anthropic's).
+
+    Derived from the same SSOT as :func:`check_requirements` (each source's
+    ``config['auth']``), so a newly added paid source is covered automatically — the
+    test suite scrubs exactly these so no test can spend money by accident.
+    """
+    keys = [r.name for r in build_requirements().values() if r.probe == "env"]
+    return tuple(sorted(set(keys) | set(_KEY_ALIASES)))
+
+
 def _available(req: Requirement) -> bool:
     """Whether ``req`` is satisfied, dispatching on its ``probe``."""
     return _PROBES.get(req.probe, _PROBES["binary"])(req.name)
