@@ -1,4 +1,4 @@
-> built 2026-10-04 08:24 UTC from 51e53f4 (main) · foley 0.0.29. Details: build_info.json
+> built 2026-10-04 09:00 UTC from 11292d2 (main) · foley 0.0.30. Details: build_info.json
 
 # index.html.md
 
@@ -126,6 +126,8 @@ lazily, so a bare install stays light. What each adds:
 | `mcp` · `obs`                               | the MCP server · OpenTelemetry export                              |
 
 **Nothing paid runs unless you ask for it.** Having `ANTHROPIC_API_KEY` set does not switch the SELECT rungs to Claude: pass `llm="anthropic"` to `find()` / `score()` or set `FOLEY_LLM=anthropic` (`llm="local"` uses `FOLEY_LLM_BASE_URL`). By default they run the free deterministic fakes, or your local endpoint if one is configured. `with foley.offline():` (or `FOLEY_OFFLINE=1`) blocks every external source and LLM call foley makes, on every surface, raising `foley.runtime.EgressBlocked` (model-weight downloads from Hugging Face are not covered yet).
+
+**Every paid call is priced and capped.** `foley.estimate("generate", backend="elevenlabs", duration=3)` says what a call costs before it is made (`None` means unknown, never free). A `find` / `score` / `generate` run stops before the first paid call that would take it past `Budget(max_usd=1.0)` (the default), and a call of unknown cost needs `Budget(approve_unknown_cost=True)`. Every paid response is kept in `~/.local/share/foley/generations/` before QC, so an identical request is served from there instead of paying twice. What a backend could not honour is never silent: a parameter that changes the result (`seed` on ElevenLabs) raises, and every other drop or clamp is listed in the returned candidate’s `notes`.
 
 `foley.check_requirements()` (and the `foley_capabilities` MCP tool) report what’s installed and
 what’s degraded. Full docs: **[thorwhalen.github.io/foley](https://thorwhalen.github.io/foley)**.
@@ -277,7 +279,7 @@ verify + generate aggregate into a single reproducible run-manifest.
 |----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | [`Judge`](_autosummary/foley.agent.html.md#foley.agent.Judge)(\*args, \*\*kwargs)                         | One rung of the verify ladder: does this candidate match this event? (report 10 §4.2).                                         |
 | [`Refiner`](_autosummary/foley.agent.html.md#foley.agent.Refiner)(\*args, \*\*kwargs)                       | One event query → 2–4 paraphrases/expansions (query-expansion for retrieval).                                                  |
-| [`Budget`](_autosummary/foley.agent.html.md#foley.agent.Budget)([max_refine_loops, max_generations, ...])  | Bounded-cost accounting for the per-event refine/generate loops.                                                               |
+| [`Budget`](_autosummary/foley.agent.html.md#foley.agent.Budget)([max_refine_loops, max_generations, ...])  | Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).                                             |
 | [`Decision`](_autosummary/foley.agent.html.md#foley.agent.Decision)(action[, candidate, reason])             | The tiny result of [`decide()`](_autosummary/foley.agent.html.md#foley.agent.decide); `reason` feeds the refine hint + the audit Step. |
 | [`DecideAction`](_autosummary/foley.agent.html.md#foley.agent.DecideAction)(\*values)                            | What [`decide()`](_autosummary/foley.agent.html.md#foley.agent.decide) chose for one event (the single branch's outcomes).             |
 | [`KeywordDecomposer`](_autosummary/foley.agent.html.md#foley.agent.KeywordDecomposer)()                               | Deterministic cue-lexicon decomposer — the zero-dependency default and CI fake.                                                |
@@ -359,14 +361,43 @@ Listen to the clip and return the AQAScore `Verdict` (`P(yes) ≥ tau`).
 * **Return type:**
   [`Verdict`](_autosummary/foley.base.html.md#foley.base.Verdict)
 
-### *class* foley.agent.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
+### *class* foley.agent.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, max_usd=1.0, approve_unknown_cost=None, \_refines=0, \_gens=0, \_spent_usd=0.0, \_unknown_calls=0, \_lock=<factory>)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-Bounded-cost accounting for the per-event refine/generate loops.
+Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).
 
-Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](_autosummary/foley.agent.html.md#foley.agent.Budget.refine_ok) /
-[`gen_ok()`](_autosummary/foley.agent.html.md#foley.agent.Budget.gen_ok) to test, then [`spend_refine()`](_autosummary/foley.agent.html.md#foley.agent.Budget.spend_refine) / [`spend_gen()`](_autosummary/foley.agent.html.md#foley.agent.Budget.spend_gen) to charge.
+Two kinds of bound:
+
+* **Per event** — `max_refine_loops` / `max_generations`: the loop calls
+  [`refine_ok()`](_autosummary/foley.agent.html.md#foley.agent.Budget.refine_ok) / [`gen_ok()`](_autosummary/foley.agent.html.md#foley.agent.Budget.gen_ok) to test, then [`spend_refine()`](_autosummary/foley.agent.html.md#foley.agent.Budget.spend_refine) /
+  [`spend_gen()`](_autosummary/foley.agent.html.md#foley.agent.Budget.spend_gen) to charge; [`reset()`](_autosummary/foley.agent.html.md#foley.agent.Budget.reset) zeroes them at each event.
+* **Per run, cumulative** — `max_usd` (default $1): every paid call (generation,
+  paid LLM rung) is checked with [`authorize()`](_autosummary/foley.agent.html.md#foley.agent.Budget.authorize) before it is made and recorded with [`charge()`](_autosummary/foley.agent.html.md#foley.agent.Budget.charge)
+  after. [`reset()`](_autosummary/foley.agent.html.md#foley.agent.Budget.reset) never clears it, so the cap holds across the whole
+  `find` / `score` run. A call whose cost is unknown (estimate `None`) is
+  refused unless `approve_unknown_cost` (or `$FOLEY_APPROVE_UNKNOWN_COST=1`).
+
+#### authorize(estimate_usd, , what)
+
+Alias of [`check()`](_autosummary/foley.agent.html.md#foley.agent.Budget.check) (kept for callers that only test affordability).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### charge(usd)
+
+Record a call’s cost (`None` = unknown: counted, not summed).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### check(estimate_usd, , what)
+
+Raise if this run cannot afford `estimate_usd` (nothing is reserved).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### gen_ok()
 
@@ -382,6 +413,17 @@ Whether another refine→re-retrieve pass is within budget.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+#### reserve(estimate_usd, , what)
+
+Check, then count `estimate_usd` as spent at once (atomic under a lock).
+
+Reserving before the call is what keeps concurrent calls on one budget (MCP
+tools run in a threadpool) from all passing the check before any is charged.
+[`settle()`](_autosummary/foley.agent.html.md#foley.agent.Budget.settle) later replaces the reservation with the actual cost, if known.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### reset()
 
 Zero the spend counters so the caps apply *per event*, not per passage.
@@ -389,6 +431,13 @@ Zero the spend counters so the caps apply *per event*, not per passage.
 The `find` loop calls this at the top of each event so one hard event’s
 refine/generate spend never starves later events (the documented per-event
 semantics).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### settle(reserved_usd, actual_usd)
+
+Replace a reservation with the actual cost (`None` actual: keep the reservation).
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -406,6 +455,10 @@ Charge one refine loop.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### *property* spent_usd *: [float](https://docs.python.org/3/builtins/functions.html#float)*
+
+Dollars charged so far this run (calls of unknown cost count as 0 here).
 
 ### *class* foley.agent.ClapJudge
 
@@ -601,7 +654,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
   * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
     [`Budget`](_autosummary/foley.agent.html.md#foley.agent.Budget)).
-  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](_autosummary/foley.agent.html.md#foley.agent.Budget) (overrides `max_refine_loops`).
+  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](_autosummary/foley.agent.html.md#foley.agent.Budget) (overrides `max_refine_loops`). It is
+    also the run’s spend cap: `Budget(max_usd=...)` (default $1) bounds
+    every paid call the run makes — generations and paid LLM rungs —
+    cumulatively, and a call of unknown cost needs
+    `Budget(approve_unknown_cost=True)` (#57).
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
@@ -769,19 +826,23 @@ place a new provider, or per-provider cost data, is added.
 
 ### Module Attributes
 
-| [`LLM_ENV_VAR`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.LLM_ENV_VAR)   | The environment variable that opts in to a provider when `llm=` is not passed.          |
-|----------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| [`PROVIDERS`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.PROVIDERS)     | provider -> rung kind -> `"module:Class"` (imported lazily; the real ones need extras). |
-| [`LLM_CHOICES`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.LLM_CHOICES)   | The accepted providers.                                                                 |
+| [`LLM_ENV_VAR`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.LLM_ENV_VAR)     | The environment variable that opts in to a provider when `llm=` is not passed.          |
+|------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| [`PROVIDERS`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.PROVIDERS)       | provider -> rung kind -> `"module:Class"` (imported lazily; the real ones need extras). |
+| [`LLM_CHOICES`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.LLM_CHOICES)     | The accepted providers.                                                                 |
+| [`RUNG_MAX_TOKENS`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.RUNG_MAX_TOKENS) | Default `max_tokens` of each rung (the classes read these, so estimates match).         |
 
 ### Functions
 
-| [`resolve_llm`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm)([llm, implicit_local])     | Resolve which LLM provider the SELECT rungs use (see the module docstring).                                                             |
-|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| [`make_rung`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.make_rung)(kind[, llm, implicit_local]) | Build the `kind` rung (`'decomposer'` | `'refiner'` | `'judge'`) for `llm`.                                                             |
-| [`llm_egress`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.llm_egress)(provider)                   | The `data_egress` class (`'local'` | `'external'`) of an LLM provider.                                                                  |
-| [`require_llm_egress`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.require_llm_egress)(provider)           | Raise [`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) if the runtime forbids `provider` now. |
-| [`is_loopback_host`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.is_loopback_host)(host)                 | Whether `host` is this machine (`localhost`, `127.*`, `::1`, `0.0.0.0`).                                                                |
+| [`resolve_llm`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm)([llm, implicit_local])            | Resolve which LLM provider the SELECT rungs use (see the module docstring).                                                             |
+|------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| [`make_rung`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.make_rung)(kind[, llm, implicit_local])        | Build the `kind` rung (`'decomposer'` | `'refiner'` | `'judge'`) for `llm`.                                                             |
+| [`llm_egress`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.llm_egress)(provider)                          | The `data_egress` class (`'local'` | `'external'`) of an LLM provider.                                                                  |
+| [`require_llm_egress`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.require_llm_egress)(provider)                  | Raise [`EgressBlocked`](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) if the runtime forbids `provider` now. |
+| [`llm_call_estimate`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.llm_call_estimate)(provider, \*[, model, ...]) | An upper bound on one rung call's USD cost, or `None` when it is unknown.                                                               |
+| [`guard_llm_call`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.guard_llm_call)(provider)                      | The call-time egress check every real rung runs before calling its model.                                                               |
+| [`metered_create`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.metered_create)(client, \*[, sleep])           | `client.messages.create(**request)`, priced, capped and charged (#57).                                                                  |
+| [`is_loopback_host`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.is_loopback_host)(host)                        | Whether `host` is this machine (`localhost`, `127.*`, `::1`, `0.0.0.0`).                                                                |
 
 ### foley.agent.llm.LLM_CHOICES *= ('fake', 'local', 'anthropic')*
 
@@ -795,12 +856,36 @@ The environment variable that opts in to a provider when `llm=` is not passed.
 
 provider -> rung kind -> `"module:Class"` (imported lazily; the real ones need extras).
 
+### foley.agent.llm.RUNG_MAX_TOKENS *= {'decomposer': 2000, 'judge': 500, 'refiner': 500}*
+
+Default `max_tokens` of each rung (the classes read these, so estimates match).
+
+### foley.agent.llm.guard_llm_call(provider)
+
+The call-time egress check every real rung runs before calling its model.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### foley.agent.llm.is_loopback_host(host)
 
 Whether `host` is this machine (`localhost`, `127.*`, `::1`, `0.0.0.0`).
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+### foley.agent.llm.llm_call_estimate(provider, , model=None, max_tokens=None, kind=None, input_chars=0)
+
+An upper bound on one rung call’s USD cost, or `None` when it is unknown.
+
+`0.0` for the fake and an on-device endpoint. For Anthropic: the input-token
+bound (`chars / CHARS_PER_TOKEN_FLOOR` of the prompt — the rung’s fixed prompt
+and allowance when `kind` is given, plus `input_chars`) × the input price, plus
+`max_tokens` × the output price (thinking counts toward `max_tokens`). A remote
+endpoint, or an Anthropic model with no listed price, is `None`.
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### foley.agent.llm.llm_egress(provider)
 
@@ -818,6 +903,22 @@ Build the `kind` rung (`'decomposer'` | `'refiner'` | `'judge'`) for `llm`.
   * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The provider (see [`resolve_llm()`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm)).
   * **implicit_local** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Forwarded to [`resolve_llm()`](_autosummary/foley.agent.llm.html.md#foley.agent.llm.resolve_llm).
   * **\*\*kwargs** – Passed to the rung’s constructor.
+
+### foley.agent.llm.metered_create(client, , sleep=None, \*\*request)
+
+`client.messages.create(**request)`, priced, capped and charged (#57).
+
+The bound for *this* request (its real prompt length and `max_tokens`) is
+reserved on every budget in force before it is sent, so it can never take a run
+past its cap; afterwards the reservation becomes the actual cost from
+`response.usage`. A request the API rejects (429 / 5xx — not billed) is retried
+up to `METERED_ATTEMPTS` times. Anything else (a timeout, a dropped
+connection) keeps the reservation — it may have been billed — and raises. The SDK
+never re-sends behind this accounting: foley builds its clients with
+`max_retries=0`, and an injected client is used through
+`with_options(max_retries=0)`. Tokens the API adds itself (structured-output
+grammar, thinking) are not in the bound; [`settle()`](_autosummary/foley.cost.html.md#foley.cost.settle) records the
+true cost from `usage` afterwards.
 
 ### foley.agent.llm.require_llm_egress(provider)
 
@@ -994,7 +1095,7 @@ and per-session [`foley.agent.session.SessionStore`](_autosummary/foley.agent.se
 
 The full JSON-safe tool surface (SSOT), in a stable order.
 
-### foley.agent.mcp.build_mcp_server(, library=None, session='default', runtime=None, byte_store=None, include=None, name='foley')
+### foley.agent.mcp.build_mcp_server(, library=None, session='default', runtime=None, byte_store=None, include=None, name='foley', max_usd=None)
 
 Build the foley MCP server (lazy `py2mcp`); registers the JSON-safe tool surface.
 
@@ -1009,6 +1110,8 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
   * **byte_store** – A `MutableMapping[str, bytes]` for previews / rendered mixes.
   * **include** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Optional subset of tool names to expose.
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP server name.
+  * **max_usd** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – The server’s cumulative spend cap across every paid tool call, for
+    its lifetime (default [`foley.cost.DEFAULT_MAX_USD`](_autosummary/foley.cost.html.md#foley.cost.DEFAULT_MAX_USD), $1).
 * **Returns:**
   A `fastmcp.FastMCP` server.
 
@@ -1252,19 +1355,48 @@ run away. This module is stdlib-only (imports only [`foley.base`](_autosummary/f
 
 ### Classes
 
-| [`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)([max_refine_loops, max_generations, ...])   | Bounded-cost accounting for the per-event refine/generate loops.                                                               |
+| [`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)([max_refine_loops, max_generations, ...])   | Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).                                             |
 |-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | [`DecideAction`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.DecideAction)(\*values)                             | What [`decide()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.decide) chose for one event (the single branch's outcomes).             |
 | [`Decision`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Decision)(action[, candidate, reason])              | The tiny result of [`decide()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.decide); `reason` feeds the refine hint + the audit Step. |
 
-### *class* foley.agent.policy.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
+### *class* foley.agent.policy.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, max_usd=1.0, approve_unknown_cost=None, \_refines=0, \_gens=0, \_spent_usd=0.0, \_unknown_calls=0, \_lock=<factory>)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-Bounded-cost accounting for the per-event refine/generate loops.
+Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).
 
-Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.refine_ok) /
-[`gen_ok()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.gen_ok) to test, then [`spend_refine()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.spend_refine) / [`spend_gen()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.spend_gen) to charge.
+Two kinds of bound:
+
+* **Per event** — `max_refine_loops` / `max_generations`: the loop calls
+  [`refine_ok()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.refine_ok) / [`gen_ok()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.gen_ok) to test, then [`spend_refine()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.spend_refine) /
+  [`spend_gen()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.spend_gen) to charge; [`reset()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.reset) zeroes them at each event.
+* **Per run, cumulative** — `max_usd` (default $1): every paid call (generation,
+  paid LLM rung) is checked with [`authorize()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.authorize) before it is made and recorded with [`charge()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.charge)
+  after. [`reset()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.reset) never clears it, so the cap holds across the whole
+  `find` / `score` run. A call whose cost is unknown (estimate `None`) is
+  refused unless `approve_unknown_cost` (or `$FOLEY_APPROVE_UNKNOWN_COST=1`).
+
+#### authorize(estimate_usd, , what)
+
+Alias of [`check()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.check) (kept for callers that only test affordability).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### charge(usd)
+
+Record a call’s cost (`None` = unknown: counted, not summed).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### check(estimate_usd, , what)
+
+Raise if this run cannot afford `estimate_usd` (nothing is reserved).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### gen_ok()
 
@@ -1280,6 +1412,17 @@ Whether another refine→re-retrieve pass is within budget.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+#### reserve(estimate_usd, , what)
+
+Check, then count `estimate_usd` as spent at once (atomic under a lock).
+
+Reserving before the call is what keeps concurrent calls on one budget (MCP
+tools run in a threadpool) from all passing the check before any is charged.
+[`settle()`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget.settle) later replaces the reservation with the actual cost, if known.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### reset()
 
 Zero the spend counters so the caps apply *per event*, not per passage.
@@ -1287,6 +1430,13 @@ Zero the spend counters so the caps apply *per event*, not per passage.
 The `find` loop calls this at the top of each event so one hard event’s
 refine/generate spend never starves later events (the documented per-event
 semantics).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### settle(reserved_usd, actual_usd)
+
+Replace a reservation with the actual cost (`None` actual: keep the reservation).
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -1304,6 +1454,10 @@ Charge one refine loop.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### *property* spent_usd *: [float](https://docs.python.org/3/builtins/functions.html#float)*
+
+Dollars charged so far this run (calls of unknown cost count as 0 here).
 
 ### *class* foley.agent.policy.DecideAction(\*values)
 
@@ -1742,12 +1896,26 @@ generation-error hierarchy are imported lazily inside the functions that call th
 
 ### Functions
 
-| [`find`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.find)(context, \*[, max_events, seconds, ...])     | The headline: a narrative context → verified, license-clean sound candidates.             |
-|----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
-| [`generate_sound`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.generate_sound)(query, \*[, backend, library])     | Generate a clip for `query` (the fallback tool) — a thin wrapper over `foley.generate`.   |
-| [`place_in_timeline`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.place_in_timeline)(clip, \*[, onset, gain, ...])   | Emit the SPARSE per-item plan subset (`clip_ref·onset·gain·layer·loop`) — no more.        |
-| [`plan`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.plan)(candidates, \*[, transcript])                | Fold verified candidates into the SPARSE `SoundDesignTimeline` (the SELECT→WEAVE bridge). |
-| [`search_sounds`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.search_sounds)(queries, \*[, k, library, filters]) | Hybrid search for one query, or a multi-query RRF-merge (the SELECT retrieval tool).      |
+| [`estimate_find_usd`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.estimate_find_usd)(\*[, max_events, backend, ...])   | An upper bound on what one [`find()`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.find) run can spend, or `None` if unknown.   |
+|------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| [`find`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.find)(context, \*[, max_events, seconds, ...])       | The headline: a narrative context → verified, license-clean sound candidates.                                             |
+| [`generate_sound`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.generate_sound)(query, \*[, backend, library])       | Generate a clip for `query` (the fallback tool) — a thin wrapper over `foley.generate`.                                   |
+| [`place_in_timeline`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.place_in_timeline)(clip, \*[, onset, gain, ...])     | Emit the SPARSE per-item plan subset (`clip_ref·onset·gain·layer·loop`) — no more.                                        |
+| [`plan`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.plan)(candidates, \*[, transcript])                  | Fold verified candidates into the SPARSE `SoundDesignTimeline` (the SELECT→WEAVE bridge).                                 |
+| [`search_sounds`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.search_sounds)(queries, \*[, k, library, filters])   | Hybrid search for one query, or a multi-query RRF-merge (the SELECT retrieval tool).                                      |
+
+### foley.agent.tools.estimate_find_usd(, max_events=6, backend='auto', llm=None, k=10, verify='listen', max_refine_loops=1, max_generations=1, injected=None, context_chars=0)
+
+An upper bound on what one [`find()`](_autosummary/foley.agent.tools.html.md#foley.agent.tools.find) run can spend, or `None` if unknown.
+
+Every generation (`max_generations` per event through `backend`) plus every
+LLM call the default rungs could make: one decomposition, `max_refine_loops`
+refinements per event, `k` judge calls per retrieval pass above the `clap`
+rung, and one re-verification per generation. Injected rungs are the caller’s to
+meter (their real calls are still checked one by one).
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### foley.agent.tools.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None, llm=None)
 
@@ -1774,7 +1942,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
   * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
     `Budget`).
-  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit `Budget` (overrides `max_refine_loops`).
+  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit `Budget` (overrides `max_refine_loops`). It is
+    also the run’s spend cap: `Budget(max_usd=...)` (default $1) bounds
+    every paid call the run makes — generations and paid LLM rungs —
+    cumulatively, and a call of unknown cost needs
+    `Budget(approve_unknown_cost=True)` (#57).
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
@@ -2338,7 +2510,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How a sound entered foley (retrieval channel or origin).
 
-### *class* foley.base.Affordance(name, type, description, default=None, stage='query')
+### *class* foley.base.Affordance(name, type, description, default=None, stage='query', carries_meaning=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2364,6 +2536,12 @@ Default value (`None` = no default / required).
 
 `'query'` (search/find/filter) or `'generate'`.
 
+#### carries_meaning
+
+Dropping it would change what the caller gets (a seed they
+will rely on to reproduce, content they asked to exclude), so a backend
+that cannot honour it raises instead of dropping it (#53).
+
 ### *class* foley.base.Anchor(\*values)
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
@@ -2374,7 +2552,7 @@ How a WEAVE `Placement` binds its symbolic time to the narration (report 06 §2.
 `word_timeline` — `word` to a trigger word’s onset, `sentence` across a
 sentence span, `scene`/`paragraph` to a boundary’s first spoken word.
 
-### *class* foley.base.Candidate(sound, origin=CandidateOrigin.retrieved, event=None, clap_score=None, bm25_score=None, rrf_score=None, rerank_score=None, verdict=None, license_ok=None, preview_uri=None)
+### *class* foley.base.Candidate(sound, origin=CandidateOrigin.retrieved, event=None, clap_score=None, bm25_score=None, rrf_score=None, rerank_score=None, verdict=None, license_ok=None, preview_uri=None, notes=<factory>, cost_estimate_usd=None, cost_actual_usd=None)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -2390,7 +2568,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Whether a candidate was retrieved from the index or freshly generated.
 
-### foley.base.GENERATION_AFFORDANCES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Affordance](_autosummary/foley.base.html.md#foley.base.Affordance)]* *= {'duration': Affordance(name='duration', type=<class 'float'>, description='Seconds; None => backend default', default=None, stage='generate'), 'loop': Affordance(name='loop', type=<class 'bool'>, description='Seamless-loopable clip', default=False, stage='generate'), 'negative_prompt': Affordance(name='negative_prompt', type=<class 'str'>, description='Content to exclude', default=None, stage='generate'), 'output_format': Affordance(name='output_format', type=<class 'str'>, description='wav|opus|mp3', default='wav', stage='generate'), 'prompt': Affordance(name='prompt', type=<class 'str'>, description='Sound description', default=None, stage='generate'), 'prompt_influence': Affordance(name='prompt_influence', type=<class 'float'>, description='0..1 unified guidance', default=0.3, stage='generate'), 'seed': Affordance(name='seed', type=<class 'int'>, description='Reproducibility (capture in provenance)', default=None, stage='generate'), 'steps': Affordance(name='steps', type=<class 'int'>, description='Diffusion/flow steps', default=None, stage='generate')}*
+### foley.base.GENERATION_AFFORDANCES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Affordance](_autosummary/foley.base.html.md#foley.base.Affordance)]* *= {'duration': Affordance(name='duration', type=<class 'float'>, description='Seconds; None => backend default', default=None, stage='generate', carries_meaning=False), 'loop': Affordance(name='loop', type=<class 'bool'>, description='Seamless-loopable clip', default=False, stage='generate', carries_meaning=False), 'negative_prompt': Affordance(name='negative_prompt', type=<class 'str'>, description='Content to exclude', default=None, stage='generate', carries_meaning=True), 'output_format': Affordance(name='output_format', type=<class 'str'>, description='wav|opus|mp3', default='wav', stage='generate', carries_meaning=False), 'prompt': Affordance(name='prompt', type=<class 'str'>, description='Sound description', default=None, stage='generate', carries_meaning=False), 'prompt_influence': Affordance(name='prompt_influence', type=<class 'float'>, description='0..1 unified guidance', default=0.3, stage='generate', carries_meaning=False), 'seed': Affordance(name='seed', type=<class 'int'>, description='Reproducibility (capture in provenance)', default=None, stage='generate', carries_meaning=True), 'steps': Affordance(name='steps', type=<class 'int'>, description='Diffusion/flow steps', default=None, stage='generate', carries_meaning=False)}*
 
 Unified generation-stage parameters (generate backends map onto these).
 
@@ -2453,7 +2631,7 @@ Every field is a no-op at its default, so a sparse item (no `processing`)
 renders untouched; the mixer departs from dry/centered/full-level only when a
 field is set.
 
-### foley.base.QUERY_AFFORDANCES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Affordance](_autosummary/foley.base.html.md#foley.base.Affordance)]* *= {'audioset_label': Affordance(name='audioset_label', type=<class 'str'>, description='AudioSet ontology facet (rolls up children)', default=None, stage='query'), 'commercial_ok': Affordance(name='commercial_ok', type=<class 'bool'>, description='License filter shorthand', default=None, stage='query'), 'duration_range': Affordance(name='duration_range', type=<class 'tuple'>, description='(min_s, max_s)', default=None, stage='query'), 'filters': Affordance(name='filters', type=<class 'dict'>, description='Metadata predicates (SQL-style)', default=None, stage='query'), 'k': Affordance(name='k', type=<class 'int'>, description='Number of results', default=10, stage='query'), 'license': Affordance(name='license', type=<class 'str'>, description='Explicit license id constraint', default=None, stage='query'), 'min_snr': Affordance(name='min_snr', type=<class 'float'>, description='QC filter: min SNR dB', default=None, stage='query'), 'rerank': Affordance(name='rerank', type=<class 'bool'>, description='Apply second-stage rerank', default=False, stage='query'), 'semantic_text': Affordance(name='semantic_text', type=<class 'str'>, description='Query for CLAP semantic space', default=None, stage='query'), 'sort': Affordance(name='sort', type=<class 'str'>, description='score|duration|created|downloads', default='score', stage='query'), 'text': Affordance(name='text', type=<class 'str'>, description='Natural-language query', default=None, stage='query'), 'ucs_category': Affordance(name='ucs_category', type=<class 'str'>, description='UCS CatID facet', default=None, stage='query')}*
+### foley.base.QUERY_AFFORDANCES *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Affordance](_autosummary/foley.base.html.md#foley.base.Affordance)]* *= {'audioset_label': Affordance(name='audioset_label', type=<class 'str'>, description='AudioSet ontology facet (rolls up children)', default=None, stage='query', carries_meaning=False), 'commercial_ok': Affordance(name='commercial_ok', type=<class 'bool'>, description='License filter shorthand', default=None, stage='query', carries_meaning=False), 'duration_range': Affordance(name='duration_range', type=<class 'tuple'>, description='(min_s, max_s)', default=None, stage='query', carries_meaning=False), 'filters': Affordance(name='filters', type=<class 'dict'>, description='Metadata predicates (SQL-style)', default=None, stage='query', carries_meaning=False), 'k': Affordance(name='k', type=<class 'int'>, description='Number of results', default=10, stage='query', carries_meaning=False), 'license': Affordance(name='license', type=<class 'str'>, description='Explicit license id constraint', default=None, stage='query', carries_meaning=False), 'min_snr': Affordance(name='min_snr', type=<class 'float'>, description='QC filter: min SNR dB', default=None, stage='query', carries_meaning=False), 'rerank': Affordance(name='rerank', type=<class 'bool'>, description='Apply second-stage rerank', default=False, stage='query', carries_meaning=False), 'semantic_text': Affordance(name='semantic_text', type=<class 'str'>, description='Query for CLAP semantic space', default=None, stage='query', carries_meaning=False), 'sort': Affordance(name='sort', type=<class 'str'>, description='score|duration|created|downloads', default='score', stage='query', carries_meaning=False), 'text': Affordance(name='text', type=<class 'str'>, description='Natural-language query', default=None, stage='query', carries_meaning=False), 'ucs_category': Affordance(name='ucs_category', type=<class 'str'>, description='UCS CatID facet', default=None, stage='query', carries_meaning=False)}*
 
 Unified query-stage parameters (search / find / filter surface).
 
@@ -2629,6 +2807,166 @@ Entry point for the `foley` console script.
 
 * **Return type:**
   [`int`](https://docs.python.org/3/builtins/functions.html#int)
+
+
+# _autosummary/foley.cost.html.md
+
+# foley.cost
+
+Cost: what a call will cost before it is made, and a cumulative cap on a run (#57).
+
+Three pieces, each small:
+
+* **Pricing as data.** Each source declares `SOURCE_CONFIG['pricing']` — the falaw
+  convention (`unit`, `amount_usd`, plus the `source` and `seen` date the price
+  was read from). [`estimate_call()`](_autosummary/foley.cost.html.md#foley.cost.estimate_call) turns it into dollars for one call, and returns
+  `None` — never `0.0` — when the cost cannot be known (no pricing, or a
+  per-second price with no duration and no maximum).
+* **A run-scoped budget.** [`spend_scope()`](_autosummary/foley.cost.html.md#foley.cost.spend_scope) makes a
+  [`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget) the active one for a `find` / `score` /
+  > `generate` run; [`authorize()`](_autosummary/foley.cost.html.md#foley.cost.authorize) is called before every paid call and refuses the
+  > first one that would take the run past `max_usd` (default [`DEFAULT_MAX_USD`](_autosummary/foley.cost.html.md#foley.cost.DEFAULT_MAX_USD),
+  > $1 — maintainer decision on #57), or whose cost is unknown unless the budget
+  > approves unknown costs.
+* **Two errors.** [`BudgetExceeded`](_autosummary/foley.cost.html.md#foley.cost.BudgetExceeded) and its subclass [`CostApprovalRequired`](_autosummary/foley.cost.html.md#foley.cost.CostApprovalRequired).
+
+Stdlib-only.
+
+### Module Attributes
+
+| [`DEFAULT_MAX_USD`](_autosummary/foley.cost.html.md#foley.cost.DEFAULT_MAX_USD)          | The default cumulative cap for one run (a `find` / `score` / `generate` call).    |
+|---------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| [`APPROVE_UNKNOWN_COST_ENV`](_autosummary/foley.cost.html.md#foley.cost.APPROVE_UNKNOWN_COST_ENV) | Set to 1 to approve calls whose cost is unknown, for every run that does not say. |
+
+### Functions
+
+| [`estimate_call`](_autosummary/foley.cost.html.md#foley.cost.estimate_call)(config, \*\*affordances)   | The USD cost of one call to the source `config` declares, or `None` if unknown.                                                |
+|-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| [`spend_scope`](_autosummary/foley.cost.html.md#foley.cost.spend_scope)([budget])                    | Put `budget` in force for the block; every enclosing budget stays in force too.                                                |
+| [`scoped_iter`](_autosummary/foley.cost.html.md#foley.cost.scoped_iter)(iterator_factory[, budget])  | Iterate `iterator_factory()` with `budget` in force only while it runs.                                                        |
+| [`active_budget`](_autosummary/foley.cost.html.md#foley.cost.active_budget)()                          | The innermost [`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget) of the current run, or `None`. |
+| [`check`](_autosummary/foley.cost.html.md#foley.cost.check)(estimate_usd, \*, what)            | Raise unless every budget in force can afford `estimate_usd` (reserves nothing).                                               |
+| [`authorize`](_autosummary/foley.cost.html.md#foley.cost.authorize)(estimate_usd, \*, what)        | Admit a paid call: every budget in force must afford it, and each reserves it.                                                 |
+| [`settle`](_autosummary/foley.cost.html.md#foley.cost.settle)(reserved_usd, actual_usd)         | Replace each budget's reservation with the actual cost (`None`: keep it).                                                      |
+| [`release`](_autosummary/foley.cost.html.md#foley.cost.release)(reserved_usd)                    | Undo a reservation for a call that was never sent.                                                                             |
+| [`charge`](_autosummary/foley.cost.html.md#foley.cost.charge)(usd)                              | Record `usd` against every budget in force (a no-op outside any run).                                                          |
+
+### Exceptions
+
+| [`BudgetExceeded`](_autosummary/foley.cost.html.md#foley.cost.BudgetExceeded)       | Raised before a paid call that would take the run past its `max_usd` cap.          |
+|-----------------------------------------------------------------------|------------------------------------------------------------------------------------|
+| [`CostApprovalRequired`](_autosummary/foley.cost.html.md#foley.cost.CostApprovalRequired) | Raised before a call whose cost is unknown, when the budget has not approved that. |
+
+### foley.cost.APPROVE_UNKNOWN_COST_ENV *= 'FOLEY_APPROVE_UNKNOWN_COST'*
+
+Set to 1 to approve calls whose cost is unknown, for every run that does not say.
+
+### *exception* foley.cost.BudgetExceeded
+
+Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
+
+Raised before a paid call that would take the run past its `max_usd` cap.
+
+### *exception* foley.cost.CostApprovalRequired
+
+Bases: [`BudgetExceeded`](_autosummary/foley.cost.html.md#foley.cost.BudgetExceeded)
+
+Raised before a call whose cost is unknown, when the budget has not approved that.
+
+### foley.cost.DEFAULT_MAX_USD *: [float](https://docs.python.org/3/builtins/functions.html#float)* *= 1.0*
+
+The default cumulative cap for one run (a `find` / `score` / `generate` call).
+
+### foley.cost.active_budget()
+
+The innermost [`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget) of the current run, or `None`.
+
+### foley.cost.authorize(estimate_usd, , what)
+
+Admit a paid call: every budget in force must afford it, and each reserves it.
+
+The reservation is atomic per budget, so concurrent calls cannot all pass before
+any is counted. Call [`settle()`](_autosummary/foley.cost.html.md#foley.cost.settle) afterwards with the actual cost when known; a
+call that fails after being sent keeps its reservation (it may have been billed);
+one refused before sending is released with [`release()`](_autosummary/foley.cost.html.md#foley.cost.release).
+
+* **Raises:**
+  * [**CostApprovalRequired**](_autosummary/foley.cost.html.md#foley.cost.CostApprovalRequired) – If `estimate_usd` is `None` and a budget in force has
+        not approved unknown costs (`Budget.approve_unknown_cost` /
+        `$FOLEY_APPROVE_UNKNOWN_COST`).
+  * [**BudgetExceeded**](_autosummary/foley.cost.html.md#foley.cost.BudgetExceeded) – If a budget’s spend plus `estimate_usd` exceeds its `max_usd`.
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+### foley.cost.charge(usd)
+
+Record `usd` against every budget in force (a no-op outside any run).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+### foley.cost.check(estimate_usd, , what)
+
+Raise unless every budget in force can afford `estimate_usd` (reserves nothing).
+
+For a whole-run upper bound (`find`’s pre-flight).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+### foley.cost.estimate_call(config, \*\*affordances)
+
+The USD cost of one call to the source `config` declares, or `None` if unknown.
+
+`config['pricing']` units:
+
+* `'free'` (local inference, a free API tier) → `0.0`;
+* `'per_call'` → `amount_usd`;
+* `'per_second'` → `amount_usd` × the requested `duration`, or × the backend’s
+  `native_defaults['duration_max_s']` when the duration is left to the backend
+  (an upper bound), else `None`.
+
+* **Parameters:**
+  * **config** ([`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)) – A `SOURCE_CONFIG`.
+  * **\*\*affordances** – The canonical affordances of the call (`duration`, …).
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
+
+### foley.cost.release(reserved_usd)
+
+Undo a reservation for a call that was never sent.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+### foley.cost.scoped_iter(iterator_factory, budget=None)
+
+Iterate `iterator_factory()` with `budget` in force only while it runs.
+
+A generator that holds a [`spend_scope()`](_autosummary/foley.cost.html.md#foley.cost.spend_scope) across `yield` would leave its
+budget active in the caller’s context between items (so the caller’s own calls, or
+another interleaved stream, would charge it). This re-enters the scope for each
+step and leaves it before handing the item out; closing the stream closes the
+inner iterator inside the scope too.
+
+### foley.cost.settle(reserved_usd, actual_usd)
+
+Replace each budget’s reservation with the actual cost (`None`: keep it).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+### foley.cost.spend_scope(budget=None)
+
+Put `budget` in force for the block; every enclosing budget stays in force too.
+
+Budgets stack: a paid call must fit **every** budget in force (so an explicit,
+stricter `budget` inside a `find` / `score` run still applies) and is charged
+to each of them once. With no `budget`: inside a run, nothing changes; outside
+one, a fresh default [`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget) is used ($1).
+
+* **Yields:**
+  The innermost budget in force.
 
 
 # _autosummary/foley.eval.baseline.html.md
@@ -4031,6 +4369,7 @@ lazy-imported inside the audio/QC functions that need them (install via the
 | [`to_working`](_autosummary/foley.html.md#foley.to_working)(samples, sample_rate, \*[, mono, ...])   | Produce the canonical CLAP/QC working array from an arbitrary clip.                                                                                                            |
 | [`default_library`](_autosummary/foley.html.md#foley.default_library)()                                   | The process-wide default library (local stores + CLAP + best index).                                                                                                           |
 | [`search`](_autosummary/foley.html.md#foley.search)(query, \*[, k, filters, ...])                | Hybrid (CLAP vector ⊕ BM25) search of the default library.                                                                                                                     |
+| [`estimate`](_autosummary/foley.html.md#foley.estimate)(verb, \*\*kwargs)                          | What a call would cost in USD before making it — `None` when it cannot be known (#57).                                                                                         |
 | [`similar`](_autosummary/foley.html.md#foley.similar)(sound_id, \*[, k, commercial_ok])           | Find sounds similar to a stored sound (audio<->audio) in the default library.                                                                                                  |
 | [`default_embedder`](_autosummary/foley.html.md#foley.default_embedder)()                                  | Return a process-wide default [`ClapEmbedder`](_autosummary/foley.html.md#foley.ClapEmbedder) (loaded once, reused).                                                             |
 | [`default_index`](_autosummary/foley.html.md#foley.default_index)(\*, data_dir, dim)                    | Build the best available persistent index for a library.                                                                                                                       |
@@ -4128,11 +4467,11 @@ lazy-imported inside the audio/QC functions that need them (install via the
 | [`ClapZeroShotTagger`](_autosummary/foley.html.md#foley.ClapZeroShotTagger)(\*[, embedder, labels, ...])   | Zero-shot tagger: score a clip against a label set via CLAP cosine.                                                                  |
 | [`PannsTagger`](_autosummary/foley.html.md#foley.PannsTagger)(\*[, device, threshold])              | PANNs CNN14 supervised tagger over the 527 AudioSet classes (`foley[tag]`).                                                          |
 | [`IngestResult`](_autosummary/foley.html.md#foley.IngestResult)(id, status[, record, qc, ...])       | The outcome of ingesting one clip.                                                                                                   |
-| [`IngestReport`](_autosummary/foley.html.md#foley.IngestReport)(root[, results])                     | The rolled-up outcome of a folder ingest (JSON-serializable).                                                                        |
+| [`IngestReport`](_autosummary/foley.html.md#foley.IngestReport)(root[, results, notes])              | The rolled-up outcome of a folder ingest (JSON-serializable).                                                                        |
 | [`RunManifest`](_autosummary/foley.html.md#foley.RunManifest)(run_id, op[, created_at, ...])        | The reproducible run-artifact for one foley operation (trace ⊕ plan ⊕ provenance).                                                   |
 | [`SpanRecord`](_autosummary/foley.html.md#foley.SpanRecord)(name, span_id[, parent_id, kind, ...]) | One node of the run's span tree (the trace half of the artifact).                                                                    |
 | [`Judge`](_autosummary/foley.html.md#foley.Judge)(\*args, \*\*kwargs)                         | One rung of the verify ladder: does this candidate match this event? (report 10 §4.2).                                               |
-| [`Budget`](_autosummary/foley.html.md#foley.Budget)([max_refine_loops, max_generations, ...])  | Bounded-cost accounting for the per-event refine/generate loops.                                                                     |
+| [`Budget`](_autosummary/foley.html.md#foley.Budget)([max_refine_loops, max_generations, ...])  | Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).                                                   |
 | [`Decision`](_autosummary/foley.html.md#foley.Decision)(action[, candidate, reason])             | The tiny result of [`decide()`](_autosummary/foley.html.md#foley.decide); `reason` feeds the refine hint + the audit Step.       |
 | [`WeaveResult`](_autosummary/foley.html.md#foley.WeaveResult)(audio, sr, timeline, credits, ...)    | The output of `weave()` — the v1 Definition-of-Done deliverable.                                                                     |
 | [`ScoreResult`](_autosummary/foley.html.md#foley.ScoreResult)(timeline, events[, weave])            | The output of [`score()`](_autosummary/foley.html.md#foley.score) — the editable plan + per-event rationale (+ mix when woven). |
@@ -4156,7 +4495,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How a sound entered foley (retrieval channel or origin).
 
-### *class* foley.Affordance(name, type, description, default=None, stage='query')
+### *class* foley.Affordance(name, type, description, default=None, stage='query', carries_meaning=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4182,6 +4521,12 @@ Default value (`None` = no default / required).
 
 `'query'` (search/find/filter) or `'generate'`.
 
+#### carries_meaning
+
+Dropping it would change what the caller gets (a seed they
+will rely on to reproduce, content they asked to exclude), so a backend
+that cannot honour it raises instead of dropping it (#53).
+
 ### *class* foley.Anchor(\*values)
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
@@ -4192,14 +4537,43 @@ How a WEAVE `Placement` binds its symbolic time to the narration (report 06 §2.
 `word_timeline` — `word` to a trigger word’s onset, `sentence` across a
 sentence span, `scene`/`paragraph` to a boundary’s first spoken word.
 
-### *class* foley.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
+### *class* foley.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, max_usd=1.0, approve_unknown_cost=None, \_refines=0, \_gens=0, \_spent_usd=0.0, \_unknown_calls=0, \_lock=<factory>)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-Bounded-cost accounting for the per-event refine/generate loops.
+Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).
 
-Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](_autosummary/foley.html.md#foley.Budget.refine_ok) /
-[`gen_ok()`](_autosummary/foley.html.md#foley.Budget.gen_ok) to test, then [`spend_refine()`](_autosummary/foley.html.md#foley.Budget.spend_refine) / [`spend_gen()`](_autosummary/foley.html.md#foley.Budget.spend_gen) to charge.
+Two kinds of bound:
+
+* **Per event** — `max_refine_loops` / `max_generations`: the loop calls
+  [`refine_ok()`](_autosummary/foley.html.md#foley.Budget.refine_ok) / [`gen_ok()`](_autosummary/foley.html.md#foley.Budget.gen_ok) to test, then [`spend_refine()`](_autosummary/foley.html.md#foley.Budget.spend_refine) /
+  [`spend_gen()`](_autosummary/foley.html.md#foley.Budget.spend_gen) to charge; [`reset()`](_autosummary/foley.html.md#foley.Budget.reset) zeroes them at each event.
+* **Per run, cumulative** — `max_usd` (default $1): every paid call (generation,
+  paid LLM rung) is checked with [`authorize()`](_autosummary/foley.html.md#foley.Budget.authorize) before it is made and recorded with [`charge()`](_autosummary/foley.html.md#foley.Budget.charge)
+  after. [`reset()`](_autosummary/foley.html.md#foley.Budget.reset) never clears it, so the cap holds across the whole
+  `find` / `score` run. A call whose cost is unknown (estimate `None`) is
+  refused unless `approve_unknown_cost` (or `$FOLEY_APPROVE_UNKNOWN_COST=1`).
+
+#### authorize(estimate_usd, , what)
+
+Alias of [`check()`](_autosummary/foley.html.md#foley.Budget.check) (kept for callers that only test affordability).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### charge(usd)
+
+Record a call’s cost (`None` = unknown: counted, not summed).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### check(estimate_usd, , what)
+
+Raise if this run cannot afford `estimate_usd` (nothing is reserved).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### gen_ok()
 
@@ -4215,6 +4589,17 @@ Whether another refine→re-retrieve pass is within budget.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+#### reserve(estimate_usd, , what)
+
+Check, then count `estimate_usd` as spent at once (atomic under a lock).
+
+Reserving before the call is what keeps concurrent calls on one budget (MCP
+tools run in a threadpool) from all passing the check before any is charged.
+[`settle()`](_autosummary/foley.html.md#foley.Budget.settle) later replaces the reservation with the actual cost, if known.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### reset()
 
 Zero the spend counters so the caps apply *per event*, not per passage.
@@ -4222,6 +4607,13 @@ Zero the spend counters so the caps apply *per event*, not per passage.
 The `find` loop calls this at the top of each event so one hard event’s
 refine/generate spend never starves later events (the documented per-event
 semantics).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### settle(reserved_usd, actual_usd)
+
+Replace a reservation with the actual cost (`None` actual: keep the reservation).
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -4240,7 +4632,11 @@ Charge one refine loop.
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-### *class* foley.Candidate(sound, origin=CandidateOrigin.retrieved, event=None, clap_score=None, bm25_score=None, rrf_score=None, rerank_score=None, verdict=None, license_ok=None, preview_uri=None)
+#### *property* spent_usd *: [float](https://docs.python.org/3/builtins/functions.html#float)*
+
+Dollars charged so far this run (calls of unknown cost count as 0 here).
+
+### *class* foley.Candidate(sound, origin=CandidateOrigin.retrieved, event=None, clap_score=None, bm25_score=None, rrf_score=None, rerank_score=None, verdict=None, license_ok=None, preview_uri=None, notes=<factory>, cost_estimate_usd=None, cost_actual_usd=None)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -4518,7 +4914,7 @@ The [`IngestReport`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.
 The terminal [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult) status
 (`'quarantined'` | `'rights_blocked'` | `'error'` | …).
 
-### *class* foley.IngestReport(root, results=<factory>)
+### *class* foley.IngestReport(root, results=<factory>, notes=<factory>)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -4534,6 +4930,11 @@ Record a per-file error without aborting the run.
 #### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
+
+#### exception *= None*
+
+The exception behind the last `error` result, kept so a raising façade can
+chain it (`raise ... from`); a plain attribute, never serialized.
 
 #### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
@@ -4565,7 +4966,7 @@ A counts dict for a console/CLI summary.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* foley.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
+### *class* foley.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None, cost_estimate_usd=None, cost_actual_usd=None)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -5497,7 +5898,7 @@ The output of `weave()` — the v1 Definition-of-Done deliverable.
 A mastered mix + an editable, re-renderable timeline + credits + SDH captions + a
 reproducible run-artifact join, plus the fail-safe provenance re-assertion.
 
-### foley.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, \*\*affordances)
+### foley.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, on_unsupported=None, \*\*affordances)
 
 Search a live `source` and ingest its license-clean hits into `library`.
 
@@ -5521,6 +5922,9 @@ applies the by-reference storage gate from the sound’s own license.
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport
     adapter; production omits it and the registry lazily builds one).
+  * **on_unsupported** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A search parameter the source cannot honour: `None`
+    (default) drops it with a note in `report.notes`; `'raise'` raises
+    (see `foley.sources._dispatch.translate_affordances()`).
   * **\*\*affordances** – Extra unified affordances forwarded to the adapter’s
     `search` (e.g. `duration_range`, `sort`).
 * **Return type:**
@@ -5589,7 +5993,7 @@ Seed `library` from the selected bulk corpora, returning per-corpus reports.
 * **Returns:**
   `{corpus_name: IngestReport}` — inspect each `.summary()`.
 
-### foley.build_mcp_server(, library=None, session='default', runtime=None, byte_store=None, include=None, name='foley')
+### foley.build_mcp_server(, library=None, session='default', runtime=None, byte_store=None, include=None, name='foley', max_usd=None)
 
 Build the foley MCP server (lazy `py2mcp`); registers the JSON-safe tool surface.
 
@@ -5604,6 +6008,8 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
   * **byte_store** – A `MutableMapping[str, bytes]` for previews / rendered mixes.
   * **include** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Optional subset of tool names to expose.
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP server name.
+  * **max_usd** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – The server’s cumulative spend cap across every paid tool call, for
+    its lifetime (default [`foley.cost.DEFAULT_MAX_USD`](_autosummary/foley.cost.html.md#foley.cost.DEFAULT_MAX_USD), $1).
 * **Returns:**
   A `fastmcp.FastMCP` server.
 
@@ -5929,6 +6335,28 @@ Mappings: mono -> N by duplication; N -> mono by mean; N -> M (N != M, both
 
 Lazy dependency: `numpy` (only for the up-mix / tile path).
 
+### foley.estimate(verb, \*\*kwargs)
+
+What a call would cost in USD before making it — `None` when it cannot be known (#57).
+
+`None` is never “free”: it means the price is unknown (no pricing declared, a
+remote LLM endpoint, an unlisted model), and such a call needs the run’s approval
+(`Budget(approve_unknown_cost=True)`). Paid amounts are upper bounds.
+
+* **Parameters:**
+  * **verb** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'generate'` (`backend=`, plus the generation affordances — priced
+    exactly as the call would be: same drops, same clamp); `'find'` /
+    `'score'` (the run’s upper bound: every generation and LLM call it could
+    make — what `find` checks against its budget before the first paid call;
+    pass `context=` / `segments=` so the decomposer’s prompt is sized, and
+    `score` sums one `find` per segment);
+    `'search'` / `'similar'` / `'ingest'` (local: `0.0`);
+    `'add_from'` (`source=`).
+  * **\*\*kwargs** – The same keywords the verb takes.
+* **Raises:**
+  * [**ValueError**](https://docs.python.org/3/builtins/exceptions.html#ValueError) – For an unknown verb.
+  * [**KeyError**](https://docs.python.org/3/builtins/exceptions.html#KeyError) – For an unknown backend / source.
+
 ### foley.estimate_snr(samples, sample_rate, , quiet_percentile=10.0, frame_s=0.025, hop_s=0.01)
 
 Estimate SNR in dB (advisory — a busy-street SFX legitimately scores low).
@@ -6037,7 +6465,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
   * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
     [`Budget`](_autosummary/foley.html.md#foley.Budget)).
-  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](_autosummary/foley.html.md#foley.Budget) (overrides `max_refine_loops`).
+  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](_autosummary/foley.html.md#foley.Budget) (overrides `max_refine_loops`). It is
+    also the run’s spend cap: `Budget(max_usd=...)` (default $1) bounds
+    every paid call the run makes — generations and paid LLM rungs —
+    cumulatively, and a call of unknown cost needs
+    `Budget(approve_unknown_cost=True)` (#57).
   * **library** – Target [`SoundLibrary`](_autosummary/foley.html.md#foley.SoundLibrary) (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](_autosummary/foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);
@@ -6074,7 +6506,7 @@ RRF-fuse a vector ranker’s hits with a keyword ranker’s hits.
 
   FusedHit\`s, each carrying its raw component scores.
 
-### foley.generate(prompt, , backend='stable_audio', library=None, store=True, adapter=None, watermark=None, on_flagged='refuse', watermarker=None, provenance_store=None, \*\*affordances)
+### foley.generate(prompt, , backend='stable_audio', library=None, store=True, adapter=None, watermark=None, on_flagged='refuse', watermarker=None, provenance_store=None, on_unsupported=None, reuse_cached=True, budget=None, \*\*affordances)
 
 Generate a sound effect for `prompt` and add it to the library (by-value).
 
@@ -6104,20 +6536,36 @@ training uses).
   * **watermarker** – An injected watermarker (the DI seam; tests pass a fake).
   * **provenance_store** – A `MutableMapping` for content-credential sidecars
     (default: [`foley.stores.make_provenance_store()`](_autosummary/foley.stores.html.md#foley.stores.make_provenance_store)).
+  * **on_unsupported** – A parameter the backend cannot honour: `None` (default)
+    raises for a meaning-carrying one (`seed`, `negative_prompt`) and drops
+    the rest with a note; `'warn'` drops everything with a note + warning;
+    `'note'` silently-but-recorded; `'raise'` raises for any.
+  * **reuse_cached** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Serve an identical paid request from the generations cache
+    (default `True`): a paid sound is never paid for twice (#59).
+  * **budget** – A [`Budget`](_autosummary/foley.html.md#foley.Budget) for this call (default: the active run’s, else a
+    fresh one — a $1 cap; an unknown cost needs approval) (#57).
   * **\*\*affordances** – Unified generation affordances (`duration`,
     `prompt_influence`, `negative_prompt`, `steps`, `seed`, `loop`,
-    `output_format` — see `GENERATION_AFFORDANCES`); a backend
-    warns-and-drops the ones it does not support.
+    `output_format` — see `GENERATION_AFFORDANCES`).
 * **Returns:**
   The stored [`Candidate`](_autosummary/foley.html.md#foley.Candidate) (`origin=generated`) — its `sound` is the
-  canonical, by-value [`SoundRecord`](_autosummary/foley.html.md#foley.SoundRecord) (a content-hash id).
+  canonical, by-value [`SoundRecord`](_autosummary/foley.html.md#foley.SoundRecord) (a content-hash id); its `notes`
+  list every dropped, clamped or substituted parameter, and
+  `cost_estimate_usd` / `cost_actual_usd` what it cost (`None` = unknown).
 * **Raises:**
   * [**SafetyRefusal**](_autosummary/foley.html.md#foley.SafetyRefusal) – If the prompt trips a safety gate and `on_flagged='refuse'`
         (a [`GenerationError`](_autosummary/foley.html.md#foley.GenerationError) subclass — `TrademarkRefusal` /
         `RecognizableVoiceRefusal`).
   * [**GenerationError**](_autosummary/foley.html.md#foley.GenerationError) – If the backend yields no stored sound (QC-quarantined,
-        rights-blocked, or a synthesis/ingest error). The exception carries the
-        full `report` and terminal `status` so callers can react distinctly.
+        rights-blocked, or a synthesis/ingest error). The message carries the root
+        cause and the exception is chained to it; it also carries the full
+        `report` and terminal `status` so callers can react distinctly.
+  * [**SourceConfigurationError**](_autosummary/foley.sources.base.html.md#foley.sources.base.SourceConfigurationError) – If the backend is not configured (a missing key or
+        plan) — the message names the env var and where to get the key.
+  * **UnsupportedParameter** – For a meaning-carrying parameter the backend cannot
+        honour (see `on_unsupported`).
+  * **BudgetExceeded / CostApprovalRequired** – Before a paid call the budget refuses.
+  * [**EgressBlocked**](_autosummary/foley.runtime.html.md#foley.runtime.EgressBlocked) – For an external backend under [`offline()`](_autosummary/foley.html.md#foley.offline).
 
 ### foley.has_nan_inf(samples)
 
@@ -6525,7 +6973,7 @@ Mapping for the cloud.
 * **Returns:**
   A `MutableMapping[str, dict]` keyed by the bare key.
 
-### foley.mcp_server(, library=None, session='default', runtime=None, byte_store=None, include=None, name='foley')
+### foley.mcp_server(, library=None, session='default', runtime=None, byte_store=None, include=None, name='foley', max_usd=None)
 
 Build the foley MCP server (lazy `py2mcp`); registers the JSON-safe tool surface.
 
@@ -6540,6 +6988,8 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
   * **byte_store** – A `MutableMapping[str, bytes]` for previews / rendered mixes.
   * **include** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Optional subset of tool names to expose.
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP server name.
+  * **max_usd** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – The server’s cumulative spend cap across every paid tool call, for
+    its lifetime (default [`foley.cost.DEFAULT_MAX_USD`](_autosummary/foley.cost.html.md#foley.cost.DEFAULT_MAX_USD), $1).
 * **Returns:**
   A `fastmcp.FastMCP` server.
 
@@ -6818,7 +7268,7 @@ Write `samples` to `dst` as `fmt`/`subtype` (default = FLAC archive).
 
 Lazy dependency: `soundfile`.
 
-### foley.score(segments, , audio=None, transcript=None, library=None, intended_use=None, commercial_ok=None, max_events=6, verify='listen', master='podcast', weave=None, llm=None, \*\*weave_kwargs)
+### foley.score(segments, , audio=None, transcript=None, library=None, intended_use=None, commercial_ok=None, max_events=6, verify='listen', master='podcast', weave=None, llm=None, budget=None, \*\*weave_kwargs)
 
 Choose sounds for narration text and (optionally) weave them into the narration audio.
 
@@ -6851,6 +7301,8 @@ editable [`SoundDesignTimeline`](_autosummary/foley.base.html.md#foley.base.Soun
   * **weave** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]) – Force weaving on/off; default auto (`True` iff `audio` is given).
   * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which LLM the SELECT rungs use (`'fake'` | `'local'` | `'anthropic'`;
     `None` reads `$FOLEY_LLM`, else the free default) — see [`foley.find()`](_autosummary/foley.html.md#foley.find).
+  * **budget** – The run’s [`Budget`](_autosummary/foley.agent.policy.html.md#foley.agent.policy.Budget) — one spend cap
+    (`max_usd`, default $1) across every segment’s paid calls (#57).
   * **\*\*weave_kwargs** – Forwarded to `foley.weave()` (e.g. `sign_cert`, `watermark`).
 * **Return type:**
   [`ScoreResult`](_autosummary/foley.html.md#foley.ScoreResult)
@@ -7095,6 +7547,7 @@ escalates to the injected/​default judge for that rung and returns *its* verdi
 | [`agent_kit`](_autosummary/foley.agent_kit.html.md#module-foley.agent_kit)       | Install foley's shipped agent kit — the consumer skill + Claude slash command + subagent.                                                            |
 | [`base`](_autosummary/foley.base.html.md#module-foley.base)                 | Canonical data models for foley — the single source of truth (SSOT) types.                                                                           |
 | [`cli`](_autosummary/foley.cli.html.md#module-foley.cli)                   | The `foley` command-line interface (stdlib `argparse`, zero new deps).                                                                               |
+| [`cost`](_autosummary/foley.cost.html.md#module-foley.cost)                 | Cost: what a call will cost before it is made, and a cumulative cap on a run (#57).                                                                  |
 | [`licensing`](_autosummary/foley.licensing.html.md#module-foley.licensing)       | License policy for foley: the license_id -> flag-set SSOT, flag derivation (with per-source overrides), and the fail-closed candidate `keep()` gate. |
 | [`qc`](_autosummary/foley.qc.html.md#module-foley.qc)                     | Tier-0 deterministic audio QC for foley (research report 08 §3).                                                                                     |
 | [`requirements`](_autosummary/foley.requirements.html.md#module-foley.requirements) | Onboarding — check what foley needs, tell the user how to get it (accompy-style, #12).                                                               |
@@ -7271,7 +7724,7 @@ only the stdlib; install the capability you use via the matching extra
 | [`ClapZeroShotTagger`](_autosummary/foley.index.html.md#foley.index.ClapZeroShotTagger)(\*[, embedder, labels, ...])   | Zero-shot tagger: score a clip against a label set via CLAP cosine.         |
 | [`PannsTagger`](_autosummary/foley.index.html.md#foley.index.PannsTagger)(\*[, device, threshold])              | PANNs CNN14 supervised tagger over the 527 AudioSet classes (`foley[tag]`). |
 | [`IngestResult`](_autosummary/foley.index.html.md#foley.index.IngestResult)(id, status[, record, qc, ...])       | The outcome of ingesting one clip.                                          |
-| [`IngestReport`](_autosummary/foley.index.html.md#foley.index.IngestReport)(root[, results])                     | The rolled-up outcome of a folder ingest (JSON-serializable).               |
+| [`IngestReport`](_autosummary/foley.index.html.md#foley.index.IngestReport)(root[, results, notes])              | The rolled-up outcome of a folder ingest (JSON-serializable).               |
 | [`MemoryIndex`](_autosummary/foley.index.html.md#foley.index.MemoryIndex)(\*[, dim])                            | In-memory vector + keyword index (numpy cosine + compact BM25).             |
 | [`LanceIndex`](_autosummary/foley.index.html.md#foley.index.LanceIndex)(\*, uri, dim[, table_name])            | LanceDB-backed index: one table with a vector column + a native FTS index.  |
 | [`SqliteVecIndex`](_autosummary/foley.index.html.md#foley.index.SqliteVecIndex)(\*, path, dim)                     | Single-file index: sqlite-vec `vec0` KNN + stdlib FTS5 keyword search.      |
@@ -7484,7 +7937,7 @@ appeared only in the keyword list).
 BM25 score from the keyword ranker (`None` if the id
 appeared only in the vector list).
 
-### *class* foley.index.IngestReport(root, results=<factory>)
+### *class* foley.index.IngestReport(root, results=<factory>, notes=<factory>)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -7500,6 +7953,11 @@ Record a per-file error without aborting the run.
 #### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
+
+#### exception *= None*
+
+The exception behind the last `error` result, kept so a raising façade can
+chain it (`raise ... from`); a plain attribute, never serialized.
 
 #### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
@@ -7531,7 +7989,7 @@ A counts dict for a console/CLI summary.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* foley.index.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
+### *class* foley.index.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None, cost_estimate_usd=None, cost_actual_usd=None)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -8683,7 +9141,7 @@ module costs only the stdlib.
 
 ### Classes
 
-| [`IngestReport`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestReport)(root[, results])               | The rolled-up outcome of a folder ingest (JSON-serializable).   |
+| [`IngestReport`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestReport)(root[, results, notes])        | The rolled-up outcome of a folder ingest (JSON-serializable).   |
 |----------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
 | [`IngestResult`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)(id, status[, record, qc, ...]) | The outcome of ingesting one clip.                              |
 
@@ -8703,7 +9161,7 @@ licence URL / label its source served (kept in `license_url`).
 * **Type:**
   `restamp_rights(license=FROM_LICENSE_URL)`
 
-### *class* foley.index.ingest.IngestReport(root, results=<factory>)
+### *class* foley.index.ingest.IngestReport(root, results=<factory>, notes=<factory>)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -8719,6 +9177,11 @@ Record a per-file error without aborting the run.
 #### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
+
+#### exception *= None*
+
+The exception behind the last `error` result, kept so a raising façade can
+chain it (`raise ... from`); a plain attribute, never serialized.
 
 #### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestResult)]*
 
@@ -8750,7 +9213,7 @@ A counts dict for a console/CLI summary.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* foley.index.ingest.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
+### *class* foley.index.ingest.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None, cost_estimate_usd=None, cost_actual_usd=None)
 
 Bases: [`SerializableMixin`](_autosummary/foley.base.html.md#foley.base.SerializableMixin)
 
@@ -11618,7 +12081,7 @@ True if the prompt matched any trademark or recognizable-voice pattern.
 
 True if the prompt matched a branded-audio-logo entry.
 
-### foley.provenance.disclosure.TRADEMARK_REGISTRY *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[TrademarkEntry](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'deep note', 'thx'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc three-note', 'nbc chime', 'nbc chimes'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'tudum', 'ta dum', 'netflix intro', 'ta-dum', 'netflix sound', 'netflix chime'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'mgm roar', 'metro-goldwyn-mayer lion', 'mgm lion'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'20th century fox fanfare', 'fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel jingle', 'intel bong', 'intel chime', 'intel inside'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({"d'oh", 'homer doh', 'homer simpson doh'})))*
+### foley.provenance.disclosure.TRADEMARK_REGISTRY *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[TrademarkEntry](_autosummary/foley.provenance.disclosure.html.md#foley.provenance.disclosure.TrademarkEntry), ...]* *= (TrademarkEntry(canonical='THX Deep Note', aliases=frozenset({'deep note', 'thx'})), TrademarkEntry(canonical='NBC chimes', aliases=frozenset({'nbc chime', 'nbc chimes', 'nbc three-note'})), TrademarkEntry(canonical='Netflix Ta-dum', aliases=frozenset({'netflix sound', 'ta dum', 'netflix chime', 'tudum', 'netflix intro', 'ta-dum'})), TrademarkEntry(canonical='MGM lion roar', aliases=frozenset({'metro-goldwyn-mayer lion', 'mgm lion', 'mgm roar'})), TrademarkEntry(canonical='20th Century Fox fanfare', aliases=frozenset({'20th century fox fanfare', 'fox fanfare', 'century fox intro'})), TrademarkEntry(canonical='Intel five-note bong', aliases=frozenset({'intel inside', 'intel chime', 'intel jingle', 'intel bong'})), TrademarkEntry(canonical="Homer Simpson D'oh", aliases=frozenset({'homer doh', 'homer simpson doh', "d'oh"})))*
 
 Seed registry of branded audio logos foley must not knowingly generate for
 commercial use (report 07 §7.2). Each entry maps a canonical mark to a set of
@@ -12452,6 +12915,11 @@ so the derived permission flags stay single-sourced.
 | [`GeneratedClip`](_autosummary/foley.sources.base.html.md#foley.sources.base.GeneratedClip)(audio_bytes, candidate[, notes]) | One freshly-generated sound: its transient bytes + a provisional candidate.     |
 | [`UniformCorpus`](_autosummary/foley.sources.base.html.md#foley.sources.base.UniformCorpus)(name, ring, ...[, ...])          | A bulk corpus where **every** clip carries the same license.                    |
 
+### Exceptions
+
+| [`SourceConfigurationError`](_autosummary/foley.sources.base.html.md#foley.sources.base.SourceConfigurationError)   | A source cannot run until the user configures it: a missing key, plan or endpoint.   |
+|-----------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+
 ### foley.sources.base.CORPUS_REGISTRY *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [CorpusAdapter](_autosummary/foley.sources.base.html.md#foley.sources.base.CorpusAdapter)]* *= {'bbc_remarc': UniformCorpus(name='bbc_remarc', ring=2, default_license_id='RemArc', source='bbc_remarc', rights_verified=True, tag_hints_from_path=False), 'clotho': ClothoEvalCorpus(name='clotho', ring=0, default_license_id='CC-BY-4.0', source='clotho', rights_verified=True, tag_hints_from_path=False, include_captions=False), 'foleyset': UniformCorpus(name='foleyset', ring=0, default_license_id='CC-BY-4.0', source='foleyset', rights_verified=True, tag_hints_from_path=True), 'fsd50k': <foley.sources.fsd50k.Fsd50kCorpus object>, 'sonniss': UniformCorpus(name='sonniss', ring=2, default_license_id='Sonniss-GDC', source='sonniss', rights_verified=True, tag_hints_from_path=False)}*
 
 Registry of concrete bulk-corpus adapters, keyed by `adapter.name`.
@@ -12647,6 +13115,16 @@ Return ranked candidates for `query` (license filter pushed native).
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Candidate`](_autosummary/foley.base.html.md#foley.base.Candidate)]
+
+### *exception* foley.sources.base.SourceConfigurationError
+
+Bases: [`RuntimeError`](https://docs.python.org/3/builtins/exceptions.html#RuntimeError)
+
+A source cannot run until the user configures it: a missing key, plan or endpoint.
+
+Not transient, so it is never recorded as one failed hit among many: the generate
+and pull façades let it propagate, and its message names what to set (the env var
+and, for a key, its sign-up URL) (#64).
 
 ### *class* foley.sources.base.UniformCorpus(name, ring, default_license_id, source, rights_verified=True, tag_hints_from_path=False)
 
@@ -13041,6 +13519,13 @@ Generate a sound effect for `prompt`; return its bytes + provisional candidate.
 #### *property* plan *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The account plan = the generated sound’s `license_id` (fail-closed when unknown).
+
+#### request_salt()
+
+What besides the request decides the result: the plan (it decides the licence).
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 
 # _autosummary/foley.sources.elevenlabs.config.html.md
@@ -13740,7 +14225,7 @@ Stamp the corpus’s uniform license (derived via the licensing SSOT).
 * **Return type:**
   [`LicenseRecord`](_autosummary/foley.base.html.md#foley.base.LicenseRecord)
 
-### foley.sources.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, \*\*affordances)
+### foley.sources.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, on_unsupported=None, \*\*affordances)
 
 Search a live `source` and ingest its license-clean hits into `library`.
 
@@ -13764,6 +14249,9 @@ applies the by-reference storage gate from the sound’s own license.
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport
     adapter; production omits it and the registry lazily builds one).
+  * **on_unsupported** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A search parameter the source cannot honour: `None`
+    (default) drops it with a note in `report.notes`; `'raise'` raises
+    (see `foley.sources._dispatch.translate_affordances()`).
   * **\*\*affordances** – Extra unified affordances forwarded to the adapter’s
     `search` (e.g. `duration_range`, `sort`).
 * **Return type:**
@@ -13870,7 +14358,7 @@ an already-registered name (e.g. a test double) is never overwritten.
 * **Returns:**
   The list of discovered source names.
 
-### foley.sources.generate(prompt, , backend='stable_audio', library=None, store=True, adapter=None, watermark=None, on_flagged='refuse', watermarker=None, provenance_store=None, \*\*affordances)
+### foley.sources.generate(prompt, , backend='stable_audio', library=None, store=True, adapter=None, watermark=None, on_flagged='refuse', watermarker=None, provenance_store=None, on_unsupported=None, reuse_cached=True, generations_cache=None, \*\*affordances)
 
 Generate a sound via `backend` and ingest it (by-value) into `library`.
 
@@ -13916,11 +14404,16 @@ Disclosure/safety (#9b), all optional and degrading gracefully:
     (the DI seam; wins over auto-detect — tests pass a fake).
   * **provenance_store** – A `MutableMapping[str, dict]` for content-credential
     sidecars (default: [`foley.stores.make_provenance_store()`](_autosummary/foley.stores.html.md#foley.stores.make_provenance_store)).
-  * **\*\*affordances** – Unified generation affordances forwarded to the adapter’s
-    `generate` (`duration`, `prompt_influence`, `negative_prompt`,
-    `steps`, `seed`, `loop`, `output_format` — see
-    [`foley.base.GENERATION_AFFORDANCES`](_autosummary/foley.base.html.md#foley.base.GENERATION_AFFORDANCES)); unsupported ones are
-    warn-and-dropped per the source’s `on_unsupported_param`.
+  * **on_unsupported** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – What to do with a parameter the backend cannot honour —
+    `'raise'` | `'warn'` | `'note'`; `None` (default) raises for a
+    meaning-carrying one (`seed`, `negative_prompt`) and drops the rest
+    with a note. See `foley.sources._dispatch.translate_affordances()`.
+  * **reuse_cached** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Serve an identical paid request from the generations cache
+    instead of paying again (default `True`; #59).
+  * **generations_cache** – A [`GenerationsCache`](_autosummary/foley.stores.html.md#foley.stores.GenerationsCache) (default: local).
+  * **\*\*affordances** – Unified generation affordances (`duration`,
+    `prompt_influence`, `negative_prompt`, `steps`, `seed`, `loop`,
+    `output_format` — see [`foley.base.GENERATION_AFFORDANCES`](_autosummary/foley.base.html.md#foley.base.GENERATION_AFFORDANCES)).
 * **Return type:**
   [`IngestReport`](_autosummary/foley.index.ingest.html.md#foley.index.ingest.IngestReport)
 * **Returns:**
@@ -14207,7 +14700,7 @@ remote by-reference sound; that is the contract).
 | [`add_from`](_autosummary/foley.sources.pull.html.md#foley.sources.pull.add_from)(source, \*, query[, license, limit, ...])   | Search a live `source` and ingest its license-clean hits into `library`.   |
 |-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 
-### foley.sources.pull.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, \*\*affordances)
+### foley.sources.pull.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, on_unsupported=None, \*\*affordances)
 
 Search a live `source` and ingest its license-clean hits into `library`.
 
@@ -14231,6 +14724,9 @@ applies the by-reference storage gate from the sound’s own license.
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport
     adapter; production omits it and the registry lazily builds one).
+  * **on_unsupported** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A search parameter the source cannot honour: `None`
+    (default) drops it with a note in `report.notes`; `'raise'` raises
+    (see `foley.sources._dispatch.translate_affordances()`).
   * **\*\*affordances** – Extra unified affordances forwarded to the adapter’s
     `search` (e.g. `duration_range`, `sort`).
 * **Return type:**
@@ -14451,7 +14947,7 @@ Build a resilient transport from a source `config` (its `rate` drives the thrott
 * **Returns:**
   A resilient transport wrapping `base`.
 
-### foley.sources.resilience.resilient(transport, \*, rate=None, retry=None, breaker=None, clock=<built-in function monotonic>, sleep=<built-in function sleep>)
+### foley.sources.resilience.resilient(transport, \*, rate=None, retry=None, breaker=None, clock=<built-in function monotonic>, sleep=<built-in function sleep>, resend_after_transport_error=True)
 
 Wrap a [`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.Transport) with throttle + backoff + circuit-break.
 
@@ -14462,6 +14958,11 @@ Wrap a [`Transport`](_autosummary/foley.sources.http.html.md#foley.sources.http.
   * **breaker** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`BreakerPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.BreakerPolicy)]) – The [`BreakerPolicy`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.BreakerPolicy) (default: open after 5 consecutive fails).
   * **clock** ([`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[], [`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Monotonic time source (injected for tests).
   * **sleep** ([`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Blocking sleep (injected for tests).
+  * **resend_after_transport_error** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Retry a non-GET request after a transport-level
+    failure (timeout, reset). `False` for a paid source: the provider may
+    have accepted — and billed — the request before the connection failed, so
+    re-sending would be an unauthorized second paid call. Status-coded
+    rejections (429 / 5xx) are still retried: those are answers, not charges.
 * **Returns:**
   A transport with the same signature, plus a `.reset()` method. Raises
   [`SourceUnavailable`](_autosummary/foley.sources.resilience.html.md#foley.sources.resilience.SourceUnavailable) when the breaker is open or retries are exhausted.
@@ -14682,25 +15183,36 @@ Invariants wired here (see the skill):
 
 ### Module Attributes
 
-| [`HASH_ALGO`](_autosummary/foley.stores.html.md#foley.stores.HASH_ALGO)              | Hash algorithm used for content addressing (matches `SoundRecord.hash_algo`).   |
-|-------------------------------------------------------------------------|---------------------------------------------------------------------------------|
-| [`META_FILE_SUFFIX`](_autosummary/foley.stores.html.md#foley.stores.META_FILE_SUFFIX)       | Suffix given to on-disk metadata files (keys stay the bare `sound_id`).         |
-| [`FOLEY_DATA_DIR`](_autosummary/foley.stores.html.md#foley.stores.FOLEY_DATA_DIR)         | data under `~/.local/share`, never in the package).                             |
-| [`DEFAULT_PROVENANCE_DIR`](_autosummary/foley.stores.html.md#foley.stores.DEFAULT_PROVENANCE_DIR) | `Mapping[content_id -> credential dict]`.                                       |
-| [`DEFAULT_RUN_DIR`](_autosummary/foley.stores.html.md#foley.stores.DEFAULT_RUN_DIR)        | `Mapping[run_id -> RunManifest dict]`.                                          |
-| [`DEFAULT_SESSION_DIR`](_autosummary/foley.stores.html.md#foley.stores.DEFAULT_SESSION_DIR)    | `sessions/{id}/{candidates,picks,rejects}/`.                                    |
-| [`Rootdir`](_autosummary/foley.stores.html.md#foley.stores.Rootdir)                | A filesystem location (path or path-like string) for a local store root.        |
+| [`HASH_ALGO`](_autosummary/foley.stores.html.md#foley.stores.HASH_ALGO)               | Hash algorithm used for content addressing (matches `SoundRecord.hash_algo`).   |
+|--------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [`META_FILE_SUFFIX`](_autosummary/foley.stores.html.md#foley.stores.META_FILE_SUFFIX)        | Suffix given to on-disk metadata files (keys stay the bare `sound_id`).         |
+| [`FOLEY_DATA_DIR`](_autosummary/foley.stores.html.md#foley.stores.FOLEY_DATA_DIR)          | data under `~/.local/share`, never in the package).                             |
+| [`DEFAULT_PROVENANCE_DIR`](_autosummary/foley.stores.html.md#foley.stores.DEFAULT_PROVENANCE_DIR)  | `Mapping[content_id -> credential dict]`.                                       |
+| [`DEFAULT_RUN_DIR`](_autosummary/foley.stores.html.md#foley.stores.DEFAULT_RUN_DIR)         | `Mapping[run_id -> RunManifest dict]`.                                          |
+| [`DEFAULT_SESSION_DIR`](_autosummary/foley.stores.html.md#foley.stores.DEFAULT_SESSION_DIR)     | `sessions/{id}/{candidates,picks,rejects}/`.                                    |
+| [`DEFAULT_GENERATIONS_DIR`](_autosummary/foley.stores.html.md#foley.stores.DEFAULT_GENERATIONS_DIR) | Every paid generation's bytes + the request that produced them (#59).           |
+| [`Rootdir`](_autosummary/foley.stores.html.md#foley.stores.Rootdir)                 | A filesystem location (path or path-like string) for a local store root.        |
 
 ### Functions
 
 | [`content_key`](_autosummary/foley.stores.html.md#foley.stores.content_key)(data, \*[, algo])                   | Return the content-address key for `data` — its hex digest.                           |
 |--------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
 | [`make_byte_store`](_autosummary/foley.stores.html.md#foley.stores.make_byte_store)([rootdir])                      | Build the content-addressable blob store: `Mapping[content_key -> bytes]`.            |
+| [`make_generations_store`](_autosummary/foley.stores.html.md#foley.stores.make_generations_store)([rootdir])               | Build the paid-generations cache (local files by default; any `dol` pair works).      |
 | [`make_meta_store`](_autosummary/foley.stores.html.md#foley.stores.make_meta_store)([rootdir])                      | Build the metadata store: `Mapping[sound_id -> SoundRecord]` (JSON files).            |
 | [`make_provenance_store`](_autosummary/foley.stores.html.md#foley.stores.make_provenance_store)([rootdir])                | Build the content-credential store: `Mapping[content_id -> dict]` (JSON files).       |
 | [`make_run_store`](_autosummary/foley.stores.html.md#foley.stores.make_run_store)([rootdir])                       | Build the run-artifact store: `Mapping[run_id -> RunManifest dict]` (JSON files).     |
 | [`make_session_store`](_autosummary/foley.stores.html.md#foley.stores.make_session_store)([session_id, name, rootdir]) | Build a per-session JSON store: `Mapping[key -> dict]` under `sessions/{id}/{name}/`. |
 | [`store_sound`](_autosummary/foley.stores.html.md#foley.stores.store_sound)(record[, data, cache_bytes_ok])     | Persist a sound, choosing by-value vs by-reference from `cache_bytes_ok`.             |
+
+### Classes
+
+| [`GenerationsCache`](_autosummary/foley.stores.html.md#foley.stores.GenerationsCache)(audio, requests)   | Where paid generations are kept, so a paid response is never lost or paid twice (#59).   |
+|--------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+
+### foley.stores.DEFAULT_GENERATIONS_DIR *= PosixPath('/home/runner/.local/share/foley/generations')*
+
+Every paid generation’s bytes + the request that produced them (#59).
 
 ### foley.stores.DEFAULT_PROVENANCE_DIR *= PosixPath('/home/runner/.local/share/foley/provenance')*
 
@@ -14730,6 +15242,32 @@ the package). Override with `$FOLEY_DATA_DIR`.
 
 * **Type:**
   Default data root (app-data-lifecycle
+
+### *class* foley.stores.GenerationsCache(audio, requests)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Where paid generations are kept, so a paid response is never lost or paid twice (#59).
+
+Two `dol` mappings:
+
+* `audio` — `content_key -> bytes`: every paid response, written **before**
+  QC or ingest, so a quarantined or undecodable generation is still retrievable.
+* `requests` — `request digest -> dict`: the canonical request (backend,
+  prompt, the affordances sent, the model version) mapped to the content key plus
+  the licence and notes it was generated under. An identical request is served from
+  here instead of calling the provider again.
+
+#### evict(request_key, , keep_audio=False)
+
+Forget a cached request (so the next identical one generates anew).
+
+* **Parameters:**
+  * **request_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The request digest (noted on the result that cached it).
+  * **keep_audio** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Keep the bytes (default: delete them too, unless another
+    request still points at them).
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.stores.HASH_ALGO *= 'sha256'*
 
@@ -14775,6 +15313,17 @@ it directly to [`store_sound()`](_autosummary/foley.stores.html.md#foley.stores.
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 * **Returns:**
   A `MutableMapping[str, bytes]` keyed by [`content_key()`](_autosummary/foley.stores.html.md#foley.stores.content_key).
+
+### foley.stores.make_generations_store(rootdir=PosixPath('/home/runner/.local/share/foley/generations'))
+
+Build the paid-generations cache (local files by default; any `dol` pair works).
+
+* **Parameters:**
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory holding `audio/` (bytes) and `requests/` (JSON).
+* **Return type:**
+  [`GenerationsCache`](_autosummary/foley.stores.html.md#foley.stores.GenerationsCache)
+* **Returns:**
+  A [`GenerationsCache`](_autosummary/foley.stores.html.md#foley.stores.GenerationsCache).
 
 ### foley.stores.make_meta_store(rootdir=PosixPath('/home/runner/.local/share/foley/meta'))
 
@@ -15607,18 +16156,16 @@ Non-destructively mute/unmute an item — a NEW timeline.
 
 # About this build
 
-This documentation was built on **2026-10-04 08:24 UTC** from commit <a href="https://github.com/thorwhalen/foley/commit/51e53f48444aa9f0a6f91a25de9985e748f55b21"><code>51e53f4</code></a> on branch <code>main</code>, for **foley 0.0.29** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-04 09:00 UTC** from commit <a href="https://github.com/thorwhalen/foley/commit/11292d2754fdc291a2efd4a21a2289524e1129a6"><code>11292d2</code></a> on branch <code>main</code>, for **foley 0.0.30** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.0.29) is behind the latest release on PyPI (0.0.30): `pip install foley` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/foley/commit/51e53f48444aa9f0a6f91a25de9985e748f55b21"><code>51e53f48444aa9f0a6f91a25de9985e748f55b21</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/foley/commit/11292d2754fdc291a2efd4a21a2289524e1129a6"><code>11292d2754fdc291a2efd4a21a2289524e1129a6</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -15629,9 +16176,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/foley</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/foley/actions/runs/37188669964">37188669964</a>     |
+| Run          | <a href="https://github.com/thorwhalen/foley/actions/runs/37190643220">37190643220</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>51e53f48444aa9f0a6f91a25de9985e748f55b21</code> (in the history of the built commit) |
+| Event commit | <code>11292d2754fdc291a2efd4a21a2289524e1129a6</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -15656,13 +16203,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/foley/0.0.30/">0.0.30</a>, newer than the documented version (0.0.29).
+Latest release: <a href="https://pypi.org/project/foley/0.0.30/">0.0.30</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/foley && cd foley
-git checkout 51e53f48444aa9f0a6f91a25de9985e748f55b21
+git checkout 11292d2754fdc291a2efd4a21a2289524e1129a6
 pip install "epythet==0.2.12"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

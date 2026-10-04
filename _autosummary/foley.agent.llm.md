@@ -26,19 +26,23 @@ place a new provider, or per-provider cost data, is added.
 
 ### Module Attributes
 
-| [`LLM_ENV_VAR`](#foley.agent.llm.LLM_ENV_VAR)   | The environment variable that opts in to a provider when `llm=` is not passed.          |
-|----------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| [`PROVIDERS`](#foley.agent.llm.PROVIDERS)     | provider -> rung kind -> `"module:Class"` (imported lazily; the real ones need extras). |
-| [`LLM_CHOICES`](#foley.agent.llm.LLM_CHOICES)   | The accepted providers.                                                                 |
+| [`LLM_ENV_VAR`](#foley.agent.llm.LLM_ENV_VAR)     | The environment variable that opts in to a provider when `llm=` is not passed.          |
+|------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| [`PROVIDERS`](#foley.agent.llm.PROVIDERS)       | provider -> rung kind -> `"module:Class"` (imported lazily; the real ones need extras). |
+| [`LLM_CHOICES`](#foley.agent.llm.LLM_CHOICES)     | The accepted providers.                                                                 |
+| [`RUNG_MAX_TOKENS`](#foley.agent.llm.RUNG_MAX_TOKENS) | Default `max_tokens` of each rung (the classes read these, so estimates match).         |
 
 ### Functions
 
-| [`resolve_llm`](#foley.agent.llm.resolve_llm)([llm, implicit_local])     | Resolve which LLM provider the SELECT rungs use (see the module docstring).                                                             |
-|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| [`make_rung`](#foley.agent.llm.make_rung)(kind[, llm, implicit_local]) | Build the `kind` rung (`'decomposer'` | `'refiner'` | `'judge'`) for `llm`.                                                             |
-| [`llm_egress`](#foley.agent.llm.llm_egress)(provider)                   | The `data_egress` class (`'local'` | `'external'`) of an LLM provider.                                                                  |
-| [`require_llm_egress`](#foley.agent.llm.require_llm_egress)(provider)           | Raise [`EgressBlocked`](foley.runtime.md#foley.runtime.EgressBlocked) if the runtime forbids `provider` now. |
-| [`is_loopback_host`](#foley.agent.llm.is_loopback_host)(host)                 | Whether `host` is this machine (`localhost`, `127.*`, `::1`, `0.0.0.0`).                                                                |
+| [`resolve_llm`](#foley.agent.llm.resolve_llm)([llm, implicit_local])            | Resolve which LLM provider the SELECT rungs use (see the module docstring).                                                             |
+|------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| [`make_rung`](#foley.agent.llm.make_rung)(kind[, llm, implicit_local])        | Build the `kind` rung (`'decomposer'` | `'refiner'` | `'judge'`) for `llm`.                                                             |
+| [`llm_egress`](#foley.agent.llm.llm_egress)(provider)                          | The `data_egress` class (`'local'` | `'external'`) of an LLM provider.                                                                  |
+| [`require_llm_egress`](#foley.agent.llm.require_llm_egress)(provider)                  | Raise [`EgressBlocked`](foley.runtime.md#foley.runtime.EgressBlocked) if the runtime forbids `provider` now. |
+| [`llm_call_estimate`](#foley.agent.llm.llm_call_estimate)(provider, \*[, model, ...]) | An upper bound on one rung call's USD cost, or `None` when it is unknown.                                                               |
+| [`guard_llm_call`](#foley.agent.llm.guard_llm_call)(provider)                      | The call-time egress check every real rung runs before calling its model.                                                               |
+| [`metered_create`](#foley.agent.llm.metered_create)(client, \*[, sleep])           | `client.messages.create(**request)`, priced, capped and charged (#57).                                                                  |
+| [`is_loopback_host`](#foley.agent.llm.is_loopback_host)(host)                        | Whether `host` is this machine (`localhost`, `127.*`, `::1`, `0.0.0.0`).                                                                |
 
 ### foley.agent.llm.LLM_CHOICES *= ('fake', 'local', 'anthropic')*
 
@@ -52,12 +56,36 @@ The environment variable that opts in to a provider when `llm=` is not passed.
 
 provider -> rung kind -> `"module:Class"` (imported lazily; the real ones need extras).
 
+### foley.agent.llm.RUNG_MAX_TOKENS *= {'decomposer': 2000, 'judge': 500, 'refiner': 500}*
+
+Default `max_tokens` of each rung (the classes read these, so estimates match).
+
+### foley.agent.llm.guard_llm_call(provider)
+
+The call-time egress check every real rung runs before calling its model.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### foley.agent.llm.is_loopback_host(host)
 
 Whether `host` is this machine (`localhost`, `127.*`, `::1`, `0.0.0.0`).
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+### foley.agent.llm.llm_call_estimate(provider, , model=None, max_tokens=None, kind=None, input_chars=0)
+
+An upper bound on one rung call’s USD cost, or `None` when it is unknown.
+
+`0.0` for the fake and an on-device endpoint. For Anthropic: the input-token
+bound (`chars / CHARS_PER_TOKEN_FLOOR` of the prompt — the rung’s fixed prompt
+and allowance when `kind` is given, plus `input_chars`) × the input price, plus
+`max_tokens` × the output price (thinking counts toward `max_tokens`). A remote
+endpoint, or an Anthropic model with no listed price, is `None`.
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### foley.agent.llm.llm_egress(provider)
 
@@ -75,6 +103,22 @@ Build the `kind` rung (`'decomposer'` | `'refiner'` | `'judge'`) for `llm`.
   * **llm** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – The provider (see [`resolve_llm()`](#foley.agent.llm.resolve_llm)).
   * **implicit_local** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Forwarded to [`resolve_llm()`](#foley.agent.llm.resolve_llm).
   * **\*\*kwargs** – Passed to the rung’s constructor.
+
+### foley.agent.llm.metered_create(client, , sleep=None, \*\*request)
+
+`client.messages.create(**request)`, priced, capped and charged (#57).
+
+The bound for *this* request (its real prompt length and `max_tokens`) is
+reserved on every budget in force before it is sent, so it can never take a run
+past its cap; afterwards the reservation becomes the actual cost from
+`response.usage`. A request the API rejects (429 / 5xx — not billed) is retried
+up to `METERED_ATTEMPTS` times. Anything else (a timeout, a dropped
+connection) keeps the reservation — it may have been billed — and raises. The SDK
+never re-sends behind this accounting: foley builds its clients with
+`max_retries=0`, and an injected client is used through
+`with_options(max_retries=0)`. Tokens the API adds itself (structured-output
+grammar, thinking) are not in the bound; [`settle()`](foley.cost.md#foley.cost.settle) records the
+true cost from `usage` afterwards.
 
 ### foley.agent.llm.require_llm_egress(provider)
 

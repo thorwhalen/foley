@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.agent.decompose" href="foley.agent.decompose.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -370,6 +370,7 @@
 <li class="toctree-l2"><a class="reference internal" href="foley.agent_kit.html">foley.agent_kit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.base.html">foley.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.cli.html">foley.cli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.cost.html">foley.cost</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.licensing.html">foley.licensing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.qc.html">foley.qc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.requirements.html">foley.requirements</a></li>
@@ -494,6 +495,9 @@ place a new provider, or per-provider cost data, is added.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.agent.llm.LLM_CHOICES" title="foley.agent.llm.LLM_CHOICES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LLM_CHOICES</span></code></a></p></td>
 <td><p>The accepted providers.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.agent.llm.RUNG_MAX_TOKENS" title="foley.agent.llm.RUNG_MAX_TOKENS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RUNG_MAX_TOKENS</span></code></a></p></td>
+<td><p>Default <code class="docutils literal notranslate"><span class="pre">max_tokens</span></code> of each rung (the classes read these, so estimates match).</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -512,7 +516,16 @@ place a new provider, or per-provider cost data, is added.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.agent.llm.require_llm_egress" title="foley.agent.llm.require_llm_egress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require_llm_egress</span></code></a>(provider)</p></td>
 <td><p>Raise <a class="reference internal" href="foley.runtime.html#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-class docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a> if the runtime forbids <code class="docutils literal notranslate"><span class="pre">provider</span></code> now.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#foley.agent.llm.is_loopback_host" title="foley.agent.llm.is_loopback_host"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_loopback_host</span></code></a>(host)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.agent.llm.llm_call_estimate" title="foley.agent.llm.llm_call_estimate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">llm_call_estimate</span></code></a>(provider, *[, model, ...])</p></td>
+<td><p>An upper bound on one rung call's USD cost, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when it is unknown.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.agent.llm.guard_llm_call" title="foley.agent.llm.guard_llm_call"><code class="xref py py-obj docutils literal notranslate"><span class="pre">guard_llm_call</span></code></a>(provider)</p></td>
+<td><p>The call-time egress check every real rung runs before calling its model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.agent.llm.metered_create" title="foley.agent.llm.metered_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metered_create</span></code></a>(client, *[, sleep])</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">client.messages.create(**request)</span></code>, priced, capped and charged (#57).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.agent.llm.is_loopback_host" title="foley.agent.llm.is_loopback_host"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_loopback_host</span></code></a>(host)</p></td>
 <td><p>Whether <code class="docutils literal notranslate"><span class="pre">host</span></code> is this machine (<code class="docutils literal notranslate"><span class="pre">localhost</span></code>, <code class="docutils literal notranslate"><span class="pre">127.*</span></code>, <code class="docutils literal notranslate"><span class="pre">::1</span></code>, <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code>).</p></td>
 </tr>
 </tbody>
@@ -536,6 +549,23 @@ place a new provider, or per-provider cost data, is added.</p>
 <dd><p>provider -&gt; rung kind -&gt; <code class="docutils literal notranslate"><span class="pre">&quot;module:Class&quot;</span></code> (imported lazily; the real ones need extras).</p>
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.agent.llm.RUNG_MAX_TOKENS">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.llm.</span></span><span class="sig-name descname"><span class="pre">RUNG_MAX_TOKENS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'decomposer':</span> <span class="pre">2000,</span> <span class="pre">'judge':</span> <span class="pre">500,</span> <span class="pre">'refiner':</span> <span class="pre">500}</span></span><a class="headerlink" href="#foley.agent.llm.RUNG_MAX_TOKENS" title="Link to this definition">#</a></dt>
+<dd><p>Default <code class="docutils literal notranslate"><span class="pre">max_tokens</span></code> of each rung (the classes read these, so estimates match).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.llm.guard_llm_call">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.llm.</span></span><span class="sig-name descname"><span class="pre">guard_llm_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/llm.html#guard_llm_call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.llm.guard_llm_call" title="Link to this definition">#</a></dt>
+<dd><p>The call-time egress check every real rung runs before calling its model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="foley.agent.llm.is_loopback_host">
 <span class="sig-prename descclassname"><span class="pre">foley.agent.llm.</span></span><span class="sig-name descname"><span class="pre">is_loopback_host</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/llm.html#is_loopback_host"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.llm.is_loopback_host" title="Link to this definition">#</a></dt>
@@ -543,6 +573,22 @@ place a new provider, or per-provider cost data, is added.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.llm.llm_call_estimate">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.llm.</span></span><span class="sig-name descname"><span class="pre">llm_call_estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_chars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/llm.html#llm_call_estimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.llm.llm_call_estimate" title="Link to this definition">#</a></dt>
+<dd><p>An upper bound on one rung call’s USD cost, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when it is unknown.</p>
+<p><code class="docutils literal notranslate"><span class="pre">0.0</span></code> for the fake and an on-device endpoint. For Anthropic: the input-token
+bound (<code class="docutils literal notranslate"><span class="pre">chars</span> <span class="pre">/</span> <span class="pre">CHARS_PER_TOKEN_FLOOR</span></code> of the prompt — the rung’s fixed prompt
+and allowance when <code class="docutils literal notranslate"><span class="pre">kind</span></code> is given, plus <code class="docutils literal notranslate"><span class="pre">input_chars</span></code>) × the input price, plus
+<code class="docutils literal notranslate"><span class="pre">max_tokens</span></code> × the output price (thinking counts toward <code class="docutils literal notranslate"><span class="pre">max_tokens</span></code>). A remote
+endpoint, or an Anthropic model with no listed price, is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -572,6 +618,23 @@ place a new provider, or per-provider cost data, is added.</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.agent.llm.metered_create">
+<span class="sig-prename descclassname"><span class="pre">foley.agent.llm.</span></span><span class="sig-name descname"><span class="pre">metered_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/llm.html#metered_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.llm.metered_create" title="Link to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">client.messages.create(**request)</span></code>, priced, capped and charged (#57).</p>
+<p>The bound for <em>this</em> request (its real prompt length and <code class="docutils literal notranslate"><span class="pre">max_tokens</span></code>) is
+reserved on every budget in force before it is sent, so it can never take a run
+past its cap; afterwards the reservation becomes the actual cost from
+<code class="docutils literal notranslate"><span class="pre">response.usage</span></code>. A request the API rejects (429 / 5xx — not billed) is retried
+up to <code class="xref py py-data docutils literal notranslate"><span class="pre">METERED_ATTEMPTS</span></code> times. Anything else (a timeout, a dropped
+connection) keeps the reservation — it may have been billed — and raises. The SDK
+never re-sends behind this accounting: foley builds its clients with
+<code class="docutils literal notranslate"><span class="pre">max_retries=0</span></code>, and an injected client is used through
+<code class="docutils literal notranslate"><span class="pre">with_options(max_retries=0)</span></code>. Tokens the API adds itself (structured-output
+grammar, thinking) are not in the bound; <a class="reference internal" href="foley.cost.html#foley.cost.settle" title="foley.cost.settle"><code class="xref py py-func docutils literal notranslate"><span class="pre">settle()</span></code></a> records the
+true cost from <code class="docutils literal notranslate"><span class="pre">usage</span></code> afterwards.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -668,9 +731,13 @@ model, so a rung built online and called inside <a class="reference internal" hr
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.LLM_CHOICES"><code class="docutils literal notranslate"><span class="pre">LLM_CHOICES</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.LLM_ENV_VAR"><code class="docutils literal notranslate"><span class="pre">LLM_ENV_VAR</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.PROVIDERS"><code class="docutils literal notranslate"><span class="pre">PROVIDERS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.RUNG_MAX_TOKENS"><code class="docutils literal notranslate"><span class="pre">RUNG_MAX_TOKENS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.guard_llm_call"><code class="docutils literal notranslate"><span class="pre">guard_llm_call()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.is_loopback_host"><code class="docutils literal notranslate"><span class="pre">is_loopback_host()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.llm_call_estimate"><code class="docutils literal notranslate"><span class="pre">llm_call_estimate()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.llm_egress"><code class="docutils literal notranslate"><span class="pre">llm_egress()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.make_rung"><code class="docutils literal notranslate"><span class="pre">make_rung()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.metered_create"><code class="docutils literal notranslate"><span class="pre">metered_create()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.require_llm_egress"><code class="docutils literal notranslate"><span class="pre">require_llm_egress()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.llm.resolve_llm"><code class="docutils literal notranslate"><span class="pre">resolve_llm()</span></code></a></li>
 </ul>

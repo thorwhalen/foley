@@ -25,19 +25,48 @@ run away. This module is stdlib-only (imports only [`foley.base`](foley.base.htm
 
 ### Classes
 
-| [`Budget`](#foley.agent.policy.Budget)([max_refine_loops, max_generations, ...])   | Bounded-cost accounting for the per-event refine/generate loops.                                                               |
+| [`Budget`](#foley.agent.policy.Budget)([max_refine_loops, max_generations, ...])   | Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).                                             |
 |-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | [`DecideAction`](#foley.agent.policy.DecideAction)(\*values)                             | What [`decide()`](#foley.agent.policy.decide) chose for one event (the single branch's outcomes).             |
 | [`Decision`](#foley.agent.policy.Decision)(action[, candidate, reason])              | The tiny result of [`decide()`](#foley.agent.policy.decide); `reason` feeds the refine hint + the audit Step. |
 
-### *class* foley.agent.policy.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
+### *class* foley.agent.policy.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, max_usd=1.0, approve_unknown_cost=None, \_refines=0, \_gens=0, \_spent_usd=0.0, \_unknown_calls=0, \_lock=<factory>)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-Bounded-cost accounting for the per-event refine/generate loops.
+Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).
 
-Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](#foley.agent.policy.Budget.refine_ok) /
-[`gen_ok()`](#foley.agent.policy.Budget.gen_ok) to test, then [`spend_refine()`](#foley.agent.policy.Budget.spend_refine) / [`spend_gen()`](#foley.agent.policy.Budget.spend_gen) to charge.
+Two kinds of bound:
+
+* **Per event** — `max_refine_loops` / `max_generations`: the loop calls
+  [`refine_ok()`](#foley.agent.policy.Budget.refine_ok) / [`gen_ok()`](#foley.agent.policy.Budget.gen_ok) to test, then [`spend_refine()`](#foley.agent.policy.Budget.spend_refine) /
+  [`spend_gen()`](#foley.agent.policy.Budget.spend_gen) to charge; [`reset()`](#foley.agent.policy.Budget.reset) zeroes them at each event.
+* **Per run, cumulative** — `max_usd` (default $1): every paid call (generation,
+  paid LLM rung) is checked with [`authorize()`](#foley.agent.policy.Budget.authorize) before it is made and recorded with [`charge()`](#foley.agent.policy.Budget.charge)
+  after. [`reset()`](#foley.agent.policy.Budget.reset) never clears it, so the cap holds across the whole
+  `find` / `score` run. A call whose cost is unknown (estimate `None`) is
+  refused unless `approve_unknown_cost` (or `$FOLEY_APPROVE_UNKNOWN_COST=1`).
+
+#### authorize(estimate_usd, , what)
+
+Alias of [`check()`](#foley.agent.policy.Budget.check) (kept for callers that only test affordability).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### charge(usd)
+
+Record a call’s cost (`None` = unknown: counted, not summed).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### check(estimate_usd, , what)
+
+Raise if this run cannot afford `estimate_usd` (nothing is reserved).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### gen_ok()
 
@@ -53,6 +82,17 @@ Whether another refine→re-retrieve pass is within budget.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+#### reserve(estimate_usd, , what)
+
+Check, then count `estimate_usd` as spent at once (atomic under a lock).
+
+Reserving before the call is what keeps concurrent calls on one budget (MCP
+tools run in a threadpool) from all passing the check before any is charged.
+[`settle()`](#foley.agent.policy.Budget.settle) later replaces the reservation with the actual cost, if known.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### reset()
 
 Zero the spend counters so the caps apply *per event*, not per passage.
@@ -60,6 +100,13 @@ Zero the spend counters so the caps apply *per event*, not per passage.
 The `find` loop calls this at the top of each event so one hard event’s
 refine/generate spend never starves later events (the documented per-event
 semantics).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### settle(reserved_usd, actual_usd)
+
+Replace a reservation with the actual cost (`None` actual: keep the reservation).
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -77,6 +124,10 @@ Charge one refine loop.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### *property* spent_usd *: [float](https://docs.python.org/3/builtins/functions.html#float)*
+
+Dollars charged so far this run (calls of unknown cost count as 0 here).
 
 ### *class* foley.agent.policy.DecideAction(\*values)
 

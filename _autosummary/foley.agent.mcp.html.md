@@ -53,7 +53,7 @@ and per-session [`foley.agent.session.SessionStore`](foley.agent.session.html.md
 
 The full JSON-safe tool surface (SSOT), in a stable order.
 
-### foley.agent.mcp.build_mcp_server(, library=None, session='default', runtime=None, byte_store=None, include=None, name='foley')
+### foley.agent.mcp.build_mcp_server(, library=None, session='default', runtime=None, byte_store=None, include=None, name='foley', max_usd=None)
 
 Build the foley MCP server (lazy `py2mcp`); registers the JSON-safe tool surface.
 
@@ -68,6 +68,8 @@ injectable library / runtime / byte-store, and hands the resolved tool functions
   * **byte_store** – A `MutableMapping[str, bytes]` for previews / rendered mixes.
   * **include** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Optional subset of tool names to expose.
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The MCP server name.
+  * **max_usd** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]) – The server’s cumulative spend cap across every paid tool call, for
+    its lifetime (default [`foley.cost.DEFAULT_MAX_USD`](foley.cost.html.md#foley.cost.DEFAULT_MAX_USD), $1).
 * **Returns:**
   A `fastmcp.FastMCP` server.
 

@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.sources.stable_audio.config" href="foley.sources.stable_audio.config.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -370,6 +370,7 @@
 <li class="toctree-l2"><a class="reference internal" href="foley.agent_kit.html">foley.agent_kit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.base.html">foley.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.cli.html">foley.cli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.cost.html">foley.cost</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.licensing.html">foley.licensing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.qc.html">foley.qc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.requirements.html">foley.requirements</a></li>
@@ -520,7 +521,10 @@ ids are unaffected (percent-encoding is a no-op on them).</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.stores.DEFAULT_SESSION_DIR" title="foley.stores.DEFAULT_SESSION_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_SESSION_DIR</span></code></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">sessions/{id}/{candidates,picks,rejects}/</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#foley.stores.Rootdir" title="foley.stores.Rootdir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rootdir</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.stores.DEFAULT_GENERATIONS_DIR" title="foley.stores.DEFAULT_GENERATIONS_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_GENERATIONS_DIR</span></code></a></p></td>
+<td><p>Every paid generation's bytes + the request that produced them (#59).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.stores.Rootdir" title="foley.stores.Rootdir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Rootdir</span></code></a></p></td>
 <td><p>A filesystem location (path or path-like string) for a local store root.</p></td>
 </tr>
 </tbody>
@@ -535,24 +539,42 @@ ids are unaffected (percent-encoding is a no-op on them).</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.stores.make_byte_store" title="foley.stores.make_byte_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_byte_store</span></code></a>([rootdir])</p></td>
 <td><p>Build the content-addressable blob store: <code class="docutils literal notranslate"><span class="pre">Mapping[content_key</span> <span class="pre">-&gt;</span> <span class="pre">bytes]</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#foley.stores.make_meta_store" title="foley.stores.make_meta_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_meta_store</span></code></a>([rootdir])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.stores.make_generations_store" title="foley.stores.make_generations_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_generations_store</span></code></a>([rootdir])</p></td>
+<td><p>Build the paid-generations cache (local files by default; any <code class="docutils literal notranslate"><span class="pre">dol</span></code> pair works).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.stores.make_meta_store" title="foley.stores.make_meta_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_meta_store</span></code></a>([rootdir])</p></td>
 <td><p>Build the metadata store: <code class="docutils literal notranslate"><span class="pre">Mapping[sound_id</span> <span class="pre">-&gt;</span> <span class="pre">SoundRecord]</span></code> (JSON files).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#foley.stores.make_provenance_store" title="foley.stores.make_provenance_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_provenance_store</span></code></a>([rootdir])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.stores.make_provenance_store" title="foley.stores.make_provenance_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_provenance_store</span></code></a>([rootdir])</p></td>
 <td><p>Build the content-credential store: <code class="docutils literal notranslate"><span class="pre">Mapping[content_id</span> <span class="pre">-&gt;</span> <span class="pre">dict]</span></code> (JSON files).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#foley.stores.make_run_store" title="foley.stores.make_run_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_run_store</span></code></a>([rootdir])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.stores.make_run_store" title="foley.stores.make_run_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_run_store</span></code></a>([rootdir])</p></td>
 <td><p>Build the run-artifact store: <code class="docutils literal notranslate"><span class="pre">Mapping[run_id</span> <span class="pre">-&gt;</span> <span class="pre">RunManifest</span> <span class="pre">dict]</span></code> (JSON files).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#foley.stores.make_session_store" title="foley.stores.make_session_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_session_store</span></code></a>([session_id, name, rootdir])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.stores.make_session_store" title="foley.stores.make_session_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_session_store</span></code></a>([session_id, name, rootdir])</p></td>
 <td><p>Build a per-session JSON store: <code class="docutils literal notranslate"><span class="pre">Mapping[key</span> <span class="pre">-&gt;</span> <span class="pre">dict]</span></code> under <code class="docutils literal notranslate"><span class="pre">sessions/{id}/{name}/</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#foley.stores.store_sound" title="foley.stores.store_sound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store_sound</span></code></a>(record[, data, cache_bytes_ok])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.stores.store_sound" title="foley.stores.store_sound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">store_sound</span></code></a>(record[, data, cache_bytes_ok])</p></td>
 <td><p>Persist a sound, choosing by-value vs by-reference from <code class="docutils literal notranslate"><span class="pre">cache_bytes_ok</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<p class="rubric">Classes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.stores.GenerationsCache" title="foley.stores.GenerationsCache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GenerationsCache</span></code></a>(audio, requests)</p></td>
+<td><p>Where paid generations are kept, so a paid response is never lost or paid twice (#59).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.stores.DEFAULT_GENERATIONS_DIR">
+<span class="sig-prename descclassname"><span class="pre">foley.stores.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_GENERATIONS_DIR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/.local/share/foley/generations')</span></span><a class="headerlink" href="#foley.stores.DEFAULT_GENERATIONS_DIR" title="Link to this definition">#</a></dt>
+<dd><p>Every paid generation’s bytes + the request that produced them (#59).</p>
+</dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="foley.stores.DEFAULT_PROVENANCE_DIR">
 <span class="sig-prename descclassname"><span class="pre">foley.stores.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_PROVENANCE_DIR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/.local/share/foley/provenance')</span></span><a class="headerlink" href="#foley.stores.DEFAULT_PROVENANCE_DIR" title="Link to this definition">#</a></dt>
@@ -596,6 +618,42 @@ the package). Override with <code class="docutils literal notranslate"><span cla
 <dd class="field-odd"><p>Default data root (app-data-lifecycle</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="foley.stores.GenerationsCache">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.stores.</span></span><span class="sig-name descname"><span class="pre">GenerationsCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requests</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/stores.html#GenerationsCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.stores.GenerationsCache" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Where paid generations are kept, so a paid response is never lost or paid twice (#59).</p>
+<p>Two <code class="docutils literal notranslate"><span class="pre">dol</span></code> mappings:</p>
+<ul class="simple">
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">audio</span></code> — <code class="docutils literal notranslate"><span class="pre">content_key</span> <span class="pre">-&gt;</span> <span class="pre">bytes</span></code>: every paid response, written <strong>before</strong>
+QC or ingest, so a quarantined or undecodable generation is still retrievable.</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">requests</span></code> — <code class="docutils literal notranslate"><span class="pre">request</span> <span class="pre">digest</span> <span class="pre">-&gt;</span> <span class="pre">dict</span></code>: the canonical request (backend,
+prompt, the affordances sent, the model version) mapped to the content key plus
+the licence and notes it was generated under. An identical request is served from
+here instead of calling the provider again.</p></li>
+</ul>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.stores.GenerationsCache.evict">
+<span class="sig-name descname"><span class="pre">evict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_key</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_audio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/stores.html#GenerationsCache.evict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.stores.GenerationsCache.evict" title="Link to this definition">#</a></dt>
+<dd><p>Forget a cached request (so the next identical one generates anew).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request_key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The request digest (noted on the result that cached it).</p></li>
+<li><p><strong>keep_audio</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Keep the bytes (default: delete them too, unless another
+request still points at them).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py data">
@@ -656,6 +714,23 @@ it directly to <a class="reference internal" href="#foley.stores.store_sound" ti
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping[str,</span> <span class="pre">bytes]</span></code> keyed by <a class="reference internal" href="#foley.stores.content_key" title="foley.stores.content_key"><code class="xref py py-func docutils literal notranslate"><span class="pre">content_key()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.stores.make_generations_store">
+<span class="sig-prename descclassname"><span class="pre">foley.stores.</span></span><span class="sig-name descname"><span class="pre">make_generations_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/home/runner/.local/share/foley/generations')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/stores.html#make_generations_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.stores.make_generations_store" title="Link to this definition">#</a></dt>
+<dd><p>Build the paid-generations cache (local files by default; any <code class="docutils literal notranslate"><span class="pre">dol</span></code> pair works).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rootdir</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span>) – Directory holding <code class="docutils literal notranslate"><span class="pre">audio/</span></code> (bytes) and <code class="docutils literal notranslate"><span class="pre">requests/</span></code> (JSON).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#foley.stores.GenerationsCache" title="foley.stores.GenerationsCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenerationsCache</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <a class="reference internal" href="#foley.stores.GenerationsCache" title="foley.stores.GenerationsCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenerationsCache</span></code></a>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -850,15 +925,21 @@ metadata reference dangling against a missing blob.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.DEFAULT_GENERATIONS_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_GENERATIONS_DIR</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.DEFAULT_PROVENANCE_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_PROVENANCE_DIR</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.DEFAULT_RUN_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_RUN_DIR</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.DEFAULT_SESSION_DIR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_SESSION_DIR</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.FOLEY_DATA_DIR"><code class="docutils literal notranslate"><span class="pre">FOLEY_DATA_DIR</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.GenerationsCache"><code class="docutils literal notranslate"><span class="pre">GenerationsCache</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.GenerationsCache.evict"><code class="docutils literal notranslate"><span class="pre">GenerationsCache.evict()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.HASH_ALGO"><code class="docutils literal notranslate"><span class="pre">HASH_ALGO</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.META_FILE_SUFFIX"><code class="docutils literal notranslate"><span class="pre">META_FILE_SUFFIX</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.Rootdir"><code class="docutils literal notranslate"><span class="pre">Rootdir</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.content_key"><code class="docutils literal notranslate"><span class="pre">content_key()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.make_byte_store"><code class="docutils literal notranslate"><span class="pre">make_byte_store()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.make_generations_store"><code class="docutils literal notranslate"><span class="pre">make_generations_store()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.make_meta_store"><code class="docutils literal notranslate"><span class="pre">make_meta_store()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.make_provenance_store"><code class="docutils literal notranslate"><span class="pre">make_provenance_store()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.stores.make_run_store"><code class="docutils literal notranslate"><span class="pre">make_run_store()</span></code></a></li>

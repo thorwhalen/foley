@@ -90,3 +90,10 @@ Generate a sound effect for `prompt`; return its bytes + provisional candidate.
 #### *property* plan *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 The account plan = the generated sound’s `license_id` (fail-closed when unknown).
+
+#### request_salt()
+
+What besides the request decides the result: the plan (it decides the licence).
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)

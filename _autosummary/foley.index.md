@@ -46,7 +46,7 @@ only the stdlib; install the capability you use via the matching extra
 | [`ClapZeroShotTagger`](#foley.index.ClapZeroShotTagger)(\*[, embedder, labels, ...])   | Zero-shot tagger: score a clip against a label set via CLAP cosine.         |
 | [`PannsTagger`](#foley.index.PannsTagger)(\*[, device, threshold])              | PANNs CNN14 supervised tagger over the 527 AudioSet classes (`foley[tag]`). |
 | [`IngestResult`](#foley.index.IngestResult)(id, status[, record, qc, ...])       | The outcome of ingesting one clip.                                          |
-| [`IngestReport`](#foley.index.IngestReport)(root[, results])                     | The rolled-up outcome of a folder ingest (JSON-serializable).               |
+| [`IngestReport`](#foley.index.IngestReport)(root[, results, notes])              | The rolled-up outcome of a folder ingest (JSON-serializable).               |
 | [`MemoryIndex`](#foley.index.MemoryIndex)(\*[, dim])                            | In-memory vector + keyword index (numpy cosine + compact BM25).             |
 | [`LanceIndex`](#foley.index.LanceIndex)(\*, uri, dim[, table_name])            | LanceDB-backed index: one table with a vector column + a native FTS index.  |
 | [`SqliteVecIndex`](#foley.index.SqliteVecIndex)(\*, path, dim)                     | Single-file index: sqlite-vec `vec0` KNN + stdlib FTS5 keyword search.      |
@@ -259,7 +259,7 @@ appeared only in the keyword list).
 BM25 score from the keyword ranker (`None` if the id
 appeared only in the vector list).
 
-### *class* foley.index.IngestReport(root, results=<factory>)
+### *class* foley.index.IngestReport(root, results=<factory>, notes=<factory>)
 
 Bases: [`SerializableMixin`](foley.base.md#foley.base.SerializableMixin)
 
@@ -275,6 +275,11 @@ Record a per-file error without aborting the run.
 #### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
+
+#### exception *= None*
+
+The exception behind the last `error` result, kept so a raising façade can
+chain it (`raise ... from`); a plain attribute, never serialized.
 
 #### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](foley.index.ingest.md#foley.index.ingest.IngestResult)]*
 
@@ -306,7 +311,7 @@ A counts dict for a console/CLI summary.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* foley.index.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
+### *class* foley.index.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None, cost_estimate_usd=None, cost_actual_usd=None)
 
 Bases: [`SerializableMixin`](foley.base.md#foley.base.SerializableMixin)
 

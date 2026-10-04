@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -1059,6 +1059,7 @@ window.runMermaid = runMermaid;</script>
     <span class="s2">"SoundLibrary"</span><span class="p">,</span>
     <span class="s2">"default_library"</span><span class="p">,</span>
     <span class="s2">"search"</span><span class="p">,</span>
+    <span class="s2">"estimate"</span><span class="p">,</span>
     <span class="s2">"similar"</span><span class="p">,</span>
     <span class="s2">"Embedder"</span><span class="p">,</span>
     <span class="s2">"ClapEmbedder"</span><span class="p">,</span>
@@ -1345,7 +1346,11 @@ window.runMermaid = runMermaid;</script>
     <span class="n">hits</span> <span class="o">=</span> <span class="n">default_library</span><span class="p">()</span><span class="o">.</span><span class="n">similar</span><span class="p">(</span><span class="n">sound_id</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">intended_use_for</span><span class="p">(</span><span class="n">commercial_ok</span><span class="o">=</span><span class="n">commercial_ok</span><span class="p">)</span><span class="o">.</span><span class="n">commercial</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">hits</span>
-    <span class="n">kept</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">hits</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">commercial_ok</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">rights_verified</span><span class="p">]</span>
+    <span class="n">kept</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">c</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">hits</span>
+        <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">commercial_ok</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">sound</span><span class="o">.</span><span class="n">license</span><span class="o">.</span><span class="n">rights_verified</span>
+    <span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">kept</span><span class="p">:</span>
         <span class="n">_warn_if_hidden</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">kept</span></div>
@@ -1380,6 +1385,9 @@ window.runMermaid = runMermaid;</script>
     <span class="n">on_flagged</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"refuse"</span><span class="p">,</span>
     <span class="n">watermarker</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">provenance_store</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">on_unsupported</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">reuse_cached</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">budget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">affordances</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Generate a sound effect for ``prompt`` and add it to the library (by-value).</span>
@@ -1410,35 +1418,56 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        watermarker: An injected watermarker (the DI seam; tests pass a fake).</span>
 <span class="sd">        provenance_store: A ``MutableMapping`` for content-credential sidecars</span>
 <span class="sd">            (default: :func:`foley.stores.make_provenance_store`).</span>
+<span class="sd">        on_unsupported: A parameter the backend cannot honour: ``None`` (default)</span>
+<span class="sd">            raises for a meaning-carrying one (``seed``, ``negative_prompt``) and drops</span>
+<span class="sd">            the rest with a note; ``'warn'`` drops everything with a note + warning;</span>
+<span class="sd">            ``'note'`` silently-but-recorded; ``'raise'`` raises for any.</span>
+<span class="sd">        reuse_cached: Serve an identical paid request from the generations cache</span>
+<span class="sd">            (default ``True``): a paid sound is never paid for twice (#59).</span>
+<span class="sd">        budget: A :class:`Budget` for this call (default: the active run's, else a</span>
+<span class="sd">            fresh one — a $1 cap; an unknown cost needs approval) (#57).</span>
 <span class="sd">        **affordances: Unified generation affordances (``duration``,</span>
 <span class="sd">            ``prompt_influence``, ``negative_prompt``, ``steps``, ``seed``, ``loop``,</span>
-<span class="sd">            ``output_format`` — see :data:`GENERATION_AFFORDANCES`); a backend</span>
-<span class="sd">            warns-and-drops the ones it does not support.</span>
+<span class="sd">            ``output_format`` — see :data:`GENERATION_AFFORDANCES`).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The stored :class:`Candidate` (``origin=generated``) — its ``sound`` is the</span>
-<span class="sd">        canonical, by-value :class:`SoundRecord` (a content-hash id).</span>
+<span class="sd">        canonical, by-value :class:`SoundRecord` (a content-hash id); its ``notes``</span>
+<span class="sd">        list every dropped, clamped or substituted parameter, and</span>
+<span class="sd">        ``cost_estimate_usd`` / ``cost_actual_usd`` what it cost (``None`` = unknown).</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        SafetyRefusal: If the prompt trips a safety gate and ``on_flagged='refuse'``</span>
 <span class="sd">            (a :class:`GenerationError` subclass — ``TrademarkRefusal`` /</span>
 <span class="sd">            ``RecognizableVoiceRefusal``).</span>
 <span class="sd">        GenerationError: If the backend yields no stored sound (QC-quarantined,</span>
-<span class="sd">            rights-blocked, or a synthesis/ingest error). The exception carries the</span>
-<span class="sd">            full ``report`` and terminal ``status`` so callers can react distinctly.</span>
+<span class="sd">            rights-blocked, or a synthesis/ingest error). The message carries the root</span>
+<span class="sd">            cause and the exception is chained to it; it also carries the full</span>
+<span class="sd">            ``report`` and terminal ``status`` so callers can react distinctly.</span>
+<span class="sd">        SourceConfigurationError: If the backend is not configured (a missing key or</span>
+<span class="sd">            plan) — the message names the env var and where to get the key.</span>
+<span class="sd">        UnsupportedParameter: For a meaning-carrying parameter the backend cannot</span>
+<span class="sd">            honour (see ``on_unsupported``).</span>
+<span class="sd">        BudgetExceeded / CostApprovalRequired: Before a paid call the budget refuses.</span>
+<span class="sd">        EgressBlocked: For an external backend under :func:`offline`.</span>
 <span class="sd">    """</span>
-    <span class="n">report</span> <span class="o">=</span> <span class="n">_generate_backend</span><span class="p">(</span>
-        <span class="n">prompt</span><span class="p">,</span>
-        <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
-        <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
-        <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span>
-        <span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">,</span>
-        <span class="n">watermark</span><span class="o">=</span><span class="n">watermark</span><span class="p">,</span>
-        <span class="n">on_flagged</span><span class="o">=</span><span class="n">on_flagged</span><span class="p">,</span>
-        <span class="n">watermarker</span><span class="o">=</span><span class="n">watermarker</span><span class="p">,</span>
-        <span class="n">provenance_store</span><span class="o">=</span><span class="n">provenance_store</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">affordances</span><span class="p">,</span>
-    <span class="p">)</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.cost</span><span class="w"> </span><span class="kn">import</span> <span class="n">spend_scope</span>
+
+    <span class="k">with</span> <span class="n">spend_scope</span><span class="p">(</span><span class="n">budget</span><span class="p">):</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">_generate_backend</span><span class="p">(</span>
+            <span class="n">prompt</span><span class="p">,</span>
+            <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
+            <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
+            <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span>
+            <span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">,</span>
+            <span class="n">watermark</span><span class="o">=</span><span class="n">watermark</span><span class="p">,</span>
+            <span class="n">on_flagged</span><span class="o">=</span><span class="n">on_flagged</span><span class="p">,</span>
+            <span class="n">watermarker</span><span class="o">=</span><span class="n">watermarker</span><span class="p">,</span>
+            <span class="n">provenance_store</span><span class="o">=</span><span class="n">provenance_store</span><span class="p">,</span>
+            <span class="n">on_unsupported</span><span class="o">=</span><span class="n">on_unsupported</span><span class="p">,</span>
+            <span class="n">reuse_cached</span><span class="o">=</span><span class="n">reuse_cached</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">affordances</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">results</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">results</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1446,18 +1475,28 @@ window.runMermaid = runMermaid;</script>
             <span class="sa">f</span><span class="s2">"generation via </span><span class="si">{</span><span class="n">backend</span><span class="si">!r}</span><span class="s2"> produced no result"</span><span class="p">,</span> <span class="n">report</span><span class="o">=</span><span class="n">report</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"pass"</span><span class="p">,</span> <span class="s2">"warn"</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">candidate_of</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_with_call_facts</span><span class="p">(</span><span class="n">candidate_of</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="n">res</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">"skipped_dup"</span><span class="p">:</span>
         <span class="c1"># A byte-identical regeneration is already in the library — return it (the</span>
         <span class="c1"># desirable flywheel behavior: never store byte-twins).</span>
         <span class="n">lib</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">Candidate</span><span class="p">(</span><span class="n">sound</span><span class="o">=</span><span class="n">lib</span><span class="p">[</span><span class="n">res</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="n">CandidateOrigin</span><span class="o">.</span><span class="n">generated</span><span class="p">)</span>
+        <span class="n">cand</span> <span class="o">=</span> <span class="n">Candidate</span><span class="p">(</span><span class="n">sound</span><span class="o">=</span><span class="n">lib</span><span class="p">[</span><span class="n">res</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="n">CandidateOrigin</span><span class="o">.</span><span class="n">generated</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_with_call_facts</span><span class="p">(</span><span class="n">cand</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">cause</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">error</span> <span class="ow">or</span> <span class="s2">"; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">notes</span><span class="p">)</span> <span class="ow">or</span> <span class="n">res</span><span class="o">.</span><span class="n">status</span>
     <span class="k">raise</span> <span class="n">GenerationError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"generation via </span><span class="si">{</span><span class="n">backend</span><span class="si">!r}</span><span class="s2"> yielded no stored sound (</span><span class="si">{</span><span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"generation via </span><span class="si">{</span><span class="n">backend</span><span class="si">!r}</span><span class="s2"> yielded no stored sound (</span><span class="si">{</span><span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">cause</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
         <span class="n">report</span><span class="o">=</span><span class="n">report</span><span class="p">,</span>
         <span class="n">status</span><span class="o">=</span><span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
-    <span class="p">)</span></div>
+    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">report.exception</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_with_call_facts</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Copy a generation's notes and cost from its ingest result onto the candidate."""</span>
+    <span class="n">candidate</span><span class="o">.</span><span class="n">notes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">notes</span><span class="p">)</span>
+    <span class="n">candidate</span><span class="o">.</span><span class="n">cost_estimate_usd</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">cost_estimate_usd</span>
+    <span class="n">candidate</span><span class="o">.</span><span class="n">cost_actual_usd</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">cost_actual_usd</span>
+    <span class="k">return</span> <span class="n">candidate</span>
 
 
 <div class="viewcode-block" id="ingest">
@@ -1499,13 +1538,71 @@ window.runMermaid = runMermaid;</script>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"license"</span><span class="p">),</span> <span class="nb">str</span><span class="p">):</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.index.ingest</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_ingest_license</span>
 
-        <span class="n">resolve_ingest_license</span><span class="p">(</span><span class="n">kw</span><span class="p">[</span><span class="s2">"license"</span><span class="p">])</span>  <span class="c1"># an unknown id fails before any file is read</span>
+        <span class="n">resolve_ingest_license</span><span class="p">(</span>
+            <span class="n">kw</span><span class="p">[</span><span class="s2">"license"</span><span class="p">]</span>
+        <span class="p">)</span>  <span class="c1"># an unknown id fails before any file is read</span>
     <span class="k">return</span> <span class="n">ingest_folder</span><span class="p">(</span>
         <span class="n">path</span><span class="p">,</span>
         <span class="n">library</span><span class="o">=</span><span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">(),</span>
         <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">,</span>
         <span class="n">do_qc</span><span class="o">=</span><span class="n">qc</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kw</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="estimate">
+<a class="viewcode-back" href="../_autosummary/foley.html#foley.estimate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate</span><span class="p">(</span><span class="n">verb</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""What a call would cost in USD before making it — ``None`` when it cannot be known (#57).</span>
+
+<span class="sd">    ``None`` is never "free": it means the price is unknown (no pricing declared, a</span>
+<span class="sd">    remote LLM endpoint, an unlisted model), and such a call needs the run's approval</span>
+<span class="sd">    (``Budget(approve_unknown_cost=True)``). Paid amounts are upper bounds.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        verb: ``'generate'`` (``backend=``, plus the generation affordances — priced</span>
+<span class="sd">            exactly as the call would be: same drops, same clamp); ``'find'`` /</span>
+<span class="sd">            ``'score'`` (the run's upper bound: every generation and LLM call it could</span>
+<span class="sd">            make — what ``find`` checks against its budget before the first paid call;</span>
+<span class="sd">            pass ``context=`` / ``segments=`` so the decomposer's prompt is sized, and</span>
+<span class="sd">            ``score`` sums one ``find`` per segment);</span>
+<span class="sd">            ``'search'`` / ``'similar'`` / ``'ingest'`` (local: ``0.0``);</span>
+<span class="sd">            ``'add_from'`` (``source=``).</span>
+<span class="sd">        **kwargs: The same keywords the verb takes.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: For an unknown verb.</span>
+<span class="sd">        KeyError: For an unknown backend / source.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.agent.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">estimate_find_usd</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.cost</span><span class="w"> </span><span class="kn">import</span> <span class="n">estimate_call</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.sources._dispatch</span><span class="w"> </span><span class="kn">import</span> <span class="n">estimate_generation</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.sources.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOURCE_REGISTRY</span><span class="p">,</span> <span class="n">discover_sources</span><span class="p">,</span> <span class="n">get_source</span> <span class="k">as</span> <span class="n">_get</span>
+
+    <span class="k">if</span> <span class="n">verb</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="s2">"similar"</span><span class="p">,</span> <span class="s2">"ingest"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">if</span> <span class="n">verb</span> <span class="o">==</span> <span class="s2">"add_from"</span><span class="p">:</span>
+        <span class="n">discover_sources</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"source"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SOURCE_REGISTRY</span><span class="p">:</span>
+            <span class="n">_get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">estimate_call</span><span class="p">(</span><span class="n">SOURCE_REGISTRY</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s2">"config"</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">verb</span> <span class="o">==</span> <span class="s2">"generate"</span><span class="p">:</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"backend"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"stable_audio"</span>
+        <span class="k">return</span> <span class="n">estimate_generation</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verb</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"find"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">):</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"max_events"</span><span class="p">,</span> <span class="s2">"backend"</span><span class="p">,</span> <span class="s2">"llm"</span><span class="p">,</span> <span class="s2">"k"</span><span class="p">,</span> <span class="s2">"verify"</span><span class="p">,</span> <span class="s2">"max_refine_loops"</span><span class="p">)</span>
+        <span class="n">kw</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">}</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"segments"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span>
+        <span class="n">segments</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verb</span> <span class="o">==</span> <span class="s2">"find"</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">segments</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">estimate_find_usd</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">,</span> <span class="n">context_chars</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">segments</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># score runs one find per segment</span>
+        <span class="n">per</span> <span class="o">=</span> <span class="p">[</span><span class="n">estimate_find_usd</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">,</span> <span class="n">context_chars</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="p">))</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">per</span><span class="p">)</span> <span class="k">else</span> <span class="nb">sum</span><span class="p">(</span><span class="n">per</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"estimate() knows generate, find, score, search, similar, ingest, add_from; got </span><span class="si">{</span><span class="n">verb</span><span class="si">!r}</span><span class="s2">"</span>
     <span class="p">)</span></div>
 
 

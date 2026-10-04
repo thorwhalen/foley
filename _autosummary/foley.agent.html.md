@@ -39,7 +39,7 @@ verify + generate aggregate into a single reproducible run-manifest.
 |----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | [`Judge`](#foley.agent.Judge)(\*args, \*\*kwargs)                         | One rung of the verify ladder: does this candidate match this event? (report 10 §4.2).                                         |
 | [`Refiner`](#foley.agent.Refiner)(\*args, \*\*kwargs)                       | One event query → 2–4 paraphrases/expansions (query-expansion for retrieval).                                                  |
-| [`Budget`](#foley.agent.Budget)([max_refine_loops, max_generations, ...])  | Bounded-cost accounting for the per-event refine/generate loops.                                                               |
+| [`Budget`](#foley.agent.Budget)([max_refine_loops, max_generations, ...])  | Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).                                             |
 | [`Decision`](#foley.agent.Decision)(action[, candidate, reason])             | The tiny result of [`decide()`](#foley.agent.decide); `reason` feeds the refine hint + the audit Step. |
 | [`DecideAction`](#foley.agent.DecideAction)(\*values)                            | What [`decide()`](#foley.agent.decide) chose for one event (the single branch's outcomes).             |
 | [`KeywordDecomposer`](#foley.agent.KeywordDecomposer)()                               | Deterministic cue-lexicon decomposer — the zero-dependency default and CI fake.                                                |
@@ -121,14 +121,43 @@ Listen to the clip and return the AQAScore `Verdict` (`P(yes) ≥ tau`).
 * **Return type:**
   [`Verdict`](foley.base.html.md#foley.base.Verdict)
 
-### *class* foley.agent.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, \_refines=0, \_gens=0)
+### *class* foley.agent.Budget(max_refine_loops=1, max_generations=1, allow_generate=True, max_usd=1.0, approve_unknown_cost=None, \_refines=0, \_gens=0, \_spent_usd=0.0, \_unknown_calls=0, \_lock=<factory>)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
-Bounded-cost accounting for the per-event refine/generate loops.
+Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).
 
-Prevents unbounded cost on a hard event. The loop calls [`refine_ok()`](#foley.agent.Budget.refine_ok) /
-[`gen_ok()`](#foley.agent.Budget.gen_ok) to test, then [`spend_refine()`](#foley.agent.Budget.spend_refine) / [`spend_gen()`](#foley.agent.Budget.spend_gen) to charge.
+Two kinds of bound:
+
+* **Per event** — `max_refine_loops` / `max_generations`: the loop calls
+  [`refine_ok()`](#foley.agent.Budget.refine_ok) / [`gen_ok()`](#foley.agent.Budget.gen_ok) to test, then [`spend_refine()`](#foley.agent.Budget.spend_refine) /
+  [`spend_gen()`](#foley.agent.Budget.spend_gen) to charge; [`reset()`](#foley.agent.Budget.reset) zeroes them at each event.
+* **Per run, cumulative** — `max_usd` (default $1): every paid call (generation,
+  paid LLM rung) is checked with [`authorize()`](#foley.agent.Budget.authorize) before it is made and recorded with [`charge()`](#foley.agent.Budget.charge)
+  after. [`reset()`](#foley.agent.Budget.reset) never clears it, so the cap holds across the whole
+  `find` / `score` run. A call whose cost is unknown (estimate `None`) is
+  refused unless `approve_unknown_cost` (or `$FOLEY_APPROVE_UNKNOWN_COST=1`).
+
+#### authorize(estimate_usd, , what)
+
+Alias of [`check()`](#foley.agent.Budget.check) (kept for callers that only test affordability).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### charge(usd)
+
+Record a call’s cost (`None` = unknown: counted, not summed).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### check(estimate_usd, , what)
+
+Raise if this run cannot afford `estimate_usd` (nothing is reserved).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### gen_ok()
 
@@ -144,6 +173,17 @@ Whether another refine→re-retrieve pass is within budget.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+#### reserve(estimate_usd, , what)
+
+Check, then count `estimate_usd` as spent at once (atomic under a lock).
+
+Reserving before the call is what keeps concurrent calls on one budget (MCP
+tools run in a threadpool) from all passing the check before any is charged.
+[`settle()`](#foley.agent.Budget.settle) later replaces the reservation with the actual cost, if known.
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 #### reset()
 
 Zero the spend counters so the caps apply *per event*, not per passage.
@@ -151,6 +191,13 @@ Zero the spend counters so the caps apply *per event*, not per passage.
 The `find` loop calls this at the top of each event so one hard event’s
 refine/generate spend never starves later events (the documented per-event
 semantics).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### settle(reserved_usd, actual_usd)
+
+Replace a reservation with the actual cost (`None` actual: keep the reservation).
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -168,6 +215,10 @@ Charge one refine loop.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### *property* spent_usd *: [float](https://docs.python.org/3/builtins/functions.html#float)*
+
+Dollars charged so far this run (calls of unknown cost count as 0 here).
 
 ### *class* foley.agent.ClapJudge
 
@@ -363,7 +414,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
   * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
     [`Budget`](#foley.agent.Budget)).
-  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](#foley.agent.Budget) (overrides `max_refine_loops`).
+  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit [`Budget`](#foley.agent.Budget) (overrides `max_refine_loops`). It is
+    also the run’s spend cap: `Budget(max_usd=...)` (default $1) bounds
+    every paid call the run makes — generations and paid LLM rungs —
+    cumulatively, and a call of unknown cost needs
+    `Budget(approve_unknown_cost=True)` (#57).
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);

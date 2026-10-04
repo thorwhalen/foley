@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../../../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -883,6 +883,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">breaker</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BreakerPolicy</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">clock</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">,</span>
     <span class="n">sleep</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">,</span>
+    <span class="n">resend_after_transport_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Wrap a :class:`~foley.sources.http.Transport` with throttle + backoff + circuit-break.</span>
 
@@ -893,6 +894,11 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        breaker: The :class:`BreakerPolicy` (default: open after 5 consecutive fails).</span>
 <span class="sd">        clock: Monotonic time source (injected for tests).</span>
 <span class="sd">        sleep: Blocking sleep (injected for tests).</span>
+<span class="sd">        resend_after_transport_error: Retry a non-GET request after a transport-level</span>
+<span class="sd">            failure (timeout, reset). ``False`` for a paid source: the provider may</span>
+<span class="sd">            have accepted — and billed — the request before the connection failed, so</span>
+<span class="sd">            re-sending would be an unauthorized second paid call. Status-coded</span>
+<span class="sd">            rejections (429 / 5xx) are still retried: those are answers, not charges.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A transport with the same signature, plus a ``.reset()`` method. Raises</span>
@@ -917,6 +923,8 @@ window.runMermaid = runMermaid;</script>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># transport-level failure (timeout, conn reset)</span>
                 <span class="n">last_exc</span> <span class="o">=</span> <span class="n">exc</span>
                 <span class="n">_breaker</span><span class="o">.</span><span class="n">on_failure</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">resend_after_transport_error</span> <span class="ow">and</span> <span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"GET"</span><span class="p">:</span>
+                    <span class="k">raise</span>  <span class="c1"># it may have been billed: never re-send it unauthorized</span>
                 <span class="k">if</span> <span class="n">attempt</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">retry</span><span class="o">.</span><span class="n">max_attempts</span><span class="p">:</span>
                     <span class="n">sleep</span><span class="p">(</span><span class="n">_backoff_delay</span><span class="p">(</span><span class="n">attempt</span><span class="p">,</span> <span class="n">retry</span><span class="p">))</span>
                     <span class="k">continue</span>
@@ -963,6 +971,12 @@ window.runMermaid = runMermaid;</script>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">requests_transport</span>
 
         <span class="n">base</span> <span class="o">=</span> <span class="n">requests_transport</span>
+    <span class="n">paid</span> <span class="o">=</span> <span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pricing"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"unit"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"free"</span>
+    <span class="n">inject</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"resend_after_transport_error"</span><span class="p">,</span> <span class="ow">not</span> <span class="n">paid</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">paid</span> <span class="ow">and</span> <span class="s2">"retry"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inject</span><span class="p">:</span>
+        <span class="c1"># A gateway 502 / 504 can come after the provider accepted (and billed) the</span>
+        <span class="c1"># request; only answers that mean "not processed" are retried for a paid source.</span>
+        <span class="n">inject</span><span class="p">[</span><span class="s2">"retry"</span><span class="p">]</span> <span class="o">=</span> <span class="n">RetryPolicy</span><span class="p">(</span><span class="n">retry_on</span><span class="o">=</span><span class="p">(</span><span class="mi">429</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">503</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">resilient</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"rate"</span><span class="p">),</span> <span class="o">**</span><span class="n">inject</span><span class="p">)</span></div>
 
 </pre></div>

@@ -43,25 +43,36 @@ Invariants wired here (see the skill):
 
 ### Module Attributes
 
-| [`HASH_ALGO`](#foley.stores.HASH_ALGO)              | Hash algorithm used for content addressing (matches `SoundRecord.hash_algo`).   |
-|-------------------------------------------------------------------------|---------------------------------------------------------------------------------|
-| [`META_FILE_SUFFIX`](#foley.stores.META_FILE_SUFFIX)       | Suffix given to on-disk metadata files (keys stay the bare `sound_id`).         |
-| [`FOLEY_DATA_DIR`](#foley.stores.FOLEY_DATA_DIR)         | data under `~/.local/share`, never in the package).                             |
-| [`DEFAULT_PROVENANCE_DIR`](#foley.stores.DEFAULT_PROVENANCE_DIR) | `Mapping[content_id -> credential dict]`.                                       |
-| [`DEFAULT_RUN_DIR`](#foley.stores.DEFAULT_RUN_DIR)        | `Mapping[run_id -> RunManifest dict]`.                                          |
-| [`DEFAULT_SESSION_DIR`](#foley.stores.DEFAULT_SESSION_DIR)    | `sessions/{id}/{candidates,picks,rejects}/`.                                    |
-| [`Rootdir`](#foley.stores.Rootdir)                | A filesystem location (path or path-like string) for a local store root.        |
+| [`HASH_ALGO`](#foley.stores.HASH_ALGO)               | Hash algorithm used for content addressing (matches `SoundRecord.hash_algo`).   |
+|--------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [`META_FILE_SUFFIX`](#foley.stores.META_FILE_SUFFIX)        | Suffix given to on-disk metadata files (keys stay the bare `sound_id`).         |
+| [`FOLEY_DATA_DIR`](#foley.stores.FOLEY_DATA_DIR)          | data under `~/.local/share`, never in the package).                             |
+| [`DEFAULT_PROVENANCE_DIR`](#foley.stores.DEFAULT_PROVENANCE_DIR)  | `Mapping[content_id -> credential dict]`.                                       |
+| [`DEFAULT_RUN_DIR`](#foley.stores.DEFAULT_RUN_DIR)         | `Mapping[run_id -> RunManifest dict]`.                                          |
+| [`DEFAULT_SESSION_DIR`](#foley.stores.DEFAULT_SESSION_DIR)     | `sessions/{id}/{candidates,picks,rejects}/`.                                    |
+| [`DEFAULT_GENERATIONS_DIR`](#foley.stores.DEFAULT_GENERATIONS_DIR) | Every paid generation's bytes + the request that produced them (#59).           |
+| [`Rootdir`](#foley.stores.Rootdir)                 | A filesystem location (path or path-like string) for a local store root.        |
 
 ### Functions
 
 | [`content_key`](#foley.stores.content_key)(data, \*[, algo])                   | Return the content-address key for `data` — its hex digest.                           |
 |--------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
 | [`make_byte_store`](#foley.stores.make_byte_store)([rootdir])                      | Build the content-addressable blob store: `Mapping[content_key -> bytes]`.            |
+| [`make_generations_store`](#foley.stores.make_generations_store)([rootdir])               | Build the paid-generations cache (local files by default; any `dol` pair works).      |
 | [`make_meta_store`](#foley.stores.make_meta_store)([rootdir])                      | Build the metadata store: `Mapping[sound_id -> SoundRecord]` (JSON files).            |
 | [`make_provenance_store`](#foley.stores.make_provenance_store)([rootdir])                | Build the content-credential store: `Mapping[content_id -> dict]` (JSON files).       |
 | [`make_run_store`](#foley.stores.make_run_store)([rootdir])                       | Build the run-artifact store: `Mapping[run_id -> RunManifest dict]` (JSON files).     |
 | [`make_session_store`](#foley.stores.make_session_store)([session_id, name, rootdir]) | Build a per-session JSON store: `Mapping[key -> dict]` under `sessions/{id}/{name}/`. |
 | [`store_sound`](#foley.stores.store_sound)(record[, data, cache_bytes_ok])     | Persist a sound, choosing by-value vs by-reference from `cache_bytes_ok`.             |
+
+### Classes
+
+| [`GenerationsCache`](#foley.stores.GenerationsCache)(audio, requests)   | Where paid generations are kept, so a paid response is never lost or paid twice (#59).   |
+|--------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+
+### foley.stores.DEFAULT_GENERATIONS_DIR *= PosixPath('/home/runner/.local/share/foley/generations')*
+
+Every paid generation’s bytes + the request that produced them (#59).
 
 ### foley.stores.DEFAULT_PROVENANCE_DIR *= PosixPath('/home/runner/.local/share/foley/provenance')*
 
@@ -91,6 +102,32 @@ the package). Override with `$FOLEY_DATA_DIR`.
 
 * **Type:**
   Default data root (app-data-lifecycle
+
+### *class* foley.stores.GenerationsCache(audio, requests)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Where paid generations are kept, so a paid response is never lost or paid twice (#59).
+
+Two `dol` mappings:
+
+* `audio` — `content_key -> bytes`: every paid response, written **before**
+  QC or ingest, so a quarantined or undecodable generation is still retrievable.
+* `requests` — `request digest -> dict`: the canonical request (backend,
+  prompt, the affordances sent, the model version) mapped to the content key plus
+  the licence and notes it was generated under. An identical request is served from
+  here instead of calling the provider again.
+
+#### evict(request_key, , keep_audio=False)
+
+Forget a cached request (so the next identical one generates anew).
+
+* **Parameters:**
+  * **request_key** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The request digest (noted on the result that cached it).
+  * **keep_audio** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Keep the bytes (default: delete them too, unless another
+    request still points at them).
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### foley.stores.HASH_ALGO *= 'sha256'*
 
@@ -136,6 +173,17 @@ it directly to [`store_sound()`](#foley.stores.store_sound) instead of calling t
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 * **Returns:**
   A `MutableMapping[str, bytes]` keyed by [`content_key()`](#foley.stores.content_key).
+
+### foley.stores.make_generations_store(rootdir=PosixPath('/home/runner/.local/share/foley/generations'))
+
+Build the paid-generations cache (local files by default; any `dol` pair works).
+
+* **Parameters:**
+  **rootdir** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]) – Directory holding `audio/` (bytes) and `requests/` (JSON).
+* **Return type:**
+  [`GenerationsCache`](#foley.stores.GenerationsCache)
+* **Returns:**
+  A [`GenerationsCache`](#foley.stores.GenerationsCache).
 
 ### foley.stores.make_meta_store(rootdir=PosixPath('/home/runner/.local/share/foley/meta'))
 

@@ -72,7 +72,7 @@ Build a resilient transport from a source `config` (its `rate` drives the thrott
 * **Returns:**
   A resilient transport wrapping `base`.
 
-### foley.sources.resilience.resilient(transport, \*, rate=None, retry=None, breaker=None, clock=<built-in function monotonic>, sleep=<built-in function sleep>)
+### foley.sources.resilience.resilient(transport, \*, rate=None, retry=None, breaker=None, clock=<built-in function monotonic>, sleep=<built-in function sleep>, resend_after_transport_error=True)
 
 Wrap a [`Transport`](foley.sources.http.html.md#foley.sources.http.Transport) with throttle + backoff + circuit-break.
 
@@ -83,6 +83,11 @@ Wrap a [`Transport`](foley.sources.http.html.md#foley.sources.http.Transport) wi
   * **breaker** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`BreakerPolicy`](#foley.sources.resilience.BreakerPolicy)]) – The [`BreakerPolicy`](#foley.sources.resilience.BreakerPolicy) (default: open after 5 consecutive fails).
   * **clock** ([`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[], [`float`](https://docs.python.org/3/builtins/functions.html#float)]) – Monotonic time source (injected for tests).
   * **sleep** ([`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`float`](https://docs.python.org/3/builtins/functions.html#float)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Blocking sleep (injected for tests).
+  * **resend_after_transport_error** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Retry a non-GET request after a transport-level
+    failure (timeout, reset). `False` for a paid source: the provider may
+    have accepted — and billed — the request before the connection failed, so
+    re-sending would be an unauthorized second paid call. Status-coded
+    rejections (429 / 5xx) are still retried: those are answers, not charges.
 * **Returns:**
   A transport with the same signature, plus a `.reset()` method. Raises
   [`SourceUnavailable`](#foley.sources.resilience.SourceUnavailable) when the breaker is open or retries are exhausted.

@@ -384,7 +384,7 @@ Stamp the corpus’s uniform license (derived via the licensing SSOT).
 * **Return type:**
   [`LicenseRecord`](foley.base.md#foley.base.LicenseRecord)
 
-### foley.sources.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, \*\*affordances)
+### foley.sources.add_from(source, , query, license='cc0', limit=50, library=None, intended_use=None, adapter=None, on_unsupported=None, \*\*affordances)
 
 Search a live `source` and ingest its license-clean hits into `library`.
 
@@ -408,6 +408,9 @@ applies the by-reference storage gate from the sound’s own license.
   * **adapter** – An optional pre-built adapter to use instead of the registry’s
     (the dependency-injection seam — a test passes a fake-transport
     adapter; production omits it and the registry lazily builds one).
+  * **on_unsupported** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A search parameter the source cannot honour: `None`
+    (default) drops it with a note in `report.notes`; `'raise'` raises
+    (see `foley.sources._dispatch.translate_affordances()`).
   * **\*\*affordances** – Extra unified affordances forwarded to the adapter’s
     `search` (e.g. `duration_range`, `sort`).
 * **Return type:**
@@ -514,7 +517,7 @@ an already-registered name (e.g. a test double) is never overwritten.
 * **Returns:**
   The list of discovered source names.
 
-### foley.sources.generate(prompt, , backend='stable_audio', library=None, store=True, adapter=None, watermark=None, on_flagged='refuse', watermarker=None, provenance_store=None, \*\*affordances)
+### foley.sources.generate(prompt, , backend='stable_audio', library=None, store=True, adapter=None, watermark=None, on_flagged='refuse', watermarker=None, provenance_store=None, on_unsupported=None, reuse_cached=True, generations_cache=None, \*\*affordances)
 
 Generate a sound via `backend` and ingest it (by-value) into `library`.
 
@@ -560,11 +563,16 @@ Disclosure/safety (#9b), all optional and degrading gracefully:
     (the DI seam; wins over auto-detect — tests pass a fake).
   * **provenance_store** – A `MutableMapping[str, dict]` for content-credential
     sidecars (default: [`foley.stores.make_provenance_store()`](foley.stores.md#foley.stores.make_provenance_store)).
-  * **\*\*affordances** – Unified generation affordances forwarded to the adapter’s
-    `generate` (`duration`, `prompt_influence`, `negative_prompt`,
-    `steps`, `seed`, `loop`, `output_format` — see
-    [`foley.base.GENERATION_AFFORDANCES`](foley.base.md#foley.base.GENERATION_AFFORDANCES)); unsupported ones are
-    warn-and-dropped per the source’s `on_unsupported_param`.
+  * **on_unsupported** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – What to do with a parameter the backend cannot honour —
+    `'raise'` | `'warn'` | `'note'`; `None` (default) raises for a
+    meaning-carrying one (`seed`, `negative_prompt`) and drops the rest
+    with a note. See `foley.sources._dispatch.translate_affordances()`.
+  * **reuse_cached** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Serve an identical paid request from the generations cache
+    instead of paying again (default `True`; #59).
+  * **generations_cache** – A [`GenerationsCache`](foley.stores.md#foley.stores.GenerationsCache) (default: local).
+  * **\*\*affordances** – Unified generation affordances (`duration`,
+    `prompt_influence`, `negative_prompt`, `steps`, `seed`, `loop`,
+    `output_format` — see [`foley.base.GENERATION_AFFORDANCES`](foley.base.md#foley.base.GENERATION_AFFORDANCES)).
 * **Return type:**
   [`IngestReport`](foley.index.ingest.md#foley.index.ingest.IngestReport)
 * **Returns:**

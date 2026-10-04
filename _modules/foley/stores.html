@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -756,6 +756,7 @@ window.runMermaid = runMermaid;</script>
 <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">MutableMapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">quote</span><span class="p">,</span> <span class="n">unquote</span>
@@ -783,6 +784,8 @@ window.runMermaid = runMermaid;</script>
 <span class="n">DEFAULT_RUN_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">"runs"</span>
 <span class="c1">#: Per-session audition state (#12): ``sessions/{id}/{candidates,picks,rejects}/``.</span>
 <span class="n">DEFAULT_SESSION_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">"sessions"</span>
+<span class="c1">#: Every paid generation's bytes + the request that produced them (#59).</span>
+<span class="n">DEFAULT_GENERATIONS_DIR</span> <span class="o">=</span> <span class="n">FOLEY_DATA_DIR</span> <span class="o">/</span> <span class="s2">"generations"</span>
 
 <span class="c1">#: A filesystem location (path or path-like string) for a local store root.</span>
 <span class="n">Rootdir</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">"os.PathLike[str]"</span><span class="p">]</span>
@@ -973,6 +976,67 @@ window.runMermaid = runMermaid;</script>
     <span class="n">root</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span> <span class="k">if</span> <span class="n">rootdir</span> <span class="k">else</span> <span class="n">DEFAULT_SESSION_DIR</span><span class="p">)</span> <span class="o">/</span> <span class="n">session_id</span> <span class="o">/</span> <span class="n">name</span>
     <span class="n">json_store</span> <span class="o">=</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">JsonFiles</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">root</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">wrap_kvs</span><span class="p">(</span><span class="n">json_store</span><span class="p">,</span> <span class="n">id_of_key</span><span class="o">=</span><span class="n">_meta_filename</span><span class="p">,</span> <span class="n">key_of_id</span><span class="o">=</span><span class="n">_meta_key</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="GenerationsCache">
+<a class="viewcode-back" href="../../_autosummary/foley.stores.html#foley.GenerationsCache">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GenerationsCache</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Where paid generations are kept, so a paid response is never lost or paid twice (#59).</span>
+
+<span class="sd">    Two ``dol`` mappings:</span>
+
+<span class="sd">    * :attr:`audio` — ``content_key -&gt; bytes``: every paid response, written **before**</span>
+<span class="sd">      QC or ingest, so a quarantined or undecodable generation is still retrievable.</span>
+<span class="sd">    * :attr:`requests` — ``request digest -&gt; dict``: the canonical request (backend,</span>
+<span class="sd">      prompt, the affordances sent, the model version) mapped to the content key plus</span>
+<span class="sd">      the licence and notes it was generated under. An identical request is served from</span>
+<span class="sd">      here instead of calling the provider again.</span>
+<span class="sd">    """</span>
+
+    <span class="n">audio</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]</span>
+    <span class="n">requests</span><span class="p">:</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span>
+
+<div class="viewcode-block" id="GenerationsCache.evict">
+<a class="viewcode-back" href="../../_autosummary/foley.stores.html#foley.GenerationsCache.evict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">keep_audio</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Forget a cached request (so the next identical one generates anew).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            request_key: The request digest (noted on the result that cached it).</span>
+<span class="sd">            keep_audio: Keep the bytes (default: delete them too, unless another</span>
+<span class="sd">                request still points at them).</span>
+<span class="sd">        """</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">requests</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">request_key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span> <span class="ow">or</span> <span class="n">keep_audio</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"content_key"</span><span class="p">)</span>
+        <span class="n">still_used</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"content_key"</span><span class="p">)</span> <span class="o">==</span> <span class="n">key</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">requests</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">still_used</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="make_generations_store">
+<a class="viewcode-back" href="../../_autosummary/foley.stores.html#foley.make_generations_store">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_generations_store</span><span class="p">(</span>
+    <span class="n">rootdir</span><span class="p">:</span> <span class="n">Rootdir</span> <span class="o">=</span> <span class="n">DEFAULT_GENERATIONS_DIR</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GenerationsCache</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Build the paid-generations cache (local files by default; any ``dol`` pair works).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rootdir: Directory holding ``audio/`` (bytes) and ``requests/`` (JSON).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`GenerationsCache`.</span>
+<span class="sd">    """</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">GenerationsCache</span><span class="p">(</span>
+        <span class="n">audio</span><span class="o">=</span><span class="n">make_byte_store</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"audio"</span><span class="p">),</span>
+        <span class="n">requests</span><span class="o">=</span><span class="n">make_provenance_store</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"requests"</span><span class="p">),</span>
+    <span class="p">)</span></div>
 
 
 

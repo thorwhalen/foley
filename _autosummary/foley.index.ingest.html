@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.index.indexes" href="foley.index.indexes.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -370,6 +370,7 @@
 <li class="toctree-l2"><a class="reference internal" href="foley.agent_kit.html">foley.agent_kit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.base.html">foley.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.cli.html">foley.cli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.cost.html">foley.cost</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.licensing.html">foley.licensing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.qc.html">foley.qc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.requirements.html">foley.requirements</a></li>
@@ -539,7 +540,7 @@ module costs only the stdlib.</p>
 <p class="rubric">Classes</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IngestReport</span></code></a>(root[, results])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.index.ingest.IngestReport" title="foley.index.ingest.IngestReport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IngestReport</span></code></a>(root[, results, notes])</p></td>
 <td><p>The rolled-up outcome of a folder ingest (JSON-serializable).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IngestResult</span></code></a>(id, status[, record, qc, ...])</p></td>
@@ -574,7 +575,7 @@ licence URL / label its source served (kept in <code class="docutils literal not
 
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.index.ingest.IngestReport">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">IngestReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/ingest.html#IngestReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.IngestReport" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">IngestReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/ingest.html#IngestReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.IngestReport" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="foley.base.html#foley.base.SerializableMixin" title="foley.base.SerializableMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">SerializableMixin</span></code></a></p>
 <p>The rolled-up outcome of a folder ingest (JSON-serializable).</p>
 <dl class="field-list simple">
@@ -594,6 +595,13 @@ licence URL / label its source served (kept in <code class="docutils literal not
 <dt class="sig sig-object py" id="foley.index.ingest.IngestReport.errored">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">errored</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#foley.index.ingest.IngestResult" title="foley.index.ingest.IngestResult"><span class="pre">IngestResult</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#foley.index.ingest.IngestReport.errored" title="Link to this definition">#</a></dt>
 <dd><p>Results that raised during ingest.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="foley.index.ingest.IngestReport.exception">
+<span class="sig-name descname"><span class="pre">exception</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#foley.index.ingest.IngestReport.exception" title="Link to this definition">#</a></dt>
+<dd><p>The exception behind the last <code class="docutils literal notranslate"><span class="pre">error</span></code> result, kept so a raising façade can
+chain it (<code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">...</span> <span class="pre">from</span></code>); a plain attribute, never serialized.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -646,7 +654,7 @@ licence URL / label its source served (kept in <code class="docutils literal not
 
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.index.ingest.IngestResult">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">IngestResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/ingest.html#IngestResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.IngestResult" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.index.ingest.</span></span><span class="sig-name descname"><span class="pre">IngestResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_estimate_usd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_actual_usd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/index/ingest.html#IngestResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.index.ingest.IngestResult" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="foley.base.html#foley.base.SerializableMixin" title="foley.base.SerializableMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">SerializableMixin</span></code></a></p>
 <p>The outcome of ingesting one clip.</p>
 <p><code class="docutils literal notranslate"><span class="pre">status</span></code>: <code class="docutils literal notranslate"><span class="pre">'pass'</span></code>/<code class="docutils literal notranslate"><span class="pre">'warn'</span></code> (ingested), <code class="docutils literal notranslate"><span class="pre">'quarantined'</span></code> (QC-rejected,
@@ -978,6 +986,7 @@ its own <code class="docutils literal notranslate"><span class="pre">license_url
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ingest.IngestReport"><code class="docutils literal notranslate"><span class="pre">IngestReport</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ingest.IngestReport.error"><code class="docutils literal notranslate"><span class="pre">IngestReport.error()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ingest.IngestReport.errored"><code class="docutils literal notranslate"><span class="pre">IngestReport.errored</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ingest.IngestReport.exception"><code class="docutils literal notranslate"><span class="pre">IngestReport.exception</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ingest.IngestReport.ingested"><code class="docutils literal notranslate"><span class="pre">IngestReport.ingested</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ingest.IngestReport.quarantined"><code class="docutils literal notranslate"><span class="pre">IngestReport.quarantined</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.ingest.IngestReport.record"><code class="docutils literal notranslate"><span class="pre">IngestReport.record()</span></code></a></li>

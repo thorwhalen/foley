@@ -45,7 +45,7 @@ module costs only the stdlib.
 
 ### Classes
 
-| [`IngestReport`](#foley.index.ingest.IngestReport)(root[, results])               | The rolled-up outcome of a folder ingest (JSON-serializable).   |
+| [`IngestReport`](#foley.index.ingest.IngestReport)(root[, results, notes])        | The rolled-up outcome of a folder ingest (JSON-serializable).   |
 |----------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
 | [`IngestResult`](#foley.index.ingest.IngestResult)(id, status[, record, qc, ...]) | The outcome of ingesting one clip.                              |
 
@@ -65,7 +65,7 @@ licence URL / label its source served (kept in `license_url`).
 * **Type:**
   `restamp_rights(license=FROM_LICENSE_URL)`
 
-### *class* foley.index.ingest.IngestReport(root, results=<factory>)
+### *class* foley.index.ingest.IngestReport(root, results=<factory>, notes=<factory>)
 
 Bases: [`SerializableMixin`](foley.base.html.md#foley.base.SerializableMixin)
 
@@ -81,6 +81,11 @@ Record a per-file error without aborting the run.
 #### *property* errored *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](#foley.index.ingest.IngestResult)]*
 
 Results that raised during ingest.
+
+#### exception *= None*
+
+The exception behind the last `error` result, kept so a raising façade can
+chain it (`raise ... from`); a plain attribute, never serialized.
 
 #### *property* ingested *: [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[IngestResult](#foley.index.ingest.IngestResult)]*
 
@@ -112,7 +117,7 @@ A counts dict for a console/CLI summary.
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* foley.index.ingest.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None)
+### *class* foley.index.ingest.IngestResult(id, status, record=None, qc=None, notes=<factory>, error=None, cost_estimate_usd=None, cost_actual_usd=None)
 
 Bases: [`SerializableMixin`](foley.base.html.md#foley.base.SerializableMixin)
 

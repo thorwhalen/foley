@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.sources" href="foley.sources.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -370,6 +370,7 @@
 <li class="toctree-l2"><a class="reference internal" href="foley.agent_kit.html">foley.agent_kit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.base.html">foley.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.cli.html">foley.cli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.cost.html">foley.cost</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.licensing.html">foley.licensing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.qc.html">foley.qc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.requirements.html">foley.requirements</a></li>
@@ -555,6 +556,15 @@ so the derived permission flags stay single-sourced.</p>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.sources.base.UniformCorpus" title="foley.sources.base.UniformCorpus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UniformCorpus</span></code></a>(name, ring, ...[, ...])</p></td>
 <td><p>A bulk corpus where <strong>every</strong> clip carries the same license.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Exceptions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.sources.base.SourceConfigurationError" title="foley.sources.base.SourceConfigurationError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SourceConfigurationError</span></code></a></p></td>
+<td><p>A source cannot run until the user configures it: a missing key, plan or endpoint.</p></td>
 </tr>
 </tbody>
 </table>
@@ -807,6 +817,16 @@ adapters.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="foley.sources.base.SourceConfigurationError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.sources.base.</span></span><span class="sig-name descname"><span class="pre">SourceConfigurationError</span></span><a class="reference internal" href="../_modules/foley/sources/base.html#SourceConfigurationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.sources.base.SourceConfigurationError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#RuntimeError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a></p>
+<p>A source cannot run until the user configures it: a missing key, plan or endpoint.</p>
+<p>Not transient, so it is never recorded as one failed hit among many: the generate
+and pull façades let it propagate, and its message names what to set (the env var
+and, for a key, its sign-up URL) (#64).</p>
 </dd></dl>
 
 <dl class="py class">
@@ -1151,6 +1171,7 @@ the default <code class="docutils literal notranslate"><span class="pre">rings</
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.base.SourceAdapter.search"><code class="docutils literal notranslate"><span class="pre">SourceAdapter.search()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.base.SourceConfigurationError"><code class="docutils literal notranslate"><span class="pre">SourceConfigurationError</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.base.UniformCorpus"><code class="docutils literal notranslate"><span class="pre">UniformCorpus</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.base.UniformCorpus.corpus_dir"><code class="docutils literal notranslate"><span class="pre">UniformCorpus.corpus_dir()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.sources.base.UniformCorpus.iter_clips"><code class="docutils literal notranslate"><span class="pre">UniformCorpus.iter_clips()</span></code></a></li>

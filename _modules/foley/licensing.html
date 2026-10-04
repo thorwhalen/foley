@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -846,7 +846,12 @@ window.runMermaid = runMermaid;</script>
 
 <span class="c1">#: ``(family id prefix, URL path segment, display label, flags)`` for versioned CC families.</span>
 <span class="n">_CC_VERSIONED</span><span class="p">:</span> <span class="s2">"tuple[tuple[str, str, str, LicenseFlags], ...]"</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="p">(</span><span class="s2">"CC-BY"</span><span class="p">,</span> <span class="s2">"by"</span><span class="p">,</span> <span class="s2">"CC BY"</span><span class="p">,</span> <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span>
+    <span class="p">(</span>
+        <span class="s2">"CC-BY"</span><span class="p">,</span>
+        <span class="s2">"by"</span><span class="p">,</span>
+        <span class="s2">"CC BY"</span><span class="p">,</span>
+        <span class="n">LicenseFlags</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">),</span>
     <span class="p">(</span>
         <span class="s2">"CC-BY-NC"</span><span class="p">,</span>
         <span class="s2">"by-nc"</span><span class="p">,</span>
@@ -943,25 +948,37 @@ window.runMermaid = runMermaid;</script>
         <span class="k">return</span> <span class="s2">"unknown"</span><span class="p">,</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="s2">"publicdomain"</span> <span class="ow">in</span> <span class="n">toks</span> <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="s2">"public"</span><span class="p">,</span> <span class="s2">"domain"</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">"zero"</span> <span class="ow">in</span> <span class="n">toks</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="p">{</span><span class="s2">"publicdomain"</span><span class="p">,</span> <span class="s2">"zero"</span><span class="p">,</span> <span class="s2">"public"</span><span class="p">,</span> <span class="s2">"domain"</span><span class="p">},</span> <span class="s2">"CC0-1.0"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span>
+                <span class="n">tokens</span><span class="p">,</span> <span class="p">{</span><span class="s2">"publicdomain"</span><span class="p">,</span> <span class="s2">"zero"</span><span class="p">,</span> <span class="s2">"public"</span><span class="p">,</span> <span class="s2">"domain"</span><span class="p">},</span> <span class="s2">"CC0-1.0"</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="s2">"PDM-1.0"</span><span class="p">,</span> <span class="kc">False</span>  <span class="c1"># 'mark' or a bare public-domain claim</span>
-    <span class="k">if</span> <span class="s2">"cc0"</span> <span class="ow">in</span> <span class="n">toks</span> <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="s2">"creative"</span><span class="p">,</span> <span class="s2">"commons"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span>
-        <span class="n">tokens</span><span class="p">,</span> <span class="s2">"creative"</span><span class="p">,</span> <span class="s2">"commons"</span><span class="p">,</span> <span class="s2">"zero"</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="s2">"cc0"</span> <span class="ow">in</span> <span class="n">toks</span>
+        <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="s2">"creative"</span><span class="p">,</span> <span class="s2">"commons"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="n">_has_phrase</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="s2">"creative"</span><span class="p">,</span> <span class="s2">"commons"</span><span class="p">,</span> <span class="s2">"zero"</span><span class="p">)</span>
     <span class="p">):</span>
         <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="p">{</span><span class="s2">"cc0"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">,</span> <span class="s2">"zero"</span><span class="p">},</span> <span class="s2">"CC0-1.0"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">toks</span> <span class="o">&amp;</span> <span class="p">{</span><span class="s2">"sampling"</span><span class="p">,</span> <span class="s2">"sampling+"</span><span class="p">}:</span>
-        <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="p">{</span><span class="s2">"sampling"</span><span class="p">,</span> <span class="s2">"sampling+"</span><span class="p">,</span> <span class="s2">"plus"</span><span class="p">},</span> <span class="s2">"CC-Sampling+-1.0"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span>
+            <span class="n">tokens</span><span class="p">,</span> <span class="p">{</span><span class="s2">"sampling"</span><span class="p">,</span> <span class="s2">"sampling+"</span><span class="p">,</span> <span class="s2">"plus"</span><span class="p">},</span> <span class="s2">"CC-Sampling+-1.0"</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="n">toks</span> <span class="o">&amp;</span> <span class="n">_BY_TOKENS</span><span class="p">:</span>
         <span class="n">nc</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">toks</span> <span class="o">&amp;</span> <span class="n">_NC_TOKENS</span><span class="p">)</span>
         <span class="n">extra</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"non"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"use"</span><span class="p">}</span> <span class="k">if</span> <span class="n">nc</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">family</span> <span class="o">=</span> <span class="s2">"CC-BY-NC"</span> <span class="k">if</span> <span class="n">nc</span> <span class="k">else</span> <span class="s2">"CC-BY"</span>
-        <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">_BY_TOKENS</span> <span class="o">|</span> <span class="n">_NC_TOKENS</span> <span class="o">|</span> <span class="n">extra</span><span class="p">,</span> <span class="n">family</span><span class="p">,</span> <span class="n">versioned</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_only_known</span><span class="p">(</span>
+            <span class="n">tokens</span><span class="p">,</span> <span class="n">_BY_TOKENS</span> <span class="o">|</span> <span class="n">_NC_TOKENS</span> <span class="o">|</span> <span class="n">extra</span><span class="p">,</span> <span class="n">family</span><span class="p">,</span> <span class="n">versioned</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="s2">"unknown"</span><span class="p">,</span> <span class="kc">False</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_only_known</span><span class="p">(</span>
-    <span class="n">tokens</span><span class="p">:</span> <span class="s2">"list[str]"</span><span class="p">,</span> <span class="n">allowed</span><span class="p">:</span> <span class="s2">"set[str]"</span><span class="p">,</span> <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">versioned</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="s2">"list[str]"</span><span class="p">,</span>
+    <span class="n">allowed</span><span class="p">:</span> <span class="s2">"set[str]"</span><span class="p">,</span>
+    <span class="n">license_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">versioned</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"tuple[str, bool]"</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""``(license_id, True)`` if every token is accounted for, else fail closed.</span>
 
@@ -971,7 +988,9 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    """</span>
     <span class="n">versions</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">_CC_VERSION_RE</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span>
     <span class="n">leftover</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span> <span class="ow">and</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_NEUTRAL_TOKENS</span> <span class="ow">and</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">versions</span>
+        <span class="n">t</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span> <span class="ow">and</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_NEUTRAL_TOKENS</span> <span class="ow">and</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">versions</span>
     <span class="p">]</span>
     <span class="k">if</span> <span class="n">leftover</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">versions</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">"unknown"</span><span class="p">,</span> <span class="kc">False</span>
@@ -1241,7 +1260,9 @@ window.runMermaid = runMermaid;</script>
     <span class="k">if</span> <span class="n">intended_use</span><span class="o">.</span><span class="n">will_train</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ai_use_permitted</span><span class="p">(</span>
         <span class="n">record</span><span class="p">,</span> <span class="n">open_source_model</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">commercial</span><span class="o">=</span><span class="n">intended_use</span><span class="o">.</span><span class="n">commercial</span>
     <span class="p">):</span>
-        <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># the trainer's model is unknown here, so a scoped grant fails closed</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="kc">False</span>  <span class="c1"># the trainer's model is unknown here, so a scoped grant fails closed</span>
+        <span class="p">)</span>
     <span class="n">cap</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">revenue_cap_usd</span>
     <span class="k">if</span> <span class="n">cap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">intended_use</span><span class="o">.</span><span class="n">revenue_usd</span> <span class="o">&gt;=</span> <span class="n">cap</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>

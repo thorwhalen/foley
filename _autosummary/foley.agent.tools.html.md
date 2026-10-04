@@ -19,12 +19,26 @@ generation-error hierarchy are imported lazily inside the functions that call th
 
 ### Functions
 
-| [`find`](#foley.agent.tools.find)(context, \*[, max_events, seconds, ...])     | The headline: a narrative context → verified, license-clean sound candidates.             |
-|----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
-| [`generate_sound`](#foley.agent.tools.generate_sound)(query, \*[, backend, library])     | Generate a clip for `query` (the fallback tool) — a thin wrapper over `foley.generate`.   |
-| [`place_in_timeline`](#foley.agent.tools.place_in_timeline)(clip, \*[, onset, gain, ...])   | Emit the SPARSE per-item plan subset (`clip_ref·onset·gain·layer·loop`) — no more.        |
-| [`plan`](#foley.agent.tools.plan)(candidates, \*[, transcript])                | Fold verified candidates into the SPARSE `SoundDesignTimeline` (the SELECT→WEAVE bridge). |
-| [`search_sounds`](#foley.agent.tools.search_sounds)(queries, \*[, k, library, filters]) | Hybrid search for one query, or a multi-query RRF-merge (the SELECT retrieval tool).      |
+| [`estimate_find_usd`](#foley.agent.tools.estimate_find_usd)(\*[, max_events, backend, ...])   | An upper bound on what one [`find()`](#foley.agent.tools.find) run can spend, or `None` if unknown.   |
+|------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| [`find`](#foley.agent.tools.find)(context, \*[, max_events, seconds, ...])       | The headline: a narrative context → verified, license-clean sound candidates.                                             |
+| [`generate_sound`](#foley.agent.tools.generate_sound)(query, \*[, backend, library])       | Generate a clip for `query` (the fallback tool) — a thin wrapper over `foley.generate`.                                   |
+| [`place_in_timeline`](#foley.agent.tools.place_in_timeline)(clip, \*[, onset, gain, ...])     | Emit the SPARSE per-item plan subset (`clip_ref·onset·gain·layer·loop`) — no more.                                        |
+| [`plan`](#foley.agent.tools.plan)(candidates, \*[, transcript])                  | Fold verified candidates into the SPARSE `SoundDesignTimeline` (the SELECT→WEAVE bridge).                                 |
+| [`search_sounds`](#foley.agent.tools.search_sounds)(queries, \*[, k, library, filters])   | Hybrid search for one query, or a multi-query RRF-merge (the SELECT retrieval tool).                                      |
+
+### foley.agent.tools.estimate_find_usd(, max_events=6, backend='auto', llm=None, k=10, verify='listen', max_refine_loops=1, max_generations=1, injected=None, context_chars=0)
+
+An upper bound on what one [`find()`](#foley.agent.tools.find) run can spend, or `None` if unknown.
+
+Every generation (`max_generations` per event through `backend`) plus every
+LLM call the default rungs could make: one decomposition, `max_refine_loops`
+refinements per event, `k` judge calls per retrieval pass above the `clap`
+rung, and one re-verification per generation. Injected rungs are the caller’s to
+meter (their real calls are still checked one by one).
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### foley.agent.tools.find(context, , max_events=6, seconds=None, intended_use=None, backend='auto', verify='listen', stream=False, k=10, tau_retrieve=0.5, tau_clap=0.35, max_refine_loops=1, budget=None, library=None, decomposer=None, judge=None, refiner=None, llm=None)
 
@@ -51,7 +65,11 @@ deterministic defaults; every model / threshold / seam is an optional keyword.
   * **tau_clap** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – The `clap`-rung gate threshold.
   * **max_refine_loops** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Max refine→re-retrieve passes per event (also the default
     `Budget`).
-  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit `Budget` (overrides `max_refine_loops`).
+  * **budget** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Budget`](foley.agent.policy.html.md#foley.agent.policy.Budget)]) – An explicit `Budget` (overrides `max_refine_loops`). It is
+    also the run’s spend cap: `Budget(max_usd=...)` (default $1) bounds
+    every paid call the run makes — generations and paid LLM rungs —
+    cumulatively, and a call of unknown cost needs
+    `Budget(approve_unknown_cost=True)` (#57).
   * **library** – Target `SoundLibrary` (default: the process-wide default).
   * **refiner** (*decomposer / judge /*) – Injected DI seams
     ([`Decomposer`](foley.agent.protocols.html.md#foley.agent.protocols.Decomposer) / `Judge` / `Refiner`);

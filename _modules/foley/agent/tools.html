@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../../../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -951,11 +951,22 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    Handles the ``skipped_dup`` byte-twin (a bare ``Candidate`` with event/verdict/​license</span>
 <span class="sd">    unset — still gated + verified here, never assumed pre-vetted).</span>
 <span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..cost</span><span class="w"> </span><span class="kn">import</span> <span class="n">BudgetExceeded</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">EgressBlocked</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..sources</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenerationError</span>  <span class="c1"># lazy: keeps import foley dol-only</span>
 
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..sources.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">SourceConfigurationError</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">gc</span> <span class="o">=</span> <span class="n">generate_sound</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">BudgetExceeded</span><span class="p">,</span> <span class="n">SourceConfigurationError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="c1"># Generation is find's optional fallback: an exhausted enclosing budget, or a</span>
+        <span class="c1"># backend that is not set up (no key, no plan, extra not installed), skips it —</span>
+        <span class="c1"># loudly, since nothing was generated — and find falls back to retrieval.</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">"generation skipped: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
     <span class="k">except</span> <span class="p">(</span><span class="n">GenerationError</span><span class="p">,</span> <span class="n">EgressBlocked</span><span class="p">):</span>
         <span class="c1"># Refused, failed, or an external backend under offline(): skip generation;</span>
         <span class="c1"># the caller falls back to the best verified retrieval.</span>
@@ -1030,7 +1041,11 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        tau_clap: The ``clap``-rung gate threshold.</span>
 <span class="sd">        max_refine_loops: Max refine→re-retrieve passes per event (also the default</span>
 <span class="sd">            :class:`Budget`).</span>
-<span class="sd">        budget: An explicit :class:`Budget` (overrides ``max_refine_loops``).</span>
+<span class="sd">        budget: An explicit :class:`Budget` (overrides ``max_refine_loops``). It is</span>
+<span class="sd">            also the run's spend cap: ``Budget(max_usd=...)`` (default $1) bounds</span>
+<span class="sd">            every paid call the run makes — generations and paid LLM rungs —</span>
+<span class="sd">            cumulatively, and a call of unknown cost needs</span>
+<span class="sd">            ``Budget(approve_unknown_cost=True)`` (#57).</span>
 <span class="sd">        library: Target :class:`SoundLibrary` (default: the process-wide default).</span>
 <span class="sd">        decomposer / judge / refiner: Injected DI seams</span>
 <span class="sd">            (:class:`~foley.agent.protocols.Decomposer` / ``Judge`` / ``Refiner``);</span>
@@ -1086,8 +1101,131 @@ window.runMermaid = runMermaid;</script>
     <span class="n">llm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Iterator[Candidate]"</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""The streaming body of :func:`find` (``find(stream=False)`` == ``list(_find_stream(...))``)."""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..cost</span><span class="w"> </span><span class="kn">import</span> <span class="n">check</span><span class="p">,</span> <span class="n">scoped_iter</span>
+
     <span class="n">use</span> <span class="o">=</span> <span class="n">intended_use_for</span><span class="p">(</span><span class="n">intended_use</span><span class="p">)</span>
     <span class="n">budget</span> <span class="o">=</span> <span class="n">budget</span> <span class="ow">or</span> <span class="n">Budget</span><span class="p">(</span><span class="n">max_refine_loops</span><span class="o">=</span><span class="n">max_refine_loops</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+        <span class="c1"># Before the first paid call: the whole run's upper bound must fit every</span>
+        <span class="c1"># budget in force (#57's acceptance), else nothing is spent. A check, not a</span>
+        <span class="c1"># reservation: each call reserves its own cost when it is made.</span>
+        <span class="n">check</span><span class="p">(</span>
+            <span class="n">estimate_find_usd</span><span class="p">(</span>
+                <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span>
+                <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
+                <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
+                <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+                <span class="n">verify</span><span class="o">=</span><span class="n">verify</span><span class="p">,</span>
+                <span class="n">max_refine_loops</span><span class="o">=</span><span class="n">budget</span><span class="o">.</span><span class="n">max_refine_loops</span><span class="p">,</span>
+                <span class="n">max_generations</span><span class="o">=</span><span class="n">budget</span><span class="o">.</span><span class="n">max_generations</span> <span class="k">if</span> <span class="n">budget</span><span class="o">.</span><span class="n">allow_generate</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="n">context_chars</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="p">),</span>
+                <span class="n">injected</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">"decomposer"</span><span class="p">:</span> <span class="n">decomposer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">"refiner"</span><span class="p">:</span> <span class="n">refiner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">"judge"</span><span class="p">:</span> <span class="n">judge</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">),</span>
+            <span class="n">what</span><span class="o">=</span><span class="sa">f</span><span class="s2">"this find run (upper bound for </span><span class="si">{</span><span class="n">max_events</span><span class="si">}</span><span class="s2"> events)"</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">_find_events</span><span class="p">(</span>
+            <span class="n">context</span><span class="p">,</span>
+            <span class="n">use</span><span class="o">=</span><span class="n">use</span><span class="p">,</span>
+            <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
+            <span class="n">max_events</span><span class="o">=</span><span class="n">max_events</span><span class="p">,</span>
+            <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span>
+            <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span>
+            <span class="n">verify</span><span class="o">=</span><span class="n">verify</span><span class="p">,</span>
+            <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+            <span class="n">tau_retrieve</span><span class="o">=</span><span class="n">tau_retrieve</span><span class="p">,</span>
+            <span class="n">tau_clap</span><span class="o">=</span><span class="n">tau_clap</span><span class="p">,</span>
+            <span class="n">library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
+            <span class="n">decomposer</span><span class="o">=</span><span class="n">decomposer</span><span class="p">,</span>
+            <span class="n">judge</span><span class="o">=</span><span class="n">judge</span><span class="p">,</span>
+            <span class="n">refiner</span><span class="o">=</span><span class="n">refiner</span><span class="p">,</span>
+            <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># The budget is in force only while the stream runs, never between items.</span>
+    <span class="k">yield from</span> <span class="n">scoped_iter</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="estimate_find_usd">
+<a class="viewcode-back" href="../../../_autosummary/foley.agent.tools.html#foley.estimate_find_usd">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_find_usd</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_events</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"auto"</span><span class="p">,</span>
+    <span class="n">llm</span><span class="p">:</span> <span class="s2">"Optional[str]"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">verify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"listen"</span><span class="p">,</span>
+    <span class="n">max_refine_loops</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">max_generations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">injected</span><span class="p">:</span> <span class="s2">"Optional[dict]"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">context_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Optional[float]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""An upper bound on what one :func:`find` run can spend, or ``None`` if unknown.</span>
+
+<span class="sd">    Every generation (``max_generations`` per event through ``backend``) plus every</span>
+<span class="sd">    LLM call the default rungs could make: one decomposition, ``max_refine_loops``</span>
+<span class="sd">    refinements per event, ``k`` judge calls per retrieval pass above the ``clap``</span>
+<span class="sd">    rung, and one re-verification per generation. Injected rungs are the caller's to</span>
+<span class="sd">    meter (their real calls are still checked one by one).</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..sources._dispatch</span><span class="w"> </span><span class="kn">import</span> <span class="n">estimate_generation</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">RUNG_MAX_TOKENS</span><span class="p">,</span> <span class="n">llm_call_estimate</span><span class="p">,</span> <span class="n">resolve_llm</span>
+
+    <span class="n">injected</span> <span class="o">=</span> <span class="n">injected</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">provider</span> <span class="o">=</span> <span class="n">resolve_llm</span><span class="p">(</span><span class="n">llm</span><span class="p">)</span>
+    <span class="n">per_gen</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">if</span> <span class="n">max_generations</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">"stable_audio"</span> <span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="s2">"auto"</span> <span class="k">else</span> <span class="n">backend</span>
+        <span class="n">per_gen</span> <span class="o">=</span> <span class="n">estimate_generation</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">calls</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"decomposer"</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">injected</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"decomposer"</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">"refiner"</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">injected</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"refiner"</span><span class="p">)</span> <span class="k">else</span> <span class="n">max_events</span> <span class="o">*</span> <span class="n">max_refine_loops</span><span class="p">,</span>
+        <span class="s2">"judge"</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">injected</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"judge"</span><span class="p">)</span>
+        <span class="k">else</span> <span class="n">max_events</span>
+        <span class="o">*</span> <span class="p">((</span><span class="n">max_refine_loops</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="k">if</span> <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">verify</span><span class="p">)</span> <span class="o">!=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+           <span class="o">+</span> <span class="n">max_generations</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">per_gen</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">max_events</span> <span class="o">*</span> <span class="n">max_generations</span> <span class="o">*</span> <span class="n">per_gen</span>
+    <span class="k">if</span> <span class="n">per_gen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">calls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">context_chars</span> <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"decomposer"</span> <span class="k">else</span> <span class="mi">0</span>  <span class="c1"># the passage goes to it</span>
+        <span class="n">each</span> <span class="o">=</span> <span class="n">llm_call_estimate</span><span class="p">(</span>
+            <span class="n">provider</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="n">RUNG_MAX_TOKENS</span><span class="p">[</span><span class="n">kind</span><span class="p">],</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">input_chars</span><span class="o">=</span><span class="n">extra</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">each</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">each</span>
+    <span class="k">return</span> <span class="n">total</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_events</span><span class="p">(</span>
+    <span class="n">context</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">use</span><span class="p">,</span>
+    <span class="n">budget</span><span class="p">,</span>
+    <span class="n">max_events</span><span class="p">,</span>
+    <span class="n">seconds</span><span class="p">,</span>
+    <span class="n">backend</span><span class="p">,</span>
+    <span class="n">verify</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">,</span>
+    <span class="n">tau_retrieve</span><span class="p">,</span>
+    <span class="n">tau_clap</span><span class="p">,</span>
+    <span class="n">library</span><span class="p">,</span>
+    <span class="n">decomposer</span><span class="p">,</span>
+    <span class="n">judge</span><span class="p">,</span>
+    <span class="n">refiner</span><span class="p">,</span>
+    <span class="n">llm</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Iterator[Candidate]"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The per-event loop of :func:`find`, run inside the run's spend scope."""</span>
     <span class="n">library</span> <span class="o">=</span> <span class="n">library</span> <span class="k">if</span> <span class="n">library</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default_library</span><span class="p">()</span>
     <span class="n">decomposer</span> <span class="o">=</span> <span class="n">decomposer</span> <span class="ow">or</span> <span class="n">_default_decomposer</span><span class="p">(</span><span class="n">llm</span><span class="p">)</span>
     <span class="n">max_level</span> <span class="o">=</span> <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">verify</span><span class="p">)</span>

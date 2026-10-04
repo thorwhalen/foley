@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.agent.mcp" href="foley.agent.mcp.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -370,6 +370,7 @@
 <li class="toctree-l2"><a class="reference internal" href="foley.agent_kit.html">foley.agent_kit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.base.html">foley.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.cli.html">foley.cli</a></li>
+<li class="toctree-l2"><a class="reference internal" href="foley.cost.html">foley.cost</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.licensing.html">foley.licensing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.qc.html">foley.qc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="foley.requirements.html">foley.requirements</a></li>
@@ -495,7 +496,7 @@ run away. This module is stdlib-only (imports only <a class="reference internal"
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.agent.policy.Budget" title="foley.agent.policy.Budget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Budget</span></code></a>([max_refine_loops, max_generations, ...])</p></td>
-<td><p>Bounded-cost accounting for the per-event refine/generate loops.</p></td>
+<td><p>Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.agent.policy.DecideAction" title="foley.agent.policy.DecideAction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DecideAction</span></code></a>(*values)</p></td>
 <td><p>What <a class="reference internal" href="#foley.agent.policy.decide" title="foley.agent.policy.decide"><code class="xref py py-func docutils literal notranslate"><span class="pre">decide()</span></code></a> chose for one event (the single branch's outcomes).</p></td>
@@ -508,13 +509,55 @@ run away. This module is stdlib-only (imports only <a class="reference internal"
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="foley.agent.policy.Budget">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.agent.policy.</span></span><span class="sig-name descname"><span class="pre">Budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_refine_loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_generations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_generate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_refines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.agent.policy.</span></span><span class="sig-name descname"><span class="pre">Budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_refine_loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_generations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_generate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_usd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approve_unknown_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_refines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_spent_usd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_unknown_calls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_lock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Bounded-cost accounting for the per-event refine/generate loops.</p>
-<p>Prevents unbounded cost on a hard event. The loop calls <a class="reference internal" href="#foley.agent.policy.Budget.refine_ok" title="foley.agent.policy.Budget.refine_ok"><code class="xref py py-meth docutils literal notranslate"><span class="pre">refine_ok()</span></code></a> /
-<a class="reference internal" href="#foley.agent.policy.Budget.gen_ok" title="foley.agent.policy.Budget.gen_ok"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gen_ok()</span></code></a> to test, then <a class="reference internal" href="#foley.agent.policy.Budget.spend_refine" title="foley.agent.policy.Budget.spend_refine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">spend_refine()</span></code></a> / <a class="reference internal" href="#foley.agent.policy.Budget.spend_gen" title="foley.agent.policy.Budget.spend_gen"><code class="xref py py-meth docutils literal notranslate"><span class="pre">spend_gen()</span></code></a> to charge.</p>
+<p>Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).</p>
+<p>Two kinds of bound:</p>
+<ul class="simple">
+<li><p><strong>Per event</strong> — <code class="docutils literal notranslate"><span class="pre">max_refine_loops</span></code> / <code class="docutils literal notranslate"><span class="pre">max_generations</span></code>: the loop calls
+<a class="reference internal" href="#foley.agent.policy.Budget.refine_ok" title="foley.agent.policy.Budget.refine_ok"><code class="xref py py-meth docutils literal notranslate"><span class="pre">refine_ok()</span></code></a> / <a class="reference internal" href="#foley.agent.policy.Budget.gen_ok" title="foley.agent.policy.Budget.gen_ok"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gen_ok()</span></code></a> to test, then <a class="reference internal" href="#foley.agent.policy.Budget.spend_refine" title="foley.agent.policy.Budget.spend_refine"><code class="xref py py-meth docutils literal notranslate"><span class="pre">spend_refine()</span></code></a> /
+<a class="reference internal" href="#foley.agent.policy.Budget.spend_gen" title="foley.agent.policy.Budget.spend_gen"><code class="xref py py-meth docutils literal notranslate"><span class="pre">spend_gen()</span></code></a> to charge; <a class="reference internal" href="#foley.agent.policy.Budget.reset" title="foley.agent.policy.Budget.reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code></a> zeroes them at each event.</p></li>
+<li><p><strong>Per run, cumulative</strong> — <code class="docutils literal notranslate"><span class="pre">max_usd</span></code> (default $1): every paid call (generation,
+paid LLM rung) is checked with <a class="reference internal" href="#foley.agent.policy.Budget.authorize" title="foley.agent.policy.Budget.authorize"><code class="xref py py-meth docutils literal notranslate"><span class="pre">authorize()</span></code></a> before it is made and recorded with <a class="reference internal" href="#foley.agent.policy.Budget.charge" title="foley.agent.policy.Budget.charge"><code class="xref py py-meth docutils literal notranslate"><span class="pre">charge()</span></code></a>
+after. <a class="reference internal" href="#foley.agent.policy.Budget.reset" title="foley.agent.policy.Budget.reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code></a> never clears it, so the cap holds across the whole
+<code class="docutils literal notranslate"><span class="pre">find</span></code> / <code class="docutils literal notranslate"><span class="pre">score</span></code> run. A call whose cost is unknown (estimate <code class="docutils literal notranslate"><span class="pre">None</span></code>) is
+refused unless <code class="docutils literal notranslate"><span class="pre">approve_unknown_cost</span></code> (or <code class="docutils literal notranslate"><span class="pre">$FOLEY_APPROVE_UNKNOWN_COST=1</span></code>).</p></li>
+</ul>
 <dl class="field-list simple">
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.authorize">
+<span class="sig-name descname"><span class="pre">authorize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimate_usd</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget.authorize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.authorize" title="Link to this definition">#</a></dt>
+<dd><p>Alias of <a class="reference internal" href="#foley.agent.policy.Budget.check" title="foley.agent.policy.Budget.check"><code class="xref py py-meth docutils literal notranslate"><span class="pre">check()</span></code></a> (kept for callers that only test affordability).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.charge">
+<span class="sig-name descname"><span class="pre">charge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">usd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget.charge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.charge" title="Link to this definition">#</a></dt>
+<dd><p>Record a call’s cost (<code class="docutils literal notranslate"><span class="pre">None</span></code> = unknown: counted, not summed).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimate_usd</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.check" title="Link to this definition">#</a></dt>
+<dd><p>Raise if this run cannot afford <code class="docutils literal notranslate"><span class="pre">estimate_usd</span></code> (nothing is reserved).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="foley.agent.policy.Budget.gen_ok">
 <span class="sig-name descname"><span class="pre">gen_ok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget.gen_ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.gen_ok" title="Link to this definition">#</a></dt>
@@ -538,12 +581,37 @@ run away. This module is stdlib-only (imports only <a class="reference internal"
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.reserve">
+<span class="sig-name descname"><span class="pre">reserve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimate_usd</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget.reserve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.reserve" title="Link to this definition">#</a></dt>
+<dd><p>Check, then count <code class="docutils literal notranslate"><span class="pre">estimate_usd</span></code> as spent at once (atomic under a lock).</p>
+<p>Reserving before the call is what keeps concurrent calls on one budget (MCP
+tools run in a threadpool) from all passing the check before any is charged.
+<a class="reference internal" href="#foley.agent.policy.Budget.settle" title="foley.agent.policy.Budget.settle"><code class="xref py py-meth docutils literal notranslate"><span class="pre">settle()</span></code></a> later replaces the reservation with the actual cost, if known.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="foley.agent.policy.Budget.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.reset" title="Link to this definition">#</a></dt>
 <dd><p>Zero the spend counters so the caps apply <em>per event</em>, not per passage.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">find</span></code> loop calls this at the top of each event so one hard event’s
 refine/generate spend never starves later events (the documented per-event
 semantics).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.settle">
+<span class="sig-name descname"><span class="pre">settle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reserved_usd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actual_usd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/agent/policy.html#Budget.settle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.agent.policy.Budget.settle" title="Link to this definition">#</a></dt>
+<dd><p>Replace a reservation with the actual cost (<code class="docutils literal notranslate"><span class="pre">None</span></code> actual: keep the reservation).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
@@ -571,6 +639,12 @@ semantics).</p>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="foley.agent.policy.Budget.spent_usd">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">spent_usd</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><a class="headerlink" href="#foley.agent.policy.Budget.spent_usd" title="Link to this definition">#</a></dt>
+<dd><p>Dollars charged so far this run (calls of unknown cost count as 0 here).</p>
 </dd></dl>
 
 </dd></dl>
@@ -705,11 +779,17 @@ its survivors are license-clean.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget"><code class="docutils literal notranslate"><span class="pre">Budget</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.authorize"><code class="docutils literal notranslate"><span class="pre">Budget.authorize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.charge"><code class="docutils literal notranslate"><span class="pre">Budget.charge()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.check"><code class="docutils literal notranslate"><span class="pre">Budget.check()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.gen_ok"><code class="docutils literal notranslate"><span class="pre">Budget.gen_ok()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.refine_ok"><code class="docutils literal notranslate"><span class="pre">Budget.refine_ok()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.reserve"><code class="docutils literal notranslate"><span class="pre">Budget.reserve()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.reset"><code class="docutils literal notranslate"><span class="pre">Budget.reset()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.settle"><code class="docutils literal notranslate"><span class="pre">Budget.settle()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.spend_gen"><code class="docutils literal notranslate"><span class="pre">Budget.spend_gen()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.spend_refine"><code class="docutils literal notranslate"><span class="pre">Budget.spend_refine()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.Budget.spent_usd"><code class="docutils literal notranslate"><span class="pre">Budget.spent_usd</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.agent.policy.DecideAction"><code class="docutils literal notranslate"><span class="pre">DecideAction</span></code></a></li>
