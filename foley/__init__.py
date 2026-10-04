@@ -829,7 +829,9 @@ def estimate(verb: str, **kwargs):
         verb: ``'generate'`` (``backend=``, plus the generation affordances — priced
             exactly as the call would be: same drops, same clamp); ``'find'`` /
             ``'score'`` (the run's upper bound: every generation and LLM call it could
-            make — what ``find`` checks against its budget before the first paid call);
+            make — what ``find`` checks against its budget before the first paid call;
+            pass ``context=`` / ``segments=`` so the decomposer's prompt is sized, and
+            ``score`` sums one ``find`` per segment);
             ``'search'`` / ``'similar'`` / ``'ingest'`` (local: ``0.0``);
             ``'add_from'`` (``source=``).
         **kwargs: The same keywords the verb takes.
@@ -856,7 +858,14 @@ def estimate(verb: str, **kwargs):
         return estimate_generation(backend, **kwargs)
     if verb in ("find", "score"):
         keys = ("max_events", "backend", "llm", "k", "verify", "max_refine_loops")
-        return estimate_find_usd(**{key: kwargs[key] for key in keys if key in kwargs})
+        kw = {key: kwargs[key] for key in keys if key in kwargs}
+        text = kwargs.get("context") or kwargs.get("segments") or ""
+        segments = [text] if isinstance(text, str) else list(text)
+        if verb == "find" or not segments:
+            return estimate_find_usd(**kw, context_chars=len(segments[0]) if segments else 0)
+        # score runs one find per segment
+        per = [estimate_find_usd(**kw, context_chars=len(seg)) for seg in segments]
+        return None if any(p is None for p in per) else sum(per)
     raise ValueError(
         f"estimate() knows generate, find, score, search, similar, ingest, add_from; got {verb!r}"
     )

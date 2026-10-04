@@ -280,17 +280,20 @@ def test_a_stream_does_not_lend_its_budget_to_the_caller(paid_source, library, f
     assert active_budget() is None  # between items, the stream's budget is not in force
 
 
-def test_an_mcp_session_is_one_run_for_the_cap(paid_source, library):
+def test_an_mcp_server_has_one_cap_whatever_session_ids_the_agent_sends(paid_source, library):
     from foley.agent import mcp
 
     adapter = paid_source("mcpgen", amount=0.40)
     mcp._configure(library=library)
-    mcp._STATE["budgets"].clear()
-    results = [mcp.foley_generate(f"door {i}", backend="mcpgen", session="s1") for i in range(4)]
+    mcp._STATE["budget"] = None
+    results = [
+        mcp.foley_generate(f"door {i}", backend="mcpgen", session=f"invented-{i}")
+        for i in range(4)
+    ]
     assert [r["ok"] for r in results] == [True, True, False, False]
     assert adapter.calls == 2 and "cap" in results[2]["error"]
-    assert mcp.foley_status(session="s1")["spent_usd"] == pytest.approx(0.80)
-    mcp._STATE["budgets"].clear()
+    assert mcp.foley_status(session="anything")["spent_usd"] == pytest.approx(0.80)
+    mcp._STATE["budget"] = None
 
 
 # ---------------------------------------------------------------------------
@@ -428,3 +431,170 @@ def test_a_missing_extra_is_a_configuration_error(library, paid_source):
 
 def test_estimate_prices_the_call_as_it_would_be_made():
     assert foley.estimate("generate", backend="elevenlabs", duration=60) == pytest.approx(0.06)
+
+
+
+# ---------------------------------------------------------------------------
+# second review: bounds from the real prompt, retries, concurrency
+# ---------------------------------------------------------------------------
+
+
+class _Usage:
+    def __init__(self, tin, tout):
+        self.input_tokens, self.output_tokens = tin, tout
+
+
+def _fake_anthropic(*, fail_with=None, calls=None):
+    from types import SimpleNamespace
+
+    class _Client:
+        class messages:  # noqa: N801
+            @staticmethod
+            def create(**kw):
+                if calls is not None:
+                    calls.append(kw)
+                if fail_with and len(calls or []) <= len(fail_with):
+                    raise fail_with[len(calls) - 1]
+                text = SimpleNamespace(type="text", text='{"events": []}')
+                return SimpleNamespace(content=[text], model="claude-opus-4-8",
+                                       stop_reason="end_turn", usage=_Usage(100, 50))
+
+    return _Client()
+
+
+def test_a_long_passage_is_bounded_by_its_real_length(monkeypatch):
+    """A 400k-character passage cannot slip under the cap on a fixed input guess."""
+    from foley.agent.decompose import AnthropicDecomposer
+    from foley.cost import spend_scope
+
+    calls = []
+    with spend_scope(Budget(max_usd=1.0)) as budget:
+        budget.charge(0.90)
+        with pytest.raises(BudgetExceeded):
+            AnthropicDecomposer(client=_fake_anthropic(calls=calls)).decompose("x" * 400_000)
+    assert calls == [] and budget.spent_usd == pytest.approx(0.90)
+
+
+def test_a_metered_call_is_charged_its_actual_usage_and_never_resent_after_a_timeout():
+    from foley.agent.llm import metered_create
+    from foley.cost import spend_scope
+
+    with spend_scope(Budget(max_usd=1.0)) as budget:
+        metered_create(_fake_anthropic(calls=[]), model="claude-opus-4-8", max_tokens=500,
+                       messages=[{"role": "user", "content": "hi"}])
+        assert budget.spent_usd == pytest.approx((100 * 5 + 50 * 25) / 1e6)
+        calls = []
+        with pytest.raises(TimeoutError):
+            metered_create(_fake_anthropic(fail_with=[TimeoutError("read")], calls=calls),
+                           model="claude-opus-4-8", max_tokens=500, messages=[])
+        assert len(calls) == 1  # not re-sent
+        assert budget.spent_usd > (100 * 5 + 50 * 25) / 1e6  # the reservation stays
+
+
+def test_a_rejected_metered_call_is_retried_without_double_charging():
+    anthropic = pytest.importorskip("anthropic")
+    import httpx2 as httpx  # noqa: F401 - the SDK's HTTP library (1.x)
+
+    from foley.agent.llm import metered_create
+    from foley.cost import spend_scope
+
+    req = httpx.Request("POST", "https://api.anthropic.com/v1/messages")
+    rejected = anthropic.RateLimitError("slow down", response=httpx.Response(429, request=req),
+                                        body=None)
+    calls = []
+    with spend_scope(Budget(max_usd=1.0)) as budget:
+        metered_create(_fake_anthropic(fail_with=[rejected], calls=calls), sleep=lambda s: None,
+                       model="claude-opus-4-8", max_tokens=500, messages=[])
+    assert len(calls) == 2
+    assert budget.spent_usd == pytest.approx((100 * 5 + 50 * 25) / 1e6)
+
+
+def test_a_paid_post_is_not_resent_after_a_transport_error():
+    from foley.sources.resilience import SourceUnavailable, make_resilient_transport_from_config
+
+    sent = []
+
+    def flaky(method, url, **kw):
+        sent.append(method)
+        raise TimeoutError("read timeout")
+
+    paid = make_resilient_transport_from_config(
+        {"rate": None, "pricing": {"unit": "per_second", "amount_usd": 0.002}},
+        base=flaky, sleep=lambda s: None)
+    with pytest.raises(TimeoutError):
+        paid("POST", "https://api.example/x")
+    assert sent == ["POST"]
+    free = make_resilient_transport_from_config(
+        {"rate": None, "pricing": {"unit": "free"}}, base=flaky, sleep=lambda s: None)
+    with pytest.raises(SourceUnavailable):
+        free("POST", "https://api.example/x")
+    assert len(sent) > 2  # a free source keeps its retries
+
+
+def test_concurrent_calls_cannot_all_pass_before_any_is_counted(paid_source, library):
+    import threading
+
+    from foley.cost import spend_scope
+
+    gate = threading.Barrier(4)
+    adapter = paid_source("concurrent", amount=0.40)
+    original = adapter.generate
+
+    def slow(prompt, **kw):
+        return original(prompt, **kw)
+
+    adapter.generate = slow
+    budget = Budget(max_usd=1.0)
+    errors = []
+
+    def worker(i):
+        gate.wait()
+        try:
+            with spend_scope(budget):
+                foley.generate(f"door {i}", backend="concurrent", library=library)
+        except BudgetExceeded as exc:
+            errors.append(exc)
+
+    threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert adapter.calls == 2 and len(errors) == 2
+    assert budget.spent_usd == pytest.approx(0.80)
+
+
+def test_a_rights_refusal_or_ingest_error_replays_the_paid_bytes(library, paid_source,
+                                                                 _in_memory_generations_cache):
+    adapter = paid_source("replay", amount=0.05)
+    foley.generate("a door", backend="replay", library=library)
+    for key, entry in list(_in_memory_generations_cache.requests.items()):
+        _in_memory_generations_cache.requests[key] = {**entry, "status": "error"}
+    foley.generate("a door", backend="replay", library=library)
+    assert adapter.calls == 1  # an unrelated ingest error does not re-pay
+
+
+def test_loopback_means_this_machine_only():
+    from foley.agent.llm import is_loopback_host
+
+    assert is_loopback_host("127.0.0.1") and is_loopback_host("localhost")
+    assert not is_loopback_host("127.example.com")
+
+
+def test_estimate_score_sums_one_find_per_segment(paid_source):
+    paid_source("seg", amount=0.01)
+    one = foley.estimate("find", backend="seg", context="a door")
+    assert foley.estimate("score", backend="seg", segments=["a door", "rain"]) == pytest.approx(2 * one)
+
+
+def test_an_over_budget_mcp_find_is_a_json_refusal(library, monkeypatch):
+    from foley.agent import mcp
+
+    def over_budget(*a, **k):
+        raise BudgetExceeded("this find run (upper bound) would cost ~$3.00, over its $1.00 cap")
+
+    monkeypatch.setattr(foley, "find", over_budget)
+    mcp._configure(library=library)
+    rows = mcp.foley_find(DEMO)
+    assert rows == [{"ok": False, "status": "refused", "error": rows[0]["error"]}]
+    assert "cap" in rows[0]["error"]

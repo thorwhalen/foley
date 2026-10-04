@@ -33,7 +33,10 @@ __all__ = [
     "spend_scope",
     "scoped_iter",
     "active_budget",
+    "check",
     "authorize",
+    "settle",
+    "release",
     "charge",
 ]
 
@@ -135,7 +138,8 @@ def scoped_iter(iterator_factory, budget=None):
     A generator that holds a :func:`spend_scope` across ``yield`` would leave its
     budget active in the caller's context between items (so the caller's own calls, or
     another interleaved stream, would charge it). This re-enters the scope for each
-    step and leaves it before handing the item out.
+    step and leaves it before handing the item out; closing the stream closes the
+    inner iterator inside the scope too.
     """
     stack = _stack()
     if budget is None:
@@ -146,21 +150,48 @@ def scoped_iter(iterator_factory, budget=None):
 
             budget = Budget()
     iterator = None
-    while True:
-        with spend_scope(budget):
-            if iterator is None:
-                iterator = iter(iterator_factory())
-            try:
-                item = next(iterator)
-            except StopIteration:
-                return
-        yield item
+    try:
+        while True:
+            with spend_scope(budget):
+                if iterator is None:
+                    iterator = iter(iterator_factory())
+                try:
+                    item = next(iterator)
+                except StopIteration:
+                    return
+            yield item
+    finally:
+        close = getattr(iterator, "close", None)
+        if close is not None:
+            with spend_scope(budget):
+                close()
+
+
+def _budgets() -> tuple:
+    stack = _stack()
+    if stack:
+        return stack
+    from .agent.policy import Budget
+
+    return (Budget(),)  # no run in force: this single call is the run
+
+
+def check(estimate_usd: Optional[float], *, what: str) -> None:
+    """Raise unless every budget in force can afford ``estimate_usd`` (reserves nothing).
+
+    For a whole-run upper bound (``find``'s pre-flight).
+    """
+    for budget in _budgets():
+        budget.check(estimate_usd, what=what)
 
 
 def authorize(estimate_usd: Optional[float], *, what: str) -> None:
-    """Refuse a paid call before it is made if any budget in force cannot afford it.
+    """Admit a paid call: every budget in force must afford it, and each reserves it.
 
-    With no budget in force, a fresh default one (this single call is the run).
+    The reservation is atomic per budget, so concurrent calls cannot all pass before
+    any is counted. Call :func:`settle` afterwards with the actual cost when known; a
+    call that fails after being sent keeps its reservation (it may have been billed);
+    one refused before sending is released with :func:`release`.
 
     Raises:
         CostApprovalRequired: If ``estimate_usd`` is ``None`` and a budget in force has
@@ -168,13 +199,22 @@ def authorize(estimate_usd: Optional[float], *, what: str) -> None:
             ``$FOLEY_APPROVE_UNKNOWN_COST``).
         BudgetExceeded: If a budget's spend plus ``estimate_usd`` exceeds its ``max_usd``.
     """
-    stack = _stack()
-    if not stack:
-        from .agent.policy import Budget
+    budgets = _budgets()
+    for budget in budgets:
+        budget.check(estimate_usd, what=what)
+    for budget in budgets:
+        budget.reserve(estimate_usd, what=what)
 
-        stack = (Budget(),)
-    for budget in stack:
-        budget.authorize(estimate_usd, what=what)
+
+def settle(reserved_usd: Optional[float], actual_usd: Optional[float]) -> None:
+    """Replace each budget's reservation with the actual cost (``None``: keep it)."""
+    for budget in _stack():
+        budget.settle(reserved_usd, actual_usd)
+
+
+def release(reserved_usd: Optional[float]) -> None:
+    """Undo a reservation for a call that was never sent."""
+    settle(reserved_usd, 0.0)
 
 
 def charge(usd: Optional[float]) -> None:

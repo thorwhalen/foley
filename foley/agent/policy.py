@@ -18,7 +18,8 @@ run away. This module is stdlib-only (imports only :mod:`foley.base` /
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import threading
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
 
@@ -107,6 +108,7 @@ class Budget:
     _gens: int = 0
     _spent_usd: float = 0.0
     _unknown_calls: int = 0
+    _lock: object = field(default_factory=threading.Lock, repr=False, compare=False)
 
     @property
     def spent_usd(self) -> float:
@@ -120,7 +122,34 @@ class Budget:
 
         return os.environ.get(APPROVE_UNKNOWN_COST_ENV, "").lower() in ("1", "true", "yes")
 
+    def check(self, estimate_usd: "Optional[float]", *, what: str) -> None:
+        """Raise if this run cannot afford ``estimate_usd`` (nothing is reserved)."""
+        with self._lock:
+            self._check(estimate_usd, what=what)
+
+    def reserve(self, estimate_usd: "Optional[float]", *, what: str) -> None:
+        """Check, then count ``estimate_usd`` as spent at once (atomic under a lock).
+
+        Reserving before the call is what keeps concurrent calls on one budget (MCP
+        tools run in a threadpool) from all passing the check before any is charged.
+        :meth:`settle` later replaces the reservation with the actual cost, if known.
+        """
+        with self._lock:
+            self._check(estimate_usd, what=what)
+            self._add(estimate_usd)
+
+    def settle(self, reserved_usd: "Optional[float]", actual_usd: "Optional[float]") -> None:
+        """Replace a reservation with the actual cost (``None`` actual: keep the reservation)."""
+        if actual_usd is None or reserved_usd is None:
+            return
+        with self._lock:
+            self._spent_usd += float(actual_usd) - float(reserved_usd)
+
     def authorize(self, estimate_usd: "Optional[float]", *, what: str) -> None:
+        """Alias of :meth:`check` (kept for callers that only test affordability)."""
+        self.check(estimate_usd, what=what)
+
+    def _check(self, estimate_usd: "Optional[float]", *, what: str) -> None:
         """Refuse a paid call before it is made if this run cannot afford it.
 
         Raises:
@@ -144,6 +173,10 @@ class Budget:
 
     def charge(self, usd: "Optional[float]") -> None:
         """Record a call's cost (``None`` = unknown: counted, not summed)."""
+        with self._lock:
+            self._add(usd)
+
+    def _add(self, usd: "Optional[float]") -> None:
         if usd is None:
             self._unknown_calls += 1
         else:

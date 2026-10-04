@@ -188,7 +188,11 @@ class AnthropicDecomposer:
     """
 
     def __init__(
-        self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = RUNG_MAX_TOKENS["decomposer"]
+        self,
+        *,
+        client=None,
+        model: str = DEFAULT_AGENT_MODEL,
+        max_tokens: int = RUNG_MAX_TOKENS["decomposer"],
     ):
         self._client = client
         self.model = model
@@ -201,16 +205,18 @@ class AnthropicDecomposer:
         """Call Claude and round-trip each event through :meth:`SoundEvent.from_dict`."""
         import json
 
-        from .llm import charge_llm_call, guard_llm_call
+        from .llm import guard_llm_call, metered_create
 
-        # call-time egress + cost (holds for an injected rung too)
-        est = guard_llm_call("anthropic", model=self.model, max_tokens=self.max_tokens)
+        guard_llm_call(
+            "anthropic"
+        )  # call-time egress check (holds for an injected rung)
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path, behind foley[agent]
 
-            client = anthropic.Anthropic()
-        resp = client.messages.create(
+            client = anthropic.Anthropic(max_retries=0)  # metered_create retries
+        resp = metered_create(
+            client,
             model=self.model,
             max_tokens=self.max_tokens,
             thinking={"type": "adaptive"},
@@ -221,7 +227,6 @@ class AnthropicDecomposer:
                 "format": {"type": "json_schema", "schema": _EVENT_JSON_SCHEMA}
             },
         )
-        charge_llm_call(est, model=self.model, response=resp)
         self.last_response = resp
         text = next(b.text for b in resp.content if getattr(b, "type", None) == "text")
         data = json.loads(text)

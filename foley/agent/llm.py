@@ -41,7 +41,7 @@ __all__ = [
     "require_llm_egress",
     "llm_call_estimate",
     "guard_llm_call",
-    "charge_llm_call",
+    "metered_create",
     "RUNG_MAX_TOKENS",
     "is_loopback_host",
 ]
@@ -80,7 +80,15 @@ def is_loopback_host(host: Optional[str]) -> bool:
     """Whether ``host`` is this machine (``localhost``, ``127.*``, ``::1``, ``0.0.0.0``)."""
     if not host:
         return False
-    return host in ("localhost", "::1", "0.0.0.0") or host.startswith("127.")
+    if host == "localhost":
+        return True
+    import ipaddress
+
+    try:
+        addr = ipaddress.ip_address(host.strip("[]"))
+    except ValueError:
+        return False  # a name like "127.example.com" is not this machine
+    return addr.is_loopback or addr.is_unspecified
 
 
 def _local_endpoint_is_loopback() -> bool:
@@ -121,23 +129,52 @@ ANTHROPIC_PRICES_PER_MTOK: "dict[str, tuple[float, float]]" = {
 }
 PRICES_SEEN = "2026-09-25"
 
-#: The input-token bound assumed for one rung call (system prompt + schema + passage).
-#: The rungs send short prompts; this is a deliberately generous ceiling.
-INPUT_TOKEN_BOUND = 4000
+#: A floor on characters per token, so ``chars / CHARS_PER_TOKEN_FLOOR`` bounds the
+#: input tokens of any prompt (English runs ~4 chars/token; 2 leaves room for code,
+#: numbers and other scripts). Input bounds are computed from the real prompt.
+CHARS_PER_TOKEN_FLOOR = 2
+
+#: The variable part of a rung's prompt beyond its fixed system prompt and schema,
+#: for the pre-flight (before the prompt exists): a query + a candidate's caption and
+#: tags (judge), a query + a failure hint (refiner). The decomposer's is the passage.
+RUNG_VARIABLE_CHARS = {"decomposer": 0, "refiner": 1_000, "judge": 2_000}
 
 #: Default ``max_tokens`` of each rung (the classes read these, so estimates match).
 RUNG_MAX_TOKENS = {"decomposer": 2000, "refiner": 500, "judge": 500}
 
+#: Attempts a metered Anthropic call makes on a *rejected* request (429 / 5xx), which
+#: is not billed. A timeout or dropped connection is never retried: it may have been.
+METERED_ATTEMPTS = 3
+
+
+def _rung_fixed_chars(kind: str) -> int:
+    """Characters of a rung's fixed prompt: its system prompt plus its JSON schema."""
+    import json
+
+    if kind == "decomposer":
+        from .decompose import _DECOMPOSE_SYSTEM as system, _EVENT_JSON_SCHEMA as schema
+    elif kind == "refiner":
+        from .refine import _REFINE_JSON_SCHEMA as schema, _REFINE_SYSTEM as system
+    else:
+        from .verify import _JUDGE_JSON_SCHEMA as schema, _JUDGE_SYSTEM as system
+    return len(system) + len(json.dumps(schema))
+
 
 def llm_call_estimate(
-    provider: str, *, model: Optional[str] = None, max_tokens: Optional[int] = None
+    provider: str,
+    *,
+    model: Optional[str] = None,
+    max_tokens: Optional[int] = None,
+    kind: Optional[str] = None,
+    input_chars: int = 0,
 ) -> Optional[float]:
     """An upper bound on one rung call's USD cost, or ``None`` when it is unknown.
 
-    ``0.0`` for the fake and an on-device endpoint. For Anthropic:
-    ``INPUT_TOKEN_BOUND`` × input price + ``max_tokens`` × output price (thinking
-    tokens count toward ``max_tokens``, so the bound holds). A remote endpoint, or an
-    Anthropic model with no listed price, is ``None``.
+    ``0.0`` for the fake and an on-device endpoint. For Anthropic: the input-token
+    bound (``chars / CHARS_PER_TOKEN_FLOOR`` of the prompt — the rung's fixed prompt
+    and allowance when ``kind`` is given, plus ``input_chars``) × the input price, plus
+    ``max_tokens`` × the output price (thinking counts toward ``max_tokens``). A remote
+    endpoint, or an Anthropic model with no listed price, is ``None``.
     """
     if provider == "fake" or (provider == "local" and _local_endpoint_is_loopback()):
         return 0.0
@@ -148,8 +185,12 @@ def llm_call_estimate(
     prices = ANTHROPIC_PRICES_PER_MTOK.get(model or DEFAULT_AGENT_MODEL)
     if prices is None:
         return None
+    chars = input_chars
+    if kind is not None:
+        chars += _rung_fixed_chars(kind) + RUNG_VARIABLE_CHARS[kind]
+    tokens_in = -(-chars // CHARS_PER_TOKEN_FLOOR)
     tokens_out = max_tokens if max_tokens is not None else max(RUNG_MAX_TOKENS.values())
-    return (INPUT_TOKEN_BOUND * prices[0] + tokens_out * prices[1]) / 1e6
+    return (tokens_in * prices[0] + tokens_out * prices[1]) / 1e6
 
 
 def _usage_cost(model: Optional[str], response) -> Optional[float]:
@@ -165,35 +206,58 @@ def _usage_cost(model: Optional[str], response) -> Optional[float]:
     return (tin * prices[0] + tout * prices[1]) / 1e6
 
 
-def guard_llm_call(
-    provider: str, *, model: Optional[str] = None, max_tokens: Optional[int] = None
-) -> Optional[float]:
-    """The call-time check every real rung runs before calling its model.
-
-    Egress (:func:`require_llm_egress`), then cost: the call's upper bound
-    (:func:`llm_call_estimate`) is authorized against every budget in force
-    (:func:`foley.cost.authorize`) — so paid LLM calls count toward the run's
-    ``max_usd`` — and an unknown cost needs approval. Call :func:`charge_llm_call`
-    after the response.
-
-    Returns:
-        The estimate (pass it to :func:`charge_llm_call`).
-    """
-    from ..cost import authorize
-
+def guard_llm_call(provider: str) -> None:
+    """The call-time egress check every real rung runs before calling its model."""
     require_llm_egress(provider)
-    estimate = llm_call_estimate(provider, model=model, max_tokens=max_tokens)
-    if estimate != 0.0:
-        authorize(estimate, what=f"an LLM call via {provider!r}")
-    return estimate
 
 
-def charge_llm_call(estimate: Optional[float], *, model=None, response=None) -> None:
-    """Charge a rung call: its actual cost from ``response.usage`` when priceable, else the estimate."""
-    from ..cost import charge
+def _is_rejection(exc: BaseException) -> bool:
+    """A 429 / 5xx answer from the API: the request was refused, so it was not billed."""
+    try:
+        import anthropic
+    except ImportError:  # pragma: no cover - a fake client without the SDK
+        return False
+    if isinstance(exc, anthropic.RateLimitError):
+        return True
+    return isinstance(exc, anthropic.APIStatusError) and getattr(exc, "status_code", 0) >= 500
 
-    actual = _usage_cost(model, response) if response is not None else None
-    charge(actual if actual is not None else estimate)
+
+def metered_create(client, *, sleep=None, **request):
+    """``client.messages.create(**request)``, priced, capped and charged (#57).
+
+    The bound for *this* request (its real prompt length and ``max_tokens``) is
+    reserved on every budget in force before it is sent, so it can never take a run
+    past its cap; afterwards the reservation becomes the actual cost from
+    ``response.usage``. A request the API rejects (429 / 5xx — not billed) is retried
+    up to :data:`METERED_ATTEMPTS` times. Anything else (a timeout, a dropped
+    connection) keeps the reservation — it may have been billed — and raises.
+    foley builds its own clients with ``max_retries=0`` so the SDK never re-sends a
+    request behind this accounting; an injected client's own retries are its owner's.
+    """
+    import json
+    import time
+
+    from ..cost import authorize, settle
+
+    model = request.get("model")
+    chars = len(json.dumps([request.get("system"), request.get("messages"),
+                            request.get("output_config")], default=str))
+    estimate = llm_call_estimate(
+        "anthropic", model=model, max_tokens=request.get("max_tokens"), input_chars=chars
+    )
+    authorize(estimate, what="an LLM call via 'anthropic'")
+    sleep = sleep or time.sleep
+    for attempt in range(METERED_ATTEMPTS):
+        try:
+            response = client.messages.create(**request)
+        except Exception as exc:
+            if _is_rejection(exc) and attempt + 1 < METERED_ATTEMPTS:
+                sleep(min(2.0**attempt, 8.0))
+                continue
+            raise
+        settle(estimate, _usage_cost(model, response))
+        return response
+    raise RuntimeError("unreachable")  # pragma: no cover
 
 
 def resolve_llm(llm: Optional[str] = None, *, implicit_local: bool = True) -> str:

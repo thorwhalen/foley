@@ -89,7 +89,11 @@ class AnthropicRefiner:
     """
 
     def __init__(
-        self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = RUNG_MAX_TOKENS["refiner"]
+        self,
+        *,
+        client=None,
+        model: str = DEFAULT_AGENT_MODEL,
+        max_tokens: int = RUNG_MAX_TOKENS["refiner"],
     ):
         self._client = client
         self.model = model
@@ -102,19 +106,21 @@ class AnthropicRefiner:
         """Call Claude for ``n`` paraphrases; the original ``query`` is always first."""
         import json
 
-        from .llm import charge_llm_call, guard_llm_call
+        from .llm import guard_llm_call, metered_create
 
-        # call-time egress + cost (holds for an injected rung too)
-        est = guard_llm_call("anthropic", model=self.model, max_tokens=self.max_tokens)
+        guard_llm_call(
+            "anthropic"
+        )  # call-time egress check (holds for an injected rung)
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path
 
-            client = anthropic.Anthropic()
+            client = anthropic.Anthropic(max_retries=0)  # metered_create retries
         user = f"Query: {query}\nParaphrases wanted: {n}"
         if hint:
             user += f"\nPrevious attempt failed because: {hint}"
-        resp = client.messages.create(
+        resp = metered_create(
+            client,
             model=self.model,
             max_tokens=self.max_tokens,
             thinking={"type": "adaptive"},
@@ -124,7 +130,6 @@ class AnthropicRefiner:
                 "format": {"type": "json_schema", "schema": _REFINE_JSON_SCHEMA}
             },
         )
-        charge_llm_call(est, model=self.model, response=resp)
         self.last_response = resp
         text = next(b.text for b in resp.content if getattr(b, "type", None) == "text")
         paraphrases = json.loads(text).get("paraphrases", [])

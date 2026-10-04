@@ -287,7 +287,7 @@ def run_generation(plan: GenerationPlan, adapter, *, cache=None):
         The :class:`~foley.sources.base.GeneratedClip`, its notes prefixed with the
         plan's, and ``candidate.cost_estimate_usd`` / ``cost_actual_usd`` set.
     """
-    from ..cost import charge
+    from ..cost import release
     from .base import SourceConfigurationError
 
     if plan.cached is not None:
@@ -296,21 +296,21 @@ def run_generation(plan: GenerationPlan, adapter, *, cache=None):
         clip.candidate.cost_actual_usd = 0.0
         clip.notes = [*plan.notes, *clip.notes]
         return clip
+    # plan_generation already reserved the estimate on every budget in force.
+    reserved = plan.estimate_usd if plan.request_key is not None else None
     try:
         clip = adapter.generate(plan.prompt, **plan.affordances)
     except SourceConfigurationError:
-        raise  # refused before any request was sent: nothing to charge
+        release(reserved)  # refused before any request was sent
+        raise
     except ImportError as exc:
+        release(reserved)
         raise SourceConfigurationError(
             f"{plan.backend!r} needs an optional dependency that is not installed "
             f"({exc.name or exc}): pip install 'foley[{plan.backend.replace('_', '-')}]'"
         ) from exc
-    except Exception:
-        # The request may have been sent and billed even though it failed (a read
-        # timeout after the server accepted it): count it.
-        charge(plan.estimate_usd)
-        raise
-    charge(plan.estimate_usd)
+    # Any other failure keeps the reservation: the request may have been sent and
+    # billed (a read timeout after the server accepted it).
     clip.notes = [*plan.notes, *clip.notes]
     clip.candidate.cost_estimate_usd = plan.estimate_usd
     if plan.request_key is not None:
@@ -369,8 +369,12 @@ def _store_clip(cache, plan: GenerationPlan, clip) -> None:
     }
 
 
-#: Ingest outcomes after which a cached generation is not replayed.
-_NOT_REPLAYED = frozenset({"quarantined", "error", "rights_blocked"})
+#: Ingest outcomes after which a cached generation is not replayed: only a QC
+#: rejection, which is about the bytes themselves. An ingest error (a library write,
+#: a credential build) or a rights refusal (decided by the request, which is in the
+#: key) would come out the same — or fail for reasons unrelated to the bytes — so the
+#: paid bytes are replayed rather than paid for again.
+_NOT_REPLAYED = frozenset({"quarantined"})
 
 
 def _cached_clip(cache, request_key: str, notes: list):

@@ -157,6 +157,7 @@ def resilient(
     breaker: Optional[BreakerPolicy] = None,
     clock: Callable[[], float] = time.monotonic,
     sleep: Callable[[float], None] = time.sleep,
+    resend_after_transport_error: bool = True,
 ):
     """Wrap a :class:`~foley.sources.http.Transport` with throttle + backoff + circuit-break.
 
@@ -167,6 +168,11 @@ def resilient(
         breaker: The :class:`BreakerPolicy` (default: open after 5 consecutive fails).
         clock: Monotonic time source (injected for tests).
         sleep: Blocking sleep (injected for tests).
+        resend_after_transport_error: Retry a non-GET request after a transport-level
+            failure (timeout, reset). ``False`` for a paid source: the provider may
+            have accepted — and billed — the request before the connection failed, so
+            re-sending would be an unauthorized second paid call. Status-coded
+            rejections (429 / 5xx) are still retried: those are answers, not charges.
 
     Returns:
         A transport with the same signature, plus a ``.reset()`` method. Raises
@@ -191,6 +197,8 @@ def resilient(
             except Exception as exc:  # transport-level failure (timeout, conn reset)
                 last_exc = exc
                 _breaker.on_failure()
+                if not resend_after_transport_error and method.upper() != "GET":
+                    raise  # it may have been billed: never re-send it unauthorized
                 if attempt + 1 < retry.max_attempts:
                     sleep(_backoff_delay(attempt, retry))
                     continue
@@ -234,4 +242,6 @@ def make_resilient_transport_from_config(config: dict, *, base=None, **inject):
         from .http import requests_transport
 
         base = requests_transport
+    paid = (config.get("pricing") or {}).get("unit") != "free"
+    inject.setdefault("resend_after_transport_error", not paid)
     return resilient(base, rate=config.get("rate"), **inject)

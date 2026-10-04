@@ -374,15 +374,16 @@ def _find_stream(
     llm=None,
 ) -> "Iterator[Candidate]":
     """The streaming body of :func:`find` (``find(stream=False)`` == ``list(_find_stream(...))``)."""
-    from ..cost import authorize, scoped_iter
+    from ..cost import check, scoped_iter
 
     use = intended_use_for(intended_use)
     budget = budget or Budget(max_refine_loops=max_refine_loops)
 
     def run():
         # Before the first paid call: the whole run's upper bound must fit every
-        # budget in force (#57's acceptance), else nothing is spent.
-        authorize(
+        # budget in force (#57's acceptance), else nothing is spent. A check, not a
+        # reservation: each call reserves its own cost when it is made.
+        check(
             estimate_find_usd(
                 max_events=max_events,
                 backend=backend,
@@ -391,6 +392,7 @@ def _find_stream(
                 verify=verify,
                 max_refine_loops=budget.max_refine_loops,
                 max_generations=budget.max_generations if budget.allow_generate else 0,
+                context_chars=len(context),
                 injected={
                     "decomposer": decomposer is not None,
                     "refiner": refiner is not None,
@@ -431,6 +433,7 @@ def estimate_find_usd(
     max_refine_loops: int = 1,
     max_generations: int = 1,
     injected: "Optional[dict]" = None,
+    context_chars: int = 0,
 ) -> "Optional[float]":
     """An upper bound on what one :func:`find` run can spend, or ``None`` if unknown.
 
@@ -464,7 +467,10 @@ def estimate_find_usd(
     for kind, n in calls.items():
         if not n:
             continue
-        each = llm_call_estimate(provider, max_tokens=RUNG_MAX_TOKENS[kind])
+        extra = context_chars if kind == "decomposer" else 0  # the passage goes to it
+        each = llm_call_estimate(
+            provider, max_tokens=RUNG_MAX_TOKENS[kind], kind=kind, input_chars=extra
+        )
         if each is None:
             return None
         total += n * each

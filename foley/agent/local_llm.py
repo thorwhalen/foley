@@ -59,13 +59,17 @@ def _chat_json(
     """
     import json
 
-    from .llm import charge_llm_call, guard_llm_call
+    from ..cost import authorize, settle
+    from .llm import guard_llm_call, llm_call_estimate
 
-    est = guard_llm_call("local")  # call-time egress + cost (a remote endpoint: unknown)
+    guard_llm_call("local")  # call-time egress check (a remote endpoint is external)
     sys_prompt = (
         system + "\n\nReturn ONLY a single JSON object conforming to this JSON Schema "
         "(no prose, no markdown fences):\n" + json.dumps(schema)
     )
+    est = llm_call_estimate("local", input_chars=len(sys_prompt) + len(user))
+    if est != 0.0:
+        authorize(est, what="an LLM call via a remote OpenAI-compatible endpoint")
     resp = client.chat.completions.create(
         model=model,
         messages=[
@@ -76,7 +80,7 @@ def _chat_json(
         temperature=0,
         max_tokens=max_tokens,
     )
-    charge_llm_call(est)
+    settle(est, None)  # the price of a remote endpoint is unknown: keep the reservation
     return json.loads(resp.choices[0].message.content)
 
 

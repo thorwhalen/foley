@@ -124,7 +124,11 @@ class AnthropicJudge:
     """
 
     def __init__(
-        self, *, client=None, model: str = DEFAULT_AGENT_MODEL, max_tokens: int = RUNG_MAX_TOKENS["judge"]
+        self,
+        *,
+        client=None,
+        model: str = DEFAULT_AGENT_MODEL,
+        max_tokens: int = RUNG_MAX_TOKENS["judge"],
     ):
         self._client = client
         self.model = model
@@ -141,21 +145,23 @@ class AnthropicJudge:
         """Call Claude to arbitrate the match; returns a :class:`Verdict` at ``level``."""
         import json
 
-        from .llm import charge_llm_call, guard_llm_call
+        from .llm import guard_llm_call, metered_create
 
-        # call-time egress + cost (holds for an injected rung too)
-        est = guard_llm_call("anthropic", model=self.model, max_tokens=self.max_tokens)
+        guard_llm_call(
+            "anthropic"
+        )  # call-time egress check (holds for an injected rung)
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path
 
-            client = anthropic.Anthropic()
+            client = anthropic.Anthropic(max_retries=0)  # metered_create retries
         sound = candidate.sound
         desc = sound.caption or ""
         if sound.tags:
             desc += " [tags: " + ", ".join(sound.tags) + "]"
         user = f"Wanted event: {event.query}\nCandidate clip: {desc}"
-        resp = client.messages.create(
+        resp = metered_create(
+            client,
             model=self.model,
             max_tokens=self.max_tokens,
             thinking={"type": "adaptive"},
@@ -165,7 +171,6 @@ class AnthropicJudge:
                 "format": {"type": "json_schema", "schema": _JUDGE_JSON_SCHEMA}
             },
         )
-        charge_llm_call(est, model=self.model, response=resp)
         self.last_response = resp
         text = next(b.text for b in resp.content if getattr(b, "type", None) == "text")
         data = json.loads(text)
