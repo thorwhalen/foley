@@ -109,7 +109,9 @@ def _add_from(
     except Exception as exc:
         report.record(
             IngestResult(
-                id=f"{source}:search", status="error", error=f"{type(exc).__name__}: {exc}"
+                id=f"{source}:search",
+                status="error",
+                error=f"{type(exc).__name__}: {exc}",
             )
         )
         report.exception = exc

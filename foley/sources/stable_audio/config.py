@@ -80,6 +80,11 @@ SOURCE_CONFIG = {
         "cache_bytes_ok": True,
     },
     "commercial_ok": True,  # generate guardrail (revenue-capped; enforced by keep())
-    "pricing": {"unit": "free", "amount_usd": 0.0, "source": "local inference", "seen": "2026-10-04"},
+    "pricing": {
+        "unit": "free",
+        "amount_usd": 0.0,
+        "source": "local inference",
+        "seen": "2026-10-04",
+    },
     "data_egress": "local",  # runs entirely on-device (offline-capable; report 12)
 }

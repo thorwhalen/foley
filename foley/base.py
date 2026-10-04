@@ -166,7 +166,11 @@ GENERATION_AFFORDANCES: dict[str, Affordance] = {
         "prompt_influence", float, "0..1 unified guidance", 0.3, "generate"
     ),
     "negative_prompt": Affordance(
-        "negative_prompt", str, "Content to exclude", stage="generate", carries_meaning=True
+        "negative_prompt",
+        str,
+        "Content to exclude",
+        stage="generate",
+        carries_meaning=True,
     ),
     "steps": Affordance("steps", int, "Diffusion/flow steps", stage="generate"),
     "seed": Affordance(

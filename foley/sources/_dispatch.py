@@ -60,12 +60,16 @@ class UnsupportedParameter(ValueError):
 
 def _carries_meaning(name: str, config: dict, vocabulary: dict) -> bool:
     aff = vocabulary.get(name)
-    return bool(aff and aff.carries_meaning) or name in config.get("meaning_carrying", ())
+    return bool(aff and aff.carries_meaning) or name in config.get(
+        "meaning_carrying", ()
+    )
 
 
 def _is_default(name: str, value, vocabulary: dict) -> bool:
     aff = vocabulary.get(name)
-    return value is None or (aff is not None and aff.default is not None and value == aff.default)
+    return value is None or (
+        aff is not None and aff.default is not None and value == aff.default
+    )
 
 
 def translate_affordances(
@@ -114,7 +118,9 @@ def translate_affordances(
             if _carries_meaning(name, config, vocabulary):
                 policy = "raise"
             else:
-                policy = "warn" if config.get("on_unsupported_param") == "warn" else "note"
+                policy = (
+                    "warn" if config.get("on_unsupported_param") == "warn" else "note"
+                )
         if policy == "raise":
             raise UnsupportedParameter(
                 f"{name}={value!r} is {kind} {source}, and dropping it would change what "
@@ -148,7 +154,9 @@ def _clamp_duration(kept: dict, config: dict, notes: list) -> None:
         kept["duration"] = clamped
 
 
-def request_digest(backend: str, prompt: str, config: dict, affordances: dict, salt=None) -> str:
+def request_digest(
+    backend: str, prompt: str, config: dict, affordances: dict, salt=None
+) -> str:
     """The cache key of a generation request (canonical JSON, SHA-256).
 
     Covers everything that decides the bytes and their licence: the backend, its model
@@ -243,10 +251,12 @@ def plan_generation(
     from .registry import SOURCE_REGISTRY, require_source_egress
 
     if config is None:
-        config = getattr(adapter, "config", None) or SOURCE_REGISTRY.get(backend, {}).get(
-            "config", {}
-        )
-    kept, notes = translate_affordances(config, affordances, on_unsupported=on_unsupported)
+        config = getattr(adapter, "config", None) or SOURCE_REGISTRY.get(
+            backend, {}
+        ).get("config", {})
+    kept, notes = translate_affordances(
+        config, affordances, on_unsupported=on_unsupported
+    )
     plan = GenerationPlan(
         backend=backend,
         prompt=prompt,
@@ -318,7 +328,9 @@ def run_generation(plan: GenerationPlan, adapter, *, cache=None):
         try:
             _store_clip(cache, plan, clip)
         except Exception as exc:  # noqa: BLE001 - never lose paid bytes over a cache write
-            clip.notes.append(f"could not keep the paid generation in the cache: {exc!r}")
+            clip.notes.append(
+                f"could not keep the paid generation in the cache: {exc!r}"
+            )
         else:
             clip.notes.append(
                 f"paid generation kept in the generations cache: {plan.request_key}"
@@ -394,7 +406,9 @@ def _cached_clip(cache, request_key: str, notes: list):
     from .base import GeneratedClip
 
     try:
-        entry = cache.requests.get(request_key) if hasattr(cache.requests, "get") else None
+        entry = (
+            cache.requests.get(request_key) if hasattr(cache.requests, "get") else None
+        )
         if not entry:
             return None
         if entry.get("status") in _NOT_REPLAYED:
@@ -414,7 +428,9 @@ def _cached_clip(cache, request_key: str, notes: list):
         )
         audio = cache.audio[entry["content_key"]]
     except Exception as exc:  # noqa: BLE001 - a bad cache entry is a miss, not a crash
-        notes.append(f"generations cache entry {request_key} unreadable ({exc!r}); ignored")
+        notes.append(
+            f"generations cache entry {request_key} unreadable ({exc!r}); ignored"
+        )
         return None
     return GeneratedClip(
         audio_bytes=audio,
@@ -446,7 +462,11 @@ def estimate_generation(backend: str, **affordances) -> Optional[float]:
 
 
 def plan_search(
-    source: str, config: dict, affordances: dict, *, on_unsupported: Optional[str] = None
+    source: str,
+    config: dict,
+    affordances: dict,
+    *,
+    on_unsupported: Optional[str] = None,
 ) -> "tuple[dict, list[str]]":
     """Egress check + translation for a retrieve source's ``search`` (the same policy).
 

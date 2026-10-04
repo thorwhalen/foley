@@ -263,7 +263,9 @@ def _generate(
     except Exception as exc:
         report.record(
             IngestResult(
-                id=f"{backend}:generate", status="error", error=f"{type(exc).__name__}: {exc}"
+                id=f"{backend}:generate",
+                status="error",
+                error=f"{type(exc).__name__}: {exc}",
             )
         )
         report.exception = exc

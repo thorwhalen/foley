@@ -219,7 +219,10 @@ def _is_rejection(exc: BaseException) -> bool:
         return False
     if isinstance(exc, anthropic.RateLimitError):
         return True
-    return isinstance(exc, anthropic.APIStatusError) and getattr(exc, "status_code", 0) >= 500
+    return (
+        isinstance(exc, anthropic.APIStatusError)
+        and getattr(exc, "status_code", 0) >= 500
+    )
 
 
 def metered_create(client, *, sleep=None, **request):
@@ -246,10 +249,21 @@ def metered_create(client, *, sleep=None, **request):
     if callable(with_options):  # an injected SDK client: no re-sends behind our back
         client = with_options(max_retries=0)
     model = request.get("model")
-    chars = len(json.dumps([request.get("system"), request.get("messages"),
-                            request.get("output_config")], default=str))
+    chars = len(
+        json.dumps(
+            [
+                request.get("system"),
+                request.get("messages"),
+                request.get("output_config"),
+            ],
+            default=str,
+        )
+    )
     estimate = llm_call_estimate(
-        "anthropic", model=model, max_tokens=request.get("max_tokens"), input_chars=chars
+        "anthropic",
+        model=model,
+        max_tokens=request.get("max_tokens"),
+        input_chars=chars,
     )
     authorize(estimate, what="an LLM call via 'anthropic'")
     sleep = sleep or time.sleep

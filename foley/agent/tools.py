@@ -458,8 +458,11 @@ def estimate_find_usd(
         "judge": 0
         if injected.get("judge")
         else max_events
-        * ((max_refine_loops + 1) * (k if VerifyLevel(verify) != VerifyLevel.clap else 0)
-           + max_generations),
+        * (
+            (max_refine_loops + 1)
+            * (k if VerifyLevel(verify) != VerifyLevel.clap else 0)
+            + max_generations
+        ),
     }
     total = 0.0 if per_gen is None else max_events * max_generations * per_gen
     if per_gen is None:

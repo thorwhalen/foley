@@ -152,8 +152,9 @@ def score(
     events: "list[ScoredEvent]" = []
     from .cost import spend_scope
 
-    with obs.run("score", params={"n_segments": len(segs), "verify": str(verify)}), spend_scope(
-        budget
+    with (
+        obs.run("score", params={"n_segments": len(segs), "verify": str(verify)}),
+        spend_scope(budget),
     ):
         for i, seg in enumerate(segs):
             for c in find(seg, **find_kw):

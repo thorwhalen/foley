@@ -402,7 +402,12 @@ def foley_generate(
     try:
         with spend_scope(_server_budget()):
             cand = generate(prompt, backend=backend, library=_lib())
-    except (EgressBlocked, BudgetExceeded, SourceConfigurationError, UnsupportedParameter) as exc:
+    except (
+        EgressBlocked,
+        BudgetExceeded,
+        SourceConfigurationError,
+        UnsupportedParameter,
+    ) as exc:
         # Refused before any provider call: say why, as JSON.
         return {"ok": False, "status": "refused", "error": str(exc), "backend": backend}
     except GenerationError as exc:

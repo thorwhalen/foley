@@ -862,7 +862,9 @@ def estimate(verb: str, **kwargs):
         text = kwargs.get("context") or kwargs.get("segments") or ""
         segments = [text] if isinstance(text, str) else list(text)
         if verb == "find" or not segments:
-            return estimate_find_usd(**kw, context_chars=len(segments[0]) if segments else 0)
+            return estimate_find_usd(
+                **kw, context_chars=len(segments[0]) if segments else 0
+            )
         # score runs one find per segment
         per = [estimate_find_usd(**kw, context_chars=len(seg)) for seg in segments]
         return None if any(p is None for p in per) else sum(per)

@@ -120,7 +120,11 @@ class Budget:
             return bool(self.approve_unknown_cost)
         import os
 
-        return os.environ.get(APPROVE_UNKNOWN_COST_ENV, "").lower() in ("1", "true", "yes")
+        return os.environ.get(APPROVE_UNKNOWN_COST_ENV, "").lower() in (
+            "1",
+            "true",
+            "yes",
+        )
 
     def check(self, estimate_usd: "Optional[float]", *, what: str) -> None:
         """Raise if this run cannot afford ``estimate_usd`` (nothing is reserved)."""
@@ -138,7 +142,9 @@ class Budget:
             self._check(estimate_usd, what=what)
             self._add(estimate_usd)
 
-    def settle(self, reserved_usd: "Optional[float]", actual_usd: "Optional[float]") -> None:
+    def settle(
+        self, reserved_usd: "Optional[float]", actual_usd: "Optional[float]"
+    ) -> None:
         """Replace a reservation with the actual cost (``None`` actual: keep the reservation)."""
         if actual_usd is None or reserved_usd is None:
             return
