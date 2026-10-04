@@ -69,7 +69,13 @@ def fake_embedder():
 LIVE_API_TESTS_ENV = "FOLEY_LIVE_API_TESTS"
 
 #: foley's own env switches that change which provider or posture a default resolves to.
-_FOLEY_POSTURE_ENV = ("FOLEY_LLM", "FOLEY_LLM_BASE_URL", "FOLEY_LLM_API_KEY", "FOLEY_OFFLINE")
+_FOLEY_POSTURE_ENV = (
+    "FOLEY_LLM",
+    "FOLEY_LLM_BASE_URL",
+    "FOLEY_LLM_API_KEY",
+    "FOLEY_OFFLINE",
+    "FOLEY_ELEVENLABS_PLAN",
+)
 
 #: Marker for the (few) tests that trip the network guard on purpose.
 NETWORK_TRIP_MARKER = "network_trip_expected"

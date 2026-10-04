@@ -99,5 +99,5 @@ def test_cli_ingest_dispatches(monkeypatch, capsys):
     # test_bootstrap.test_ingest_facade_qc_kwarg_maps_to_do_qc is the real
     # (non-monkeypatched) integration check for that mapping.
     assert captured["qc"] is False
-    # a license_id was translated into a populated LicenseRecord
-    assert captured["license"].license_id == "CC0-1.0"
+    # the asserted license_id is passed through; ingest_one resolves it per file (#55)
+    assert captured["license"] == "CC0-1.0"

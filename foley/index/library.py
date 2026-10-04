@@ -254,6 +254,22 @@ class SoundLibrary(Mapping):
         _commit(self.kindex)
         return record
 
+    def update_record(self, record: SoundRecord) -> SoundRecord:
+        """Rewrite a stored record's metadata and re-index its keyword text.
+
+        For corrections that do not touch the audio (a re-stamped licence, a removed
+        caption): the bytes and the CLAP vector stay as they are.
+
+        Raises:
+            KeyError: If ``record.id`` is not in the library.
+        """
+        if record.id not in self.meta:
+            raise KeyError(record.id)
+        self.meta[record.id] = record
+        self.kindex.index(record.id, _index_text(record), {"id": record.id})
+        _commit(self.kindex)
+        return record
+
     # -- retrieval ----------------------------------------------------------
 
     def search(
@@ -494,7 +510,9 @@ def _record_matches(
     duration_range: "Optional[tuple[float, float]]" = None,
 ) -> bool:
     """True if ``record`` satisfies every supplied metadata facet."""
-    if commercial_ok and not record.license.commercial_ok:
+    if commercial_ok and not (
+        record.license.commercial_ok and record.license.rights_verified
+    ):  # an unverified claim (a PDM label) is not commercially usable
         return False
     if ucs_category is not None and record.ucs_category != ucs_category:
         return False

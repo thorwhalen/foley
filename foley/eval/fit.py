@@ -236,11 +236,11 @@ def _accepted_candidates(units, *, embedder, level, judge, k):
     audit records ``{query_id, event, candidate_id, match, relevant, confidence}``.
     """
     from ..agent import gate_candidates, search_sounds, verify_match
-    from ..base import IntendedUse
+    from ..licensing import intended_use_for
     from .golden import build_eval_library
 
     lib = build_eval_library(embedder=embedder)
-    use = IntendedUse()
+    use = intended_use_for()
     records = []
     for item, ev_idx, ev_dict in units:
         event = _event_from_golden(ev_dict)

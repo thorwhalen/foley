@@ -166,6 +166,7 @@ from .index import (
     hybrid_search,
     ingest_folder,
     ingest_one,
+    restamp_rights,
     lancedb_available,
     parse_ucs_filename,
     reciprocal_rank_fusion,
@@ -380,6 +381,7 @@ __all__ = [
     "default_tagger",
     "default_zeroshot_tagger",
     "ingest",
+    "restamp_rights",
     "ingest_one",
     "ingest_folder",
     "IngestResult",
@@ -582,25 +584,60 @@ def search(
     Convenience wrapper over ``foley.library.search(...)`` — see
     :meth:`foley.index.SoundLibrary.search`. Constructs the process-wide default
     library (local stores + CLAP + best available index) on first use.
+
+    ``commercial_ok`` defaults to the one rights intent every verb shares
+    (:data:`foley.licensing.DEFAULT_INTENDED_USE`: commercial), so only commercially
+    usable sounds come back; pass ``commercial_ok=False`` to include the rest.
     """
-    return default_library().search(
-        query,
+    from .licensing import intended_use_for
+
+    commercial = intended_use_for(commercial_ok=commercial_ok).commercial
+    lib = default_library()
+    kw = dict(
         k=k,
         filters=filters,
-        commercial_ok=commercial_ok,
         ucs_category=ucs_category,
         min_snr=min_snr,
         duration_range=duration_range,
         rerank=rerank,
     )
+    hits = lib.search(query, commercial_ok=commercial or None, **kw)
+    if commercial and not hits:
+        _warn_if_hidden(lib.search(query, commercial_ok=None, **kw))
+    return hits
 
 
-def similar(sound_id: str, *, k: int = 10):
+def similar(sound_id: str, *, k: int = 10, commercial_ok=None):
     """Find sounds similar to a stored sound (audio<->audio) in the default library.
 
-    See :meth:`foley.index.SoundLibrary.similar`.
+    See :meth:`foley.index.SoundLibrary.similar`. Like :func:`search`, only sounds
+    cleared for the default (commercial) intent are returned unless
+    ``commercial_ok=False``.
     """
-    return default_library().similar(sound_id, k=k)
+    from .licensing import intended_use_for
+
+    hits = default_library().similar(sound_id, k=k)
+    if not intended_use_for(commercial_ok=commercial_ok).commercial:
+        return hits
+    kept = [c for c in hits if c.sound.license.commercial_ok and c.sound.license.rights_verified]
+    if not kept:
+        _warn_if_hidden(hits)
+    return kept
+
+
+def _warn_if_hidden(hidden) -> None:
+    """Say why a commercial-default search came back empty when it did not have to."""
+    if hidden:
+        import warnings
+
+        warnings.warn(
+            f"{len(hidden)} match(es) hidden: not cleared for commercial use (unverified "
+            "or non-commercial rights — e.g. files ingested without a licence). Pass "
+            "commercial_ok=False to see them, or assert rights with "
+            "foley.ingest(path, license='user-owned') / foley restamp-rights.",
+            UserWarning,
+            stacklevel=3,
+        )
 
 
 def generate(
@@ -717,13 +754,20 @@ def ingest(
             signature for forward-compat.
         qc: Run the Tier-0 QC gate (quarantines failing clips).
         recursive: Recurse into sub-folders.
-        **kw: Forwarded to :func:`foley.index.ingest_one`.
+        **kw: Forwarded to :func:`foley.index.ingest_one` — notably ``license``:
+            omit it and the files' rights are **unknown** (indexed, but
+            :func:`keep` refuses them for every use); pass ``license="user-owned"``
+            to assert you own them (#55).
     """
     if backend != "local":
         # A non-local backend names a live source adapter (#5): treat ``path`` as
         # the query and route through the add_from pull facade (search -> license
         # gate -> download -> the shared ingest_one pipeline).
         return add_from(backend, query=path, library=library, **kw)
+    if isinstance(kw.get("license"), str):
+        from .index.ingest import resolve_ingest_license
+
+        resolve_ingest_license(kw["license"])  # an unknown id fails before any file is read
     return ingest_folder(
         path,
         library=library if library is not None else default_library(),

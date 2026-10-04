@@ -308,6 +308,11 @@ class LicenseRecord(SerializableMixin):
     cache_bytes_ok: bool = False  # OPERATIONAL: may foley persist bytes? (Freesound TOS => False even for CC0)
     modification_ok: bool = False
     ai_training_ok: bool = False
+    # Narrows ai_training_ok when the rights holder states WHICH AI use is allowed:
+    # None (no narrowing) | 'none' | 'open_source_only' | 'nc_open_source_only'.
+    # See foley.licensing.ai_use_permitted (#69).
+    ai_training_scope: Optional[str] = None
+    gen_ai_preference: Optional[str] = None  # the raw value a source served (Freesound)
     revenue_cap_usd: Optional[int] = None  # e.g. 1_000_000 for Stability-Community
 
     # attribution

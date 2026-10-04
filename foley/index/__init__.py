@@ -28,7 +28,14 @@ from .indexes import (
     lancedb_available,
     sqlite_vec_loadable,
 )
-from .ingest import IngestReport, IngestResult, ingest_folder, ingest_one
+from .ingest import (
+    IngestReport,
+    IngestResult,
+    ingest_folder,
+    ingest_one,
+    resolve_ingest_license,
+    restamp_rights,
+)
 from .library import SoundLibrary, default_library
 from .protocols import Captioner, Embedder, KeywordIndex, Tagger, VectorIndex
 from .search import (
@@ -66,6 +73,8 @@ __all__ = [
     # ingestion
     "ingest_one",
     "ingest_folder",
+    "resolve_ingest_license",
+    "restamp_rights",
     "IngestResult",
     "IngestReport",
     "DEFAULT_CLAP_MODEL_ID",

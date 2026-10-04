@@ -34,6 +34,7 @@ from ..obs.recorder import current_run
 from ..obs.recorder import run as _obs_run
 from ..obs.run_artifact import Step
 from .decompose import decompose_context, _default_decomposer
+from ..licensing import intended_use_for
 from .policy import Budget, DecideAction, decide, gate_candidates
 from .refine import refine_query, _default_refiner
 from .verify import _default_judge, verify_match
@@ -291,8 +292,9 @@ def find(
         context: The narrative passage.
         max_events: The sparse density cap on decomposed events.
         seconds: Optional passage duration (density-window hint; forwarded).
-        intended_use: The caller's rights intent (default: a conservative
-            :class:`IntendedUse` — ``allow_voice_or_trademark`` stays ``False``).
+        intended_use: The caller's rights intent (default:
+            :data:`foley.licensing.DEFAULT_INTENDED_USE` — commercial publishing;
+            NC / SA material is refused unless you pass a different intent).
         backend: Generation backend for the fallback (``'auto'`` → ``foley.generate``'s default).
         verify: The max verify rung — ``'clap'`` | ``'listen'`` | ``'judge'``.
         stream: If ``True``, return a generator yielding one :class:`Candidate` per
@@ -357,7 +359,7 @@ def _find_stream(
     llm=None,
 ) -> "Iterator[Candidate]":
     """The streaming body of :func:`find` (``find(stream=False)`` == ``list(_find_stream(...))``)."""
-    use = intended_use or IntendedUse()
+    use = intended_use_for(intended_use)
     budget = budget or Budget(max_refine_loops=max_refine_loops)
     library = library if library is not None else default_library()
     decomposer = decomposer or _default_decomposer(llm)

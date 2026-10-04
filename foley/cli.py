@@ -74,22 +74,38 @@ def _cmd_bootstrap(args) -> int:
 
 def _cmd_ingest(args) -> int:
     from . import ingest
-    from .base import LicenseRecord
-    from .licensing import apply_license_flags
     from .qc import QCStatus
 
-    license_record = None
-    if args.license:
-        license_record = apply_license_flags(
-            LicenseRecord(source="cli", license_id=args.license, rights_verified=True)
-        )
     report = ingest(
         args.path,
-        license=license_record,
+        license=args.license,  # None => rights unknown (#55); an id is validated upstream
         qc=not args.no_qc,  # the facade maps qc -> ingest_one's do_qc
         min_status=QCStatus(args.min_status),
     )
     print(json.dumps(report.summary(), indent=2))
+    return 0
+
+
+def _assertable_license_ids() -> "list[str]":
+    """Licence ids a user may assert on ingest (every LICENSE_FLAGS row but 'unknown')."""
+    from .index.ingest import ASSERTABLE_LICENSE_IDS
+
+    return sorted(ASSERTABLE_LICENSE_IDS)
+
+
+def _cmd_restamp(args) -> int:
+    from .index.ingest import restamp_rights
+
+    changed = restamp_rights(
+        license=args.license,
+        ids=args.ids or None,
+        select=args.select,
+        apply=args.apply,
+    )
+    verb = "re-stamped" if args.apply else "would re-stamp (dry run; pass --apply)"
+    print(f"{verb} {len(changed)} sound(s) as {args.license}")
+    for sid in changed:
+        print(f"  {sid}")
     return 0
 
 
@@ -179,7 +195,7 @@ def _cmd_eval_fit(args) -> int:
 def _cmd_search(args) -> int:
     from . import search
 
-    hits = search(args.query, k=args.k, commercial_ok=args.commercial_ok or None)
+    hits = search(args.query, k=args.k, commercial_ok=not args.include_noncommercial)
     for hit in hits:
         rec = hit.sound
         print(
@@ -226,10 +242,39 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_ing = sub.add_parser("ingest", help="ingest a local folder or file")
     p_ing.add_argument("path")
-    p_ing.add_argument("--license", help="license_id to stamp (default: user-owned)")
+    p_ing.add_argument(
+        "--license",
+        choices=_assertable_license_ids(),
+        metavar="LICENSE_ID",
+        help="licence you assert for these files, e.g. user-owned for your own recordings "
+        "(default: none — rights unknown, so foley.keep() refuses them for every use)",
+    )
     p_ing.add_argument("--min-status", default="warn", choices=["fail", "warn", "pass"])
     p_ing.add_argument("--no-qc", action="store_true")
     p_ing.set_defaults(func=_cmd_ingest)
+
+    p_rs = sub.add_parser(
+        "restamp-rights",
+        help="re-stamp stored sounds' licence (default: the ones an older foley "
+        "marked user-owned without being told)",
+    )
+    p_rs.add_argument(
+        "--license",
+        default="unknown",
+        choices=["unknown", "from-url", *_assertable_license_ids()],
+        metavar="LICENSE_ID",
+        help="licence to stamp (default: unknown = fail closed); from-url re-derives "
+        "each record from the licence string its source served",
+    )
+    p_rs.add_argument(
+        "--select",
+        default="legacy-user-owned",
+        choices=["legacy-user-owned", "legacy-elevenlabs", "has-license-url"],
+        help="which stored sounds to re-stamp (default: legacy-user-owned)",
+    )
+    p_rs.add_argument("--ids", nargs="*", help="re-stamp exactly these sound ids")
+    p_rs.add_argument("--apply", action="store_true", help="write (default: dry run)")
+    p_rs.set_defaults(func=_cmd_restamp)
 
     p_eval = sub.add_parser(
         "eval", help="Tier-1 retrieval eval + the nDCG regression gate"
@@ -284,7 +329,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_search.add_argument(
         "--commercial-ok",
         action="store_true",
-        help="keep only commercially-usable sounds",
+        help="keep only commercially-usable sounds (the default; kept for compatibility)",
+    )
+    p_search.add_argument(
+        "--include-noncommercial",
+        action="store_true",
+        help="also return sounds that are not cleared for commercial use",
     )
     p_search.set_defaults(func=_cmd_search)
 

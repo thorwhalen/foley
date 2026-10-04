@@ -32,13 +32,12 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from .base import IntendedUse
-from .index.ingest import IngestReport, IngestResult, ingest_one
-from .licensing import derive_license_flags, keep
+from .index.ingest import IngestReport, IngestResult, content_id, ingest_one
+from .licensing import DEFAULT_INTENDED_USE, derive_license_flags, keep
 from .sources.base import CorpusAdapter, bulk_license, select_corpora
 
 #: The intended use the Ring-1 commercial filter checks each clip against.
-COMMERCIAL_USE = IntendedUse(commercial=True, publish=True, can_attribute=True)
+COMMERCIAL_USE = DEFAULT_INTENDED_USE  # kept as an alias; the SSOT is foley.licensing
 
 
 class MetadataCaptioner:
@@ -103,19 +102,24 @@ def _ingest_corpus(
     kw = dict(ingest_one_kw)
     if min_status is not None:
         kw["min_status"] = min_status
+    # Clips an older foley already stored from this corpus get their rights re-derived
+    # from the corpus metadata on a re-run (dedup alone would leave them as they were).
+    source = getattr(adapter, "source", adapter.name)
+    has_prior = any(r.license.source == source for r in library.meta.values())
 
     for spec in adapter.iter_clips(root):
         lic = adapter.resolve_license(spec)
         # Ring commercial filter: drop non-commercial / unverified clips fail-closed
         # BEFORE they are embedded (report only their provenance).
-        if commercial and not keep(lic, COMMERCIAL_USE):
-            report.record(
-                IngestResult(
-                    id=spec.source_id,
-                    status="skipped_license",
-                    notes=[f"dropped: {lic.license_id} not commercial-use-clean"],
-                )
+        if commercial and not keep(lic, DEFAULT_INTENDED_USE):
+            res = IngestResult(
+                id=spec.source_id,
+                status="skipped_license",
+                notes=[f"dropped: {lic.license_id} not commercial-use-clean"],
             )
+            if has_prior:
+                _repair_stored(library, content_id(spec.path), lic, spec, res)
+            report.record(res)
             continue
         captioner = (
             MetadataCaptioner(spec.meta["caption"])
@@ -135,8 +139,41 @@ def _ingest_corpus(
             res.notes.append(
                 "AI-training restriction acknowledged by operator (consent recorded)"
             )
+        if res.status == "skipped_dup":
+            _repair_stored(library, res.id, lic, spec, res)
         report.record(res)
     return report
+
+
+def _repair_stored(library, sound_id: str, lic, spec, res: IngestResult) -> None:
+    """Re-stamp an already-stored clip from the corpus metadata (the #56 / #68 repair).
+
+    Libraries built before October 2026 hold Clotho clips as CC-BY-4.0 (some are
+    CC BY-NC 3.0), CC versions collapsed to 4.0, and the Public Domain Mark as verified
+    CC0; content dedup alone would keep them so. The corpus is the authority on its own
+    clips, so a re-run replaces the stored licence with the freshly resolved one and
+    removes a caption the corpus now withholds (Clotho's non-commercial captions).
+    """
+    rec = library.meta.get(sound_id) if hasattr(library.meta, "get") else None
+    if rec is None:
+        return
+    old = rec.license
+    changes = []
+    if (old.license_id, old.rights_verified, old.license_url) != (
+        lic.license_id,
+        lic.rights_verified,
+        lic.license_url,
+    ):
+        lic.transformations = list(old.transformations)
+        rec.license = lic
+        changes.append(f"licence {old.license_id} -> {lic.license_id}")
+    withheld = spec.meta.get("withheld_caption")
+    if withheld and rec.caption == withheld:
+        rec.caption = None
+        changes.append("non-commercial caption removed from the index")
+    if changes:
+        library.update_record(rec)
+        res.notes.append("re-stamped from corpus metadata: " + "; ".join(changes))
 
 
 def bootstrap(

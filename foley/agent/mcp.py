@@ -17,6 +17,8 @@ from __future__ import annotations
 
 from typing import Optional
 
+from ..licensing import DEFAULT_INTENDED_USE, intended_use_for
+
 # ---------------------------------------------------------------------------
 # injectable shared state (a default library + session factory; overridden in tests)
 # ---------------------------------------------------------------------------
@@ -83,16 +85,48 @@ def _enum(x):
     return x.value if hasattr(x, "value") else x
 
 
+#: The rights fields every MCP candidate row carries (#63): the full TASL attribution
+#: (title is the row's caption) plus every derived permission flag, so an MCP caller can
+#: attribute and decide without a second lookup.
+_LICENSE_ROW_FIELDS = (
+    "license_id",
+    "license_name",
+    "license_url",
+    "creator_name",
+    "creator_url",
+    "source",
+    "source_id",
+    "source_url",
+    "attribution_text",
+    "requires_attribution",
+    "commercial_ok",
+    "embed_in_derivative_ok",
+    "redistribute_standalone_ok",
+    "cache_bytes_ok",
+    "modification_ok",
+    "ai_training_ok",
+    "ai_training_scope",
+    "revenue_cap_usd",
+    "rights_verified",
+    "is_ai_generated",
+    "generator_model",
+    "disclosure_recommended",
+)
+
+
 def _license_summary(lic) -> dict:
-    """A compact, JSON-safe license summary (the fields an agent needs to decide)."""
-    return {
-        "license_id": getattr(lic, "license_id", None),
-        "commercial_ok": getattr(lic, "commercial_ok", None),
-        "requires_attribution": getattr(lic, "requires_attribution", None),
-        "attribution_text": getattr(lic, "attribution_text", None),
-        "redistribute_standalone_ok": getattr(lic, "redistribute_standalone_ok", None),
-        "is_ai_generated": getattr(lic, "is_ai_generated", None),
-    }
+    """A JSON-safe licence row: full TASL + every derived flag (see ``_LICENSE_ROW_FIELDS``).
+
+    ``license_name`` / ``license_url`` fall back to the licence table's display row
+    when the source did not supply them, so attribution always has a deed to link.
+    """
+    from ..licensing import license_meta
+
+    row = {f: _enum(getattr(lic, f, None)) for f in _LICENSE_ROW_FIELDS}
+    meta = license_meta(row["license_id"] or "unknown")
+    row["license_name"] = row["license_name"] or meta.display_name
+    row["license_url"] = row["license_url"] or meta.url
+    return row
 
 
 def _candidate_row(c) -> dict:
@@ -165,7 +199,7 @@ def foley_find(
     context: str,
     max_events: int = 6,
     verify: str = "listen",
-    commercial_ok: bool = False,
+    commercial_ok: bool = DEFAULT_INTENDED_USE.commercial,
     k: int = 10,
     session: str = "default",
 ) -> list:
@@ -175,7 +209,6 @@ def foley_find(
     rehydrate them by id. Returns compact candidate rows.
     """
     from .. import find
-    from ..base import IntendedUse
 
     cands = list(
         find(
@@ -183,7 +216,7 @@ def foley_find(
             max_events=max_events,
             verify=verify,
             k=k,
-            intended_use=IntendedUse(commercial=commercial_ok),
+            intended_use=intended_use_for(commercial_ok=commercial_ok),
             library=_lib(),
         )
     )
@@ -194,7 +227,7 @@ def foley_find(
 def foley_search(
     query: str,
     k: int = 10,
-    commercial_ok: bool = False,
+    commercial_ok: bool = DEFAULT_INTENDED_USE.commercial,
     ucs_category: Optional[str] = None,
     rerank: bool = False,
     session: str = "default",
@@ -211,11 +244,20 @@ def foley_search(
     return [_candidate_row(c) for c in hits]
 
 
-def foley_similar_to(sound_id: str, k: int = 10, session: str = "default") -> list:
+def foley_similar_to(
+    sound_id: str,
+    k: int = 10,
+    commercial_ok: bool = DEFAULT_INTENDED_USE.commercial,
+    session: str = "default",
+) -> list:
     """ "More like this" — the library neighbours of a sound (by id); returns candidate rows."""
     from .preview import similar_to
 
     hits = similar_to(sound_id, k=k, library=_lib())
+    if commercial_ok:
+        hits = [
+            c for c in hits if c.sound.license.commercial_ok and c.sound.license.rights_verified
+        ]
     _session(session).cache_candidates(hits)
     return [_candidate_row(c) for c in hits]
 
@@ -291,7 +333,7 @@ def foley_list_picks(session: str = "default") -> list:
 def foley_generate(
     prompt: str,
     backend: str = "stable_audio",
-    commercial_ok: bool = False,
+    commercial_ok: bool = DEFAULT_INTENDED_USE.commercial,
     session: str = "default",
 ) -> dict:
     """Generate a sound from a text prompt (local backends only when offline)."""
@@ -325,7 +367,17 @@ def foley_generate(
             "error": str(exc),
             "backend": backend,
         }
-    return {"ok": True, "sound_ids": [cand.sound.id], "backend": backend}
+    from ..licensing import keep
+
+    usable = keep(cand.sound.license, intended_use_for(commercial_ok=commercial_ok))
+    return {
+        "ok": True,
+        "sound_ids": [cand.sound.id],
+        "backend": backend,
+        "license_ok": usable,  # under this call's commercial_ok intent
+        "license": _license_summary(cand.sound.license),
+        "notes": list(cand.notes) if hasattr(cand, "notes") else [],
+    }
 
 
 def foley_plan(
@@ -440,7 +492,7 @@ def foley_timeline_captions(timeline: dict, fmt: str = "vtt") -> dict:
 
 def foley_score(
     context: str,
-    commercial_ok: bool = False,
+    commercial_ok: bool = DEFAULT_INTENDED_USE.commercial,
     verify: str = "listen",
     max_events: int = 6,
     session: str = "default",
@@ -496,8 +548,9 @@ TASTE HEURISTICS:
     `stinger` = a sharp accent on a boundary; keep beds low and duck them under the voice.
   - Salience: score a moment only if the sound adds meaning; leave quiet moments quiet.
   - Onset: place a spot effect ON its trigger word; a bed spans its sentence.
-  - Licensing is load-bearing: only `license_ok` candidates are placed; set commercial_ok when the
-    output is published; check each row's `license` summary (attribution, redistribution).
+  - Licensing is load-bearing: only `license_ok` candidates are placed. Every tool assumes
+    commercial publishing (commercial_ok=True); pass commercial_ok=False only for a
+    non-commercial project. Each row's `license` carries full TASL + every rights flag.
   - Loudness: the master profile ('podcast'/'streaming'/'broadcast_ebu') sets the delivery target.
 
 OFFLINE / SENSITIVE narration: run with the offline posture (foley_status shows it) — external

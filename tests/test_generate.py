@@ -138,6 +138,12 @@ class FakePipeline:
         return SimpleNamespace(audios=[self._audio])
 
 
+@pytest.fixture(autouse=True)
+def _elevenlabs_paid_plan(monkeypatch):
+    """These tests exercise a paid-plan account; the plan rules have their own tests."""
+    monkeypatch.setenv("FOLEY_ELEVENLABS_PLAN", "elevenlabs-paid-plan")
+
+
 @pytest.fixture
 def library(fake_embedder):
     """A fresh in-memory FakeEmbedder-backed library (no CLAP, no disk)."""
@@ -147,8 +153,8 @@ def library(fake_embedder):
     )
 
 
-def _el_adapter(transport=None, *, api_key="test-key"):
-    return ElevenLabsAdapter(api_key=api_key, http=transport or FakeTransport())
+def _el_adapter(transport=None, *, api_key="test-key", plan="elevenlabs-paid-plan"):
+    return ElevenLabsAdapter(api_key=api_key, http=transport or FakeTransport(), plan=plan)
 
 
 def _sa_adapter(pipeline=None):
@@ -166,7 +172,7 @@ def test_elevenlabs_generate_builds_clip():
     cand = clip.candidate
     assert cand.origin == CandidateOrigin.generated
     lic = cand.sound.license
-    assert lic.license_id == "ElevenLabs-SFX"
+    assert lic.license_id == "elevenlabs-paid-plan"
     assert lic.is_ai_generated is True
     assert lic.generator_model == "eleven_text_to_sound_v2"
     assert lic.generation_seed is None  # non-deterministic backend

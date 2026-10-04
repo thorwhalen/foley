@@ -18,7 +18,12 @@ from foley.sources import (
     select_corpora,
 )
 from foley.sources.bbc_remarc import BBC_REMARC
+from dataclasses import replace
+
 from foley.sources.clotho import CLOTHO
+
+#: Clotho with its (non-commercial) captions opted in — the eval-only configuration.
+CLOTHO_WITH_CAPTIONS = replace(CLOTHO, include_captions=True)
 from foley.sources.foleyset import FOLEYSET
 from foley.sources.fsd50k import FSD50K, _license_id_from_url
 from foley.sources.sonniss import SONNISS
@@ -76,8 +81,9 @@ def test_license_id_from_url_maps_cc_families():
         "CC-BY-4.0",
         True,
     )
+    # the version is kept (#56): a 3.0 clip is credited as 3.0
     assert _license_id_from_url("http://creativecommons.org/licenses/by/3.0/") == (
-        "CC-BY-4.0",
+        "CC-BY-3.0",
         True,
     )
     # by-nc must be recognized BEFORE the bare 'by'
@@ -210,7 +216,7 @@ def test_clotho_injects_human_captions(tmp_path):
         "clip_a.wav,a dog barks loudly,another caption\n"
         "clip_b.wav,,rain falls steadily\n"  # first caption empty -> use caption_2
     )
-    by_name = {Path(s.path).name: s for s in CLOTHO.iter_clips(str(root))}
+    by_name = {Path(s.path).name: s for s in CLOTHO_WITH_CAPTIONS.iter_clips(str(root))}
     assert by_name["clip_a.wav"].meta["caption"] == "a dog barks loudly"
     assert by_name["clip_b.wav"].meta["caption"] == "rain falls steadily"
 
@@ -229,7 +235,7 @@ def test_clotho_captions_survive_bom_and_non_utf8(tmp_path):
     (root / "latin1_captions.csv").write_bytes(
         "file_name,caption_1\nclip_b.wav,cafe\xe9 ambience\n".encode("latin-1")
     )
-    by_name = {Path(s.path).name: s for s in CLOTHO.iter_clips(str(root))}
+    by_name = {Path(s.path).name: s for s in CLOTHO_WITH_CAPTIONS.iter_clips(str(root))}
     # BOM did not orphan the header -> caption resolved
     assert by_name["clip_a.wav"].meta.get("caption") == "a dog barks loudly"
     # latin-1 file did not crash; clip_b got some caption mentioning ambience

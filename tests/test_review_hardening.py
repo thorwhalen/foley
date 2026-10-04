@@ -279,8 +279,10 @@ def test_status_reports_effective_redaction_mode(mcp_wired):
 def test_noncommercial_labels_map_to_nc_not_plain_by():
     from foley.licensing import derive_license_flags, license_id_from_cc_url
 
-    for label in ("Attribution-NonCommercial", "noncommercial", "Attribution NonCommercial"):
+    for label in ("Attribution-NonCommercial", "Attribution NonCommercial"):
         assert license_id_from_cc_url(label) == ("CC-BY-NC-4.0", True), label
+    # a bare "noncommercial" names no licence family: it fails closed (never commercial)
+    assert license_id_from_cc_url("noncommercial") == ("unknown", False)
     # the NC flag is genuinely non-commercial (pre-fix mapped to CC-BY-4.0 → commercial_ok)
     assert derive_license_flags("CC-BY-NC-4.0").commercial_ok is False
     # ND/SA compounds still fail closed (the guard runs before the NC needle)

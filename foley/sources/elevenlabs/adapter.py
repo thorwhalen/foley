@@ -57,6 +57,10 @@ class ElevenLabsAdapter:
         api_key: The ElevenLabs token. Defaults to ``$ELEVENLABS_API_KEY``.
         http: The injected :class:`~foley.sources.http.Transport` (defaults to
             :func:`~foley.sources.http.requests_transport`); tests pass a fake.
+        plan: The ElevenLabs account plan (``'elevenlabs-paid-plan'`` |
+            ``'elevenlabs-free-plan'``), which decides the generated sound's licence.
+            Defaults to ``$FOLEY_ELEVENLABS_PLAN``; with neither, ``generate`` refuses
+            before calling the API (#56).
     """
 
     def __init__(
@@ -65,11 +69,28 @@ class ElevenLabsAdapter:
         *,
         api_key: Optional[str] = None,
         http: Optional[Transport] = None,
+        plan: Optional[str] = None,
     ):
         self.config = config if config is not None else SOURCE_CONFIG
         self.name = self.config["name"]
         self._api_key = api_key
+        self._plan = plan
         self._http: Transport = http if http is not None else requests_transport
+
+    @property
+    def plan(self) -> str:
+        """The account plan = the generated sound's ``license_id`` (fail-closed when unknown)."""
+        lic_cfg = self.config["license"]
+        env_var = lic_cfg["plan_env_var"]
+        plan = self._plan if self._plan is not None else os.environ.get(env_var)
+        if plan not in lic_cfg["plans"]:
+            got = "unset" if plan is None else repr(plan)
+            raise RuntimeError(
+                f"ElevenLabs plan is {got}: set ${env_var} (or pass plan=) to one of "
+                f"{list(lic_cfg['plans'])}. The plan decides whether the sound may be "
+                "used commercially, so foley does not assume it; nothing was generated."
+            )
+        return plan
 
     # -- auth / http helpers ------------------------------------------------
 
@@ -123,8 +144,12 @@ class ElevenLabsAdapter:
 
         Returns:
             A :class:`~foley.sources.base.GeneratedClip` (``origin=generated``,
-            ``license_id='ElevenLabs-SFX'``, ``is_ai_generated=True``).
+            ``license_id`` = the account plan, ``is_ai_generated=True``).
+
+        Raises:
+            RuntimeError: If the plan is unknown (before any API call).
         """
+        license_id = self.plan  # fail closed BEFORE the paid call
         notes: list = []
         native_output_format = self._resolve_output_format(output_format, notes)
         self._warn_unsupported(
@@ -156,7 +181,10 @@ class ElevenLabsAdapter:
         }
         lic = generated_license(
             source=self.name,
-            license_id=self.config["license"]["default_license_id"],
+            license_id=license_id,
+            attribution_text=self.config["license"]
+            .get("plan_attribution", {})
+            .get(license_id),
             generator_model=model_id,
             generator_version=self.config["native_defaults"].get("generator_version"),
             generation_prompt=prompt,

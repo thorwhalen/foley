@@ -28,13 +28,13 @@ import foley
 candidates = foley.find("She pushed open the heavy oak door; rain hammered outside.")
 
 # Direct hybrid search of your library (text query or a reference clip)
-hits = foley.search("distant thunder rumble", k=10, commercial_ok=True)
+hits = foley.search("distant thunder rumble", k=10)  # commercial use is the default
 
 # Generate a sound when nothing fits (arioso-style; pluggable backends)
 clip = foley.generate("a single wooden door creak", backend="stable_audio", duration=3)
 
 # Grow the library — ingest auto-tags, captions, and embeds every file
-foley.ingest("~/my_sounds/")
+foley.ingest("~/my_sounds/", license="user-owned")  # omit it and rights stay unknown
 foley.add_from("freesound", query="ocean waves", license="cc0")
 
 # Compose: place the sounds under the narration (find → plan → weave)

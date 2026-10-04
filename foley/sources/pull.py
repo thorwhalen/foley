@@ -21,12 +21,8 @@ from typing import Optional
 
 from ..base import IntendedUse
 from ..index.ingest import IngestReport, IngestResult, ingest_one
-from ..licensing import keep
+from ..licensing import DEFAULT_INTENDED_USE, keep
 from .registry import get_source, require_source_egress
-
-#: Default intent for a pull: a publishable, commercial, attributable use — the
-#: same fail-closed bar :func:`foley.bootstrap.bootstrap`'s Ring-1 filter applies.
-DEFAULT_INTENDED_USE = IntendedUse(commercial=True, publish=True, can_attribute=True)
 
 
 def _add_from(
@@ -128,6 +124,7 @@ def _add_from(
                 license=lic,
                 captioner=MetadataCaptioner(rec.caption) if rec.caption else None,
                 seed_tags=rec.tags,
+                commercial=use.commercial,  # the AI-use scope is judged under this intent
             )
         except (
             Exception

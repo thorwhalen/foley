@@ -31,7 +31,12 @@ from typing import Iterator, Optional
 
 from ..base import LicenseRecord
 from ..licensing import license_id_from_cc_url
-from .base import ClipSpec, bulk_license, register_corpus
+from .base import (
+    ClipSpec,
+    license_from_clip_meta,
+    per_clip_license_meta,
+    register_corpus,
+)
 
 #: Glob for the FSD50K per-clip info JSONs (dev + eval).
 _CLIPS_INFO_GLOB = "*clips_info*.json"
@@ -90,30 +95,20 @@ class Fsd50kCorpus:
         for fp in iter_audio_files(root):
             fname = fp.stem
             clip = info.get(fname, {})
-            license_id, verified = _license_id_from_url(clip.get("license"))
             yield ClipSpec(
                 path=str(fp),
                 source_id=fname,
-                meta={
-                    "license_id": license_id,
-                    "rights_verified": verified,
-                    "creator_name": clip.get("uploader"),
+                meta=per_clip_license_meta(
+                    clip.get("license"),
+                    creator_name=clip.get("uploader"),
                     # FSD50K fnames ARE Freesound sound ids -> a real attribution URL
-                    "source_url": f"https://freesound.org/s/{fname}/",
-                },
+                    source_url=f"https://freesound.org/s/{fname}/",
+                ),
             )
 
     def resolve_license(self, spec: ClipSpec) -> LicenseRecord:
         """Build the per-clip rights record from the metadata in ``spec.meta``."""
-        meta = spec.meta
-        return bulk_license(
-            source=self.source,
-            license_id=meta.get("license_id", "unknown"),
-            rights_verified=bool(meta.get("rights_verified", False)),
-            source_id=spec.source_id,
-            source_url=meta.get("source_url"),
-            creator_name=meta.get("creator_name"),
-        )
+        return license_from_clip_meta(self.source, spec)
 
 
 #: The FSD50K Ring-1 adapter.
