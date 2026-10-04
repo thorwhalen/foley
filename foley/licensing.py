@@ -18,10 +18,33 @@ item is redistributable but stored by-reference.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, replace
 from typing import Optional
 
 from .base import IntendedUse, LicenseRecord
+
+#: The ONE rights intent every verb and surface defaults to (#63, maintainer decision
+#: 2026-10-03): commercial publishing, attributable. NC and SA material is refused
+#: unless a caller explicitly passes a different :class:`~foley.base.IntendedUse` (or
+#: ``commercial_ok=False``). Treat it as read-only; copy with ``dataclasses.replace``.
+DEFAULT_INTENDED_USE = IntendedUse(commercial=True, publish=True, can_attribute=True)
+
+
+def intended_use_for(
+    intended_use: Optional[IntendedUse] = None, *, commercial_ok: Optional[bool] = None
+) -> IntendedUse:
+    """The rights intent a verb runs under — every verb and surface resolves it here (#63).
+
+    An explicit ``intended_use`` wins; else :data:`DEFAULT_INTENDED_USE`, with
+    ``commercial`` overridden when ``commercial_ok`` is given (``False`` is the explicit
+    opt-in to non-commercial material). Always a fresh copy, so callers may mutate it.
+    """
+    if intended_use is not None:
+        return intended_use
+    if commercial_ok is None:
+        return replace(DEFAULT_INTENDED_USE)
+    return replace(DEFAULT_INTENDED_USE, commercial=bool(commercial_ok))
 
 
 @dataclass(frozen=True)
@@ -49,14 +72,29 @@ UNKNOWN_LICENSE_FLAGS = LicenseFlags()
 #:     ai_training, requires_attribution, revenue_cap_usd
 LICENSE_FLAGS: dict[str, LicenseFlags] = {
     "CC0-1.0": LicenseFlags(True, True, True, True, True, True, False, None),
-    "CC-BY-4.0": LicenseFlags(True, True, True, True, True, True, True, None),
-    "CC-BY-NC-4.0": LicenseFlags(False, True, True, True, True, False, True, None),
+    # The Public Domain Mark is a LABEL ("believed free of copyright"), not a grant:
+    # its flags are permissive, but license_id_from_cc_url never marks it verified, so
+    # keep() refuses it until a human has checked the claim (#56).
+    "PDM-1.0": LicenseFlags(True, True, True, True, True, True, False, None),
+    # CC-BY / CC-BY-NC rows exist per version (rights do not differ across versions,
+    # the credit does): see _CC_VERSIONED below, merged into this table after it.
     # commercial only as a transformed sample -> default-exclude
     "CC-Sampling+-1.0": LicenseFlags(False, True, False, True, True, False, True, None),
     "RemArc": LicenseFlags(False, True, False, True, True, False, True, None),
     "Sonniss-GDC": LicenseFlags(True, True, False, True, True, False, False, None),
     "Pixabay-Content": LicenseFlags(True, True, False, True, True, False, False, None),
-    # paid tier
+    # ElevenLabs, by the account's plan (the same codes as `an`'s PROVIDER_TERMS). The
+    # plan is never assumed: the adapter reads it from plan= / $FOLEY_ELEVENLABS_PLAN
+    # and refuses to generate when it is unknown (#56).
+    "elevenlabs-paid-plan": LicenseFlags(
+        True, True, False, True, True, False, False, None
+    ),
+    # free plan: non-commercial, attribution required
+    "elevenlabs-free-plan": LicenseFlags(
+        False, True, False, True, True, False, True, None
+    ),
+    # LEGACY (records made before the plan was explicit): a paid plan was assumed.
+    # Re-stamp them with foley.restamp_rights (see the CHANGELOG / PR for #56).
     "ElevenLabs-SFX": LicenseFlags(True, True, False, True, True, False, False, None),
     "Stability-Community": LicenseFlags(
         True, True, False, True, True, False, False, 1_000_000
@@ -74,19 +112,52 @@ LICENSE_FLAGS: dict[str, LicenseFlags] = {
     "unknown": UNKNOWN_LICENSE_FLAGS,
 }
 
+#: The CC versions foley has rows for (Freesound, FSD50K, Clotho and Wikimedia use these).
+CC_VERSIONS: "tuple[str, ...]" = ("2.0", "2.5", "3.0", "4.0")
+
+#: ``(family id prefix, URL path segment, display label, flags)`` for versioned CC families.
+_CC_VERSIONED: "tuple[tuple[str, str, str, LicenseFlags], ...]" = (
+    ("CC-BY", "by", "CC BY", LicenseFlags(True, True, True, True, True, True, True, None)),
+    (
+        "CC-BY-NC",
+        "by-nc",
+        "CC BY-NC",
+        LicenseFlags(False, True, True, True, True, False, True, None),
+    ),
+)
+
+LICENSE_FLAGS.update(
+    {
+        f"{prefix}-{v}": flags
+        for prefix, _seg, _label, flags in _CC_VERSIONED
+        for v in CC_VERSIONS
+    }
+)
+
 #: Creative-Commons URL / label substrings, checked in order (NC and Sampling+
 #: BEFORE the bare ``by`` so a compound license never mis-maps to plain CC-BY).
 #: Each entry is ``(needle, license_id)``; a match sets ``rights_verified=True``.
 _CC_URL_MARKERS: "tuple[tuple[tuple[str, ...], str], ...]" = (
-    (("zero", "publicdomain", "creative commons 0", "cc0"), "CC0-1.0"),
+    (("publicdomain/zero", "creative commons 0", "creative commons zero", "cc0"), "CC0-1.0"),
     # ``noncommercial`` subsumes the spaced label ("attribution noncommercial") AND the
     # hyphenated/bare forms ("Attribution-NonCommercial", "noncommercial"), so no NC work
     # slips through to the plain-CC-BY fallback below (which would fail OPEN by granting
     # commercial rights). Checked AFTER the -nd/-sa guard, so by-nc-nd/by-nc-sa still fail
     # closed. Mirrors the generic ND/SA needles.
-    (("by-nc", "noncommercial"), "CC-BY-NC-4.0"),
+    (("by-nc", "noncommercial"), "CC-BY-NC"),
     (("sampling",), "CC-Sampling+-1.0"),
 )
+
+#: Public Domain Mark needles (checked after CC0's ``publicdomain/zero``).
+_PDM_MARKERS: "tuple[str, ...]" = ("publicdomain/mark", "public domain mark", "pdm")
+
+#: A CC version in a URL (``/by/3.0/``) or a label (``Attribution 3.0``).
+_CC_VERSION_RE = re.compile(r"(?<![\d.])([1-4]\.[05])(?![\d.])")
+
+#: The version assumed when a source gives a CC family with no version at all
+#: (Freesound's search labels: ``"Attribution"``). Rights are the same across versions;
+#: only the credit's version is a guess, so the record keeps the label it was given.
+DEFAULT_CC_VERSION = "4.0"
 
 
 def license_id_from_cc_url(url: Optional[str]) -> "tuple[str, bool]":
@@ -114,6 +185,11 @@ def license_id_from_cc_url(url: Optional[str]) -> "tuple[str, bool]":
     forbid). Only *after* it are ``by-nc`` / ``sampling`` tested before the bare
     ``by``.
 
+    **The version is kept** (#56): ``/by/3.0/`` maps to ``CC-BY-3.0`` and is credited
+    as 3.0; a versionless label (``"Attribution"``) gets :data:`DEFAULT_CC_VERSION`.
+    **The Public Domain Mark is not CC0**: it maps to ``PDM-1.0`` with
+    ``rights_verified=False`` (a claim about the work, not a licence anyone granted).
+
     Args:
         url: A CC license URL, a CC label string, or ``None``.
 
@@ -129,12 +205,33 @@ def license_id_from_cc_url(url: Optional[str]) -> "tuple[str, bool]":
     # 'by-nc-sa' and mis-map a stricter license to plain CC-BY-NC (fail-open).
     if any(marker in u for marker in ("-nd", "-sa", "noderiv", "sharealike")):
         return "unknown", False
+    if any(n in u for n in _PDM_MARKERS) or (
+        "publicdomain" in u and "zero" not in u
+    ):
+        return "PDM-1.0", False  # a label, not a grant: never auto-verified (#56)
     for needles, license_id in _CC_URL_MARKERS:
         if any(n in u for n in needles):
-            return license_id, True
+            return _versioned(license_id, u)
     if "/by/" in u or u.rstrip("/").endswith("/by") or "attribution" in u:
-        return "CC-BY-4.0", True
+        return _versioned("CC-BY", u)
     return "unknown", False
+
+
+def _versioned(family: str, url: str) -> "tuple[str, bool]":
+    """``(family-version id, verified)`` for a versioned CC family; others pass through.
+
+    The version comes from the URL or label; with none given, :data:`DEFAULT_CC_VERSION`.
+    A version foley has no row for fails closed (``'unknown'``) rather than borrowing
+    another version's credit.
+    """
+    if family not in {prefix for prefix, *_ in _CC_VERSIONED}:
+        return family, True
+    m = _CC_VERSION_RE.search(url)
+    version = m.group(1) if m else DEFAULT_CC_VERSION
+    license_id = f"{family}-{version}"
+    if license_id not in LICENSE_FLAGS:
+        return "unknown", False
+    return license_id, True
 
 
 # ---------------------------------------------------------------------------
@@ -169,11 +266,9 @@ LICENSE_META: dict[str, LicenseMeta] = {
         "CC0 1.0 Universal (Public Domain Dedication)",
         "https://creativecommons.org/publicdomain/zero/1.0/",
     ),
-    "CC-BY-4.0": LicenseMeta(
-        "CC BY 4.0", "https://creativecommons.org/licenses/by/4.0/"
-    ),
-    "CC-BY-NC-4.0": LicenseMeta(
-        "CC BY-NC 4.0", "https://creativecommons.org/licenses/by-nc/4.0/"
+    "PDM-1.0": LicenseMeta(
+        "Public Domain Mark 1.0 (unverified claim)",
+        "https://creativecommons.org/publicdomain/mark/1.0/",
     ),
     "CC-Sampling+-1.0": LicenseMeta(
         "CC Sampling+ 1.0", "https://creativecommons.org/licenses/sampling+/1.0/"
@@ -188,8 +283,16 @@ LICENSE_META: dict[str, LicenseMeta] = {
     "Pixabay-Content": LicenseMeta(
         "Pixabay Content License", "https://pixabay.com/service/license-summary/"
     ),
+    "elevenlabs-paid-plan": LicenseMeta(
+        "ElevenLabs Terms (paid plan)", "https://elevenlabs.io/terms-of-use"
+    ),
+    "elevenlabs-free-plan": LicenseMeta(
+        "ElevenLabs Terms (free plan: non-commercial, attribution required)",
+        "https://elevenlabs.io/terms-of-use",
+    ),
     "ElevenLabs-SFX": LicenseMeta(
-        "ElevenLabs Sound Effects Terms", "https://elevenlabs.io/terms-of-use"
+        "ElevenLabs Sound Effects Terms (legacy: paid plan assumed)",
+        "https://elevenlabs.io/terms-of-use",
     ),
     "Stability-Community": LicenseMeta(
         "Stability AI Community License",
@@ -199,6 +302,16 @@ LICENSE_META: dict[str, LicenseMeta] = {
     "user-owned": LicenseMeta("User-owned / original work", None),
     "unknown": UNKNOWN_LICENSE_META,
 }
+
+LICENSE_META.update(
+    {
+        f"{prefix}-{v}": LicenseMeta(
+            f"{label} {v}", f"https://creativecommons.org/licenses/{seg}/{v}/"
+        )
+        for prefix, seg, label, _flags in _CC_VERSIONED
+        for v in CC_VERSIONS
+    }
+)
 
 
 def license_meta(license_id: str) -> LicenseMeta:
@@ -271,6 +384,68 @@ def apply_license_flags(
     return record
 
 
+# ---------------------------------------------------------------------------
+# AI-use scope (Freesound's gen_ai_preference, #69)
+# ---------------------------------------------------------------------------
+
+#: The ``ai_training_scope`` values (``None`` = no narrowing beyond ``ai_training_ok``).
+AI_TRAINING_SCOPES: "tuple[str, ...]" = (
+    "none",
+    "open_source_only",
+    "nc_open_source_only",
+)
+
+#: Freesound ``gen_ai_preference`` -> ``(ai_training_ok override, ai_training_scope)``.
+#: ``None`` as the override leaves the CC row's flag alone. An unlisted value fails
+#: closed (see :func:`ai_scope_from_gen_ai_preference`).
+GEN_AI_PREFERENCE_SCOPES: "dict[str, tuple[Optional[bool], Optional[str]]]" = {
+    "no-additional-preferences": (None, None),
+    "open-source-models": (None, "open_source_only"),
+    "noncommercial-open-source-models": (None, "nc_open_source_only"),
+    "no-gen-ai": (False, "none"),
+}
+
+
+def ai_scope_from_gen_ai_preference(
+    preference: Optional[str],
+) -> "tuple[Optional[bool], Optional[str]]":
+    """Map a Freesound ``gen_ai_preference`` to ``(ai_training_ok override, scope)``.
+
+    All four published values are honoured (only ``no-gen-ai`` was before #69). A
+    missing value means no stated preference; an unrecognised one fails closed.
+    """
+    if preference is None:
+        return None, None
+    return GEN_AI_PREFERENCE_SCOPES.get(preference, (False, "none"))
+
+
+def ai_use_permitted(
+    record: LicenseRecord, *, open_source_model: bool, commercial: bool
+) -> bool:
+    """Whether AI use of the sound (CLAP-embedding it counts) is allowed here.
+
+    ``ai_training_ok`` must hold, and the record's ``ai_training_scope`` must admit
+    this use: ``open_source_only`` needs an open-source model, ``nc_open_source_only``
+    also needs a non-commercial purpose, ``none`` admits nothing.
+
+    Args:
+        record: The rights record.
+        open_source_model: Whether the model using the audio is open source (the
+            embedder's ``open_source`` attribute; LAION-CLAP is).
+        commercial: Whether the purpose is commercial (foley's default intent).
+    """
+    if not record.ai_training_ok:
+        return False
+    scope = record.ai_training_scope
+    if scope is None:
+        return True
+    if scope == "open_source_only":
+        return open_source_model
+    if scope == "nc_open_source_only":
+        return open_source_model and not commercial
+    return False  # 'none' or an unrecognised scope: fail closed
+
+
 def keep(record: LicenseRecord, intended_use: IntendedUse) -> bool:
     """Fail-closed candidate license gate (report 07 §8.2).
 
@@ -293,8 +468,10 @@ def keep(record: LicenseRecord, intended_use: IntendedUse) -> bool:
         return False
     if intended_use.redistribute_standalone and not record.redistribute_standalone_ok:
         return False
-    if intended_use.will_train and not record.ai_training_ok:
-        return False
+    if intended_use.will_train and not ai_use_permitted(
+        record, open_source_model=False, commercial=intended_use.commercial
+    ):
+        return False  # the trainer's model is unknown here, so a scoped grant fails closed
     cap = record.revenue_cap_usd
     if cap is not None and intended_use.revenue_usd >= cap:
         return False

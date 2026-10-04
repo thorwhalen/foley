@@ -52,6 +52,8 @@ __all__ = [
     "GeneratedClip",
     "UniformCorpus",
     "bulk_license",
+    "per_clip_license_meta",
+    "license_from_clip_meta",
     "api_license",
     "generated_license",
     "CORPUS_REGISTRY",
@@ -265,6 +267,7 @@ def bulk_license(
     rights_verified: bool,
     source_id: Optional[str] = None,
     source_url: Optional[str] = None,
+    license_url: Optional[str] = None,
     creator_name: Optional[str] = None,
     attribution_text: Optional[str] = None,
 ) -> LicenseRecord:
@@ -272,8 +275,7 @@ def bulk_license(
 
     The SSOT license builder every **bulk-corpus** adapter routes through
     (``acquisition_method=bulk``); a thin wrapper over :func:`_build_license`. Its
-    signature is unchanged from #4 — no ``overrides`` (a downloaded corpus is
-    cacheable by-value), so every existing corpus adapter keeps working verbatim.
+    signature has no ``overrides`` (a downloaded corpus is cacheable by-value).
 
     Args:
         source: Provenance source tag (e.g. ``'fsd50k'``, ``'foleyset'``).
@@ -283,6 +285,8 @@ def bulk_license(
             gate input — pass ``False`` for unrecognized/ambiguous licenses).
         source_id: The corpus-native clip id, for provenance.
         source_url: A human-resolvable URL for the clip (attribution/credits).
+        license_url: The licence URL/label exactly as the corpus served it (kept so the
+            credit links the deed the clip was actually released under).
         creator_name: The uploader/creator (required for CC-BY attribution).
         attribution_text: A ready-made attribution string, if the corpus supplies one.
 
@@ -296,6 +300,7 @@ def bulk_license(
         acquisition_method=AcquisitionMethod.bulk,
         source_id=source_id,
         source_url=source_url,
+        license_url=license_url,
         creator_name=creator_name,
         attribution_text=attribution_text,
     )
@@ -449,6 +454,46 @@ def generated_license(
     record.watermark = watermark
     record.c2pa_manifest_ref = c2pa_manifest_ref
     return record
+
+
+def per_clip_license_meta(
+    license_url: Optional[str],
+    *,
+    creator_name: Optional[str] = None,
+    source_url: Optional[str] = None,
+) -> dict:
+    """The ``ClipSpec.meta`` rights fields for a clip that carries its own CC licence.
+
+    Shared by the corpora whose clips each keep their Freesound licence (FSD50K,
+    Clotho): the licence string goes through the one CC mapper
+    (:func:`~foley.licensing.license_id_from_cc_url` — version kept, unknown fails
+    closed), and the string itself is kept as ``license_url`` so the credit links the
+    deed the clip was released under. Read back by :func:`license_from_clip_meta`.
+    """
+    from ..licensing import license_id_from_cc_url
+
+    license_id, verified = license_id_from_cc_url(license_url)
+    return {
+        "license_id": license_id,
+        "rights_verified": verified,
+        "license_url": license_url,
+        "creator_name": creator_name,
+        "source_url": source_url,
+    }
+
+
+def license_from_clip_meta(source: str, spec: "ClipSpec") -> LicenseRecord:
+    """Build a clip's rights record from :func:`per_clip_license_meta` fields (fail-closed)."""
+    meta = spec.meta
+    return bulk_license(
+        source=source,
+        license_id=meta.get("license_id", "unknown"),
+        rights_verified=bool(meta.get("rights_verified", False)),
+        source_id=spec.source_id,
+        source_url=meta.get("source_url"),
+        license_url=meta.get("license_url"),
+        creator_name=meta.get("creator_name"),
+    )
 
 
 @dataclass

@@ -42,6 +42,9 @@ class ClapEmbedder:
     Attributes:
         model_id: The HF checkpoint id.
         dim: The embedding dimensionality.
+        open_source: Whether the checkpoint is an open-source model (the LAION
+            releases are). Read by the ingest AI-use gate for sounds whose rights
+            holder allows only open-source models (#69).
     """
 
     def __init__(self, model_id: str = DEFAULT_CLAP_MODEL_ID, *, device=None):
@@ -53,6 +56,7 @@ class ClapEmbedder:
                 else CPU.
         """
         self.model_id = model_id
+        self.open_source = model_id.startswith("laion/")
         self._device = device
         # Known for the default checkpoint; resolved lazily (from the lightweight
         # config, not the weights) for others so ``dim`` is never a bad sentinel.

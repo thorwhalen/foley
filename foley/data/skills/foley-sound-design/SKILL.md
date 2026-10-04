@@ -33,7 +33,7 @@ print(result.rationale)  # what was chosen and why
 result.timeline  # an editable SoundDesignTimeline
 
 # Plan + render (weave under the actual narration audio):
-result = foley.score(segments, audio="narration.wav", commercial_ok=True)
+result = foley.score(segments, audio="narration.wav")  # commercial use is the default
 result.weave.audio  # mastered stereo mix (numpy)
 result.weave.captions_vtt  # SDH captions (no speech text leaks)
 result.weave.credits  # attribution (CREDITS.md + JSON)
@@ -76,10 +76,13 @@ timeline dicts, store keys) — audio is referenced by a byte-store key, never i
 ## Licensing is load-bearing (foley's output gets published)
 
 - Only `license_ok` candidates are ever placed — the gate is **fail-closed** (unknown license →
-  refused). Set `commercial_ok=True` (or `IntendedUse(commercial=True, publish=True)`) when the
-  result will be published commercially, and the filter tightens accordingly.
-- Read each candidate's `license` summary: `commercial_ok`, `requires_attribution`,
-  `redistribute_standalone_ok`, `is_ai_generated`. `foley.credits(sounds)` builds the attribution
+  refused). Every verb and tool assumes **commercial publishing** by default; pass
+  `commercial_ok=False` (or an explicit `IntendedUse`) only for a non-commercial project.
+- Sounds you ingest yourself have **unknown** rights until you say otherwise:
+  `foley.ingest(path, license="user-owned")` for your own recordings.
+- Read each candidate's `license` row: full TASL (`creator_name`, `source_url`, `license_url`) and
+  every flag (`commercial_ok`, `requires_attribution`, `redistribute_standalone_ok`,
+  `ai_training_ok`, `is_ai_generated`, …). `foley.credits(sounds)` builds the attribution
   (a `CREDITS.md` + JSON) — always ship it.
 - Generated audio (`foley.generate`) is disclosed (EU AI Act Art. 50) and watermarked when the
   provenance extra is installed; the mix carries a C2PA content credential.

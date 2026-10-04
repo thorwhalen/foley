@@ -60,8 +60,9 @@ def test_ingest_one_stores_by_value_and_indexes(library):
     assert result.status in ("pass", "warn")
     rec = result.record
     assert rec is not None
-    # user-owned default license => cached by-value
-    assert rec.license.license_id == "user-owned"
+    # no licence given => rights unknown (keep() refuses it, #55), bytes still kept locally
+    assert rec.license.license_id == "unknown"
+    assert rec.license.rights_verified is False
     assert rec.storage_mode == StorageMode.by_value
     assert rec.qc is not None and rec.duration_s == pytest.approx(1.0, abs=0.05)
     assert rec.sample_rate == SR

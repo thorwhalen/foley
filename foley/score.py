@@ -83,7 +83,7 @@ def score(
     transcript: Optional[str] = None,
     library=None,
     intended_use=None,
-    commercial_ok: bool = False,
+    commercial_ok: Optional[bool] = None,
     max_events: int = 6,
     verify: str = "listen",
     master: str = "podcast",
@@ -109,9 +109,11 @@ def score(
             given, the result is woven into a mastered mix (set ``weave=False`` to skip).
         transcript: The full narration transcript for alignment (default: the segments joined).
         library: The :class:`foley.index.SoundLibrary` (default: the process-wide default).
-        intended_use: The rights intent (default: a conservative publishing
-            :class:`~foley.base.IntendedUse` from ``commercial_ok``).
-        commercial_ok: Shorthand for a commercial-publishing intent (the license filter).
+        intended_use: The rights intent (default:
+            :data:`foley.licensing.DEFAULT_INTENDED_USE` — commercial publishing, the
+            same default as :func:`foley.find` and every MCP tool).
+        commercial_ok: Shorthand override of the default intent's ``commercial``;
+            ``False`` explicitly admits non-commercial material.
         max_events: The sparse density cap **per segment** (restraint).
         verify: The max verify rung — ``'clap'`` | ``'listen'`` | ``'judge'``.
         master: The delivery :data:`~foley.base.MASTER_PROFILES` target (``'podcast'`` default).
@@ -125,10 +127,10 @@ def score(
     """
     from . import find, obs, plan
     from . import weave as _weave
-    from .base import IntendedUse
+    from .licensing import intended_use_for
 
     segs = [segments] if isinstance(segments, str) else list(segments)
-    use = intended_use or IntendedUse(commercial=commercial_ok, publish=True)
+    use = intended_use_for(intended_use, commercial_ok=commercial_ok)
     full_transcript = transcript or " ".join(segs)
     do_weave = (audio is not None) if weave is None else bool(weave)
 

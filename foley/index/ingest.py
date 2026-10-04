@@ -31,7 +31,12 @@ from typing import TYPE_CHECKING, Iterator, Optional
 
 from ..audio import ARCHIVE_FORMAT, WORKING_SAMPLE_RATE, encode, load, to_working
 from ..base import AcquisitionMethod, LicenseRecord, SerializableMixin, SoundRecord
-from ..licensing import apply_license_flags
+from ..licensing import (
+    DEFAULT_INTENDED_USE,
+    LICENSE_FLAGS,
+    ai_use_permitted,
+    apply_license_flags,
+)
 from ..qc import DEFAULT_QC_THRESHOLDS, QCStatus, QCThresholds, run_qc
 from ..stores import content_key
 from .taxonomy import resolve_catid
@@ -239,19 +244,58 @@ def content_id(src: "AudioSource") -> str:
     return _audio_identity(_probe(src).wav)
 
 
-def _default_user_license(source_url: Optional[str] = None) -> LicenseRecord:
-    """The default license for a local ingest: user-owned => cacheable (by-value).
+#: The note on every clip ingested without a licence (#55).
+_UNKNOWN_LOCAL_NOTE = (
+    "rights unknown (no license given): indexed for local search only; foley.keep() "
+    "refuses it for every use until rights are asserted, e.g. "
+    "foley.ingest(path, license='user-owned') or `foley ingest PATH --license user-owned`"
+)
 
-    Routes through the ``license_id -> flags`` SSOT (``'user-owned'``), so the
-    storage mode is derived, not hand-set. ``rights_verified=True`` because the
-    user is asserting ownership by ingesting their own files.
+
+def _now_iso() -> str:
+    from datetime import datetime, timezone
+
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def resolve_ingest_license(
+    license: "LicenseRecord | str | None", *, source_url: Optional[str] = None
+) -> LicenseRecord:
+    """The rights record for a local ingest: fail-closed unless rights are asserted (#55).
+
+    * ``None`` (no licence given) → ``license_id='unknown'``, ``rights_verified=False``:
+      :func:`foley.keep` refuses it for every use. The bytes are still kept locally
+      (``cache_bytes_ok=True``: it is the user's own disk, no terms of service apply),
+      so the clip is searchable and can be re-stamped later without re-ingesting.
+    * a ``str`` → that ``license_id``, which must be a :data:`LICENSE_FLAGS` row, with
+      ``rights_verified=True`` (the caller is asserting it) and ``verified_at`` set —
+      e.g. ``'user-owned'`` for the user's own recordings.
+    * a :class:`~foley.base.LicenseRecord` → used as given.
+
+    Raises:
+        ValueError: If a ``str`` licence id has no :data:`LICENSE_FLAGS` row.
     """
+    if isinstance(license, LicenseRecord):
+        return license
+    if license is None:
+        lic = LicenseRecord(
+            source="user",
+            source_url=source_url,
+            license_id="unknown",
+            acquisition_method=AcquisitionMethod.user,
+            rights_verified=False,
+        )
+        return apply_license_flags(lic, overrides={"cache_bytes_ok": True})
+    if license not in LICENSE_FLAGS or license == "unknown":
+        known = sorted(k for k in LICENSE_FLAGS if k != "unknown")
+        raise ValueError(f"unknown license id {license!r}; expected one of {known}")
     lic = LicenseRecord(
         source="user",
         source_url=source_url,
-        license_id="user-owned",
+        license_id=license,
         acquisition_method=AcquisitionMethod.user,
         rights_verified=True,
+        verified_at=_now_iso(),
     )
     return apply_license_flags(lic)
 
@@ -280,6 +324,7 @@ def _ingest_one(
     store: bool = True,
     allow_ai_training_forbidden: bool = False,
     seed_tags: Optional[list] = None,
+    commercial: Optional[bool] = None,
 ) -> IngestResult:
     """Ingest one clip into ``library`` and return an :class:`IngestResult`.
 
@@ -305,7 +350,10 @@ def _ingest_one(
             adapter passes the stable source page URL (e.g.
             ``'https://freesound.org/s/12345/'``) that :func:`foley.stores.store_sound`
             requires for a by-reference sound.
-        license: Rights record (default: a user-owned, cacheable license).
+        license: Rights record, or a ``license_id`` string the caller asserts
+            (``'user-owned'``), or ``None`` (default): rights **unknown**, so the clip
+            is indexed but :func:`foley.keep` refuses it (#55). See
+            :func:`resolve_ingest_license`.
         tagger: Supervised :class:`~foley.index.protocols.Tagger` (default: PANNs
             via :func:`~foley.index.taggers.default_tagger`).
         zeroshot_tagger: Zero-shot tagger (default: CLAP via
@@ -330,6 +378,9 @@ def _ingest_one(
             consent and admit it anyway (see :func:`foley.bootstrap.bootstrap`'s
             ``accept_ai_restricted``). Protects every ingest path, not just
             bootstrap.
+        commercial: Whether the AI use is for a commercial purpose (decides a
+            ``nc_open_source_only`` scope, #69). ``None`` (default) means
+            :data:`~foley.licensing.DEFAULT_INTENDED_USE`'s (commercial).
 
     Returns:
         An :class:`IngestResult`; its ``record`` is ``None`` when quarantined, a
@@ -378,14 +429,26 @@ def _ingest_one(
     # unless the caller passes explicit consent. Guards every path into the
     # library, not just bootstrap (report 07; invariant #3 of foley-dev-implement).
     ref_uri = source_uri if source_uri is not None else _reference_uri(src)
-    lic = license if license is not None else _default_user_license(ref_uri)
-    if not lic.ai_training_ok and not allow_ai_training_forbidden:
+    local_default = license is None
+    lic = resolve_ingest_license(license, source_url=ref_uri)
+    if local_default:
+        notes.append(_UNKNOWN_LOCAL_NOTE)
+    ai_ok = ai_use_permitted(
+        lic,
+        open_source_model=bool(getattr(lib.embedder, "open_source", False)),
+        commercial=DEFAULT_INTENDED_USE.commercial if commercial is None else commercial,
+    )
+    # A local file ingested without a licence is the user's own disk: indexing it for
+    # local search is not a use anyone has forbidden, so it proceeds — but keep()
+    # refuses it for every use, because its rights are unknown (#55).
+    if not ai_ok and not (allow_ai_training_forbidden or local_default):
         return IngestResult(
             id=sid,
             status="rights_blocked",
             notes=[
-                f"license {lic.license_id!r} forbids AI training; embed + persist "
-                "refused (set allow_ai_training_forbidden=True to consent)"
+                f"license {lic.license_id!r} does not allow AI use here "
+                f"(ai_training_ok={lic.ai_training_ok}, scope={lic.ai_training_scope!r}); "
+                "embed + persist refused (set allow_ai_training_forbidden=True to consent)"
             ],
         )
 
@@ -594,3 +657,112 @@ def ingest_folder(
                 report.error(fp, exc)
         run.set_ingest_report(ingest_digest(report))
     return report
+
+
+# ---------------------------------------------------------------------------
+# Re-stamping stored rights (the migration for #55 / #56)
+# ---------------------------------------------------------------------------
+
+
+def is_legacy_default_user_owned(lic: LicenseRecord) -> bool:
+    """Whether ``lic`` is the ``user-owned`` stamp foley used to put on any unlicensed ingest.
+
+    Before #55, ``foley.ingest(path)`` with no licence stamped every file
+    ``user-owned`` + verified. An explicit assertion now also records ``verified_at``;
+    the old default never did, which is what tells them apart.
+    """
+    return (
+        lic.license_id == "user-owned"
+        and lic.source == "user"
+        and lic.acquisition_method == AcquisitionMethod.user
+        and lic.verified_at is None
+    )
+
+
+def is_legacy_elevenlabs(lic: LicenseRecord) -> bool:
+    """Whether ``lic`` is an ElevenLabs generation stamped before the plan was explicit (#56)."""
+    return lic.license_id == "ElevenLabs-SFX"
+
+
+#: Named selections for :func:`restamp_rights` (``foley restamp-rights --select NAME``).
+LEGACY_SELECTORS = {
+    "legacy-user-owned": is_legacy_default_user_owned,
+    "legacy-elevenlabs": is_legacy_elevenlabs,
+}
+
+
+def _restamped(lic: LicenseRecord, license_id: str) -> LicenseRecord:
+    """A copy of ``lic`` under ``license_id``: flags re-derived, provenance + storage kept.
+
+    ``cache_bytes_ok`` is carried over (it is a terms-of-service fact about the source,
+    and the bytes are already stored or referenced accordingly). ``rights_verified``
+    becomes ``True`` with a ``verified_at`` stamp for an asserted id, ``False`` for
+    ``'unknown'``.
+    """
+    from dataclasses import replace
+
+    new = replace(lic, license_id=license_id, transformations=list(lic.transformations))
+    apply_license_flags(new, overrides={"cache_bytes_ok": lic.cache_bytes_ok})
+    new.rights_verified = license_id != "unknown"
+    new.verified_at = _now_iso() if new.rights_verified else None
+    return new
+
+
+def restamp_rights(
+    library=None,
+    *,
+    license: str = "unknown",
+    ids: "Optional[list[str]]" = None,
+    where=None,
+    select: str = "legacy-user-owned",
+    apply: bool = False,
+) -> "list[str]":
+    """Re-stamp the licence of stored sounds; a dry run unless ``apply=True``.
+
+    The migration for libraries built before #55 / #56. A re-ingest does not do it
+    (content-addressed dedup skips files already stored), so this rewrites the stored
+    records in place:
+
+    * ``foley restamp-rights --apply`` — every sound an older foley stamped
+      ``user-owned`` without being told becomes ``unknown`` (fail closed);
+    * ``foley restamp-rights --license user-owned --apply`` — the same sounds, but you
+      assert that you own them (now recorded with a ``verified_at`` timestamp);
+    * ``foley restamp-rights --select legacy-elevenlabs --license elevenlabs-paid-plan
+      --apply`` — ElevenLabs generations made before the plan was explicit.
+
+    Args:
+        library: The :class:`~foley.index.library.SoundLibrary` (default: the default one).
+        license: The ``license_id`` to stamp (a ``LICENSE_FLAGS`` row; default
+            ``'unknown'``).
+        ids: Re-stamp exactly these sound ids (overrides ``where`` / ``select``).
+        where: A predicate ``LicenseRecord -> bool`` choosing the records (overrides
+            ``select``).
+        select: A :data:`LEGACY_SELECTORS` name (default ``'legacy-user-owned'``).
+        apply: Write the change. ``False`` (default) only reports what would change.
+
+    Returns:
+        The ids that were (or, in a dry run, would be) re-stamped.
+
+    Raises:
+        ValueError: If ``license`` or ``select`` is unknown.
+    """
+    from .library import default_library
+
+    if license not in LICENSE_FLAGS:
+        raise ValueError(f"unknown license id {license!r}")
+    if where is None:
+        if select not in LEGACY_SELECTORS:
+            raise ValueError(f"select must be one of {sorted(LEGACY_SELECTORS)}")
+        where = LEGACY_SELECTORS[select]
+    lib = library if library is not None else default_library()
+    wanted = set(ids) if ids else None
+    changed: "list[str]" = []
+    for sid in list(lib.meta):
+        rec = lib.meta[sid]
+        if (sid not in wanted) if wanted is not None else not where(rec.license):
+            continue
+        changed.append(sid)
+        if apply:
+            rec.license = _restamped(rec.license, license)
+            lib.meta[sid] = rec
+    return changed

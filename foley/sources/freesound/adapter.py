@@ -33,7 +33,7 @@ import os
 from typing import Optional
 
 from ...base import Candidate, CandidateOrigin, SoundRecord
-from ...licensing import license_id_from_cc_url
+from ...licensing import ai_scope_from_gen_ai_preference, license_id_from_cc_url
 from ..base import api_license
 from ..http import Transport, requests_transport
 from .config import SOURCE_CONFIG
@@ -257,11 +257,13 @@ class FreesoundAdapter:
             return None  # fail-closed: never index a non-accepted-license sound
 
         overrides = {"cache_bytes_ok": False}  # TOS: by-reference even for CC0
-        # Honor the uploader's AI-training preference: CLAP-embedding + persisting
-        # IS a form of training, so a 'no-gen-ai' sound is marked ai_training_ok
-        # False and then refused by ingest_one's fail-closed gate.
-        if item.get("gen_ai_preference") == "no-gen-ai":
-            overrides["ai_training_ok"] = False
+        # Honor the uploader's AI-use preference (all four values, #69): CLAP-
+        # embedding + persisting IS AI use, so ingest_one's gate reads the scope
+        # (ai_use_permitted) and 'no-gen-ai' also clears ai_training_ok.
+        preference = item.get("gen_ai_preference")
+        ai_ok, ai_scope = ai_scope_from_gen_ai_preference(preference)
+        if ai_ok is not None:
+            overrides["ai_training_ok"] = ai_ok
 
         page = item.get("url") or f"https://freesound.org/s/{raw_id}/"
         lic = api_license(
@@ -274,6 +276,8 @@ class FreesoundAdapter:
             creator_name=item.get("username"),
             overrides=overrides,
         )
+        lic.gen_ai_preference = preference
+        lic.ai_training_scope = ai_scope
         record = SoundRecord(
             id=f"freesound:{raw_id}",  # short, case-stable, no URL
             uri=page,

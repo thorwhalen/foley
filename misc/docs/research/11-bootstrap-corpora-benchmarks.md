@@ -39,7 +39,7 @@ first data those flags must gate.
 | Corpus | Size | Contents | License (key constraints) | `redistribute` / `ai_training` | How to obtain |
 |---|---|---|---|---|---|
 | **FSD50K** | 51,197 clips / 108.3 h / ~30 GB WAV | Freesound clips, 200 AudioSet-ontology classes, multi-label | Overall **CC-BY 4.0**; per-clip CC0/BY/BY-NC/Sampling+ (85 % CC0+BY) [6][7] | ✅ (per-clip) / ✅ (research; filter NC) | Zenodo 4060432 (6 zips) / HF mirror [6] |
-| **Clotho v2** | 4,981 clips / 15–30 s / ~24,905 captions | Freesound clips **+ 5 captions each**; **ships audio** | Audio: redistributable Freesound subset; captions **CC-BY 4.0** [8][9] | ✅ / ✅ | Zenodo (dev/val/eval zips) [9] |
+| **Clotho v2** | 4,981 clips / 15–30 s / ~24,905 captions | Freesound clips **+ 5 captions each**; **ships audio** | Audio: per-file Freesound licences (CC0 / CC BY 3.0 / CC BY-NC 3.0 / Sampling+); captions **Tampere University licence, non-commercial only** (*corrected 2026-10, #68; this row first said CC-BY 4.0*) [8][9] | ✅ / ✅ | Zenodo (dev/val/eval zips) [9] |
 | **Sonniss GameAudioGDC** | ~160–200 GB cumulative (2015–2024); e.g. 2023 ≈ 40 GB, 2024 ≈ 27.5 GB | Pro game-audio SFX, hi-res WAV, per-vendor folders | Royalty-free commercial; **no standalone resale**; **AI training expressly prohibited** [3][4][5] | ❌ / ❌ | sonniss.com/gameaudiogdc (HTTP + torrent + mirror) [3] |
 | **BBC Sound Effects** | 33,000+ (16,000 downloadable WAV) | Broadcast archive SFX | **RemArc = non-commercial** (personal/education/research) [23] | ❌ / ⚠️ | Web only (no bulk API) [23] |
 | **FoleySet** (2026) | 10,000 clips | Foley/action sounds, **2-level Foley taxonomy** | **CC-BY 4.0** [19] | ✅ / ✅ | arXiv 2606.25980 (CC resource) [19] |
@@ -346,8 +346,8 @@ and audio decode, with the index itself effectively free.
 Assemble the day-one library in three concentric rings, gated by the `LicenseRecord` flags:
 
 **Ring 0 — ship inside foley (tiny, redistributable, self-testing):**
-- **Clotho-eval** (1,045 clips + 5,225 captions, audio on disk, CC-BY captions / redistributable
-  Freesound audio). Doubles as the built-in **retrieval regression fixture**. ~1–2 GB. [8][9]
+- **Clotho-eval** (1,045 clips + 5,225 captions, audio on disk; audio under per-file Freesound
+  licences, captions non-commercial only — corrected 2026-10, #68). Doubles as the built-in **retrieval regression fixture**. ~1–2 GB. [8][9]
 - **FoleySet** (10 k, **CC-BY 4.0**, Foley-native 2-level taxonomy) — the on-mission core;
   attribution-only, redistributable, AI-ok. ~2–5 GB. [19]
 
@@ -411,7 +411,7 @@ cheaply-built narrative-context golden set.
 6. [FSD50K — Zenodo record 4060432 (files, splits, per-clip license counts)](https://zenodo.org/records/4060432)
 7. [FSD50K: An Open Dataset of Human-Labeled Sound Events — Fonseca et al., arXiv:2010.00475](https://arxiv.org/abs/2010.00475)
 8. [Clotho: an Audio Captioning Dataset — Drossos, Lipping, Virtanen, ICASSP 2020 (arXiv:1910.09387)](https://arxiv.org/abs/1910.09387)
-9. [Clotho v2 — Zenodo record (dev/val/eval audio + captions, CC-BY)](https://zenodo.org/records/4783391)
+9. [Clotho v2 — Zenodo record (dev/val/eval audio with per-file licences; captions under a non-commercial Tampere University licence)](https://zenodo.org/records/4783391)
 10. [DCASE 2024 Task 6b — Language-Based Audio Retrieval (Clotho, metrics R@k/mAP)](https://dcase.community/challenge2024/task-language-based-audio-retrieval)
 11. [DCASE 2022 Task 6a — Automated Audio Captioning (Clotho v2 splits)](https://dcase.community/challenge2022/task-automatic-audio-captioning)
 12. [AudioCaps: Generating Captions for Audios in The Wild — Kim et al., NAACL 2019](https://aclanthology.org/N19-1011/)
