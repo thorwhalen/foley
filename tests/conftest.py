@@ -75,6 +75,7 @@ _FOLEY_POSTURE_ENV = (
     "FOLEY_LLM_API_KEY",
     "FOLEY_OFFLINE",
     "FOLEY_ELEVENLABS_PLAN",
+    "FOLEY_APPROVE_UNKNOWN_COST",
 )
 
 #: Marker for the (few) tests that trip the network guard on purpose.
@@ -153,3 +154,14 @@ def _isolate_from_paid_apis(monkeypatch, request, _provider_key_env_vars):
     yield
     if trips and request.node.get_closest_marker(NETWORK_TRIP_MARKER) is None:
         pytest.fail(f"test attempted network connection(s): {trips}")
+
+
+@pytest.fixture(autouse=True)
+def _in_memory_generations_cache(monkeypatch):
+    """Keep paid-generation caching (#59) off the developer's real data dir."""
+    from foley.sources import _dispatch
+    from foley.stores import GenerationsCache
+
+    cache = GenerationsCache(audio={}, requests={})
+    monkeypatch.setattr(_dispatch, "_default_cache", lambda: cache)
+    return cache

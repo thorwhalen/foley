@@ -227,14 +227,16 @@ def _generate_and_reverify(
     Handles the ``skipped_dup`` byte-twin (a bare ``Candidate`` with event/verdict/​license
     unset — still gated + verified here, never assumed pre-vetted).
     """
+    from ..cost import BudgetExceeded
     from ..runtime import EgressBlocked
     from ..sources import GenerationError  # lazy: keeps import foley dol-only
 
     try:
         gc = generate_sound(event.query, backend=backend, library=library)
-    except (GenerationError, EgressBlocked):
-        # Refused, failed, or an external backend under offline(): skip generation;
-        # the caller falls back to the best verified retrieval.
+    except (GenerationError, EgressBlocked, BudgetExceeded):
+        # Refused, failed, an external backend under offline(), or a paid call the
+        # run's budget does not allow (nothing was called): skip generation; the
+        # caller falls back to the best verified retrieval.
         return None
     gc.event = event  # (origin is already 'generated' from foley.generate)
     if not gate_candidates([gc], intended_use):
@@ -304,7 +306,11 @@ def find(
         tau_clap: The ``clap``-rung gate threshold.
         max_refine_loops: Max refine→re-retrieve passes per event (also the default
             :class:`Budget`).
-        budget: An explicit :class:`Budget` (overrides ``max_refine_loops``).
+        budget: An explicit :class:`Budget` (overrides ``max_refine_loops``). It is
+            also the run's spend cap: ``Budget(max_usd=...)`` (default $1) bounds
+            every paid call the run makes — generations and paid LLM rungs —
+            cumulatively, and a call of unknown cost needs
+            ``Budget(approve_unknown_cost=True)`` (#57).
         library: Target :class:`SoundLibrary` (default: the process-wide default).
         decomposer / judge / refiner: Injected DI seams
             (:class:`~foley.agent.protocols.Decomposer` / ``Judge`` / ``Refiner``);
@@ -361,6 +367,47 @@ def _find_stream(
     """The streaming body of :func:`find` (``find(stream=False)`` == ``list(_find_stream(...))``)."""
     use = intended_use_for(intended_use)
     budget = budget or Budget(max_refine_loops=max_refine_loops)
+    from ..cost import spend_scope
+
+    with spend_scope(budget):
+        yield from _find_events(
+            context,
+            use=use,
+            budget=budget,
+            max_events=max_events,
+            seconds=seconds,
+            backend=backend,
+            verify=verify,
+            k=k,
+            tau_retrieve=tau_retrieve,
+            tau_clap=tau_clap,
+            library=library,
+            decomposer=decomposer,
+            judge=judge,
+            refiner=refiner,
+            llm=llm,
+        )
+
+
+def _find_events(
+    context,
+    *,
+    use,
+    budget,
+    max_events,
+    seconds,
+    backend,
+    verify,
+    k,
+    tau_retrieve,
+    tau_clap,
+    library,
+    decomposer,
+    judge,
+    refiner,
+    llm,
+) -> "Iterator[Candidate]":
+    """The per-event loop of :func:`find`, run inside the run's spend scope."""
     library = library if library is not None else default_library()
     decomposer = decomposer or _default_decomposer(llm)
     max_level = VerifyLevel(verify)

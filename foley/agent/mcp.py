@@ -358,10 +358,15 @@ def foley_generate(
     # rights-blocked, safety-refused, or an empty result). Surface both as JSON so the
     # agent gets the real generated id on success — and a structured error, never an
     # escaping exception, on failure — honoring the module's JSON-in/JSON-out contract.
+    from ..cost import BudgetExceeded
+    from ..sources._dispatch import UnsupportedParameter
+    from ..sources.base import SourceConfigurationError
+
     try:
         cand = generate(prompt, backend=backend, library=_lib())
-    except EgressBlocked as exc:
-        return {"ok": False, "error": str(exc), "backend": backend}
+    except (EgressBlocked, BudgetExceeded, SourceConfigurationError, UnsupportedParameter) as exc:
+        # Refused before any provider call: say why, as JSON.
+        return {"ok": False, "status": "refused", "error": str(exc), "backend": backend}
     except GenerationError as exc:
         return {
             "ok": False,

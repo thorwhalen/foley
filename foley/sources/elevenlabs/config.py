@@ -90,6 +90,14 @@ SOURCE_CONFIG = {
         "cache_bytes_ok": True,
     },
     "commercial_ok": None,  # decided by the plan's LICENSE_FLAGS row
+    # falaw-style price (foley.cost.estimate_call): $0.12 per minute of audio. With the
+    # duration left to the model, the estimate is the 30 s maximum (an upper bound).
+    "pricing": {
+        "unit": "per_second",
+        "amount_usd": 0.002,
+        "source": "ElevenLabs pricing via foley report 13 [4]",
+        "seen": "2026-10-03",
+    },
     "rate": {"per_min": 60},
     "data_egress": "external",  # for offline/sensitive-narration mode (report 12)
 }

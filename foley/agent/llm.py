@@ -39,6 +39,8 @@ __all__ = [
     "make_rung",
     "llm_egress",
     "require_llm_egress",
+    "llm_call_estimate",
+    "guard_llm_call",
     "is_loopback_host",
 ]
 
@@ -103,6 +105,33 @@ def require_llm_egress(provider: str) -> None:
     from ..runtime import require_egress
 
     require_egress(llm_egress(provider), what=f"LLM provider {provider!r}")
+
+
+def llm_call_estimate(provider: str) -> Optional[float]:
+    """The USD cost of one rung call: ``0.0`` for the fake and an on-device endpoint.
+
+    Anthropic's (and a remote endpoint's) per-call cost depends on tokens foley does not
+    know in advance, so it is ``None`` — unknown — and needs the run's approval (#57).
+    """
+    if provider == "fake" or (provider == "local" and _local_endpoint_is_loopback()):
+        return 0.0
+    return None
+
+
+def guard_llm_call(provider: str) -> None:
+    """The call-time check every real rung runs before calling its model.
+
+    Egress (:func:`require_llm_egress`), then cost: the call is authorized against the
+    active run's budget (:func:`foley.cost.authorize`) and charged. An unknown cost
+    raises :class:`~foley.cost.CostApprovalRequired` unless the run approves it.
+    """
+    from ..cost import authorize, charge
+
+    require_llm_egress(provider)
+    estimate = llm_call_estimate(provider)
+    if estimate != 0.0:
+        authorize(estimate, what=f"an LLM call via {provider!r}")
+    charge(estimate)
 
 
 def resolve_llm(llm: Optional[str] = None, *, implicit_local: bool = True) -> str:

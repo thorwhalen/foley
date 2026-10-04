@@ -70,6 +70,14 @@ SOURCE_CONFIG = {
         "cache_bytes_ok": False,  # TOS: never cache Freesound bytes, even CC0
         "accepted_license_ids": ["CC0-1.0"],  # #5 allowlist; generalize later
     },
+    # The token-tier API is free to call (commercial use of the API is negotiated
+    # separately with UPF; see report 14 and the maintainer's open question).
+    "pricing": {
+        "unit": "free",
+        "amount_usd": 0.0,
+        "source": "Freesound APIv2 token tier",
+        "seen": "2026-10-03",
+    },
     "rate": {"per_min": 60, "per_day": 2000},  # 429 -> back off, read JSON `detail`
     "data_egress": "external",  # for offline/sensitive-narration mode (report 12)
 }

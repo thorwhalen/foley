@@ -152,12 +152,13 @@ def _el(plan=None, calls=None):
 
 
 def test_an_unknown_elevenlabs_plan_refuses_before_any_paid_call(library):
+    from foley.sources.base import SourceConfigurationError
+
     calls = []
-    with pytest.raises(foley.GenerationError) as exc:
+    with pytest.raises(SourceConfigurationError, match="FOLEY_ELEVENLABS_PLAN"):
         foley.generate("a door creaks", backend="elevenlabs", adapter=_el(None, calls),
                        library=library)
     assert calls == []
-    assert "FOLEY_ELEVENLABS_PLAN" in repr(exc.value.report.results[0].error)
 
 
 def test_the_elevenlabs_plan_decides_the_rights(monkeypatch):

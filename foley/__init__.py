@@ -347,6 +347,7 @@ __all__ = [
     "SoundLibrary",
     "default_library",
     "search",
+    "estimate",
     "similar",
     "Embedder",
     "ClapEmbedder",
@@ -655,6 +656,9 @@ def generate(
     on_flagged: str = "refuse",
     watermarker=None,
     provenance_store=None,
+    on_unsupported=None,
+    reuse_cached: bool = True,
+    budget=None,
     **affordances,
 ):
     """Generate a sound effect for ``prompt`` and add it to the library (by-value).
@@ -685,35 +689,56 @@ def generate(
         watermarker: An injected watermarker (the DI seam; tests pass a fake).
         provenance_store: A ``MutableMapping`` for content-credential sidecars
             (default: :func:`foley.stores.make_provenance_store`).
+        on_unsupported: A parameter the backend cannot honour: ``None`` (default)
+            raises for a meaning-carrying one (``seed``, ``negative_prompt``) and drops
+            the rest with a note; ``'warn'`` drops everything with a note + warning;
+            ``'note'`` silently-but-recorded; ``'raise'`` raises for any.
+        reuse_cached: Serve an identical paid request from the generations cache
+            (default ``True``): a paid sound is never paid for twice (#59).
+        budget: A :class:`Budget` for this call (default: the active run's, else a
+            fresh one — a $1 cap; an unknown cost needs approval) (#57).
         **affordances: Unified generation affordances (``duration``,
             ``prompt_influence``, ``negative_prompt``, ``steps``, ``seed``, ``loop``,
-            ``output_format`` — see :data:`GENERATION_AFFORDANCES`); a backend
-            warns-and-drops the ones it does not support.
+            ``output_format`` — see :data:`GENERATION_AFFORDANCES`).
 
     Returns:
         The stored :class:`Candidate` (``origin=generated``) — its ``sound`` is the
-        canonical, by-value :class:`SoundRecord` (a content-hash id).
+        canonical, by-value :class:`SoundRecord` (a content-hash id); its ``notes``
+        list every dropped, clamped or substituted parameter, and
+        ``cost_estimate_usd`` / ``cost_actual_usd`` what it cost (``None`` = unknown).
 
     Raises:
         SafetyRefusal: If the prompt trips a safety gate and ``on_flagged='refuse'``
             (a :class:`GenerationError` subclass — ``TrademarkRefusal`` /
             ``RecognizableVoiceRefusal``).
         GenerationError: If the backend yields no stored sound (QC-quarantined,
-            rights-blocked, or a synthesis/ingest error). The exception carries the
-            full ``report`` and terminal ``status`` so callers can react distinctly.
+            rights-blocked, or a synthesis/ingest error). The message carries the root
+            cause and the exception is chained to it; it also carries the full
+            ``report`` and terminal ``status`` so callers can react distinctly.
+        SourceConfigurationError: If the backend is not configured (a missing key or
+            plan) — the message names the env var and where to get the key.
+        UnsupportedParameter: For a meaning-carrying parameter the backend cannot
+            honour (see ``on_unsupported``).
+        BudgetExceeded / CostApprovalRequired: Before a paid call the budget refuses.
+        EgressBlocked: For an external backend under :func:`offline`.
     """
-    report = _generate_backend(
-        prompt,
-        backend=backend,
-        library=library,
-        store=store,
-        adapter=adapter,
-        watermark=watermark,
-        on_flagged=on_flagged,
-        watermarker=watermarker,
-        provenance_store=provenance_store,
-        **affordances,
-    )
+    from .cost import spend_scope
+
+    with spend_scope(budget):
+        report = _generate_backend(
+            prompt,
+            backend=backend,
+            library=library,
+            store=store,
+            adapter=adapter,
+            watermark=watermark,
+            on_flagged=on_flagged,
+            watermarker=watermarker,
+            provenance_store=provenance_store,
+            on_unsupported=on_unsupported,
+            reuse_cached=reuse_cached,
+            **affordances,
+        )
     results = report.results
     res = results[0] if results else None
     if res is None:
@@ -721,17 +746,27 @@ def generate(
             f"generation via {backend!r} produced no result", report=report, status=None
         )
     if res.status in ("pass", "warn"):
-        return candidate_of(res)
+        return _with_call_facts(candidate_of(res), res)
     if res.status == "skipped_dup":
         # A byte-identical regeneration is already in the library — return it (the
         # desirable flywheel behavior: never store byte-twins).
         lib = library if library is not None else default_library()
-        return Candidate(sound=lib[res.id], origin=CandidateOrigin.generated)
+        cand = Candidate(sound=lib[res.id], origin=CandidateOrigin.generated)
+        return _with_call_facts(cand, res)
+    cause = res.error or "; ".join(res.notes) or res.status
     raise GenerationError(
-        f"generation via {backend!r} yielded no stored sound ({res.status})",
+        f"generation via {backend!r} yielded no stored sound ({res.status}): {cause}",
         report=report,
         status=res.status,
-    )
+    ) from report.exception
+
+
+def _with_call_facts(candidate, result):
+    """Copy a generation's notes and cost from its ingest result onto the candidate."""
+    candidate.notes = list(result.notes)
+    candidate.cost_estimate_usd = result.cost_estimate_usd
+    candidate.cost_actual_usd = result.cost_actual_usd
+    return candidate
 
 
 def ingest(
@@ -780,6 +815,57 @@ def ingest(
         recursive=recursive,
         do_qc=qc,
         **kw,
+    )
+
+
+def estimate(verb: str, **kwargs):
+    """What a call would cost in USD before making it — ``None`` when it cannot be known (#57).
+
+    ``None`` is never "free": it means the price is unknown (no pricing declared, or a
+    paid LLM whose token use is not known in advance), and such a call needs the run's
+    approval (``Budget(approve_unknown_cost=True)``).
+
+    Args:
+        verb: ``'generate'`` (``backend=``, plus the generation affordances, e.g.
+            ``duration``); ``'find'`` / ``'score'`` (an upper bound: ``max_events``
+            generations through ``backend`` plus the LLM rungs of ``llm``);
+            ``'search'`` / ``'similar'`` / ``'ingest'`` (local: ``0.0``);
+            ``'add_from'`` (``source=``).
+        **kwargs: The same keywords the verb takes.
+
+    Raises:
+        ValueError: For an unknown verb.
+        KeyError: For an unknown backend / source.
+    """
+    from .agent.llm import llm_call_estimate, resolve_llm
+    from .cost import estimate_call
+    from .sources.registry import get_source as _get
+
+    def _config(name):
+        from .sources.registry import SOURCE_REGISTRY, discover_sources
+
+        discover_sources()
+        if name not in SOURCE_REGISTRY:
+            _get(name)  # raises the informative KeyError
+        return SOURCE_REGISTRY[name]["config"]
+
+    if verb in ("search", "similar", "ingest"):
+        return 0.0
+    if verb == "add_from":
+        return estimate_call(_config(kwargs["source"]))
+    if verb == "generate":
+        backend = kwargs.pop("backend", None) or "stable_audio"
+        return estimate_call(_config(backend), **kwargs)
+    if verb in ("find", "score"):
+        backend = kwargs.get("backend") or "auto"
+        backend = "stable_audio" if backend == "auto" else backend
+        per_gen = estimate_call(_config(backend), **{"duration": kwargs.get("duration")})
+        llm_cost = llm_call_estimate(resolve_llm(kwargs.get("llm")))
+        if per_gen is None or llm_cost is None:
+            return None
+        return float(kwargs.get("max_events", 6)) * per_gen + llm_cost
+    raise ValueError(
+        f"estimate() knows generate, find, score, search, similar, ingest, add_from; got {verb!r}"
     )
 
 

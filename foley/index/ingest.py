@@ -85,6 +85,8 @@ class IngestResult(SerializableMixin):
     qc: Optional[dict] = None
     notes: list = field(default_factory=list)
     error: Optional[str] = None
+    cost_estimate_usd: Optional[float] = None  # a paid generation's estimate (#57)
+    cost_actual_usd: Optional[float] = None  # None = unknown; 0.0 = served from cache
 
 
 @dataclass
@@ -93,6 +95,11 @@ class IngestReport(SerializableMixin):
 
     root: str
     results: "list[IngestResult]" = field(default_factory=list)
+    notes: list = field(default_factory=list)  # run-level notes (dropped search params)
+
+    #: The exception behind the last ``error`` result, kept so a raising façade can
+    #: chain it (``raise ... from``); a plain attribute, never serialized.
+    exception = None
 
     def record(self, result: IngestResult) -> None:
         """Append one :class:`IngestResult`."""

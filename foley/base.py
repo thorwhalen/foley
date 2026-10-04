@@ -123,6 +123,9 @@ class Affordance:
         description: Human-readable description.
         default: Default value (``None`` = no default / required).
         stage: ``'query'`` (search/find/filter) or ``'generate'``.
+        carries_meaning: Dropping it would change what the caller gets (a seed they
+            will rely on to reproduce, content they asked to exclude), so a backend
+            that cannot honour it raises instead of dropping it (#53).
     """
 
     name: str
@@ -130,6 +133,7 @@ class Affordance:
     description: str
     default: Any = None
     stage: str = "query"
+    carries_meaning: bool = False
 
 
 #: Unified query-stage parameters (search / find / filter surface).
@@ -162,11 +166,15 @@ GENERATION_AFFORDANCES: dict[str, Affordance] = {
         "prompt_influence", float, "0..1 unified guidance", 0.3, "generate"
     ),
     "negative_prompt": Affordance(
-        "negative_prompt", str, "Content to exclude", stage="generate"
+        "negative_prompt", str, "Content to exclude", stage="generate", carries_meaning=True
     ),
     "steps": Affordance("steps", int, "Diffusion/flow steps", stage="generate"),
     "seed": Affordance(
-        "seed", int, "Reproducibility (capture in provenance)", stage="generate"
+        "seed",
+        int,
+        "Reproducibility (capture in provenance)",
+        stage="generate",
+        carries_meaning=True,
     ),
     "loop": Affordance("loop", bool, "Seamless-loopable clip", False, "generate"),
     "output_format": Affordance(
@@ -455,6 +463,11 @@ class Candidate(SerializableMixin):
     verdict: Optional[Verdict] = None
     license_ok: Optional[bool] = None  # result of keep()
     preview_uri: Optional[str] = None
+    # honesty about the call that produced it (#53, #57): every dropped / clamped /
+    # substituted parameter, and the estimated vs actual cost (None = unknown)
+    notes: list = field(default_factory=list)
+    cost_estimate_usd: Optional[float] = None
+    cost_actual_usd: Optional[float] = None
 
 
 # ---------------------------------------------------------------------------

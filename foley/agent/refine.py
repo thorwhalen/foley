@@ -101,9 +101,9 @@ class AnthropicRefiner:
         """Call Claude for ``n`` paraphrases; the original ``query`` is always first."""
         import json
 
-        from .llm import require_llm_egress
+        from .llm import guard_llm_call
 
-        require_llm_egress("anthropic")  # call-time: holds for an injected rung too
+        guard_llm_call("anthropic")  # call-time egress + cost: holds for an injected rung
         client = self._client
         if client is None:
             import anthropic  # lazy — only on the real path

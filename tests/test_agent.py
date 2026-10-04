@@ -550,8 +550,9 @@ class _FakeAnthropic:
         )
 
 
-def test_anthropic_decomposer_offline():
+def test_anthropic_decomposer_offline(monkeypatch):
     """AnthropicDecomposer round-trips a canned payload and records the GenAI span — no network."""
+    monkeypatch.setenv("FOLEY_APPROVE_UNKNOWN_COST", "1")  # a real rung: cost unknown (#57)
     import json
 
     from foley.obs.trace import GENAI
@@ -582,8 +583,9 @@ def test_anthropic_decomposer_offline():
     assert span.attributes.get(GENAI["finish_reasons"]) == ["end_turn"]  # semconv: string[]
 
 
-def test_anthropic_judge_offline():
+def test_anthropic_judge_offline(monkeypatch):
     """AnthropicJudge round-trips a canned verdict and uses the right model — no network."""
+    monkeypatch.setenv("FOLEY_APPROVE_UNKNOWN_COST", "1")  # a real rung: cost unknown (#57)
     import json
 
     from foley.agent.verify import AnthropicJudge
@@ -599,8 +601,9 @@ def test_anthropic_judge_offline():
     assert kw["thinking"] == {"type": "adaptive"} and "output_config" in kw
 
 
-def test_anthropic_refiner_offline():
+def test_anthropic_refiner_offline(monkeypatch):
     """AnthropicRefiner round-trips a canned paraphrase list, query-first + deduped."""
+    monkeypatch.setenv("FOLEY_APPROVE_UNKNOWN_COST", "1")  # a real rung: cost unknown (#57)
     import json
 
     from foley.agent.refine import AnthropicRefiner

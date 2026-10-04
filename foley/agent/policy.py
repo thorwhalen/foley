@@ -23,6 +23,12 @@ from enum import Enum
 from typing import Optional
 
 from ..base import Candidate, IntendedUse, SoundEvent
+from ..cost import (
+    APPROVE_UNKNOWN_COST_ENV,
+    DEFAULT_MAX_USD,
+    BudgetExceeded,
+    CostApprovalRequired,
+)
 from ..licensing import keep_sound
 
 
@@ -78,17 +84,70 @@ class Decision:
 
 @dataclass
 class Budget:
-    """Bounded-cost accounting for the per-event refine/generate loops.
+    """Bounded-cost accounting: per-event loop counts, and a cumulative dollar cap (#57).
 
-    Prevents unbounded cost on a hard event. The loop calls :meth:`refine_ok` /
-    :meth:`gen_ok` to test, then :meth:`spend_refine` / :meth:`spend_gen` to charge.
+    Two kinds of bound:
+
+    * **Per event** — ``max_refine_loops`` / ``max_generations``: the loop calls
+      :meth:`refine_ok` / :meth:`gen_ok` to test, then :meth:`spend_refine` /
+      :meth:`spend_gen` to charge; :meth:`reset` zeroes them at each event.
+    * **Per run, cumulative** — ``max_usd`` (default $1): every paid call (generation,
+      paid LLM rung) is checked with :meth:`authorize` before it is made and recorded with :meth:`charge`
+      after. :meth:`reset` never clears it, so the cap holds across the whole
+      ``find`` / ``score`` run. A call whose cost is unknown (estimate ``None``) is
+      refused unless ``approve_unknown_cost`` (or ``$FOLEY_APPROVE_UNKNOWN_COST=1``).
     """
 
     max_refine_loops: int = 1
     max_generations: int = 1
     allow_generate: bool = True
+    max_usd: float = DEFAULT_MAX_USD
+    approve_unknown_cost: "Optional[bool]" = None  # None -> $FOLEY_APPROVE_UNKNOWN_COST
     _refines: int = 0
     _gens: int = 0
+    _spent_usd: float = 0.0
+    _unknown_calls: int = 0
+
+    @property
+    def spent_usd(self) -> float:
+        """Dollars charged so far this run (calls of unknown cost count as 0 here)."""
+        return self._spent_usd
+
+    def _approves_unknown(self) -> bool:
+        if self.approve_unknown_cost is not None:
+            return bool(self.approve_unknown_cost)
+        import os
+
+        return os.environ.get(APPROVE_UNKNOWN_COST_ENV, "").lower() in ("1", "true", "yes")
+
+    def authorize(self, estimate_usd: "Optional[float]", *, what: str) -> None:
+        """Refuse a paid call before it is made if this run cannot afford it.
+
+        Raises:
+            CostApprovalRequired: If the cost is unknown and not approved.
+            BudgetExceeded: If spend + ``estimate_usd`` would exceed ``max_usd``.
+        """
+        if estimate_usd is None:
+            if not self._approves_unknown():
+                raise CostApprovalRequired(
+                    f"{what}: its cost is unknown, so it needs approval. Pass "
+                    "budget=Budget(approve_unknown_cost=True) or set "
+                    f"${APPROVE_UNKNOWN_COST_ENV}=1."
+                )
+            return
+        if self._spent_usd + estimate_usd > self.max_usd + 1e-12:
+            raise BudgetExceeded(
+                f"{what} would cost ~${estimate_usd:.4f}, taking this run to "
+                f"${self._spent_usd + estimate_usd:.4f}, over its ${self.max_usd:.2f} cap "
+                "(Budget.max_usd). Nothing was called."
+            )
+
+    def charge(self, usd: "Optional[float]") -> None:
+        """Record a call's cost (``None`` = unknown: counted, not summed)."""
+        if usd is None:
+            self._unknown_calls += 1
+        else:
+            self._spent_usd += float(usd)
 
     def refine_ok(self) -> bool:
         """Whether another refine→re-retrieve pass is within budget."""

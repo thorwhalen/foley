@@ -42,7 +42,9 @@ from typing import Optional
 
 from ..base import Candidate, CandidateOrigin
 from ..index.ingest import IngestReport, IngestResult, ingest_one
-from .registry import get_source, require_source_egress
+from ._dispatch import plan_generation, run_generation
+from .base import SourceConfigurationError
+from .registry import get_source
 
 #: The consent note stamped on a stored generation whose license forbids AI
 #: training (mirrors :func:`foley.bootstrap.bootstrap`'s Ring-2 acknowledgement).
@@ -123,6 +125,9 @@ def _generate(
     on_flagged: str = "refuse",
     watermarker=None,
     provenance_store=None,
+    on_unsupported: Optional[str] = None,
+    reuse_cached: bool = True,
+    generations_cache=None,
     **affordances,
 ) -> IngestReport:
     """Generate a sound via ``backend`` and ingest it (by-value) into ``library``.
@@ -169,11 +174,16 @@ def _generate(
             (the DI seam; wins over auto-detect — tests pass a fake).
         provenance_store: A ``MutableMapping[str, dict]`` for content-credential
             sidecars (default: :func:`foley.stores.make_provenance_store`).
-        **affordances: Unified generation affordances forwarded to the adapter's
-            ``generate`` (``duration``, ``prompt_influence``, ``negative_prompt``,
-            ``steps``, ``seed``, ``loop``, ``output_format`` — see
-            :data:`foley.base.GENERATION_AFFORDANCES`); unsupported ones are
-            warn-and-dropped per the source's ``on_unsupported_param``.
+        on_unsupported: What to do with a parameter the backend cannot honour —
+            ``'raise'`` | ``'warn'`` | ``'note'``; ``None`` (default) raises for a
+            meaning-carrying one (``seed``, ``negative_prompt``) and drops the rest
+            with a note. See :func:`foley.sources._dispatch.translate_affordances`.
+        reuse_cached: Serve an identical paid request from the generations cache
+            instead of paying again (default ``True``; #59).
+        generations_cache: A :class:`~foley.stores.GenerationsCache` (default: local).
+        **affordances: Unified generation affordances (``duration``,
+            ``prompt_influence``, ``negative_prompt``, ``steps``, ``seed``, ``loop``,
+            ``output_format`` — see :data:`foley.base.GENERATION_AFFORDANCES`).
 
     Returns:
         An :class:`~foley.index.ingest.IngestReport` — inspect ``.ingested`` for the
@@ -214,13 +224,25 @@ def _generate(
     wm = disclosure.resolve_watermarker(watermark, watermarker)
 
     lib = library if library is not None else default_library()
-    if adapter is not None:
-        require_source_egress(backend, getattr(adapter, "config", None))
     gen = adapter if adapter is not None else get_source(backend)["adapter"]
 
+    # Everything that can refuse the call — offline egress, an unsupported
+    # meaning-carrying parameter, the run's cost cap, a missing key or plan — is
+    # decided here, BEFORE any provider is called, and raises (#53 #57 #64). A paid
+    # request seen before is served from the generations cache (#59).
+    plan = plan_generation(
+        backend,
+        prompt,
+        adapter=gen,
+        on_unsupported=on_unsupported,
+        cache=generations_cache,
+        reuse_cached=reuse_cached,
+        **affordances,
+    )
+
     report = IngestReport(root=f"{backend}:{prompt}")
-    # A synthesis failure (auth / rate-limit / model load / bad response) yields an
-    # inspectable report with one error entry, never an unhandled exception.
+    # A synthesis failure (rate-limit / model load / bad response) yields an
+    # inspectable report with one error entry; a configuration error propagates.
     try:
         from ..obs.recorder import current_run
         from ..obs.trace import GENAI
@@ -235,11 +257,16 @@ def _generate(
                 GENAI["request_model"]: backend,
             },
         ):
-            clip = gen.generate(prompt, **affordances)
+            clip = run_generation(plan, gen, cache=generations_cache)
+    except SourceConfigurationError:
+        raise
     except Exception as exc:
         report.record(
-            IngestResult(id=f"{backend}:generate", status="error", error=repr(exc))
+            IngestResult(
+                id=f"{backend}:generate", status="error", error=f"{type(exc).__name__}: {exc}"
+            )
         )
+        report.exception = exc
         return report
 
     lic = clip.candidate.sound.license
@@ -310,8 +337,14 @@ def _generate(
         )
     except Exception as exc:
         report.record(
-            IngestResult(id=f"{backend}:ingest", status="error", error=repr(exc))
+            IngestResult(
+                id=f"{backend}:ingest",
+                status="error",
+                error=f"{type(exc).__name__}: {exc}",
+                notes=list(clip.notes),  # incl. the generations-cache key: bytes kept
+            )
         )
+        report.exception = exc
         return report
 
     # Write the content-credential sidecar ONLY for a freshly stored clip — a
@@ -324,6 +357,8 @@ def _generate(
     # flag, watermark-skip) in the run report.
     if clip.notes:
         res.notes.extend(clip.notes)
+    res.cost_estimate_usd = clip.candidate.cost_estimate_usd
+    res.cost_actual_usd = clip.candidate.cost_actual_usd
     # Record the operator-consent acknowledgement on a stored generation whose
     # license forbids AI training (mirrors bootstrap's Ring-2 note). ai_training_ok
     # stays False on the record — keep() still rejects it for will_train uses.
@@ -344,6 +379,9 @@ _GENERATE_KNOWN = frozenset(
         "on_flagged",
         "watermarker",
         "provenance_store",
+        "on_unsupported",
+        "reuse_cached",
+        "generations_cache",
     }
 )
 
