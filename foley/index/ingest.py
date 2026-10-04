@@ -445,7 +445,9 @@ def _ingest_one(
     ai_ok = ai_use_permitted(
         lic,
         open_source_model=bool(getattr(lib.embedder, "open_source", False)),
-        commercial=DEFAULT_INTENDED_USE.commercial if commercial is None else commercial,
+        commercial=DEFAULT_INTENDED_USE.commercial
+        if commercial is None
+        else commercial,
     )
     # A local file ingested without a licence is the user's own disk: indexing it for
     # local search is not a use anyone has forbidden, so it proceeds — but keep()
@@ -764,9 +766,9 @@ def _declared_attribution(license_id: str) -> Optional[str]:
 
     discover_sources()
     for entry in SOURCE_REGISTRY.values():
-        line = ((entry["config"].get("license") or {}).get("plan_attribution") or {}).get(
-            license_id
-        )
+        line = (
+            (entry["config"].get("license") or {}).get("plan_attribution") or {}
+        ).get(license_id)
         if line:
             return line
     return None

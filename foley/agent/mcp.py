@@ -256,7 +256,9 @@ def foley_similar_to(
     hits = similar_to(sound_id, k=k, library=_lib())
     if commercial_ok:
         hits = [
-            c for c in hits if c.sound.license.commercial_ok and c.sound.license.rights_verified
+            c
+            for c in hits
+            if c.sound.license.commercial_ok and c.sound.license.rights_verified
         ]
     _session(session).cache_candidates(hits)
     return [_candidate_row(c) for c in hits]

@@ -84,7 +84,9 @@ SOURCE_CONFIG = {
         "plan_env_var": "FOLEY_ELEVENLABS_PLAN",
         "plans": ("elevenlabs-paid-plan", "elevenlabs-free-plan"),  # LICENSE_FLAGS rows
         # The credit line a free-plan sound carries (its row requires attribution).
-        "plan_attribution": {"elevenlabs-free-plan": "Created with ElevenLabs (elevenlabs.io)"},
+        "plan_attribution": {
+            "elevenlabs-free-plan": "Created with ElevenLabs (elevenlabs.io)"
+        },
         "cache_bytes_ok": True,
     },
     "commercial_ok": None,  # decided by the plan's LICENSE_FLAGS row

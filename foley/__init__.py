@@ -619,7 +619,11 @@ def similar(sound_id: str, *, k: int = 10, commercial_ok=None):
     hits = default_library().similar(sound_id, k=k)
     if not intended_use_for(commercial_ok=commercial_ok).commercial:
         return hits
-    kept = [c for c in hits if c.sound.license.commercial_ok and c.sound.license.rights_verified]
+    kept = [
+        c
+        for c in hits
+        if c.sound.license.commercial_ok and c.sound.license.rights_verified
+    ]
     if not kept:
         _warn_if_hidden(hits)
     return kept
@@ -767,7 +771,9 @@ def ingest(
     if isinstance(kw.get("license"), str):
         from .index.ingest import resolve_ingest_license
 
-        resolve_ingest_license(kw["license"])  # an unknown id fails before any file is read
+        resolve_ingest_license(
+            kw["license"]
+        )  # an unknown id fails before any file is read
     return ingest_folder(
         path,
         library=library if library is not None else default_library(),

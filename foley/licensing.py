@@ -125,7 +125,12 @@ CC_VERSIONS: "tuple[str, ...]" = ("2.0", "2.5", "3.0", "4.0")
 
 #: ``(family id prefix, URL path segment, display label, flags)`` for versioned CC families.
 _CC_VERSIONED: "tuple[tuple[str, str, str, LicenseFlags], ...]" = (
-    ("CC-BY", "by", "CC BY", LicenseFlags(True, True, True, True, True, True, True, None)),
+    (
+        "CC-BY",
+        "by",
+        "CC BY",
+        LicenseFlags(True, True, True, True, True, True, True, None),
+    ),
     (
         "CC-BY-NC",
         "by-nc",
@@ -220,24 +225,36 @@ def license_id_from_cc_url(url: Optional[str]) -> "tuple[str, bool]":
         return "unknown", False
     if "publicdomain" in toks or _has_phrase(tokens, "public", "domain"):
         if "zero" in toks:
-            return _only_known(tokens, {"publicdomain", "zero", "public", "domain"}, "CC0-1.0")
+            return _only_known(
+                tokens, {"publicdomain", "zero", "public", "domain"}, "CC0-1.0"
+            )
         return "PDM-1.0", False  # 'mark' or a bare public-domain claim
-    if "cc0" in toks or _has_phrase(tokens, "creative", "commons", "0") or _has_phrase(
-        tokens, "creative", "commons", "zero"
+    if (
+        "cc0" in toks
+        or _has_phrase(tokens, "creative", "commons", "0")
+        or _has_phrase(tokens, "creative", "commons", "zero")
     ):
         return _only_known(tokens, {"cc0", "0", "zero"}, "CC0-1.0")
     if toks & {"sampling", "sampling+"}:
-        return _only_known(tokens, {"sampling", "sampling+", "plus"}, "CC-Sampling+-1.0")
+        return _only_known(
+            tokens, {"sampling", "sampling+", "plus"}, "CC-Sampling+-1.0"
+        )
     if toks & _BY_TOKENS:
         nc = bool(toks & _NC_TOKENS)
         extra = {"non", "no", "use"} if nc else set()
         family = "CC-BY-NC" if nc else "CC-BY"
-        return _only_known(tokens, _BY_TOKENS | _NC_TOKENS | extra, family, versioned=True)
+        return _only_known(
+            tokens, _BY_TOKENS | _NC_TOKENS | extra, family, versioned=True
+        )
     return "unknown", False
 
 
 def _only_known(
-    tokens: "list[str]", allowed: "set[str]", license_id: str, *, versioned: bool = False
+    tokens: "list[str]",
+    allowed: "set[str]",
+    license_id: str,
+    *,
+    versioned: bool = False,
 ) -> "tuple[str, bool]":
     """``(license_id, True)`` if every token is accounted for, else fail closed.
 
@@ -247,7 +264,9 @@ def _only_known(
     """
     versions = [t for t in tokens if _CC_VERSION_RE.match(t)]
     leftover = [
-        t for t in tokens if t not in allowed and t not in _NEUTRAL_TOKENS and t not in versions
+        t
+        for t in tokens
+        if t not in allowed and t not in _NEUTRAL_TOKENS and t not in versions
     ]
     if leftover or len(set(versions)) > 1:
         return "unknown", False
@@ -497,7 +516,9 @@ def keep(record: LicenseRecord, intended_use: IntendedUse) -> bool:
     if intended_use.will_train and not ai_use_permitted(
         record, open_source_model=False, commercial=intended_use.commercial
     ):
-        return False  # the trainer's model is unknown here, so a scoped grant fails closed
+        return (
+            False  # the trainer's model is unknown here, so a scoped grant fails closed
+        )
     cap = record.revenue_cap_usd
     if cap is not None and intended_use.revenue_usd >= cap:
         return False
