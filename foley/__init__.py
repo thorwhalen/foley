@@ -592,24 +592,52 @@ def search(
     from .licensing import intended_use_for
 
     commercial = intended_use_for(commercial_ok=commercial_ok).commercial
-    return default_library().search(
-        query,
+    lib = default_library()
+    kw = dict(
         k=k,
         filters=filters,
-        commercial_ok=commercial or None,
         ucs_category=ucs_category,
         min_snr=min_snr,
         duration_range=duration_range,
         rerank=rerank,
     )
+    hits = lib.search(query, commercial_ok=commercial or None, **kw)
+    if commercial and not hits:
+        _warn_if_hidden(lib.search(query, commercial_ok=None, **kw))
+    return hits
 
 
-def similar(sound_id: str, *, k: int = 10):
+def similar(sound_id: str, *, k: int = 10, commercial_ok=None):
     """Find sounds similar to a stored sound (audio<->audio) in the default library.
 
-    See :meth:`foley.index.SoundLibrary.similar`.
+    See :meth:`foley.index.SoundLibrary.similar`. Like :func:`search`, only sounds
+    cleared for the default (commercial) intent are returned unless
+    ``commercial_ok=False``.
     """
-    return default_library().similar(sound_id, k=k)
+    from .licensing import intended_use_for
+
+    hits = default_library().similar(sound_id, k=k)
+    if not intended_use_for(commercial_ok=commercial_ok).commercial:
+        return hits
+    kept = [c for c in hits if c.sound.license.commercial_ok and c.sound.license.rights_verified]
+    if not kept:
+        _warn_if_hidden(hits)
+    return kept
+
+
+def _warn_if_hidden(hidden) -> None:
+    """Say why a commercial-default search came back empty when it did not have to."""
+    if hidden:
+        import warnings
+
+        warnings.warn(
+            f"{len(hidden)} match(es) hidden: not cleared for commercial use (unverified "
+            "or non-commercial rights — e.g. files ingested without a licence). Pass "
+            "commercial_ok=False to see them, or assert rights with "
+            "foley.ingest(path, license='user-owned') / foley restamp-rights.",
+            UserWarning,
+            stacklevel=3,
+        )
 
 
 def generate(

@@ -244,6 +244,14 @@ def content_id(src: "AudioSource") -> str:
     return _audio_identity(_probe(src).wav)
 
 
+#: Licence ids that can never be *asserted* as verified: ``unknown`` by definition,
+#: ``PDM-1.0`` (a claim about the work, not a grant — verify it by building the
+#: ``LicenseRecord`` yourself), and the legacy ``ElevenLabs-SFX`` row (say the plan).
+UNASSERTABLE_LICENSE_IDS = frozenset({"unknown", "PDM-1.0", "ElevenLabs-SFX"})
+
+#: The ids a caller may assert on ingest / restamp (``foley ingest --license``).
+ASSERTABLE_LICENSE_IDS = frozenset(LICENSE_FLAGS) - UNASSERTABLE_LICENSE_IDS
+
 #: The note on every clip ingested without a licence (#55).
 _UNKNOWN_LOCAL_NOTE = (
     "rights unknown (no license given): indexed for local search only; foley.keep() "
@@ -286,9 +294,10 @@ def resolve_ingest_license(
             rights_verified=False,
         )
         return apply_license_flags(lic, overrides={"cache_bytes_ok": True})
-    if license not in LICENSE_FLAGS or license == "unknown":
-        known = sorted(k for k in LICENSE_FLAGS if k != "unknown")
-        raise ValueError(f"unknown license id {license!r}; expected one of {known}")
+    if license not in ASSERTABLE_LICENSE_IDS:
+        raise ValueError(
+            f"unknown license id {license!r}; expected one of {sorted(ASSERTABLE_LICENSE_IDS)}"
+        )
     lic = LicenseRecord(
         source="user",
         source_url=source_url,
@@ -679,6 +688,11 @@ def is_legacy_default_user_owned(lic: LicenseRecord) -> bool:
     )
 
 
+def has_license_url(lic: LicenseRecord) -> bool:
+    """Whether ``lic`` kept the licence string its source served (re-derivable)."""
+    return bool(lic.license_url)
+
+
 def is_legacy_elevenlabs(lic: LicenseRecord) -> bool:
     """Whether ``lic`` is an ElevenLabs generation stamped before the plan was explicit (#56)."""
     return lic.license_id == "ElevenLabs-SFX"
@@ -688,23 +702,86 @@ def is_legacy_elevenlabs(lic: LicenseRecord) -> bool:
 LEGACY_SELECTORS = {
     "legacy-user-owned": is_legacy_default_user_owned,
     "legacy-elevenlabs": is_legacy_elevenlabs,
+    "has-license-url": has_license_url,
 }
+
+
+#: ``restamp_rights(license=FROM_LICENSE_URL)``: re-derive each record's id from the
+#: licence URL / label its source served (kept in ``license_url``).
+FROM_LICENSE_URL = "from-url"
+
+
+def _source_overrides(lic: LicenseRecord, new_license_id: str) -> dict:
+    """The flags that are facts about the SOURCE, so moving ``lic`` to a new id keeps them.
+
+    ``cache_bytes_ok`` is a terms-of-service fact (and the bytes are already stored or
+    referenced accordingly). An API source's ``ai_training_ok`` may carry the rights
+    holder's stated AI preference (Freesound ``gen_ai_preference``), so it can only be
+    kept or narrowed: it is the AND of the stored flag, the preference, and the new row.
+    """
+    from ..base import AcquisitionMethod as _AM
+    from ..licensing import ai_scope_from_gen_ai_preference, derive_license_flags
+
+    overrides = {"cache_bytes_ok": lic.cache_bytes_ok}
+    ai_ok, _scope = ai_scope_from_gen_ai_preference(lic.gen_ai_preference)
+    if ai_ok is False or lic.acquisition_method == _AM.api:
+        overrides["ai_training_ok"] = (
+            bool(lic.ai_training_ok)
+            and ai_ok is not False
+            and derive_license_flags(new_license_id).ai_training_ok
+        )
+    return overrides
 
 
 def _restamped(lic: LicenseRecord, license_id: str) -> LicenseRecord:
     """A copy of ``lic`` under ``license_id``: flags re-derived, provenance + storage kept.
 
-    ``cache_bytes_ok`` is carried over (it is a terms-of-service fact about the source,
-    and the bytes are already stored or referenced accordingly). ``rights_verified``
-    becomes ``True`` with a ``verified_at`` stamp for an asserted id, ``False`` for
-    ``'unknown'``.
+    Source facts survive (:func:`_source_overrides`). ``rights_verified`` becomes
+    ``True`` with a ``verified_at`` stamp only for an assertable id
+    (:data:`ASSERTABLE_LICENSE_IDS`); ``unknown`` and ``PDM-1.0`` are unverified. When
+    the id changes, the old deed link and name are dropped (the credit then uses the
+    new id's row) and a source-declared attribution line for the new id is applied.
     """
     from dataclasses import replace
 
+    changed = license_id != lic.license_id
     new = replace(lic, license_id=license_id, transformations=list(lic.transformations))
-    apply_license_flags(new, overrides={"cache_bytes_ok": lic.cache_bytes_ok})
-    new.rights_verified = license_id != "unknown"
+    apply_license_flags(new, overrides=_source_overrides(lic, license_id))
+    new.rights_verified = license_id in ASSERTABLE_LICENSE_IDS
     new.verified_at = _now_iso() if new.rights_verified else None
+    if changed:
+        new.license_url = None
+        new.license_name = None
+        new.attribution_text = _declared_attribution(license_id) or (
+            None if lic.requires_attribution else lic.attribution_text
+        )
+    return new
+
+
+def _declared_attribution(license_id: str) -> Optional[str]:
+    """A credit line a source config declares for ``license_id`` (ElevenLabs free plan)."""
+    from ..sources.registry import SOURCE_REGISTRY, discover_sources
+
+    discover_sources()
+    for entry in SOURCE_REGISTRY.values():
+        line = ((entry["config"].get("license") or {}).get("plan_attribution") or {}).get(
+            license_id
+        )
+        if line:
+            return line
+    return None
+
+
+def _rederived_from_url(lic: LicenseRecord) -> LicenseRecord:
+    """``lic`` re-derived from its own ``license_url`` (the string its source served)."""
+    from dataclasses import replace
+
+    from ..licensing import license_id_from_cc_url
+
+    license_id, verified = license_id_from_cc_url(lic.license_url)
+    new = replace(lic, license_id=license_id, transformations=list(lic.transformations))
+    apply_license_flags(new, overrides=_source_overrides(lic, license_id))
+    new.rights_verified = verified
     return new
 
 
@@ -728,12 +805,18 @@ def restamp_rights(
     * ``foley restamp-rights --license user-owned --apply`` — the same sounds, but you
       assert that you own them (now recorded with a ``verified_at`` timestamp);
     * ``foley restamp-rights --select legacy-elevenlabs --license elevenlabs-paid-plan
-      --apply`` — ElevenLabs generations made before the plan was explicit.
+      --apply`` — ElevenLabs generations made before the plan was explicit;
+    * ``foley restamp-rights --select has-license-url --license from-url --apply`` —
+      every record that kept its source's licence string (Freesound pulls) is
+      re-derived by today's mapper (CC versions, PDM, NC spellings);
+    * corpus clips (Clotho, FSD50K) are repaired by re-running ``foley bootstrap``,
+      which re-stamps already-stored clips from the corpus metadata.
 
     Args:
         library: The :class:`~foley.index.library.SoundLibrary` (default: the default one).
         license: The ``license_id`` to stamp (a ``LICENSE_FLAGS`` row; default
-            ``'unknown'``).
+            ``'unknown'``), or :data:`FROM_LICENSE_URL` to re-derive each record from
+            its own ``license_url``.
         ids: Re-stamp exactly these sound ids (overrides ``where`` / ``select``).
         where: A predicate ``LicenseRecord -> bool`` choosing the records (overrides
             ``select``).
@@ -748,7 +831,7 @@ def restamp_rights(
     """
     from .library import default_library
 
-    if license not in LICENSE_FLAGS:
+    if license != FROM_LICENSE_URL and license not in LICENSE_FLAGS:
         raise ValueError(f"unknown license id {license!r}")
     if where is None:
         if select not in LEGACY_SELECTORS:
@@ -761,8 +844,17 @@ def restamp_rights(
         rec = lib.meta[sid]
         if (sid not in wanted) if wanted is not None else not where(rec.license):
             continue
+        if license == FROM_LICENSE_URL:
+            new = _rederived_from_url(rec.license)
+            if (new.license_id, new.rights_verified) == (
+                rec.license.license_id,
+                rec.license.rights_verified,
+            ):
+                continue  # already what today's mapper says
+        else:
+            new = _restamped(rec.license, license)
         changed.append(sid)
         if apply:
-            rec.license = _restamped(rec.license, license)
+            rec.license = new
             lib.meta[sid] = rec
     return changed

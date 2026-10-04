@@ -244,11 +244,20 @@ def foley_search(
     return [_candidate_row(c) for c in hits]
 
 
-def foley_similar_to(sound_id: str, k: int = 10, session: str = "default") -> list:
+def foley_similar_to(
+    sound_id: str,
+    k: int = 10,
+    commercial_ok: bool = DEFAULT_INTENDED_USE.commercial,
+    session: str = "default",
+) -> list:
     """ "More like this" — the library neighbours of a sound (by id); returns candidate rows."""
     from .preview import similar_to
 
     hits = similar_to(sound_id, k=k, library=_lib())
+    if commercial_ok:
+        hits = [
+            c for c in hits if c.sound.license.commercial_ok and c.sound.license.rights_verified
+        ]
     _session(session).cache_candidates(hits)
     return [_candidate_row(c) for c in hits]
 
@@ -358,7 +367,17 @@ def foley_generate(
             "error": str(exc),
             "backend": backend,
         }
-    return {"ok": True, "sound_ids": [cand.sound.id], "backend": backend}
+    from ..licensing import keep
+
+    usable = keep(cand.sound.license, intended_use_for(commercial_ok=commercial_ok))
+    return {
+        "ok": True,
+        "sound_ids": [cand.sound.id],
+        "backend": backend,
+        "license_ok": usable,  # under this call's commercial_ok intent
+        "license": _license_summary(cand.sound.license),
+        "notes": list(cand.notes) if hasattr(cand, "notes") else [],
+    }
 
 
 def foley_plan(

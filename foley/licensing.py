@@ -39,8 +39,16 @@ def intended_use_for(
     An explicit ``intended_use`` wins; else :data:`DEFAULT_INTENDED_USE`, with
     ``commercial`` overridden when ``commercial_ok`` is given (``False`` is the explicit
     opt-in to non-commercial material). Always a fresh copy, so callers may mutate it.
+
+    Raises:
+        ValueError: If both are given and disagree on ``commercial``.
     """
     if intended_use is not None:
+        if commercial_ok is not None and bool(commercial_ok) != intended_use.commercial:
+            raise ValueError(
+                f"commercial_ok={commercial_ok!r} contradicts intended_use.commercial="
+                f"{intended_use.commercial!r}; pass one of them"
+            )
         return intended_use
     if commercial_ok is None:
         return replace(DEFAULT_INTENDED_USE)
@@ -134,104 +142,122 @@ LICENSE_FLAGS.update(
     }
 )
 
-#: Creative-Commons URL / label substrings, checked in order (NC and Sampling+
-#: BEFORE the bare ``by`` so a compound license never mis-maps to plain CC-BY).
-#: Each entry is ``(needle, license_id)``; a match sets ``rights_verified=True``.
-_CC_URL_MARKERS: "tuple[tuple[tuple[str, ...], str], ...]" = (
-    (("publicdomain/zero", "creative commons 0", "creative commons zero", "cc0"), "CC0-1.0"),
-    # ``noncommercial`` subsumes the spaced label ("attribution noncommercial") AND the
-    # hyphenated/bare forms ("Attribution-NonCommercial", "noncommercial"), so no NC work
-    # slips through to the plain-CC-BY fallback below (which would fail OPEN by granting
-    # commercial rights). Checked AFTER the -nd/-sa guard, so by-nc-nd/by-nc-sa still fail
-    # closed. Mirrors the generic ND/SA needles.
-    (("by-nc", "noncommercial"), "CC-BY-NC"),
-    (("sampling",), "CC-Sampling+-1.0"),
-)
-
-#: Public Domain Mark needles (checked after CC0's ``publicdomain/zero``).
-_PDM_MARKERS: "tuple[str, ...]" = ("publicdomain/mark", "public domain mark", "pdm")
-
-#: A CC version in a URL (``/by/3.0/``) or a label (``Attribution 3.0``).
-_CC_VERSION_RE = re.compile(r"(?<![\d.])([1-4]\.[05])(?![\d.])")
+#: A CC version token (``3.0``, ``2.5``) in a URL path or a label.
+_CC_VERSION_RE = re.compile(r"^\d\.\d$")
 
 #: The version assumed when a source gives a CC family with no version at all
 #: (Freesound's search labels: ``"Attribution"``). Rights are the same across versions;
 #: only the credit's version is a guess, so the record keeps the label it was given.
 DEFAULT_CC_VERSION = "4.0"
 
+#: Tokens that say nothing about the rights (URL scaffolding, the word "licence", …).
+#: A string with any OTHER unrecognised token fails closed: foley cannot tell what it
+#: adds (a jurisdiction port, "required", "no commercial use", …).
+_NEUTRAL_TOKENS = frozenset(
+    {
+        "http", "https", "www", "creativecommons.org", "creativecommons", "org",
+        "licenses", "licence", "license", "legalcode", "deed", "deed.en", "en",
+        "cc", "creative", "commons", "international", "unported", "generic",
+        "public", "version",
+    }
+)  # fmt: skip
+
+_ND_TOKENS = frozenset({"nd", "noderivs", "noderivatives", "noderiv"})
+_SA_TOKENS = frozenset({"sa", "sharealike"})
+_NC_TOKENS = frozenset({"nc", "noncommercial", "commercial"})  # any mention restricts
+_BY_TOKENS = frozenset({"by", "attribution"})
+
+
+def _cc_tokens(text: str) -> "list[str]":
+    """Lower-case word tokens of a CC URL or label (``by-nc/3.0`` → ``by nc 3.0``)."""
+    return re.findall(r"[a-z0-9.+]+", text.lower().replace("creativecommons.org", " "))
+
+
+def _has_phrase(tokens: "list[str]", *phrase: str) -> bool:
+    n = len(phrase)
+    return any(tuple(tokens[i : i + n]) == phrase for i in range(len(tokens) - n + 1))
+
 
 def license_id_from_cc_url(url: Optional[str]) -> "tuple[str, bool]":
     """Map a Creative-Commons license URL **or label** to ``(license_id, verified)``.
 
     The single SSOT for turning an external source's license string into a foley
-    ``license_id`` (used by the FSD50K bulk adapter and the Freesound API adapter).
-    Recognized CC families map to their foley ``license_id`` with
-    ``rights_verified=True``; anything unknown/missing fails closed to
-    ``('unknown', False)`` so :func:`keep` drops it while its provenance is still
-    recorded.
+    ``license_id`` (FSD50K, Clotho, the Freesound API, …). It **never widens rights**:
+    the string is split into tokens, and
 
-    Both representations Freesound uses are handled: the CC **URL** form
-    (``http://creativecommons.org/publicdomain/zero/1.0/``) and the plain **label**
-    the search API returns (``"Creative Commons 0"``, ``"Attribution"``,
-    ``"Attribution NonCommercial"``).
-
-    **Fail-closed for NoDerivatives / ShareAlike.** Any ``-nd`` / ``-sa`` variant —
-    including the ``by-nc-nd`` and ``by-nc-sa`` compounds — has NO foley
-    ``LICENSE_FLAGS`` row: its extra restrictions (no derivatives / share-alike) are
-    not expressible by any row we have, so it maps to ``('unknown', False)`` and is
-    rejected everywhere. This check runs first, so ``by-nc-nd`` / ``by-nc-sa`` are
-    NOT mis-mapped to plain ``CC-BY-NC-4.0`` (which would fail-open by granting the
-    modification / derivative / standalone-redistribution rights those licenses
-    forbid). Only *after* it are ``by-nc`` / ``sampling`` tested before the bare
-    ``by``.
-
-    **The version is kept** (#56): ``/by/3.0/`` maps to ``CC-BY-3.0`` and is credited
-    as 3.0; a versionless label (``"Attribution"``) gets :data:`DEFAULT_CC_VERSION`.
-    **The Public Domain Mark is not CC0**: it maps to ``PDM-1.0`` with
-    ``rights_verified=False`` (a claim about the work, not a licence anyone granted).
+    * any NoDerivatives / ShareAlike sign (``nd``, ``sa``, ``no derivatives``,
+      ``share alike``, ``sharealike``) → ``('unknown', False)``: foley has no row
+      expressing those restrictions, so the sound is refused everywhere;
+    * the Public Domain Mark → ``('PDM-1.0', False)``: a claim about the work, not a
+      licence anyone granted, so never auto-verified (#56);
+    * CC0 (``publicdomain/zero``, ``cc0``, ``creative commons 0``) → ``CC0-1.0``;
+    * Sampling+ → ``CC-Sampling+-1.0``;
+    * ``by`` / ``attribution`` with any mention of commercial use (``nc``,
+      ``noncommercial``, ``non commercial``, ``no commercial use``) → ``CC-BY-NC-<v>``,
+      else ``CC-BY-<v>``. **The version is kept** (``/by/3.0/`` → ``CC-BY-3.0``); a
+      versionless label gets :data:`DEFAULT_CC_VERSION`; a version foley has no row
+      for (a ``2.1/jp`` port) fails closed;
+    * anything else — including a string with a token this parser does not know —
+      → ``('unknown', False)``.
 
     Args:
         url: A CC license URL, a CC label string, or ``None``.
 
     Returns:
-        ``(license_id, rights_verified)`` — ``('unknown', False)`` when
-        unrecognized, missing, or a fail-closed ND/SA variant.
+        ``(license_id, rights_verified)``.
     """
     if not url:
         return "unknown", False
-    u = url.lower()
-    # NoDerivatives / ShareAlike (and the nc-nd / nc-sa compounds) fail closed —
-    # BEFORE the by-nc marker, which would otherwise substring-match 'by-nc-nd' /
-    # 'by-nc-sa' and mis-map a stricter license to plain CC-BY-NC (fail-open).
-    if any(marker in u for marker in ("-nd", "-sa", "noderiv", "sharealike")):
-        return "unknown", False
-    if any(n in u for n in _PDM_MARKERS) or (
-        "publicdomain" in u and "zero" not in u
+    tokens = _cc_tokens(url)
+    toks = set(tokens)
+    if (
+        toks & _ND_TOKENS
+        or toks & _SA_TOKENS
+        or _has_phrase(tokens, "no", "derivatives")
+        or _has_phrase(tokens, "no", "derivs")
+        or _has_phrase(tokens, "share", "alike")
     ):
-        return "PDM-1.0", False  # a label, not a grant: never auto-verified (#56)
-    for needles, license_id in _CC_URL_MARKERS:
-        if any(n in u for n in needles):
-            return _versioned(license_id, u)
-    if "/by/" in u or u.rstrip("/").endswith("/by") or "attribution" in u:
-        return _versioned("CC-BY", u)
+        return "unknown", False
+    if "publicdomain" in toks or _has_phrase(tokens, "public", "domain"):
+        if "zero" in toks:
+            return _only_known(tokens, {"publicdomain", "zero", "public", "domain"}, "CC0-1.0")
+        return "PDM-1.0", False  # 'mark' or a bare public-domain claim
+    if "cc0" in toks or _has_phrase(tokens, "creative", "commons", "0") or _has_phrase(
+        tokens, "creative", "commons", "zero"
+    ):
+        return _only_known(tokens, {"cc0", "0", "zero"}, "CC0-1.0")
+    if toks & {"sampling", "sampling+"}:
+        return _only_known(tokens, {"sampling", "sampling+", "plus"}, "CC-Sampling+-1.0")
+    if toks & _BY_TOKENS:
+        nc = bool(toks & _NC_TOKENS)
+        extra = {"non", "no", "use"} if nc else set()
+        family = "CC-BY-NC" if nc else "CC-BY"
+        return _only_known(tokens, _BY_TOKENS | _NC_TOKENS | extra, family, versioned=True)
     return "unknown", False
 
 
-def _versioned(family: str, url: str) -> "tuple[str, bool]":
-    """``(family-version id, verified)`` for a versioned CC family; others pass through.
+def _only_known(
+    tokens: "list[str]", allowed: "set[str]", license_id: str, *, versioned: bool = False
+) -> "tuple[str, bool]":
+    """``(license_id, True)`` if every token is accounted for, else fail closed.
 
-    The version comes from the URL or label; with none given, :data:`DEFAULT_CC_VERSION`.
-    A version foley has no row for fails closed (``'unknown'``) rather than borrowing
-    another version's credit.
+    Version tokens are allowed; for a ``versioned`` family the version picks the row
+    (``CC-BY-3.0``), and a version with no row fails closed. Unversioned families
+    (CC0 1.0, Sampling+ 1.0) accept their one version.
     """
-    if family not in {prefix for prefix, *_ in _CC_VERSIONED}:
-        return family, True
-    m = _CC_VERSION_RE.search(url)
-    version = m.group(1) if m else DEFAULT_CC_VERSION
-    license_id = f"{family}-{version}"
-    if license_id not in LICENSE_FLAGS:
+    versions = [t for t in tokens if _CC_VERSION_RE.match(t)]
+    leftover = [
+        t for t in tokens if t not in allowed and t not in _NEUTRAL_TOKENS and t not in versions
+    ]
+    if leftover or len(set(versions)) > 1:
         return "unknown", False
-    return license_id, True
+    if not versioned:
+        return license_id, True
+    version = versions[0] if versions else DEFAULT_CC_VERSION
+    versioned_id = f"{license_id}-{version}"
+    if versioned_id not in LICENSE_FLAGS:
+        return "unknown", False
+    return versioned_id, True
 
 
 # ---------------------------------------------------------------------------

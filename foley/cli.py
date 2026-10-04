@@ -88,9 +88,9 @@ def _cmd_ingest(args) -> int:
 
 def _assertable_license_ids() -> "list[str]":
     """Licence ids a user may assert on ingest (every LICENSE_FLAGS row but 'unknown')."""
-    from .licensing import LICENSE_FLAGS
+    from .index.ingest import ASSERTABLE_LICENSE_IDS
 
-    return sorted(k for k in LICENSE_FLAGS if k != "unknown")
+    return sorted(ASSERTABLE_LICENSE_IDS)
 
 
 def _cmd_restamp(args) -> int:
@@ -261,14 +261,15 @@ def build_parser() -> argparse.ArgumentParser:
     p_rs.add_argument(
         "--license",
         default="unknown",
-        choices=["unknown", *_assertable_license_ids()],
+        choices=["unknown", "from-url", *_assertable_license_ids()],
         metavar="LICENSE_ID",
-        help="licence to stamp (default: unknown = fail closed)",
+        help="licence to stamp (default: unknown = fail closed); from-url re-derives "
+        "each record from the licence string its source served",
     )
     p_rs.add_argument(
         "--select",
         default="legacy-user-owned",
-        choices=["legacy-user-owned", "legacy-elevenlabs"],
+        choices=["legacy-user-owned", "legacy-elevenlabs", "has-license-url"],
         help="which stored sounds to re-stamp (default: legacy-user-owned)",
     )
     p_rs.add_argument("--ids", nargs="*", help="re-stamp exactly these sound ids")

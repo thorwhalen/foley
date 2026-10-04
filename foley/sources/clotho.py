@@ -108,7 +108,7 @@ class ClothoEvalCorpus(UniformCorpus):
         """Yield clips carrying their per-file licence (and caption, when opted in)."""
         root_path = Path(root).expanduser()
         metadata = _load_metadata(root_path)
-        captions = _load_captions(root_path) if self.include_captions else {}
+        captions = _load_captions(root_path)
         for spec in super().iter_clips(root):
             name = Path(spec.path).name
             row = metadata.get(name, {})
@@ -120,9 +120,13 @@ class ClothoEvalCorpus(UniformCorpus):
                 )
             )
             caption = captions.get(name)
-            if caption:
+            if caption and self.include_captions:
                 spec.meta["caption"] = caption
                 spec.meta["caption_license"] = CAPTION_LICENSE
+            elif caption:
+                # Not indexed; carried only so a re-run bootstrap can remove it from
+                # a library an older foley built with it (see foley.bootstrap).
+                spec.meta["withheld_caption"] = caption
             yield spec
 
     def resolve_license(self, spec: ClipSpec) -> LicenseRecord:

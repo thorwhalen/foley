@@ -327,3 +327,108 @@ def test_mcp_rows_carry_full_tasl(fake_embedder):
                   "ai_training_ok", "revenue_cap_usd", "rights_verified"):
         assert field in row
     assert row["creator_name"] == "ada" and row["license_url"]
+
+
+# ---------------------------------------------------------------------------
+# review hardening: odd spellings, migrations, unverifiable claims
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "label",
+    [
+        "Attribution Non-Commercial",
+        "Attribution, Non-Commercial",
+        "Attribution (non commercial)",
+        "Attribution required, no commercial use",
+        "Attribution No Derivatives",
+        "Attribution Share Alike",
+        "https://creativecommons.org/licenses/by/2.1/jp/",
+        "https://creativecommons.org/licenses/by-nc/2.1/jp/",
+        "noncommercial",
+    ],
+)
+def test_odd_licence_spellings_never_grant_commercial_use(label):
+    from foley.licensing import derive_license_flags
+
+    license_id, verified = license_id_from_cc_url(label)
+    assert not (verified and derive_license_flags(license_id).commercial_ok), license_id
+
+
+def test_rerunning_bootstrap_repairs_clips_an_older_foley_widened(library, tmp_path):
+    """Old libraries hold Clotho NC clips as verified CC-BY-4.0 with NC captions indexed."""
+    root = _clotho_dir(tmp_path)
+    foley.bootstrap(corpora=["clotho"], roots={"clotho": str(root)}, library=library,
+                    do_supervised=False, do_zeroshot=False)
+    # simulate the pre-#68 state: widen a stored clip and give it the NC caption
+    sid = next(iter(library.meta))
+    rec = library.meta[sid]
+    caption = f"caption of {Path(rec.license.source_url or '').name}"
+    old = LicenseRecord(source="clotho", license_id="CC-BY-4.0", rights_verified=True)
+    foley.licensing.apply_license_flags(old)
+    rec.license, rec.caption = old, "caption of by3.wav"
+    library.update_record(rec)
+
+    report = foley.bootstrap(corpora=["clotho"], roots={"clotho": str(root)},
+                             library=library, do_supervised=False, do_zeroshot=False)
+    repaired = library.meta[sid]
+    assert repaired.license.license_id in {"CC0-1.0", "CC-BY-3.0"}  # its own, from the CSV
+    assert repaired.caption is None
+    notes = [n for r in report["clotho"].results for n in r.notes]
+    assert any("re-stamped from corpus metadata" in n for n in notes)
+    assert caption  # (the clip's own name was resolvable)
+
+
+def test_restamp_keeps_a_source_ai_preference(library):
+    from foley.base import AcquisitionMethod
+
+    lic = LicenseRecord(source="freesound", license_id="CC0-1.0", rights_verified=True,
+                        acquisition_method=AcquisitionMethod.api)
+    foley.licensing.apply_license_flags(lic, overrides={"ai_training_ok": False})
+    library.add(SoundRecord(id="fs:1", license=lic, uri="https://freesound.org/s/1/"),
+                vector=np.ones(library.embedder.dim, dtype=np.float32))
+    foley.restamp_rights(library, ids=["fs:1"], license="CC-BY-4.0", apply=True)
+    assert library.meta["fs:1"].license.ai_training_ok is False  # never widened
+
+
+def test_the_public_domain_mark_cannot_be_asserted(library, tmp_path):
+    with pytest.raises(ValueError):
+        foley.ingest(_folder(tmp_path), library=library, license="PDM-1.0")
+    lic = LicenseRecord(source="user", license_id="CC0-1.0", rights_verified=True)
+    foley.licensing.apply_license_flags(lic)
+    library.add(SoundRecord(id="x", license=lic, uri="x"),
+                vector=np.ones(library.embedder.dim, dtype=np.float32))
+    foley.restamp_rights(library, ids=["x"], license="PDM-1.0", apply=True)
+    assert library.meta["x"].license.rights_verified is False
+
+
+def test_restamp_from_url_rederives_with_todays_mapper(library):
+    from foley.base import AcquisitionMethod
+
+    widened = LicenseRecord(source="freesound", license_id="CC0-1.0", rights_verified=True,
+                            acquisition_method=AcquisitionMethod.api,
+                            license_url="https://creativecommons.org/publicdomain/mark/1.0/")
+    foley.licensing.apply_license_flags(widened, overrides={"cache_bytes_ok": False})
+    library.add(SoundRecord(id="fs:2", license=widened, uri="https://freesound.org/s/2/"),
+                vector=np.ones(library.embedder.dim, dtype=np.float32))
+    changed = foley.restamp_rights(library, select="has-license-url", license="from-url",
+                                   apply=True)
+    lic = library.meta["fs:2"].license
+    assert changed == ["fs:2"]
+    assert (lic.license_id, lic.rights_verified, lic.cache_bytes_ok) == ("PDM-1.0", False, False)
+    assert foley.restamp_rights(library, select="has-license-url", license="from-url") == []
+
+
+def test_a_commercial_search_says_when_it_hid_everything(library, tmp_path, monkeypatch):
+    foley.ingest(_folder(tmp_path), library=library, do_supervised=False, do_zeroshot=False)
+    monkeypatch.setattr(foley, "default_library", lambda: library)
+    with pytest.warns(UserWarning, match="hidden"):
+        assert foley.search("clip", k=5) == []
+    assert foley.search("clip", k=5, commercial_ok=False)
+
+
+def test_one_intent_cannot_contradict_the_other():
+    from foley.licensing import intended_use_for
+
+    with pytest.raises(ValueError, match="contradicts"):
+        intended_use_for(IntendedUse(commercial=True), commercial_ok=False)

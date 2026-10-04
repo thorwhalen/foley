@@ -124,6 +124,7 @@ def _add_from(
                 license=lic,
                 captioner=MetadataCaptioner(rec.caption) if rec.caption else None,
                 seed_tags=rec.tags,
+                commercial=use.commercial,  # the AI-use scope is judged under this intent
             )
         except (
             Exception
