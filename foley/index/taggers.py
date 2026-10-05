@@ -144,6 +144,8 @@ class ClapZeroShotTagger:
 #: Where panns-inference keeps (and, when missing, ``wget``-downloads) its files.
 PANNS_DATA_DIR = "~/panns_data"
 PANNS_FILES = ("Cnn14_mAP=0.431.pth", "class_labels_indices.csv")
+#: panns-inference treats a smaller checkpoint as incomplete and fetches it again.
+PANNS_CHECKPOINT_MIN_BYTES = 300_000_000
 
 
 def _require_panns_files() -> None:
@@ -155,9 +157,12 @@ def _require_panns_files() -> None:
     """
     from ..runtime import require_local_files
 
+    paths = [f"{PANNS_DATA_DIR}/{name}" for name in PANNS_FILES]
     require_local_files(
-        [f"{PANNS_DATA_DIR}/{name}" for name in PANNS_FILES],
+        paths,
         what="the PANNs tagger",
+        # panns-inference re-downloads a checkpoint under 300 MB (a truncated wget)
+        min_bytes={paths[0]: PANNS_CHECKPOINT_MIN_BYTES},
         how_to_fetch="run `foley.index.PannsTagger().tag(...)` once online "
         f"(panns-inference saves them to {PANNS_DATA_DIR}).",
     )

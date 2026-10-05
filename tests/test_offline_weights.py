@@ -41,7 +41,10 @@ def fake_diffusers(monkeypatch):
         def from_pretrained(model_id, **kw):
             calls.append(kw)
             if kw.get("local_files_only"):
-                raise OSError(f"{model_id} not found in the local cache")
+                raise OSError(
+                    f"We couldn't connect to 'https://huggingface.co' to load the files, "
+                    f"and couldn't find them in the cached files for {model_id}."
+                )
             raise AssertionError("would download weights from the Hub")
 
     monkeypatch.setitem(sys.modules, "diffusers", types.SimpleNamespace(
@@ -187,3 +190,31 @@ def test_a_non_cache_error_is_not_relabelled_as_a_missing_model():
     with foley.offline():
         with pytest.raises(ValueError, match="torch_dtype"):
             load_pretrained(bad_dtype, "x/y")
+
+
+def test_a_corrupt_cached_model_is_not_reported_as_missing(monkeypatch):
+    from foley import runtime
+    from foley.runtime import load_pretrained
+
+    monkeypatch.setattr(runtime, "_repo_in_hf_cache", lambda model_id: True)  # it IS cached
+
+    def corrupt(model_id, **kw):
+        raise OSError("Unable to load weights from pytorch checkpoint file for 'x/y'")
+
+    with foley.offline():
+        with pytest.raises(OSError, match="Unable to load weights") as exc:
+            load_pretrained(corrupt, "x/y")
+    assert not isinstance(exc.value, ModelNotCached)
+
+
+def test_a_truncated_panns_checkpoint_counts_as_missing(tmp_path, monkeypatch):
+    from foley.index import taggers
+
+    data = tmp_path / "panns_data"
+    data.mkdir()
+    (data / "Cnn14_mAP=0.431.pth").write_bytes(b"partial")
+    (data / "class_labels_indices.csv").write_text("index,mid,display_name\n")
+    monkeypatch.setattr(taggers, "PANNS_DATA_DIR", str(data))
+    with foley.offline():
+        with pytest.raises(ModelNotCached, match="PANNs"):
+            taggers._require_panns_files()

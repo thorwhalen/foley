@@ -126,12 +126,52 @@ def load_pretrained(loader, model_id: str, *, how_to_fetch: "str | None" = None,
         return loader(model_id, **kwargs)
     try:
         return loader(model_id, local_files_only=True, **kwargs)
-    except OSError as exc:  # HF raises OSError (EnvironmentError) on a cache miss
+    except OSError as exc:
+        if not (_is_cache_miss(exc) or not _repo_in_hf_cache(model_id)):
+            raise  # e.g. a corrupt cached file: downloading would not fix it
         fetch = how_to_fetch or f"huggingface-cli download {model_id}"
         raise ModelNotCached(
             f"model {model_id!r} is not in the local cache, and the offline posture "
             f"forbids downloading it. Fetch it once while online: `{fetch}`."
         ) from exc
+
+
+#: Exception types (anywhere in the chain) and message fragments that mean "the file
+#: is not in the local cache" under ``local_files_only=True`` (huggingface_hub /
+#: transformers / diffusers), as opposed to a cached file that failed to load.
+_CACHE_MISS_TYPES = frozenset(
+    {"LocalEntryNotFoundError", "EntryNotFoundError", "OfflineModeIsEnabled"}
+)
+_CACHE_MISS_TEXT = (
+    "couldn't find them in the cached files",
+    "local_files_only",
+    "is not a local folder and is not a valid model identifier",
+    "cannot find the requested files in the local cache",
+)
+
+
+def _repo_in_hf_cache(model_id: str) -> bool:
+    """Whether the Hugging Face cache holds anything for ``model_id`` (a repo id)."""
+    try:
+        from huggingface_hub import constants
+    except ImportError:  # pragma: no cover - no hub, nothing cached
+        return False
+    from pathlib import Path
+
+    folder = "models--" + model_id.replace("/", "--")
+    return (Path(constants.HF_HUB_CACHE) / folder).is_dir()
+
+
+def _is_cache_miss(exc: BaseException) -> bool:
+    seen = set()
+    while exc is not None and id(exc) not in seen:
+        seen.add(id(exc))
+        if type(exc).__name__ in _CACHE_MISS_TYPES:
+            return True
+        if any(t in str(exc) for t in _CACHE_MISS_TEXT):
+            return True
+        exc = exc.__cause__ or exc.__context__
+    return False
 
 
 @contextmanager
@@ -189,8 +229,17 @@ def _is_loopback(host: str) -> bool:
         return False
 
 
-def require_local_files(paths: "list[str]", *, what: str, how_to_fetch: str) -> None:
+def require_local_files(
+    paths: "list[str]",
+    *,
+    what: str,
+    how_to_fetch: str,
+    min_bytes: "dict[str, int] | None" = None,
+) -> None:
     """Under an offline posture, raise :class:`ModelNotCached` unless every path exists.
+
+    ``min_bytes`` maps a path to the size below which the library would re-download it
+    (a truncated download), so such a file counts as missing too.
 
     For model files a library downloads itself (PANNs fetches its checkpoint and label
     CSV with ``wget``, even at import), checked before that library is touched.
@@ -199,7 +248,13 @@ def require_local_files(paths: "list[str]", *, what: str, how_to_fetch: str) -> 
 
     if current_runtime().allows(EXTERNAL):
         return
-    missing = [p for p in paths if not Path(p).expanduser().exists()]
+    min_bytes = min_bytes or {}
+
+    def _present(p: str) -> bool:
+        f = Path(p).expanduser()
+        return f.exists() and f.stat().st_size >= min_bytes.get(p, 0)
+
+    missing = [p for p in paths if not _present(p)]
     if missing:
         raise ModelNotCached(
             f"{what} needs {missing}, which are not on this machine, and the offline "
