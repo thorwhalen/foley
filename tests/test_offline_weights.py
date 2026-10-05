@@ -101,3 +101,89 @@ def test_an_offline_ingest_without_weights_raises_once(tmp_path):
         with pytest.raises(ModelNotCached):
             foley.ingest(tmp_path, library=lib, do_supervised=False, do_zeroshot=False,
                          qc=False)
+
+
+def _downloading_loader(calls):
+    """A loader that, like AudioSeal / whisperX, fetches its weights over the network."""
+    import socket
+
+    def load(*a, **k):
+        calls.append(a)
+        try:
+            socket.create_connection(("192.0.2.10", 443), timeout=0.01)
+        except OSError as exc:
+            raise RuntimeError(f"download failed: {exc}") from exc
+        return object()
+
+    return load
+
+
+def test_audioseal_does_not_download_under_offline(monkeypatch):
+    pytest.importorskip("torch")
+    from foley.provenance import disclosure
+
+    calls = []
+    fake = types.SimpleNamespace(AudioSeal=types.SimpleNamespace(
+        load_generator=_downloading_loader(calls)))
+    monkeypatch.setitem(sys.modules, "audioseal", fake)
+    wm = disclosure.AudioSealWatermarker.__new__(disclosure.AudioSealWatermarker)
+    with foley.offline():
+        with pytest.raises(ModelNotCached, match="AudioSeal"):
+            wm._generator
+    assert calls  # the loader ran, but its connection never left the machine
+
+
+def test_whisperx_does_not_download_under_offline(monkeypatch):
+    np = pytest.importorskip("numpy")
+    from foley.weave import align
+
+    calls = []
+    fake = types.SimpleNamespace(load_model=_downloading_loader(calls),
+                                 load_align_model=_downloading_loader(calls))
+    monkeypatch.setitem(sys.modules, "whisperx", fake)
+    aligner = align.WhisperXAligner(model_size="base", device="cpu", batch_size=1)
+    with foley.offline():
+        with pytest.raises(ModelNotCached, match="whisperX"):
+            aligner.word_timeline(np.zeros(16000, dtype=np.float32), 16000, transcript="hi")
+
+
+def test_mcp_tools_run_under_the_servers_offline_posture():
+    from foley.agent import mcp
+    from foley.runtime import RuntimeConfig, current_runtime
+
+    seen = []
+
+    def probe():
+        seen.append(current_runtime().offline)
+
+    old = mcp._STATE["runtime"]
+    mcp._STATE["runtime"] = RuntimeConfig.offline_local()
+    try:
+        mcp._under_bound_runtime(probe)()
+    finally:
+        mcp._STATE["runtime"] = old
+    assert seen == [True]
+
+
+def test_find_warns_when_generation_weights_are_missing_offline(fake_diffusers, fake_embedder):
+    from foley.index import MemoryIndex, SoundLibrary
+
+    idx = MemoryIndex(dim=fake_embedder.dim)
+    empty = SoundLibrary(sounds={}, meta={}, vindex=idx, kindex=idx, embedder=fake_embedder)
+    foley.obs.configure(run_store={})
+    try:
+        with foley.offline(), pytest.warns(UserWarning, match="not in the local cache"):
+            foley.find("The heavy oak door creaked.", library=empty)
+    finally:
+        foley.obs.reset()
+
+
+def test_a_non_cache_error_is_not_relabelled_as_a_missing_model():
+    from foley.runtime import load_pretrained
+
+    def bad_dtype(model_id, **kw):
+        raise ValueError("unsupported torch_dtype 'float8'")
+
+    with foley.offline():
+        with pytest.raises(ValueError, match="torch_dtype"):
+            load_pretrained(bad_dtype, "x/y")

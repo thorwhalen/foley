@@ -720,7 +720,9 @@ def generate(
         UnsupportedParameter: For a meaning-carrying parameter the backend cannot
             honour (see ``on_unsupported``).
         BudgetExceeded / CostApprovalRequired: Before a paid call the budget refuses.
-        EgressBlocked: For an external backend under :func:`offline`.
+        EgressBlocked: For an external backend under :func:`offline`, or
+            :class:`~foley.runtime.ModelNotCached` for a local one whose weights are
+            not on this machine.
     """
     from .cost import spend_scope
 

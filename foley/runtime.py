@@ -110,8 +110,10 @@ def load_pretrained(loader, model_id: str, *, how_to_fetch: "str | None" = None,
     """Call ``loader(model_id, **kwargs)`` — a ``from_pretrained`` — honouring the posture.
 
     Online, it is a plain call. Under :func:`offline` it passes
-    ``local_files_only=True`` (no Hub request at all) and turns a cache miss into
-    :class:`ModelNotCached`. Every Hugging Face load in foley goes through here.
+    ``local_files_only=True`` (no Hub request at all) and turns a cache miss (an
+    ``OSError``) into :class:`ModelNotCached`; any other error passes through as is.
+    foley's ``from_pretrained`` loads (CLAP, Stable Audio) go through here; loaders
+    with no local-only switch (AudioSeal, whisperX) go through :func:`no_download`.
 
     Args:
         loader: e.g. ``ClapModel.from_pretrained``.
@@ -124,12 +126,67 @@ def load_pretrained(loader, model_id: str, *, how_to_fetch: "str | None" = None,
         return loader(model_id, **kwargs)
     try:
         return loader(model_id, local_files_only=True, **kwargs)
-    except (OSError, ValueError) as exc:  # HF raises OSError/EnvironmentError on a miss
+    except OSError as exc:  # HF raises OSError (EnvironmentError) on a cache miss
         fetch = how_to_fetch or f"huggingface-cli download {model_id}"
         raise ModelNotCached(
             f"model {model_id!r} is not in the local cache, and the offline posture "
             f"forbids downloading it. Fetch it once while online: `{fetch}`."
         ) from exc
+
+
+@contextmanager
+def no_download(what: str, *, how_to_fetch: str):
+    """Under an offline posture, forbid every outbound connection for the block.
+
+    For model loaders that have no local-only switch (AudioSeal, whisperX): while the
+    block runs, a non-loopback ``connect`` raises, and whatever error the library turns
+    that into is re-raised as :class:`ModelNotCached` naming ``what`` and
+    ``how_to_fetch``. Online it does nothing. The block is process-wide while it runs —
+    acceptable because, offline, nothing should be connecting out anyway.
+    """
+    import socket
+
+    if current_runtime().allows(EXTERNAL):
+        yield
+        return
+    real_connect, real_connect_ex = socket.socket.connect, socket.socket.connect_ex
+    tripped: list = []
+
+    def _blocked(real):
+        def guarded(sock, address):
+            host = address[0] if isinstance(address, tuple) else None
+            family_unix = getattr(socket, "AF_UNIX", None)
+            if host is not None and sock.family != family_unix and not _is_loopback(host):
+                tripped.append(address)
+                raise ConnectionRefusedError(f"offline: connection to {address!r} blocked")
+            return real(sock, address)
+
+        return guarded
+
+    socket.socket.connect = _blocked(real_connect)
+    socket.socket.connect_ex = _blocked(real_connect_ex)
+    try:
+        yield
+    except Exception as exc:
+        if tripped:
+            raise ModelNotCached(
+                f"{what} is not on this machine, and the offline posture forbids "
+                f"downloading it. Fetch it once while online: {how_to_fetch}"
+            ) from exc
+        raise
+    finally:
+        socket.socket.connect, socket.socket.connect_ex = real_connect, real_connect_ex
+
+
+def _is_loopback(host: str) -> bool:
+    import ipaddress
+
+    if host == "localhost":
+        return True
+    try:
+        return ipaddress.ip_address(host.strip("[]")).is_loopback
+    except ValueError:
+        return False
 
 
 def require_local_files(paths: "list[str]", *, what: str, how_to_fetch: str) -> None:

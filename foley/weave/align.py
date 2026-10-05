@@ -111,11 +111,17 @@ class WhisperXAligner:
         audio16 = resample(
             to_mono(audio), sample_rate, target_sr=WHISPERX_SAMPLE_RATE
         ).astype("float32")
-        model = whisperx.load_model(self.model_size, self.device, language=language)
+        from ..runtime import no_download
+
+        with no_download(
+            f"the whisperX models ({self.model_size!r}, {language!r} alignment)",
+            how_to_fetch="align one clip with foley.weave once while online.",
+        ):
+            model = whisperx.load_model(self.model_size, self.device, language=language)
+            align_model, meta = whisperx.load_align_model(
+                language_code=language, device=self.device
+            )
         result = model.transcribe(audio16, batch_size=self.batch_size)
-        align_model, meta = whisperx.load_align_model(
-            language_code=language, device=self.device
-        )
         aligned = whisperx.align(
             result["segments"], align_model, meta, audio16, self.device
         )

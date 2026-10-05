@@ -648,7 +648,9 @@ def ingest_folder(
         recursive: Recurse into sub-folders.
         exts: Audio extensions to ingest.
         on_error: ``'collect'`` records per-file errors and continues;
-            ``'raise'`` re-raises the first error.
+            ``'raise'`` re-raises the first error. Either way an
+            :class:`~foley.runtime.EgressBlocked` (offline, the embedder's weights not
+            cached) raises at once: every file would fail the same way.
         **ingest_one_kw: Forwarded to :func:`ingest_one` (license, taggers, QC
             flags, …).
 
