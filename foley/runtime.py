@@ -98,6 +98,58 @@ class EgressBlocked(PermissionError):
     """
 
 
+class ModelNotCached(EgressBlocked):
+    """Raised under an offline posture when a model's weights are not on this machine.
+
+    foley never downloads weights inside :func:`offline` (#86); the message names the
+    model and how to fetch it beforehand, online.
+    """
+
+
+def load_pretrained(loader, model_id: str, *, how_to_fetch: "str | None" = None, **kwargs):
+    """Call ``loader(model_id, **kwargs)`` — a ``from_pretrained`` — honouring the posture.
+
+    Online, it is a plain call. Under :func:`offline` it passes
+    ``local_files_only=True`` (no Hub request at all) and turns a cache miss into
+    :class:`ModelNotCached`. Every Hugging Face load in foley goes through here.
+
+    Args:
+        loader: e.g. ``ClapModel.from_pretrained``.
+        model_id: The Hub repo id.
+        how_to_fetch: The pre-download instruction for the error (default: the
+            ``huggingface-cli download`` command).
+        **kwargs: Passed to ``loader``.
+    """
+    if current_runtime().allows(EXTERNAL):
+        return loader(model_id, **kwargs)
+    try:
+        return loader(model_id, local_files_only=True, **kwargs)
+    except (OSError, ValueError) as exc:  # HF raises OSError/EnvironmentError on a miss
+        fetch = how_to_fetch or f"huggingface-cli download {model_id}"
+        raise ModelNotCached(
+            f"model {model_id!r} is not in the local cache, and the offline posture "
+            f"forbids downloading it. Fetch it once while online: `{fetch}`."
+        ) from exc
+
+
+def require_local_files(paths: "list[str]", *, what: str, how_to_fetch: str) -> None:
+    """Under an offline posture, raise :class:`ModelNotCached` unless every path exists.
+
+    For model files a library downloads itself (PANNs fetches its checkpoint and label
+    CSV with ``wget``, even at import), checked before that library is touched.
+    """
+    from pathlib import Path
+
+    if current_runtime().allows(EXTERNAL):
+        return
+    missing = [p for p in paths if not Path(p).expanduser().exists()]
+    if missing:
+        raise ModelNotCached(
+            f"{what} needs {missing}, which are not on this machine, and the offline "
+            f"posture forbids downloading them. Fetch them once while online: {how_to_fetch}"
+        )
+
+
 def require_egress(data_egress: "str | None", *, what: str) -> None:
     """Raise :class:`EgressBlocked` unless the active runtime allows ``data_egress``.
 

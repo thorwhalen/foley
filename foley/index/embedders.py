@@ -76,13 +76,19 @@ class ClapEmbedder:
         return self._dim
 
     def _resolve_dim(self) -> int:
+        from ..runtime import EgressBlocked
+
         try:
             from transformers import AutoConfig
 
-            cfg = AutoConfig.from_pretrained(self.model_id)
+            from ..runtime import load_pretrained
+
+            cfg = load_pretrained(AutoConfig.from_pretrained, self.model_id)
             proj = getattr(cfg, "projection_dim", None)
             if proj:
                 return int(proj)
+        except EgressBlocked:
+            raise  # offline and not cached: say so, do not fall back to a download
         except Exception:
             pass
         return int(getattr(self._model.config, "projection_dim", DEFAULT_CLAP_DIM))
@@ -104,7 +110,10 @@ class ClapEmbedder:
     def _model(self):
         from transformers import ClapModel
 
-        model = ClapModel.from_pretrained(self.model_id).to(self.device).eval()
+        from ..runtime import load_pretrained
+
+        model = load_pretrained(ClapModel.from_pretrained, self.model_id)
+        model = model.to(self.device).eval()
         # Trust the loaded config for the dim (keeps non-default checkpoints
         # coherent) — the ``dim`` property caches it via ``_resolve_dim``.
         proj = getattr(model.config, "projection_dim", None)
@@ -116,7 +125,9 @@ class ClapEmbedder:
     def _processor(self):
         from transformers import ClapProcessor
 
-        return ClapProcessor.from_pretrained(self.model_id)
+        from ..runtime import load_pretrained
+
+        return load_pretrained(ClapProcessor.from_pretrained, self.model_id)
 
     @staticmethod
     def _l2(features) -> "ndarray":

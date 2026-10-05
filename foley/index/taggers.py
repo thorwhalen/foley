@@ -141,6 +141,28 @@ class ClapZeroShotTagger:
 # ---------------------------------------------------------------------------
 
 
+#: Where panns-inference keeps (and, when missing, ``wget``-downloads) its files.
+PANNS_DATA_DIR = "~/panns_data"
+PANNS_FILES = ("Cnn14_mAP=0.431.pth", "class_labels_indices.csv")
+
+
+def _require_panns_files() -> None:
+    """Under :func:`foley.offline`, refuse before panns-inference can ``wget`` its files.
+
+    Importing ``panns_inference`` downloads its label CSV when missing, and
+    ``AudioTagging(checkpoint_path=None)`` downloads the checkpoint, so this check runs
+    before either.
+    """
+    from ..runtime import require_local_files
+
+    require_local_files(
+        [f"{PANNS_DATA_DIR}/{name}" for name in PANNS_FILES],
+        what="the PANNs tagger",
+        how_to_fetch="run `foley.index.PannsTagger().tag(...)` once online "
+        f"(panns-inference saves them to {PANNS_DATA_DIR}).",
+    )
+
+
 class PannsTagger:
     """PANNs CNN14 supervised tagger over the 527 AudioSet classes (``foley[tag]``).
 
@@ -156,6 +178,7 @@ class PannsTagger:
 
     @cached_property
     def _model(self):
+        _require_panns_files()
         try:
             from panns_inference import AudioTagging
         except ImportError as exc:  # pragma: no cover - env-dependent
@@ -166,6 +189,7 @@ class PannsTagger:
 
     @cached_property
     def _labels(self):
+        _require_panns_files()
         from panns_inference import labels
 
         return labels
