@@ -78,6 +78,21 @@ class FakeAligner:
         ]
 
 
+def _offline_kwargs(whisperx) -> dict:
+    """``{"local_files_only": True}`` under an offline posture, when whisperX accepts it."""
+    import inspect
+
+    from ..runtime import EXTERNAL, current_runtime
+
+    if current_runtime().allows(EXTERNAL):
+        return {}
+    try:
+        params = inspect.signature(whisperx.load_model).parameters
+    except (TypeError, ValueError):  # pragma: no cover - a C-level callable
+        return {}
+    return {"local_files_only": True} if "local_files_only" in params else {}
+
+
 class WhisperXAligner:
     """The real ≈±50 ms :class:`Aligner` (``foley[align]``) — faster-whisper ASR + wav2vec2 CTC.
 
@@ -111,11 +126,19 @@ class WhisperXAligner:
         audio16 = resample(
             to_mono(audio), sample_rate, target_sr=WHISPERX_SAMPLE_RATE
         ).astype("float32")
-        model = whisperx.load_model(self.model_size, self.device, language=language)
+        from ..runtime import no_download
+
+        with no_download(
+            f"the whisperX models ({self.model_size!r}, {language!r} alignment)",
+            how_to_fetch="align one clip with foley.weave once while online.",
+        ):
+            model = whisperx.load_model(
+                self.model_size, self.device, language=language, **_offline_kwargs(whisperx)
+            )
+            align_model, meta = whisperx.load_align_model(
+                language_code=language, device=self.device
+            )
         result = model.transcribe(audio16, batch_size=self.batch_size)
-        align_model, meta = whisperx.load_align_model(
-            language_code=language, device=self.device
-        )
         aligned = whisperx.align(
             result["segments"], align_model, meta, audio16, self.device
         )

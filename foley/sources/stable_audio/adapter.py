@@ -75,7 +75,9 @@ class StableAudioAdapter:
         cuda = torch.cuda.is_available()
         # float16-on-CPU is broken/very slow — branch the dtype on the device.
         dtype = torch.float16 if cuda else torch.float32
-        pipe = StableAudioPipeline.from_pretrained(model_id, torch_dtype=dtype)
+        from ...runtime import load_pretrained
+
+        pipe = load_pretrained(StableAudioPipeline.from_pretrained, model_id, torch_dtype=dtype)
         return pipe.to("cuda" if cuda else "cpu")
 
     # -- GenerateAdapter surface --------------------------------------------

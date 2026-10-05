@@ -681,10 +681,38 @@ TOOLS = [
 
 def _resolve_tools(*, include: "Optional[list[str]]" = None) -> list:
     """The tool list, optionally subset by name (``include``)."""
-    if include is None:
-        return list(TOOLS)
-    by_name = {fn.__name__: fn for fn in TOOLS}
-    return [by_name[n] for n in include if n in by_name]
+    tools = list(TOOLS)
+    if include is not None:
+        by_name = {fn.__name__: fn for fn in tools}
+        tools = [by_name[n] for n in include if n in by_name]
+    return [_under_bound_runtime(fn) for fn in tools]
+
+
+def _under_bound_runtime(fn):
+    """Run a tool under the server's bound runtime (so offline holds in every call).
+
+    ``build_mcp_server(runtime=RuntimeConfig.offline_local())`` binds a posture; tool
+    calls run in a threadpool or on tasks, whose context may not carry it, so each
+    call re-enters it (model loads, sources and LLM rungs all read
+    :func:`foley.runtime.current_runtime`).
+    """
+    import functools
+
+    @functools.wraps(fn)
+    def wrapped(*args, **kwargs):
+        runtime = _STATE["runtime"]
+        if runtime is None or not runtime.offline:
+            return fn(*args, **kwargs)
+        from ..runtime import current_runtime, runtime_scope
+
+        if current_runtime() == runtime:
+            return fn(*args, **kwargs)
+        # The ContextVar only: safe from many worker threads at once (offline_scope
+        # would save/restore process-wide obs settings out of order).
+        with runtime_scope(runtime):
+            return fn(*args, **kwargs)
+
+    return wrapped
 
 
 def build_mcp_server(
@@ -736,7 +764,7 @@ def _run_server(server, runtime) -> None:
     lifetime (with :func:`foley.obs.recorder.run` now honoring ``force_disabled``, this
     silences the ``find`` / ``weave`` paths too, not only the ``facade_run`` ones).
     """
-    if runtime is not None and not runtime.telemetry:
+    if runtime is not None and (runtime.offline or not runtime.telemetry):
         from ..runtime import offline_scope
 
         with offline_scope(runtime):

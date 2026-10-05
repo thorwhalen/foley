@@ -243,9 +243,15 @@ def _generate_and_reverify(
 
         warnings.warn(f"generation skipped: {exc}", UserWarning, stacklevel=2)
         return None
-    except (GenerationError, EgressBlocked):
-        # Refused, failed, or an external backend under offline(): skip generation;
-        # the caller falls back to the best verified retrieval.
+    except EgressBlocked as exc:
+        # Offline: an external backend, or a local one whose weights are not cached.
+        import warnings
+
+        warnings.warn(f"generation skipped: {exc}", UserWarning, stacklevel=2)
+        return None
+    except GenerationError:
+        # Refused or failed: skip generation; find falls back to the best verified
+        # retrieval.
         return None
     gc.event = event  # (origin is already 'generated' from foley.generate)
     if not gate_candidates([gc], intended_use):

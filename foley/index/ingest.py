@@ -648,7 +648,9 @@ def ingest_folder(
         recursive: Recurse into sub-folders.
         exts: Audio extensions to ingest.
         on_error: ``'collect'`` records per-file errors and continues;
-            ``'raise'`` re-raises the first error.
+            ``'raise'`` re-raises the first error. Either way an
+            :class:`~foley.runtime.EgressBlocked` (offline, the embedder's weights not
+            cached) raises at once: every file would fail the same way.
         **ingest_one_kw: Forwarded to :func:`ingest_one` (license, taggers, QC
             flags, …).
 
@@ -658,6 +660,7 @@ def ingest_folder(
     from .library import default_library
 
     from ..obs.recorder import facade_run
+    from ..runtime import EgressBlocked
     from ..obs.run_artifact import ingest_digest
 
     lib = library if library is not None else default_library()
@@ -669,6 +672,8 @@ def ingest_folder(
         for fp in iter_audio_files(path, recursive=recursive, exts=exts):
             try:
                 report.record(ingest_one(str(fp), library=lib, **ingest_one_kw))
+            except EgressBlocked:
+                raise  # offline without the embedder's weights: every file would fail
             except Exception as exc:
                 if on_error == "raise":
                     raise

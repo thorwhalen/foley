@@ -298,6 +298,7 @@ def run_generation(plan: GenerationPlan, adapter, *, cache=None):
         plan's, and ``candidate.cost_estimate_usd`` / ``cost_actual_usd`` set.
     """
     from ..cost import release
+    from ..runtime import EgressBlocked
     from .base import SourceConfigurationError
 
     if plan.cached is not None:
@@ -310,8 +311,8 @@ def run_generation(plan: GenerationPlan, adapter, *, cache=None):
     reserved = plan.estimate_usd if plan.request_key is not None else None
     try:
         clip = adapter.generate(plan.prompt, **plan.affordances)
-    except SourceConfigurationError:
-        release(reserved)  # refused before any request was sent
+    except (SourceConfigurationError, EgressBlocked):
+        release(reserved)  # refused before any request was sent (incl. offline weights)
         raise
     except ImportError as exc:
         release(reserved)

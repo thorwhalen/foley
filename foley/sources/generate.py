@@ -43,6 +43,7 @@ from typing import Optional
 from ..base import Candidate, CandidateOrigin
 from ..index.ingest import IngestReport, IngestResult, ingest_one
 from ._dispatch import plan_generation, record_generation_outcome, run_generation
+from ..runtime import EgressBlocked
 from .base import SourceConfigurationError
 from .registry import get_source
 
@@ -258,8 +259,8 @@ def _generate(
             },
         ):
             clip = run_generation(plan, gen, cache=generations_cache)
-    except SourceConfigurationError:
-        raise
+    except (SourceConfigurationError, EgressBlocked):
+        raise  # not configured, or offline without the model's weights: say so
     except Exception as exc:
         report.record(
             IngestResult(

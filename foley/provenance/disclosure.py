@@ -281,7 +281,13 @@ class AudioSealWatermarker:
         import torch  # noqa: F401 - ensures torch present for the model
         from audioseal import AudioSeal
 
-        return AudioSeal.load_generator(AUDIOSEAL_GENERATOR).to("cpu").eval()
+        from ..runtime import no_download
+
+        with no_download(
+            f"the AudioSeal watermark model {AUDIOSEAL_GENERATOR!r}",
+            how_to_fetch=f"run `AudioSeal.load_generator({AUDIOSEAL_GENERATOR!r})` once.",
+        ):
+            return AudioSeal.load_generator(AUDIOSEAL_GENERATOR).to("cpu").eval()
 
     def embed(
         self, audio_bytes: bytes, *, message: Optional[int] = None
@@ -388,7 +394,13 @@ def detect_watermark(audio_bytes: bytes) -> "tuple[float, Optional[int]]":
     ]
     if sr != WATERMARK_EMBED_SR:
         x = torchaudio.functional.resample(x, sr, WATERMARK_EMBED_SR)
-    detector = AudioSeal.load_detector(AUDIOSEAL_DETECTOR).to("cpu").eval()
+    from ..runtime import no_download
+
+    with no_download(
+        f"the AudioSeal detector {AUDIOSEAL_DETECTOR!r}",
+        how_to_fetch=f"run `AudioSeal.load_detector({AUDIOSEAL_DETECTOR!r})` once.",
+    ):
+        detector = AudioSeal.load_detector(AUDIOSEAL_DETECTOR).to("cpu").eval()
     with torch.no_grad():
         prob, message = detector.detect_watermark(x, WATERMARK_EMBED_SR)
     prob = float(prob)
