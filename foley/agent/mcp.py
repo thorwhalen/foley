@@ -698,11 +698,13 @@ def _under_bound_runtime(fn):
         runtime = _STATE["runtime"]
         if runtime is None or not runtime.offline:
             return fn(*args, **kwargs)
-        from ..runtime import current_runtime, offline_scope
+        from ..runtime import current_runtime, runtime_scope
 
         if current_runtime() == runtime:
             return fn(*args, **kwargs)
-        with offline_scope(runtime):
+        # The ContextVar only: safe from many worker threads at once (offline_scope
+        # would save/restore process-wide obs settings out of order).
+        with runtime_scope(runtime):
             return fn(*args, **kwargs)
 
     return wrapped

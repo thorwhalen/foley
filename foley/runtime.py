@@ -126,13 +126,25 @@ def load_pretrained(loader, model_id: str, *, how_to_fetch: "str | None" = None,
         return loader(model_id, **kwargs)
     try:
         return loader(model_id, local_files_only=True, **kwargs)
-    except OSError as exc:
-        if not (_is_cache_miss(exc) or not _repo_in_hf_cache(model_id)):
-            raise  # e.g. a corrupt cached file: downloading would not fix it
+    except (OSError, AttributeError) as exc:
+        from pathlib import Path
+
+        if Path(model_id).expanduser().exists():
+            raise  # a local directory: no download involved, keep the real error
         fetch = how_to_fetch or f"huggingface-cli download {model_id}"
+        if _is_cache_miss(exc) or not _repo_in_hf_cache(model_id):
+            raise ModelNotCached(
+                f"model {model_id!r} is not in the local cache, and the offline posture "
+                f"forbids downloading it. Fetch it once while online: `{fetch}`."
+            ) from exc
+        # Cached, yet it failed to load: an interrupted download (files missing) or a
+        # corrupt file. Say both, and keep the original error as the cause.
         raise ModelNotCached(
-            f"model {model_id!r} is not in the local cache, and the offline posture "
-            f"forbids downloading it. Fetch it once while online: `{fetch}`."
+            f"model {model_id!r} is in the local cache but failed to load "
+            f"({type(exc).__name__}: {exc}). Its files may be incomplete (an "
+            f"interrupted download) or corrupt. Offline, foley will not re-download: "
+            f"while online, run `{fetch} --force-download` (or delete its cache folder "
+            f"and fetch it again)."
         ) from exc
 
 
@@ -174,48 +186,56 @@ def _is_cache_miss(exc: BaseException) -> bool:
     return False
 
 
-@contextmanager
-def no_download(what: str, *, how_to_fetch: str):
-    """Under an offline posture, forbid every outbound connection for the block.
+#: Whether outbound connections are blocked in this context (set by :func:`no_download`).
+_DOWNLOADS_BLOCKED: "ContextVar[str | None]" = ContextVar("foley_no_download", default=None)
 
-    For model loaders that have no local-only switch (AudioSeal, whisperX): while the
-    block runs, a non-loopback ``connect`` raises, and whatever error the library turns
-    that into is re-raised as :class:`ModelNotCached` naming ``what`` and
-    ``how_to_fetch``. Online it does nothing. The block is process-wide while it runs —
-    acceptable because, offline, nothing should be connecting out anyway.
+
+class _OfflineBlocked(ConnectionRefusedError):
+    """The connection :func:`no_download` refused (so a miss can be told from other errors)."""
+
+
+def _ensure_socket_gate() -> None:
+    """Wrap ``socket.socket.connect`` / ``connect_ex`` / ``socket.getaddrinfo`` once.
+
+    The wrappers consult a :class:`~contextvars.ContextVar`, so blocking applies only to
+    the context (thread / task) inside :func:`no_download`: concurrent loads cannot undo
+    each other, and an online thread is never affected. Re-wraps if something replaced
+    the functions since (a test fixture restoring its own patch).
     """
     import socket
 
-    if current_runtime().allows(EXTERNAL):
-        yield
-        return
-    real_connect, real_connect_ex = socket.socket.connect, socket.socket.connect_ex
-    tripped: list = []
+    def gate(real, kind):
+        def wrapped(*args, **kwargs):
+            what = _DOWNLOADS_BLOCKED.get()
+            if what is not None:
+                if kind == "addr":
+                    host = args[0] if args else kwargs.get("host")
+                    if isinstance(host, bytes):
+                        host = host.decode()
+                    if host is not None and not _is_loopback(str(host)):
+                        raise _OfflineBlocked(f"offline: name lookup for {host!r} blocked")
+                else:
+                    sock, address = args[0], args[1]
+                    host = address[0] if isinstance(address, tuple) else None
+                    if (
+                        host is not None
+                        and sock.family != getattr(socket, "AF_UNIX", None)
+                        and not _is_loopback(str(host))
+                    ):
+                        raise _OfflineBlocked(f"offline: connection to {address!r} blocked")
+            return real(*args, **kwargs)
 
-    def _blocked(real):
-        def guarded(sock, address):
-            host = address[0] if isinstance(address, tuple) else None
-            family_unix = getattr(socket, "AF_UNIX", None)
-            if host is not None and sock.family != family_unix and not _is_loopback(host):
-                tripped.append(address)
-                raise ConnectionRefusedError(f"offline: connection to {address!r} blocked")
-            return real(sock, address)
+        wrapped._foley_gate = True
+        return wrapped
 
-        return guarded
-
-    socket.socket.connect = _blocked(real_connect)
-    socket.socket.connect_ex = _blocked(real_connect_ex)
-    try:
-        yield
-    except Exception as exc:
-        if tripped:
-            raise ModelNotCached(
-                f"{what} is not on this machine, and the offline posture forbids "
-                f"downloading it. Fetch it once while online: {how_to_fetch}"
-            ) from exc
-        raise
-    finally:
-        socket.socket.connect, socket.socket.connect_ex = real_connect, real_connect_ex
+    for owner, name, kind in (
+        (socket.socket, "connect", "sock"),
+        (socket.socket, "connect_ex", "sock"),
+        (socket, "getaddrinfo", "addr"),
+    ):
+        current = getattr(owner, name)
+        if not getattr(current, "_foley_gate", False):
+            setattr(owner, name, gate(current, kind))
 
 
 def _is_loopback(host: str) -> bool:
@@ -227,6 +247,72 @@ def _is_loopback(host: str) -> bool:
         return ipaddress.ip_address(host.strip("[]")).is_loopback
     except ValueError:
         return False
+
+
+def _blocked_by_gate(exc: BaseException) -> bool:
+    """Whether ``exc``'s chain (``__cause__`` / ``__context__`` / ``reason``) holds a refusal."""
+    seen = set()
+    stack = [exc]
+    while stack:
+        e = stack.pop()
+        if e is None or id(e) in seen:
+            continue
+        seen.add(id(e))
+        if isinstance(e, _OfflineBlocked) or type(e).__name__ in _CACHE_MISS_TYPES:
+            return True
+        stack.extend([e.__cause__, e.__context__, getattr(e, "reason", None)])
+        stack = [x for x in stack if isinstance(x, BaseException) or x is None]
+    return False
+
+
+@contextmanager
+def no_download(what: str, *, how_to_fetch: str):
+    """Under an offline posture, forbid outbound connections in this context for the block.
+
+    For model loaders that have no local-only switch (AudioSeal, whisperX): inside the
+    block a non-loopback connection or name lookup made from this context is refused,
+    and an error whose cause is that refusal is re-raised as :class:`ModelNotCached`
+    naming ``what`` and ``how_to_fetch``. A cached model still loads (the libraries fall
+    back to their cache when the network is refused); an unrelated error passes through
+    unchanged. Online it does nothing. Threads a loader starts itself do not inherit
+    the block (they start with a fresh context); the loaders guarded here make their
+    first request from the calling thread.
+    """
+    if current_runtime().allows(EXTERNAL):
+        yield
+        return
+    _ensure_socket_gate()
+    token = _DOWNLOADS_BLOCKED.set(what)
+    try:
+        yield
+    except Exception as exc:
+        if _blocked_by_gate(exc):
+            raise ModelNotCached(
+                f"{what} is not on this machine, and the offline posture forbids "
+                f"downloading it. Fetch it once while online: {how_to_fetch}"
+            ) from exc
+        raise
+    finally:
+        _DOWNLOADS_BLOCKED.reset(token)
+
+
+def runtime_scope(config: "RuntimeConfig"):
+    """Make ``config`` the current posture for the block — the ContextVar only.
+
+    Unlike :func:`offline_scope` it leaves the process-wide obs settings alone (safe to
+    enter from many threads at once); telemetry still follows the posture, because
+    :func:`foley.obs.is_enabled` reads :func:`current_runtime`.
+    """
+
+    @contextmanager
+    def _scope():
+        token = _CURRENT_RUNTIME.set(config)
+        try:
+            yield config
+        finally:
+            _CURRENT_RUNTIME.reset(token)
+
+    return _scope()
 
 
 def require_local_files(

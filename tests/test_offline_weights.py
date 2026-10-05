@@ -192,7 +192,8 @@ def test_a_non_cache_error_is_not_relabelled_as_a_missing_model():
             load_pretrained(bad_dtype, "x/y")
 
 
-def test_a_corrupt_cached_model_is_not_reported_as_missing(monkeypatch):
+def test_a_cached_model_that_fails_to_load_is_not_called_missing(monkeypatch):
+    """Corrupt or half-downloaded: the message says so, and keeps the real error."""
     from foley import runtime
     from foley.runtime import load_pretrained
 
@@ -202,9 +203,76 @@ def test_a_corrupt_cached_model_is_not_reported_as_missing(monkeypatch):
         raise OSError("Unable to load weights from pytorch checkpoint file for 'x/y'")
 
     with foley.offline():
-        with pytest.raises(OSError, match="Unable to load weights") as exc:
+        with pytest.raises(ModelNotCached, match="in the local cache but failed to load") as exc:
             load_pretrained(corrupt, "x/y")
+    assert "Unable to load weights" in str(exc.value.__cause__)
+    assert "--force-download" in str(exc.value)
+
+
+def test_a_local_model_directory_keeps_its_own_error(tmp_path):
+    from foley.runtime import load_pretrained
+
+    def broken(model_id, **kw):
+        raise OSError("no config.json in this folder")
+
+    with foley.offline():
+        with pytest.raises(OSError, match="no config.json") as exc:
+            load_pretrained(broken, str(tmp_path))
     assert not isinstance(exc.value, ModelNotCached)
+
+
+def test_an_unrelated_error_after_a_refused_request_is_not_relabelled():
+    """A cached model loads after its refused HEAD; a later real error stays itself."""
+    import socket
+
+    from foley.runtime import no_download
+
+    with foley.offline():
+        with pytest.raises(ValueError, match="unsupported language"):
+            with no_download("a model", how_to_fetch="..."):
+                try:
+                    socket.create_connection(("192.0.2.20", 443), timeout=0.01)
+                except OSError:
+                    pass  # the library falls back to its cache
+                raise ValueError("unsupported language 'xx'")
+
+
+def test_blocking_is_per_context_not_process_wide():
+    """An online thread keeps its network while another thread's offline load runs."""
+    import socket
+    import threading
+
+    from foley.runtime import _DOWNLOADS_BLOCKED, _ensure_socket_gate, no_download
+
+    _ensure_socket_gate()
+    inside, release = threading.Event(), threading.Event()
+    seen = {}
+
+    def offline_loader():
+        with foley.offline(), no_download("m", how_to_fetch="..."):
+            seen["offline_flag"] = _DOWNLOADS_BLOCKED.get()
+            inside.set()
+            release.wait(5)
+
+    t = threading.Thread(target=offline_loader)
+    t.start()
+    inside.wait(5)
+    seen["online_flag"] = _DOWNLOADS_BLOCKED.get()  # this thread is not blocked
+    release.set()
+    t.join()
+    assert seen == {"offline_flag": "m", "online_flag": None}
+    assert getattr(socket.socket.connect, "_foley_gate", False)  # one permanent gate
+
+
+def test_name_lookups_are_blocked_too():
+    import socket
+
+    from foley.runtime import no_download
+
+    with foley.offline():
+        with pytest.raises(ModelNotCached):
+            with no_download("a model", how_to_fetch="..."):
+                socket.getaddrinfo("huggingface.co", 443)
 
 
 def test_a_truncated_panns_checkpoint_counts_as_missing(tmp_path, monkeypatch):
