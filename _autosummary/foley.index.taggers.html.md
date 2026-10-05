@@ -22,9 +22,11 @@ importing this module costs only the stdlib.
 
 ### Module Attributes
 
-| [`ZEROSHOT_PROMPT`](#foley.index.taggers.ZEROSHOT_PROMPT)   | Prompt template for zero-shot CLAP tagging (report 03 Part 2).   |
-|--------------------------------------------------------------------|------------------------------------------------------------------|
-| [`PANNS_SAMPLE_RATE`](#foley.index.taggers.PANNS_SAMPLE_RATE) | PANNs CNN14 expects 32 kHz mono audio.                           |
+| [`ZEROSHOT_PROMPT`](#foley.index.taggers.ZEROSHOT_PROMPT)            | Prompt template for zero-shot CLAP tagging (report 03 Part 2).                  |
+|-----------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [`PANNS_SAMPLE_RATE`](#foley.index.taggers.PANNS_SAMPLE_RATE)          | PANNs CNN14 expects 32 kHz mono audio.                                          |
+| [`PANNS_DATA_DIR`](#foley.index.taggers.PANNS_DATA_DIR)             | Where panns-inference keeps (and, when missing, `wget`-downloads) its files.    |
+| [`PANNS_CHECKPOINT_MIN_BYTES`](#foley.index.taggers.PANNS_CHECKPOINT_MIN_BYTES) | panns-inference treats a smaller checkpoint as incomplete and fetches it again. |
 
 ### Functions
 
@@ -83,6 +85,14 @@ no second CLAP forward pass.
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+
+### foley.index.taggers.PANNS_CHECKPOINT_MIN_BYTES *= 300000000*
+
+panns-inference treats a smaller checkpoint as incomplete and fetches it again.
+
+### foley.index.taggers.PANNS_DATA_DIR *= '~/panns_data'*
+
+Where panns-inference keeps (and, when missing, `wget`-downloads) its files.
 
 ### foley.index.taggers.PANNS_SAMPLE_RATE *: [int](https://docs.python.org/3/builtins/functions.html#int)* *= 32000*
 

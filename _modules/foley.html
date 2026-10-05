@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -1449,7 +1449,9 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        UnsupportedParameter: For a meaning-carrying parameter the backend cannot</span>
 <span class="sd">            honour (see ``on_unsupported``).</span>
 <span class="sd">        BudgetExceeded / CostApprovalRequired: Before a paid call the budget refuses.</span>
-<span class="sd">        EgressBlocked: For an external backend under :func:`offline`.</span>
+<span class="sd">        EgressBlocked: For an external backend under :func:`offline`, or</span>
+<span class="sd">            :class:`~foley.runtime.ModelNotCached` for a local one whose weights are</span>
+<span class="sd">            not on this machine.</span>
 <span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.cost</span><span class="w"> </span><span class="kn">import</span> <span class="n">spend_scope</span>
 
@@ -1597,7 +1599,9 @@ window.runMermaid = runMermaid;</script>
         <span class="n">text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"context"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"segments"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span>
         <span class="n">segments</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verb</span> <span class="o">==</span> <span class="s2">"find"</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">segments</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">estimate_find_usd</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">,</span> <span class="n">context_chars</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">segments</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">estimate_find_usd</span><span class="p">(</span>
+                <span class="o">**</span><span class="n">kw</span><span class="p">,</span> <span class="n">context_chars</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">segments</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="p">)</span>
         <span class="c1"># score runs one find per segment</span>
         <span class="n">per</span> <span class="o">=</span> <span class="p">[</span><span class="n">estimate_find_usd</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">,</span> <span class="n">context_chars</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="p">))</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">]</span>
         <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">per</span><span class="p">)</span> <span class="k">else</span> <span class="nb">sum</span><span class="p">(</span><span class="n">per</span><span class="p">)</span>

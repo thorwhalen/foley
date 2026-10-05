@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="API reference" href="../api.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -3740,7 +3740,9 @@ list every dropped, clamped or substituted parameter, and
 <li><p><strong>UnsupportedParameter</strong> – For a meaning-carrying parameter the backend cannot
     honour (see <code class="docutils literal notranslate"><span class="pre">on_unsupported</span></code>).</p></li>
 <li><p><strong>BudgetExceeded / CostApprovalRequired</strong> – Before a paid call the budget refuses.</p></li>
-<li><p><a class="reference internal" href="foley.runtime.html#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><strong>EgressBlocked</strong></a> – For an external backend under <a class="reference internal" href="#foley.offline" title="foley.offline"><code class="xref py py-func docutils literal notranslate"><span class="pre">offline()</span></code></a>.</p></li>
+<li><p><a class="reference internal" href="foley.runtime.html#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><strong>EgressBlocked</strong></a> – For an external backend under <a class="reference internal" href="#foley.offline" title="foley.offline"><code class="xref py py-func docutils literal notranslate"><span class="pre">offline()</span></code></a>, or
+    <a class="reference internal" href="foley.runtime.html#foley.runtime.ModelNotCached" title="foley.runtime.ModelNotCached"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelNotCached</span></code></a> for a local one whose weights are
+    not on this machine.</p></li>
 </ul>
 </dd>
 </dl>
@@ -3823,7 +3825,9 @@ to assert you own them (#55).</p></li>
 <li><p><strong>recursive</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Recurse into sub-folders.</p></li>
 <li><p><strong>exts</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#Ellipsis" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>]</span>) – Audio extensions to ingest.</p></li>
 <li><p><strong>on_error</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">'collect'</span></code> records per-file errors and continues;
-<code class="docutils literal notranslate"><span class="pre">'raise'</span></code> re-raises the first error.</p></li>
+<code class="docutils literal notranslate"><span class="pre">'raise'</span></code> re-raises the first error. Either way an
+<a class="reference internal" href="foley.runtime.html#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-class docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a> (offline, the embedder’s weights not
+cached) raises at once: every file would fail the same way.</p></li>
 <li><p><strong>**ingest_one_kw</strong> – Forwarded to <a class="reference internal" href="#foley.ingest_one" title="foley.ingest_one"><code class="xref py py-func docutils literal notranslate"><span class="pre">ingest_one()</span></code></a> (license, taggers, QC
 flags, …).</p></li>
 </ul>

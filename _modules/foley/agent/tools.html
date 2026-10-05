@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../../../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -967,9 +967,15 @@ window.runMermaid = runMermaid;</script>
 
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">"generation skipped: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">except</span> <span class="p">(</span><span class="n">GenerationError</span><span class="p">,</span> <span class="n">EgressBlocked</span><span class="p">):</span>
-        <span class="c1"># Refused, failed, or an external backend under offline(): skip generation;</span>
-        <span class="c1"># the caller falls back to the best verified retrieval.</span>
+    <span class="k">except</span> <span class="n">EgressBlocked</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="c1"># Offline: an external backend, or a local one whose weights are not cached.</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">"generation skipped: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">except</span> <span class="n">GenerationError</span><span class="p">:</span>
+        <span class="c1"># Refused or failed: skip generation; find falls back to the best verified</span>
+        <span class="c1"># retrieval.</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="n">gc</span><span class="o">.</span><span class="n">event</span> <span class="o">=</span> <span class="n">event</span>  <span class="c1"># (origin is already 'generated' from foley.generate)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">gate_candidates</span><span class="p">([</span><span class="n">gc</span><span class="p">],</span> <span class="n">intended_use</span><span class="p">):</span>
@@ -1187,8 +1193,11 @@ window.runMermaid = runMermaid;</script>
         <span class="s2">"judge"</span><span class="p">:</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">injected</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"judge"</span><span class="p">)</span>
         <span class="k">else</span> <span class="n">max_events</span>
-        <span class="o">*</span> <span class="p">((</span><span class="n">max_refine_loops</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="k">if</span> <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">verify</span><span class="p">)</span> <span class="o">!=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
-           <span class="o">+</span> <span class="n">max_generations</span><span class="p">),</span>
+        <span class="o">*</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">max_refine_loops</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="k">if</span> <span class="n">VerifyLevel</span><span class="p">(</span><span class="n">verify</span><span class="p">)</span> <span class="o">!=</span> <span class="n">VerifyLevel</span><span class="o">.</span><span class="n">clap</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">max_generations</span>
+        <span class="p">),</span>
     <span class="p">}</span>
     <span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">per_gen</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">max_events</span> <span class="o">*</span> <span class="n">max_generations</span> <span class="o">*</span> <span class="n">per_gen</span>
     <span class="k">if</span> <span class="n">per_gen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

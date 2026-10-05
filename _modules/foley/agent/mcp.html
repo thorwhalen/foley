@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../../../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -1146,7 +1146,12 @@ window.runMermaid = runMermaid;</script>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">spend_scope</span><span class="p">(</span><span class="n">_server_budget</span><span class="p">()):</span>
             <span class="n">cand</span> <span class="o">=</span> <span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="n">_lib</span><span class="p">())</span>
-    <span class="k">except</span> <span class="p">(</span><span class="n">EgressBlocked</span><span class="p">,</span> <span class="n">BudgetExceeded</span><span class="p">,</span> <span class="n">SourceConfigurationError</span><span class="p">,</span> <span class="n">UnsupportedParameter</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+    <span class="k">except</span> <span class="p">(</span>
+        <span class="n">EgressBlocked</span><span class="p">,</span>
+        <span class="n">BudgetExceeded</span><span class="p">,</span>
+        <span class="n">SourceConfigurationError</span><span class="p">,</span>
+        <span class="n">UnsupportedParameter</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
         <span class="c1"># Refused before any provider call: say why, as JSON.</span>
         <span class="k">return</span> <span class="p">{</span><span class="s2">"ok"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"refused"</span><span class="p">,</span> <span class="s2">"error"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">),</span> <span class="s2">"backend"</span><span class="p">:</span> <span class="n">backend</span><span class="p">}</span>
     <span class="k">except</span> <span class="n">GenerationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
@@ -1457,10 +1462,38 @@ window.runMermaid = runMermaid;</script>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_tools</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">include</span><span class="p">:</span> <span class="s2">"Optional[list[str]]"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""The tool list, optionally subset by name (``include``)."""</span>
-    <span class="k">if</span> <span class="n">include</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">TOOLS</span><span class="p">)</span>
-    <span class="n">by_name</span> <span class="o">=</span> <span class="p">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">fn</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">TOOLS</span><span class="p">}</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">by_name</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">include</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">by_name</span><span class="p">]</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">TOOLS</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">include</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">by_name</span> <span class="o">=</span> <span class="p">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">fn</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">}</span>
+        <span class="n">tools</span> <span class="o">=</span> <span class="p">[</span><span class="n">by_name</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">include</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">by_name</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">_under_bound_runtime</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_under_bound_runtime</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Run a tool under the server's bound runtime (so offline holds in every call).</span>
+
+<span class="sd">    ``build_mcp_server(runtime=RuntimeConfig.offline_local())`` binds a posture; tool</span>
+<span class="sd">    calls run in a threadpool or on tasks, whose context may not carry it, so each</span>
+<span class="sd">    call re-enters it (model loads, sources and LLM rungs all read</span>
+<span class="sd">    :func:`foley.runtime.current_runtime`).</span>
+<span class="sd">    """</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">runtime</span> <span class="o">=</span> <span class="n">_STATE</span><span class="p">[</span><span class="s2">"runtime"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">runtime</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">runtime</span><span class="o">.</span><span class="n">offline</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_runtime</span><span class="p">,</span> <span class="n">runtime_scope</span>
+
+        <span class="k">if</span> <span class="n">current_runtime</span><span class="p">()</span> <span class="o">==</span> <span class="n">runtime</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># The ContextVar only: safe from many worker threads at once (offline_scope</span>
+        <span class="c1"># would save/restore process-wide obs settings out of order).</span>
+        <span class="k">with</span> <span class="n">runtime_scope</span><span class="p">(</span><span class="n">runtime</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapped</span>
 
 
 <div class="viewcode-block" id="build_mcp_server">
@@ -1515,7 +1548,7 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    lifetime (with :func:`foley.obs.recorder.run` now honoring ``force_disabled``, this</span>
 <span class="sd">    silences the ``find`` / ``weave`` paths too, not only the ``facade_run`` ones).</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">runtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">runtime</span><span class="o">.</span><span class="n">telemetry</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">runtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">runtime</span><span class="o">.</span><span class="n">offline</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">runtime</span><span class="o">.</span><span class="n">telemetry</span><span class="p">):</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">offline_scope</span>
 
         <span class="k">with</span> <span class="n">offline_scope</span><span class="p">(</span><span class="n">runtime</span><span class="p">):</span>

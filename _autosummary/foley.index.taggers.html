@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.index.search" href="foley.index.search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -490,6 +490,12 @@ importing this module costs only the stdlib.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.index.taggers.PANNS_SAMPLE_RATE" title="foley.index.taggers.PANNS_SAMPLE_RATE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PANNS_SAMPLE_RATE</span></code></a></p></td>
 <td><p>PANNs CNN14 expects 32 kHz mono audio.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.index.taggers.PANNS_DATA_DIR" title="foley.index.taggers.PANNS_DATA_DIR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PANNS_DATA_DIR</span></code></a></p></td>
+<td><p>Where panns-inference keeps (and, when missing, <code class="docutils literal notranslate"><span class="pre">wget</span></code>-downloads) its files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.index.taggers.PANNS_CHECKPOINT_MIN_BYTES" title="foley.index.taggers.PANNS_CHECKPOINT_MIN_BYTES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PANNS_CHECKPOINT_MIN_BYTES</span></code></a></p></td>
+<td><p>panns-inference treats a smaller checkpoint as incomplete and fetches it again.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -575,6 +581,18 @@ no second CLAP forward pass.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.index.taggers.PANNS_CHECKPOINT_MIN_BYTES">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taggers.</span></span><span class="sig-name descname"><span class="pre">PANNS_CHECKPOINT_MIN_BYTES</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">300000000</span></span><a class="headerlink" href="#foley.index.taggers.PANNS_CHECKPOINT_MIN_BYTES" title="Link to this definition">#</a></dt>
+<dd><p>panns-inference treats a smaller checkpoint as incomplete and fetches it again.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="foley.index.taggers.PANNS_DATA_DIR">
+<span class="sig-prename descclassname"><span class="pre">foley.index.taggers.</span></span><span class="sig-name descname"><span class="pre">PANNS_DATA_DIR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'~/panns_data'</span></span><a class="headerlink" href="#foley.index.taggers.PANNS_DATA_DIR" title="Link to this definition">#</a></dt>
+<dd><p>Where panns-inference keeps (and, when missing, <code class="docutils literal notranslate"><span class="pre">wget</span></code>-downloads) its files.</p>
 </dd></dl>
 
 <dl class="py data">
@@ -694,6 +712,8 @@ default embedder.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.taggers.ClapZeroShotTagger.tag_vector"><code class="docutils literal notranslate"><span class="pre">ClapZeroShotTagger.tag_vector()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.taggers.PANNS_CHECKPOINT_MIN_BYTES"><code class="docutils literal notranslate"><span class="pre">PANNS_CHECKPOINT_MIN_BYTES</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.taggers.PANNS_DATA_DIR"><code class="docutils literal notranslate"><span class="pre">PANNS_DATA_DIR</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.taggers.PANNS_SAMPLE_RATE"><code class="docutils literal notranslate"><span class="pre">PANNS_SAMPLE_RATE</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.taggers.PannsTagger"><code class="docutils literal notranslate"><span class="pre">PannsTagger</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.index.taggers.PannsTagger.tag"><code class="docutils literal notranslate"><span class="pre">PannsTagger.tag()</span></code></a></li>

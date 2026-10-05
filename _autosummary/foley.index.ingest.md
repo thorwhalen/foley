@@ -174,7 +174,9 @@ Ingest every audio file under `path` and return an [`IngestReport`](#foley.index
   * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
   * **exts** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Audio extensions to ingest.
   * **on_error** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'collect'` records per-file errors and continues;
-    `'raise'` re-raises the first error.
+    `'raise'` re-raises the first error. Either way an
+    [`EgressBlocked`](foley.runtime.md#foley.runtime.EgressBlocked) (offline, the embedder’s weights not
+    cached) raises at once: every file would fail the same way.
   * **\*\*ingest_one_kw** – Forwarded to [`ingest_one()`](#foley.index.ingest.ingest_one) (license, taggers, QC
     flags, …).
 * **Return type:**

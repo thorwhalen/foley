@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../../../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -865,6 +865,33 @@ window.runMermaid = runMermaid;</script>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 
+<span class="c1">#: Where panns-inference keeps (and, when missing, ``wget``-downloads) its files.</span>
+<span class="n">PANNS_DATA_DIR</span> <span class="o">=</span> <span class="s2">"~/panns_data"</span>
+<span class="n">PANNS_FILES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"Cnn14_mAP=0.431.pth"</span><span class="p">,</span> <span class="s2">"class_labels_indices.csv"</span><span class="p">)</span>
+<span class="c1">#: panns-inference treats a smaller checkpoint as incomplete and fetches it again.</span>
+<span class="n">PANNS_CHECKPOINT_MIN_BYTES</span> <span class="o">=</span> <span class="mi">300_000_000</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_require_panns_files</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Under :func:`foley.offline`, refuse before panns-inference can ``wget`` its files.</span>
+
+<span class="sd">    Importing ``panns_inference`` downloads its label CSV when missing, and</span>
+<span class="sd">    ``AudioTagging(checkpoint_path=None)`` downloads the checkpoint, so this check runs</span>
+<span class="sd">    before either.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">require_local_files</span>
+
+    <span class="n">paths</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">PANNS_DATA_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">PANNS_FILES</span><span class="p">]</span>
+    <span class="n">require_local_files</span><span class="p">(</span>
+        <span class="n">paths</span><span class="p">,</span>
+        <span class="n">what</span><span class="o">=</span><span class="s2">"the PANNs tagger"</span><span class="p">,</span>
+        <span class="c1"># panns-inference re-downloads a checkpoint under 300 MB (a truncated wget)</span>
+        <span class="n">min_bytes</span><span class="o">=</span><span class="p">{</span><span class="n">paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">PANNS_CHECKPOINT_MIN_BYTES</span><span class="p">},</span>
+        <span class="n">how_to_fetch</span><span class="o">=</span><span class="s2">"run `foley.index.PannsTagger().tag(...)` once online "</span>
+        <span class="sa">f</span><span class="s2">"(panns-inference saves them to </span><span class="si">{</span><span class="n">PANNS_DATA_DIR</span><span class="si">}</span><span class="s2">)."</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
 <div class="viewcode-block" id="PannsTagger">
 <a class="viewcode-back" href="../../../_autosummary/foley.index.taggers.html#foley.PannsTagger">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PannsTagger</span><span class="p">:</span>
@@ -882,6 +909,7 @@ window.runMermaid = runMermaid;</script>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_require_panns_files</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">panns_inference</span><span class="w"> </span><span class="kn">import</span> <span class="n">AudioTagging</span>
         <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># pragma: no cover - env-dependent</span>
@@ -892,6 +920,7 @@ window.runMermaid = runMermaid;</script>
 
     <span class="nd">@cached_property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_require_panns_files</span><span class="p">()</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">panns_inference</span><span class="w"> </span><span class="kn">import</span> <span class="n">labels</span>
 
         <span class="k">return</span> <span class="n">labels</span>

@@ -2290,7 +2290,9 @@ training uses).
   * **UnsupportedParameter** – For a meaning-carrying parameter the backend cannot
         honour (see `on_unsupported`).
   * **BudgetExceeded / CostApprovalRequired** – Before a paid call the budget refuses.
-  * [**EgressBlocked**](foley.runtime.html.md#foley.runtime.EgressBlocked) – For an external backend under [`offline()`](#foley.offline).
+  * [**EgressBlocked**](foley.runtime.html.md#foley.runtime.EgressBlocked) – For an external backend under [`offline()`](#foley.offline), or
+        [`ModelNotCached`](foley.runtime.html.md#foley.runtime.ModelNotCached) for a local one whose weights are
+        not on this machine.
 
 ### foley.has_nan_inf(samples)
 
@@ -2356,7 +2358,9 @@ Ingest every audio file under `path` and return an [`IngestReport`](#foley.Inges
   * **recursive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Recurse into sub-folders.
   * **exts** ([`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis)]) – Audio extensions to ingest.
   * **on_error** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `'collect'` records per-file errors and continues;
-    `'raise'` re-raises the first error.
+    `'raise'` re-raises the first error. Either way an
+    [`EgressBlocked`](foley.runtime.html.md#foley.runtime.EgressBlocked) (offline, the embedder’s weights not
+    cached) raises at once: every file would fail the same way.
   * **\*\*ingest_one_kw** – Forwarded to [`ingest_one()`](#foley.ingest_one) (license, taggers, QC
     flags, …).
 * **Return type:**

@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="foley.requirements" href="foley.requirements.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -494,6 +494,12 @@ keeps <code class="docutils literal notranslate"><span class="pre">import</span>
 <tr class="row-even"><td><p><a class="reference internal" href="#foley.runtime.is_offline" title="foley.runtime.is_offline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_offline</span></code></a>()</p></td>
 <td><p>Whether an offline runtime scope is currently active.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.runtime.load_pretrained" title="foley.runtime.load_pretrained"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_pretrained</span></code></a>(loader, model_id, *[, ...])</p></td>
+<td><p>Call <code class="docutils literal notranslate"><span class="pre">loader(model_id,</span> <span class="pre">**kwargs)</span></code> — a <code class="docutils literal notranslate"><span class="pre">from_pretrained</span></code> — honouring the posture.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.runtime.no_download" title="foley.runtime.no_download"><code class="xref py py-obj docutils literal notranslate"><span class="pre">no_download</span></code></a>(what, *, how_to_fetch)</p></td>
+<td><p>Under an offline posture, forbid outbound connections in this context for the block.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.runtime.offline" title="foley.runtime.offline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">offline</span></code></a>([config])</p></td>
 <td><p>Alias of <a class="reference internal" href="#foley.runtime.offline_scope" title="foley.runtime.offline_scope"><code class="xref py py-func docutils literal notranslate"><span class="pre">offline_scope()</span></code></a> — <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">foley.offline():</span> <span class="pre">...</span></code> for local-first runs.</p></td>
 </tr>
@@ -502,6 +508,12 @@ keeps <code class="docutils literal notranslate"><span class="pre">import</span>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.runtime.require_egress" title="foley.runtime.require_egress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require_egress</span></code></a>(data_egress, *, what)</p></td>
 <td><p>Raise <a class="reference internal" href="#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-class docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a> unless the active runtime allows <code class="docutils literal notranslate"><span class="pre">data_egress</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.runtime.require_local_files" title="foley.runtime.require_local_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">require_local_files</span></code></a>(paths, *, what, how_to_fetch)</p></td>
+<td><p>Under an offline posture, raise <a class="reference internal" href="#foley.runtime.ModelNotCached" title="foley.runtime.ModelNotCached"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelNotCached</span></code></a> unless every path exists.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#foley.runtime.runtime_scope" title="foley.runtime.runtime_scope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">runtime_scope</span></code></a>(config)</p></td>
+<td><p>Make <code class="docutils literal notranslate"><span class="pre">config</span></code> the current posture for the block — the ContextVar only.</p></td>
 </tr>
 </tbody>
 </table>
@@ -521,6 +533,9 @@ keeps <code class="docutils literal notranslate"><span class="pre">import</span>
 <tr class="row-odd"><td><p><a class="reference internal" href="#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a></p></td>
 <td><p>Raised when a call would send data off the device under an offline posture.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#foley.runtime.ModelNotCached" title="foley.runtime.ModelNotCached"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelNotCached</span></code></a></p></td>
+<td><p>Raised under an offline posture when a model's weights are not on this machine.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -539,6 +554,15 @@ in the MCP tools.</p>
 <dt class="sig sig-object py" id="foley.runtime.LOCAL">
 <span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">LOCAL</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'local'</span></span><a class="headerlink" href="#foley.runtime.LOCAL" title="Link to this definition">#</a></dt>
 <dd><p>The egress classes a source may declare (<code class="docutils literal notranslate"><span class="pre">config['data_egress']</span></code> SSOT).</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="foley.runtime.ModelNotCached">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">ModelNotCached</span></span><a class="reference internal" href="../_modules/foley/runtime.html#ModelNotCached"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.runtime.ModelNotCached" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#foley.runtime.EgressBlocked" title="foley.runtime.EgressBlocked"><code class="xref py py-class docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a></p>
+<p>Raised under an offline posture when a model’s weights are not on this machine.</p>
+<p>foley never downloads weights inside <a class="reference internal" href="#foley.runtime.offline" title="foley.runtime.offline"><code class="xref py py-func docutils literal notranslate"><span class="pre">offline()</span></code></a> (#86); the message names the
+model and how to fetch it beforehand, online.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -631,6 +655,44 @@ not say where its data goes is never used offline.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="foley.runtime.load_pretrained">
+<span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">load_pretrained</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_id</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">how_to_fetch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/runtime.html#load_pretrained"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.runtime.load_pretrained" title="Link to this definition">#</a></dt>
+<dd><p>Call <code class="docutils literal notranslate"><span class="pre">loader(model_id,</span> <span class="pre">**kwargs)</span></code> — a <code class="docutils literal notranslate"><span class="pre">from_pretrained</span></code> — honouring the posture.</p>
+<p>Online, it is a plain call. Under <a class="reference internal" href="#foley.runtime.offline" title="foley.runtime.offline"><code class="xref py py-func docutils literal notranslate"><span class="pre">offline()</span></code></a> it passes
+<code class="docutils literal notranslate"><span class="pre">local_files_only=True</span></code> (no Hub request at all) and turns a cache miss (an
+<code class="docutils literal notranslate"><span class="pre">OSError</span></code>) into <a class="reference internal" href="#foley.runtime.ModelNotCached" title="foley.runtime.ModelNotCached"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelNotCached</span></code></a>; any other error passes through as is.
+foley’s <code class="docutils literal notranslate"><span class="pre">from_pretrained</span></code> loads (CLAP, Stable Audio) go through here; loaders
+with no local-only switch (AudioSeal, whisperX) go through <a class="reference internal" href="#foley.runtime.no_download" title="foley.runtime.no_download"><code class="xref py py-func docutils literal notranslate"><span class="pre">no_download()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loader</strong> – e.g. <code class="docutils literal notranslate"><span class="pre">ClapModel.from_pretrained</span></code>.</p></li>
+<li><p><strong>model_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The Hub repo id.</p></li>
+<li><p><strong>how_to_fetch</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – The pre-download instruction for the error (default: the
+<code class="docutils literal notranslate"><span class="pre">huggingface-cli</span> <span class="pre">download</span></code> command).</p></li>
+<li><p><strong>**kwargs</strong> – Passed to <code class="docutils literal notranslate"><span class="pre">loader</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.runtime.no_download">
+<span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">no_download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">how_to_fetch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/runtime.html#no_download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.runtime.no_download" title="Link to this definition">#</a></dt>
+<dd><p>Under an offline posture, forbid outbound connections in this context for the block.</p>
+<p>For model loaders that have no local-only switch (AudioSeal, whisperX): inside the
+block a non-loopback connection or name lookup made from this context is refused,
+and an error whose cause is that refusal is re-raised as <a class="reference internal" href="#foley.runtime.ModelNotCached" title="foley.runtime.ModelNotCached"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelNotCached</span></code></a>
+naming <code class="docutils literal notranslate"><span class="pre">what</span></code> and <code class="docutils literal notranslate"><span class="pre">how_to_fetch</span></code>. A cached model still loads (the libraries fall
+back to their cache when the network is refused); an unrelated error passes through
+unchanged. Online it does nothing. Threads a loader starts itself do not inherit
+the block (they start with a fresh context); the loaders guarded here make their
+first request from the calling thread.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="foley.runtime.offline">
 <span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">offline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/runtime.html#offline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.runtime.offline" title="Link to this definition">#</a></dt>
 <dd><p>Alias of <a class="reference internal" href="#foley.runtime.offline_scope" title="foley.runtime.offline_scope"><code class="xref py py-func docutils literal notranslate"><span class="pre">offline_scope()</span></code></a> — <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">foley.offline():</span> <span class="pre">...</span></code> for local-first runs.</p>
@@ -671,6 +733,32 @@ declaration map a missing one to <code class="docutils literal notranslate"><spa
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
 </dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.runtime.require_local_files">
+<span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">require_local_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">what</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">how_to_fetch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_bytes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/runtime.html#require_local_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.runtime.require_local_files" title="Link to this definition">#</a></dt>
+<dd><p>Under an offline posture, raise <a class="reference internal" href="#foley.runtime.ModelNotCached" title="foley.runtime.ModelNotCached"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelNotCached</span></code></a> unless every path exists.</p>
+<p><code class="docutils literal notranslate"><span class="pre">min_bytes</span></code> maps a path to the size below which the library would re-download it
+(a truncated download), so such a file counts as missing too.</p>
+<p>For model files a library downloads itself (PANNs fetches its checkpoint and label
+CSV with <code class="docutils literal notranslate"><span class="pre">wget</span></code>, even at import), checked before that library is touched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="foley.runtime.runtime_scope">
+<span class="sig-prename descclassname"><span class="pre">foley.runtime.</span></span><span class="sig-name descname"><span class="pre">runtime_scope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/foley/runtime.html#runtime_scope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#foley.runtime.runtime_scope" title="Link to this definition">#</a></dt>
+<dd><p>Make <code class="docutils literal notranslate"><span class="pre">config</span></code> the current posture for the block — the ContextVar only.</p>
+<p>Unlike <a class="reference internal" href="#foley.runtime.offline_scope" title="foley.runtime.offline_scope"><code class="xref py py-func docutils literal notranslate"><span class="pre">offline_scope()</span></code></a> it leaves the process-wide obs settings alone (safe to
+enter from many threads at once); telemetry still follows the posture, because
+<a class="reference internal" href="foley.obs.html#foley.obs.is_enabled" title="foley.obs.is_enabled"><code class="xref py py-func docutils literal notranslate"><span class="pre">foley.obs.is_enabled()</span></code></a> reads <a class="reference internal" href="#foley.runtime.current_runtime" title="foley.runtime.current_runtime"><code class="xref py py-func docutils literal notranslate"><span class="pre">current_runtime()</span></code></a>.</p>
+<dl class="field-list simple">
 </dl>
 </dd></dl>
 
@@ -725,6 +813,7 @@ declaration map a missing one to <code class="docutils literal notranslate"><spa
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.EgressBlocked"><code class="docutils literal notranslate"><span class="pre">EgressBlocked</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.LOCAL"><code class="docutils literal notranslate"><span class="pre">LOCAL</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.ModelNotCached"><code class="docutils literal notranslate"><span class="pre">ModelNotCached</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.RuntimeConfig"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.RuntimeConfig.allows"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig.allows()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.RuntimeConfig.default"><code class="docutils literal notranslate"><span class="pre">RuntimeConfig.default()</span></code></a></li>
@@ -734,9 +823,13 @@ declaration map a missing one to <code class="docutils literal notranslate"><spa
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.current_runtime"><code class="docutils literal notranslate"><span class="pre">current_runtime()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.is_offline"><code class="docutils literal notranslate"><span class="pre">is_offline()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.load_pretrained"><code class="docutils literal notranslate"><span class="pre">load_pretrained()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.no_download"><code class="docutils literal notranslate"><span class="pre">no_download()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.offline"><code class="docutils literal notranslate"><span class="pre">offline()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.offline_scope"><code class="docutils literal notranslate"><span class="pre">offline_scope()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.require_egress"><code class="docutils literal notranslate"><span class="pre">require_egress()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.require_local_files"><code class="docutils literal notranslate"><span class="pre">require_local_files()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foley.runtime.runtime_scope"><code class="docutils literal notranslate"><span class="pre">runtime_scope()</span></code></a></li>
 </ul>
   </nav></div>
 

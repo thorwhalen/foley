@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -409,7 +409,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -828,6 +828,314 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    the LLM resolver — so ``with foley.offline():`` holds on every surface, not only</span>
 <span class="sd">    in the MCP tools.</span>
 <span class="sd">    """</span></div>
+
+
+
+<div class="viewcode-block" id="ModelNotCached">
+<a class="viewcode-back" href="../../_autosummary/foley.runtime.html#foley.ModelNotCached">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModelNotCached</span><span class="p">(</span><span class="n">EgressBlocked</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Raised under an offline posture when a model's weights are not on this machine.</span>
+
+<span class="sd">    foley never downloads weights inside :func:`offline` (#86); the message names the</span>
+<span class="sd">    model and how to fetch it beforehand, online.</span>
+<span class="sd">    """</span></div>
+
+
+
+<div class="viewcode-block" id="load_pretrained">
+<a class="viewcode-back" href="../../_autosummary/foley.runtime.html#foley.load_pretrained">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_pretrained</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">how_to_fetch</span><span class="p">:</span> <span class="s2">"str | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Call ``loader(model_id, **kwargs)`` — a ``from_pretrained`` — honouring the posture.</span>
+
+<span class="sd">    Online, it is a plain call. Under :func:`offline` it passes</span>
+<span class="sd">    ``local_files_only=True`` (no Hub request at all) and turns a cache miss (an</span>
+<span class="sd">    ``OSError``) into :class:`ModelNotCached`; any other error passes through as is.</span>
+<span class="sd">    foley's ``from_pretrained`` loads (CLAP, Stable Audio) go through here; loaders</span>
+<span class="sd">    with no local-only switch (AudioSeal, whisperX) go through :func:`no_download`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        loader: e.g. ``ClapModel.from_pretrained``.</span>
+<span class="sd">        model_id: The Hub repo id.</span>
+<span class="sd">        how_to_fetch: The pre-download instruction for the error (default: the</span>
+<span class="sd">            ``huggingface-cli download`` command).</span>
+<span class="sd">        **kwargs: Passed to ``loader``.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">current_runtime</span><span class="p">()</span><span class="o">.</span><span class="n">allows</span><span class="p">(</span><span class="n">EXTERNAL</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">loader</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">loader</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="n">local_files_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">model_id</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span>  <span class="c1"># a local directory: no download involved, keep the real error</span>
+        <span class="n">fetch</span> <span class="o">=</span> <span class="n">how_to_fetch</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">"huggingface-cli download </span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">if</span> <span class="n">_is_cache_miss</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_repo_in_hf_cache</span><span class="p">(</span><span class="n">model_id</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ModelNotCached</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"model </span><span class="si">{</span><span class="n">model_id</span><span class="si">!r}</span><span class="s2"> is not in the local cache, and the offline posture "</span>
+                <span class="sa">f</span><span class="s2">"forbids downloading it. Fetch it once while online: `</span><span class="si">{</span><span class="n">fetch</span><span class="si">}</span><span class="s2">`."</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+        <span class="c1"># Cached, yet it failed to load: an interrupted download (files missing) or a</span>
+        <span class="c1"># corrupt file. Say both, and keep the original error as the cause.</span>
+        <span class="k">raise</span> <span class="n">ModelNotCached</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"model </span><span class="si">{</span><span class="n">model_id</span><span class="si">!r}</span><span class="s2"> is in the local cache but failed to load "</span>
+            <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">). Its files may be incomplete (an "</span>
+            <span class="sa">f</span><span class="s2">"interrupted download) or corrupt. Offline, foley will not re-download: "</span>
+            <span class="sa">f</span><span class="s2">"while online, run `</span><span class="si">{</span><span class="n">fetch</span><span class="si">}</span><span class="s2"> --force-download` (or delete its cache folder "</span>
+            <span class="sa">f</span><span class="s2">"and fetch it again)."</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span></div>
+
+
+
+<span class="c1">#: Exception types (anywhere in the chain) and message fragments that mean "the file</span>
+<span class="c1">#: is not in the local cache" under ``local_files_only=True`` (huggingface_hub /</span>
+<span class="c1">#: transformers / diffusers), as opposed to a cached file that failed to load.</span>
+<span class="n">_CACHE_MISS_TYPES</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">"LocalEntryNotFoundError"</span><span class="p">,</span> <span class="s2">"EntryNotFoundError"</span><span class="p">,</span> <span class="s2">"OfflineModeIsEnabled"</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">_CACHE_MISS_TEXT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"couldn't find them in the cached files"</span><span class="p">,</span>
+    <span class="s2">"local_files_only"</span><span class="p">,</span>
+    <span class="s2">"is not a local folder and is not a valid model identifier"</span><span class="p">,</span>
+    <span class="s2">"cannot find the requested files in the local cache"</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_repo_in_hf_cache</span><span class="p">(</span><span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether the Hugging Face cache holds anything for ``model_id`` (a repo id)."""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">huggingface_hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover - no hub, nothing cached</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+    <span class="n">folder</span> <span class="o">=</span> <span class="s2">"models--"</span> <span class="o">+</span> <span class="n">model_id</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"/"</span><span class="p">,</span> <span class="s2">"--"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">HF_HUB_CACHE</span><span class="p">)</span> <span class="o">/</span> <span class="n">folder</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_cache_miss</span><span class="p">(</span><span class="n">exc</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">while</span> <span class="n">exc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">id</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+        <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">_CACHE_MISS_TYPES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">t</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">_CACHE_MISS_TEXT</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">exc</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">__cause__</span> <span class="ow">or</span> <span class="n">exc</span><span class="o">.</span><span class="n">__context__</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="c1">#: Whether outbound connections are blocked in this context (set by :func:`no_download`).</span>
+<span class="n">_DOWNLOADS_BLOCKED</span><span class="p">:</span> <span class="s2">"ContextVar[str | None]"</span> <span class="o">=</span> <span class="n">ContextVar</span><span class="p">(</span><span class="s2">"foley_no_download"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_OfflineBlocked</span><span class="p">(</span><span class="ne">ConnectionRefusedError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The connection :func:`no_download` refused (so a miss can be told from other errors)."""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_ensure_socket_gate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Wrap ``socket.socket.connect`` / ``connect_ex`` / ``socket.getaddrinfo`` once.</span>
+
+<span class="sd">    The wrappers consult a :class:`~contextvars.ContextVar`, so blocking applies only to</span>
+<span class="sd">    the context (thread / task) inside :func:`no_download`: concurrent loads cannot undo</span>
+<span class="sd">    each other, and an online thread is never affected. Re-wraps if something replaced</span>
+<span class="sd">    the functions since (a test fixture restoring its own patch).</span>
+<span class="sd">    """</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">gate</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">what</span> <span class="o">=</span> <span class="n">_DOWNLOADS_BLOCKED</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">what</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"addr"</span><span class="p">:</span>
+                    <span class="n">host</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"host"</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+                        <span class="n">host</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">host</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">_outbound</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">host</span><span class="p">)):</span>
+                        <span class="k">raise</span> <span class="n">_OfflineBlocked</span><span class="p">(</span><span class="sa">f</span><span class="s2">"offline: name lookup for </span><span class="si">{</span><span class="n">host</span><span class="si">!r}</span><span class="s2"> blocked"</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">sock</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">host</span> <span class="o">=</span> <span class="n">address</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">host</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                        <span class="ow">and</span> <span class="n">sock</span><span class="o">.</span><span class="n">family</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="s2">"AF_UNIX"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">_outbound</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">host</span><span class="p">))</span>
+                    <span class="p">):</span>
+                        <span class="k">raise</span> <span class="n">_OfflineBlocked</span><span class="p">(</span><span class="sa">f</span><span class="s2">"offline: connection to </span><span class="si">{</span><span class="n">address</span><span class="si">!r}</span><span class="s2"> blocked"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">real</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">wrapped</span><span class="o">.</span><span class="n">_foley_gate</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">wrapped</span>
+
+    <span class="k">for</span> <span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="s2">"connect"</span><span class="p">,</span> <span class="s2">"sock"</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="s2">"connect_ex"</span><span class="p">,</span> <span class="s2">"sock"</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="s2">"getaddrinfo"</span><span class="p">,</span> <span class="s2">"addr"</span><span class="p">),</span>
+    <span class="p">):</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="s2">"_foley_gate"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">gate</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">kind</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_loopback</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">ipaddress</span>
+
+    <span class="k">if</span> <span class="n">host</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"localhost"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># "" is the local wildcard in getaddrinfo / bind</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="n">host</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">"[]"</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">addr</span><span class="o">.</span><span class="n">is_loopback</span> <span class="ow">or</span> <span class="n">addr</span><span class="o">.</span><span class="n">is_unspecified</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_outbound</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether connecting to ``host`` leaves the machine: not loopback, or a proxy.</span>
+
+<span class="sd">    A loopback HTTP(S) proxy (Clash, cntlm, Charles…) forwards everything outward, so</span>
+<span class="sd">    a configured proxy host is treated as outbound even on 127.0.0.1.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_loopback</span><span class="p">(</span><span class="n">host</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">urllib.parse</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
+
+    <span class="n">proxy_hosts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">hostname</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">getproxies</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">"no"</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">proxy_hosts</span> <span class="ow">or</span> <span class="p">(</span><span class="n">host</span> <span class="o">==</span> <span class="s2">"localhost"</span> <span class="ow">and</span> <span class="s2">"127.0.0.1"</span> <span class="ow">in</span> <span class="n">proxy_hosts</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_blocked_by_gate</span><span class="p">(</span><span class="n">exc</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether ``exc`` was caused by the gate's refusal (or a hub cache miss).</span>
+
+<span class="sd">    Follows only causal links: ``__cause__``, a ``reason`` attribute (urllib's</span>
+<span class="sd">    ``URLError``, urllib3's ``MaxRetryError``) and exceptions held in ``args``</span>
+<span class="sd">    (requests' ``ConnectionError``) — never ``__context__``, so an unrelated error raised</span>
+<span class="sd">    inside a library's own "network failed, use the cache" handler is not relabelled.</span>
+<span class="sd">    """</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="n">exc</span><span class="p">]</span>
+    <span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">id</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">_OfflineBlocked</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">_CACHE_MISS_TYPES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">__cause__</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s2">"reason"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="o">*</span><span class="nb">getattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s2">"args"</span><span class="p">,</span> <span class="p">())])</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="no_download">
+<a class="viewcode-back" href="../../_autosummary/foley.runtime.html#foley.no_download">[docs]</a>
+<span class="nd">@contextmanager</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">no_download</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">how_to_fetch</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Under an offline posture, forbid outbound connections in this context for the block.</span>
+
+<span class="sd">    For model loaders that have no local-only switch (AudioSeal, whisperX): inside the</span>
+<span class="sd">    block a non-loopback connection or name lookup made from this context is refused,</span>
+<span class="sd">    and an error whose cause is that refusal is re-raised as :class:`ModelNotCached`</span>
+<span class="sd">    naming ``what`` and ``how_to_fetch``. A cached model still loads (the libraries fall</span>
+<span class="sd">    back to their cache when the network is refused); an unrelated error passes through</span>
+<span class="sd">    unchanged. Online it does nothing. Threads a loader starts itself do not inherit</span>
+<span class="sd">    the block (they start with a fresh context); the loaders guarded here make their</span>
+<span class="sd">    first request from the calling thread.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">current_runtime</span><span class="p">()</span><span class="o">.</span><span class="n">allows</span><span class="p">(</span><span class="n">EXTERNAL</span><span class="p">):</span>
+        <span class="k">yield</span>
+        <span class="k">return</span>
+    <span class="n">_ensure_socket_gate</span><span class="p">()</span>
+    <span class="n">_drop_pooled_hub_connections</span><span class="p">()</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">_DOWNLOADS_BLOCKED</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span>
+    <span class="k">except</span> <span class="n">ModelNotCached</span><span class="p">:</span>
+        <span class="k">raise</span>  <span class="c1"># a nested guard already named the precise model</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_blocked_by_gate</span><span class="p">(</span><span class="n">exc</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ModelNotCached</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> is not on this machine, and the offline posture forbids "</span>
+                <span class="sa">f</span><span class="s2">"downloading it. Fetch it once while online: </span><span class="si">{</span><span class="n">how_to_fetch</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+        <span class="k">raise</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">_DOWNLOADS_BLOCKED</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">token</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_drop_pooled_hub_connections</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Close huggingface_hub's pooled HTTP sessions so the next request must connect.</span>
+
+<span class="sd">    A keep-alive connection opened earlier (online) would be reused without a new</span>
+<span class="sd">    ``connect`` and slip past the gate. Resetting only forces a reconnect, which is</span>
+<span class="sd">    harmless to any other thread; once the hub's first request is refused it falls</span>
+<span class="sd">    back to its cache instead of spawning download workers.</span>
+<span class="sd">    """</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">huggingface_hub.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">reset_sessions</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover - no hub, nothing pooled</span>
+        <span class="k">return</span>
+    <span class="n">reset_sessions</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="runtime_scope">
+<a class="viewcode-back" href="../../_autosummary/foley.runtime.html#foley.runtime_scope">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">runtime_scope</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="s2">"RuntimeConfig"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Make ``config`` the current posture for the block — the ContextVar only.</span>
+
+<span class="sd">    Unlike :func:`offline_scope` it leaves the process-wide obs settings alone (safe to</span>
+<span class="sd">    enter from many threads at once); telemetry still follows the posture, because</span>
+<span class="sd">    :func:`foley.obs.is_enabled` reads :func:`current_runtime`.</span>
+<span class="sd">    """</span>
+
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_scope</span><span class="p">():</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">_CURRENT_RUNTIME</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">config</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">_CURRENT_RUNTIME</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_scope</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="require_local_files">
+<a class="viewcode-back" href="../../_autosummary/foley.runtime.html#foley.require_local_files">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">require_local_files</span><span class="p">(</span>
+    <span class="n">paths</span><span class="p">:</span> <span class="s2">"list[str]"</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">what</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">how_to_fetch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">min_bytes</span><span class="p">:</span> <span class="s2">"dict[str, int] | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Under an offline posture, raise :class:`ModelNotCached` unless every path exists.</span>
+
+<span class="sd">    ``min_bytes`` maps a path to the size below which the library would re-download it</span>
+<span class="sd">    (a truncated download), so such a file counts as missing too.</span>
+
+<span class="sd">    For model files a library downloads itself (PANNs fetches its checkpoint and label</span>
+<span class="sd">    CSV with ``wget``, even at import), checked before that library is touched.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+    <span class="k">if</span> <span class="n">current_runtime</span><span class="p">()</span><span class="o">.</span><span class="n">allows</span><span class="p">(</span><span class="n">EXTERNAL</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">min_bytes</span> <span class="o">=</span> <span class="n">min_bytes</span> <span class="ow">or</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_present</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span> <span class="o">&gt;=</span> <span class="n">min_bytes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">_present</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ModelNotCached</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> needs </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">, which are not on this machine, and the offline "</span>
+            <span class="sa">f</span><span class="s2">"posture forbids downloading them. Fetch them once while online: </span><span class="si">{</span><span class="n">how_to_fetch</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span></div>
 
 
 
