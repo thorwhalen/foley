@@ -286,3 +286,72 @@ def test_a_truncated_panns_checkpoint_counts_as_missing(tmp_path, monkeypatch):
     with foley.offline():
         with pytest.raises(ModelNotCached, match="PANNs"):
             taggers._require_panns_files()
+
+
+def test_a_loopback_proxy_is_outbound(monkeypatch):
+    import socket
+
+    from foley.runtime import no_download
+
+    monkeypatch.setenv("HTTPS_PROXY", "http://127.0.0.1:7890")
+    with foley.offline():
+        with pytest.raises(ModelNotCached):
+            with no_download("a model", how_to_fetch="..."):
+                socket.create_connection(("127.0.0.1", 7890), timeout=0.01)
+
+
+def test_an_error_inside_a_librarys_fallback_handler_is_not_relabelled():
+    """faster-whisper shape: except ConnectionError -> use cache -> an unrelated error."""
+    import socket
+
+    from foley.runtime import no_download
+
+    with foley.offline():
+        with pytest.raises(KeyError):
+            with no_download("a model", how_to_fetch="..."):
+                try:
+                    socket.create_connection(("192.0.2.30", 443), timeout=0.01)
+                except OSError:
+                    raise KeyError("model.bin")  # unrelated, raised in the handler
+
+
+def test_pooled_hub_connections_are_dropped_on_entry(monkeypatch):
+    hub_utils = pytest.importorskip("huggingface_hub.utils")
+    from foley.runtime import no_download
+
+    calls = []
+    monkeypatch.setattr(hub_utils, "reset_sessions", lambda: calls.append(1))
+    with foley.offline(), no_download("a model", how_to_fetch="..."):
+        pass
+    assert calls == [1]
+
+
+def test_a_real_attribute_error_is_not_called_a_missing_model(monkeypatch):
+    from foley import runtime
+    from foley.runtime import load_pretrained
+
+    monkeypatch.setattr(runtime, "_repo_in_hf_cache", lambda model_id: True)
+
+    def skewed(model_id, **kw):
+        raise AttributeError("'NoneType' object has no attribute 'endswith'")
+
+    with foley.offline():
+        with pytest.raises(AttributeError):
+            load_pretrained(skewed, "x/y")
+
+
+def test_whisperx_gets_local_files_only_offline(monkeypatch):
+    np = pytest.importorskip("numpy")
+    from foley.weave import align
+
+    seen = {}
+
+    def load_model(size, device, language=None, local_files_only=False):
+        seen["local_files_only"] = local_files_only
+        raise OSError("not cached")
+
+    monkeypatch.setitem(sys.modules, "whisperx", types.SimpleNamespace(
+        load_model=load_model, load_align_model=lambda **k: None))
+    with foley.offline(), pytest.raises(OSError):
+        align.WhisperXAligner().word_timeline(np.zeros(1600, dtype=np.float32), 16000)
+    assert seen == {"local_files_only": True}

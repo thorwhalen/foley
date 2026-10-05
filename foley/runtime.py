@@ -126,7 +126,7 @@ def load_pretrained(loader, model_id: str, *, how_to_fetch: "str | None" = None,
         return loader(model_id, **kwargs)
     try:
         return loader(model_id, local_files_only=True, **kwargs)
-    except (OSError, AttributeError) as exc:
+    except OSError as exc:
         from pathlib import Path
 
         if Path(model_id).expanduser().exists():
@@ -212,7 +212,7 @@ def _ensure_socket_gate() -> None:
                     host = args[0] if args else kwargs.get("host")
                     if isinstance(host, bytes):
                         host = host.decode()
-                    if host is not None and not _is_loopback(str(host)):
+                    if host is not None and _outbound(str(host)):
                         raise _OfflineBlocked(f"offline: name lookup for {host!r} blocked")
                 else:
                     sock, address = args[0], args[1]
@@ -220,7 +220,7 @@ def _ensure_socket_gate() -> None:
                     if (
                         host is not None
                         and sock.family != getattr(socket, "AF_UNIX", None)
-                        and not _is_loopback(str(host))
+                        and _outbound(str(host))
                     ):
                         raise _OfflineBlocked(f"offline: connection to {address!r} blocked")
             return real(*args, **kwargs)
@@ -241,27 +241,52 @@ def _ensure_socket_gate() -> None:
 def _is_loopback(host: str) -> bool:
     import ipaddress
 
-    if host == "localhost":
-        return True
+    if host in ("localhost", ""):
+        return True  # "" is the local wildcard in getaddrinfo / bind
     try:
-        return ipaddress.ip_address(host.strip("[]")).is_loopback
+        addr = ipaddress.ip_address(host.strip("[]"))
+        return addr.is_loopback or addr.is_unspecified
     except ValueError:
         return False
 
 
+def _outbound(host: str) -> bool:
+    """Whether connecting to ``host`` leaves the machine: not loopback, or a proxy.
+
+    A loopback HTTP(S) proxy (Clash, cntlm, Charles…) forwards everything outward, so
+    a configured proxy host is treated as outbound even on 127.0.0.1.
+    """
+    if not _is_loopback(host):
+        return True
+    import urllib.parse
+    import urllib.request
+
+    proxy_hosts = {
+        urllib.parse.urlparse(url).hostname
+        for key, url in urllib.request.getproxies().items()
+        if key != "no"
+    }
+    return host in proxy_hosts or (host == "localhost" and "127.0.0.1" in proxy_hosts)
+
+
 def _blocked_by_gate(exc: BaseException) -> bool:
-    """Whether ``exc``'s chain (``__cause__`` / ``__context__`` / ``reason``) holds a refusal."""
+    """Whether ``exc`` was caused by the gate's refusal (or a hub cache miss).
+
+    Follows only causal links: ``__cause__``, a ``reason`` attribute (urllib's
+    ``URLError``, urllib3's ``MaxRetryError``) and exceptions held in ``args``
+    (requests' ``ConnectionError``) — never ``__context__``, so an unrelated error raised
+    inside a library's own "network failed, use the cache" handler is not relabelled.
+    """
     seen = set()
     stack = [exc]
     while stack:
         e = stack.pop()
-        if e is None or id(e) in seen:
+        if not isinstance(e, BaseException) or id(e) in seen:
             continue
         seen.add(id(e))
         if isinstance(e, _OfflineBlocked) or type(e).__name__ in _CACHE_MISS_TYPES:
             return True
-        stack.extend([e.__cause__, e.__context__, getattr(e, "reason", None)])
-        stack = [x for x in stack if isinstance(x, BaseException) or x is None]
+        stack.extend([e.__cause__, getattr(e, "reason", None), *getattr(e, "args", ())])
     return False
 
 
@@ -282,9 +307,12 @@ def no_download(what: str, *, how_to_fetch: str):
         yield
         return
     _ensure_socket_gate()
+    _drop_pooled_hub_connections()
     token = _DOWNLOADS_BLOCKED.set(what)
     try:
         yield
+    except ModelNotCached:
+        raise  # a nested guard already named the precise model
     except Exception as exc:
         if _blocked_by_gate(exc):
             raise ModelNotCached(
@@ -294,6 +322,21 @@ def no_download(what: str, *, how_to_fetch: str):
         raise
     finally:
         _DOWNLOADS_BLOCKED.reset(token)
+
+
+def _drop_pooled_hub_connections() -> None:
+    """Close huggingface_hub's pooled HTTP sessions so the next request must connect.
+
+    A keep-alive connection opened earlier (online) would be reused without a new
+    ``connect`` and slip past the gate. Resetting only forces a reconnect, which is
+    harmless to any other thread; once the hub's first request is refused it falls
+    back to its cache instead of spawning download workers.
+    """
+    try:
+        from huggingface_hub.utils import reset_sessions
+    except ImportError:  # pragma: no cover - no hub, nothing pooled
+        return
+    reset_sessions()
 
 
 def runtime_scope(config: "RuntimeConfig"):
