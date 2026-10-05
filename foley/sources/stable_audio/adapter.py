@@ -77,7 +77,9 @@ class StableAudioAdapter:
         dtype = torch.float16 if cuda else torch.float32
         from ...runtime import load_pretrained
 
-        pipe = load_pretrained(StableAudioPipeline.from_pretrained, model_id, torch_dtype=dtype)
+        pipe = load_pretrained(
+            StableAudioPipeline.from_pretrained, model_id, torch_dtype=dtype
+        )
         return pipe.to("cuda" if cuda else "cpu")
 
     # -- GenerateAdapter surface --------------------------------------------
